@@ -16,6 +16,12 @@
     - [x] Create Dynamic Route `src/app/consumables/[id]/page.tsx`
     - [x] Implement `generateStaticParams` for build-time generation
     - [x] Implement `generateMetadata` for dynamic consumable SEO
+- [x] **Phase 1.5: Design Identity & Infrastructure**
+  - [x] **Design System**: Implement "Arcane Modern" theme with Tailwind v4 (CSS Variables, @theme)
+  - [x] **Analytics**: Install Vercel Analytics & Speed Insights
+  - [x] **Security**: Configure strict Security Headers (CSP, X-Frame-Options) in `next.config.ts`
+  - [x] **SEO**: Generate dynamic `sitemap.xml` for all 50+ pages (`src/app/sitemap.ts`)
+  - [x] **Refactor**: Update Debug Page and generated pages to use new Design Tokens
 - [ ] **Phase 2: The Archive (UI Core)** <!-- id: 8 -->
   - [ ] Build Global Layout (Nav, Footer with Socials) <!-- id: 9 -->
   - [ ] Create specialized `Card` components (Unit, Spell, Building) <!-- id: 10 -->
