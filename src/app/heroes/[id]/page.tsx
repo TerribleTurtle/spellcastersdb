@@ -13,6 +13,7 @@ export async function generateStaticParams() {
   }));
 }
 
+// 2. Generate Dynamic Metadata (SEO)
 export async function generateMetadata({ params }: HeroPageProps): Promise<Metadata> {
   const { id } = await params;
   const hero = await getHeroById(id);
@@ -21,16 +22,20 @@ export async function generateMetadata({ params }: HeroPageProps): Promise<Metad
     return { title: "Hero Not Found" };
   }
 
+  // Fallback description since heroes don't have a specific description field
+  const description = `${hero.name} - ${hero.abilities.primary.name} user. Health: ${hero.health}.`;
+
   return {
     title: hero.name,
-    description: hero.description,
+    description: description,
     openGraph: {
-      title: `${hero.name} - ${hero.title}`,
-      description: hero.description,
+      title: hero.name,
+      description: description,
     },
   };
 }
 
+// 3. The UI Component
 export default async function HeroPage({ params }: HeroPageProps) {
   const { id } = await params;
   const hero = await getHeroById(id);
@@ -41,51 +46,87 @@ export default async function HeroPage({ params }: HeroPageProps) {
 
   return (
     <div className="min-h-screen bg-slate-900 text-white p-8">
-      <div className="max-w-2xl mx-auto">
-        <div className="mb-6">
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="mb-8 border-b border-white/10 pb-6">
           <span className="text-purple-400 font-mono text-sm uppercase tracking-wider">
-            Hero • {hero.magic_school}
+            Hero Character
           </span>
-          <h1 className="text-5xl font-bold mt-2 mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+          <h1 className="text-6xl font-bold mt-2 mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
             {hero.name}
           </h1>
-          <h2 className="text-2xl text-purple-200 mb-4 font-light">
-            {hero.title}
-          </h2>
-          <p className="text-xl text-gray-300 leading-relaxed">
-            {hero.description}
-          </p>
         </div>
 
-        {/* Hero Stats */}
-        <div className="grid grid-cols-2 gap-4 bg-white/5 rounded-2xl p-6 border border-white/10 mb-8">
-          <div className="p-4 bg-black/20 rounded-xl">
-            <p className="text-gray-400 text-sm">Health</p>
-            <p className="text-2xl font-bold text-green-400">{hero.health}</p>
+        {/* Combat Stats Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-white/5 p-4 rounded-xl border border-white/10">
+            <p className="text-gray-400 text-xs uppercase tracking-widest mb-1">Health</p>
+            <p className="text-3xl font-bold text-green-400">{hero.health}</p>
+            <p className="text-xs text-gray-500 mt-1">+{hero.health_regen_rate}/s Regen</p>
           </div>
-          <div className="p-4 bg-black/20 rounded-xl">
-            <p className="text-gray-400 text-sm">Movement Speed</p>
-            <p className="text-2xl font-bold text-yellow-400">{hero.movement_speed}</p>
-          </div>
-        </div>
-
-        {/* Abilities */}
-        {hero.abilities && hero.abilities.length > 0 && (
-          <div>
-            <h3 className="text-2xl font-bold mb-4 text-purple-300">Abilities</h3>
-            <div className="space-y-4">
-              {hero.abilities.map((ability) => (
-                <div key={ability.ability_id} className="bg-white/5 rounded-xl p-6 border border-purple-500/20">
-                  <h4 className="text-xl font-bold text-pink-400 mb-2">{ability.name}</h4>
-                  <p className="text-gray-300">{ability.description}</p>
-                  {ability.cooldown && (
-                    <p className="text-sm text-gray-400 mt-2">Cooldown: {ability.cooldown}s</p>
-                  )}
-                </div>
-              ))}
+          <div className="bg-white/5 p-4 rounded-xl border border-white/10">
+            <p className="text-gray-400 text-xs uppercase tracking-widest mb-1">Damage</p>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold text-red-400">{hero.attack_damage_minion} <span className="text-sm font-normal text-gray-500">vs Minion</span></span>
+              <span className="text-xl font-bold text-orange-400">{hero.attack_damage_summoner} <span className="text-sm font-normal text-gray-500">vs Player</span></span>
             </div>
           </div>
-        )}
+          <div className="bg-white/5 p-4 rounded-xl border border-white/10">
+             <p className="text-gray-400 text-xs uppercase tracking-widest mb-1">Move Speed</p>
+             <p className="text-2xl font-bold text-yellow-400">{hero.movement_speed}</p>
+          </div>
+           <div className="bg-white/5 p-4 rounded-xl border border-white/10">
+             <p className="text-gray-400 text-xs uppercase tracking-widest mb-1">Flight Speed</p>
+             <p className="text-2xl font-bold text-blue-400">{hero.flight_speed}</p>
+          </div>
+        </div>
+
+        {/* Ability Kit */}
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-purple-200 flex items-center gap-2">
+            <span>✨</span> Ability Kit
+          </h2>
+          
+          {/* Primary */}
+          <div className="bg-gradient-to-r from-purple-900/40 to-slate-900/40 border border-purple-500/30 rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-2">
+               <span className="bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded">PRIMARY</span>
+               <h3 className="text-xl font-bold text-white">{hero.abilities.primary.name}</h3>
+            </div>
+            <p className="text-gray-300">{hero.abilities.primary.description}</p>
+          </div>
+
+           {/* Defense */}
+           <div className="bg-gradient-to-r from-blue-900/40 to-slate-900/40 border border-blue-500/30 rounded-xl p-6">
+            <div className="flex items-center gap-3 mb-2">
+               <span className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded">DEFENSE</span>
+               <h3 className="text-xl font-bold text-white">{hero.abilities.defense.name}</h3>
+            </div>
+            <p className="text-gray-300">{hero.abilities.defense.description}</p>
+          </div>
+
+          {/* Ultimate */}
+          <div className="bg-gradient-to-r from-amber-900/40 to-slate-900/40 border border-amber-500/30 rounded-xl p-6 relative overflow-hidden">
+            <div className="flex items-center gap-3 mb-2 relative z-10">
+               <span className="bg-amber-500 text-white text-xs font-bold px-2 py-1 rounded">ULTIMATE</span>
+               <h3 className="text-xl font-bold text-white">{hero.abilities.ultimate.name}</h3>
+            </div>
+            <p className="text-gray-300 relative z-10">{hero.abilities.ultimate.description}</p>
+          </div>
+
+          {/* Passives */}
+          {hero.abilities.passive.length > 0 && (
+             <div className="grid gap-4">
+                {hero.abilities.passive.map((passive, idx) => (
+                  <div key={idx} className="bg-white/5 rounded-lg p-4 border border-white/5">
+                    <h4 className="font-bold text-gray-300 text-sm mb-1">PASSIVE: <span className="text-white">{passive.name}</span></h4>
+                    <p className="text-gray-400 text-sm">{passive.description}</p>
+                  </div>
+                ))}
+            </div>
+          )}
+
+        </div>
       </div>
     </div>
   );

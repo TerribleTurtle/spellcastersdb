@@ -70,30 +70,39 @@ export interface Unit {
 export interface Ability {
   ability_id: string;
   name: string;
+  name: string;
   description: string;
-  icon?: string;
+  // Some abilities might not have cooldown in the data yet, but good to keep optional
   cooldown?: number;
-  tags?: string[];
+}
+
+export interface HeroAbilities {
+  passive: Ability[];
+  primary: Ability;
+  defense: Ability;
+  ultimate: Ability;
 }
 
 export interface Hero {
   $schema?: string;
   game_version: string;
-  hero_id: string; // Changed from entity_id
+  hero_id: string;
   name: string;
-  title: string;
-  magic_school: MagicSchool;
-  description: string;
   image_required?: boolean;
 
-  // Hero Stats
+  // Combat Stats
   health: number;
   movement_speed: number;
+  flight_speed: number;
+  health_regen_rate: number;
+  regen_delay: number;
+  
+  // Offense
+  attack_damage_summoner: number;
+  attack_damage_minion: number;
 
-  // Abilities
-  abilities?: Ability[];
-
-  tags: string[];
+  // Kit
+  abilities: HeroAbilities;
 }
 
 export interface Consumable {
