@@ -118,6 +118,7 @@ export interface Consumable {
   duration?: number;
 
   tags: string[];
+  rarity?: string;
 }
 
 export interface Upgrade {
