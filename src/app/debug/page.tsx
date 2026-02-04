@@ -12,12 +12,12 @@ export default async function DebugPage() {
 
   if (error || !data) {
     return (
-      <div className="min-h-screen bg-red-950 text-white p-8">
+      <div className="min-h-screen bg-surface-main text-foreground p-8">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-8 text-red-400">❌ API Error</h1>
-          <div className="bg-white/10 rounded-xl p-6">
-            <p className="text-xl mb-4">Failed to fetch game data</p>
-            <pre className="bg-black/30 p-4 rounded-lg overflow-auto">
+          <div className="bg-surface-card rounded-xl p-6 border border-red-500/20">
+            <p className="text-xl mb-4 text-red-200">Failed to fetch game data</p>
+            <pre className="bg-black/30 p-4 rounded-lg overflow-auto text-red-300 font-mono text-sm">
               {error instanceof Error ? error.message : String(error)}
             </pre>
           </div>

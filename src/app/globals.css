@@ -47,7 +47,13 @@
 }
 
 body {
-  background: var(--background);
+  background: radial-gradient(
+    circle at top center, 
+    color-mix(in srgb, var(--color-brand-primary), transparent 90%), 
+    var(--color-surface-main)
+  );
+  background-color: var(--color-surface-main); /* Fallback */
   color: var(--foreground);
   font-family: var(--font-geist-sans), sans-serif;
+  min-height: 100vh;
 }
