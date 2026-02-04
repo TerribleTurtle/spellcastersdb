@@ -1,0 +1,25 @@
+# SpellcastersDB.com Task List
+
+- [/] **Phase 0: Architecture & Deployment** <!-- id: 0 -->
+  - [x] Initialize Next.js Project (TypeScript, Tailwind, customized `npx` command) <!-- id: 1 -->
+  - [/] Commit Initial Codebase to GitHub <!-- id: 2 -->
+  - [ ] Verify Vercel Deployment & Domain Connection (`spellcastersdb.com`) <!-- id: 3 -->
+- [ ] **Phase 1: The Foundation (Data Layer)** <!-- id: 4 -->
+  - [ ] Define TypeScript Interfaces (The Contract) based on API Docs <!-- id: 5 -->
+  - [ ] Create Data Fetching Service (`lib/api.ts`) with Stale-While-Revalidate <!-- id: 6 -->
+  - [ ] Implement Static Site Generation (SSG) for Unit Pages <!-- id: 7 -->
+- [ ] **Phase 2: The Archive (UI Core)** <!-- id: 8 -->
+  - [ ] Build Global Layout (Nav, Footer with Socials) <!-- id: 9 -->
+  - [ ] Create specialized `Card` components (Unit, Spell, Building) <!-- id: 10 -->
+  - [ ] Implement Search & Filter Logic (Fuse.js) <!-- id: 11 -->
+- [ ] **Phase 3: The Forge (Deck Builder)** <!-- id: 12 -->
+  - [ ] implement `DeckContext` for state management <!-- id: 13 -->
+  - [ ] Build "Floating Tray" UI for mobile <!-- id: 14 -->
+  - [ ] Implement "The Invariants" validation logic <!-- id: 15 -->
+- [ ] **Phase 4: Social & Sharing** <!-- id: 16 -->
+  - [ ] Implement `lz-string` URL compression/decompression <!-- id: 17 -->
+  - [ ] Create `vercel-og` API route for dynamic social images <!-- id: 18 -->
+- [ ] **Phase 5: Optimization & Automation ("The Deep Dive")** <!-- id: 19 -->
+  - [ ] Configure `next-sitemap` for SEO <!-- id: 20 -->
+  - [ ] Implement metadata generation strategies <!-- id: 21 -->
+  - [ ] Create Github Action for "Daily Revalidation" (Check API for updates) <!-- id: 22 -->
