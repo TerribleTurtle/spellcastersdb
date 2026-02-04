@@ -2,8 +2,8 @@ import { getHeroes } from "@/lib/api";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Heroes",
-  description: "Browse all accessible heroes in Spellcasters Chronicles.",
+  title: "Spellcasters",
+  description: "Browse all accessible spellcasters in Spellcasters Chronicles.",
 };
 
 export default async function HeroesIndexPage() {
@@ -13,7 +13,7 @@ export default async function HeroesIndexPage() {
     <div className="min-h-screen bg-surface-main text-foreground p-8">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary">
-          Heroes
+          Spellcasters
         </h1>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

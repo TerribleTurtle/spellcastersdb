@@ -14,10 +14,10 @@ function getEntityMeta(entity: UnifiedEntity) {
   if ("hero_id" in entity) {
     return { 
       href: `/heroes/${entity.hero_id}`, 
-      category: "Hero", 
+      category: "Spellcaster", 
       rank: "LEGENDARY",
       pop: null,
-      school: "Hero"
+      school: "Spellcaster"
     };
   }
   if ("consumable_id" in entity) {

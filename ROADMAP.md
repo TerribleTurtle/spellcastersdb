@@ -30,10 +30,10 @@ Build and deploy **SpellcastersDB.com**, a premium, high-performance community h
 
 **Goal:** The application can "read" the game data correctly.
 
-1.  **Define Contracts**: Create `types/api.d.ts` matching the JSON structure (e.g., `Unit`, `Hero`, `Upgrade`).
+1.  **Define Contracts**: Create `types/api.d.ts` matching the JSON structure (e.g., `Unit`, `Spellcaster`, `Upgrade`).
 2.  **Fetch Logic**: Implement `lib/api.ts` to fetch `all_data.json` from the GitHub Pages API.
 3.  **Stubbing**: Create local fallback data (stubs) for offline dev.
-4.  **Stopping Point**: Run a script `npm run check-data` that logs "Fetched 50 Units, 6 Heroes successfully".
+4.  **Stopping Point**: Run a script `npm run check-data` that logs "Fetched 50 Units, 6 Spellcasters successfully".
 
 ### Phase 2: The Archive (Read-Only)
 
@@ -50,7 +50,7 @@ Build and deploy **SpellcastersDB.com**, a premium, high-performance community h
 
 **Goal:** Users can build valid decks.
 
-1.  **State**: `DeckContext` to track selected Hero + 5 Cards.
+1.  **State**: `DeckContext` to track selected Spellcaster + 5 Cards.
 2.  **UI**: The "Floating Tray" (Mobile bottom bar).
 3.  **Validation**: "The Invariants" (Rank limits, Role limits).
 4.  **Stopping Point**: Try to add 5 Titans. UI should prevent it or warn "Invalid Deck".

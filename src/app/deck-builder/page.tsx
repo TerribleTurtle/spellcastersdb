@@ -83,7 +83,7 @@ export default function DeckBuilderPage() {
           
           <div className="space-y-4">
             {[
-              { phase: 'Phase 1', title: 'Deck State Management', desc: 'Hero selection + 5-card deck builder with drag-and-drop', status: 'In Progress' },
+              { phase: 'Phase 1', title: 'Deck State Management', desc: 'Spellcaster selection + 5-card deck builder with drag-and-drop', status: 'In Progress' },
               { phase: 'Phase 2', title: 'The Invariants', desc: 'Real-time validation for rank limits, role restrictions, and deck rules', status: 'Planned' },
               { phase: 'Phase 3', title: 'URL Sharing', desc: 'Compressed deck URLs with auto-generated social preview images', status: 'Planned' },
               { phase: 'Phase 4', title: 'Community Hub', desc: 'Browse and share decks, strategy guides, and tips from other players', status: 'Future' },

@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Game Guide",
-  description: "Learn the basics of Spellcasters Chronicles. Understand unit types, deck building, hero system, and game mechanics.",
+  description: "Learn the basics of Spellcasters Chronicles. Understand unit types, deck building, spellcaster system, and game mechanics.",
   keywords: ["Spellcasters Chronicles", "Guide", "How to Play", "Tutorial", "Game Mechanics", "Deck Building"],
 };
 
@@ -19,7 +19,7 @@ export default function GuidePage() {
           <section className="bg-surface-card border border-white/10 rounded-lg p-6">
             <h2 className="text-2xl font-semibold mb-4 text-brand-accent">What is Spellcasters Chronicles?</h2>
             <p className="text-slate-300 leading-relaxed">
-              Spellcasters Chronicles is a strategic card-based game where players build decks and battle using units, spells, and heroes. Each match requires careful planning, resource management, and tactical decision-making to outmaneuver your opponent.
+              Spellcasters Chronicles is a strategic card-based game where players build decks and battle using units, spells, and spellcasters. Each match requires careful planning, resource management, and tactical decision-making to outmaneuver your opponent.
             </p>
           </section>
 
@@ -83,16 +83,16 @@ export default function GuidePage() {
             </ul>
           </section>
 
-          {/* Hero System */}
+          {/* Spellcaster System */}
           <section className="bg-surface-card border border-white/10 rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Heroes</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Spellcasters</h2>
             <p className="text-slate-300 leading-relaxed mb-4">
-              Every deck is led by a Hero, which defines your playstyle and provides unique abilities. Heroes have:
+              Every deck is led by a Spellcaster, which defines your playstyle and provides unique abilities. Spellcasters have:
             </p>
             <ul className="list-disc list-inside text-slate-300 space-y-2">
-              <li><strong>Faction Affinity:</strong> Heroes belong to specific factions and may synergize with certain unit types</li>
+              <li><strong>Faction Affinity:</strong> Spellcasters belong to specific factions and may synergize with certain unit types</li>
               <li><strong>Special Abilities:</strong> Unique powers that can be activated during battle</li>
-              <li><strong>Starting Resources:</strong> Heroes may influence your starting mana or other resources</li>
+              <li><strong>Starting Resources:</strong> Spellcasters may influence your starting mana or other resources</li>
             </ul>
           </section>
 
@@ -131,10 +131,10 @@ export default function GuidePage() {
               Building a strong deck requires understanding the game&apos;s rules and synergies:
             </p>
             <ul className="list-disc list-inside text-slate-300 space-y-2">
-              <li>Each deck must have exactly <strong>1 Hero</strong></li>
+              <li>Each deck must have exactly <strong>1 Spellcaster</strong></li>
               <li>Decks typically contain <strong>5 units</strong> (exact rules may vary)</li>
               <li>Consider balancing unit ranks for early, mid, and late game presence</li>
-              <li>Build synergies between your Hero and units</li>
+              <li>Build synergies between your Spellcaster and units</li>
               <li>Include a mix of offensive and defensive options</li>
               <li>Account for different opponent strategies</li>
             </ul>

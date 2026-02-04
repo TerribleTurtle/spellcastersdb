@@ -2,11 +2,11 @@
 
 **Current Phase**: Phase 3: The Forge (Deck Builder)
 **Status**: Ready to Start
-**Last Action**: Completed Phase 2 (Archive UI, Search, Filter, Data Unification) on 2026-02-04.
+**Last Action**: Renamed user-facing "Heroes" references to "Spellcasters" on 2026-02-04.
 
 ## Current Focus
 
-We are about to begin building "The Forge", the deck-building engine of SpellcastersDB.
+We are preparing to build "The Forge", but first completed a terminology update requested by the user.
 
 ## Active Tasks
 
@@ -19,6 +19,7 @@ We are about to begin building "The Forge", the deck-building engine of Spellcas
 
 ## Recent Accomplishments
 
+- [x] Renamed "Hero" -> "Spellcaster" in UI (Sidebar, Headers, Guide, Deck Builder).
 - [x] Refactored Root Page to host the Archive.
 - [x] Unified Units, Heroes, and Consumables into a single searchable database.
 - [x] Implemented polymorphic `UnitCard` and dynamic filtering.

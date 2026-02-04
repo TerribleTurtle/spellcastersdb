@@ -19,7 +19,7 @@ interface FilterSidebarProps {
 
 const SCHOOLS = ["Astral", "War", "Elemental", "Lightning", "Holy", "Dark", "Frost"];
 const RANKS = ["I", "II", "III", "IV"];
-const CATEGORIES = ["Hero", "Creature", "Building", "Spell", "Titan", "Consumable"];
+const CATEGORIES = ["Spellcaster", "Creature", "Building", "Spell", "Titan", "Consumable"];
 
 export function FilterSidebar({
   searchQuery,

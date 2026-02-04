@@ -13,10 +13,10 @@ function getSearchableAttributes(entity: UnifiedEntity) {
   // Hero
   if ("hero_id" in entity) {
     return {
-      category: "Hero",
-      school: "Hero",     // Virtual School for filtering
+      category: "Spellcaster",
+      school: "Spellcaster",     // Virtual School for filtering
       rank: "LEGENDARY",  // Virtual Rank
-      tags: ["Hero", entity.name],
+      tags: ["Spellcaster", entity.name],
     };
   }
   // Consumable

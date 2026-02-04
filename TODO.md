@@ -8,10 +8,10 @@
   - [x] Define TypeScript Interfaces (The Contract) based on API Docs <!-- id: 5 -->
   - [x] Create Data Fetching Service (`lib/api.ts`) with Stale-While-Revalidate <!-- id: 6 -->
   - [x] Implement Static Site Generation (SSG) for Unit Pages <!-- id: 7 -->
-  - [x] Implement Static Site Generation (SSG) for Hero Pages
+  - [x] Implement Static Site Generation (SSG) for Spellcaster Pages
     - [x] Create Dynamic Route `src/app/heroes/[id]/page.tsx`
     - [x] Implement `generateStaticParams` for build-time generation
-    - [x] Implement `generateMetadata` for dynamic hero SEO
+    - [x] Implement `generateMetadata` for dynamic spellcaster SEO
   - [x] Implement Static Site Generation (SSG) for Consumable Pages
     - [x] Create Dynamic Route `src/app/consumables/[id]/page.tsx`
     - [x] Implement `generateStaticParams` for build-time generation
