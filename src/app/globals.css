@@ -1,26 +1,53 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  /* Brand Palette */
+  --color-brand-primary: #a855f7; /* Purple 500 */
+  --color-brand-secondary: #ec4899; /* Pink 500 */
+  --color-brand-accent: #22d3ee; /* Cyan 400 */
+  --color-brand-dark: #0f172a; /* Slate 900 */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Semantic Surfaces */
+  --color-surface-main: #0f172a;
+  --color-surface-card: rgba(255, 255, 255, 0.05); /* Glass effect */
+  --color-surface-hover: rgba(255, 255, 255, 0.1);
+  --color-surface-highlight: rgba(168, 85, 247, 0.2);
+
+  /* Rarity Colors */
+  --color-rarity-common: #94a3b8; /* Slate 400 */
+  --color-rarity-rare: #60a5fa; /* Blue 400 */
+  --color-rarity-epic: #a855f7; /* Purple 500 */
+  --color-rarity-legendary: #facc15; /* Yellow 400 */
+
+  /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /* Animations */
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+
+  @keyframes glow {
+    from {
+      box-shadow:
+        0 0 10px #a855f7,
+        0 0 20px #a855f7;
+    }
+    to {
+      box-shadow:
+        0 0 20px #ec4899,
+        0 0 30px #ec4899;
+    }
+  }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  /* Default Dark Theme */
+  --background: #0f172a;
+  --foreground: #ededed;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
 }
