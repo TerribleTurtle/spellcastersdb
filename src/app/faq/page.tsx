@@ -11,7 +11,7 @@ export default function FAQPage() {
   const faqs = [
     {
       question: "What is SpellcastersDB?",
-      answer: "SpellcastersDB is a community-driven database and deck builder for Spellcasters Chronicles. It provides comprehensive information about all units, heroes, and consumables in the game, along with tools to help you build and share decks."
+      answer: "SpellcastersDB is a community-driven database and deck builder for Spellcasters Chronicles. It provides comprehensive information about all units, Spellcasters, and consumables in the game, along with tools to help you build and share decks."
     },
     {
       question: "Is this an official website?",
@@ -73,7 +73,7 @@ export default function FAQPage() {
     },
     {
       question: "How do I use the deck builder?",
-      answer: "The deck builder is currently under development. Once complete, you&apos;ll be able to select a hero and add units to create valid decks that follow the game&apos;s rules. Decks will be shareable via URL."
+      answer: "The deck builder is currently under development. Once complete, you'll be able to select a hero and add units to create valid decks that follow the game's rules. Decks will be shareable via URL."
     },
     {
       question: "Can I filter units by type or faction?",
@@ -119,7 +119,7 @@ export default function FAQPage() {
         <div className="bg-surface-card border border-white/10 rounded-lg p-6 mb-8">
           <h2 className="text-xl font-semibold mb-3 text-brand-accent">Still have questions?</h2>
           <p className="text-slate-300 mb-4">
-            If you have a question that isn't answered here, feel free to reach out through the Community API GitHub repository or check the{" "}
+            If you have a question that isn&apos;t answered here, feel free to reach out through the Community API GitHub repository or check the{" "}
             <Link href="/about" className="text-brand-primary hover:text-brand-accent transition-colors">
               About page
             </Link>
