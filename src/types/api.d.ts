@@ -152,3 +152,5 @@ export interface AllDataResponse {
   consumables: Consumable[];
   upgrades: Upgrade[];
 }
+
+export type UnifiedEntity = Unit | Hero | Consumable;

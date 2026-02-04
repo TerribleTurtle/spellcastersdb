@@ -22,11 +22,11 @@ export default function Footer() {
           {/* Right: Links */}
           <div className="flex flex-col items-center gap-4 md:items-end">
             <div className="flex gap-6">
-              <a href="#" className="text-sm text-slate-400 hover:text-brand-accent transition-colors">
+              <a href="https://store.steampowered.com/app/2458470/Spellcasters_Chronicles/" target="_blank" rel="noopener noreferrer" className="text-sm text-slate-400 hover:text-brand-accent transition-colors">
                 Steam
               </a>
-              <a href="#" className="text-sm text-slate-400 hover:text-brand-accent transition-colors">
-                Discord
+              <a href="https://discord.com/invite/spellcasters-chronicles-1425209254847058003" target="_blank" rel="noopener noreferrer" className="text-sm text-slate-400 hover:text-brand-accent transition-colors">
+                Official Discord
               </a>
               <a href="https://github.com/TerribleTurtle/spellcasters-community-api" target="_blank" rel="noopener noreferrer" className="text-sm text-slate-400 hover:text-brand-accent transition-colors">
                 Community API

@@ -3,7 +3,7 @@
  * Implements Stale-While-Revalidate (SWR) caching strategy via Next.js fetch
  */
 
-import type { AllDataResponse, Unit, Hero, Consumable, Upgrade } from "@/types/api";
+import type { AllDataResponse, Unit, Hero, Consumable, Upgrade, UnifiedEntity } from "@/types/api";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://terribleturtle.github.io/spellcasters-community-api/api/v1";
 
@@ -101,4 +101,16 @@ export async function getUnitsByCategory(category: Unit['category']): Promise<Un
 export async function getUnitsByMagicSchool(school: Unit['magic_school']): Promise<Unit[]> {
   const units = await getUnits();
   return units.filter(unit => unit.magic_school === school);
+}
+
+/**
+ * Returns a unified list of all searchable entities (Units, Heroes, Consumables)
+ */
+export async function getAllEntities(): Promise<UnifiedEntity[]> {
+  const data = await fetchGameData();
+  return [
+    ...data.units,
+    ...data.heroes,
+    ...data.consumables
+  ];
 }
