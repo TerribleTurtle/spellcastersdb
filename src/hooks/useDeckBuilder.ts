@@ -141,6 +141,12 @@ export function useDeckBuilder() {
   stats.averageCost = filledCount > 0 ? totalPop / filledCount : 0;
   stats.isValid = stats.validationErrors.length === 0;
 
+  const setDeckState = useCallback((newDeck: Deck) => {
+      setDeck(newDeck);
+  }, []);
+
+  const isEmpty = !deck.spellcaster && deck.slots.every(s => !s.unit);
+
   return {
     deck,
     isInitialized,
@@ -148,6 +154,8 @@ export function useDeckBuilder() {
     setSlot,
     clearSlot,
     clearDeck,
+    setDeckState,
+    isEmpty,
     validation: {
         isValid: stats.isValid,
         errors: stats.validationErrors

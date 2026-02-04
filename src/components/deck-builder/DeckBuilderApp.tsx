@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { 
   DndContext, 
   DragEndEvent, 
@@ -11,12 +10,17 @@ import {
   useSensor, 
   useSensors 
 } from "@dnd-kit/core";
+import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { Unit, Hero as Spellcaster } from "@/types/api";
 import { useDeckBuilder } from "@/hooks/useDeckBuilder";
 import { UnitBrowser } from "./UnitBrowser";
 import { CardInspector } from "./CardInspector";
 import { ForgeControls } from "./ForgeControls";
 import { ActiveDeckTray } from "./ActiveDeckTray";
+import { decodeDeck } from "@/lib/encoding";
+import { Deck, DeckSlot } from "@/types/deck"; 
+import { AlertTriangle } from "lucide-react";
 
 interface DeckBuilderAppProps {
   units: Unit[];
@@ -24,19 +28,95 @@ interface DeckBuilderAppProps {
 }
 
 export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
-  const { 
-    deck, 
-    setSlot, 
-    clearSlot, 
-    clearDeck, 
-    setSpellcaster, 
-    stats
-  } = useDeckBuilder();
+  // Import Conflict State
+  const [pendingImport, setPendingImport] = useState<Deck | null>(null);
 
   // Selected Item for Inspector
   const [selectedItem, setSelectedItem] = useState<Unit | Spellcaster | null>(null);
   // Dragging Item for Overlay
   const [activeDragItem, setActiveDragItem] = useState<Unit | Spellcaster | null>(null);
+  
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const { 
+      deck, 
+      setSlot, 
+      clearSlot, 
+      clearDeck, 
+      setSpellcaster, 
+      setDeckState,
+      isEmpty,
+      stats,
+      isInitialized
+  } = useDeckBuilder();
+
+  // URL Import Logic
+  useEffect(() => {
+    // Only run if deck logic is initialized to avoid premature overwrite
+    if (!isInitialized) return;
+
+    const deckHash = searchParams.get('d');
+    if (!deckHash) return;
+
+    const decoded = decodeDeck(deckHash);
+    if (!decoded) return;
+
+    // Reconstruct Deck Object from IDs
+    const newDeck: Deck = {
+        spellcaster: spellcasters.find(s => s.hero_id === decoded.spellcasterId) || null,
+        slots: deck.slots.map(s => s) as [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot] // Clone structure
+    };
+
+    // Fill slots
+    decoded.slotIds.forEach((id, idx) => {
+        if (idx > 4) return;
+        if (id) {
+            const unit = units.find(u => u.entity_id === id);
+            if (unit) {
+                newDeck.slots[idx] = { ...newDeck.slots[idx], unit };
+            }
+        }
+    });
+    
+    // Check equality (naive check via IDs)
+    const localIds = [
+        deck.spellcaster?.hero_id, 
+        ...deck.slots.map(s => s.unit?.entity_id)
+    ];
+    const importedIds = [decoded.spellcasterId, ...decoded.slotIds];
+    
+    // Simplistic equality check
+    const isDifferent = localIds.some((id, i) => (id || null) !== (importedIds[i] || null));
+
+    if (!isDifferent) {
+        // Same deck, just clear param to clean URL
+        router.replace('/deck-builder', { scroll: false });
+        return;
+    }
+
+    if (isEmpty) {
+        setDeckState(newDeck);
+        router.replace('/deck-builder', { scroll: false });
+    } else {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        setPendingImport(newDeck);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, isInitialized, isEmpty]); 
+
+  const confirmImport = () => {
+    if (pendingImport) {
+        setDeckState(pendingImport);
+        setPendingImport(null);
+        router.replace('/deck-builder', { scroll: false });
+    }
+  };
+
+  const cancelImport = () => {
+    setPendingImport(null);
+    router.replace('/deck-builder', { scroll: false });
+  };
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 10 } }),
@@ -58,11 +138,19 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     if (!over || !item) return;
 
     // Check if it's a Spellcaster being dropped
-    // Simplistic Logic: If it's a Hero, allowed anywhere -> Set as Deck Spellcaster
-    // If it's a Unit -> Slot logic
     if ('hero_id' in item) {
-        // It's a hero
-        setSpellcaster(item as Spellcaster);
+        // If dropped on "spellcaster-zone" or anywhere really?
+        // User asked for "drag to their slot in the top right".
+        // Let's enforce the target ID.
+        if (over.id === 'spellcaster-zone' || !over.id) { 
+             // Allow loose dropping for now or strict? 
+             // "allow selecting and changing a spellcater by draging them to theri slot"
+             // Implies strict target. But earlier I considered "anywhere". 
+             // Let's support both: Drop on "spellcaster-zone" specifically.
+             if (over.id === 'spellcaster-zone') {
+                 setSpellcaster(item as Spellcaster);
+             }
+        }
         return;
     }
 
@@ -122,8 +210,8 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                         spellcaster={deck.spellcaster} 
                         stats={stats} 
                         onClear={clearDeck}
+                        deck={deck} // Pass deck for encoding
                     />
-                    {/* Spellcaster quick pick removed in favor of Browser + Inspector flow */}
                 </div>
             </div>
 
@@ -134,6 +222,40 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                     onRemoveSlot={clearSlot} 
                 />
             </div>
+
+            {/* Import Conflict Modal */}
+            {pendingImport && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+                    <div className="bg-surface-card border border-brand-primary/50 rounded-lg p-6 max-w-md w-full shadow-2xl relative animate-in fade-in zoom-in duration-200">
+                        <div className="flex items-start gap-4 mb-4">
+                            <div className="p-3 bg-yellow-500/20 rounded-full text-yellow-500">
+                                <AlertTriangle size={24} />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold text-white mb-1">Load Shared Deck?</h3>
+                                <p className="text-sm text-gray-400">
+                                    You have a non-empty deck in your local storage. Loading this link will overwrite your current changes.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex gap-3 justify-end">
+                            <button 
+                                onClick={cancelImport}
+                                className="px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                            >
+                                Keep My Deck
+                            </button>
+                            <button 
+                                onClick={confirmImport}
+                                className="px-4 py-2 rounded text-sm font-bold bg-brand-primary text-white hover:bg-brand-primary/80 shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-colors"
+                            >
+                                Load Shared Deck
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
 
         {/* Drag Overlay for Visual Feedback */}

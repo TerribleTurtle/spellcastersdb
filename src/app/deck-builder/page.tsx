@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { fetchGameData } from '@/lib/api';
 import { DeckBuilderApp } from '@/components/deck-builder/DeckBuilderApp';
@@ -12,10 +13,12 @@ export default async function DeckBuilderPage() {
 
   return (
     <div className="min-h-screen pt-16 bg-surface-main">
-        <DeckBuilderApp 
-            units={data.units} 
-            spellcasters={data.heroes} 
-        />
+        <Suspense fallback={<div className="flex h-[80vh] items-center justify-center text-brand-primary">Loading The Forge...</div>}>
+            <DeckBuilderApp 
+                units={data.units} 
+                spellcasters={data.heroes} 
+            />
+        </Suspense>
     </div>
   );
 }
