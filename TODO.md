@@ -1,13 +1,13 @@
 # SpellcastersDB.com Task List
 
-- [/] **Phase 0: Architecture & Deployment** <!-- id: 0 -->
+- [x] **Phase 0: Architecture & Deployment** <!-- id: 0 -->
   - [x] Initialize Next.js Project (TypeScript, Tailwind, customized `npx` command) <!-- id: 1 -->
   - [x] Commit Initial Codebase to GitHub <!-- id: 2 -->
-  - [ ] Verify Vercel Deployment & Domain Connection (`spellcastersdb.com`) <!-- id: 3 -->
-- [/] **Phase 1: The Foundation (Data Layer)** <!-- id: 4 -->
+  - [x] Verify Vercel Deployment & Domain Connection (`spellcastersdb.com`) <!-- id: 3 -->
+- [x] **Phase 1: The Foundation (Data Layer)** <!-- id: 4 -->
   - [x] Define TypeScript Interfaces (The Contract) based on API Docs <!-- id: 5 -->
   - [x] Create Data Fetching Service (`lib/api.ts`) with Stale-While-Revalidate <!-- id: 6 -->
-  - [ ] Implement Static Site Generation (SSG) for Unit Pages <!-- id: 7 -->
+  - [x] Implement Static Site Generation (SSG) for Unit Pages <!-- id: 7 -->
 - [ ] **Phase 2: The Archive (UI Core)** <!-- id: 8 -->
   - [ ] Build Global Layout (Nav, Footer with Socials) <!-- id: 9 -->
   - [ ] Create specialized `Card` components (Unit, Spell, Building) <!-- id: 10 -->
