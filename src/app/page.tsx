@@ -2,8 +2,8 @@ import { getAllEntities } from "@/lib/api";
 import { UnitArchive } from "@/components/archive/UnitArchive";
 
 export const metadata = {
-  title: "SpellcastersDB - Community Database & Deck Builder",
-  description: "The definitive community hub for Spellcasters Chronicles. Search and filter the complete unit database.",
+  title: "Spellcasters Chronicles Database",
+  description: "The definitive community hub for Spellcasters Chronicles. Search and filter the complete unit database including creatures, spells, buildings, and titans.",
 };
 
 export default async function Home() {

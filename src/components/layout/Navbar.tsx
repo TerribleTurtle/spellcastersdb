@@ -15,6 +15,9 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Deck Builder', href: '/deck-builder', internal: true },
+    { name: 'Guide', href: '/guide', internal: true },
+    { name: 'FAQ', href: '/faq', internal: true },
+    { name: 'About', href: '/about', internal: true },
   ];
 
   const externalLinks = [

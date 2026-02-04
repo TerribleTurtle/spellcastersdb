@@ -14,14 +14,22 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | SpellcastersDB",
-    default: "SpellcastersDB - Community Database & Deck Builder",
+    template: "%s | Spellcasters Chronicles Database",
+    default: "Spellcasters Chronicles Database | SpellcastersDB",
   },
   description: "The definitive community hub for Spellcasters Chronicles. Browse units, build decks, and analyze the meta with the most up-to-date data.",
   keywords: ["Spellcasters Chronicles", "Deck Builder", "Unit Database", "Strategy", "Game Data", "Wiki"],
   authors: [{ name: "TerribleTurtle" }],
   creator: "TerribleTurtle",
   metadataBase: new URL("https://spellcastersdb.com"),
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+  },
   openGraph: {
     title: "SpellcastersDB",
     description: "The definitive community hub for Spellcasters Chronicles.",
