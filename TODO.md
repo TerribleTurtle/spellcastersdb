@@ -8,6 +8,14 @@
   - [x] Define TypeScript Interfaces (The Contract) based on API Docs <!-- id: 5 -->
   - [x] Create Data Fetching Service (`lib/api.ts`) with Stale-While-Revalidate <!-- id: 6 -->
   - [x] Implement Static Site Generation (SSG) for Unit Pages <!-- id: 7 -->
+  - [x] Implement Static Site Generation (SSG) for Hero Pages
+    - [x] Create Dynamic Route `src/app/heroes/[id]/page.tsx`
+    - [x] Implement `generateStaticParams` for build-time generation
+    - [x] Implement `generateMetadata` for dynamic hero SEO
+  - [x] Implement Static Site Generation (SSG) for Consumable Pages
+    - [x] Create Dynamic Route `src/app/consumables/[id]/page.tsx`
+    - [x] Implement `generateStaticParams` for build-time generation
+    - [x] Implement `generateMetadata` for dynamic consumable SEO
 - [ ] **Phase 2: The Archive (UI Core)** <!-- id: 8 -->
   - [ ] Build Global Layout (Nav, Footer with Socials) <!-- id: 9 -->
   - [ ] Create specialized `Card` components (Unit, Spell, Building) <!-- id: 10 -->

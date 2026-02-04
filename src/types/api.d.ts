@@ -79,7 +79,7 @@ export interface Ability {
 export interface Hero {
   $schema?: string;
   game_version: string;
-  entity_id: string;
+  hero_id: string; // Changed from entity_id
   name: string;
   title: string;
   magic_school: MagicSchool;
@@ -99,7 +99,7 @@ export interface Hero {
 export interface Consumable {
   $schema?: string;
   game_version: string;
-  entity_id: string;
+  consumable_id: string; // Changed from entity_id
   name: string;
   description: string;
   image_required?: boolean;

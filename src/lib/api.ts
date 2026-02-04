@@ -80,7 +80,7 @@ export async function getUnitById(entityId: string): Promise<Unit | null> {
  */
 export async function getHeroById(entityId: string): Promise<Hero | null> {
   const heroes = await getHeroes();
-  return heroes.find(hero => hero.entity_id === entityId) || null;
+  return heroes.find(hero => hero.hero_id === entityId) || null;
 }
 
 /**
