@@ -20,8 +20,10 @@ export function EntityImage({ entity, className, alt }: EntityImageProps) {
   const showPlaceholder = error || entity.image_required === false;
 
   const getImageUrl = (entity: UnifiedEntity) => {
-    // Asset base URL is the GitHub Pages root for the API
-    const assetBase = "https://terribleturtle.github.io/spellcasters-community-api/assets";
+    // Derive asset base URL from API URL environment variable
+    // Remove /api/v1 suffix and append /assets
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://terribleturtle.github.io/spellcasters-community-api/api/v1";
+    const assetBase = apiUrl.replace(/\/api\/v1$/, "/assets");
 
     let folder = "units";
     if ("hero_id" in entity) folder = "heroes";

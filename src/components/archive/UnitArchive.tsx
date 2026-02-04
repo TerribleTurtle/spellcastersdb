@@ -22,7 +22,15 @@ interface UnitArchiveProps {
 export function UnitArchive({ initialUnits }: UnitArchiveProps) {
   // State
   const [searchQuery, setSearchQuery] = useState("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  
+  // Initialize view mode based on screen size (mobile = list, desktop = grid)
+  // Using lazy initialization to avoid setState in useEffect
+  const [viewMode, setViewMode] = useState<"grid" | "list">(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768 ? "list" : "grid";
+    }
+    return "grid"; // SSR fallback
+  });
   const [activeFilters, setActiveFilters] = useState<{
     schools: string[];
     ranks: string[];
