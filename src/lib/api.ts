@@ -5,7 +5,11 @@
 
 import type { AllDataResponse, Unit, Hero, Consumable, Upgrade } from "@/types/api";
 
-const API_BASE_URL = "https://terribleturtle.github.io/spellcasters-community-api/api/v1";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://terribleturtle.github.io/spellcasters-community-api/api/v1";
+
+if (!process.env.NEXT_PUBLIC_API_URL) {
+  console.warn("WARN: NEXT_PUBLIC_API_URL is not defined. Using default API URL.");
+}
 const REVALIDATE_SECONDS = 60; // 1 minute cache
 
 /**

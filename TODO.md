@@ -22,6 +22,8 @@
   - [x] **Security**: Configure strict Security Headers (CSP, X-Frame-Options) in `next.config.ts`
   - [x] **SEO**: Generate dynamic `sitemap.xml` for all 50+ pages (`src/app/sitemap.ts`)
   - [x] **Refactor**: Update Debug Page and generated pages to use new Design Tokens
+  - [x] **Config**: Externalize API URL to `NEXT_PUBLIC_API_URL` & add `.env.local` support
+  - [x] **Quality**: Add `type-check` script and fix duplicate type definitions
 - [ ] **Phase 2: The Archive (UI Core)** <!-- id: 8 -->
   - [ ] Build Global Layout (Nav, Footer with Socials) <!-- id: 9 -->
   - [ ] Create specialized `Card` components (Unit, Spell, Building) <!-- id: 10 -->

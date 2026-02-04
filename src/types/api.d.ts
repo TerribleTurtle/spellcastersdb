@@ -70,7 +70,6 @@ export interface Unit {
 export interface Ability {
   ability_id: string;
   name: string;
-  name: string;
   description: string;
   // Some abilities might not have cooldown in the data yet, but good to keep optional
   cooldown?: number;
