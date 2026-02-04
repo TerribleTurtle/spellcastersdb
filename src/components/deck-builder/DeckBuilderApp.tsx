@@ -33,10 +33,10 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     stats
   } = useDeckBuilder();
 
-  // Selected Unit for Inspector
-  const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
+  // Selected Item for Inspector
+  const [selectedItem, setSelectedItem] = useState<Unit | Spellcaster | null>(null);
   // Dragging Item for Overlay
-  const [activeDragUnit, setActiveDragUnit] = useState<Unit | null>(null);
+  const [activeDragItem, setActiveDragItem] = useState<Unit | Spellcaster | null>(null);
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 10 } }),
@@ -44,31 +44,43 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    // We stored the full unit object in data.unit in UnitBrowser
     const current = event.active.data.current;
-    if (current && typeof current === 'object' && 'unit' in current) {
-         setActiveDragUnit(current.unit as Unit);
+    if (current && typeof current === 'object' && 'item' in current) {
+         setActiveDragItem(current.item as Unit | Spellcaster);
     }
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
-    setActiveDragUnit(null);
-    const { active, over } = event;
+    const item = activeDragItem;
+    setActiveDragItem(null);
+    const { over } = event;
 
-    if (!over) return;
+    if (!over || !item) return;
 
-    // Identified by `slot-{index}`
+    // Check if it's a Spellcaster being dropped
+    // Simplistic Logic: If it's a Hero, allowed anywhere -> Set as Deck Spellcaster
+    // If it's a Unit -> Slot logic
+    if ('hero_id' in item) {
+        // It's a hero
+        setSpellcaster(item as Spellcaster);
+        return;
+    }
+
+    // It's a Unit
     if (!over.id.toString().startsWith("slot-")) return;
 
     const slotIndex = over.data.current?.index;
-    const unit = active.data.current?.unit as Unit;
 
-    if (slotIndex !== undefined && unit) {
-        // useDeckBuilder handles validation, but we can also prevent dropping here visually if needed
-        // For now, just try to set it.
-        setSlot(slotIndex, unit);
+    if (slotIndex !== undefined) {
+        setSlot(slotIndex, item as Unit);
     }
   };
+
+  // Merge Data for Browser
+  const browserItems = [
+      ...spellcasters.map(h => ({ ...h, category: 'Spellcaster' as const })), // Add mock category for filter
+      ...units
+  ];
 
   return (
     <DndContext 
@@ -82,42 +94,36 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                 {/* Left: Unit Browser (3 Cols) */}
                 <div className="md:col-span-3 h-1/2 md:h-full overflow-hidden border-b md:border-b-0 md:border-r border-white/10">
                     <UnitBrowser 
-                        units={units} 
-                        onSelectUnit={setSelectedUnit} 
+                        items={browserItems} 
+                        onSelectItem={setSelectedItem} 
                     />
                 </div>
 
                 {/* Center: Inspector (6 Cols) */}
                 <div className="md:col-span-6 h-1/2 md:h-full overflow-hidden flex flex-col">
                     <CardInspector 
-                        unit={selectedUnit} 
-                        onAddSlot={(idx) => selectedUnit && setSlot(idx, selectedUnit)}
+                        item={selectedItem} 
+                        onAddSlot={(idx) => {
+                            if (selectedItem && !('hero_id' in selectedItem)) {
+                                setSlot(idx, selectedItem as Unit);
+                            }
+                        }}
+                        onSetSpellcaster={() => {
+                            if (selectedItem && 'hero_id' in selectedItem) {
+                                setSpellcaster(selectedItem as Spellcaster);
+                            }
+                        }}
                     />
                 </div>
 
                 {/* Right: Controls (3 Cols) */}
                 <div className="md:col-span-3 hidden md:block border-l border-white/10 h-full overflow-y-auto">
-                    {/* Spellcaster Select would go here properly, for now passing mock select */}
                     <ForgeControls 
                         spellcaster={deck.spellcaster} 
                         stats={stats} 
                         onClear={clearDeck}
                     />
-                    {/* Temp Spellcaster Picker for MVP */}
-                    <div className="p-4 border-t border-white/10">
-                        <h4 className="text-xs font-bold text-gray-500 uppercase mb-2">Change Spellcaster</h4>
-                        <div className="grid grid-cols-3 gap-2">
-                            {spellcasters.map(sc => (
-                                <button 
-                                    key={sc.hero_id}
-                                    onClick={() => setSpellcaster(sc)}
-                                    className={`text-[10px] p-1 border rounded ${deck.spellcaster?.hero_id === sc.hero_id ? 'border-brand-primary bg-brand-primary/20' : 'border-white/10'}`}
-                                >
-                                    {sc.name.split(' ')[0]}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                    {/* Spellcaster quick pick removed in favor of Browser + Inspector flow */}
                 </div>
             </div>
 
@@ -132,9 +138,9 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
 
         {/* Drag Overlay for Visual Feedback */}
         <DragOverlay>
-            {activeDragUnit ? (
-                 <div className="w-24 h-32 bg-surface-card border-2 border-brand-primary rounded-lg shadow-2xl opacity-90 flex items-center justify-center">
-                    <span className="text-xs font-bold text-center p-1">{activeDragUnit.name}</span>
+            {activeDragItem ? (
+                 <div className="w-32 h-auto aspect-3/4 bg-surface-card border-2 border-brand-primary rounded-lg shadow-2xl opacity-90 flex items-center justify-center pointer-events-none">
+                    <span className="text-xs font-bold text-center p-1">{activeDragItem.name}</span>
                  </div>
             ) : null}
         </DragOverlay>
