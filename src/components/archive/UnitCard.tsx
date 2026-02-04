@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { UnifiedEntity, Unit, Hero, Consumable } from "@/types/api";
-import { cn } from "@/lib/utils"; 
-// If cn doesn't exist, I'll use clsx + tailwind-merge locally or check utils.
-// Checking package.json revealed clsx and tailwind-merge.
+import { UnifiedEntity } from "@/types/api";
+import { cn } from "@/lib/utils";
+import { EntityImage } from "@/components/ui/EntityImage";
 
 interface UnitCardProps {
   unit: UnifiedEntity;
@@ -42,87 +41,113 @@ function getEntityMeta(entity: UnifiedEntity) {
 
 export function UnitCard({ unit, variant = "default", className }: UnitCardProps) {
   const meta = getEntityMeta(unit);
+  
   if (variant === "compact") {
     return (
       <Link
         href={meta.href}
         className={cn(
-          "group flex items-center justify-between p-3 rounded-lg border border-white/5 bg-surface-card hover:bg-surface-hover hover:border-brand-accent/30 transition-all",
+          "group flex items-center gap-3 p-2.5 rounded-lg border border-white/5 bg-surface-card hover:bg-surface-hover hover:border-brand-accent/30 transition-all",
           className
         )}
       >
-        <div className="flex items-center gap-3">
-          {/* Rank Badge */}
-          <div className="flex items-center justify-center w-8 h-8 rounded bg-brand-dark border border-white/10 text-[10px] font-mono font-bold text-brand-primary group-hover:text-brand-accent tracking-tighter overflow-hidden">
-            {meta.rank}
-          </div>
-          
-          <div className="flex flex-col">
-            <h3 className="text-sm font-bold text-white group-hover:text-brand-accent transition-colors">
-              {unit.name}
-            </h3>
-            <span className="text-[10px] uppercase tracking-wider text-gray-500 group-hover:text-gray-400">
-              {meta.school} • {meta.category}
-            </span>
+        {/* Image Thumbnail */}
+        <EntityImage
+          entity={unit}
+          className="w-12 h-12 shrink-0"
+        />
+        
+        <div className="flex flex-col flex-1 min-w-0">
+          <h3 className="text-sm font-bold text-white group-hover:text-brand-accent transition-colors truncate">
+            {unit.name}
+          </h3>
+          <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider">
+            <span className="text-brand-primary font-semibold">{meta.school}</span>
+            <span className="text-gray-600">•</span>
+            <span className="text-gray-500">{meta.category}</span>
           </div>
         </div>
-
-        {/* Stats / Cost */}
-        <div className="flex items-center gap-4 text-xs font-mono">
-           <div className="text-right">
-             {meta.pop !== null && (
-               <div className="text-brand-secondary">{meta.pop} Pop</div>
-             )}
-           </div>
+        
+        {/* Stats - Only show for units with combat stats */}
+        {"health" in unit && "damage" in unit && (
+          <div className="hidden sm:flex items-center gap-3 text-xs font-mono shrink-0">
+            <div className="text-center">
+              <div className="text-gray-600 text-[9px]">HP</div>
+              <div className="text-white font-bold">{unit.health}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-gray-600 text-[9px]">DMG</div>
+              <div className="text-white font-bold">{unit.damage}</div>
+            </div>
+          </div>
+        )}
+        
+        {/* Rank Badge */}
+        <div className="flex items-center justify-center w-7 h-7 rounded bg-brand-dark border border-brand-primary/20 text-[9px] font-mono font-bold text-brand-primary shrink-0">
+          {meta.rank}
         </div>
       </Link>
     );
   }
 
-  // Default (Large/Grid) Variant
+  // Default (Grid) Variant
   return (
     <Link
       href={meta.href}
       className={cn(
-        "block group bg-surface-card border border-white/10 rounded-xl p-5 transition-all hover:bg-surface-hover hover:border-brand-accent/50 hover:-translate-y-1 backdrop-blur-sm",
+        "block group bg-surface-card border border-white/10 rounded-lg overflow-hidden transition-all hover:bg-surface-hover hover:border-brand-accent/50 hover:-translate-y-1",
         className
       )}
     >
-      <div className="flex justify-between items-start mb-2">
-        <span className="text-xs font-mono text-gray-500 uppercase">{meta.category}</span>
-        {meta.pop !== null && (
-          <span className="text-xs font-mono text-brand-secondary bg-brand-secondary/10 px-2 py-0.5 rounded border border-brand-secondary/20">
-            {meta.pop} Pop
+      {/* Card Image */}
+      <EntityImage
+        entity={unit}
+        className="w-full h-28"
+      />
+      
+      <div className="p-3">
+        {/* Header with Rank */}
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[10px] font-mono text-gray-500 uppercase tracking-wide">{meta.category}</span>
+          <span className="text-[10px] font-mono font-bold text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border border-brand-primary/20">
+            {meta.rank}
           </span>
-        )}
-      </div>
+        </div>
 
-      <h2 className="text-xl font-bold text-white group-hover:text-brand-accent transition-colors mb-1 truncate">
-        {unit.name}
-      </h2>
+        <h2 className="text-base font-bold text-white group-hover:text-brand-accent transition-colors mb-1 truncate">
+          {unit.name}
+        </h2>
 
-      <p className="text-xs text-brand-primary mb-3 uppercase tracking-wider font-semibold">
-        {meta.school} • {meta.rank}
-      </p>
+        <p className="text-[10px] text-brand-primary mb-3 uppercase tracking-wider font-semibold">
+          {meta.school}
+        </p>
 
-      {/* Render stats conditionally based on type, or just common ones */}
-      <div className="grid grid-cols-2 gap-2 text-xs text-gray-400 mt-4 border-t border-white/5 pt-3">
-        {"health" in unit ? (
-           <>
-            <div>
-              <span className="block text-[10px] uppercase tracking-wider text-gray-600 mb-0.5">Health</span>
-              <span className="text-white font-mono">{unit.health}</span>
+        {/* Stats Grid - Cleaner presentation */}
+        {"health" in unit && "damage" in unit ? (
+          <div className="grid grid-cols-4 gap-2 pt-2 border-t border-white/5">
+            <div className="text-center">
+              <div className="text-[9px] text-gray-600 mb-0.5">HP</div>
+              <div className="text-xs text-white font-mono font-bold">{unit.health}</div>
             </div>
-            <div>
-              <span className="block text-[10px] uppercase tracking-wider text-gray-600 mb-0.5">Speed</span>
-              <span className="text-white font-mono">{unit.movement_speed}</span>
+            <div className="text-center">
+              <div className="text-[9px] text-gray-600 mb-0.5">DMG</div>
+              <div className="text-xs text-white font-mono font-bold">{unit.damage}</div>
             </div>
-           </>
+            <div className="text-center">
+              <div className="text-[9px] text-gray-600 mb-0.5">RNG</div>
+              <div className="text-xs text-white font-mono font-bold">{unit.range}</div>
+            </div>
+            <div className="text-center">
+              <div className="text-[9px] text-gray-600 mb-0.5">SPD</div>
+              <div className="text-xs text-white font-mono font-bold">{unit.movement_speed}</div>
+            </div>
+          </div>
         ) : (
-           <div className="col-span-2">
-             <span className="block text-[10px] uppercase tracking-wider text-gray-600 mb-0.5">Description</span>
-             <p className="text-gray-400 line-clamp-2">{unit.description}</p>
-           </div>
+          <div className="pt-2 border-t border-white/5">
+            <p className="text-gray-400 line-clamp-2 text-[10px] leading-relaxed">
+              {"description" in unit ? unit.description : ""}
+            </p>
+          </div>
         )}
       </div>
     </Link>

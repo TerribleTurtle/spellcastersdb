@@ -61,7 +61,7 @@ export function UnitArchive({ initialUnits }: UnitArchiveProps) {
         activeFilters={activeFilters}
         toggleFilter={toggleFilter}
         clearFilters={clearFilters}
-        className="w-full md:w-64 shrink-0 md:sticky md:top-24"
+        className="w-full md:w-64 shrink-0 md:sticky md:top-24 md:z-30"
       />
 
       {/* Main Content */}

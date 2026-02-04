@@ -24,11 +24,12 @@
   - [x] **Refactor**: Update Debug Page and generated pages to use new Design Tokens
   - [x] **Config**: Externalize API URL to `NEXT_PUBLIC_API_URL` & add `.env.local` support
   - [x] **Quality**: Add `type-check` script and fix duplicate type definitions
-- [ ] **Phase 2: The Archive (UI Core)** <!-- id: 8 -->
+- [x] **Phase 2: The Archive (UI Core)** <!-- id: 8 -->
   - [x] Build Global Layout (Nav, Footer with Socials) <!-- id: 9 -->
-  - [ ] Create specialized `Card` components (Unit, Spell, Building) <!-- id: 10 -->
-  - [ ] Implement Search & Filter Logic (Fuse.js) <!-- id: 11 -->
+  - [x] Create specialized `Card` components (Unit, Spell, Building) <!-- id: 10 -->
+  - [x] Implement Search & Filter Logic (Fuse.js) <!-- id: 11 -->
 - [ ] **Phase 3: The Forge (Deck Builder)** <!-- id: 12 -->
+  - [x] Create placeholder page at `/deck-builder` with roadmap
   - [ ] implement `DeckContext` for state management <!-- id: 13 -->
   - [ ] Build "Floating Tray" UI for mobile <!-- id: 14 -->
   - [ ] Implement "The Invariants" validation logic <!-- id: 15 -->

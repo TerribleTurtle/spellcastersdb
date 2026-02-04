@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Filter, X, ChevronDown, ChevronUp, Check, SlidersHorizontal } from "lucide-react";
+import { Search, X, ChevronDown, ChevronUp, Check, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface FilterSidebarProps {
@@ -69,7 +69,7 @@ export function FilterSidebar({
           </button>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-4">
           {/* Search Input */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
@@ -83,14 +83,16 @@ export function FilterSidebar({
           </div>
 
           {/* Active Filters Clear */}
-          {hasActiveFilters && (
-            <button
-              onClick={clearFilters}
-              className="text-xs text-brand-secondary hover:text-brand-secondary/80 flex items-center gap-1 font-mono uppercase tracking-wider"
-            >
-              <X size={12} /> Clear all filters
-            </button>
-          )}
+          <div className="min-h-[20px]">
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="text-xs text-brand-secondary hover:text-brand-secondary/80 flex items-center gap-1 font-mono uppercase tracking-wider"
+              >
+                <X size={12} /> Clear all filters
+              </button>
+            )}
+          </div>
 
           {/* Categories */}
           <FilterSection
