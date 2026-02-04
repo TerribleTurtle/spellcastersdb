@@ -15,7 +15,7 @@ We are preparing to build "The Forge", but first completed a terminology update 
     - "Add to Deck" toggle on Unit Cards.
     - Floating Deck Tray (Mobile/Desktop).
     - Mana Curve Visualization.
-3.  **Validation**: Implement "The Invariants" (Min 40 cards, Max 3 copies, etc.).
+3.  **Validation**: Implement "The Invariants" (5 slots, 1 Titan, Rank I/II requirements).
 
 ## Recent Accomplishments
 

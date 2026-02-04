@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Search, X, ChevronDown, ChevronUp, Check, SlidersHorizontal } from "lucide-react";
+import { Search, X, SlidersHorizontal } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { FilterSection } from "@/components/ui/FilterSection";
 
 interface FilterSidebarProps {
   searchQuery: string;
@@ -124,82 +125,8 @@ export function FilterSidebar({
   );
 }
 
-function FilterSection({
-  title,
-  options,
-  selected,
-  onToggle,
-  isGrid = false,
-}: {
-  title: string;
-  options: string[];
-  selected: string[];
-  onToggle: (val: string) => void;
-  isGrid?: boolean; // For Ranks mostly
-}) {
-  const [isExpanded, setIsExpanded] = useState(true);
 
-  return (
-    <div className="space-y-3">
-      <button
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="flex items-center justify-between w-full text-left group"
-      >
-        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest group-hover:text-white transition-colors">
-          {title}
-        </h3>
-        {isExpanded ? <ChevronUp size={14} className="text-gray-600" /> : <ChevronDown size={14} className="text-gray-600" />}
-      </button>
+// ... (imports will be handled by the user/system or manual edit, but here I replace the bottom function)
+// Actually I need to do imports separately or replacing the whole file content if I want to be clean, but `replace_file_content` is a chunk replacement.
+// I will remove the bottom function first.
 
-      {isExpanded && (
-        <div className={cn("space-y-1", isGrid && "grid grid-cols-4 gap-2 space-y-0")}>
-          {options.map((option) => {
-            const isSelected = selected.includes(option);
-            
-            if (isGrid) {
-               return (
-                 <button
-                   key={option}
-                   onClick={() => onToggle(option)}
-                   className={cn(
-                     "flex items-center justify-center p-2 rounded border text-xs font-mono font-bold transition-all",
-                     isSelected
-                       ? "bg-brand-primary border-brand-primary text-white"
-                       : "bg-surface-card border-white/5 text-gray-400 hover:border-brand-primary/30"
-                   )}
-                 >
-                   {option}
-                 </button>
-               )
-            }
-
-            return (
-              <label
-                key={option}
-                className="flex items-center gap-3 p-2 rounded hover:bg-white/5 cursor-pointer group transition-colors"
-                onClick={(e) => {
-                  e.preventDefault(); // Prevent default since we wrap in label but handle toggle manually if needed, or just let input handle it. Better to use button/div for custom UI.
-                  onToggle(option);
-                }}
-              >
-                <div
-                  className={cn(
-                    "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                    isSelected
-                      ? "bg-brand-primary border-brand-primary"
-                      : "border-gray-600 group-hover:border-gray-400"
-                  )}
-                >
-                  {isSelected && <Check size={10} className="text-white" />}
-                </div>
-                <span className={cn("text-sm", isSelected ? "text-white" : "text-gray-400 group-hover:text-gray-300")}>
-                  {option}
-                </span>
-              </label>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
