@@ -42,3 +42,8 @@
   - [ ] Configure `next-sitemap` for SEO <!-- id: 21 -->
   - [ ] Implement metadata generation strategies <!-- id: 22 -->
   - [ ] Create Github Action for "Daily Revalidation" <!-- id: 23 -->
+
+## Maintenance & UX Refinement
+
+- [x] Implement persistent dismissal for Beta Banner (localStorage)
+- [x] Change Beta Banner to relative positioning (scrolls with page)
