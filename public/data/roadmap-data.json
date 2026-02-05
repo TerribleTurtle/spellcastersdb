@@ -1,0 +1,63 @@
+{
+  "categories": [
+    {
+      "id": "community-requests",
+      "title": "Community Requests",
+      "description": "Features and improvements requested by the community"
+    },
+    {
+      "id": "in-progress",
+      "title": "In Progress",
+      "description": "Features currently being worked on"
+    },
+    {
+      "id": "live",
+      "title": "Live",
+      "description": "Recently shipped features and improvements"
+    }
+  ],
+  "items": [
+    {
+      "id": "unit-comparison-tool",
+      "title": "Unit Comparison Tool",
+      "description": "Side-by-side stat comparison for different units",
+      "category": "community-requests"
+    },
+    {
+      "id": "advanced-filters",
+      "title": "Advanced Filtering",
+      "description": "Filter units by multiple attributes simultaneously",
+      "category": "community-requests"
+    },
+    {
+      "id": "deck-templates",
+      "title": "Deck Templates",
+      "description": "Pre-built deck templates for different strategies",
+      "category": "community-requests"
+    },
+    {
+      "id": "og-images",
+      "title": "Visual Deck Sharing",
+      "description": "Dynamic OG images for deck links on social media",
+      "category": "in-progress"
+    },
+    {
+      "id": "url-sharing",
+      "title": "URL Deck Sharing",
+      "description": "Share decks via compressed URLs",
+      "category": "live"
+    },
+    {
+      "id": "deck-builder",
+      "title": "The Forge (Deck Builder)",
+      "description": "Build and validate decks with drag-and-drop",
+      "category": "live"
+    },
+    {
+      "id": "responsive-design",
+      "title": "Mobile-Optimized Design",
+      "description": "Fully responsive UI across all devices",
+      "category": "live"
+    }
+  ]
+}

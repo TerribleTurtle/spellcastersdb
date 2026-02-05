@@ -15,6 +15,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Deck Builder', href: '/deck-builder', internal: true },
+    { name: 'Roadmap', href: '/roadmap', internal: true },
     { name: 'Guide', href: '/guide', internal: true },
     { name: 'FAQ', href: '/faq', internal: true },
     { name: 'About', href: '/about', internal: true },
@@ -31,7 +32,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="shrink-0">
             <Link href="/" className="flex flex-col">
-              <span className="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-brand-secondary">
+              <span className="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-linear-to-r from-brand-primary to-brand-secondary">
                 SPELLCASTERS<span className="text-white">DB</span>
               </span>
               <span className="text-[10px] text-gray-500 tracking-wide hidden sm:block">
