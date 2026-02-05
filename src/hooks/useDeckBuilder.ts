@@ -95,6 +95,15 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
 
   const setSlot = useCallback((index: SlotIndex, unit: Unit) => {
     setDeck(prev => {
+      // Check for duplicates in non-titan slots (indices 0-3)
+      // We only care if the unit is being added to a standard slot (0-3)
+      if (index < 4) {
+          const isDuplicate = prev.slots.some((s, i) => 
+               i < 4 && i !== index && s.unit?.entity_id === unit.entity_id
+          );
+          if (isDuplicate) return prev;
+      }
+
       const newSlots = [...prev.slots] as typeof prev.slots;
       
       const slot = newSlots[index];

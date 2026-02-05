@@ -172,10 +172,12 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
                 isHero && "border-brand-accent/30 shadow-[0_0_10px_rgba(255,255,255,0.05)]"
             )}
         >
-            {/* Image placeholder */}
-            <div className={`absolute inset-0 bg-gray-800 flex items-center justify-center p-1`}>
-                <span className="text-[10px] text-center opacity-70 leading-tight">{item.name}</span>
-            </div>
+            {/* Image */}
+            <img 
+                src={`/images/cards/${id}_card.png`} 
+                alt={item.name}
+                className="absolute inset-0 w-full h-full object-cover bg-gray-800"
+            />
              
              {/* Rank Badge */}
              {rank && (

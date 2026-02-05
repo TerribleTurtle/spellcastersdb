@@ -60,9 +60,12 @@ function Slot({ slot, onRemove }: { slot: DeckSlot; onRemove: () => void }) {
             {/* Filled State */}
             {slot.unit && (
                 <>
-                    <div className="absolute inset-0 bg-slate-800 rounded flex items-center justify-center">
-                        {/* Img placeholder */}
-                         <p className="text-xs px-2 text-center opacity-60">{slot.unit.name}</p>
+                    <div className="absolute inset-0 bg-slate-800 rounded overflow-hidden">
+                        <img 
+                             src={`/images/cards/${slot.unit.entity_id}_card.png`} 
+                             alt={slot.unit.name}
+                             className="w-full h-full object-cover"
+                        />
                     </div>
                     {/* Remove Action */}
                     <button 

@@ -260,10 +260,14 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         </div>
 
         {/* Drag Overlay for Visual Feedback */}
-        <DragOverlay>
+        <DragOverlay dropAnimation={null}>
             {activeDragItem ? (
-                 <div className="w-32 h-auto aspect-3/4 bg-surface-card border-2 border-brand-primary rounded-lg shadow-2xl opacity-90 flex items-center justify-center pointer-events-none">
-                    <span className="text-xs font-bold text-center p-1">{activeDragItem.name}</span>
+                 <div className="w-32 h-auto aspect-3/4 bg-surface-card border-2 border-brand-primary rounded-lg shadow-2xl overflow-hidden pointer-events-none">
+                    <img 
+                        src={`/images/cards/${'entity_id' in activeDragItem ? activeDragItem.entity_id : activeDragItem.hero_id}_card.png`} 
+                        alt={activeDragItem.name} 
+                        className="w-full h-full object-cover"
+                    />
                  </div>
             ) : null}
         </DragOverlay>

@@ -36,9 +36,12 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster }: CardInspect
        {/* Art / Banner Area */}
        <div className="aspect-video w-full bg-slate-800 relative flex items-center justify-center overflow-hidden">
             {/* Placeholder Art */}
-            <div className="text-center">
-                <h1 className="text-4xl font-bold text-white/20 tracking-tighter uppercase">{name}</h1>
-            </div>
+            <img 
+                src={`/images/cards/${isUnit ? item.entity_id : item.hero_id}_card.png`} 
+                alt={name}
+                className="absolute inset-0 w-full h-full object-cover opacity-100" 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-surface-card/90 via-transparent to-transparent" />
             {/* Badges */}
             <div className="absolute top-4 right-4 flex gap-2">
                 <span className="bg-black/80 px-3 py-1 rounded text-lg font-bold font-mono text-brand-accent border border-brand-accent/30">
