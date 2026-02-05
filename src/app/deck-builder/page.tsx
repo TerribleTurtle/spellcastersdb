@@ -13,9 +13,9 @@ export default async function DeckBuilderPage() {
   const data = await fetchGameData();
 
   return (
-    <div className="min-h-screen pt-16 bg-surface-main">
+    <div className="fixed inset-0 top-16 bg-surface-main overflow-hidden">
         {/* TODO: Replace with proper Skeleton logic if desired, but Suspense needs to be high up */}
-        <Suspense fallback={<div className="flex h-[80vh] items-center justify-center text-brand-primary animate-pulse">Loading The Forge...</div>}>
+        <Suspense fallback={<div className="flex h-full items-center justify-center text-brand-primary animate-pulse">Loading The Forge...</div>}>
             <DeckBuilderApp 
                 units={data.units} 
                 spellcasters={data.heroes} 

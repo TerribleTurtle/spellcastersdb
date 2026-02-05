@@ -56,7 +56,7 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
 
   const category = isUnit ? item.category : 'Spellcaster';
   const name = item.name;
-  const rank = isUnit ? item.card_config.rank : 'HERO';
+  const rank = isUnit ? item.card_config.rank : 'Spellcaster';
 
   return (
     <div className="h-full w-full bg-surface-main/30 p-4 md:p-6 overflow-y-auto custom-scrollbar">

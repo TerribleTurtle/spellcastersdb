@@ -195,7 +195,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         onDragStart={handleDragStart} 
         onDragEnd={handleDragEnd}
     >
-        <div className="h-[calc(100vh-128px)] flex flex-col md:grid md:grid-rows-[1fr_auto]">
+        <div className="h-full flex flex-col md:grid md:grid-rows-[1fr_auto]">
             {/* Mobile Tab Navigation */}
             <div className="md:hidden flex bg-surface-main border-b border-white/10 shrink-0">
                 {[
