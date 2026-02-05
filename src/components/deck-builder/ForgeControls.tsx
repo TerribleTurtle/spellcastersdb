@@ -104,15 +104,14 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
                        <div className="h-1 w-12 bg-white/5 rounded-full" />
                    </div>
                    
-                   <div className="space-y-3">
+                   <div className="space-y-2">
                        {spellcaster.abilities.passive.map((ability) => (
-                           <div key={ability.ability_id} className="group/ability relative">
-                               <div className="absolute -left-2 top-0 bottom-0 w-0.5 bg-brand-secondary/0 group-hover/ability:bg-brand-secondary/50 transition-all" />
-                               <p className="text-sm font-bold text-gray-100 group-hover/ability:text-brand-secondary transition-colors">
+                           <div key={ability.ability_id} className="group/ability relative pl-3 py-2 border-l-2 border-white/20 hover:border-brand-secondary transition-all bg-linear-to-r from-white/5 to-transparent hover:from-brand-secondary/10">
+                               <p className="text-sm font-black text-gray-100 group-hover/ability:text-brand-secondary transition-colors uppercase tracking-wide">
                                    {ability.name}
                                </p>
-                               <p className="text-xs text-gray-400 leading-relaxed mt-1 pr-2 italic">
-                                   &ldquo;{ability.description}&rdquo;
+                               <p className="text-xs text-brand-blue-100/80 leading-snug mt-1">
+                                   {ability.description}
                                </p>
                            </div>
                        ))}
