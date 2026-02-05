@@ -19,7 +19,7 @@ import { CardInspector } from "./CardInspector";
 import { ForgeControls } from "./ForgeControls";
 import { ActiveDeckTray } from "./ActiveDeckTray";
 import { decodeDeck } from "@/lib/encoding";
-import { getCardImageUrl } from "@/lib/utils";
+import { cn, getCardImageUrl } from "@/lib/utils";
 import { Deck, DeckSlot } from "@/types/deck"; 
 import { AlertTriangle } from "lucide-react";
 
@@ -131,6 +131,15 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     router.replace('/deck-builder', { scroll: false });
   };
 
+  // Mobile Navigation State
+  const [activeMobileTab, setActiveMobileTab] = useState<'BROWSER' | 'INSPECTOR' | 'FORGE'>('BROWSER');
+
+  const handleSelectItem = (item: Unit | Spellcaster) => {
+    setSelectedItem(item);
+    // Auto-switch to inspector on mobile
+    setActiveMobileTab('INSPECTOR');
+  };
+
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 10 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
@@ -142,7 +151,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     if (current?.item && ('entity_id' in current.item || 'hero_id' in current.item)) {
          const item = current.item as Unit | Spellcaster;
          setActiveDragItem(item);
-         setSelectedItem(item);
+         handleSelectItem(item); // Use unified selection handler
     }
   };
 
@@ -187,20 +196,50 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         onDragEnd={handleDragEnd}
     >
         <div className="h-[calc(100vh-128px)] flex flex-col md:grid md:grid-rows-[1fr_auto]">
-            {/* Top Area: 3 Columns */}
-            <div className="row-span-1 min-h-0 flex flex-col md:grid md:grid-cols-12 border-b border-white/10 bg-surface-main">
+            {/* Mobile Tab Navigation */}
+            <div className="md:hidden flex bg-surface-main border-b border-white/10 shrink-0">
+                {[
+                    { id: 'BROWSER', label: 'Vault', icon: <div className="w-1.5 h-1.5 rounded-full border border-current" /> },
+                    { id: 'INSPECTOR', label: 'Inspector', icon: <div className="w-1.5 h-1.5 rounded-full bg-brand-primary" /> },
+                    { id: 'FORGE', label: 'Forge', icon: <AlertTriangle size={14} /> }
+                ].map(tab => (
+                    <button
+                        key={tab.id}
+                        onClick={() => setActiveMobileTab(tab.id as 'BROWSER' | 'INSPECTOR' | 'FORGE')}
+                        className={cn(
+                            "flex-1 py-3 flex flex-col items-center gap-1 transition-all border-b-2",
+                            activeMobileTab === tab.id 
+                                ? "text-brand-accent border-brand-accent bg-white/5" 
+                                : "text-gray-500 border-transparent hover:text-gray-300"
+                        )}
+                    >
+                        <span className="text-[10px] font-black uppercase tracking-widest">{tab.label}</span>
+                    </button>
+                ))}
+            </div>
+
+            {/* Top Area: 3 Columns (Desktop) / Tabbed (Mobile) */}
+            <div className="row-span-1 min-h-0 flex-1 flex flex-col md:grid md:grid-cols-12 border-b border-white/10 bg-surface-main overflow-hidden">
                 {/* Left: Unit Browser (3 Cols) */}
-                <div className="md:col-span-3 h-1/2 md:h-full overflow-hidden border-b md:border-b-0 md:border-r border-white/10">
+                <div className={cn(
+                    "md:col-span-3 h-full overflow-hidden md:border-r border-white/10",
+                    activeMobileTab !== 'BROWSER' && "hidden md:block"
+                )}>
                     <UnitBrowser 
                         items={browserItems} 
-                        onSelectItem={setSelectedItem} 
+                        onSelectItem={handleSelectItem} 
                     />
                 </div>
 
                 {/* Center: Inspector (6 Cols) */}
-                <div className="md:col-span-6 h-1/2 md:h-full overflow-hidden flex flex-col">
+                <div className={cn(
+                    "md:col-span-6 h-full overflow-hidden flex flex-col",
+                    activeMobileTab !== 'INSPECTOR' && "hidden md:block"
+                )}>
                     <CardInspector 
                         item={selectedItem} 
+                         onBack={() => setActiveMobileTab('BROWSER')}
+                         onClose={() => setSelectedItem(null)}
                         onAddSlot={(idx) => {
                             if (selectedItem && !('hero_id' in selectedItem)) {
                                 setSlot(idx, selectedItem as Unit);
@@ -215,7 +254,10 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                 </div>
 
                 {/* Right: Controls (3 Cols) */}
-                <div className="md:col-span-3 hidden md:block border-l border-white/10 h-full overflow-y-auto">
+                <div className={cn(
+                    "md:col-span-3 h-full overflow-y-auto border-l border-white/10",
+                    activeMobileTab !== 'FORGE' && "hidden md:block"
+                )}>
                     <ForgeControls 
                         spellcaster={deck.spellcaster} 
                         stats={stats}

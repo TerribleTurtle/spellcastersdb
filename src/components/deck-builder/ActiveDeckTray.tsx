@@ -16,7 +16,7 @@ interface ActiveDeckTrayProps {
 export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpellcaster }: ActiveDeckTrayProps) {
   return (
     <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-4">
-      <div className="grow flex items-center justify-center px-4 py-4 gap-2 md:gap-4 overflow-x-auto min-h-[160px]">
+      <div className="grow flex items-center justify-center px-4 py-2 md:py-4 gap-2 md:gap-4 overflow-x-auto min-h-[120px] md:min-h-[160px]">
         {/* Unit Slots 1-4 */}
         <div className="flex gap-2 mx-2">
             {slots.slice(0, 4).map((slot) => (
@@ -63,7 +63,7 @@ function Slot({ slot, onRemove }: { slot: DeckSlot; onRemove: () => void }) {
         <div 
             ref={setNodeRef}
             className={cn(
-                "relative group w-28 md:w-36 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center",
+                "relative group w-20 md:w-36 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center",
                 isOver ? "border-brand-primary bg-brand-primary/10 scale-105" : "border-white/10 bg-surface-card",
                 isTitanSlot && "border-brand-accent/30 bg-brand-accent/5",
                 slot.unit && "border-brand-secondary/50"
@@ -136,7 +136,7 @@ function SpellcasterSlot({ spellcaster, onRemove }: { spellcaster: Spellcaster |
         <div 
             ref={setNodeRef}
             className={cn(
-                "relative group w-32 md:w-40 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg",
+                "relative group w-24 md:w-40 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg",
                 isOver ? "border-brand-primary bg-brand-primary/10 scale-105 shadow-brand-primary/20" : "border-brand-primary/30 bg-surface-card",
                 spellcaster && "border-brand-primary"
             )}

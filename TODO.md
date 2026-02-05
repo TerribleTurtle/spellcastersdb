@@ -49,3 +49,4 @@
 - [x] Implement persistent dismissal for Beta Banner (localStorage)
 - [x] Change Beta Banner to relative positioning (scrolls with page)
 - [x] Fix oversized Spellcaster image in Deck Builder controls
+- [x] Refine Deck Builder Card Inspector UI (Padding + Close button)
