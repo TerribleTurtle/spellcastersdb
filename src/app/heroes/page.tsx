@@ -1,4 +1,4 @@
-import { getHeroes } from "@/lib/api";
+import { getSpellcasters } from "@/lib/api";
 import Link from "next/link";
 
 export const metadata = {
@@ -7,7 +7,7 @@ export const metadata = {
 };
 
 export default async function HeroesIndexPage() {
-  const heroes = await getHeroes();
+  const heroes = await getSpellcasters();
 
   return (
     <div className="min-h-screen bg-surface-main text-foreground p-8">
