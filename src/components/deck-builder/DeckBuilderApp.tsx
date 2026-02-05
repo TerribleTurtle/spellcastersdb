@@ -257,7 +257,6 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                     activeMobileTab !== 'FORGE' && "hidden md:block"
                 )}>
                     <ForgeControls 
-                        spellcaster={deck.spellcaster} 
                         stats={stats}
                         validation={validation}
                         onClear={clearDeck}

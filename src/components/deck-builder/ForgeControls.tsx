@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { Deck, DeckStats } from "@/types/deck";
-import { Spellcaster } from "@/types/api";
 import { CheckCircle2, AlertTriangle, Download, Trash2, Link as LinkIcon, Check } from "lucide-react";
-import { useDroppable } from "@dnd-kit/core";
-import { cn, getCardImageUrl } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { encodeDeck } from "@/lib/encoding";
 
 interface ForgeControlsProps {
-    spellcaster: Spellcaster | null;
     stats: DeckStats;
     validation: {
         isValid: boolean;
@@ -18,13 +15,9 @@ interface ForgeControlsProps {
     deck: Deck;
 }
 
-export function ForgeControls({ spellcaster, stats, validation, onClear, deck }: ForgeControlsProps) {
-  const { isOver, setNodeRef } = useDroppable({
-      id: "spellcaster-zone-forge",
-      data: { type: 'spellcaster' }
-  });
-
+export function ForgeControls({ stats, validation, onClear, deck }: ForgeControlsProps) {
   const [copied, setCopied] = useState(false);
+
 
   const handleShare = () => {
     const hash = encodeDeck(deck);
@@ -64,70 +57,6 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
 
    return (
     <div className="h-full bg-surface-main border-l border-white/10 flex flex-col p-4 overflow-y-auto">
-       {/* Spellcaster Spotlight */}
-       {spellcaster ? (
-           <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500 bg-surface-card border border-brand-primary/30 rounded-lg overflow-hidden shadow-2xl flex flex-col">
-               {/* Header Image & Title */}
-                <div className="relative w-full h-[12vh] min-h-20 max-h-28 group/hero shrink-0">
-                   <div className="absolute inset-0 bg-gray-900">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img 
-                            src={getCardImageUrl(spellcaster)} 
-                            alt={spellcaster.name} 
-                            className="w-full h-full object-cover object-[center_25%] transition-transform duration-1000 group-hover/hero:scale-110"
-                        />
-                        {/* Glass Overlay for name */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-surface-card via-surface-card/10 to-transparent" />
-                   </div>
-                   
-                   <div className="absolute bottom-0 left-0 right-0 p-3 pt-6">
-                       <div className="relative">
-                           <h2 className="text-xl font-black text-white leading-tight uppercase tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                               {spellcaster.name}
-                           </h2>
-                       </div>
-                   </div>
-               </div>
-
-               {/* Passives Section - Scrollable */}
-                <div className="p-4 space-y-4 bg-surface-card border-t border-white/5 flex-1 min-h-0 overflow-y-auto">
-                   <div className="flex items-center justify-between">
-                       <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">
-                           Passive Abilities
-                       </h3>
-                       <div className="h-1 w-12 bg-white/5 rounded-full" />
-                   </div>
-                   
-                   <div className="space-y-2">
-                       {spellcaster.abilities.passive.map((ability) => (
-                           <div key={ability.ability_id} className="group/ability relative pl-3 py-2 border-l-2 border-white/20 hover:border-brand-secondary transition-all bg-linear-to-r from-white/5 to-transparent hover:from-brand-secondary/10">
-                               <p className="text-sm font-black text-gray-100 group-hover/ability:text-brand-secondary transition-colors uppercase tracking-wide">
-                                   {ability.name}
-                               </p>
-                               <p className="text-xs text-brand-blue-100/80 leading-snug mt-1">
-                                   {ability.description}
-                               </p>
-                           </div>
-                       ))}
-                   </div>
-               </div>
-           </div>
-       ) : (
-           <div 
-                ref={setNodeRef}
-                className={cn(
-                    "w-full aspect-video rounded-lg border-2 border-dashed flex flex-col items-center justify-center transition-all mb-6",
-                    isOver ? "border-brand-primary bg-brand-primary/20 scale-105" : "border-white/20 bg-white/5 text-gray-500"
-                )}
-           >
-               <p className="text-sm font-bold mb-1">No Spellcaster Selected</p>
-               <p className="text-xs opacity-70">Drag a Commander here or to the deck tray</p>
-           </div>
-       )}
-
-       {/* Divider */}
-       <hr className="border-white/5 my-2" />
-
        {/* Stats Summary */}
        <div className="space-y-2 shrink-0">
           <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Metrics</h3>

@@ -47,9 +47,21 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
         {/* Separator */}
         <div className="w-px h-24 bg-white/10 mx-2 self-center hidden md:block" />
 
-        {/* Spellcaster Slot - Larger/Distinct */}
-        <div className="mx-2">
+        {/* Spellcaster Area - Slot + Passives (Desktop) */}
+        <div className="mx-2 flex items-center gap-3">
             <SpellcasterSlot spellcaster={spellcaster} onRemove={onRemoveSpellcaster} draggedItem={draggedItem} />
+            
+            {/* Passives - Desktop Only */}
+            {spellcaster && spellcaster.abilities.passive.length > 0 && (
+                <div className="hidden md:flex flex-col gap-1.5 max-w-[200px] lg:max-w-[280px]">
+                    <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Passives</span>
+                    <div className="flex flex-wrap gap-1">
+                        {spellcaster.abilities.passive.map((passive) => (
+                            <PassiveChip key={passive.ability_id} name={passive.name} description={passive.description} />
+                        ))}
+                    </div>
+                </div>
+            )}
         </div>
       </div>
     </div>
@@ -234,4 +246,21 @@ function SpellcasterSlot({ spellcaster, onRemove, draggedItem }: {
             )}
         </div>
     )
+}
+
+function PassiveChip({ name, description }: { name: string; description: string }) {
+    return (
+        <div className="relative group/passive">
+            {/* Chip */}
+            <div className="px-2 py-1 bg-brand-primary/20 border border-brand-primary/30 rounded text-[10px] font-bold text-brand-primary cursor-default hover:bg-brand-primary/30 transition-colors whitespace-nowrap">
+                {name}
+            </div>
+            
+            {/* Tooltip - Shows on hover */}
+            <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-surface-main border border-white/20 rounded-lg shadow-2xl opacity-0 invisible group-hover/passive:opacity-100 group-hover/passive:visible transition-all z-50 pointer-events-none">
+                <p className="text-xs font-bold text-brand-accent mb-1">{name}</p>
+                <p className="text-[11px] text-gray-300 leading-relaxed">{description}</p>
+            </div>
+        </div>
+    );
 }

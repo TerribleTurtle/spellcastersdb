@@ -58,3 +58,4 @@
 - [x] Fix Forge tab passives visibility (removed restrictive max-height)
 - [x] Implement GLOBAL custom scrollbar styles (replaces native Windows Chrome bars everywhere)
 - [x] Fix inspector rank badge overlap with close button
+- [x] Relocate spellcaster passives from Forge to deck tray (desktop: hover tooltips, mobile: uses Inspector)
