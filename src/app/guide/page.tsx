@@ -133,6 +133,8 @@ export default function GuidePage() {
             <ul className="list-disc list-inside text-slate-300 space-y-2">
               <li>Each deck must have exactly <strong>1 Spellcaster</strong></li>
               <li>Decks typically contain <strong>5 units</strong> (exact rules may vary)</li>
+              <li><strong className="text-brand-accent">Required:</strong> At least one <strong>Rank I or II Creature</strong> (not just any unit)</li>
+              <li>Decks cannot be composed entirely of spells</li>
               <li>Consider balancing unit ranks for early, mid, and late game presence</li>
               <li>Build synergies between your Spellcaster and units</li>
               <li>Include a mix of offensive and defensive options</li>

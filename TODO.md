@@ -63,3 +63,5 @@
 - [x] Populate roadmap with community feedback (12 new items) and cleanup stale placeholder items
 - [x] Add Magic School Alignment request to roadmap and cleanup schools
 - [x] Refine Deck validation logic: Require 1x Rank I/II Creature and prevent all-spell decks
+- [x] Document Rank I/II Creature requirement in guide and design docs (not just any unit)
+- [x] Enhance validation logic documentation with comprehensive rule comments and clearer error messages
