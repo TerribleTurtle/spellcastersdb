@@ -65,3 +65,4 @@
 - [x] Refine Deck validation logic: Require 1x Rank I/II Creature and prevent all-spell decks
 - [x] Document Rank I/II Creature requirement in guide and design docs (not just any unit)
 - [x] Enhance validation logic documentation with comprehensive rule comments and clearer error messages
+- [x] Redesign roadmap page: add 5 item types (bug/feature/enhancement/ux/data), compact layout with inline icons

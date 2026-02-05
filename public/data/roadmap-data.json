@@ -21,97 +21,113 @@
       "id": "ui-redesign",
       "title": "UI Redesign",
       "description": "Full-screen character art backgrounds, compact pop-out unit info, and reorganized deck management UI",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "ux"
     },
     {
       "id": "class-labels",
       "title": "Spellcaster Class Labels",
       "description": "Replace generic 'Mage' with specific classes: Conqueror, Enchanter, Duelist",
-      "category": "live"
+      "category": "live",
+      "type": "data"
     },
     {
       "id": "health-icon",
       "title": "Health Icon Update",
       "description": "Change Health stat icon from Shield to Heart to avoid Armor confusion",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "ux"
     },
     {
       "id": "data-cleanup",
       "title": "Data Cleanup",
       "description": "Remove unnecessary stats from Spells (Health), Pop Count, and Average Speed from metrics",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "data"
     },
     {
       "id": "ability-media",
       "title": "Ability Videos & GIFs",
       "description": "Add example videos or GIFs to card descriptions to demonstrate abilities",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "feature"
     },
     {
       "id": "sorting-improvements",
       "title": "Sorting & Naming",
       "description": "Pluralize categories (Spellcasters, Creatures) and alphabetize cards by group",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "ux"
     },
     {
       "id": "skill-bar-click",
       "title": "Skill Bar Card Info",
       "description": "Clicking cards in the skill bar should display card info",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "bug"
     },
     {
       "id": "card-swap",
       "title": "Card Slot Swapping",
       "description": "Moving a card to an occupied slot should swap cards rather than attempting to add",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "bug"
     },
     {
       "id": "draft-mode",
       "title": "Draft Mode",
       "description": "New game mode for drafting decks",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "feature"
     },
     {
       "id": "team-builder",
       "title": "Team Builder Mode",
       "description": "Build and manage up to 9 different deck builds",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "feature"
     },
     {
       "id": "build-name",
       "title": "Build Identification",
       "description": "Add Build Name display clearly in the top right of the deck builder",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "enhancement"
     },
     {
       "id": "stats-grid",
       "title": "Stats Display Overhaul",
       "description": "Consolidate stats into a cleaner, color-coded grid (Green for health, Red for damage)",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "ux"
     },
     {
       "id": "magic-school-alignment",
       "title": "Magic School Alignment",
       "description": "Align magic schools to correct sets, remove incorrect schools, and verify all units are correctly assigned.",
-      "category": "community-requests"
+      "category": "community-requests",
+      "type": "data"
     },
     {
       "id": "deck-validation-refinement",
       "title": "Refined Validation Logic",
       "description": "Require at least one Rank I or II Creature and prevent all-spell decks to ensure balanced theory-crafting.",
-      "category": "community-requests"
+      "category": "live",
+      "type": "enhancement"
     },
     {
       "id": "og-images",
       "title": "Visual Deck Sharing",
       "description": "Dynamic OG images for deck links on social media",
-      "category": "in-progress"
+      "category": "in-progress",
+      "type": "feature"
     },
     {
       "id": "url-sharing",
       "title": "URL Deck Sharing",
       "description": "Share decks via compressed URLs",
-      "category": "live"
+      "category": "live",
+      "type": "feature"
     }
   ]
 }

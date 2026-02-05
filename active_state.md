@@ -2,15 +2,17 @@
 
 **Current Phase**: Phase 5: Visual Sharing & OG Images
 **Status**: In Progress
-**Last Action**: Completed Status Dashboard (Roadmap page). Ready for OG Images implementation.
+**Last Action**: Redesigned Roadmap page with 5 item types (bug, feature, enhancement, ux, data) and compact layout.
 
 ## Current Focus
 
-The Status Dashboard is now live at `/roadmap`, providing transparent visibility into development. Next up: implementing `@vercel/og` for visual deck sharing on social media.
+The Roadmap is now more readable and detailed. Next up: implementing `@vercel/og` for visual deck sharing on social media.
 
 ## Recent Accomplishments
 
+- [x] **Redesigned Roadmap**: Added 5 item types and compact layout with inline icons
 - [x] Implemented **Status Dashboard** at `/roadmap` with JSON-based roadmap management
+- [x] Moved **Refined Validation Logic** to LIVE (requires Rank I/II Creature)
 - [x] Created flatter data structure for easy item movement between categories
 - [x] Integrated roadmap into navigation with visual consistency across the site
 - [x] Implemented **The Forge** (Deck Builder) with 5 unit slots and 1 Spellcaster slot
