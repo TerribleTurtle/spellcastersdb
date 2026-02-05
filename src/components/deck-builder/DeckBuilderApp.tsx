@@ -180,7 +180,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         onDragStart={handleDragStart} 
         onDragEnd={handleDragEnd}
     >
-        <div className="h-[calc(100vh-64px)] flex flex-col md:grid md:grid-rows-[1fr_auto]">
+        <div className="h-[calc(100vh-128px)] flex flex-col md:grid md:grid-rows-[1fr_auto]">
             {/* Top Area: 3 Columns */}
             <div className="row-span-1 min-h-0 flex flex-col md:grid md:grid-cols-12 border-b border-white/10 bg-surface-main">
                 {/* Left: Unit Browser (3 Cols) */}

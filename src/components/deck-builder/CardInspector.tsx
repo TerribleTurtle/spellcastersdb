@@ -36,13 +36,23 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster }: CardInspect
     <div className="h-full flex flex-col bg-surface-card border-x border-white/10 overflow-y-auto custom-scrollbar">
        {/* Art / Banner Area */}
        <div className="aspect-video w-full bg-slate-800 relative flex items-center justify-center overflow-hidden">
-            {/* Placeholder Art */}
+            {/* Blurred Background */}
             <img 
                 src={getCardImageUrl(item)} 
                 alt={name}
-                className="absolute inset-0 w-full h-full object-cover opacity-100" 
+                className="absolute inset-0 w-full h-full object-cover opacity-30 blur-xl scale-110" 
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-surface-card/90 via-transparent to-transparent" />
+            {/* Main Image (Contained) */}
+            <div className="absolute inset-0 flex items-center justify-center p-2 z-10">
+                <img 
+                    src={getCardImageUrl(item)} 
+                    alt={name}
+                    className="h-full w-auto max-w-full object-contain drop-shadow-2xl rounded" 
+                />
+            </div>
+            
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-linear-to-t from-surface-card to-transparent z-20" />
             {/* Badges */}
             <div className="absolute top-4 right-4 flex gap-2">
                 <span className="bg-black/80 px-3 py-1 rounded text-lg font-bold font-mono text-brand-accent border border-brand-accent/30">
