@@ -19,6 +19,7 @@ import { CardInspector } from "./CardInspector";
 import { ForgeControls } from "./ForgeControls";
 import { ActiveDeckTray } from "./ActiveDeckTray";
 import { decodeDeck } from "@/lib/encoding";
+import { getCardImageUrl } from "@/lib/utils";
 import { Deck, DeckSlot } from "@/types/deck"; 
 import { AlertTriangle } from "lucide-react";
 
@@ -264,7 +265,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
             {activeDragItem ? (
                  <div className="w-32 h-auto aspect-3/4 bg-surface-card border-2 border-brand-primary rounded-lg shadow-2xl overflow-hidden pointer-events-none">
                     <img 
-                        src={`/images/cards/${'entity_id' in activeDragItem ? activeDragItem.entity_id : activeDragItem.hero_id}_card.png`} 
+                        src={getCardImageUrl(activeDragItem)} 
                         alt={activeDragItem.name} 
                         className="w-full h-full object-cover"
                     />

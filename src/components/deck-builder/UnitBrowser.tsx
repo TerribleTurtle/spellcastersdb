@@ -5,7 +5,7 @@ import { Search } from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
 import { Unit, Spellcaster } from "@/types/api";
 import { FilterSection } from "@/components/ui/FilterSection";
-import { cn } from "@/lib/utils";
+import { cn, getCardImageUrl } from "@/lib/utils";
 
 // Combined type handling
 type BrowserItem = Unit | (Spellcaster & { category: 'Spellcaster' });
@@ -172,9 +172,10 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
                 isHero && "border-brand-accent/30 shadow-[0_0_10px_rgba(255,255,255,0.05)]"
             )}
         >
+
             {/* Image */}
             <img 
-                src={`/images/cards/${id}_card.png`} 
+                src={getCardImageUrl(item)} 
                 alt={item.name}
                 className="absolute inset-0 w-full h-full object-cover bg-gray-800"
             />

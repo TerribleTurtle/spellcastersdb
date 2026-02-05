@@ -1,6 +1,7 @@
 "use client";
 
 import { Unit, Spellcaster } from "@/types/api";
+import { getCardImageUrl } from "@/lib/utils";
 import { Shield, Swords, Zap, Users, PlusCircle, Crown, Clock } from "lucide-react";
 
 type InspectorItem = Unit | Spellcaster;
@@ -37,7 +38,7 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster }: CardInspect
        <div className="aspect-video w-full bg-slate-800 relative flex items-center justify-center overflow-hidden">
             {/* Placeholder Art */}
             <img 
-                src={`/images/cards/${isUnit ? item.entity_id : item.hero_id}_card.png`} 
+                src={getCardImageUrl(item)} 
                 alt={name}
                 className="absolute inset-0 w-full h-full object-cover opacity-100" 
             />

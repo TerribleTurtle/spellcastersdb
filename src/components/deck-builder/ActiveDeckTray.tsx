@@ -4,7 +4,7 @@ import { useDroppable } from "@dnd-kit/core";
 import { DeckSlot } from "@/types/deck";
 
 import { X, Shield } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, getCardImageUrl } from "@/lib/utils";
 
 interface ActiveDeckTrayProps {
   slots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
@@ -62,7 +62,7 @@ function Slot({ slot, onRemove }: { slot: DeckSlot; onRemove: () => void }) {
                 <>
                     <div className="absolute inset-0 bg-slate-800 rounded overflow-hidden">
                         <img 
-                             src={`/images/cards/${slot.unit.entity_id}_card.png`} 
+                             src={getCardImageUrl(slot.unit)} 
                              alt={slot.unit.name}
                              className="w-full h-full object-cover"
                         />
