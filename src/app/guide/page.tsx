@@ -139,7 +139,7 @@ export default function GuidePage() {
               <li>Account for different opponent strategies</li>
             </ul>
             <p className="text-slate-400 text-sm mt-4">
-              <strong>Note:</strong> Use the Deck Builder tool (coming soon) to create and validate decks according to the official rules.
+              <strong>Tip:</strong> Use our <a href="/deck-builder" className="text-brand-primary hover:text-brand-accent underline">Deck Builder</a> to create and validate decks according to the official rules.
             </p>
           </section>
 

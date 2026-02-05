@@ -23,6 +23,14 @@ import { getCardImageUrl } from "@/lib/utils";
 import { Deck, DeckSlot } from "@/types/deck"; 
 import { AlertTriangle } from "lucide-react";
 
+const INITIAL_SLOTS: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot] = [
+  { index: 0, unit: null, allowedTypes: ['UNIT'] },
+  { index: 1, unit: null, allowedTypes: ['UNIT'] },
+  { index: 2, unit: null, allowedTypes: ['UNIT'] },
+  { index: 3, unit: null, allowedTypes: ['UNIT'] },
+  { index: 4, unit: null, allowedTypes: ['TITAN'] },
+];
+
 interface DeckBuilderAppProps {
   units: Unit[];
   spellcasters: Spellcaster[];
@@ -50,7 +58,9 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
       setDeckState,
       isEmpty,
       stats,
-      isInitialized
+      validation,
+      isInitialized,
+      lastError
   } = useDeckBuilder(units, spellcasters);
 
   // URL Import Logic
@@ -64,10 +74,10 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     const decoded = decodeDeck(deckHash);
     if (!decoded) return;
 
-    // Reconstruct Deck Object from IDs
+    // Reconstruct Deck Object from IDs using FRESH TEMPLATE
     const newDeck: Deck = {
         spellcaster: spellcasters.find(s => s.hero_id === decoded.spellcasterId) || null,
-        slots: deck.slots.map(s => s) as [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot] // Clone structure
+        slots: INITIAL_SLOTS.map(s => ({ ...s })) as [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot]
     };
 
     // Fill slots
@@ -127,7 +137,8 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
 
   const handleDragStart = (event: DragStartEvent) => {
     const current = event.active.data.current;
-    if (current && typeof current === 'object' && 'item' in current) {
+    // Strict type check before casting
+    if (current?.item && ('entity_id' in current.item || 'hero_id' in current.item)) {
          const item = current.item as Unit | Spellcaster;
          setActiveDragItem(item);
          setSelectedItem(item);
@@ -206,7 +217,8 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                 <div className="md:col-span-3 hidden md:block border-l border-white/10 h-full overflow-y-auto">
                     <ForgeControls 
                         spellcaster={deck.spellcaster} 
-                        stats={stats} 
+                        stats={stats}
+                        validation={validation}
                         onClear={clearDeck}
                         deck={deck} // Pass deck for encoding
                     />
@@ -277,6 +289,16 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                  </div>
             ) : null}
         </DragOverlay>
+
+        {/* Singleton Error Toast */}
+        {lastError && (
+            <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-red-500/90 text-white px-6 py-3 rounded-lg shadow-2xl border border-red-400/50 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                <div className="flex items-center gap-2">
+                    <AlertTriangle size={18} />
+                    <span className="font-bold text-sm">{lastError}</span>
+                </div>
+            </div>
+        )}
     </DndContext>
   );
 }

@@ -17,5 +17,11 @@ export function getCardImageUrl(entity: { hero_id?: string; entity_id?: string; 
              "consumable_id" in entity ? entity.consumable_id : 
              entity.entity_id;
 
+  // Safety: Prevent undefined in URL
+  if (!id) {
+    console.warn("getCardImageUrl: entity has no valid ID", entity);
+    return `${assetBase}/placeholder_card.png`;
+  }
+
   return `${assetBase}/${folder}/${id}_card.png`;
 }

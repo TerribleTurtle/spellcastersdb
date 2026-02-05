@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Unit, Spellcaster } from '@/types/api';
 import { Deck, DeckSlot, SlotIndex } from '@/types/deck';
 
@@ -34,23 +34,23 @@ function serializeDeck(deck: Deck): StoredDeck {
 export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcasters: Spellcaster[] = []) {
   const [deck, setDeck] = useState<Deck>(INITIAL_DECK);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [lastError, setLastError] = useState<string | null>(null);
+  const hasHydrated = useRef(false);
 
   // 1. Hydration Load (Fix for Phantom Data)
   useEffect(() => {
     // Only run on client
     if (typeof window === 'undefined') return;
-
-    // 1. Hydration Load (Safe Mode)
-    // We allow loading even if units aren't fetched yet, so we can restore the IDs.
-    // The UI handles missing unit objects gracefully.
+    // Prevent hydration race: only run once
+    if (hasHydrated.current) return;
 
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
         const stored: StoredDeck = JSON.parse(saved);
         
-        // Reconstruct Deck from fresh API data
-        const newSlots = [...INITIAL_SLOTS];
+        // Reconstruct Deck from fresh API data with DEEP CLONE
+        const newSlots = INITIAL_SLOTS.map(s => ({ ...s }));
         
         stored.slotIds.forEach((id, idx) => {
             if (id && idx < 5) {
@@ -73,6 +73,7 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
         console.error('Failed to load deck', e);
       }
     }
+    hasHydrated.current = true;
     setIsInitialized(true);
   }, [availableUnits, availableSpellcasters]);
 
@@ -96,7 +97,11 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
           const isDuplicate = prev.slots.some((s, i) => 
                i < 4 && i !== index && s.unit?.entity_id === unit.entity_id
           );
-          if (isDuplicate) return prev;
+          if (isDuplicate) {
+            setLastError("Unique: You can only have 1 copy of this card.");
+            setTimeout(() => setLastError(null), 3000);
+            return prev;
+          }
       }
 
       const newSlots = [...prev.slots] as typeof prev.slots;
@@ -169,9 +174,11 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
   if (stats.unitCount < 4) stats.validationErrors.push("Must have 4 Units");
   if (!stats.titanCount) stats.validationErrors.push("Must have 1 Titan");
   if (!stats.hasSpellcaster) stats.validationErrors.push("Select a Spellcaster");
-  if (stats.hasSpellcaster && stats.unitCount > 0 && stats.rank1or2Count === 0) {
-      stats.validationErrors.push("Requires at least one Rank I or II unit");
-  }
+
+  // Passive reminder for Rank I/II (non-blocking)
+  const rankReminder = stats.unitCount > 0 && stats.rank1or2Count === 0 
+    ? "Tip: Include at least one Rank I or II unit for early pressure" 
+    : null;
 
   stats.isValid = stats.validationErrors.length === 0;
 
@@ -190,9 +197,11 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
     clearDeck,
     setDeckState,
     isEmpty,
+    lastError,
     validation: {
         isValid: stats.isValid,
-        errors: stats.validationErrors
+        errors: stats.validationErrors,
+        reminder: rankReminder
     },
     stats
   };

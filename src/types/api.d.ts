@@ -94,7 +94,7 @@ export interface Spellcaster {
   movement_speed: number;
   flight_speed: number;
   health_regen_rate: number;
-  regen_delay: number;
+  regen_delay?: number | null;
   
   // Offense
   attack_damage_summoner: number;

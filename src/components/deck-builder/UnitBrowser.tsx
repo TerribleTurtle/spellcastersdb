@@ -95,11 +95,7 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
             </div>
           </div>
           
-          {/* Compact Filters - Horizontal Scroll or Accordion? 
-              User complained about scrolling filters. Let's make them collapsible or scrollable standalone?
-              But sticky header approach means they are always visible.
-              Let's put them in a max-h container with overflow-y-auto so they don't eat the whole screen
-          */}
+          {/* Compact Filters */}
           <div className="px-4 pb-4 max-h-[30vh] overflow-y-auto space-y-4 border-t border-white/5 pt-4">
               <FilterSection 
                     title="Category" 
@@ -192,7 +188,7 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
                  {/* Spellcaster Badge */}
                  {isHero && (
                     <div className="absolute top-0.5 left-0.5 bg-brand-primary/90 px-1 py-0.5 rounded text-[8px] font-bold text-white uppercase tracking-wider shadow-sm">
-                        HERO
+                        MAGE
                     </div>
                  )}
             </div>

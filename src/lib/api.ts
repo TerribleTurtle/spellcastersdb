@@ -1,7 +1,6 @@
 /**
  * API Fetching Service for Spellcasters Community API
  * Implements Stale-While-Revalidate (SWR) via Next.js fetch
- * Implements Stale-While-Revalidate (SWR) via Next.js fetch
  */
 
 import { z } from "zod";

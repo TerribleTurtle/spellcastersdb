@@ -8,12 +8,17 @@ import { encodeDeck } from "@/lib/encoding";
 
 interface ForgeControlsProps {
     spellcaster: Spellcaster | null;
-    stats: DeckStats; 
+    stats: DeckStats;
+    validation: {
+        isValid: boolean;
+        errors: string[];
+        reminder: string | null;
+    };
     onClear: () => void;
     deck: Deck;
 }
 
-export function ForgeControls({ spellcaster, stats, onClear, deck }: ForgeControlsProps) {
+export function ForgeControls({ spellcaster, stats, validation, onClear, deck }: ForgeControlsProps) {
   const { isOver, setNodeRef } = useDroppable({
       id: "spellcaster-zone",
       data: { type: 'spellcaster' }
@@ -24,10 +29,15 @@ export function ForgeControls({ spellcaster, stats, onClear, deck }: ForgeContro
   const handleShare = () => {
     const hash = encodeDeck(deck);
     const url = `${window.location.origin}${window.location.pathname}?d=${hash}`;
-    navigator.clipboard.writeText(url).then(() => {
+    navigator.clipboard.writeText(url)
+      .then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
-    });
+      })
+      .catch((err) => {
+        console.error("Clipboard write failed:", err);
+        // Optionally show an error toast
+      });
   };
 
   const handleExport = () => {
@@ -93,13 +103,18 @@ export function ForgeControls({ spellcaster, stats, onClear, deck }: ForgeContro
                     {stats.isValid ? "Deck Valid" : "Invalid Deck"}
                 </span>
             </div>
-            {!stats.isValid && (
+            {!validation.isValid && (
                 <ul className="list-disc list-inside text-xs text-red-300 space-y-1">
-                    {stats.validationErrors.slice(0, 3).map((err, i) => (
+                    {validation.errors.slice(0, 3).map((err, i) => (
                         <li key={i}>{err}</li>
                     ))}
-                    {stats.validationErrors.length > 3 && <li>...and more</li>}
+                    {validation.errors.length > 3 && <li>...and more</li>}
                 </ul>
+            )}
+            {validation.reminder && (
+                <p className="text-xs text-yellow-400 mt-2 italic opacity-70">
+                    💡 {validation.reminder}
+                </p>
             )}
        </div>
 

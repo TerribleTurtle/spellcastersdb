@@ -32,6 +32,12 @@ export function decodeDeck(hash: string): DecodedDeckData | null {
     const minified: MinifiedDeck = JSON.parse(json);
     if (!Array.isArray(minified) || minified.length !== 6) return null;
 
+    // Validate each element is string or null (prevent malicious payloads)
+    if (!minified.every(v => v === null || typeof v === 'string')) {
+      console.warn("decodeDeck: invalid payload structure", minified);
+      return null;
+    }
+
     return {
         spellcasterId: minified[0],
         slotIds: minified.slice(1)
