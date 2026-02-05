@@ -165,34 +165,41 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
             {...attributes}
             onClick={onClick}
             className={cn(
-                "relative group cursor-grab active:cursor-grabbing",
+                "relative group cursor-grab active:cursor-grabbing flex flex-col",
                 "aspect-3/4 rounded overflow-hidden border border-white/10 bg-surface-card",
                 "hover:border-brand-primary/50 transition-all hover:scale-105",
                 isDragging && "opacity-50",
                 isHero && "border-brand-accent/30 shadow-[0_0_10px_rgba(255,255,255,0.05)]"
             )}
         >
+            {/* Image Area */}
+            <div className="relative flex-1 overflow-hidden bg-gray-800">
+                <img 
+                    src={getCardImageUrl(item)} 
+                    alt={item.name}
+                    className="absolute inset-0 w-full h-full object-cover object-top transition-transform group-hover:scale-110"
+                />
+                 {/* Rank Badge - Overlaid on Image */}
+                 {rank && (
+                     <div className="absolute top-0.5 right-0.5 bg-black/60 px-1 py-0.5 rounded text-[8px] font-mono text-brand-accent backdrop-blur-sm">
+                        {rank}
+                    </div>
+                 )}
+                 {/* Spellcaster Badge */}
+                 {isHero && (
+                    <div className="absolute top-0.5 left-0.5 bg-brand-primary/90 px-1 py-0.5 rounded text-[8px] font-bold text-white uppercase tracking-wider shadow-sm">
+                        HERO
+                    </div>
+                 )}
+            </div>
 
-            {/* Image */}
-            <img 
-                src={getCardImageUrl(item)} 
-                alt={item.name}
-                className="absolute inset-0 w-full h-full object-cover bg-gray-800"
-            />
-             
-             {/* Rank Badge */}
-             {rank && (
-                 <div className="absolute top-0.5 right-0.5 bg-black/60 px-1 py-0.5 rounded text-[8px] font-mono text-brand-accent">
-                    {rank}
-                </div>
-             )}
-             
-             {/* Spellcaster Badge */}
-             {isHero && (
-                <div className="absolute top-0.5 left-0.5 bg-brand-primary/80 px-1 py-0.5 rounded text-[8px] font-bold text-white uppercase tracking-wider">
-                    HERO
-                </div>
-             )}
+            {/* Name Banner */}
+            <div className="h-6 min-h-[1.5rem] bg-surface-main/95 border-t border-white/10 flex items-center justify-center px-1 z-10">
+                <span className="text-[9px] font-bold text-gray-200 text-center leading-tight line-clamp-2 md:truncate w-full">
+                    {item.name}
+                </span>
+            </div>
         </div>
     )
 }
+
