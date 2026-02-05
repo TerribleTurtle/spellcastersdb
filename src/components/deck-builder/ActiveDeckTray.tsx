@@ -163,10 +163,6 @@ function SpellcasterSlot({ spellcaster, onRemove }: { spellcaster: Spellcaster |
                              sizes="(max-width: 768px) 100vw, 33vw"
                              className="object-cover object-top"
                         />
-                         {/* Badge */}
-                        <div className="absolute top-1 left-1 bg-brand-primary px-1.5 py-0.5 rounded text-[10px] font-bold text-white shadow-sm uppercase">
-                            Commander
-                        </div>
                     </div>
                      {/* Name Banner */}
                     <div className="h-7 min-h-7 bg-brand-primary/20 backdrop-blur-sm border-t border-brand-primary/30 flex items-center justify-center px-1 z-10 shrink-0">

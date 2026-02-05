@@ -60,7 +60,7 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
 
   return (
     <div className="h-full w-full bg-surface-main/30 p-4 md:p-6 overflow-y-auto custom-scrollbar">
-       <div className="relative bg-surface-card rounded-xl border border-white/10 shadow-2xl overflow-hidden max-w-2xl mx-auto">
+       <div className="relative bg-surface-card rounded-xl border border-white/10 shadow-2xl overflow-hidden max-w-2xl mx-auto flex flex-col">
        
         {/* Close Button (Desktop) */}
         {onClose && (
@@ -73,7 +73,7 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
         )}
 
        {/* Art / Banner Area */}
-       <div className="aspect-video w-full bg-slate-800 relative flex items-center justify-center overflow-hidden">
+       <div className="flex-1 min-h-[120px] max-h-[40vh] w-full bg-slate-800 relative flex items-center justify-center overflow-hidden shrink-0">
             {/* Blurred Background */}
             <Image 
                 src={getCardImageUrl(item)} 
@@ -117,7 +117,7 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
        </div>
 
        {/* Quick Add Actions */}
-       <div className="p-4 bg-surface-main/30 sticky top-0 backdrop-blur z-10 border-b border-white/10">
+       <div className="p-4 bg-surface-main/30 sticky top-0 backdrop-blur z-10 border-b border-white/10 shrink-0">
            {isSpellcaster ? (
                <button 
                   onClick={onSetSpellcaster}
@@ -148,7 +148,7 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
        </div>
 
        {/* Detailed Stats */}
-       <div className="p-6 space-y-8">
+       <div className="p-6 space-y-8 flex-1 overflow-y-auto">
             {/* Core Stats Grid */}
             <div className="grid grid-cols-2 gap-4">
                 <StatBox label="Health" value={item.health} icon={<Shield size={16} className="text-green-400" />} />

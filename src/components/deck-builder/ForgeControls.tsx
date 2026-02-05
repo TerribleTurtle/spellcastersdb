@@ -68,7 +68,7 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
        {spellcaster ? (
            <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500 bg-surface-card border border-brand-primary/30 rounded-lg overflow-hidden shadow-2xl flex flex-col">
                {/* Header Image & Title */}
-                <div className="relative w-full h-32 group/hero shrink-0">
+                <div className="relative w-full h-24 group/hero shrink-0">
                    <div className="absolute inset-0 bg-gray-900">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
@@ -85,18 +85,12 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
                            <h2 className="text-xl font-black text-white leading-tight uppercase tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                                {spellcaster.name}
                            </h2>
-                           <div className="flex items-center gap-2 mt-0.5">
-                               <span className="h-px w-4 bg-brand-primary" />
-                               <span className="text-[10px] font-bold text-brand-primary uppercase tracking-[0.2em] drop-shadow-sm">
-                                   Commander
-                               </span>
-                           </div>
                        </div>
                    </div>
                </div>
 
-               {/* Passives Section - Flexible Height */}
-                <div className="p-4 space-y-4 bg-surface-card border-t border-white/5">
+               {/* Passives Section - Scrollable */}
+                <div className="p-4 space-y-4 bg-surface-card border-t border-white/5 max-h-[30vh] overflow-y-auto custom-scrollbar">
                    <div className="flex items-center justify-between">
                        <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">
                            Passive Abilities
