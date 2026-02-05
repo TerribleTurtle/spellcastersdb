@@ -52,10 +52,10 @@ const UnitSchema = z.object({
 }).passthrough(); 
 
 const AbilitySchema = z.object({
-  ability_id: z.string(),
+  ability_id: z.string().optional(),
   name: z.string(),
-  description: z.string(),
-  cooldown: z.number().optional(),
+  description: z.string().optional().nullable().transform(val => val || ""),
+  cooldown: z.number().optional().nullable(),
 });
 
 const SpellcasterSchema = z.object({
@@ -66,7 +66,7 @@ const SpellcasterSchema = z.object({
   movement_speed: z.number(),
   flight_speed: z.number(),
   health_regen_rate: z.number(),
-  regen_delay: z.number(),
+  regen_delay: z.number().optional().nullable(),
   attack_damage_summoner: z.number(),
   attack_damage_minion: z.number(),
   abilities: z.object({
@@ -80,8 +80,8 @@ const SpellcasterSchema = z.object({
 const ConsumableSchema = z.object({
   consumable_id: z.string(),
   name: z.string(),
-  description: z.string(),
-  tags: z.array(z.string()),
+  description: z.string().optional().nullable().default(""),
+  tags: z.array(z.string()).optional().default([]),
 }).passthrough();
 
 const AllDataSchema = z.object({
