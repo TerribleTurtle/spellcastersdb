@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { getUnits, getHeroes, getConsumables } from "@/lib/api";
+import { getUnits, getSpellcasters, getConsumables } from "@/lib/api";
 
 export const revalidate = 3600; // Revalidate sitemap every hour
 
@@ -47,9 +47,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // 2. Fetch all dynamic data
-  const [units, heroes, consumables] = await Promise.all([
+  const [units, spellcasters, consumables] = await Promise.all([
     getUnits(),
-    getHeroes(),
+    getSpellcasters(),
     getConsumables(),
   ]);
 
@@ -61,9 +61,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // 4. Map Heroes
-  const heroRoutes: MetadataRoute.Sitemap = heroes.map((hero) => ({
-    url: `${baseUrl}/heroes/${hero.hero_id}`,
+  // 4. Map Heroes (URLs kept as /heroes/ for standard SEO)
+  const heroRoutes: MetadataRoute.Sitemap = spellcasters.map((s) => ({
+    url: `${baseUrl}/heroes/${s.hero_id}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.9,

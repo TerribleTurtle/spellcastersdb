@@ -1,12 +1,12 @@
 # Project State
 
-**Current Phase**: Phase 4: Sharing & Drag Polish (Complete)
-**Status**: Ready for Next Phase
-**Last Action**: Committed and Pushed "The Forge" Phase 4 on 2026-02-04.
+**Current Phase**: Phase 5: Visual Sharing & OG Images
+**Status**: Planning
+**Last Action**: Pushed Phase 4; Added OG Image task to roadmap.
 
 ## Current Focus
 
-"The Forge" is fully functional with drag-and-drop, validation, persistence, and URL sharing. We are ready for beta testing or moving to the next feature area.
+We've finished the functional deck builder. The next goal is to make sharing look great on social media using `@vercel/og` to render a visual representation of the deck (Spellcaster + 5 Units) directly in link previews.
 
 ## Recent Accomplishments
 

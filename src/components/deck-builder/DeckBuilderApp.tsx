@@ -12,7 +12,7 @@ import {
 } from "@dnd-kit/core";
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Unit, Hero as Spellcaster } from "@/types/api";
+import { Unit, Spellcaster } from "@/types/api";
 import { useDeckBuilder } from "@/hooks/useDeckBuilder";
 import { UnitBrowser } from "./UnitBrowser";
 import { CardInspector } from "./CardInspector";
@@ -39,6 +39,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
+  // PASSING DATA FOR HYDRATION
   const { 
       deck, 
       setSlot, 
@@ -49,7 +50,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
       isEmpty,
       stats,
       isInitialized
-  } = useDeckBuilder();
+  } = useDeckBuilder(units, spellcasters);
 
   // URL Import Logic
   useEffect(() => {

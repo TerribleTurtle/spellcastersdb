@@ -1,4 +1,4 @@
-import { Unit, Hero as Spellcaster } from './api';
+import { Unit, Spellcaster } from './api';
 
 export type SlotIndex = 0 | 1 | 2 | 3 | 4;
 

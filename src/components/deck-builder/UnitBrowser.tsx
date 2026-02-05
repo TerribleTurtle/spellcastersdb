@@ -3,12 +3,12 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
-import { Unit, Hero } from "@/types/api";
+import { Unit, Spellcaster } from "@/types/api";
 import { FilterSection } from "@/components/ui/FilterSection";
 import { cn } from "@/lib/utils";
 
 // Combined type handling
-type BrowserItem = Unit | (Hero & { category: 'Spellcaster' });
+type BrowserItem = Unit | (Spellcaster & { category: 'Spellcaster' });
 
 interface UnitBrowserProps {
   items: BrowserItem[];

@@ -35,7 +35,10 @@
 - [x] **Phase 4: Social & Sharing** <!-- id: 16 -->
   - [x] Implement `lz-string` URL compression/decompression <!-- id: 17 -->
   - [x] Add "Share Link" and Conflict Resolution Modal <!-- id: 18 -->
-- [ ] **Phase 5: Optimization & Automation ("The Deep Dive")** <!-- id: 19 -->
-  - [ ] Configure `next-sitemap` for SEO <!-- id: 20 -->
-  - [ ] Implement metadata generation strategies <!-- id: 21 -->
-  - [ ] Create Github Action for "Daily Revalidation" (Check API for updates) <!-- id: 22 -->
+- [ ] **Phase 5: Visual Sharing & OG Images** <!-- id: 19 -->
+  - [ ] Implement `@vercel/og` for dynamic deck previews <!-- id: og-gen -->
+  - [ ] Design OG template: Clean, game-accurate view of Spellcaster + Units (Names/Ranks) <!-- id: og-design -->
+- [ ] **Phase 6: Optimization & Automation ("The Deep Dive")** <!-- id: 20 -->
+  - [ ] Configure `next-sitemap` for SEO <!-- id: 21 -->
+  - [ ] Implement metadata generation strategies <!-- id: 22 -->
+  - [ ] Create Github Action for "Daily Revalidation" <!-- id: 23 -->

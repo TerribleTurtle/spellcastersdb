@@ -75,17 +75,17 @@ export interface Ability {
   cooldown?: number;
 }
 
-export interface HeroAbilities {
+export interface SpellcasterAbilities {
   passive: Ability[];
   primary: Ability;
   defense: Ability;
   ultimate: Ability;
 }
 
-export interface Hero {
+export interface Spellcaster {
   $schema?: string;
   game_version: string;
-  hero_id: string;
+  hero_id: string; // Kept as hero_id to match API for now, but Interface is Spellcaster
   name: string;
   image_required?: boolean;
 
@@ -101,7 +101,7 @@ export interface Hero {
   attack_damage_minion: number;
 
   // Kit
-  abilities: HeroAbilities;
+  abilities: SpellcasterAbilities;
 }
 
 export interface Consumable {
@@ -148,9 +148,9 @@ export interface BuildInfo {
 export interface AllDataResponse {
   build_info: BuildInfo;
   units: Unit[];
-  heroes: Hero[];
+  heroes: Spellcaster[]; // API returns 'heroes' key, but we type it as Spellcaster[]
   consumables: Consumable[];
   upgrades: Upgrade[];
 }
 
-export type UnifiedEntity = Unit | Hero | Consumable;
+export type UnifiedEntity = Unit | Spellcaster | Consumable;

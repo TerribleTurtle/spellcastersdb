@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import Fuse from "fuse.js";
-import { UnifiedEntity, Unit, Hero, Consumable } from "@/types/api";
+import { UnifiedEntity, Unit, Spellcaster, Consumable } from "@/types/api";
 
 interface FilterState {
   schools: string[];

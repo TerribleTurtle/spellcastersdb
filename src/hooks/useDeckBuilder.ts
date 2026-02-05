@@ -1,8 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Unit, Hero as Spellcaster } from '@/types/api';
+import { Unit, Spellcaster } from '@/types/api';
 import { Deck, DeckSlot, SlotIndex } from '@/types/deck';
 
 const STORAGE_KEY = 'spellcasters_deck_v1';
+
+// Internal Storage Format (IDs only)
+interface StoredDeck {
+  spellcasterId: string | null;
+  slotIds: [string | null, string | null, string | null, string | null, string | null]; // 5 slots
+}
 
 const INITIAL_SLOTS: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot] = [
   { index: 0, unit: null, allowedTypes: ['UNIT'] },
@@ -17,29 +23,69 @@ const INITIAL_DECK: Deck = {
   slots: INITIAL_SLOTS,
 };
 
-export function useDeckBuilder() {
+// Helper: Convert Deck to Stored Format
+function serializeDeck(deck: Deck): StoredDeck {
+  return {
+    spellcasterId: deck.spellcaster?.hero_id || null,
+    slotIds: deck.slots.map(s => s.unit?.entity_id || null) as [string | null, string | null, string | null, string | null, string | null]
+  };
+}
+
+export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcasters: Spellcaster[] = []) {
   const [deck, setDeck] = useState<Deck>(INITIAL_DECK);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load from LocalStorage on mount
+  // 1. Hydration Load (Fix for Phantom Data)
   useEffect(() => {
+    // Only run on client
+    if (typeof window === 'undefined') return;
+
+    // Prevent hydration if we don't have reference data yet
+    if (availableUnits.length === 0 || availableSpellcasters.length === 0) {
+        // If we are waiting for data, don't say we are initialized yet?
+        // Actually, we might want to let the app load, but we can't hydrate correctly.
+        // User 'availableUnits' default is [] which makes this safe.
+        // We'll wait.
+        return; 
+    }
+
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        const parsed = JSON.parse(saved);
-        // Basic schema check could go here
-        setDeck(parsed);
+        const stored: StoredDeck = JSON.parse(saved);
+        
+        // Reconstruct Deck from fresh API data
+        const newSlots = [...INITIAL_SLOTS];
+        
+        stored.slotIds.forEach((id, idx) => {
+            if (id && idx < 5) {
+                const freshUnit = availableUnits.find(u => u.entity_id === id);
+                if (freshUnit) {
+                     newSlots[idx] = { ...newSlots[idx], unit: freshUnit };
+                }
+            }
+        });
+
+        const freshSpellcaster = stored.spellcasterId 
+            ? availableSpellcasters.find(s => s.hero_id === stored.spellcasterId) 
+            : null;
+
+        setDeck({
+            spellcaster: freshSpellcaster || null,
+            slots: newSlots as [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot]
+        });
       } catch (e) {
         console.error('Failed to load deck', e);
       }
     }
     setIsInitialized(true);
-  }, []);
+  }, [availableUnits, availableSpellcasters]);
 
-  // Save to LocalStorage on change
+  // 2. Persistence Save (IDs only)
   useEffect(() => {
     if (isInitialized) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(deck));
+      const stored = serializeDeck(deck);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(stored));
     }
   }, [deck, isInitialized]);
 
@@ -51,24 +97,12 @@ export function useDeckBuilder() {
     setDeck(prev => {
       const newSlots = [...prev.slots] as typeof prev.slots;
       
-      // Validation: Enforce Slot Types
       const slot = newSlots[index];
       const isTitan = unit.category === 'Titan';
       
-      if (slot.allowedTypes.includes('TITAN') && !isTitan) {
-        // Trying to put non-Titan in Titan slot
-        return prev;
-      }
-      
-      if (slot.allowedTypes.includes('UNIT') && isTitan) {
-        // Trying to put Titan in Unit slot
-        return prev;
-      }
-
-      // Check if unit limits (max 3 copies) - Ignored for MVP per user request "No Invariants" comment?
-      // Actually user said "Min 40 cards... is wrong" but "4 units, 1 titan... we're fine and don't need to worry about harder stuff"
-      // User said "Validation: Strict 4+1 Rules" in V4 plan.
-      // We will allow setting the slot if type matches.
+      // Strict Functionality: Prevent invalid drops
+      if (slot.allowedTypes.includes('TITAN') && !isTitan) return prev;
+      if (slot.allowedTypes.includes('UNIT') && isTitan) return prev;
 
       newSlots[index] = { ...slot, unit };
       return { ...prev, slots: newSlots };
@@ -84,13 +118,11 @@ export function useDeckBuilder() {
   }, []);
 
   const clearDeck = useCallback(() => {
-    if (confirm('Are you sure you want to clear your deck?')) {
+     // Note: Caller handles confirmation now to avoid window.confirm
       setDeck(INITIAL_DECK);
-    }
   }, []);
 
-  // Validation Logic
-  // 1. Check all slots filled
+  // Validation Logic (The Invariants)
   const stats = {
     unitCount: deck.slots.filter(s => s.unit && s.index < 4).length,
     titanCount: deck.slots[4].unit ? 1 : 0,
@@ -104,20 +136,16 @@ export function useDeckBuilder() {
     validationErrors: [] as string[]
   };
 
-  if (stats.unitCount < 4) stats.validationErrors.push("Must have 4 Units");
-  if (!stats.titanCount) stats.validationErrors.push("Must have 1 Titan");
-  if (!stats.hasSpellcaster) stats.validationErrors.push("Select a Spellcaster");
-
-  // 2. Rank Logic
+  // Calculate Stats
   let totalCharge = 0;
   let totalPop = 0;
   let filledCount = 0;
 
   deck.slots.forEach(slot => {
     if (slot.unit) {
-        // Rank Count for Units (Slots 0-3)
         if (slot.index < 4) {
-            if (slot.unit.card_config.rank === 'I' || slot.unit.card_config.rank === 'II') {
+            const rank = slot.unit.card_config.rank;
+            if (rank === 'I' || rank === 'II') {
                 stats.rank1or2Count++;
             }
         }
@@ -125,7 +153,6 @@ export function useDeckBuilder() {
         totalPop += slot.unit.card_config.cost_population;
         filledCount++;
 
-        // Counts
         const cat = slot.unit.category;
         stats.unitCounts[cat] = (stats.unitCounts[cat] || 0) + 1;
         const rank = slot.unit.card_config.rank;
@@ -133,12 +160,17 @@ export function useDeckBuilder() {
     }
   });
 
+  stats.averageChargeTime = filledCount > 0 ? totalCharge / filledCount : 0;
+  stats.averageCost = filledCount > 0 ? totalPop / filledCount : 0;
+
+  // Validation Rules
+  if (stats.unitCount < 4) stats.validationErrors.push("Must have 4 Units");
+  if (!stats.titanCount) stats.validationErrors.push("Must have 1 Titan");
+  if (!stats.hasSpellcaster) stats.validationErrors.push("Select a Spellcaster");
   if (stats.unitCount === 4 && stats.rank1or2Count === 0) {
       stats.validationErrors.push("Requires at least one Rank I or II unit");
   }
 
-  stats.averageChargeTime = filledCount > 0 ? totalCharge / filledCount : 0;
-  stats.averageCost = filledCount > 0 ? totalPop / filledCount : 0;
   stats.isValid = stats.validationErrors.length === 0;
 
   const setDeckState = useCallback((newDeck: Deck) => {

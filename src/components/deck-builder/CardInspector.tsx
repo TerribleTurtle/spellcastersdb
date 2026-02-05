@@ -1,6 +1,6 @@
 "use client";
 
-import { Unit, Hero as Spellcaster } from "@/types/api";
+import { Unit, Spellcaster } from "@/types/api";
 import { Shield, Swords, Zap, Users, PlusCircle, Crown, Clock } from "lucide-react";
 
 type InspectorItem = Unit | Spellcaster;

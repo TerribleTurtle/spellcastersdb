@@ -9,11 +9,13 @@ export const metadata: Metadata = {
 };
 
 export default async function DeckBuilderPage() {
+  // We fetch ALL data to pass to the client for instant search & hydration
   const data = await fetchGameData();
 
   return (
     <div className="min-h-screen pt-16 bg-surface-main">
-        <Suspense fallback={<div className="flex h-[80vh] items-center justify-center text-brand-primary">Loading The Forge...</div>}>
+        {/* TODO: Replace with proper Skeleton logic if desired, but Suspense needs to be high up */}
+        <Suspense fallback={<div className="flex h-[80vh] items-center justify-center text-brand-primary animate-pulse">Loading The Forge...</div>}>
             <DeckBuilderApp 
                 units={data.units} 
                 spellcasters={data.heroes} 

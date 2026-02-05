@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Deck, DeckStats } from "@/types/deck";
-import { Hero as Spellcaster } from "@/types/api";
+import { Spellcaster } from "@/types/api";
 import { CheckCircle2, AlertTriangle, Download, Trash2, Link as LinkIcon, Check } from "lucide-react";
 import { useDroppable } from "@dnd-kit/core";
 import { cn } from "@/lib/utils";
@@ -40,7 +40,19 @@ export function ForgeControls({ spellcaster, stats, onClear, deck }: ForgeContro
       downloadAnchorNode.remove();
   };
 
-  return (
+   const [showClearConfirm, setShowClearConfirm] = useState(false);
+
+   const handleClearClick = () => {
+       if (showClearConfirm) {
+           onClear();
+           setShowClearConfirm(false);
+       } else {
+           setShowClearConfirm(true);
+           setTimeout(() => setShowClearConfirm(false), 3000); // Reset after 3s
+       }
+   };
+
+   return (
     <div className="h-full bg-surface-main border-l border-white/10 flex flex-col p-4 space-y-6">
        {/* Spellcaster Section - Drop Target */}
        <div className="space-y-2">
@@ -60,7 +72,7 @@ export function ForgeControls({ spellcaster, stats, onClear, deck }: ForgeContro
                ) : (
                    <div className="text-center p-4">
                        <p className="text-sm text-gray-400 font-bold mb-1">Select Spellcaster</p>
-                       <p className="text-xs text-gray-600">Drag & Drop Hero Here</p>
+                       <p className="text-xs text-gray-600">Drag & Drop Spellcaster Here</p>
                    </div>
                )}
            </div>
@@ -127,10 +139,15 @@ export function ForgeControls({ spellcaster, stats, onClear, deck }: ForgeContro
                {copied ? "Link Copied!" : "Share Link"}
            </button>
            <button 
-                onClick={onClear}
-                className="w-full flex items-center justify-center gap-2 py-2 rounded bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20 transition-colors text-sm font-bold"
+                onClick={handleClearClick}
+                className={cn(
+                    "w-full flex items-center justify-center gap-2 py-2 rounded transition-colors text-sm font-bold",
+                    showClearConfirm 
+                        ? "bg-red-500 text-white animate-pulse" 
+                        : "bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500/20"
+                )}
             >
-               <Trash2 size={16} /> Clear Deck
+               <Trash2 size={16} /> {showClearConfirm ? "Confirm Clear?" : "Clear Deck"}
            </button>
        </div>
     </div>
