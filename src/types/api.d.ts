@@ -20,7 +20,7 @@ export type UnitCategory = "Creature" | "Building" | "Spell" | "Titan";
 
 export type UnitRank = "I" | "II" | "III" | "IV";
 
-export type SpellcasterClass = "Enchanter" | "Duelist" | "Conqueror";
+export type SpellcasterClass = "Enchanter" | "Duelist" | "Conqueror" | "Unknown";
 
 export type MovementType = "Ground" | "Fly" | "Hover" | "Stationary";
 
