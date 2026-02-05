@@ -275,7 +275,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                     </div>
                     {/* Banner */}
                     <div className="h-6 min-h-6 bg-surface-main/95 border-t border-brand-primary/30 flex items-center justify-center px-1">
-                        <span className="text-[9px] font-bold text-gray-200 text-center leading-tight truncate w-full">
+                        <span className="text-[10px] font-bold text-gray-200 text-center leading-tight truncate w-full">
                             {activeDragItem.name}
                         </span>
                     </div>

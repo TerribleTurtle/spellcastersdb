@@ -59,29 +59,37 @@ function Slot({ slot, onRemove }: { slot: DeckSlot; onRemove: () => void }) {
 
             {/* Filled State */}
             {slot.unit && (
-                <>
-                    <div className="absolute inset-0 bg-slate-800 rounded overflow-hidden">
+                <div className="flex flex-col w-full h-full overflow-hidden rounded text-left">
+                    {/* Image Area */}
+                    <div className="relative flex-1 bg-slate-800 overflow-hidden">
                         <img 
                              src={getCardImageUrl(slot.unit)} 
                              alt={slot.unit.name}
-                             className="w-full h-full object-cover"
+                             className="absolute inset-0 w-full h-full object-cover object-top"
                         />
+                         {/* Rank Badge - Overlaid */}
+                        <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm">
+                            {slot.unit.card_config.rank}
+                        </div>
                     </div>
+                     {/* Name Banner */}
+                    <div className="h-6 min-h-6 bg-surface-main/95 border-t border-white/10 flex items-center justify-center px-1 z-10 shrink-0">
+                        <span className="text-[10px] font-bold text-gray-200 text-center leading-tight truncate w-full">
+                            {slot.unit.name}
+                        </span>
+                    </div>
+
                     {/* Remove Action */}
                     <button 
                         onClick={(e) => {
                             e.stopPropagation();
                             onRemove();
                         }}
-                        className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                        className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-lg"
                     >
                         <X size={12} className="text-white" />
                     </button>
-                    {/* Rank Badge */}
-                    <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent">
-                        {slot.unit.card_config.rank}
-                    </div>
-                </>
+                </div>
             )}
 
             {/* Titan Icon Indicator (Always visible if titan slot) */}

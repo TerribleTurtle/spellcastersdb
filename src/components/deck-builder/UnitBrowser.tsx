@@ -195,7 +195,7 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
 
             {/* Name Banner */}
             <div className="h-6 min-h-[1.5rem] bg-surface-main/95 border-t border-white/10 flex items-center justify-center px-1 z-10">
-                <span className="text-[9px] font-bold text-gray-200 text-center leading-tight line-clamp-2 md:truncate w-full">
+                <span className="text-[10px] font-bold text-gray-200 text-center leading-tight line-clamp-2 md:truncate w-full">
                     {item.name}
                 </span>
             </div>
