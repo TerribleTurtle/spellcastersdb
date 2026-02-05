@@ -3,7 +3,7 @@ import { Deck, DeckStats } from "@/types/deck";
 import { Spellcaster } from "@/types/api";
 import { CheckCircle2, AlertTriangle, Download, Trash2, Link as LinkIcon, Check } from "lucide-react";
 import { useDroppable } from "@dnd-kit/core";
-import { cn } from "@/lib/utils";
+import { cn, getCardImageUrl } from "@/lib/utils";
 import { encodeDeck } from "@/lib/encoding";
 
 interface ForgeControlsProps {
@@ -66,20 +66,19 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
     <div className="h-full bg-surface-main border-l border-white/10 flex flex-col p-4 overflow-y-auto custom-scrollbar">
        {/* Spellcaster Spotlight */}
        {spellcaster ? (
-           <div className="mb-6 space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+           <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500 bg-surface-card border border-brand-primary/30 rounded-lg overflow-hidden shadow-lg group">
                {/* Header Image & Title */}
-               <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-brand-primary/30 shadow-[0_0_20px_rgba(168,85,247,0.2)]">
+               <div className="relative w-full aspect-video border-b border-brand-primary/30">
                    <div className="absolute inset-0 bg-gray-800">
-                        {/* Use a larger/hero image if available, fallback to card image */}
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
-                            src={`/images/cards/${spellcaster.hero_id}_card.png`} // Assuming consistent naming
+                            src={getCardImageUrl(spellcaster)} 
                             alt={spellcaster.name} 
-                            className="w-full h-full object-cover object-top"
+                            className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                         />
                    </div>
-                   <div className="absolute inset-0 bg-gradient-to-t from-surface-main via-transparent to-transparent" />
-                   <div className="absolute bottom-0 left-0 right-0 p-3">
+                   <div className="absolute inset-0 bg-gradient-to-t from-surface-card via-transparent to-transparent" />
+                   <div className="absolute bottom-0 left-0 right-0 p-4">
                        <h2 className="text-xl font-bold text-white leading-none mb-1 shadow-black drop-shadow-md">{spellcaster.name}</h2>
                        <span className="text-xs font-bold text-brand-primary uppercase tracking-widest shadow-black drop-shadow-md">
                            Commanding Spellcaster
@@ -87,15 +86,15 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
                    </div>
                </div>
 
-               {/* Passives */}
-               <div className="space-y-2">
+               {/* Passives Section - Connected */}
+               <div className="p-4 space-y-3 bg-surface-card/50">
                    <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
                        <span className="w-1.5 h-1.5 rounded-full bg-brand-secondary" />
                        Passives
                    </h3>
                    <div className="space-y-2">
                        {spellcaster.abilities.passive.map((ability) => (
-                           <div key={ability.ability_id} className="bg-surface-card p-2 rounded border border-white/5 hover:border-brand-secondary/30 transition-colors">
+                           <div key={ability.ability_id} className="bg-black/20 p-2.5 rounded border border-white/5 hover:border-brand-secondary/30 transition-colors">
                                <p className="text-sm font-bold text-gray-200">{ability.name}</p>
                                <p className="text-xs text-gray-400 leading-relaxed mt-1">{ability.description}</p>
                            </div>
