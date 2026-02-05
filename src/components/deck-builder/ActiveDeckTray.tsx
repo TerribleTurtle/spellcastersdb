@@ -1,26 +1,51 @@
 import Image from "next/image";
 import { useDroppable } from "@dnd-kit/core";
 import { DeckSlot } from "@/types/deck";
+import { Spellcaster } from "@/types/api";
 
-import { X, Shield } from "lucide-react";
+import { X, Shield, Sparkles } from "lucide-react";
 import { cn, getCardImageUrl } from "@/lib/utils";
 
 interface ActiveDeckTrayProps {
   slots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
+  spellcaster: Spellcaster | null;
   onRemoveSlot: (index: 0 | 1 | 2 | 3 | 4) => void;
+  onRemoveSpellcaster?: () => void; // Optional if we want to allow clearing commander from here
 }
 
-export function ActiveDeckTray({ slots, onRemoveSlot }: ActiveDeckTrayProps) {
+export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpellcaster }: ActiveDeckTrayProps) {
   return (
-    <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col">
-      <div className="grow flex items-center justify-center px-4 py-2 gap-4 overflow-x-auto">
-        {slots.map((slot) => (
+    <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-4">
+      <div className="grow flex items-center justify-center px-4 py-4 gap-2 md:gap-4 overflow-x-auto min-h-[160px]">
+        {/* Unit Slots 1-4 */}
+        <div className="flex gap-2 mx-2">
+            {slots.slice(0, 4).map((slot) => (
+                <Slot 
+                    key={slot.index} 
+                    slot={slot} 
+                    onRemove={() => onRemoveSlot(slot.index as 0|1|2|3)} 
+                />
+            ))}
+        </div>
+
+        {/* Separator */}
+        <div className="w-px h-24 bg-white/10 mx-2 self-center hidden md:block" />
+
+        {/* Titan Slot */}
+        <div className="mx-2">
             <Slot 
-                key={slot.index} 
-                slot={slot} 
-                onRemove={() => onRemoveSlot(slot.index)} 
+                slot={slots[4]} 
+                onRemove={() => onRemoveSlot(4)} 
             />
-        ))}
+        </div>
+
+        {/* Separator */}
+        <div className="w-px h-24 bg-white/10 mx-2 self-center hidden md:block" />
+
+        {/* Spellcaster Slot - Larger/Distinct */}
+        <div className="mx-2">
+            <SpellcasterSlot spellcaster={spellcaster} onRemove={onRemoveSpellcaster} />
+        </div>
       </div>
     </div>
   );
@@ -38,7 +63,7 @@ function Slot({ slot, onRemove }: { slot: DeckSlot; onRemove: () => void }) {
         <div 
             ref={setNodeRef}
             className={cn(
-                "relative group w-32 md:w-40 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center",
+                "relative group w-28 md:w-36 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center",
                 isOver ? "border-brand-primary bg-brand-primary/10 scale-105" : "border-white/10 bg-surface-card",
                 isTitanSlot && "border-brand-accent/30 bg-brand-accent/5",
                 slot.unit && "border-brand-secondary/50"
@@ -95,7 +120,74 @@ function Slot({ slot, onRemove }: { slot: DeckSlot; onRemove: () => void }) {
 
             {/* Titan Icon Indicator (Always visible if titan slot) */}
             {isTitanSlot && !slot.unit && (
-                <div className="absolute bottom-2 font-mono text-[10px] text-brand-accent opacity-50">TITAN ONLY</div>
+                <div className="absolute bottom-2 font-mono text-[10px] text-brand-accent opacity-50">TITAN</div>
+            )}
+        </div>
+    )
+}
+
+function SpellcasterSlot({ spellcaster, onRemove }: { spellcaster: Spellcaster | null, onRemove?: () => void }) {
+    const { isOver, setNodeRef } = useDroppable({
+        id: "spellcaster-zone",
+        data: { type: "spellcaster" }
+    });
+
+    return (
+        <div 
+            ref={setNodeRef}
+            className={cn(
+                "relative group w-32 md:w-40 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg",
+                isOver ? "border-brand-primary bg-brand-primary/10 scale-105 shadow-brand-primary/20" : "border-brand-primary/30 bg-surface-card",
+                spellcaster && "border-brand-primary"
+            )}
+        >
+             {!spellcaster && (
+                <div className="text-center opacity-30 text-brand-primary">
+                    <div className="mb-2 flex justify-center">
+                        <Sparkles size={28} />
+                    </div>
+                    <span className="text-xs font-bold uppercase tracking-widest">
+                        Spellcaster
+                    </span>
+                </div>
+            )}
+
+            {spellcaster && (
+                <div className="flex flex-col w-full h-full overflow-hidden rounded text-left">
+                    {/* Image Area */}
+                    <div className="relative flex-1 bg-slate-800 overflow-hidden">
+                        <Image 
+                             src={getCardImageUrl(spellcaster)} 
+                             alt={spellcaster.name}
+                             fill
+                             sizes="(max-width: 768px) 100vw, 33vw"
+                             className="object-cover object-top"
+                        />
+                         {/* Badge */}
+                        <div className="absolute top-1 left-1 bg-brand-primary px-1.5 py-0.5 rounded text-[10px] font-bold text-white shadow-sm uppercase">
+                            Commander
+                        </div>
+                    </div>
+                     {/* Name Banner */}
+                    <div className="h-7 min-h-7 bg-brand-primary/20 backdrop-blur-sm border-t border-brand-primary/30 flex items-center justify-center px-1 z-10 shrink-0">
+                        <span className="text-[11px] font-bold text-white text-center leading-tight truncate w-full shadow-black drop-shadow-md">
+                            {spellcaster.name}
+                        </span>
+                    </div>
+
+                    {/* Remove Action */}
+                     {onRemove && (
+                        <button 
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onRemove();
+                            }}
+                            className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-lg"
+                        >
+                            <X size={12} className="text-white" />
+                        </button>
+                     )}
+                </div>
             )}
         </div>
     )

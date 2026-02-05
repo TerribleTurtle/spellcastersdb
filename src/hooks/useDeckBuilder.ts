@@ -85,8 +85,11 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
     }
   }, [deck, isInitialized]);
 
-  const setSpellcaster = useCallback((spellcaster: Spellcaster) => {
     setDeck(prev => ({ ...prev, spellcaster }));
+  }, []);
+
+  const removeSpellcaster = useCallback(() => {
+    setDeck(prev => ({ ...prev, spellcaster: null }));
   }, []);
 
   const setSlot = useCallback((index: SlotIndex, unit: Unit) => {
@@ -197,6 +200,7 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
     deck,
     isInitialized,
     setSpellcaster,
+    removeSpellcaster,
     setSlot,
     clearSlot,
     clearDeck,

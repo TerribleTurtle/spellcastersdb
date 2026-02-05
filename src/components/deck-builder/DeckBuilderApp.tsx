@@ -54,7 +54,8 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
       setSlot, 
       clearSlot, 
       clearDeck, 
-      setSpellcaster, 
+      setSpellcaster,
+      removeSpellcaster, // New
       setDeckState,
       isEmpty,
       stats,
@@ -229,7 +230,9 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
             <div className="h-auto bg-surface-main z-10 shadow-[0_-5px_20px_rgba(0,0,0,0.5)]">
                 <ActiveDeckTray 
                     slots={deck.slots} 
+                    spellcaster={deck.spellcaster}
                     onRemoveSlot={clearSlot} 
+                    onRemoveSpellcaster={removeSpellcaster}
                 />
             </div>
 
