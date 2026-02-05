@@ -27,13 +27,13 @@ export function FilterSection({
         onClick={() => setIsExpanded(!isExpanded)}
         className="flex items-center justify-between w-full text-left group"
       >
-        <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest group-hover:text-white transition-colors">
+        <h3 className="text-xs font-bold text-gray-200 uppercase tracking-widest group-hover:text-white transition-colors">
           {title}
         </h3>
         {isExpanded ? (
-          <ChevronUp size={14} className="text-gray-600" />
+          <ChevronUp size={14} className="text-gray-500" />
         ) : (
-          <ChevronDown size={14} className="text-gray-600" />
+          <ChevronDown size={14} className="text-gray-500" />
         )}
       </button>
 
@@ -56,7 +56,7 @@ export function FilterSection({
                     "flex items-center justify-center p-2 rounded border text-xs font-mono font-bold transition-all",
                     isSelected
                       ? "bg-brand-primary border-brand-primary text-white"
-                      : "bg-surface-card border-white/5 text-gray-400 hover:border-brand-primary/30"
+                      : "bg-surface-card border-white/5 text-gray-300 hover:border-brand-primary/30"
                   )}
                 >
                   {option}
@@ -88,7 +88,7 @@ export function FilterSection({
                     "text-sm",
                     isSelected
                       ? "text-white"
-                      : "text-gray-400 group-hover:text-gray-300"
+                      : "text-gray-300 group-hover:text-gray-100"
                   )}
                 >
                   {option}

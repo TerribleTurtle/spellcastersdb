@@ -66,37 +66,54 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
     <div className="h-full bg-surface-main border-l border-white/10 flex flex-col p-4 overflow-y-auto custom-scrollbar">
        {/* Spellcaster Spotlight */}
        {spellcaster ? (
-           <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500 bg-surface-card border border-brand-primary/30 rounded-lg overflow-hidden shadow-lg group">
+           <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500 bg-surface-card border border-brand-primary/30 rounded-lg overflow-hidden shadow-2xl flex flex-col">
                {/* Header Image & Title */}
-               <div className="relative w-full aspect-video border-b border-brand-primary/30">
-                   <div className="absolute inset-0 bg-gray-800">
+               <div className="relative w-full aspect-[4/3] group/hero">
+                   <div className="absolute inset-0 bg-gray-900">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                             src={getCardImageUrl(spellcaster)} 
                             alt={spellcaster.name} 
-                            className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                            className="w-full h-full object-cover object-[center_20%] transition-transform duration-1000 group-hover/hero:scale-110"
                         />
+                        {/* Glass Overlay for name */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-surface-card via-surface-card/20 to-transparent" />
                    </div>
-                   <div className="absolute inset-0 bg-gradient-to-t from-surface-card via-transparent to-transparent" />
-                   <div className="absolute bottom-0 left-0 right-0 p-4">
-                       <h2 className="text-xl font-bold text-white leading-none mb-1 shadow-black drop-shadow-md">{spellcaster.name}</h2>
-                       <span className="text-xs font-bold text-brand-primary uppercase tracking-widest shadow-black drop-shadow-md">
-                           Commanding Spellcaster
-                       </span>
+                   
+                   <div className="absolute bottom-0 left-0 right-0 p-4 pt-10">
+                       <div className="relative">
+                           <h2 className="text-2xl font-black text-white leading-tight uppercase tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                               {spellcaster.name}
+                           </h2>
+                           <div className="flex items-center gap-2 mt-1">
+                               <span className="h-px w-4 bg-brand-primary" />
+                               <span className="text-[10px] font-bold text-brand-primary uppercase tracking-[0.2em] drop-shadow-sm">
+                                   Commander
+                               </span>
+                           </div>
+                       </div>
                    </div>
                </div>
 
-               {/* Passives Section - Connected */}
-               <div className="p-4 space-y-3 bg-surface-card/50">
-                   <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
-                       <span className="w-1.5 h-1.5 rounded-full bg-brand-secondary" />
-                       Passives
-                   </h3>
-                   <div className="space-y-2">
+               {/* Passives Section - Flexible Height */}
+               <div className="p-4 space-y-4 bg-gradient-to-b from-surface-card/80 to-surface-main/40 border-t border-white/5">
+                   <div className="flex items-center justify-between">
+                       <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">
+                           Passive Abilities
+                       </h3>
+                       <div className="h-1 w-12 bg-white/5 rounded-full" />
+                   </div>
+                   
+                   <div className="space-y-3">
                        {spellcaster.abilities.passive.map((ability) => (
-                           <div key={ability.ability_id} className="bg-black/20 p-2.5 rounded border border-white/5 hover:border-brand-secondary/30 transition-colors">
-                               <p className="text-sm font-bold text-gray-200">{ability.name}</p>
-                               <p className="text-xs text-gray-400 leading-relaxed mt-1">{ability.description}</p>
+                           <div key={ability.ability_id} className="group/ability relative">
+                               <div className="absolute -left-2 top-0 bottom-0 w-0.5 bg-brand-secondary/0 group-hover/ability:bg-brand-secondary/50 transition-all" />
+                               <p className="text-sm font-bold text-gray-100 group-hover/ability:text-brand-secondary transition-colors">
+                                   {ability.name}
+                               </p>
+                               <p className="text-xs text-gray-400 leading-relaxed mt-1 pr-2 italic">
+                                   &ldquo;{ability.description}&rdquo;
+                               </p>
                            </div>
                        ))}
                    </div>

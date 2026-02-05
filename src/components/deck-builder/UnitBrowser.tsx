@@ -197,9 +197,9 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
 
       {/* Filter Overlay */}
       {showFilters && (
-          <div className="absolute top-[130px] left-0 right-0 z-20 bg-surface-card/95 backdrop-blur-md border-b border-white/10 shadow-2xl animate-in slide-in-from-top-2 p-4 space-y-6">
+          <div className="absolute top-[130px] left-0 right-0 z-20 bg-surface-main border-b border-white/10 shadow-2xl animate-in slide-in-from-top-2 p-4 space-y-6">
                <div className="flex justify-between items-center mb-2">
-                   <h3 className="text-xs font-bold text-gray-400 uppercase">Active Filters</h3>
+                   <h3 className="text-xs font-bold text-white uppercase">Active Filters</h3>
                    <button onClick={() => setShowFilters(false)} className="text-gray-500 hover:text-white"><X size={16}/></button>
                </div>
                
