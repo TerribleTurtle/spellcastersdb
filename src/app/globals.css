@@ -44,12 +44,19 @@
   /* Default Dark Theme */
   --background: #0f172a;
   --foreground: #ededed;
+
+  /* Fluid Typography - Scales with viewport */
+  --text-xs: clamp(0.65rem, 0.6rem + 0.25vw, 0.75rem);
+  --text-sm: clamp(0.75rem, 0.7rem + 0.3vw, 0.875rem);
+  --text-base: clamp(0.875rem, 0.8rem + 0.4vw, 1rem);
+  --text-lg: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+  --text-xl: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
 }
 
 body {
   background: radial-gradient(
-    circle at top center, 
-    color-mix(in srgb, var(--color-brand-primary), transparent 90%), 
+    circle at top center,
+    color-mix(in srgb, var(--color-brand-primary), transparent 90%),
     var(--color-surface-main)
   );
   background-color: var(--color-surface-main); /* Fallback */

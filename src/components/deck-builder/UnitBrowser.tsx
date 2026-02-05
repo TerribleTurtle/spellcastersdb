@@ -257,7 +257,7 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
                          <h3 className="text-brand-primary font-bold text-sm uppercase tracking-widest mb-3 border-b border-white/5 pb-1">
                              {group.title} <span className="text-gray-600 text-xs ml-2">({group.items.length})</span>
                          </h3>
-                         <div className="grid grid-cols-3 md:grid-cols-4 gap-3">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
                              {group.items.map(item => {
                                  const id = 'entity_id' in item ? item.entity_id : item.hero_id;
                                  return (

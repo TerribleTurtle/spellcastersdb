@@ -60,7 +60,7 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
 
   return (
     <div className="h-full w-full bg-surface-main/30 p-4 md:p-6 overflow-y-auto custom-scrollbar">
-       <div className="relative bg-surface-card rounded-xl border border-white/10 shadow-2xl overflow-hidden max-w-2xl mx-auto flex flex-col">
+       <div className="relative bg-surface-card rounded-xl border border-white/10 shadow-2xl overflow-hidden max-w-[95%] lg:max-w-2xl xl:max-w-3xl mx-auto flex flex-col">
        
         {/* Close Button (Desktop) */}
         {onClose && (
@@ -73,7 +73,7 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
         )}
 
        {/* Art / Banner Area */}
-       <div className="flex-1 min-h-[120px] max-h-[40vh] w-full bg-slate-800 relative flex items-center justify-center overflow-hidden shrink-0">
+       <div className="flex-1 min-h-[120px] max-h-[35vh] lg:max-h-[45vh] w-full bg-slate-800 relative flex items-center justify-center overflow-hidden shrink-0">
             {/* Blurred Background */}
             <Image 
                 src={getCardImageUrl(item)} 

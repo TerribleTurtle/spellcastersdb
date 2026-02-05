@@ -219,10 +219,10 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
             </div>
 
             {/* Top Area: 3 Columns (Desktop) / Tabbed (Mobile) */}
-            <div className="row-span-1 min-h-0 flex-1 flex flex-col md:grid md:grid-cols-12 border-b border-white/10 bg-surface-main overflow-hidden">
+            <div className="row-span-1 min-h-0 flex-1 flex flex-col md:grid md:grid-cols-12 xl:grid-cols-16 border-b border-white/10 bg-surface-main overflow-hidden">
                 {/* Left: Unit Browser (3 Cols) */}
                 <div className={cn(
-                    "md:col-span-3 h-full overflow-hidden md:border-r border-white/10",
+                    "md:col-span-3 xl:col-span-4 h-full overflow-hidden md:border-r border-white/10",
                     activeMobileTab !== 'BROWSER' && "hidden md:block"
                 )}>
                     <UnitBrowser 
@@ -233,7 +233,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
 
                 {/* Center: Inspector (6 Cols) */}
                 <div className={cn(
-                    "md:col-span-6 h-full overflow-hidden flex flex-col",
+                    "md:col-span-6 xl:col-span-8 h-full overflow-hidden flex flex-col",
                     activeMobileTab !== 'INSPECTOR' && "hidden md:block"
                 )}>
                     <CardInspector 
@@ -255,7 +255,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
 
                 {/* Right: Controls (3 Cols) */}
                 <div className={cn(
-                    "md:col-span-3 h-full overflow-y-auto border-l border-white/10",
+                    "md:col-span-3 xl:col-span-4 h-full overflow-y-auto border-l border-white/10",
                     activeMobileTab !== 'FORGE' && "hidden md:block"
                 )}>
                     <ForgeControls 

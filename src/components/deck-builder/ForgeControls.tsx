@@ -68,7 +68,7 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
        {spellcaster ? (
            <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500 bg-surface-card border border-brand-primary/30 rounded-lg overflow-hidden shadow-2xl flex flex-col">
                {/* Header Image & Title */}
-                <div className="relative w-full h-24 group/hero shrink-0">
+                <div className="relative w-full h-[12vh] min-h-20 max-h-28 group/hero shrink-0">
                    <div className="absolute inset-0 bg-gray-900">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
