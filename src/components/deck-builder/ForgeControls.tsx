@@ -63,34 +63,62 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
    };
 
    return (
-    <div className="h-full bg-surface-main border-l border-white/10 flex flex-col p-4 space-y-6">
-       {/* Spellcaster Section - Drop Target */}
-       <div className="space-y-2">
-           <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Spellcaster</h3>
+    <div className="h-full bg-surface-main border-l border-white/10 flex flex-col p-4 overflow-y-auto custom-scrollbar">
+       {/* Spellcaster Spotlight */}
+       {spellcaster ? (
+           <div className="mb-6 space-y-4 animate-in fade-in slide-in-from-top-4 duration-500">
+               {/* Header Image & Title */}
+               <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-brand-primary/30 shadow-[0_0_20px_rgba(168,85,247,0.2)]">
+                   <div className="absolute inset-0 bg-gray-800">
+                        {/* Use a larger/hero image if available, fallback to card image */}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img 
+                            src={`/images/cards/${spellcaster.hero_id}_card.png`} // Assuming consistent naming
+                            alt={spellcaster.name} 
+                            className="w-full h-full object-cover object-top"
+                        />
+                   </div>
+                   <div className="absolute inset-0 bg-gradient-to-t from-surface-main via-transparent to-transparent" />
+                   <div className="absolute bottom-0 left-0 right-0 p-3">
+                       <h2 className="text-xl font-bold text-white leading-none mb-1 shadow-black drop-shadow-md">{spellcaster.name}</h2>
+                       <span className="text-xs font-bold text-brand-primary uppercase tracking-widest shadow-black drop-shadow-md">
+                           Commanding Spellcaster
+                       </span>
+                   </div>
+               </div>
+
+               {/* Passives */}
+               <div className="space-y-2">
+                   <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest flex items-center gap-2">
+                       <span className="w-1.5 h-1.5 rounded-full bg-brand-secondary" />
+                       Passives
+                   </h3>
+                   <div className="space-y-2">
+                       {spellcaster.abilities.passive.map((ability) => (
+                           <div key={ability.ability_id} className="bg-surface-card p-2 rounded border border-white/5 hover:border-brand-secondary/30 transition-colors">
+                               <p className="text-sm font-bold text-gray-200">{ability.name}</p>
+                               <p className="text-xs text-gray-400 leading-relaxed mt-1">{ability.description}</p>
+                           </div>
+                       ))}
+                   </div>
+               </div>
+           </div>
+       ) : (
            <div 
                 ref={setNodeRef}
                 className={cn(
-                    "w-full h-32 rounded-lg border flex items-center justify-center transition-all",
-                    isOver ? "border-brand-primary bg-brand-primary/20 scale-105" : "border-brand-primary/30 bg-brand-primary/5 hover:border-brand-primary/50"
+                    "w-full aspect-video rounded-lg border-2 border-dashed flex flex-col items-center justify-center transition-all mb-6",
+                    isOver ? "border-brand-primary bg-brand-primary/20 scale-105" : "border-white/20 bg-white/5 text-gray-500"
                 )}
            >
-               {spellcaster ? (
-                   <div className="text-center">
-                       <p className="font-bold text-white text-lg">{spellcaster.name}</p>
-                       <span className="text-xs text-brand-primary font-bold uppercase tracking-wider">Commander</span>
-                   </div>
-               ) : (
-                   <div className="text-center p-4">
-                       <p className="text-sm text-gray-400 font-bold mb-1">Select Spellcaster</p>
-                       <p className="text-xs text-gray-600">Drag & Drop Spellcaster Here</p>
-                   </div>
-               )}
+               <p className="text-sm font-bold mb-1">No Spellcaster Selected</p>
+               <p className="text-xs opacity-70">Drag a Commander here or to the deck tray</p>
            </div>
-       </div>
+       )}
 
-       {/* Validation Status */}
+       {/* Validation Status (Moved Down) */}
        <div className={cn(
-           "rounded-lg p-4 border transition-colors",
+           "rounded-lg p-4 border transition-colors mb-6 shrink-0",
            stats.isValid ? "bg-green-500/10 border-green-500/30" : "bg-red-500/10 border-red-500/30"
        )}>
             <div className="flex items-center gap-3 mb-2">
@@ -119,7 +147,7 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
        </div>
 
        {/* Stats Summary */}
-       <div className="space-y-2">
+       <div className="space-y-2 mb-6 shrink-0">
           <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Metrics</h3>
           <div className="grid grid-cols-2 gap-2 text-sm">
              <div className="bg-surface-card p-2 rounded border border-white/5">
@@ -136,7 +164,7 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
        <div className="grow" />
 
        {/* Actions */}
-       <div className="space-y-3">
+       <div className="space-y-3 shrink-0 pb-4">
            <button 
                 onClick={handleExport}
                 className="w-full flex items-center justify-center gap-2 py-2 rounded bg-surface-card border border-white/10 hover:bg-white/5 transition-colors text-sm font-bold text-gray-300"
