@@ -40,14 +40,9 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
     // Only run on client
     if (typeof window === 'undefined') return;
 
-    // Prevent hydration if we don't have reference data yet
-    if (availableUnits.length === 0 || availableSpellcasters.length === 0) {
-        // If we are waiting for data, don't say we are initialized yet?
-        // Actually, we might want to let the app load, but we can't hydrate correctly.
-        // User 'availableUnits' default is [] which makes this safe.
-        // We'll wait.
-        return; 
-    }
+    // 1. Hydration Load (Safe Mode)
+    // We allow loading even if units aren't fetched yet, so we can restore the IDs.
+    // The UI handles missing unit objects gracefully.
 
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -95,7 +90,7 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
 
   const setSlot = useCallback((index: SlotIndex, unit: Unit) => {
     setDeck(prev => {
-      // Check for duplicates in non-titan slots (indices 0-3)
+      // Enforce Singleton: Max 1 copy per card
       // We only care if the unit is being added to a standard slot (0-3)
       if (index < 4) {
           const isDuplicate = prev.slots.some((s, i) => 
@@ -140,7 +135,7 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
     averageChargeTime: 0,
     averageCost: 0,
     unitCounts: { Creature: 0, Building: 0, Spell: 0, Titan: 0 } as Record<string, number>,
-    rankCounts: { I: 0, II: 0, III: 0, IV: 0 } as Record<string, number>,
+    // Removed unused rankCounts
     isValid: false,
     validationErrors: [] as string[]
   };
@@ -164,8 +159,6 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
 
         const cat = slot.unit.category;
         stats.unitCounts[cat] = (stats.unitCounts[cat] || 0) + 1;
-        const rank = slot.unit.card_config.rank;
-        stats.rankCounts[rank] = (stats.rankCounts[rank] || 0) + 1;
     }
   });
 
@@ -176,7 +169,7 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
   if (stats.unitCount < 4) stats.validationErrors.push("Must have 4 Units");
   if (!stats.titanCount) stats.validationErrors.push("Must have 1 Titan");
   if (!stats.hasSpellcaster) stats.validationErrors.push("Select a Spellcaster");
-  if (stats.unitCount === 4 && stats.rank1or2Count === 0) {
+  if (stats.hasSpellcaster && stats.unitCount > 0 && stats.rank1or2Count === 0) {
       stats.validationErrors.push("Requires at least one Rank I or II unit");
   }
 

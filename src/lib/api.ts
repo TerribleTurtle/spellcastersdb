@@ -1,7 +1,7 @@
 /**
  * API Fetching Service for Spellcasters Community API
  * Implements Stale-While-Revalidate (SWR) via Next.js fetch
- * NOW WITH ZOD VALIDATION
+ * Implements Stale-While-Revalidate (SWR) via Next.js fetch
  */
 
 import { z } from "zod";
@@ -136,9 +136,9 @@ export async function fetchGameData(): Promise<AllDataResponse> {
       // We will return empty arrays to avoid crashing components downstream.
       if (process.env.NODE_ENV === 'development') {
          // In Dev, throw so we see it.
-         console.warn("Returning raw data despite validation error for dev inspection...");
-         return rawData as AllDataResponse; 
+         throw new Error(`API Validation Failed: ${JSON.stringify(result.error.format(), null, 2)}`);
       }
+      console.error("Critical API Validation Error (returning empty fallback):", result.error.format());
       return {
           build_info: { version: "unknown", generated_at: new Date().toISOString() },
           units: [],

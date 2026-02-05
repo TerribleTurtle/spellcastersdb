@@ -26,7 +26,6 @@ export interface DeckStats {
   averageCost: number;
   averageChargeTime: number;
   unitCounts: Record<string, number>;
-  rankCounts: Record<string, number>;
   isValid: boolean;
   validationErrors: string[];
 }

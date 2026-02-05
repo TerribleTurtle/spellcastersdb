@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Unit, Spellcaster } from "@/types/api";
 import { getCardImageUrl } from "@/lib/utils";
 import { Shield, Swords, Zap, Users, PlusCircle, Crown, Clock } from "lucide-react";
@@ -37,16 +38,19 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster }: CardInspect
        {/* Art / Banner Area */}
        <div className="aspect-video w-full bg-slate-800 relative flex items-center justify-center overflow-hidden">
             {/* Blurred Background */}
-            <img 
+            <Image 
                 src={getCardImageUrl(item)} 
                 alt={name}
-                className="absolute inset-0 w-full h-full object-cover opacity-30 blur-xl scale-110" 
+                fill
+                className="object-cover opacity-30 blur-xl scale-110" 
             />
             {/* Main Image (Contained) */}
             <div className="absolute inset-0 flex items-center justify-center p-2 z-10">
-                <img 
+                <Image 
                     src={getCardImageUrl(item)} 
                     alt={name}
+                    width={500}
+                    height={300}
                     className="h-full w-auto max-w-full object-contain drop-shadow-2xl rounded" 
                 />
             </div>

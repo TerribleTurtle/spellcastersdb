@@ -1,5 +1,4 @@
-"use client";
-
+import Image from "next/image";
 import { useState } from "react";
 import { UnifiedEntity } from "@/types/api";
 import { cn } from "@/lib/utils";
@@ -46,16 +45,17 @@ export function EntityImage({ entity, className, alt }: EntityImageProps) {
 
   return (
     <div className={cn("relative overflow-hidden bg-surface-card rounded-lg", className)}>
-      <img
+      <Image
         src={getImageUrl(entity)}
         alt={alt || entity.name}
-        loading="lazy"
+        fill
         className={cn(
-          "w-full h-full object-contain transition-opacity duration-300",
+          "object-contain transition-opacity duration-300",
           loaded ? "opacity-100" : "opacity-0"
         )}
         onLoad={() => setLoaded(true)}
         onError={() => setError(true)}
+        sizes="(max-width: 768px) 100vw, 50vw"
       />
       
       {/* Loading Skeleton */}

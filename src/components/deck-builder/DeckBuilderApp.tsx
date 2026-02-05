@@ -101,7 +101,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         setDeckState(newDeck);
         router.replace('/deck-builder', { scroll: false });
     } else {
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+
         setPendingImport(newDeck);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -146,14 +146,8 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         // If dropped on "spellcaster-zone" or anywhere really?
         // User asked for "drag to their slot in the top right".
         // Let's enforce the target ID.
-        if (over.id === 'spellcaster-zone' || !over.id) { 
-             // Allow loose dropping for now or strict? 
-             // "allow selecting and changing a spellcater by draging them to theri slot"
-             // Implies strict target. But earlier I considered "anywhere". 
-             // Let's support both: Drop on "spellcaster-zone" specifically.
-             if (over.id === 'spellcaster-zone') {
-                 setSpellcaster(item as Spellcaster);
-             }
+        if (over.id === 'spellcaster-zone') {
+             setSpellcaster(item as Spellcaster);
         }
         return;
     }
@@ -267,6 +261,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
             {activeDragItem ? (
                 <div className="w-32 h-auto aspect-3/4 bg-surface-card border-2 border-brand-primary rounded-lg shadow-2xl overflow-hidden pointer-events-none flex flex-col">
                     <div className="relative flex-1 overflow-hidden bg-gray-800">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                             src={getCardImageUrl(activeDragItem)} 
                             alt={activeDragItem.name} 

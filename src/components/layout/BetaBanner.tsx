@@ -12,6 +12,7 @@ export function BetaBanner() {
   useEffect(() => {
     const isDismissed = localStorage.getItem(BANNER_DISMISSED_KEY);
     if (!isDismissed) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsVisible(true);
     }
     setIsHydrated(true);

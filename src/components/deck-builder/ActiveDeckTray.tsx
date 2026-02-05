@@ -1,5 +1,4 @@
-"use client";
-
+import Image from "next/image";
 import { useDroppable } from "@dnd-kit/core";
 import { DeckSlot } from "@/types/deck";
 
@@ -62,10 +61,12 @@ function Slot({ slot, onRemove }: { slot: DeckSlot; onRemove: () => void }) {
                 <div className="flex flex-col w-full h-full overflow-hidden rounded text-left">
                     {/* Image Area */}
                     <div className="relative flex-1 bg-slate-800 overflow-hidden">
-                        <img 
+                        <Image 
                              src={getCardImageUrl(slot.unit)} 
                              alt={slot.unit.name}
-                             className="absolute inset-0 w-full h-full object-cover object-top"
+                             fill
+                             sizes="(max-width: 768px) 100vw, 33vw"
+                             className="object-cover object-top"
                         />
                          {/* Rank Badge - Overlaid */}
                         <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm">

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Search } from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
@@ -168,16 +169,19 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
                 "relative group cursor-grab active:cursor-grabbing flex flex-col",
                 "aspect-3/4 rounded overflow-hidden border border-white/10 bg-surface-card",
                 "hover:border-brand-primary/50 transition-all hover:scale-105",
+                "opacity-100", // Reset default
                 isDragging && "opacity-50",
                 isHero && "border-brand-accent/30 shadow-[0_0_10px_rgba(255,255,255,0.05)]"
             )}
         >
             {/* Image Area */}
             <div className="relative flex-1 overflow-hidden bg-gray-800">
-                <img 
+                <Image 
                     src={getCardImageUrl(item)} 
                     alt={item.name}
-                    className="absolute inset-0 w-full h-full object-cover object-top transition-transform group-hover:scale-110"
+                    fill
+                    sizes="(max-width: 768px) 33vw, 20vw"
+                    className="object-cover object-top transition-transform group-hover:scale-110"
                 />
                  {/* Rank Badge - Overlaid on Image */}
                  {rank && (
