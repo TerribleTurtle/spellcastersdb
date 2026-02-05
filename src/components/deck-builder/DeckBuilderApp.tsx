@@ -128,7 +128,9 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
   const handleDragStart = (event: DragStartEvent) => {
     const current = event.active.data.current;
     if (current && typeof current === 'object' && 'item' in current) {
-         setActiveDragItem(current.item as Unit | Spellcaster);
+         const item = current.item as Unit | Spellcaster;
+         setActiveDragItem(item);
+         setSelectedItem(item);
     }
   };
 
