@@ -13,7 +13,7 @@ export default async function DeckBuilderPage() {
   const data = await fetchGameData();
 
   return (
-    <div className="fixed inset-0 top-16 bg-surface-main overflow-hidden">
+    <div className="fixed inset-0 top-16 bg-surface-main overflow-hidden z-40">
         {/* TODO: Replace with proper Skeleton logic if desired, but Suspense needs to be high up */}
         <Suspense fallback={<div className="flex h-full items-center justify-center text-brand-primary animate-pulse">Loading The Forge...</div>}>
             <DeckBuilderApp 
