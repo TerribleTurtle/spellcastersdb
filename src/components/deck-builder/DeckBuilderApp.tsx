@@ -275,6 +275,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                     spellcaster={deck.spellcaster}
                     onRemoveSlot={clearSlot} 
                     onRemoveSpellcaster={removeSpellcaster}
+                    draggedItem={activeDragItem}
                 />
             </div>
 

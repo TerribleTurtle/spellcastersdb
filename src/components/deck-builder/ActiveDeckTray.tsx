@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useDroppable } from "@dnd-kit/core";
 import { DeckSlot } from "@/types/deck";
-import { Spellcaster } from "@/types/api";
+import { Spellcaster, Unit } from "@/types/api";
 
 import { X, Shield, Sparkles } from "lucide-react";
 import { cn, getCardImageUrl } from "@/lib/utils";
@@ -11,9 +11,10 @@ interface ActiveDeckTrayProps {
   spellcaster: Spellcaster | null;
   onRemoveSlot: (index: 0 | 1 | 2 | 3 | 4) => void;
   onRemoveSpellcaster?: () => void; // Optional if we want to allow clearing commander from here
+  draggedItem?: Unit | Spellcaster | null;
 }
 
-export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpellcaster }: ActiveDeckTrayProps) {
+export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpellcaster, draggedItem }: ActiveDeckTrayProps) {
   return (
     <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-4">
       <div className="grow flex items-center justify-center px-4 py-2 md:py-4 gap-2 md:gap-4 overflow-x-auto min-h-[120px] md:min-h-[160px]">
@@ -23,7 +24,9 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
                 <Slot 
                     key={slot.index} 
                     slot={slot} 
-                    onRemove={() => onRemoveSlot(slot.index as 0|1|2|3)} 
+                    onRemove={() => onRemoveSlot(slot.index as 0|1|2|3)}
+                    draggedItem={draggedItem}
+                    allSlots={slots}
                 />
             ))}
         </div>
@@ -35,7 +38,9 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
         <div className="mx-2">
             <Slot 
                 slot={slots[4]} 
-                onRemove={() => onRemoveSlot(4)} 
+                onRemove={() => onRemoveSlot(4)}
+                draggedItem={draggedItem}
+                allSlots={slots}
             />
         </div>
 
@@ -44,14 +49,19 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
 
         {/* Spellcaster Slot - Larger/Distinct */}
         <div className="mx-2">
-            <SpellcasterSlot spellcaster={spellcaster} onRemove={onRemoveSpellcaster} />
+            <SpellcasterSlot spellcaster={spellcaster} onRemove={onRemoveSpellcaster} draggedItem={draggedItem} />
         </div>
       </div>
     </div>
   );
 }
 
-function Slot({ slot, onRemove }: { slot: DeckSlot; onRemove: () => void }) {
+function Slot({ slot, onRemove, draggedItem, allSlots }: { 
+    slot: DeckSlot; 
+    onRemove: () => void;
+    draggedItem?: Unit | Spellcaster | null;
+    allSlots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
+}) {
     const { isOver, setNodeRef } = useDroppable({
         id: `slot-${slot.index}`,
         data: { index: slot.index, allowedTypes: slot.allowedTypes }
@@ -59,13 +69,36 @@ function Slot({ slot, onRemove }: { slot: DeckSlot; onRemove: () => void }) {
 
     const isTitanSlot = slot.allowedTypes.includes("TITAN");
 
+    // Determine if this slot is a valid drop target for the dragged item
+    let isValidTarget = false;
+    if (draggedItem && 'entity_id' in draggedItem) {
+        // It's a Unit being dragged
+        const draggedUnit = draggedItem as Unit;
+        const isTitan = draggedUnit.category === 'Titan';
+        
+        // Check type compatibility
+        const typeMatches = isTitanSlot ? isTitan : !isTitan;
+        
+        // Check singleton rule: can't drop in a slot that already has this unit (for slots 0-3)
+        const isDuplicate = slot.index < 4 && allSlots.some((s, i) => 
+            i < 4 && i !== slot.index && s.unit?.entity_id === draggedUnit.entity_id
+        );
+        
+        isValidTarget = typeMatches && !isDuplicate;
+    }
+
     return (
         <div 
             ref={setNodeRef}
             className={cn(
                 "relative group w-20 md:w-36 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center",
-                isOver ? "border-brand-primary bg-brand-primary/10 scale-105" : "border-white/10 bg-surface-card",
-                isTitanSlot && "border-brand-accent/30 bg-brand-accent/5",
+                // Valid drop target (not hovering yet)
+                isValidTarget && !isOver && "border-brand-accent/60 bg-brand-accent/5 shadow-[0_0_12px_rgba(251,191,36,0.3)] animate-pulse",
+                // Active hover state (brightest)
+                isOver && "border-brand-primary bg-brand-primary/10 scale-105",
+                // Default states
+                !isValidTarget && !isOver && "border-white/10 bg-surface-card",
+                isTitanSlot && !isValidTarget && !isOver && "border-brand-accent/30 bg-brand-accent/5",
                 slot.unit && "border-brand-secondary/50"
             )}
         >
@@ -126,18 +159,30 @@ function Slot({ slot, onRemove }: { slot: DeckSlot; onRemove: () => void }) {
     )
 }
 
-function SpellcasterSlot({ spellcaster, onRemove }: { spellcaster: Spellcaster | null, onRemove?: () => void }) {
+function SpellcasterSlot({ spellcaster, onRemove, draggedItem }: { 
+    spellcaster: Spellcaster | null;
+    onRemove?: () => void;
+    draggedItem?: Unit | Spellcaster | null;
+}) {
     const { isOver, setNodeRef } = useDroppable({
         id: "spellcaster-zone",
         data: { type: "spellcaster" }
     });
+
+    // Valid target if dragging a Spellcaster
+    const isValidTarget = draggedItem && 'hero_id' in draggedItem;
 
     return (
         <div 
             ref={setNodeRef}
             className={cn(
                 "relative group w-24 md:w-40 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg",
-                isOver ? "border-brand-primary bg-brand-primary/10 scale-105 shadow-brand-primary/20" : "border-brand-primary/30 bg-surface-card",
+                // Valid drop target (not hovering yet)
+                isValidTarget && !isOver && "border-brand-accent/60 bg-brand-accent/5 shadow-[0_0_12px_rgba(251,191,36,0.3)] animate-pulse",
+                // Active hover state (brightest)
+                isOver && "border-brand-primary bg-brand-primary/10 scale-105 shadow-brand-primary/20",
+                // Default states
+                !isValidTarget && !isOver && "border-brand-primary/30 bg-surface-card",
                 spellcaster && "border-brand-primary"
             )}
         >

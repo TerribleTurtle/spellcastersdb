@@ -90,7 +90,7 @@ export default function AboutPage() {
           <section className="bg-surface-card border border-white/10 rounded-lg p-6">
             <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Credits</h2>
             <p className="text-slate-300 leading-relaxed">
-              Created and maintained by <strong className="text-brand-primary">TerribleTurtle</strong> and the Spellcasters Chronicles community. Special thanks to all contributors who help keep the data accurate and up-to-date.
+              Created and maintained by <strong className="text-brand-primary">TerribleTurtles</strong> and the Spellcasters Chronicles community. Special thanks to all contributors who help keep the data accurate and up-to-date.
             </p>
           </section>
 
