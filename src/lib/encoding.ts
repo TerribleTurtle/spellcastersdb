@@ -1,22 +1,20 @@
 import LZString from "lz-string";
 import { Deck } from "@/types/deck";
 
-// Minimal structure for sharing to save space
-// [SpellcasterID, Slot1ID, Slot2ID, Slot3ID, Slot4ID, Slot5ID]
-// Slot ID can be null
-type MinifiedDeck = [string | null, string | null, string | null, string | null, string | null, string | null];
+const DELIMITER = "\u001F"; // ASCII Unit Separator
 
 export function encodeDeck(deck: Deck): string {
-  const minified: MinifiedDeck = [
-    deck.spellcaster?.hero_id || null,
-    deck.slots[0]?.unit?.entity_id || null,
-    deck.slots[1]?.unit?.entity_id || null,
-    deck.slots[2]?.unit?.entity_id || null,
-    deck.slots[3]?.unit?.entity_id || null,
-    deck.slots[4]?.unit?.entity_id || null,
+  const ids = [
+    deck.spellcaster?.hero_id || "",
+    deck.slots[0]?.unit?.entity_id || "",
+    deck.slots[1]?.unit?.entity_id || "",
+    deck.slots[2]?.unit?.entity_id || "",
+    deck.slots[3]?.unit?.entity_id || "",
+    deck.slots[4]?.unit?.entity_id || "",
   ];
-  const json = JSON.stringify(minified);
-  return LZString.compressToEncodedURIComponent(json);
+  
+  const packed = ids.join(DELIMITER);
+  return LZString.compressToEncodedURIComponent(packed);
 }
 
 export interface DecodedDeckData {
@@ -26,21 +24,18 @@ export interface DecodedDeckData {
 
 export function decodeDeck(hash: string): DecodedDeckData | null {
   try {
-    const json = LZString.decompressFromEncodedURIComponent(hash);
-    if (!json) return null;
+    const packed = LZString.decompressFromEncodedURIComponent(hash);
+    if (!packed) return null;
     
-    const minified: MinifiedDeck = JSON.parse(json);
-    if (!Array.isArray(minified) || minified.length !== 6) return null;
-
-    // Validate each element is string or null (prevent malicious payloads)
-    if (!minified.every(v => v === null || typeof v === 'string')) {
-      console.warn("decodeDeck: invalid payload structure", minified);
-      return null;
+    const parts = packed.split(DELIMITER);
+    if (parts.length !== 6) {
+        // Fallback for unexpected lengths, though should be 6
+        return null;
     }
 
     return {
-        spellcasterId: minified[0],
-        slotIds: minified.slice(1)
+        spellcasterId: parts[0] || null,
+        slotIds: parts.slice(1).map(id => id || null)
     };
   } catch (e) {
     console.error("Failed to decode deck", e);
