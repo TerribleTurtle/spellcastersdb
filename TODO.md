@@ -51,3 +51,4 @@
 - [x] Fix oversized Spellcaster image in Deck Builder controls
 - [x] Refine Deck Builder Card Inspector UI (Padding + Close button)
 - [x] Add visual feedback for valid drop zones when dragging cards
+- [x] Implement dynamic viewport-relative sizing for deck tray (mobile/desktop scaling)

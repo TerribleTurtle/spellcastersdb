@@ -16,10 +16,10 @@ interface ActiveDeckTrayProps {
 
 export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpellcaster, draggedItem }: ActiveDeckTrayProps) {
   return (
-    <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-4">
-      <div className="grow flex items-center justify-center px-4 py-2 md:py-4 gap-2 md:gap-4 overflow-x-auto min-h-[120px] md:min-h-[160px]">
+    <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 md:pb-3">
+      <div className="grow flex items-center justify-center px-4 py-2 md:py-3 gap-[1.5vw] md:gap-[0.75vw] overflow-x-auto">
         {/* Unit Slots 1-4 */}
-        <div className="flex gap-2 mx-2">
+        <div className="flex gap-[1.5vw] md:gap-[0.75vw] mx-2">
             {slots.slice(0, 4).map((slot) => (
                 <Slot 
                     key={slot.index} 
@@ -91,9 +91,9 @@ function Slot({ slot, onRemove, draggedItem, allSlots }: {
         <div 
             ref={setNodeRef}
             className={cn(
-                "relative group w-20 md:w-36 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center",
+                "relative group w-[14vw] md:w-[8vw] lg:w-[7vw] max-w-32 min-w-16 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center",
                 // Valid drop target (not hovering yet)
-                isValidTarget && !isOver && "border-brand-accent/60 bg-brand-accent/5 shadow-[0_0_12px_rgba(251,191,36,0.3)] animate-pulse",
+                isValidTarget && !isOver && "border-amber-400 bg-amber-400/10 shadow-[0_0_20px_rgba(251,191,36,0.6),0_0_40px_rgba(251,191,36,0.3)] animate-pulse",
                 // Active hover state (brightest)
                 isOver && "border-brand-primary bg-brand-primary/10 scale-105",
                 // Default states
@@ -176,9 +176,9 @@ function SpellcasterSlot({ spellcaster, onRemove, draggedItem }: {
         <div 
             ref={setNodeRef}
             className={cn(
-                "relative group w-24 md:w-40 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg",
+                "relative group w-[17vw] md:w-[10vw] lg:w-[8vw] max-w-36 min-w-20 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg",
                 // Valid drop target (not hovering yet)
-                isValidTarget && !isOver && "border-brand-accent/60 bg-brand-accent/5 shadow-[0_0_12px_rgba(251,191,36,0.3)] animate-pulse",
+                isValidTarget && !isOver && "border-amber-400 bg-amber-400/10 shadow-[0_0_20px_rgba(251,191,36,0.6),0_0_40px_rgba(251,191,36,0.3)] animate-pulse",
                 // Active hover state (brightest)
                 isOver && "border-brand-primary bg-brand-primary/10 scale-105 shadow-brand-primary/20",
                 // Default states
