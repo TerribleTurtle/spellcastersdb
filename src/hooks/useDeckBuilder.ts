@@ -175,8 +175,13 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
   if (!stats.titanCount) stats.validationErrors.push("Must have 1 Titan");
   if (!stats.hasSpellcaster) stats.validationErrors.push("Select a Spellcaster");
 
-  // Passive reminder for Rank I/II (non-blocking)
-  const rankReminder = stats.unitCount > 0 && stats.rank1or2Count === 0 
+  // Strict: Rank I/II Requirement (Blocking if full)
+  if (stats.unitCount === 4 && stats.rank1or2Count === 0) {
+      stats.validationErrors.push("Must include a Rank I or II unit");
+  }
+
+  // Passive reminder for Rank I/II (Tip if not full)
+  const rankReminder = stats.unitCount > 0 && stats.unitCount < 4 && stats.rank1or2Count === 0 
     ? "Tip: Include at least one Rank I or II unit for early pressure" 
     : null;
 
