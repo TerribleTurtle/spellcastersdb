@@ -90,7 +90,7 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
                </div>
 
                {/* Passives Section - Scrollable */}
-                <div className="p-4 space-y-4 bg-surface-card border-t border-white/5 flex-1">
+                <div className="p-4 space-y-4 bg-surface-card border-t border-white/5 flex-1 min-h-0 overflow-y-auto">
                    <div className="flex items-center justify-between">
                        <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">
                            Passive Abilities
