@@ -68,7 +68,7 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
        {spellcaster ? (
            <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500 bg-surface-card border border-brand-primary/30 rounded-lg overflow-hidden shadow-2xl flex flex-col">
                {/* Header Image & Title */}
-               <div className="relative w-full aspect-[4/3] group/hero">
+                <div className="relative w-full aspect-video group/hero">
                    <div className="absolute inset-0 bg-gray-900">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
@@ -96,7 +96,7 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
                </div>
 
                {/* Passives Section - Flexible Height */}
-               <div className="p-4 space-y-4 bg-gradient-to-b from-surface-card/80 to-surface-main/40 border-t border-white/5">
+                <div className="p-4 space-y-4 bg-surface-card border-t border-white/5">
                    <div className="flex items-center justify-between">
                        <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">
                            Passive Abilities
@@ -132,9 +132,32 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
            </div>
        )}
 
+       {/* Divider */}
+       <hr className="border-white/5 my-2" />
+
+       {/* Stats Summary */}
+       <div className="space-y-2 shrink-0">
+          <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Metrics</h3>
+          <div className="grid grid-cols-2 gap-2 text-sm">
+             <div className="bg-surface-card p-2 rounded border border-white/5">
+                 <span className="block text-xs text-gray-500">Avg Pop</span>
+                 <span className="font-mono font-bold text-white">{stats.averageCost.toFixed(1)}</span>
+             </div>
+             <div className="bg-surface-card p-2 rounded border border-white/5">
+                 <span className="block text-xs text-gray-500">Avg Speed</span>
+                 <span className="font-mono font-bold text-brand-secondary">{stats.averageChargeTime.toFixed(1)}s</span>
+             </div>
+          </div>
+       </div>
+
+       <div className="grow" />
+
+       {/* Divider */}
+       <hr className="border-white/5 my-4" />
+
        {/* Validation Status (Moved Down) */}
        <div className={cn(
-           "rounded-lg p-4 border transition-colors mb-6 shrink-0",
+           "rounded-lg p-4 border transition-colors mb-4 shrink-0",
            stats.isValid ? "bg-green-500/10 border-green-500/30" : "bg-red-500/10 border-red-500/30"
        )}>
             <div className="flex items-center gap-3 mb-2">
@@ -161,23 +184,6 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
                 </p>
             )}
        </div>
-
-       {/* Stats Summary */}
-       <div className="space-y-2 mb-6 shrink-0">
-          <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">Metrics</h3>
-          <div className="grid grid-cols-2 gap-2 text-sm">
-             <div className="bg-surface-card p-2 rounded border border-white/5">
-                 <span className="block text-xs text-gray-500">Avg Pop</span>
-                 <span className="font-mono font-bold text-white">{stats.averageCost.toFixed(1)}</span>
-             </div>
-             <div className="bg-surface-card p-2 rounded border border-white/5">
-                 <span className="block text-xs text-gray-500">Avg Speed</span>
-                 <span className="font-mono font-bold text-brand-secondary">{stats.averageChargeTime.toFixed(1)}s</span>
-             </div>
-          </div>
-       </div>
-
-       <div className="grow" />
 
        {/* Actions */}
        <div className="space-y-3 shrink-0 pb-4">
