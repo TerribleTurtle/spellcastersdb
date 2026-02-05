@@ -141,6 +141,7 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
     titanCount: deck.slots[4].unit ? 1 : 0,
     hasSpellcaster: !!deck.spellcaster,
     rank1or2Count: 0,
+    rank1or2CreatureCount: 0,
     averageChargeTime: 0,
     averageCost: 0,
     unitCounts: { Creature: 0, Building: 0, Spell: 0, Titan: 0 } as Record<string, number>,
@@ -158,8 +159,12 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
     if (slot.unit) {
         if (slot.index < 4) {
             const rank = slot.unit.card_config.rank;
+            const category = slot.unit.category;
             if (rank === 'I' || rank === 'II') {
                 stats.rank1or2Count++;
+                if (category === 'Creature') {
+                    stats.rank1or2CreatureCount++;
+                }
             }
         }
         totalCharge += slot.unit.card_config.charge_time;
@@ -179,14 +184,21 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
   if (!stats.titanCount) stats.validationErrors.push("Must have 1 Titan");
   if (!stats.hasSpellcaster) stats.validationErrors.push("Select a Spellcaster");
 
-  // Strict: Rank I/II Requirement (Blocking if full)
-  if (stats.unitCount === 4 && stats.rank1or2Count === 0) {
-      stats.validationErrors.push("Must include a Rank I or II unit");
+  // Strict: Rank I/II Creature Requirement (Blocking if full)
+  if (stats.unitCount === 4 && stats.rank1or2CreatureCount === 0) {
+      stats.validationErrors.push("Must include a Rank I or II Creature");
   }
 
-  // Passive reminder for Rank I/II (Tip if not full)
-  const rankReminder = stats.unitCount > 0 && stats.unitCount < 4 && stats.rank1or2Count === 0 
-    ? "Tip: Include at least one Rank I or II unit for early pressure" 
+  // Strict: Prevent all-spell decks (Must have at least one Creature or Building in slots 1-4)
+  // Note: Titan (slot 5) doesn't fulfill the "creature/building" requirement for the main 4 slots
+  const nonTitanPermanentCount = deck.slots.slice(0, 4).filter(s => s.unit && (s.unit.category === 'Creature' || s.unit.category === 'Building')).length;
+  if (stats.unitCount === 4 && nonTitanPermanentCount === 0) {
+      stats.validationErrors.push("Deck cannot be all Spells; include at least 1 Creature or Building");
+  }
+
+  // Passive reminder for Rank I/II Creature (Tip if not full)
+  const rankReminder = stats.unitCount > 0 && stats.unitCount < 4 && stats.rank1or2CreatureCount === 0 
+    ? "Tip: Include at least one Rank I or II Creature for early pressure" 
     : null;
 
   stats.isValid = stats.validationErrors.length === 0;

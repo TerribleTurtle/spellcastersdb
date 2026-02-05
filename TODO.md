@@ -62,3 +62,4 @@
 - [x] Implement Status Dashboard (Roadmap page) with JSON-based roadmap management
 - [x] Populate roadmap with community feedback (12 new items) and cleanup stale placeholder items
 - [x] Add Magic School Alignment request to roadmap and cleanup schools
+- [x] Refine Deck validation logic: Require 1x Rank I/II Creature and prevent all-spell decks

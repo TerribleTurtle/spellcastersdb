@@ -96,6 +96,12 @@
       "category": "community-requests"
     },
     {
+      "id": "deck-validation-refinement",
+      "title": "Refined Validation Logic",
+      "description": "Require at least one Rank I or II Creature and prevent all-spell decks to ensure balanced theory-crafting.",
+      "category": "community-requests"
+    },
+    {
       "id": "og-images",
       "title": "Visual Deck Sharing",
       "description": "Dynamic OG images for deck links on social media",
