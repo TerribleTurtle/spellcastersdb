@@ -61,3 +61,4 @@
 - [x] Relocate spellcaster passives from Forge to deck tray (desktop: hover tooltips, mobile: uses Inspector)
 - [x] Implement Status Dashboard (Roadmap page) with JSON-based roadmap management
 - [x] Populate roadmap with community feedback (12 new items) and cleanup stale placeholder items
+- [x] Add Magic School Alignment request to roadmap and cleanup schools

@@ -90,6 +90,12 @@
       "category": "community-requests"
     },
     {
+      "id": "magic-school-alignment",
+      "title": "Magic School Alignment",
+      "description": "Align magic schools to correct sets, remove incorrect schools, and verify all units are correctly assigned.",
+      "category": "community-requests"
+    },
+    {
       "id": "og-images",
       "title": "Visual Deck Sharing",
       "description": "Dynamic OG images for deck links on social media",
