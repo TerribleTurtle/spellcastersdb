@@ -53,3 +53,8 @@
 - [x] Add visual feedback for valid drop zones when dragging cards
 - [x] Implement dynamic viewport-relative sizing for deck tray (mobile/desktop scaling)
 - [x] Implement holistic responsive design across all deck builder components
+- [x] Audit and fix deck builder mobile scaling issues (oversized units)
+- [x] Deduplicate spellcaster drop zone IDs
+- [x] Fix Forge tab passives visibility (removed restrictive max-height)
+- [x] Implement GLOBAL custom scrollbar styles (replaces native Windows Chrome bars everywhere)
+- [x] Fix inspector rank badge overlap with close button

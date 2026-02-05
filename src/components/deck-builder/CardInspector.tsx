@@ -59,7 +59,7 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
   const rank = isUnit ? item.card_config.rank : 'Spellcaster';
 
   return (
-    <div className="h-full w-full bg-surface-main/30 p-4 md:p-6 overflow-y-auto custom-scrollbar">
+    <div className="h-full w-full bg-surface-main/30 p-4 md:p-6 overflow-y-auto">
        <div className="relative bg-surface-card rounded-xl border border-white/10 shadow-2xl overflow-hidden max-w-[95%] lg:max-w-2xl xl:max-w-3xl mx-auto flex flex-col">
        
         {/* Close Button (Desktop) */}
@@ -103,12 +103,12 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
             
             {/* Gradient Overlay */}
             <div className="absolute inset-0 bg-linear-to-t from-surface-card to-transparent z-20" />
-            {/* Badges */}
-            <div className="absolute top-4 right-4 flex gap-2">
-                <span className="bg-black/80 px-3 py-1 rounded text-lg font-bold font-mono text-brand-accent border border-brand-accent/30">
-                    {rank}
-                </span>
-            </div>
+            {/* Badges - Offset from close button */}
+             <div className="absolute top-4 right-14 md:right-16 flex gap-2 z-30">
+                 <span className="bg-black/80 px-3 py-1 rounded text-lg font-bold font-mono text-brand-accent border border-brand-accent/30">
+                     {rank}
+                 </span>
+             </div>
              <div className="absolute bottom-4 left-4">
                 <span className="bg-brand-primary/90 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
                     {category}

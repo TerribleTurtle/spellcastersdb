@@ -64,3 +64,29 @@ body {
   font-family: var(--font-geist-sans), sans-serif;
   min-height: 100vh;
 }
+
+/* Global Custom Scrollbar for Windows Chrome/Edge/Safari */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.03);
+}

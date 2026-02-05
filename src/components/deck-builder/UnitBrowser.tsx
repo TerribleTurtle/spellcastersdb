@@ -245,7 +245,7 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
       )}
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto custom-scrollbar bg-black/20 pb-20">
+      <div className="flex-1 overflow-y-auto bg-black/20 pb-20">
          {(!groupedContent || groupedContent.length === 0) ? (
              <div className="text-center text-gray-500 py-10 mt-10">
                  No results found.

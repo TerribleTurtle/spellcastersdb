@@ -63,7 +63,7 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
    };
 
    return (
-    <div className="h-full bg-surface-main border-l border-white/10 flex flex-col p-4 overflow-y-auto custom-scrollbar">
+    <div className="h-full bg-surface-main border-l border-white/10 flex flex-col p-4 overflow-y-auto">
        {/* Spellcaster Spotlight */}
        {spellcaster ? (
            <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500 bg-surface-card border border-brand-primary/30 rounded-lg overflow-hidden shadow-2xl flex flex-col">
@@ -90,7 +90,7 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
                </div>
 
                {/* Passives Section - Scrollable */}
-                <div className="p-4 space-y-4 bg-surface-card border-t border-white/5 max-h-[30vh] overflow-y-auto custom-scrollbar">
+                <div className="p-4 space-y-4 bg-surface-card border-t border-white/5 flex-1">
                    <div className="flex items-center justify-between">
                        <h3 className="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em]">
                            Passive Abilities
