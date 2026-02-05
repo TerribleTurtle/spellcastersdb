@@ -68,24 +68,24 @@ export function ForgeControls({ spellcaster, stats, validation, onClear, deck }:
        {spellcaster ? (
            <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500 bg-surface-card border border-brand-primary/30 rounded-lg overflow-hidden shadow-2xl flex flex-col">
                {/* Header Image & Title */}
-                <div className="relative w-full aspect-video group/hero">
+                <div className="relative w-full h-32 group/hero shrink-0">
                    <div className="absolute inset-0 bg-gray-900">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                             src={getCardImageUrl(spellcaster)} 
                             alt={spellcaster.name} 
-                            className="w-full h-full object-cover object-[center_20%] transition-transform duration-1000 group-hover/hero:scale-110"
+                            className="w-full h-full object-cover object-[center_25%] transition-transform duration-1000 group-hover/hero:scale-110"
                         />
                         {/* Glass Overlay for name */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-surface-card via-surface-card/20 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-surface-card via-surface-card/10 to-transparent" />
                    </div>
                    
-                   <div className="absolute bottom-0 left-0 right-0 p-4 pt-10">
+                   <div className="absolute bottom-0 left-0 right-0 p-3 pt-6">
                        <div className="relative">
-                           <h2 className="text-2xl font-black text-white leading-tight uppercase tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                           <h2 className="text-xl font-black text-white leading-tight uppercase tracking-tight drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                                {spellcaster.name}
                            </h2>
-                           <div className="flex items-center gap-2 mt-1">
+                           <div className="flex items-center gap-2 mt-0.5">
                                <span className="h-px w-4 bg-brand-primary" />
                                <span className="text-[10px] font-bold text-brand-primary uppercase tracking-[0.2em] drop-shadow-sm">
                                    Commander
