@@ -199,11 +199,11 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
       stats.validationErrors.push("Must include at least 1 Rank I or II Creature");
   }
 
-  // RULE 5: Prevent All-Spell Decks (Must have at least one permanent unit)
-  // Note: Buildings count as permanents. Titan (slot 5) doesn't count toward this requirement.
-  const nonTitanPermanentCount = deck.slots.slice(0, 4).filter(s => s.unit && (s.unit.category === 'Creature' || s.unit.category === 'Building')).length;
-  if (stats.unitCount === 4 && nonTitanPermanentCount === 0) {
-      stats.validationErrors.push("Deck cannot be all Spells; include at least 1 Creature or Building");
+  // RULE 5: Prevent All-Spell/Building Decks (Must have at least one Creature)
+  // Note: Buildings and Spells do not satisfy this requirement. Titan (slot 5) doesn't count toward this requirement.
+  const creatureCount = deck.slots.slice(0, 4).filter(s => s.unit && s.unit.category === 'Creature').length;
+  if (stats.unitCount === 4 && creatureCount === 0) {
+      stats.validationErrors.push("Deck must include at least 1 Creature (cannot be all Spells or Buildings)");
   }
 
   // Passive reminder for Rank I/II Creature (Friendly tip when deck is incomplete)
