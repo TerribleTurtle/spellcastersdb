@@ -18,21 +18,75 @@
   ],
   "items": [
     {
-      "id": "unit-comparison-tool",
-      "title": "Unit Comparison Tool",
-      "description": "Side-by-side stat comparison for different units",
+      "id": "ui-redesign",
+      "title": "UI Redesign",
+      "description": "Full-screen character art backgrounds, compact pop-out unit info, and reorganized deck management UI",
       "category": "community-requests"
     },
     {
-      "id": "advanced-filters",
-      "title": "Advanced Filtering",
-      "description": "Filter units by multiple attributes simultaneously",
+      "id": "class-labels",
+      "title": "Spellcaster Class Labels",
+      "description": "Replace generic 'Mage' with specific classes: Conqueror, Enchanter, Duelist",
       "category": "community-requests"
     },
     {
-      "id": "deck-templates",
-      "title": "Deck Templates",
-      "description": "Pre-built deck templates for different strategies",
+      "id": "health-icon",
+      "title": "Health Icon Update",
+      "description": "Change Health stat icon from Shield to Heart to avoid Armor confusion",
+      "category": "community-requests"
+    },
+    {
+      "id": "data-cleanup",
+      "title": "Data Cleanup",
+      "description": "Remove unnecessary stats from Spells (Health), Pop Count, and Average Speed from metrics",
+      "category": "community-requests"
+    },
+    {
+      "id": "ability-media",
+      "title": "Ability Videos & GIFs",
+      "description": "Add example videos or GIFs to card descriptions to demonstrate abilities",
+      "category": "community-requests"
+    },
+    {
+      "id": "sorting-improvements",
+      "title": "Sorting & Naming",
+      "description": "Pluralize categories (Spellcasters, Creatures) and alphabetize cards by group",
+      "category": "community-requests"
+    },
+    {
+      "id": "skill-bar-click",
+      "title": "Skill Bar Card Info",
+      "description": "Clicking cards in the skill bar should display card info",
+      "category": "community-requests"
+    },
+    {
+      "id": "card-swap",
+      "title": "Card Slot Swapping",
+      "description": "Moving a card to an occupied slot should swap cards rather than attempting to add",
+      "category": "community-requests"
+    },
+    {
+      "id": "draft-mode",
+      "title": "Draft Mode",
+      "description": "New game mode for drafting decks",
+      "category": "community-requests"
+    },
+    {
+      "id": "team-builder",
+      "title": "Team Builder Mode",
+      "description": "Build and manage up to 9 different deck builds",
+      "category": "community-requests"
+    },
+    {
+      "id": "build-name",
+      "title": "Build Identification",
+      "description": "Add Build Name display clearly in the top right of the deck builder",
+      "category": "community-requests"
+    },
+    {
+      "id": "stats-grid",
+      "title": "Stats Display Overhaul",
+      "description": "Consolidate stats into a cleaner, color-coded grid (Green for health, Red for damage)",
       "category": "community-requests"
     },
     {
@@ -45,18 +99,6 @@
       "id": "url-sharing",
       "title": "URL Deck Sharing",
       "description": "Share decks via compressed URLs",
-      "category": "live"
-    },
-    {
-      "id": "deck-builder",
-      "title": "The Forge (Deck Builder)",
-      "description": "Build and validate decks with drag-and-drop",
-      "category": "live"
-    },
-    {
-      "id": "responsive-design",
-      "title": "Mobile-Optimized Design",
-      "description": "Fully responsive UI across all devices",
       "category": "live"
     }
   ]
