@@ -85,6 +85,7 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
     }
   }, [deck, isInitialized]);
 
+  const setSpellcaster = useCallback((spellcaster: Spellcaster) => {
     setDeck(prev => ({ ...prev, spellcaster }));
   }, []);
 
