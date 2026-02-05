@@ -15,7 +15,7 @@ function getEntityMeta(entity: UnifiedEntity) {
     return { 
       href: `/heroes/${entity.hero_id}`, 
       category: "Spellcaster", 
-      rank: "LEGENDARY",
+      rank: entity.class.toUpperCase(),
       pop: null,
       school: "Spellcaster"
     };
@@ -33,7 +33,7 @@ function getEntityMeta(entity: UnifiedEntity) {
   return { 
     href: `/units/${entity.entity_id}`, 
     category: entity.category, 
-    rank: entity.card_config.rank,
+    rank: entity.category === "Titan" ? "TITAN" : entity.card_config.rank,
     pop: entity.card_config.cost_population,
     school: entity.magic_school
   };

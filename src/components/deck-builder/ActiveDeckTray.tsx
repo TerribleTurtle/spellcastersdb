@@ -139,10 +139,16 @@ function Slot({ slot, onRemove, draggedItem, allSlots }: {
                              sizes="(max-width: 768px) 100vw, 33vw"
                              className="object-cover object-top"
                         />
-                         {/* Rank Badge - Overlaid */}
-                        <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm">
-                            {slot.unit.card_config.rank}
-                        </div>
+                         {/* Rank/Titan Badge - Overlaid */}
+                        {slot.unit.category === 'Titan' ? (
+                            <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm">
+                                TITAN
+                            </div>
+                        ) : (
+                            <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm">
+                                {slot.unit.card_config.rank}
+                            </div>
+                        )}
                     </div>
                      {/* Name Banner */}
                     <div className="h-6 min-h-6 bg-surface-main/95 border-t border-white/10 flex items-center justify-center px-1 z-10 shrink-0">
@@ -222,6 +228,10 @@ function SpellcasterSlot({ spellcaster, onRemove, draggedItem }: {
                              sizes="(max-width: 768px) 100vw, 33vw"
                              className="object-cover object-top"
                         />
+                        {/* Spellcaster Class Badge */}
+                        <div className="absolute top-1 right-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm uppercase">
+                            {spellcaster.class}
+                        </div>
                     </div>
                      {/* Name Banner */}
                     <div className="h-7 min-h-7 bg-brand-primary/20 backdrop-blur-sm border-t border-brand-primary/30 flex items-center justify-center px-1 z-10 shrink-0">

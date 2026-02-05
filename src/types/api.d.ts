@@ -20,6 +20,8 @@ export type UnitCategory = "Creature" | "Building" | "Spell" | "Titan";
 
 export type UnitRank = "I" | "II" | "III" | "IV";
 
+export type SpellcasterClass = "Enchanter" | "Duelist" | "Conqueror";
+
 export type MovementType = "Ground" | "Fly" | "Hover" | "Stationary";
 
 // ============================================================================
@@ -87,6 +89,7 @@ export interface Spellcaster {
   game_version: string;
   hero_id: string; // Kept as hero_id to match API for now, but Interface is Spellcaster
   name: string;
+  class: SpellcasterClass;
   image_required?: boolean;
 
   // Combat Stats

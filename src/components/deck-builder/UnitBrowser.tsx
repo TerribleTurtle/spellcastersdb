@@ -282,6 +282,8 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
     const id = 'entity_id' in item ? item.entity_id : item.hero_id;
     const isHero = !('entity_id' in item);
     const rank = !isHero ? item.card_config.rank : null;
+    const isTitan = !isHero && item.category === 'Titan';
+    const spellcasterClass = isHero ? item.class : null;
 
     const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
         id: `browser-${id}`,
@@ -312,16 +314,22 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
                     sizes="(max-width: 768px) 33vw, 20vw"
                     className="object-cover object-top transition-transform group-hover:scale-110"
                 />
-                 {/* Rank Badge - Overlaid on Image - Larger Text */}
-                 {rank && (
+                 {/* Rank Badge - Overlaid on Image */}
+                 {rank && !isTitan && (
                      <div className="absolute top-1 right-1 bg-black/70 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm shadow-md border border-white/10">
                         {rank}
                     </div>
                  )}
-                 {/* Spellcaster Badge */}
-                 {isHero && (
-                    <div className="absolute top-0.5 left-0.5 bg-brand-primary/90 px-1 py-0.5 rounded text-[8px] font-bold text-white uppercase tracking-wider shadow-sm">
-                        MAGE
+                 {/* Titan Badge */}
+                 {isTitan && (
+                    <div className="absolute top-1 right-1 bg-black/70 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm shadow-md border border-white/10">
+                        TITAN
+                    </div>
+                 )}
+                 {/* Spellcaster Class Badge */}
+                 {spellcasterClass && (
+                    <div className="absolute top-1 right-1 bg-black/70 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm shadow-md border border-white/10 uppercase">
+                        {spellcasterClass}
                     </div>
                  )}
             </div>

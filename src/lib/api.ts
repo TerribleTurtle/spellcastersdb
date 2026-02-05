@@ -60,6 +60,7 @@ const AbilitySchema = z.object({
 const SpellcasterSchema = z.object({
   hero_id: z.string(),
   name: z.string(),
+  class: z.enum(["Enchanter", "Duelist", "Conqueror"]),
   image_required: z.boolean().optional(),
   health: z.number(),
   movement_speed: z.number(),
