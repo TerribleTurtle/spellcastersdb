@@ -91,7 +91,8 @@ function Slot({ slot, onRemove, draggedItem, allSlots }: {
         <div 
             ref={setNodeRef}
             className={cn(
-                "relative group w-[14vw] md:w-[8vw] lg:w-[7vw] max-w-32 min-w-16 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center",
+                "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center",
+                "w-[clamp(48px,12vw,80px)] md:w-[clamp(64px,8vw,96px)] lg:w-[clamp(72px,7vw,112px)]",
                 // Valid drop target (not hovering yet)
                 isValidTarget && !isOver && "border-amber-400 bg-amber-400/10 shadow-[0_0_20px_rgba(251,191,36,0.6),0_0_40px_rgba(251,191,36,0.3)] animate-pulse",
                 // Active hover state (brightest)
@@ -176,7 +177,8 @@ function SpellcasterSlot({ spellcaster, onRemove, draggedItem }: {
         <div 
             ref={setNodeRef}
             className={cn(
-                "relative group w-[17vw] md:w-[10vw] lg:w-[8vw] max-w-36 min-w-20 aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg",
+                "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg",
+                "w-[clamp(56px,14vw,96px)] md:w-[clamp(80px,10vw,120px)] lg:w-[clamp(88px,8vw,128px)]",
                 // Valid drop target (not hovering yet)
                 isValidTarget && !isOver && "border-amber-400 bg-amber-400/10 shadow-[0_0_20px_rgba(251,191,36,0.6),0_0_40px_rgba(251,191,36,0.3)] animate-pulse",
                 // Active hover state (brightest)

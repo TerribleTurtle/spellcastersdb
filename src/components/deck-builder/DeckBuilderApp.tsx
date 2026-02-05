@@ -164,10 +164,8 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
 
     // Check if it's a Spellcaster being dropped
     if ('hero_id' in item) {
-        // If dropped on "spellcaster-zone" or anywhere really?
-        // User asked for "drag to their slot in the top right".
-        // Let's enforce the target ID.
-        if (over.id === 'spellcaster-zone') {
+        // Accept drops on either spellcaster zone
+        if (over.id === 'spellcaster-zone' || over.id === 'spellcaster-zone-forge') {
              setSpellcaster(item as Spellcaster);
         }
         return;

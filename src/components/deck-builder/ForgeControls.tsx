@@ -20,7 +20,7 @@ interface ForgeControlsProps {
 
 export function ForgeControls({ spellcaster, stats, validation, onClear, deck }: ForgeControlsProps) {
   const { isOver, setNodeRef } = useDroppable({
-      id: "spellcaster-zone",
+      id: "spellcaster-zone-forge",
       data: { type: 'spellcaster' }
   });
 

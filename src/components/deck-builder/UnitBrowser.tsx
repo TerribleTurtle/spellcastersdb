@@ -197,7 +197,7 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
 
       {/* Filter Overlay */}
       {showFilters && (
-          <div className="absolute top-[130px] left-0 right-0 z-20 bg-surface-main border-b border-white/10 shadow-2xl animate-in slide-in-from-top-2 p-4 space-y-6">
+          <div className="absolute top-32 left-0 right-0 z-20 bg-surface-main border-b border-white/10 shadow-2xl animate-in slide-in-from-top-2 p-4 space-y-6">
                <div className="flex justify-between items-center mb-2">
                    <h3 className="text-xs font-bold text-white uppercase">Active Filters</h3>
                    <button onClick={() => setShowFilters(false)} className="text-gray-500 hover:text-white"><X size={16}/></button>
@@ -328,7 +328,7 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
 
             {/* Name Banner - Increased Text Size */}
             <div className="h-8 min-h-8 bg-surface-main/95 border-t border-white/10 flex items-center justify-center px-1 z-10">
-                <span className="text-xs font-bold text-gray-200 text-center leading-tight line-clamp-2 w-full px-1">
+                <span className="text-[10px] font-bold text-gray-200 text-center leading-tight line-clamp-2 w-full px-1">
                     {item.name}
                 </span>
             </div>
