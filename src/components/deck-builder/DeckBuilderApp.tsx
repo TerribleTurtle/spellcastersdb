@@ -117,8 +117,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     const isDifferent = localIds.some((id, i) => (id || null) !== (importedIds[i] || null));
 
     if (!isDifferent) {
-        // Same deck, just clear param to clean URL
-        router.replace('/deck-builder', { scroll: false });
+        // Deck matches URL, do nothing (keep URL synced)
         return;
     }
 
@@ -131,6 +130,30 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, isInitialized, isEmpty]); 
+
+  // Sync Deck to URL (Debounced)
+  useEffect(() => {
+    if (!isInitialized) return;
+    
+    // Don't sync if empty (keeps URL clean for new users)
+    if (!deck.spellcaster && deck.slots.every(s => !s.unit)) {
+        if (window.location.search.includes('?d=')) {
+             window.history.replaceState(null, '', window.location.pathname);
+        }
+        return;
+    }
+
+    const timer = setTimeout(() => {
+        import("@/lib/encoding").then(({ encodeDeck }) => {
+             const h = encodeDeck(deck);
+             const url = new URL(window.location.href);
+             url.searchParams.set('d', h);
+             window.history.replaceState(null, '', url.toString());
+        });
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [deck, isInitialized]); 
 
   const confirmImport = () => {
     if (pendingImport) {
