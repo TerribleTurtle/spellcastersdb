@@ -1,8 +1,8 @@
 # Active State
 
 **Current Phase**: Phase 5: Visual Sharing & OG Images
-**Status**: In Progress
-**Last Action**: Refactor Navbar: split primary/secondary links and centered alignment for a cleaner, premium UI.
+**Status**: Deployment Ready
+**Last Action**: Refined OG Image layout (larger text, less gap) and improved metadata descriptions.
 
 ## Current Focus
 
@@ -15,6 +15,7 @@
 - [x] Enabled **Hamburger Menu on Desktop** for secondary links (Guide, FAQ, About)
 - [x] Implemented **Status Dashboard** at `/roadmap` with JSON-based roadmap management
 - [x] SEO: Refine metadata to include ALL terms: "Card", "Deck", "Build", "Loadout".
+- [x] OG: Refined Image Layout (larger text, tighter spacing) and dynamic Spellcaster descriptions.
 
 ## Recent Changes
 

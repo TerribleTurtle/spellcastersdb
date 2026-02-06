@@ -129,7 +129,7 @@ export async function GET(request: NextRequest) {
             </div>
 
             {/* Deck Content */}
-            <div style={{ display: 'flex', flexGrow: 1, alignItems: 'flex-end', justifyContent: 'center', gap: 20, width: '100%', paddingBottom: 10, zIndex: 10 }}>
+            <div style={{ display: 'flex', flexGrow: 1, alignItems: 'flex-start', marginTop: 30, justifyContent: 'center', gap: 20, width: '100%', paddingBottom: 10, zIndex: 10 }}>
                 
                 {/* Spellcaster (Hero) */}
                 {spellcaster && (
@@ -153,7 +153,7 @@ export async function GET(request: NextRequest) {
                             bottom: 0,
                             left: 0,
                             right: 0,
-                            height: 48,
+                            height: 54, // Increased height
                             backgroundColor: 'rgba(15, 23, 42, 0.95)',
                             borderTop: '1px solid rgba(255,255,255,0.15)',
                             borderBottomLeftRadius: 16,
@@ -163,7 +163,7 @@ export async function GET(request: NextRequest) {
                             justifyContent: 'center',
                             padding: '0 8px'
                         }}>
-                             <span style={{ fontSize: 18, fontWeight: 700, color: 'white', textAlign: 'center', width: '100%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                             <span style={{ fontSize: 24, fontWeight: 700, color: 'white', textAlign: 'center', width: '100%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 {spellcaster.name}
                             </span>
                         </div>
@@ -223,7 +223,7 @@ export async function GET(request: NextRequest) {
                                 bottom: 0,
                                 left: 0,
                                 right: 0,
-                                height: 44,
+                                height: 50, // Increased height
                                 backgroundColor: 'rgba(15, 23, 42, 0.95)',
                                 borderTop: '1px solid rgba(255,255,255,0.15)',
                                 display: 'flex',
@@ -231,7 +231,7 @@ export async function GET(request: NextRequest) {
                                 justifyContent: 'center',
                                 padding: '0 8px'
                             }}>
-                                <span style={{ fontSize: 16, fontWeight: 700, color: '#e2e8f0', textAlign: 'center', width: '100%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                <span style={{ fontSize: 20, fontWeight: 700, color: '#e2e8f0', textAlign: 'center', width: '100%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                     {unit.name}
                                 </span>
                             </div>

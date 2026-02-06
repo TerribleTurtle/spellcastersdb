@@ -22,34 +22,44 @@ export async function generateMetadata(
     let deckName = decoded?.name;
 
     // If no name in the hash, resolve it from the Spellcaster ID
-    if (!deckName && decoded?.spellcasterId) {
-       try {
-         const data = await fetchGameData();
-         const spellcaster = data.heroes.find(h => h.hero_id === decoded.spellcasterId);
-         if (spellcaster) {
-           deckName = `${spellcaster.name} Deck`;
-         }
-       } catch (e) {
-         console.error("Failed to fetch game data for metadata", e);
-       }
+    let spellcasterName = '';
+    
+    // Always try to get spellcaster name for better metadata
+    if (decoded?.spellcasterId) {
+        try {
+            const data = await fetchGameData();
+            const spellcaster = data.heroes.find(h => h.hero_id === decoded.spellcasterId);
+            if (spellcaster) {
+                spellcasterName = spellcaster.name;
+                if (!deckName) {
+                    deckName = `${spellcaster.name} Deck`;
+                }
+            }
+        } catch (e) {
+            console.error("Failed to fetch game data for metadata", e);
+        }
     }
     
     // Fallback if still empty
     if (!deckName) deckName = 'Custom Deck';
 
+    const description = spellcasterName 
+        ? `Check out this ${spellcasterName} build for Spellcasters Chronicles.`
+        : `Check out this ${deckName} build for Spellcasters Chronicles.`;
+
     return {
       title: `${deckName} - SpellcastersDB`,
-      description: `Check out this ${deckName} build for Spellcasters Chronicles. View unit composition, stats, and strategy on SpellcastersDB.`,
+      description: description,
       openGraph: {
         title: `${deckName} - SpellcastersDB`,
-        description: `Check out this ${deckName} build for Spellcasters Chronicles.`,
+        description: description,
         type: 'website',
         images: [`/api/og?d=${deckHash}`],
       },
       twitter: {
         card: 'summary_large_image',
         title: `${deckName} - SpellcastersDB`,
-        description: `Check out this ${deckName} build for Spellcasters Chronicles.`,
+        description: description,
         images: [`/api/og?d=${deckHash}`],
       }
     };
