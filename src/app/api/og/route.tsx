@@ -97,7 +97,7 @@ export async function GET(request: NextRequest) {
           }} />
 
             {/* Content Wrapper for Vertical Centering */}
-            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 30, alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 40, alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
             
                 {/* Header */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
@@ -132,7 +132,7 @@ export async function GET(request: NextRequest) {
                 </div>
 
                 {/* Deck Content */}
-                <div style={{ display: 'flex', flexGrow: 1, alignItems: 'flex-start', justifyContent: 'center', gap: 20, width: '100%' }}>
+                <div style={{ display: 'flex', flexGrow: 1, alignItems: 'flex-end', justifyContent: 'center', gap: 20, width: '100%' }}>
                 
                 {/* Spellcaster (Hero) */}
                 {spellcaster && (
