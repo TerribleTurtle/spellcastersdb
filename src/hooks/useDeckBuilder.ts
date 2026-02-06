@@ -138,6 +138,23 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
           const newSlots = [...prev.slots] as typeof prev.slots;
           const unitA = newSlots[indexA].unit;
           const unitB = newSlots[indexB].unit;
+          
+          const slotA = newSlots[indexA];
+          const slotB = newSlots[indexB];
+
+          // Validate Unit B moving to Slot A
+          if (unitB) {
+              const isTitanB = unitB.category === 'Titan';
+              if (slotA.allowedTypes.includes('TITAN') && !isTitanB) return prev;
+              if (slotA.allowedTypes.includes('UNIT') && isTitanB) return prev;
+          }
+
+          // Validate Unit A moving to Slot B
+          if (unitA) {
+              const isTitanA = unitA.category === 'Titan';
+              if (slotB.allowedTypes.includes('TITAN') && !isTitanA) return prev;
+              if (slotB.allowedTypes.includes('UNIT') && isTitanA) return prev;
+          }
 
           // Simple swap (handles nulls gracefully)
           newSlots[indexA] = { ...newSlots[indexA], unit: unitB };

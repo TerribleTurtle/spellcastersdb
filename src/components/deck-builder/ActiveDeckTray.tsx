@@ -230,6 +230,18 @@ function SpellcasterSlot({ spellcaster, onRemove, draggedItem, onSelect }: {
         data: { type: "spellcaster" }
     });
 
+    const { attributes, listeners, setNodeRef: setDragNodeRef, transform, isDragging } = useDraggable({
+        id: "spellcaster-slot-drag",
+        data: { type: 'spellcaster-slot', spellcaster },
+        disabled: !spellcaster
+    });
+
+    const style = transform ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        zIndex: 50,
+        opacity: isDragging ? 0 : 1,
+    } : undefined;
+
     // Valid target if dragging a Spellcaster
     const isValidTarget = draggedItem && 'hero_id' in draggedItem;
 
@@ -250,9 +262,23 @@ function SpellcasterSlot({ spellcaster, onRemove, draggedItem, onSelect }: {
                 isOver && "border-brand-primary bg-brand-primary/10 scale-105 shadow-brand-primary/20",
                 // Default states
                 !isValidTarget && !isOver && "border-brand-primary/30 bg-surface-card",
-                spellcaster && "border-brand-primary"
+                spellcaster && "border-brand-primary",
+                isDragging && "opacity-50"
             )}
         >
+             {/* Draggable Wrapper */}
+             {spellcaster && (
+                <div 
+                    ref={setDragNodeRef} 
+                    {...listeners} 
+                    {...attributes} 
+                    style={style}
+                    className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing"
+                    onClick={(e) => {
+                         if (onSelect) onSelect(spellcaster);
+                    }}
+                />
+             )}
              {!spellcaster && (
                 <div className="text-center opacity-30 text-brand-primary">
                     <div className="mb-2 flex justify-center">
@@ -265,7 +291,7 @@ function SpellcasterSlot({ spellcaster, onRemove, draggedItem, onSelect }: {
             )}
 
             {spellcaster && (
-                <div className="flex flex-col w-full h-full overflow-hidden rounded text-left">
+                <div className={cn("flex flex-col w-full h-full overflow-hidden rounded text-left pointer-events-none", isDragging && "opacity-0")}>
                     {/* Image Area */}
                     <div className="relative flex-1 bg-slate-800 overflow-hidden">
                         <Image 

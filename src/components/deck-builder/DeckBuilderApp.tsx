@@ -192,7 +192,16 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         return;
     }
 
-    // --- CASE 2: BROWSER SOURCE ---
+    // --- CASE 2: SPELLCASTER SLOT SOURCE ---
+    if (active.data.current?.type === 'spellcaster-slot') {
+         // Dropped outside -> REMOVE
+         if (!over || over.id !== "spellcaster-zone") {
+             removeSpellcaster();
+         }
+         return;
+    }
+
+    // --- CASE 3: BROWSER SOURCE ---
     if (!over || !item) return;
 
     // Check if it's a Spellcaster being dropped
