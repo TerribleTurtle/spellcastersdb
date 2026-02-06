@@ -13,6 +13,7 @@ const typeConfig: Record<RoadmapItemType, { order: number }> = {
   enhancement: { order: 2 },
   ux: { order: 3 },
   data: { order: 4 },
+  concept: { order: 99 },
 };
 
 export default function StatusCategory({ category, items }: StatusCategoryProps) {

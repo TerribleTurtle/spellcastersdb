@@ -36,6 +36,12 @@ const typeConfig: Record<RoadmapItemType, { icon: string; color: string; label: 
     label: 'Data',
     badgeClasses: 'bg-amber-500/10 text-amber-300 border-amber-500/20'
   },
+  concept: { 
+    icon: '💭', 
+    color: 'text-slate-400', 
+    label: 'Concept',
+    badgeClasses: 'bg-slate-500/10 text-slate-400 border-slate-500/20 border-dashed'
+  },
 };
 
 // Status badge styles
@@ -91,6 +97,26 @@ export default function StatusItem({ item }: StatusItemProps) {
       <p className="text-xs text-slate-400 leading-relaxed pl-6">
         {item.description}
       </p>
+
+      {/* Dev Note */}
+      {item.devNote && (
+        <div className="mt-3 rounded border border-amber-500/20 bg-amber-900/20 px-2.5 py-2">
+          <p className="text-[10px] text-amber-200/80 font-mono leading-relaxed">
+            <span className="font-bold text-amber-500 mr-1.5 uppercase tracking-wider text-[9px]">Dev Note</span>
+            {item.devNote}
+          </p>
+        </div>
+      )}
+
+      {/* Concept Disclaimer */}
+      {item.type === 'concept' && (
+        <div className="mt-3 rounded border border-white/5 bg-white/5 px-2.5 py-2">
+          <p className="text-[10px] text-slate-400 leading-relaxed italic">
+            <span className="font-bold text-slate-300 mr-1 not-italic">Note:</span>
+            Large-scale concept under consideration. No guarantee of implementation.
+          </p>
+        </div>
+      )}
 
       {/* Subtle hover glow */}
       <div className="pointer-events-none absolute inset-0 rounded-lg opacity-0 transition-opacity group-hover:opacity-100 bg-linear-to-br from-brand-primary/5 to-transparent" />

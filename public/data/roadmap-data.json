@@ -70,22 +70,23 @@
       "id": "sorting-improvements",
       "title": "Sorting & Naming",
       "description": "Pluralize categories (Spellcasters, Creatures) and alphabetize cards by group",
-      "category": "community-requests",
-      "type": "ux"
+      "category": "live",
+      "type": "ux",
+      "devNote": "Implemented with Rank-first sorting (then Alphabetical) rather than purely alphabetical to better group unit tiers."
     },
     {
       "id": "draft-mode",
       "title": "Draft Mode",
       "description": "New game mode for drafting decks",
       "category": "community-requests",
-      "type": "feature"
+      "type": "concept"
     },
     {
       "id": "team-builder",
       "title": "Team Builder Mode",
       "description": "Build and manage up to 9 different deck builds",
       "category": "community-requests",
-      "type": "feature"
+      "type": "concept"
     },
     {
       "id": "build-name",

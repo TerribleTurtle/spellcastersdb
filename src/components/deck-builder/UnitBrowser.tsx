@@ -18,7 +18,16 @@ interface UnitBrowserProps {
 
 const SCHOOLS = ["Astral", "War", "Elemental", "Lightning", "Holy", "Dark", "Frost"];
 const RANKS = ["I", "II", "III", "IV"];
-const CATEGORIES = ["Spellcaster", "Creature", "Building", "Spell", "Titan"]; 
+const CATEGORY_TO_PLURAL: Record<string, string> = {
+  Spellcaster: "Spellcasters",
+  Creature: "Creatures",
+  Building: "Buildings",
+  Spell: "Spells",
+  Titan: "Titans",
+};
+
+const CATEGORIES = Object.values(CATEGORY_TO_PLURAL); 
+
 const GROUP_MODES = ["All", "Rank", "Magic School"] as const;
 
 type GroupMode = typeof GROUP_MODES[number];
@@ -59,7 +68,8 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
         }
         
         const isUnit = 'entity_id' in item;
-        const category = isUnit ? item.category : 'Spellcaster';
+        const rawCategory = isUnit ? item.category : 'Spellcaster';
+        const category = CATEGORY_TO_PLURAL[rawCategory] || rawCategory;
         const school = isUnit ? item.magic_school : 'N/A';
         const rank = isUnit ? item.card_config.rank : null;
 
@@ -87,11 +97,12 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
           // Group by Category (rank i-iv inside not strictly enforced by "group", just sort order?)
           // User said: "groups all creature, all spells and all building in theri own group rank i - iv"
           // So -> Category Headers -> Items sorted by Rank
-          const cats = ["Spellcaster", "Creature", "Spell", "Building", "Titan"];
-          cats.forEach(cat => {
+          const orderedSingularCats = ["Spellcaster", "Creature", "Spell", "Building", "Titan"];
+          orderedSingularCats.forEach(catSingular => {
+              const catPlural = CATEGORY_TO_PLURAL[catSingular] || catSingular;
               const catItems = filteredItems.filter(i => {
                   const c = 'entity_id' in i ? i.category : 'Spellcaster';
-                  return c === cat;
+                  return c === catSingular;
               });
               if (catItems.length > 0) {
                   // Sort by Rank, then Name
@@ -101,7 +112,7 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
                       if (rA !== rB) return rA.localeCompare(rB);
                       return a.name.localeCompare(b.name);
                   });
-                  groups.push({ title: cat, items: catItems });
+                  groups.push({ title: catPlural, items: catItems });
               }
           });
       } else if (groupMode === "Rank") {
@@ -117,6 +128,8 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
               // Usually Spellcasters don't have ranks I-IV like units. Keeping them out or in separate "Commander" group.
               
               if (rankItems.length > 0) {
+                  // Sort by Rank (redundant here but consistent) then Name
+                  rankItems.sort((a, b) => a.name.localeCompare(b.name));
                   groups.push({ title: `Rank ${rank}`, items: rankItems });
               }
           });
@@ -127,6 +140,13 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
                   return i.magic_school === school;
               });
               if (schoolItems.length > 0) {
+                  // Sort by Rank then Name
+                  schoolItems.sort((a, b) => {
+                      const rA = 'card_config' in a ? a.card_config.rank : 'I';
+                      const rB = 'card_config' in b ? b.card_config.rank : 'I';
+                      if (rA !== rB) return rA.localeCompare(rB);
+                      return a.name.localeCompare(b.name);
+                  });
                   groups.push({ title: school, items: schoolItems });
               }
            });
