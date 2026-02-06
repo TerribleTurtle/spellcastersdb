@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-default.png", // We will need to add this image later
+        url: "/og-default.svg",
         width: 1200,
         height: 630,
         alt: "SpellcastersDB - Community Hub",
