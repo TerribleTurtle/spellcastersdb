@@ -2,20 +2,21 @@
 
 import Image from "next/image";
 import { Unit, Spellcaster } from "@/types/api";
-import { getCardImageUrl } from "@/lib/utils";
+import { cn, getCardImageUrl } from "@/lib/utils";
 import { Swords, Zap, Users, PlusCircle, Crown, Clock, ArrowLeft, X, Heart } from "lucide-react";
 
-type InspectorItem = Unit | Spellcaster;
+export type InspectorItem = Unit | Spellcaster;
 
 interface CardInspectorProps {
   item: InspectorItem | null;
+  currentDeck: import("@/types/deck").Deck; // Use type import to avoid circular dependency if any
   onAddSlot: (slotIndex: 0 | 1 | 2 | 3 | 4) => void;
   onSetSpellcaster: () => void;
   onBack?: () => void;
   onClose?: () => void;
 }
 
-export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClose }: CardInspectorProps) {
+export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, onBack, onClose }: CardInspectorProps) {
   if (!item) {
     return (
       <div className="h-full flex flex-col items-center justify-center text-gray-500 border-x border-white/10 bg-surface-main/30 relative overflow-hidden">
@@ -59,6 +60,19 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
   const rank = isUnit 
     ? (item.category === "Titan" ? "TITAN" : item.card_config.rank)
     : item.class.toUpperCase();
+
+  // Check if item is already in deck
+  const isCurrentSpellcaster = isSpellcaster && currentDeck.spellcaster?.hero_id === (item as Spellcaster).hero_id;
+  
+  // For units, check specific slots
+  const getSlotStatus = (idx: number) => {
+      if (!isUnit) return null;
+      const slot = currentDeck.slots[idx];
+      const isExample = slot.unit?.entity_id === (item as Unit).entity_id;
+      return isExample ? 'ALREADY_IN' : null;
+  };
+
+  const isTitanInDeck = isUnit && item.category === "Titan" && currentDeck.slots[4].unit?.entity_id === (item as Unit).entity_id;
 
   return (
     <div className="h-full w-full bg-surface-main/30 p-4 md:p-6 overflow-y-auto">
@@ -123,28 +137,68 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
            {isSpellcaster ? (
                <button 
                   onClick={onSetSpellcaster}
-                  className="w-full py-3 bg-brand-primary hover:bg-brand-primary/80 text-white font-bold rounded flex items-center justify-center gap-2 transition-colors shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+                  disabled={isCurrentSpellcaster}
+                  className={cn(
+                      "w-full py-3 font-bold rounded flex items-center justify-center gap-2 transition-colors duration-200",
+                      isCurrentSpellcaster 
+                        ? "bg-white/10 text-gray-400 cursor-not-allowed border border-white/5"
+                        : "bg-brand-primary hover:bg-brand-primary/80 text-white shadow-[0_0_15px_rgba(168,85,247,0.4)]"
+                  )}
                 >
-                  <Crown size={20} /> Select as Spellcaster
+                  {isCurrentSpellcaster ? (
+                      <>
+                        <Crown size={20} className="opacity-50" /> Selected
+                      </>
+                  ) : (
+                      <>
+                        <Crown size={20} /> Select as Spellcaster
+                      </>
+                  )}
                 </button>
            ) : item.category === "Titan" ? (
                <button 
                   onClick={() => onAddSlot(4)}
-                  className="w-full py-3 bg-brand-primary hover:bg-brand-primary/80 text-white font-bold rounded flex items-center justify-center gap-2 transition-colors"
+                  disabled={isTitanInDeck}
+                  className={cn(
+                      "w-full py-3 font-bold rounded flex items-center justify-center gap-2 transition-colors duration-200",
+                      isTitanInDeck
+                        ? "bg-white/10 text-gray-400 cursor-not-allowed border border-white/5"
+                        : "bg-brand-primary hover:bg-brand-primary/80 text-white"
+                  )}
                 >
-                  <PlusCircle size={18} /> Add Titan to Slot 5
+                  {isTitanInDeck ? (
+                       <>
+                        <PlusCircle size={18} className="opacity-50" /> Selected
+                       </>
+                  ) : (
+                       <>
+                        <PlusCircle size={18} /> Add Titan to Slot 5
+                       </>
+                  )}
                 </button>
            ) : (
              <div className="grid grid-cols-4 gap-2">
-                 {([0, 1, 2, 3] as const).map(idx => (
-                    <button
-                        key={idx}
-                        onClick={() => onAddSlot(idx)}
-                        className="py-2 bg-white/5 hover:bg-brand-secondary/50 border border-white/10 hover:border-brand-secondary text-xs rounded transition-colors"
-                    >
-                        Slot {idx + 1}
-                    </button>
-                 ))}
+                 {([0, 1, 2, 3] as const).map(idx => {
+                    const status = getSlotStatus(idx);
+                    const isOccupiedBySelf = status === 'ALREADY_IN';
+                    
+                    return (
+                        <button
+                            key={idx}
+                            onClick={() => onAddSlot(idx)}
+                            disabled={isOccupiedBySelf}
+                            className={cn(
+                                "py-2 text-xs rounded transition-colors flex flex-col items-center justify-center",
+                                isOccupiedBySelf 
+                                    ? "bg-white/10 border-white/5 text-gray-500 cursor-not-allowed"
+                                    : "bg-white/5 hover:bg-brand-secondary/50 border border-white/10 hover:border-brand-secondary text-white"
+                            )}
+                        >
+                            <span>Slot {idx + 1}</span>
+                            {isOccupiedBySelf && <span className="text-[9px] uppercase tracking-widest opacity-60">Selected</span>}
+                        </button>
+                    );
+                 })}
              </div>
            )}
        </div>

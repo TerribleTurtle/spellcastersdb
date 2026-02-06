@@ -396,6 +396,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                 )}>
                     <CardInspector 
                         item={selectedItem} 
+                        currentDeck={deck}
                          onBack={() => setActiveMobileTab('BROWSER')}
                          onClose={() => setSelectedItem(null)}
                         onAddSlot={(idx) => {

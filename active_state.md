@@ -24,6 +24,9 @@
 - [x] Refined **Navbar Links**: Moved 'Contribute' link to the hamburger menu for a cleaner header.
 - [x] **SEO Listing Pages**: Created dedicated listing pages for Ranks, Schools, Unit Types, and Classes.
 - [x] **Cross-linking**: Added contextual links in Unit and Hero detail pages to the new listing pages.
+- [x] **Unit Sorting**: Implemented requested sorting (Creature > Spell > Building) in both `UnitArchive` and `UnitBrowser`.
+- [x] **API Resilience**: Refined Zod schema to handle nullable fields and resolved critical validation errors.
+- [x] **Mobile Inspector Enhancement**: Improved "Add to Deck" logic in inspector with "Selected" feedback and duplicate prevention for Spellcasters, Titans, and Units.
 
 ## Recent Changes
 
