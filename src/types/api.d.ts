@@ -8,13 +8,14 @@
 // ============================================================================
 
 export type MagicSchool =
-  | "Astral"
-  | "War"
   | "Elemental"
-  | "Lightning"
+  | "Wild"
+  | "War"
+  | "Astral"
   | "Holy"
-  | "Dark"
-  | "Frost";
+  | "Technomancy"
+  | "Necromancy"
+  | "Titan";
 
 export type UnitCategory = "Creature" | "Building" | "Spell" | "Titan";
 

@@ -18,7 +18,7 @@ interface UnitBrowserProps {
   onQuickAdd: (item: BrowserItem) => void;
 }
 
-const SCHOOLS = ["Astral", "War", "Elemental", "Lightning", "Holy", "Dark", "Frost"];
+const SCHOOLS = ["Elemental", "Wild", "War", "Astral", "Holy", "Technomancy", "Necromancy", "Titan"];
 const RANKS = ["I", "II", "III", "IV"];
 const CATEGORY_TO_PLURAL: Record<string, string> = {
   Spellcaster: "Spellcasters",

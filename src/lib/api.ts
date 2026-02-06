@@ -30,7 +30,7 @@ const UnitSchema = z.object({
   entity_id: z.string(),
   name: z.string(),
   category: z.enum(["Creature", "Building", "Spell", "Titan"]),
-  magic_school: z.enum(["Astral", "War", "Elemental", "Lightning", "Holy", "Dark", "Frost"]),
+  magic_school: z.enum(["Elemental", "Wild", "War", "Astral", "Holy", "Technomancy", "Necromancy", "Titan"]),
   description: z.string(),
   image_required: z.boolean().optional(),
   health: z.number(),

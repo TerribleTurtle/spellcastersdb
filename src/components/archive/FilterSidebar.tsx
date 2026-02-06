@@ -18,7 +18,7 @@ interface FilterSidebarProps {
   className?: string;
 }
 
-const SCHOOLS = ["Astral", "War", "Elemental", "Lightning", "Holy", "Dark", "Frost"];
+const SCHOOLS = ["Elemental", "Wild", "War", "Astral", "Holy", "Technomancy", "Necromancy", "Titan"];
 const RANKS = ["I", "II", "III", "IV"];
 const CATEGORIES = ["Spellcaster", "Creature", "Building", "Spell", "Titan", "Consumable"];
 
