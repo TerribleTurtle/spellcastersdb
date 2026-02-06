@@ -3,18 +3,19 @@ import { fetchGameData } from '@/lib/api';
 import { DeckBuilderApp } from '@/components/deck-builder/DeckBuilderApp';
 
 export const metadata = {
-  title: 'The Forge - Deck Builder',
-  description: 'Build, optimize, and share your Spellcasters Chronicles decks. The ultimate tool for crafting the perfect strategy.',
+  title: 'The Forge - Deck Builder, Card Builds & Loadouts',
+  description: 'Create, optimize, and share your Spellcasters Chronicles decks. The ultimate card strategy tool for custom builds and loadouts.',
+  keywords: ["Spellcasters Chronicles", "Deck Builder", "Card Decks", "Builds", "Loadouts", "Strategy", "MOBA", "Card Game"],
   openGraph: {
-    title: 'The Forge - Deck Builder',
-    description: 'Build, optimize, and share your Spellcasters Chronicles decks. The ultimate tool for crafting the perfect strategy.',
+    title: 'The Forge - Deck Builder, Card Builds & Loadouts',
+    description: 'Create, optimize, and share your Spellcasters Chronicles decks. The ultimate card strategy tool for custom builds and loadouts.',
     type: 'website',
     // images: ['/og-forge.png'], // TODO: Add specific OG image
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'The Forge - Deck Builder',
-    description: 'Build, optimize, and share your Spellcasters Chronicles decks.',
+    title: 'The Forge - Deck Builder, Card Builds & Loadouts',
+    description: 'Create, optimize, and share your Spellcasters Chronicles decks. The ultimate card strategy tool for custom builds and loadouts.',
   }
 };
 
