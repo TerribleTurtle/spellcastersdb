@@ -56,7 +56,7 @@
       "id": "data-cleanup",
       "title": "Data Cleanup",
       "description": "Remove unnecessary stats from Spells (Health), Pop Count, and Average Speed from metrics",
-      "category": "community-requests",
+      "category": "in-progress",
       "type": "data"
     },
     {
@@ -92,7 +92,7 @@
       "id": "build-name",
       "title": "Build Identification",
       "description": "Add Build Name display clearly in the top right of the deck builder",
-      "category": "community-requests",
+      "category": "live",
       "type": "enhancement"
     },
     {
@@ -120,7 +120,7 @@
       "id": "og-images",
       "title": "Visual Deck Sharing",
       "description": "Dynamic OG images for deck links on social media",
-      "category": "in-progress",
+      "category": "live",
       "type": "feature"
     },
     {

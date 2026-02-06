@@ -7,6 +7,10 @@ import { Unit } from '@/types/api';
 
 export const runtime = 'edge';
 
+// Font fallback strategy:
+// We try to fetch Oswald. If it fails, we silently continue, and ImageResponse will use its default.
+const fontUrl = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/oswald/Oswald-Bold.ttf';
+
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
@@ -21,12 +25,27 @@ export async function GET(request: NextRequest) {
       return new Response('Invalid deck string', { status: 400 });
     }
 
-    // specific cache: 1 hour for valid images
+    // Cache Control (The "Sharpness" Lock)
+    // Discord caches images aggressively. Force immutable cache for 1 month.
     const headers = {
-        'Cache-Control': 'public, max-age=3600, immutable',
+        'Cache-Control': 'public, max-age=2592000, immutable',
+        'Content-Type': 'image/png',
     };
 
-    // Fetch Game Data (Data is cached by Next.js fetch, effectively instantaneous)
+    // Load custom font
+    let fontData: ArrayBuffer | null = null;
+    try {
+        const fontRes = await fetch(fontUrl);
+        if (fontRes.ok) {
+            fontData = await fontRes.arrayBuffer();
+        } else {
+            console.warn('Failed to fetch font:', fontRes.statusText);
+        }
+    } catch (err) {
+        console.warn('Error fetching font:', err);
+    }
+
+    // Fetch Game Data
     const data = await fetchGameData();
     
     // Resolve Entities
@@ -55,8 +74,8 @@ export async function GET(request: NextRequest) {
             backgroundColor: bgDark,
             backgroundImage: `radial-gradient(circle at 50% 0%, #2e1065 0%, ${bgDark} 50%)`,
             color: 'white',
-            fontFamily: '"Inter", sans-serif',
-            padding: '30px 50px', // Reduced padding for more space
+            fontFamily: fontData ? '"Oswald"' : 'sans-serif',
+            padding: '30px 50px',
             position: 'relative',
             overflow: 'hidden',
           }}
@@ -68,8 +87,8 @@ export async function GET(request: NextRequest) {
             left: '-20%',
             width: '70%',
             height: '70%',
-            background: '#020617', // Even darker blob behind logo
-            filter: 'blur(80px)', // Less blur for stronger block
+            background: '#020617',
+            filter: 'blur(80px)',
             opacity: 0.9,
             zIndex: 0,
           }} />
@@ -96,12 +115,12 @@ export async function GET(request: NextRequest) {
              zIndex: 0,
           }} />
 
-            {/* Content Wrapper for Vertical Centering */}
-            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 40, alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
+            {/* Content Wrapper */}
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 30, alignItems: 'center', justifyContent: 'center', zIndex: 10, height: '100%' }}>
             
                 {/* Header */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
-                     {/* Logo Match: SPELLCASTERS(Gradient) DB(White) */}
+                     {/* Logo */}
                     <div style={{ display: 'flex', alignItems: 'center', fontSize: 24, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 4 }}>
                          <span style={{ 
                              backgroundImage: 'linear-gradient(to right, #a855f7, #ec4899)', 
@@ -114,29 +133,44 @@ export async function GET(request: NextRequest) {
                          <span style={{ color: 'white' }}>DB</span>
                     </div>
     
+                    {/* Deck Name with Stroke Hack */}
                     <div style={{ 
-                        fontSize: 60, // Reduced from 72 to prevent wrapping
+                        fontSize: 80, // Massive size
                         fontWeight: 900, 
-                        lineHeight: 1.1, 
-                        textShadow: '0 4px 20px rgba(0,0,0,0.5)',
+                        lineHeight: 1, 
+                        color: 'white',
+                        // The "Stroke" Hack: Hard shadows create an outline effect
+                        textShadow: '0px 2px 10px rgba(0,0,0,0.8), 2px 2px 0px #000', 
                         display: '-webkit-box',
-                        WebkitLineClamp: 2,
+                        WebkitLineClamp: 1, // Keep it one line for cleaner look? Or 2? 
                         WebkitBoxOrient: 'vertical',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         maxWidth: '100%',
-                        paddingRight: 20
                     }}>
                         {deckName}
                     </div>
                 </div>
 
                 {/* Deck Content */}
-                <div style={{ display: 'flex', flexGrow: 1, alignItems: 'flex-end', justifyContent: 'center', gap: 20, width: '100%' }}>
+                <div style={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start', gap: 16, width: '100%' }}>
                 
                 {/* Spellcaster (Hero) */}
                 {spellcaster && (
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 220, height: 350, position: 'relative', marginRight: 24, flexShrink: 0 }}>
+                    <div style={{ 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'center',
+                        width: 220, 
+                        height: 350, 
+                        position: 'relative', 
+                        marginRight: 24, 
+                        flexShrink: 0,
+                        borderRadius: 16, 
+                        border: `4px solid ${primary}`, 
+                        boxShadow: `0 0 50px ${primary}60`,
+                        overflow: 'hidden'
+                    }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                             src={getCardImageUrl(spellcaster)} 
@@ -145,28 +179,33 @@ export async function GET(request: NextRequest) {
                                 width: '100%', 
                                 height: '100%', 
                                 objectFit: 'cover', 
-                                borderRadius: 16, 
-                                border: `3px solid ${primary}`,
-                                boxShadow: `0 0 50px ${primary}60`,
                             }} 
                         />
-                         {/* Simple Name Bar */}
+                         {/* Name Bar */}
                          <div style={{
                             position: 'absolute',
                             bottom: 0,
                             left: 0,
                             right: 0,
-                            height: 54, // Increased height
-                            backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                            borderTop: '1px solid rgba(255,255,255,0.15)',
-                            borderBottomLeftRadius: 16,
-                            borderBottomRightRadius: 16,
+                            height: 60,
+                            background: 'linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent)',
                             display: 'flex',
-                            alignItems: 'center',
+                            alignItems: 'flex-end',
                             justifyContent: 'center',
-                            padding: '0 10px'
+                            paddingBottom: 10,
+                            paddingLeft: 4,
+                            paddingRight: 4
                         }}>
-                             <span style={{ fontSize: 24, fontWeight: 700, color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                             <span style={{ 
+                                 fontSize: 24, 
+                                 fontWeight: 700, 
+                                 color: 'white', 
+                                 textAlign: 'center',
+                                 whiteSpace: 'nowrap', 
+                                 overflow: 'hidden', 
+                                 textOverflow: 'ellipsis',
+                                 textShadow: '0px 2px 4px black, 2px 2px 0px black'
+                            }}>
                                 {spellcaster.name}
                             </span>
                         </div>
@@ -174,7 +213,6 @@ export async function GET(request: NextRequest) {
                 )}
 
                 {/* Units Grid */}
-                {/* Render up to 5 units */}
                 {[...Array(5)].map((_, i) => {
                     const unit = units[i];
                     if (!unit) {
@@ -182,7 +220,7 @@ export async function GET(request: NextRequest) {
                         return (
                             <div key={i} style={{ 
                                 width: 170, 
-                                height: 250,
+                                height: 250, 
                                 borderRadius: 14, 
                                 border: '2px dashed rgba(255,255,255,0.1)', 
                                 backgroundColor: 'rgba(255,255,255,0.02)',
@@ -197,8 +235,6 @@ export async function GET(request: NextRequest) {
                     }
 
                     const isTitan = unit.category === 'Titan';
-                    
-                    // Explicitly type the lookup map or use a simpler switch
                     const rankKey = isTitan ? 'Titan' : unit.card_config.rank;
                     const rarityColor = ({
                         'Titan': accent,
@@ -209,7 +245,19 @@ export async function GET(request: NextRequest) {
                     } as Record<string, string>)[rankKey] || '#94a3b8';
 
                     return (
-                        <div key={i} style={{ display: 'flex', flexDirection: 'column', width: 170, height: 250, position: 'relative', borderRadius: 14, overflow: 'hidden', border: `2px solid ${rarityColor}80`, boxShadow: '0 6px 24px rgba(0,0,0,0.4)', flexShrink: 0 }}>
+                        <div key={i} style={{ 
+                            display: 'flex', 
+                            flexDirection: 'column',
+                            width: 170, 
+                            height: 250, 
+                            position: 'relative', 
+                            borderRadius: 14, 
+                            overflow: 'hidden', 
+                            border: `2px solid ${rarityColor}80`, 
+                            boxShadow: '0 6px 24px rgba(0,0,0,0.4)', 
+                            flexShrink: 0 
+                        }}>
+                            {/* Full Card Image (No Zoom) */}
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img 
                                 src={getCardImageUrl(unit)} 
@@ -220,21 +268,32 @@ export async function GET(request: NextRequest) {
                                     objectFit: 'cover',
                                 }} 
                             />
-                            {/* Bottom Name Bar */}
+                            
+                            {/* Floating Name Shadow/Gradient at bottom */}
                             <div style={{
                                 position: 'absolute',
                                 bottom: 0,
                                 left: 0,
                                 right: 0,
-                                height: 50, // Increased height
-                                backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                                borderTop: '1px solid rgba(255,255,255,0.15)',
+                                height: 60,
+                                background: 'linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent)',
                                 display: 'flex',
-                                alignItems: 'center',
+                                alignItems: 'flex-end',
                                 justifyContent: 'center',
-                                padding: '0 10px'
+                                paddingBottom: 8,
+                                paddingLeft: 4,
+                                paddingRight: 4
                             }}>
-                                <span style={{ fontSize: 20, fontWeight: 700, color: '#e2e8f0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                <span style={{ 
+                                    fontSize: 20, 
+                                    fontWeight: 700, 
+                                    color: 'white', 
+                                    textAlign: 'center',
+                                    whiteSpace: 'nowrap', 
+                                    overflow: 'hidden', 
+                                    textOverflow: 'ellipsis',
+                                    textShadow: '0px 2px 4px black, 2px 2px 0px black'
+                                }}>
                                     {unit.name}
                                 </span>
                             </div>
@@ -250,6 +309,14 @@ export async function GET(request: NextRequest) {
         width: 1200,
         height: 630,
         headers,
+        fonts: fontData ? [
+            {
+                name: 'Oswald',
+                data: fontData,
+                style: 'normal',
+                weight: 700,
+            }
+        ] : undefined,
       },
     );
   } catch (e) {

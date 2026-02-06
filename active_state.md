@@ -2,10 +2,11 @@
 
 **Current Phase**: Phase 5: Visual Sharing & OG Images
 **Status**: Deployment Ready
-**Last Action**: Moved "Magic School Alignment" to Live in roadmap. Finalized OG Image layout refinements.
+**Last Action**: Updated roadmap: moved "Build Identification" and "Visual Deck Sharing" to Live; started "Data Cleanup".
 
 ## Current Focus
 
+- [x] Updated **Magic Schools**: Aligned Types, API Zod Schema, and UI Filter constants to the new 8-school set.
 - [x] Implemented **Quick Add** (Mobile '+' button, Desktop Double-Click)
 - [x] Fixed **Mobile Drag & Drop**: resolved scroll interference and "Jump to Top Left" glitch
 - [x] Fixed **Mobile Scrolling**: Removed `touch-none` to allow scrolling; drag now relies on long-press (250ms)
@@ -22,4 +23,5 @@
 - Updated `src/app/page.tsx` metadata: "Deck Builder, Card Builds & Loadouts".
 - Updated `src/app/database/page.tsx` metadata: "Card Database & Builds", description mentions "unit", "deck", "loadout".
 - [x] Implemented **Saved Deck Enhancements**: Added Unit Previews, Quick Actions (Duplicate/Copy Link), and Smart Import Logic (Save & Load conflict resolution).
-- [x] Implemented **Vercel OG (Open Graph)**: Dynamic images for shared decks (`/api/og`) displaying deck name, commander, and units.
+- [x] Implemented **Vercel OG (Open Graph)**: Optimized with "Card Slice" layout, "Oswald" font, and aggressive caching.
+- [x] **OG Optimization**: Added dynamic font loading (Oswald) and improved text legibility with stroke hacks.
