@@ -381,8 +381,8 @@ function DraggableCard({ item, onClick, onQuickAdd }: {
                 isHero && "border-brand-accent/30 shadow-[0_0_10px_rgba(255,255,255,0.05)]"
             )}
         >
-            {/* Image Area - Touch None to prevent scroll, ensuring Drag works */}
-            <div className="relative flex-1 overflow-hidden bg-gray-800 touch-none">
+            {/* Image Area - Touch action allowed to enable scrolling */}
+            <div className="relative flex-1 overflow-hidden bg-gray-800">
                 <Image 
                     src={getCardImageUrl(item)} 
                     alt={item.name}

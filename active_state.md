@@ -13,6 +13,7 @@ The Deck Builder is now optimized for mobile with virtualization and stable drag
 - [x] Optimized **Mobile Deck Builder** with `react-virtuoso` for 60fps scrolling
 - [x] Implemented **Quick Add** (Mobile '+' button, Desktop Double-Click)
 - [x] Fixed **Mobile Drag & Drop**: resolved scroll interference and "Jump to Top Left" glitch
+- [x] Fixed **Mobile Scrolling**: Removed `touch-none` to allow scrolling; drag now relies on long-press (250ms)
 - [x] Refactored **Navbar** with Primary/Secondary tiers and centered desktop layout
 - [x] Added explicit **Deck Builder** link (pointing to `/`) for easier navigation back from database/roadmap
 - [x] Enabled **Hamburger Menu on Desktop** for secondary links (Guide, FAQ, About)
