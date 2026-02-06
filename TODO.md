@@ -36,9 +36,9 @@
   - [x] Implement `lz-string` URL compression/decompression <!-- id: 17 -->
   - [x] Add "Share Link" and Conflict Resolution Modal <!-- id: 18 -->
 - [x] Optimize URL size by removing JSON overhead (Pipe-delimit with ASCII Unit Separator) <!-- id: 18-opt -->
-- [ ] **Phase 5: Visual Sharing & OG Images** <!-- id: 19 -->
-  - [ ] Implement `@vercel/og` for dynamic deck previews <!-- id: og-gen -->
-  - [ ] Design OG template: Clean, game-accurate view of Spellcaster + Units (Names/Ranks) <!-- id: og-design -->
+- [x] **Phase 5: Visual Sharing & OG Images** <!-- id: 19 -->
+  - [x] Implement `@vercel/og` for dynamic deck previews <!-- id: og-gen -->
+  - [x] Design OG template: Clean, game-accurate view of Spellcaster + Units (Names/Ranks) <!-- id: og-design -->
 - [ ] **Phase 6: Optimization & Automation ("The Deep Dive")** <!-- id: 20 -->
   - [ ] Configure `next-sitemap` for SEO <!-- id: 21 -->
   - [ ] Implement metadata generation strategies <!-- id: 22 -->
