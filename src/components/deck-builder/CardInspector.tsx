@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Unit, Spellcaster } from "@/types/api";
 import { getCardImageUrl } from "@/lib/utils";
-import { Shield, Swords, Zap, Users, PlusCircle, Crown, Clock, ArrowLeft, X } from "lucide-react";
+import { Swords, Zap, Users, PlusCircle, Crown, Clock, ArrowLeft, X, Heart } from "lucide-react";
 
 type InspectorItem = Unit | Spellcaster;
 
@@ -153,7 +153,7 @@ export function CardInspector({ item, onAddSlot, onSetSpellcaster, onBack, onClo
        <div className="p-6 space-y-8 flex-1 overflow-y-auto">
             {/* Core Stats Grid */}
             <div className="grid grid-cols-2 gap-4">
-                <StatBox label="Health" value={item.health} icon={<Shield size={16} className="text-green-400" />} />
+                <StatBox label="Health" value={item.health} icon={<Heart size={16} className="text-green-500" />} />
                 
                 {isUnit ? (
                     <>

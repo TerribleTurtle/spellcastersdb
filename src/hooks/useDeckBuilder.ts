@@ -95,20 +95,21 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
 
   const setSlot = useCallback((index: SlotIndex, unit: Unit) => {
     setDeck(prev => {
+      const newSlots = [...prev.slots] as typeof prev.slots;
+
       // Enforce Singleton: Max 1 copy per card
-      // We only care if the unit is being added to a standard slot (0-3)
+      // If the unit exists in another slot, REMOVE it from there (Move behavior) instead of blocking
+      // This allows dragging from Browser -> New Slot to act as a "Move" if already in deck
       if (index < 4) {
-          const isDuplicate = prev.slots.some((s, i) => 
+          const existingIndex = prev.slots.findIndex((s, i) => 
                i < 4 && i !== index && s.unit?.entity_id === unit.entity_id
           );
-          if (isDuplicate) {
-            setLastError("Unique: You can only have 1 copy of this card.");
-            setTimeout(() => setLastError(null), 3000);
-            return prev;
+          
+          if (existingIndex !== -1) {
+               // Remove from old location
+               newSlots[existingIndex] = { ...newSlots[existingIndex], unit: null };
           }
       }
-
-      const newSlots = [...prev.slots] as typeof prev.slots;
       
       const slot = newSlots[index];
       const isTitan = unit.category === 'Titan';
@@ -128,6 +129,20 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
       newSlots[index] = { ...newSlots[index], unit: null };
       return { ...prev, slots: newSlots };
     });
+  }, []);
+
+  const swapSlots = useCallback((indexA: number, indexB: number) => {
+      setDeck(prev => {
+          const newSlots = [...prev.slots] as typeof prev.slots;
+          const unitA = newSlots[indexA].unit;
+          const unitB = newSlots[indexB].unit;
+
+          // Simple swap (handles nulls gracefully)
+          newSlots[indexA] = { ...newSlots[indexA], unit: unitB };
+          newSlots[indexB] = { ...newSlots[indexB], unit: unitA };
+
+          return { ...prev, slots: newSlots };
+      });
   }, []);
 
   const clearDeck = useCallback(() => {
@@ -227,6 +242,7 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
     setSlot,
     clearSlot,
     clearDeck,
+    moveSlot: swapSlots, // Alias for now as swap handles move
     setDeckState,
     isEmpty,
     lastError,

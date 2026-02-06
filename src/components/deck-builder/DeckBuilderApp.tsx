@@ -57,6 +57,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
       setSpellcaster,
       removeSpellcaster, // New
       setDeckState,
+      moveSlot,
       isEmpty,
       stats,
       validation,
@@ -147,6 +148,15 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
 
   const handleDragStart = (event: DragStartEvent) => {
     const current = event.active.data.current;
+    
+    // Check if dragging from a slot
+    if (current?.type === 'slot') {
+        // Slot drag data: { type: 'slot', index: number, unit: Unit }
+        setActiveDragItem(current.unit);
+        // Do NOT select item on drag start from slot (prevents jumping context)
+        return;
+    }
+
     // Strict type check before casting
     if (current?.item && ('entity_id' in current.item || 'hero_id' in current.item)) {
          const item = current.item as Unit | Spellcaster;
@@ -158,8 +168,31 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
   const handleDragEnd = (event: DragEndEvent) => {
     const item = activeDragItem;
     setActiveDragItem(null);
-    const { over } = event;
+    const { over, active } = event;
 
+    // --- CASE 1: SLOT SOURCE ---
+    if (active.data.current?.type === 'slot') {
+        const sourceIndex = active.data.current.index as number;
+        
+        // Dropped outside or invalid target -> REMOVE
+        if (!over || !over.id.toString().startsWith("slot-")) {
+             // Basic "Drag to Remove" logic
+             clearSlot(sourceIndex as 0|1|2|3|4);
+             return;
+        }
+
+        // Dropped on another slot -> SWAP/MOVE
+        const targetIndex = over.data.current?.index as number;
+        
+        if (sourceIndex === targetIndex) return; // Same slot, do nothing
+
+        if (targetIndex !== undefined) {
+             moveSlot(sourceIndex, targetIndex);
+        }
+        return;
+    }
+
+    // --- CASE 2: BROWSER SOURCE ---
     if (!over || !item) return;
 
     // Check if it's a Spellcaster being dropped
@@ -171,7 +204,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         return;
     }
 
-    // It's a Unit
+    // It's a Unit -> Slot
     if (!over.id.toString().startsWith("slot-")) return;
 
     const slotIndex = over.data.current?.index;
@@ -272,6 +305,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                     spellcaster={deck.spellcaster}
                     onRemoveSlot={clearSlot} 
                     onRemoveSpellcaster={removeSpellcaster}
+                    onSelect={handleSelectItem}
                     draggedItem={activeDragItem}
                 />
             </div>

@@ -69,3 +69,8 @@
 - [x] Redesign roadmap page: add 5 item types (bug/feature/enhancement/ux/data), compact layout with inline icons
 - [x] Improve roadmap density: flatten type subsections into unified grid, tighten card spacing
 - [x] Add explicit type labels to roadmap cards (e.g., "Bug", "Feature") for better accessibility
+- [x] Update Deck Builder Health Icon from Shield to Heart (UX Polish)
+- [x] Implement draggable deck slots with Swap and Move logic
+- [x] Implement "Drag to Remove" interaction for deck tray
+- [x] Enable click-to-inspect for units in the deck tray
+- [x] Fix double "TITAN" label in Deck Builder slot

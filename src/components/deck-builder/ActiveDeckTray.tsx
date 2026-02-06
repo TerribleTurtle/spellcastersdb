@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { useDroppable } from "@dnd-kit/core";
+import { useDroppable, useDraggable } from "@dnd-kit/core";
 import { DeckSlot } from "@/types/deck";
 import { Spellcaster, Unit } from "@/types/api";
 
@@ -10,11 +10,12 @@ interface ActiveDeckTrayProps {
   slots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
   spellcaster: Spellcaster | null;
   onRemoveSlot: (index: 0 | 1 | 2 | 3 | 4) => void;
-  onRemoveSpellcaster?: () => void; // Optional if we want to allow clearing commander from here
+  onRemoveSpellcaster?: () => void;
+  onSelect?: (item: Unit | Spellcaster) => void;
   draggedItem?: Unit | Spellcaster | null;
 }
 
-export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpellcaster, draggedItem }: ActiveDeckTrayProps) {
+export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpellcaster, onSelect, draggedItem }: ActiveDeckTrayProps) {
   return (
     <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 md:pb-3">
       <div className="grow flex items-center justify-center px-4 py-2 md:py-3 gap-[1.5vw] md:gap-[0.75vw] overflow-x-auto">
@@ -27,6 +28,7 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
                     onRemove={() => onRemoveSlot(slot.index as 0|1|2|3)}
                     draggedItem={draggedItem}
                     allSlots={slots}
+                    onSelect={onSelect}
                 />
             ))}
         </div>
@@ -41,6 +43,7 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
                 onRemove={() => onRemoveSlot(4)}
                 draggedItem={draggedItem}
                 allSlots={slots}
+                onSelect={onSelect}
             />
         </div>
 
@@ -49,15 +52,15 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
 
         {/* Spellcaster Area - Slot + Passives (Desktop) */}
         <div className="mx-2 flex items-center gap-3">
-            <SpellcasterSlot spellcaster={spellcaster} onRemove={onRemoveSpellcaster} draggedItem={draggedItem} />
+            <SpellcasterSlot spellcaster={spellcaster} onRemove={onRemoveSpellcaster} draggedItem={draggedItem} onSelect={onSelect} />
             
             {/* Passives - Desktop Only */}
             {spellcaster && spellcaster.abilities.passive.length > 0 && (
                 <div className="hidden md:flex flex-col gap-1.5 max-w-[200px] lg:max-w-[280px]">
                     <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Passives</span>
                     <div className="flex flex-wrap gap-1">
-                        {spellcaster.abilities.passive.map((passive) => (
-                            <PassiveChip key={passive.ability_id} name={passive.name} description={passive.description} />
+                        {spellcaster.abilities.passive.map((passive, i) => (
+                            <PassiveChip key={`${passive.ability_id}-${i}`} name={passive.name} description={passive.description} />
                         ))}
                     </div>
                 </div>
@@ -68,16 +71,29 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
   );
 }
 
-function Slot({ slot, onRemove, draggedItem, allSlots }: { 
+function Slot({ slot, onRemove, draggedItem, allSlots, onSelect }: { 
     slot: DeckSlot; 
     onRemove: () => void;
     draggedItem?: Unit | Spellcaster | null;
     allSlots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
+    onSelect?: (item: Unit | Spellcaster) => void;
 }) {
     const { isOver, setNodeRef } = useDroppable({
         id: `slot-${slot.index}`,
         data: { index: slot.index, allowedTypes: slot.allowedTypes }
     });
+
+    const { attributes, listeners, setNodeRef: setDragNodeRef, transform, isDragging } = useDraggable({
+        id: `slot-drag-${slot.index}`,
+        data: { type: 'slot', index: slot.index, unit: slot.unit },
+        disabled: !slot.unit // CRITICAL: Only draggable if populated
+    });
+
+    const style = transform ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+        zIndex: 50,
+        opacity: isDragging ? 0 : 1, // Hide original when dragging (overlay is shown)
+    } : undefined;
 
     const isTitanSlot = slot.allowedTypes.includes("TITAN");
 
@@ -112,9 +128,33 @@ function Slot({ slot, onRemove, draggedItem, allSlots }: {
                 // Default states
                 !isValidTarget && !isOver && "border-white/10 bg-surface-card",
                 isTitanSlot && !isValidTarget && !isOver && "border-brand-accent/30 bg-brand-accent/5",
-                slot.unit && "border-brand-secondary/50"
+                slot.unit && "border-brand-secondary/50",
+                isDragging && "opacity-50"
             )}
         >
+            {/* Draggable Wrapper (only renders if unit exists) */}
+            {slot.unit && (
+                <div 
+                    ref={setDragNodeRef} 
+                    {...listeners} 
+                    {...attributes} 
+                    style={style}
+                    className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing"
+                    onClick={(e) => {
+                         // Stop propagation so drag doesn't conflict with click
+                         // But we want click to work if not dragging... dnd-kit handles this usually
+                         if (onSelect) onSelect(slot.unit!);
+                    }}
+                >
+                    {/* Visual Content moved inside draggable wrapper so it moves with drag? 
+                        NO - dnd-kit moves the element using transform on the ORIGINAL element or uses an overlay. 
+                        We want to leave the slot styling on the parent (droppable) and move the card content?
+                        Actually, typical pattern is: 
+                        Wrapper (Droppable) -> Inner (Draggable)
+                    */}
+                </div>
+             )}
+
             {/* Label for Empty Slot */}
             {!slot.unit && (
                 <div className="text-center opacity-30">
@@ -127,9 +167,9 @@ function Slot({ slot, onRemove, draggedItem, allSlots }: {
                 </div>
             )}
 
-            {/* Filled State */}
+            {/* Filled State - Renders BEHIND the draggable wrapper hit area but visually matches */}
             {slot.unit && (
-                <div className="flex flex-col w-full h-full overflow-hidden rounded text-left">
+                <div className={cn("flex flex-col w-full h-full overflow-hidden rounded text-left pointer-events-none", isDragging && "opacity-0")}>
                     {/* Image Area */}
                     <div className="relative flex-1 bg-slate-800 overflow-hidden">
                         <Image 
@@ -157,31 +197,33 @@ function Slot({ slot, onRemove, draggedItem, allSlots }: {
                         </span>
                     </div>
 
-                    {/* Remove Action */}
+                    {/* Remove Action - Needs pointer-events-auto to work through draggable overlay layer? */}
                     <button 
                         onClick={(e) => {
                             e.stopPropagation();
                             onRemove();
                         }}
-                        className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-lg"
+                        className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-lg pointer-events-auto"
+                        onPointerDown={(e) => e.stopPropagation()} // Prevent drag start on remove button
                     >
                         <X size={12} className="text-white" />
                     </button>
                 </div>
             )}
 
-            {/* Titan Icon Indicator (Always visible if titan slot) */}
+            {/* Titan Icon Indicator (Always visible if titan slot) - Removed redundant text label */}
             {isTitanSlot && !slot.unit && (
-                <div className="absolute bottom-2 font-mono text-[10px] text-brand-accent opacity-50">TITAN</div>
+                <div className="absolute bottom-2 font-mono text-[10px] text-brand-accent opacity-50 hidden">TITAN</div>
             )}
         </div>
     )
 }
 
-function SpellcasterSlot({ spellcaster, onRemove, draggedItem }: { 
+function SpellcasterSlot({ spellcaster, onRemove, draggedItem, onSelect }: { 
     spellcaster: Spellcaster | null;
     onRemove?: () => void;
     draggedItem?: Unit | Spellcaster | null;
+    onSelect?: (item: Unit | Spellcaster) => void;
 }) {
     const { isOver, setNodeRef } = useDroppable({
         id: "spellcaster-zone",
@@ -194,6 +236,11 @@ function SpellcasterSlot({ spellcaster, onRemove, draggedItem }: {
     return (
         <div 
             ref={setNodeRef}
+            onClick={() => {
+                if (spellcaster && onSelect) {
+                    onSelect(spellcaster);
+                }
+            }}
             className={cn(
                 "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg",
                 "w-[clamp(56px,14vw,96px)] md:w-[clamp(80px,10vw,120px)] lg:w-[clamp(88px,8vw,128px)]",

@@ -35,8 +35,22 @@
       "id": "health-icon",
       "title": "Health Icon Update",
       "description": "Change Health stat icon from Shield to Heart to avoid Armor confusion",
-      "category": "community-requests",
+      "category": "live",
       "type": "ux"
+    },
+    {
+      "id": "skill-bar-click",
+      "title": "Skill Bar Card Info",
+      "description": "Clicking cards in the skill bar should display card info",
+      "category": "live",
+      "type": "bug"
+    },
+    {
+      "id": "card-swap",
+      "title": "Card Slot Swapping",
+      "description": "Moving a card to an occupied slot should swap cards rather than attempting to add",
+      "category": "live",
+      "type": "bug"
     },
     {
       "id": "data-cleanup",
@@ -58,20 +72,6 @@
       "description": "Pluralize categories (Spellcasters, Creatures) and alphabetize cards by group",
       "category": "community-requests",
       "type": "ux"
-    },
-    {
-      "id": "skill-bar-click",
-      "title": "Skill Bar Card Info",
-      "description": "Clicking cards in the skill bar should display card info",
-      "category": "community-requests",
-      "type": "bug"
-    },
-    {
-      "id": "card-swap",
-      "title": "Card Slot Swapping",
-      "description": "Moving a card to an occupied slot should swap cards rather than attempting to add",
-      "category": "community-requests",
-      "type": "bug"
     },
     {
       "id": "draft-mode",
