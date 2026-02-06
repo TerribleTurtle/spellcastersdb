@@ -157,6 +157,12 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         return;
     }
 
+    // Check if dragging from spellcaster slot
+    if (current?.type === 'spellcaster-slot') {
+        setActiveDragItem(current.spellcaster);
+        return;
+    }
+
     // Strict type check before casting
     if (current?.item && ('entity_id' in current.item || 'hero_id' in current.item)) {
          const item = current.item as Unit | Spellcaster;
