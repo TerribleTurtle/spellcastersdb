@@ -10,7 +10,12 @@ export function BetaBanner() {
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    const isDismissed = localStorage.getItem(BANNER_DISMISSED_KEY);
+    // Legacy cleanup: Remove the permanent dismissal key so users get the new session behavior
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(BANNER_DISMISSED_KEY);
+    }
+    
+    const isDismissed = sessionStorage.getItem(BANNER_DISMISSED_KEY);
     if (!isDismissed) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsVisible(true);
@@ -19,7 +24,7 @@ export function BetaBanner() {
   }, []);
 
   const handleDismiss = () => {
-    localStorage.setItem(BANNER_DISMISSED_KEY, "true");
+    sessionStorage.setItem(BANNER_DISMISSED_KEY, "true");
     setIsVisible(false);
   };
 
@@ -27,28 +32,21 @@ export function BetaBanner() {
   if (!isHydrated || !isVisible) return null;
 
   return (
-    <div className="relative w-full z-40 bg-linear-to-r from-yellow-900/90 to-orange-900/90 backdrop-blur-sm border-b border-yellow-500/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 flex-1">
-            <AlertTriangle className="text-yellow-400 shrink-0" size={20} />
-            <div className="text-sm">
-              <span className="font-bold text-yellow-100">Beta Data Warning:</span>{" "}
-              <span className="text-yellow-200">
-                This database contains Beta 2 and stub data. We&apos;ll update with accurate Early Access data on{" "}
-                <strong className="text-yellow-100">February 26th</strong>.
-              </span>
-            </div>
-          </div>
-          <button
-            onClick={handleDismiss}
-            className="text-yellow-400 hover:text-yellow-200 transition-colors shrink-0"
-            aria-label="Dismiss banner"
-          >
-            <X size={18} />
-          </button>
-        </div>
+    <>
+    <div className="animate-in fade-in slide-in-from-top-2 duration-500">
+      <div className="flex items-center gap-2 bg-linear-to-r from-yellow-900/40 to-orange-900/40 backdrop-blur-md rounded-full border border-yellow-500/20 px-3 py-1.5 shadow-sm hover:bg-yellow-900/60 transition-colors">
+        <AlertTriangle className="text-yellow-400 shrink-0" size={14} />
+        <span className="text-[10px] font-bold text-yellow-100 whitespace-nowrap hidden sm:inline">Beta Data: Not Final</span>
+        <span className="text-[10px] font-bold text-yellow-100 whitespace-nowrap sm:hidden">Beta</span>
+        <button
+          onClick={handleDismiss}
+          className="text-yellow-400/80 hover:text-yellow-100 transition-colors ml-1 p-0.5 rounded-full hover:bg-white/5"
+          aria-label="Dismiss banner"
+        >
+          <X size={12} />
+        </button>
       </div>
     </div>
+    </>
   );
 }

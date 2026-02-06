@@ -324,8 +324,6 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                 <ActiveDeckTray 
                     slots={deck.slots} 
                     spellcaster={deck.spellcaster}
-                    onRemoveSlot={clearSlot} 
-                    onRemoveSpellcaster={removeSpellcaster}
                     onSelect={handleSelectItem}
                     draggedItem={activeDragItem}
                 />

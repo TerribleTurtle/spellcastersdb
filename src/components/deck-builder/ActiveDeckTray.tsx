@@ -3,19 +3,17 @@ import { useDroppable, useDraggable } from "@dnd-kit/core";
 import { DeckSlot } from "@/types/deck";
 import { Spellcaster, Unit } from "@/types/api";
 
-import { X, Shield, Sparkles } from "lucide-react";
+import { Shield, Sparkles } from "lucide-react";
 import { cn, getCardImageUrl } from "@/lib/utils";
 
 interface ActiveDeckTrayProps {
   slots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
   spellcaster: Spellcaster | null;
-  onRemoveSlot: (index: 0 | 1 | 2 | 3 | 4) => void;
-  onRemoveSpellcaster?: () => void;
   onSelect?: (item: Unit | Spellcaster) => void;
   draggedItem?: Unit | Spellcaster | null;
 }
 
-export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpellcaster, onSelect, draggedItem }: ActiveDeckTrayProps) {
+export function ActiveDeckTray({ slots, spellcaster, onSelect, draggedItem }: ActiveDeckTrayProps) {
   return (
     <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 md:pb-3">
       <div className="grow flex items-center justify-center px-4 py-2 md:py-3 gap-[1.5vw] md:gap-[0.75vw] overflow-x-auto">
@@ -25,7 +23,6 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
                 <Slot 
                     key={slot.index} 
                     slot={slot} 
-                    onRemove={() => onRemoveSlot(slot.index as 0|1|2|3)}
                     draggedItem={draggedItem}
                     allSlots={slots}
                     onSelect={onSelect}
@@ -40,7 +37,6 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
         <div className="mx-2">
             <Slot 
                 slot={slots[4]} 
-                onRemove={() => onRemoveSlot(4)}
                 draggedItem={draggedItem}
                 allSlots={slots}
                 onSelect={onSelect}
@@ -52,7 +48,7 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
 
         {/* Spellcaster Area - Slot + Passives (Desktop) */}
         <div className="mx-2 relative flex items-center">
-            <SpellcasterSlot spellcaster={spellcaster} onRemove={onRemoveSpellcaster} draggedItem={draggedItem} onSelect={onSelect} />
+            <SpellcasterSlot spellcaster={spellcaster} draggedItem={draggedItem} onSelect={onSelect} />
             
             {/* Passives - Desktop Only - Absolute positioning to prevent layout shift */}
             {spellcaster && spellcaster.abilities.passive.length > 0 && (
@@ -71,9 +67,8 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
   );
 }
 
-function Slot({ slot, onRemove, draggedItem, allSlots, onSelect }: { 
+function Slot({ slot, draggedItem, allSlots, onSelect }: { 
     slot: DeckSlot; 
-    onRemove: () => void;
     draggedItem?: Unit | Spellcaster | null;
     allSlots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
     onSelect?: (item: Unit | Spellcaster) => void;
@@ -140,7 +135,7 @@ function Slot({ slot, onRemove, draggedItem, allSlots, onSelect }: {
                     {...attributes} 
                     style={style}
                     className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing"
-                    onClick={(e) => {
+                    onClick={() => {
                          // Stop propagation so drag doesn't conflict with click
                          // But we want click to work if not dragging... dnd-kit handles this usually
                          if (onSelect) onSelect(slot.unit!);
@@ -162,7 +157,7 @@ function Slot({ slot, onRemove, draggedItem, allSlots, onSelect }: {
                         {isTitanSlot ? <Shield size={24} /> : <div className="w-6 h-6 rounded-full border border-current" />}
                     </div>
                     <span className="text-xs font-bold uppercase tracking-widest">
-                        {isTitanSlot ? "Titan" : `Slot ${slot.index + 1}`}
+                        {isTitanSlot ? "Titan" : `Unit ${slot.index + 1}`}
                     </span>
                 </div>
             )}
@@ -210,9 +205,8 @@ function Slot({ slot, onRemove, draggedItem, allSlots, onSelect }: {
     )
 }
 
-function SpellcasterSlot({ spellcaster, onRemove, draggedItem, onSelect }: { 
+function SpellcasterSlot({ spellcaster, draggedItem, onSelect }: { 
     spellcaster: Spellcaster | null;
-    onRemove?: () => void;
     draggedItem?: Unit | Spellcaster | null;
     onSelect?: (item: Unit | Spellcaster) => void;
 }) {
@@ -265,7 +259,7 @@ function SpellcasterSlot({ spellcaster, onRemove, draggedItem, onSelect }: {
                     {...attributes} 
                     style={style}
                     className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing"
-                    onClick={(e) => {
+                    onClick={() => {
                          if (onSelect) onSelect(spellcaster);
                     }}
                 />
@@ -275,7 +269,7 @@ function SpellcasterSlot({ spellcaster, onRemove, draggedItem, onSelect }: {
                     <div className="mb-2 flex justify-center">
                         <Sparkles size={28} />
                     </div>
-                    <span className="text-xs font-bold uppercase tracking-widest">
+                    <span className="text-[9px] md:text-xs font-bold uppercase tracking-normal md:tracking-widest">
                         Spellcaster
                     </span>
                 </div>

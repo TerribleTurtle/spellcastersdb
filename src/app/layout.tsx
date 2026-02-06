@@ -70,7 +70,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
-import { BetaBanner } from "@/components/layout/BetaBanner";
+
 
 export default function RootLayout({
   children,
@@ -83,7 +83,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen pt-16`}
       >
         <Navbar />
-        <BetaBanner />
+
         <main className="grow">
           {children}
         </main>

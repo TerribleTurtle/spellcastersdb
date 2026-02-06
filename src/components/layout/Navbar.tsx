@@ -5,6 +5,8 @@ import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { Menu, X, Github, ExternalLink } from 'lucide-react';
 
+import { BetaBanner } from './BetaBanner';
+
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
@@ -64,6 +66,7 @@ export default function Navbar() {
 
           {/* Desktop Right Side (External + Menu) */}
           <div className="hidden md:flex items-center gap-4">
+             <BetaBanner />
              {/* External Links */}
              <div className="flex items-center gap-4">
               {externalLinks.map((link) => {
@@ -98,7 +101,8 @@ export default function Navbar() {
           </div>
 
           {/* Mobile menu button */}
-          <div className="-mr-2 flex md:hidden">
+          <div className="-mr-2 flex items-center gap-2 md:hidden">
+            <BetaBanner />
             <button
               onClick={toggleMenu}
               className="inline-flex items-center justify-center rounded-md p-2 text-slate-400 hover:bg-white/5 hover:text-brand-accent focus:outline-none"
