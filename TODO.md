@@ -84,4 +84,11 @@
 - [ ] **Phase 7: User Experience Polish** <!-- id: 24 -->
   - [x] Fix drag and drop logic: Dragging unit to spellcaster should cancel drop instead of removing unit <!-- id: 25 -->
   - [x] Remove Deck Tray 'X' buttons (User Request) <!-- id: 26 -->
+  - [x] **Saved Deck Enhancements**:
+    - [x] Show Unit Previews in saved deck list (with Titan highlight)
+    - [x] Add "Duplicate Deck" feature (Layers icon)
+    - [x] Add "Copy Link" quick action
+    - [x] Implement "Save & Load" conflict resolution for imports
 - [x] Refactor Navbar: implement primary/secondary links and centered layout <!-- id: 27 -->
+- [x] Optimize Mobile Drag Performance: implemented `useRef` and `React.memo` to eliminate lag <!-- id: 28 -->
+- [x] Hide global Footer on `/deck-builder` for immersive full-screen experience <!-- id: 29 -->

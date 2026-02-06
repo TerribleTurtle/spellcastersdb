@@ -6,10 +6,12 @@
 
 ## Current Focus
 
-The Deck Builder is now optimized for mobile with virtualization and stable drag-and-drop. Next up: implementing `@vercel/og` for visual deck sharing on social media.
+The Deck Builder is now optimized for mobile with virtualization and stable, high-performance drag-and-drop. The footer is hidden on the building screen for a clean UI. Next up: implementing `@vercel/og` for visual deck sharing on social media.
 
 ## Recent Accomplishments
 
+- [x] Optimized **Mobile Drag Performance**: Refactored `DeckBuilderApp` and `UnitBrowser` with `useRef` and `React.memo` to eliminate lag during dragging.
+- [x] Improved **Deck Builder UI**: Hid global footer on `/` and `/deck-builder` routes for an immersive full-screen experience.
 - [x] Optimized **Mobile Deck Builder** with `react-virtuoso` for 60fps scrolling
 - [x] Implemented **Quick Add** (Mobile '+' button, Desktop Double-Click)
 - [x] Fixed **Mobile Drag & Drop**: resolved scroll interference and "Jump to Top Left" glitch
@@ -30,3 +32,4 @@ The Deck Builder is now optimized for mobile with virtualization and stable drag
 - [x] Added **Deck Validation** according to "The Invariants"
 - [x] Renamed "Hero" -> "Spellcaster" in UI
 - [x] Refactored Root Page to host the Archive
+- [x] Implemented **Saved Deck Enhancements**: Added Unit Previews, Quick Actions (Duplicate/Copy Link), and Smart Import Logic (Save & Load conflict resolution).

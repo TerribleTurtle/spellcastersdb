@@ -19,7 +19,8 @@ export interface DeckSlot {
 export interface Deck {
   spellcaster: Spellcaster | null;
   slots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
-  name?: string; // For saved decks
+  id?: string; // UUID for saved decks
+  name?: string; // User defined name
 }
 
 export interface DeckStats {

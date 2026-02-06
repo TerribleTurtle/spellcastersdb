@@ -65,7 +65,14 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
       stats,
       validation,
       isInitialized,
-      lastError
+      lastError,
+      savedDecks,
+      saveDeck,
+    loadDeck,
+    deleteDeck,
+    setDeckName,
+    importDecks, // New
+    duplicateDeck
   } = useDeckBuilder(units, spellcasters);
 
   // URL Import Logic
@@ -80,9 +87,12 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     if (!decoded) return;
 
     // Reconstruct Deck Object from IDs using FRESH TEMPLATE
+    // Reconstruct Deck Object from IDs using FRESH TEMPLATE
+    const spellcaster = spellcasters.find(s => s.hero_id === decoded.spellcasterId) || null;
     const newDeck: Deck = {
-        spellcaster: spellcasters.find(s => s.hero_id === decoded.spellcasterId) || null,
-        slots: INITIAL_SLOTS.map(s => ({ ...s })) as [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot]
+        spellcaster,
+        slots: INITIAL_SLOTS.map(s => ({ ...s })) as [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot],
+        name: decoded.name || (spellcaster ? `${spellcaster.name} Import` : "Imported Deck")
     };
 
     // Fill slots
@@ -130,10 +140,16 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     }
   };
 
+  const saveAndImport = () => {
+      saveDeck(deck.name || "");
+      confirmImport();
+  };
+
   const cancelImport = () => {
     setPendingImport(null);
     router.replace('/deck-builder', { scroll: false });
   };
+
 
   // Mobile Navigation State
   const [activeMobileTab, setActiveMobileTab] = useState<'BROWSER' | 'INSPECTOR' | 'FORGE'>('BROWSER');
@@ -383,7 +399,14 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                         stats={stats}
                         validation={validation}
                         onClear={clearDeck}
-                        deck={deck} // Pass deck for encoding
+                        deck={deck}
+                        savedDecks={savedDecks}
+                        onSave={saveDeck}
+                        onLoad={loadDeck}
+                        onDelete={deleteDeck}
+                        onRename={setDeckName}
+                        onImport={importDecks}
+                        onDuplicate={duplicateDeck}
                     />
                 </div>
             </div>
@@ -411,31 +434,37 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
             {/* Import Conflict Modal */}
             {pendingImport && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-                    <div className="bg-surface-card border border-brand-primary/50 rounded-lg p-6 max-w-md w-full shadow-2xl relative animate-in fade-in zoom-in duration-200">
-                        <div className="flex items-start gap-4 mb-4">
-                            <div className="p-3 bg-yellow-500/20 rounded-full text-yellow-500">
+                    <div className="bg-surface-card border border-brand-primary/50 rounded-lg p-6 max-w-lg w-full shadow-2xl relative animate-in fade-in zoom-in duration-200">
+                        <div className="flex items-start gap-4 mb-6">
+                            <div className="p-3 bg-brand-primary/20 rounded-full text-brand-primary">
                                 <AlertTriangle size={24} />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-white mb-1">Load Shared Deck?</h3>
-                                <p className="text-sm text-gray-400">
-                                    You have a non-empty deck in your local storage. Loading this link will overwrite your current changes.
+                                <h3 className="text-xl font-bold text-white mb-2">Unsaved Deck Changes</h3>
+                                <p className="text-sm text-gray-400 leading-relaxed">
+                                    You have an active deck in your workspace. Would you like to save it before loading the shared deck?
                                 </p>
                             </div>
                         </div>
 
-                        <div className="flex gap-3 justify-end">
+                        <div className="flex flex-col-reverse sm:flex-row gap-3 justify-end">
                             <button 
                                 onClick={cancelImport}
-                                className="px-4 py-2 rounded text-sm font-bold text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                                className="px-4 py-2 rounded text-sm font-bold text-gray-500 hover:text-white hover:bg-white/10 transition-colors"
                             >
-                                Keep My Deck
+                                Cancel
                             </button>
                             <button 
                                 onClick={confirmImport}
-                                className="px-4 py-2 rounded text-sm font-bold bg-brand-primary text-white hover:bg-brand-primary/80 shadow-[0_0_15px_rgba(168,85,247,0.4)] transition-colors"
+                                className="px-4 py-2 rounded text-sm font-bold text-red-400 hover:bg-red-500/10 border border-transparent hover:border-red-500/20 transition-colors"
                             >
-                                Load Shared Deck
+                                Discard & Load
+                            </button>
+                            <button 
+                                onClick={saveAndImport}
+                                className="px-6 py-2 rounded text-sm font-bold bg-brand-primary text-white hover:bg-brand-primary/80 shadow-lg shadow-brand-primary/20 transition-all hover:scale-105"
+                            >
+                                Save & Load
                             </button>
                         </div>
                     </div>
