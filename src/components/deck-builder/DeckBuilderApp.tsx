@@ -211,7 +211,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     if (current?.item && ('entity_id' in current.item || 'hero_id' in current.item)) {
          const item = current.item as Unit | Spellcaster;
          setActiveDragItem(item);
-         handleSelectItem(item); // Use unified selection handler
+         // handleSelectItem(item); // Removed to prevent inspector overlap on drag
     }
   };
 
