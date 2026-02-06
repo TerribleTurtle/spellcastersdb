@@ -8,7 +8,7 @@ export default function Footer() {
   const pathname = usePathname();
 
   // Hide footer on Deck Builder for full-screen experience
-  if (pathname?.startsWith('/deck-builder')) {
+  if (pathname === '/' || pathname?.startsWith('/deck-builder')) {
     return null;
   }
 
