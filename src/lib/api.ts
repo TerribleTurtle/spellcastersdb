@@ -38,13 +38,13 @@ const UnitSchema = z.object({
   attack_speed: z.number(),
   range: z.number(),
   movement_speed: z.number(),
-  movement_type: z.enum(["Ground", "Fly", "Hover", "Stationary"]).optional(),
-  radius: z.number().optional(),
-  duration: z.number().optional(),
-  tick_rate: z.number().optional(),
-  max_targets: z.number().optional(),
-  collision_radius: z.number().optional(),
-  target_mask: z.array(z.string()).optional(),
+  movement_type: z.enum(["Ground", "Fly", "Hover", "Stationary"]).nullish(),
+  radius: z.number().nullish(),
+  duration: z.number().nullish(),
+  tick_rate: z.number().nullish(),
+  max_targets: z.number().nullish(),
+  collision_radius: z.number().nullish(),
+  target_mask: z.array(z.string()).nullish(),
   tags: z.array(z.string()),
   card_config: CardConfigSchema,
   // Catch-all for extra fields to prevent strict failure on minor schema additions
@@ -53,8 +53,8 @@ const UnitSchema = z.object({
 const AbilitySchema = z.object({
   ability_id: z.string().optional(),
   name: z.string(),
-  description: z.string().optional().nullable().transform(val => val || ""),
-  cooldown: z.number().optional().nullable(),
+  description: z.string().nullish().transform(val => val || ""),
+  cooldown: z.number().nullish(),
 });
 
 const SpellcasterSchema = z.object({

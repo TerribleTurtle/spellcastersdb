@@ -30,6 +30,15 @@ const CATEGORY_TO_PLURAL: Record<string, string> = {
 
 const CATEGORIES = Object.values(CATEGORY_TO_PLURAL); 
 
+// Priority Maps for Sorting
+const CATEGORY_PRIORITY: Record<string, number> = {
+  Titan: 1,
+  Creature: 2,
+  Spell: 3,
+  Building: 4,
+  Spellcaster: 5,
+}; 
+
 const GROUP_MODES = ["All", "Rank", "Magic School"] as const;
 
 type GroupMode = typeof GROUP_MODES[number];
@@ -154,7 +163,18 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
               });
               
               if (rankItems.length > 0) {
-                  rankItems.sort((a, b) => a.name.localeCompare(b.name));
+                  // User Request: Sort by Creature > Spell > Building > Name
+                  rankItems.sort((a, b) => {
+                      const catA = 'category' in a ? a.category : 'Spellcaster';
+                      const catB = 'category' in b ? b.category : 'Spellcaster';
+                      
+                      const pA = CATEGORY_PRIORITY[catA] || 99;
+                      const pB = CATEGORY_PRIORITY[catB] || 99;
+
+                      if (pA !== pB) return pA - pB;
+                      
+                      return a.name.localeCompare(b.name);
+                  });
                   groups.push({ title: `Rank ${rank}`, items: rankItems });
               }
           });
@@ -165,10 +185,21 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
                   return i.magic_school === school;
               });
               if (schoolItems.length > 0) {
+                   // User Request: Sort "Magic Schools should be Creature > Spells > buildings > (Rank?)"
                   schoolItems.sort((a, b) => {
+                      // 1. Category
+                      const catA = 'category' in a ? a.category : 'Spellcaster';
+                      const catB = 'category' in b ? b.category : 'Spellcaster';
+                      const pA = CATEGORY_PRIORITY[catA] || 99;
+                      const pB = CATEGORY_PRIORITY[catB] || 99;
+                      if (pA !== pB) return pA - pB;
+
+                      // 2. Rank (Secondary)
                       const rA = 'card_config' in a ? a.card_config.rank : 'I';
                       const rB = 'card_config' in b ? b.card_config.rank : 'I';
                       if (rA !== rB) return rA.localeCompare(rB);
+
+                      // 3. Name
                       return a.name.localeCompare(b.name);
                   });
                   groups.push({ title: school, items: schoolItems });
