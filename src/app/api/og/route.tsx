@@ -96,40 +96,43 @@ export async function GET(request: NextRequest) {
              zIndex: 0,
           }} />
 
-            {/* Header */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginBottom: 10, width: '100%', zIndex: 10 }}>
-                 {/* Logo Match: SPELLCASTERS(Gradient) DB(White) */}
-                <div style={{ display: 'flex', alignItems: 'center', fontSize: 24, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 4 }}>
-                     <span style={{ 
-                         backgroundImage: 'linear-gradient(to right, #a855f7, #ec4899)', 
-                         backgroundClip: 'text', 
-                         color: 'transparent',
-                         marginRight: 0 
-                     }}>
-                         SPELLCASTERS
-                     </span>
-                     <span style={{ color: 'white' }}>DB</span>
+            {/* Content Wrapper for Vertical Centering */}
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 30, alignItems: 'center', justifyContent: 'center', zIndex: 10 }}>
+            
+                {/* Header */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
+                     {/* Logo Match: SPELLCASTERS(Gradient) DB(White) */}
+                    <div style={{ display: 'flex', alignItems: 'center', fontSize: 24, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 4 }}>
+                         <span style={{ 
+                             backgroundImage: 'linear-gradient(to right, #a855f7, #ec4899)', 
+                             backgroundClip: 'text', 
+                             color: 'transparent',
+                             marginRight: 0 
+                         }}>
+                             SPELLCASTERS
+                         </span>
+                         <span style={{ color: 'white' }}>DB</span>
+                    </div>
+    
+                    <div style={{ 
+                        fontSize: 60, // Reduced from 72 to prevent wrapping
+                        fontWeight: 900, 
+                        lineHeight: 1.1, 
+                        textShadow: '0 4px 20px rgba(0,0,0,0.5)',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        maxWidth: '100%',
+                        paddingRight: 20
+                    }}>
+                        {deckName}
+                    </div>
                 </div>
 
-                <div style={{ 
-                    fontSize: 60, // Reduced from 72 to prevent wrapping
-                    fontWeight: 900, 
-                    lineHeight: 1.1, 
-                    textShadow: '0 4px 20px rgba(0,0,0,0.5)',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    maxWidth: '100%',
-                    paddingRight: 20
-                }}>
-                    {deckName}
-                </div>
-            </div>
-
-            {/* Deck Content */}
-            <div style={{ display: 'flex', flexGrow: 1, alignItems: 'flex-start', marginTop: 30, justifyContent: 'center', gap: 20, width: '100%', paddingBottom: 10, zIndex: 10 }}>
+                {/* Deck Content */}
+                <div style={{ display: 'flex', flexGrow: 1, alignItems: 'flex-start', justifyContent: 'center', gap: 20, width: '100%' }}>
                 
                 {/* Spellcaster (Hero) */}
                 {spellcaster && (
@@ -161,9 +164,9 @@ export async function GET(request: NextRequest) {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            padding: '0 8px'
+                            padding: '0 10px'
                         }}>
-                             <span style={{ fontSize: 24, fontWeight: 700, color: 'white', textAlign: 'center', width: '100%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                             <span style={{ fontSize: 24, fontWeight: 700, color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 {spellcaster.name}
                             </span>
                         </div>
@@ -229,15 +232,17 @@ export async function GET(request: NextRequest) {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                padding: '0 8px'
+                                padding: '0 10px'
                             }}>
-                                <span style={{ fontSize: 20, fontWeight: 700, color: '#e2e8f0', textAlign: 'center', width: '100%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                <span style={{ fontSize: 20, fontWeight: 700, color: '#e2e8f0', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                     {unit.name}
                                 </span>
                             </div>
                         </div>
                     );
                 })}
+            </div>
+            
             </div>
         </div>
       ),
