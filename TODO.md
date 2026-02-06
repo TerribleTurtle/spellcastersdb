@@ -92,3 +92,7 @@
 - [x] Refactor Navbar: implement primary/secondary links and centered layout <!-- id: 27 -->
 - [x] Optimize Mobile Drag Performance: implemented `useRef` and `React.memo` to eliminate lag <!-- id: 28 -->
 - [x] Hide global Footer on `/deck-builder` for immersive full-screen experience <!-- id: 29 -->
+
+## Future Backlog
+
+- [ ] **Team Builder**: Implement multi-deck "Team" view (3 decks) with shared URL and simplified OG image. (See `docs/team_builder_feasibility.md`)

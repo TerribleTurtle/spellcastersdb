@@ -1,8 +1,8 @@
 # Active State
 
 **Current Phase**: Phase 5: Visual Sharing & OG Images
-**Status**: Deployment Ready
-**Last Action**: Fixed deck builder "Double Tap" logic: prevented units from overwriting first slot, enabled Titan swapping, and added "Deck Full" toast.
+**Status**: Deployment Ready | Researching Team Builder
+**Last Action**: Completed feasibility study for "Team Builder" (3-deck share) feature; documented requirements and refactoring path in `docs/team_builder_feasibility.md`.
 
 ## Current Focus
 
