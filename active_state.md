@@ -2,7 +2,7 @@
 
 **Current Phase**: Phase 5: Visual Sharing & OG Images
 **Status**: Deployment Ready
-**Last Action**: Updated roadmap: moved "Build Identification" and "Visual Deck Sharing" to Live; started "Data Cleanup".
+**Last Action**: Fixed deck builder "Double Tap" logic: prevented units from overwriting first slot, enabled Titan swapping, and added "Deck Full" toast.
 
 ## Current Focus
 
@@ -18,6 +18,7 @@
 - [x] Implemented **Status Dashboard** at `/roadmap` with JSON-based roadmap management
 - [x] SEO: Refine metadata to include ALL terms: "Card", "Deck", "Build", "Loadout".
 - [x] OG: Refined Image Layout (larger text, tighter spacing) and dynamic Spellcaster descriptions.
+- [x] Fixed **Deck Builder Logic**: Resolved "Double Tap" bug where units replaced slot 0. Titans now swap properly, Units fail gracefully if full.
 
 ## Recent Changes
 

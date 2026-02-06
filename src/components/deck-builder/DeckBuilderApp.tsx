@@ -196,10 +196,19 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     })
   );
 
+  // Ref to track latest deck state for stable callbacks
+  const deckRef = useRef(deck);
+  useEffect(() => {
+      deckRef.current = deck;
+  }, [deck]);
+
   // Quick Add Logic
   const [lastQuickAdd, setLastQuickAdd] = useState<string | null>(null);
 
+  // Stable callback using ref to prevent breaking UnitBrowser memoization
   const handleQuickAdd = useCallback((item: Unit | Spellcaster) => {
+      const currentDeck = deckRef.current;
+
       // 1. If Spellcaster -> Set
       if ('hero_id' in item) {
           setSpellcaster(item as Spellcaster);
@@ -208,23 +217,19 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
           return;
       }
 
-      // 2. If Unit -> Find Empty Slot
       const unit = item as Unit;
-      // Note: We need to access the LATEST deck state here. 
-      // Since this function is passed to UnitBrowser memoized, deck needs to be dependency
-      // But passing deck as dependency breaks memoization of UnitBrowser potentially if deck changes often (it does)
-      // HOWEVER, UnitBrowser only re-renders if props change.
-      // Ideally handleQuickAdd shouldn't change often. 
-      // For now, let's keep it simple. If perf is still bad we can optimize this further.
-      // Just accessing deck directly here is fine as long as we put it in dependency array or use functional updates if possible.
-      // But setSlot relies on index.
-      
-      // Actually, to truly fix UnitBrowser memoization, we need stable handlers.
-      // We can't easily make this stable without Ref or Reducer logic but let's see.
-      // For now, let's just make handleSelectItem stable which was the main culprit.
-      // handleQuickAdd is less frequent (double tap).
-      
-      const emptySlot = deck.slots.find(s => s.index < 4 && !s.unit);
+
+      // 2. Check Titan
+      if (unit.category === 'Titan') {
+           // Titans always replace slot 4, whether empty or full
+           setSlot(4, unit);
+           setLastQuickAdd(`Added ${unit.name} to Titan Slot`);
+           setTimeout(() => setLastQuickAdd(null), 2000);
+           return;
+      }
+
+      // 3. Normal Unit -> Find First Empty Slot
+      const emptySlot = currentDeck.slots.find(s => s.index < 4 && !s.unit);
       
       if (emptySlot) {
           setSlot(emptySlot.index, unit);
@@ -233,18 +238,11 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
           return;
       }
 
-      // 3. Check Titan Slot
-      if (unit.category === 'Titan' && !deck.slots[4].unit) {
-           setSlot(4, unit);
-           setLastQuickAdd(`Added ${unit.name} to Titan Slot`);
-           setTimeout(() => setLastQuickAdd(null), 2000);
-           return;
-      }
-
-      // 4. Deck Full
+      // 4. Deck Full (Units) -> Graceful Failure
+      // Logic: If we are here, it's a non-Titan unit and slots 0-3 are full.
       setLastQuickAdd(`Deck Full!`);
       setTimeout(() => setLastQuickAdd(null), 2000);
-  }, [deck, setSlot, setSpellcaster]);
+  }, [setSlot, setSpellcaster]);
 
   const handleDragStart = (event: DragStartEvent) => {
     isDraggingRef.current = true;
