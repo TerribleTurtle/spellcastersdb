@@ -136,6 +136,9 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
   const [activeMobileTab, setActiveMobileTab] = useState<'BROWSER' | 'INSPECTOR' | 'FORGE'>('BROWSER');
 
   const handleSelectItem = (item: Unit | Spellcaster) => {
+    // Prevent selection if we are currently dragging (fixes mobile drag triggering inspector)
+    if (activeDragItem) return;
+
     setSelectedItem(item);
     // Auto-switch to inspector on mobile
     setActiveMobileTab('INSPECTOR');
@@ -143,8 +146,49 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 10 } }),
-    useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 5 } })
+    useSensor(TouchSensor, { 
+        activationConstraint: { 
+            delay: 250, 
+            tolerance: 5 
+        } 
+    })
   );
+
+  // Quick Add Logic
+  const [lastQuickAdd, setLastQuickAdd] = useState<string | null>(null);
+
+  const handleQuickAdd = (item: Unit | Spellcaster) => {
+      // 1. If Spellcaster -> Set
+      if ('hero_id' in item) {
+          setSpellcaster(item as Spellcaster);
+          setLastQuickAdd(`${item.name} set as Commander`);
+          setTimeout(() => setLastQuickAdd(null), 2000);
+          return;
+      }
+
+      // 2. If Unit -> Find Empty Slot
+      const unit = item as Unit;
+      const emptySlot = deck.slots.find(s => s.index < 4 && !s.unit);
+      
+      if (emptySlot) {
+          setSlot(emptySlot.index, unit);
+          setLastQuickAdd(`Added ${unit.name}`);
+          setTimeout(() => setLastQuickAdd(null), 2000);
+          return;
+      }
+
+      // 3. Check Titan Slot
+      if (unit.category === 'Titan' && !deck.slots[4].unit) {
+           setSlot(4, unit);
+           setLastQuickAdd(`Added ${unit.name} to Titan Slot`);
+           setTimeout(() => setLastQuickAdd(null), 2000);
+           return;
+      }
+
+      // 4. Deck Full
+      setLastQuickAdd(`Deck Full!`);
+      setTimeout(() => setLastQuickAdd(null), 2000);
+  };
 
   const handleDragStart = (event: DragStartEvent) => {
     const current = event.active.data.current;
@@ -196,7 +240,10 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         const targetIndex = over.data.current?.index as number;
         
         if (sourceIndex === targetIndex) return; // Same slot, do nothing
-
+        
+        // Logic for swapping is handled inside useDeckBuilder's moveSlot? 
+        // Actually moveSlot needs to handle the swap logic carefully if validation matters.
+        // Assuming moveSlot handles plain swaps for now.
         if (targetIndex !== undefined) {
              moveSlot(sourceIndex, targetIndex);
         }
@@ -246,6 +293,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         sensors={sensors} 
         onDragStart={handleDragStart} 
         onDragEnd={handleDragEnd}
+        autoScroll={false} // Disable auto-scroll to prevent runaway scrolling
     >
         <div className="h-full flex flex-col md:grid md:grid-rows-[1fr_auto]">
             {/* Mobile Tab Navigation */}
@@ -275,11 +323,13 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                 {/* Left: Unit Browser (3 Cols) */}
                 <div className={cn(
                     "md:col-span-3 xl:col-span-4 h-full overflow-hidden md:border-r border-white/10",
-                    activeMobileTab !== 'BROWSER' && "hidden md:block"
+                    // Keep visible if active tab is BROWSER OR if we are currently dragging (to prevent unmount)
+                    (activeMobileTab === 'BROWSER' || activeDragItem) ? "block" : "hidden md:block"
                 )}>
                     <UnitBrowser 
                         items={browserItems} 
-                        onSelectItem={handleSelectItem} 
+                        onSelectItem={handleSelectItem}
+                        onQuickAdd={handleQuickAdd}
                     />
                 </div>
 
@@ -328,6 +378,16 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                     draggedItem={activeDragItem}
                 />
             </div>
+
+            {/* Quick Add Toast */}
+            {lastQuickAdd && (
+                <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-60 bg-brand-primary text-white px-4 py-2 rounded-full shadow-xl animate-in fade-in slide-in-from-bottom-4 duration-300 pointer-events-none whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                         <div className="w-2 h-2 rounded-full bg-white animate-pulse" />
+                        <span className="text-xs font-bold">{lastQuickAdd}</span>
+                    </div>
+                </div>
+            )}
 
             {/* Import Conflict Modal */}
             {pendingImport && (

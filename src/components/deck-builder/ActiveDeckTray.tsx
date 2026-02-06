@@ -134,7 +134,7 @@ function Slot({ slot, draggedItem, allSlots, onSelect }: {
                     {...listeners} 
                     {...attributes} 
                     style={style}
-                    className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing"
+                    className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing touch-none"
                     onClick={() => {
                          // Stop propagation so drag doesn't conflict with click
                          // But we want click to work if not dragging... dnd-kit handles this usually
@@ -258,7 +258,7 @@ function SpellcasterSlot({ spellcaster, draggedItem, onSelect }: {
                     {...listeners} 
                     {...attributes} 
                     style={style}
-                    className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing"
+                    className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing touch-none"
                     onClick={() => {
                          if (onSelect) onSelect(spellcaster);
                     }}

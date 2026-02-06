@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useMemo } from "react";
-import { Search, Filter, X } from "lucide-react";
+import { useState, useMemo, useEffect } from "react";
+import { Search, Filter, X, Plus } from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
 import { Unit, Spellcaster } from "@/types/api";
 import { FilterSection } from "@/components/ui/FilterSection";
 import { cn, getCardImageUrl } from "@/lib/utils";
+import { Virtuoso } from "react-virtuoso";
 
 // Combined type handling
 type BrowserItem = Unit | (Spellcaster & { category: 'Spellcaster' });
@@ -14,6 +15,7 @@ type BrowserItem = Unit | (Spellcaster & { category: 'Spellcaster' });
 interface UnitBrowserProps {
   items: BrowserItem[];
   onSelectItem: (item: BrowserItem) => void;
+  onQuickAdd: (item: BrowserItem) => void;
 }
 
 const SCHOOLS = ["Astral", "War", "Elemental", "Lightning", "Holy", "Dark", "Frost"];
@@ -32,7 +34,12 @@ const GROUP_MODES = ["All", "Rank", "Magic School"] as const;
 
 type GroupMode = typeof GROUP_MODES[number];
 
-export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
+// Virtualization Types
+type VirtualRow = 
+    | { type: 'header'; title: string; count: number }
+    | { type: 'row'; items: BrowserItem[]; startIndex: number };
+
+export function UnitBrowser({ items, onSelectItem, onQuickAdd }: UnitBrowserProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [groupMode, setGroupMode] = useState<GroupMode>("All");
   const [showFilters, setShowFilters] = useState(false);
@@ -42,6 +49,25 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
     ranks: [] as string[],
     categories: [] as string[],
   });
+
+  // Responsive Columns Hook logic
+  const [columns, setColumns] = useState(3);
+  
+  useEffect(() => {
+      const handleResize = () => {
+          const width = window.innerWidth;
+          // Matches Tailwind Breakpoints logic roughly
+          if (width >= 1280) setColumns(5); // xl
+          else if (width >= 1024) setColumns(4); // lg
+          else setColumns(3); // md & sm & default
+          // Note: Mobile formerly used grid-cols-6 but that seems excessive for cards? 
+          // Keeping 3 as minimum ensures usability for 48px-80px cards.
+      };
+      
+      handleResize(); // Init
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const toggleFilter = (type: "schools" | "ranks" | "categories", value: string) => {
     setActiveFilters((prev) => {
@@ -76,7 +102,7 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
         // Overlay Filters
         if (activeFilters.categories.length > 0 && !activeFilters.categories.includes(category)) return false;
         if (activeFilters.schools.length > 0) {
-            if (!isUnit) return false; // Spellcasters usually don't have school in this context yet
+            if (!isUnit) return false; 
             if (!activeFilters.schools.includes(school)) return false;
         }
         if (activeFilters.ranks.length > 0) {
@@ -94,9 +120,6 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
       const groups: { title: string; items: BrowserItem[] }[] = [];
 
       if (groupMode === "All") {
-          // Group by Category (rank i-iv inside not strictly enforced by "group", just sort order?)
-          // User said: "groups all creature, all spells and all building in theri own group rank i - iv"
-          // So -> Category Headers -> Items sorted by Rank
           const orderedSingularCats = ["Spellcaster", "Creature", "Spell", "Building", "Titan"];
           orderedSingularCats.forEach(catSingular => {
               const catPlural = CATEGORY_TO_PLURAL[catSingular] || catSingular;
@@ -105,7 +128,6 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
                   return c === catSingular;
               });
               if (catItems.length > 0) {
-                  // Sort by Rank, then Name
                   catItems.sort((a, b) => {
                       const rA = 'card_config' in a ? a.card_config.rank : 'I';
                       const rB = 'card_config' in b ? b.card_config.rank : 'I';
@@ -116,19 +138,13 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
               }
           });
       } else if (groupMode === "Rank") {
-          // Group by Rank I, II, III, IV
           RANKS.forEach(rank => {
               const rankItems = filteredItems.filter(i => {
-                  if (!('entity_id' in i)) return false; // Exclude Spellcasters from rank view? Or treat as neutral? Usually no rank.
+                  if (!('entity_id' in i)) return false; 
                   return i.card_config.rank === rank;
               });
               
-              // Also include Spellcasters in a separate group or at top?
-              // User said "Rank (list rank 1 spells... then rank ii...)"
-              // Usually Spellcasters don't have ranks I-IV like units. Keeping them out or in separate "Commander" group.
-              
               if (rankItems.length > 0) {
-                  // Sort by Rank (redundant here but consistent) then Name
                   rankItems.sort((a, b) => a.name.localeCompare(b.name));
                   groups.push({ title: `Rank ${rank}`, items: rankItems });
               }
@@ -140,7 +156,6 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
                   return i.magic_school === school;
               });
               if (schoolItems.length > 0) {
-                  // Sort by Rank then Name
                   schoolItems.sort((a, b) => {
                       const rA = 'card_config' in a ? a.card_config.rank : 'I';
                       const rB = 'card_config' in b ? b.card_config.rank : 'I';
@@ -150,19 +165,39 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
                   groups.push({ title: school, items: schoolItems });
               }
            });
-           
-           // Catch-all for "Neutral" or others if any
-           // ...
       }
 
       return groups;
   }, [filteredItems, groupMode]);
 
+  // 3. Flatten for Virtualization
+  const virtualData = useMemo<VirtualRow[]>(() => {
+      if (!groupedContent) return [];
+      
+      const rows: VirtualRow[] = [];
+      
+      groupedContent.forEach(group => {
+          // Header
+          rows.push({ type: 'header', title: group.title, count: group.items.length });
+          
+          // Chunk Items into Rows
+          for (let i = 0; i < group.items.length; i += columns) {
+              rows.push({
+                  type: 'row',
+                  items: group.items.slice(i, i + columns),
+                  startIndex: i
+              });
+          }
+      });
+      
+      return rows;
+  }, [groupedContent, columns]);
+
 
   return (
     <div className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
       {/* Header Area */}
-      <div className="flex flex-col border-b border-white/10 z-10 bg-surface-main/95 backdrop-blur shadow-sm pb-2">
+      <div className="flex flex-col border-b border-white/10 z-10 bg-surface-main/95 backdrop-blur shadow-sm pb-2 shrink-0">
           {/* Title & Search */}
           <div className="p-4 pb-2 space-y-3">
             <div className="flex items-center justify-between">
@@ -230,7 +265,7 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
                         selected={activeFilters.categories} 
                         onToggle={(v) => toggleFilter('categories', v)} 
                     />
-                    <div className="space-y-6">
+                   <div className="space-y-6">
                         <FilterSection 
                             title="Magic School" 
                             options={SCHOOLS} 
@@ -265,40 +300,55 @@ export function UnitBrowser({ items, onSelectItem }: UnitBrowserProps) {
       )}
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-y-auto bg-black/20 pb-20">
-         {(!groupedContent || groupedContent.length === 0) ? (
+      <div className="flex-1 bg-black/20 overflow-hidden">
+         {(!virtualData || virtualData.length === 0) ? (
              <div className="text-center text-gray-500 py-10 mt-10">
                  No results found.
              </div>
          ) : (
-             <div className="space-y-6 p-4">
-                 {groupedContent.map(group => (
-                     <div key={group.title}>
-                         <h3 className="text-brand-primary font-bold text-sm uppercase tracking-widest mb-3 border-b border-white/5 pb-1">
-                             {group.title} <span className="text-gray-600 text-xs ml-2">({group.items.length})</span>
-                         </h3>
-                          <div className="grid grid-cols-6 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2">
-                             {group.items.map(item => {
-                                 const id = 'entity_id' in item ? item.entity_id : item.hero_id;
-                                 return (
-                                     <DraggableCard 
-                                         key={id} 
-                                         item={item} 
-                                         onClick={() => onSelectItem(item)} 
-                                     />
-                                 );
-                             })}
-                         </div>
-                     </div>
-                 ))}
-             </div>
+             <Virtuoso
+                style={{ height: '100%' }}
+                data={virtualData}
+                itemContent={(index, row) => {
+                    if (row.type === 'header') {
+                        return (
+                             <div className="px-4 pt-6 pb-2 bg-surface-main/50 backdrop-blur-sm sticky top-0 z-10">
+                                <h3 className="text-brand-primary font-bold text-sm uppercase tracking-widest border-b border-white/5 pb-1">
+                                    {row.title} <span className="text-gray-600 text-xs ml-2">({row.count})</span>
+                                </h3>
+                             </div>
+                        );
+                    } else {
+                        return (
+                            <div className="px-4 py-1 grid gap-2" 
+                                 style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
+                                {row.items.map((item) => {
+                                    const id = 'entity_id' in item ? item.entity_id : item.hero_id;
+                                    return (
+                                        <DraggableCard 
+                                            key={id} 
+                                            item={item} 
+                                            onClick={() => onSelectItem(item)}
+                                            onQuickAdd={() => onQuickAdd(item)}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        );
+                    }
+                }}
+             />
          )}
       </div>
     </div>
   );
 }
 
-function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => void }) {
+function DraggableCard({ item, onClick, onQuickAdd }: { 
+    item: BrowserItem; 
+    onClick: () => void;
+    onQuickAdd: () => void;
+}) {
     const id = 'entity_id' in item ? item.entity_id : item.hero_id;
     const isHero = !('entity_id' in item);
     const rank = !isHero ? item.card_config.rank : null;
@@ -315,7 +365,13 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
             ref={setNodeRef} 
             {...listeners} 
             {...attributes}
-            onClick={onClick}
+            onClick={() => {
+                if (!isDragging) onClick();
+            }}
+            onDoubleClick={(e) => {
+                e.stopPropagation(); // Prevent inspect
+                onQuickAdd();
+            }}
             className={cn(
                 "relative group cursor-grab active:cursor-grabbing flex flex-col",
                 "aspect-3/4 rounded overflow-hidden border border-white/10 bg-surface-card",
@@ -325,8 +381,8 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
                 isHero && "border-brand-accent/30 shadow-[0_0_10px_rgba(255,255,255,0.05)]"
             )}
         >
-            {/* Image Area */}
-            <div className="relative flex-1 overflow-hidden bg-gray-800">
+            {/* Image Area - Touch None to prevent scroll, ensuring Drag works */}
+            <div className="relative flex-1 overflow-hidden bg-gray-800 touch-none">
                 <Image 
                     src={getCardImageUrl(item)} 
                     alt={item.name}
@@ -352,6 +408,19 @@ function DraggableCard({ item, onClick }: { item: BrowserItem; onClick: () => vo
                         {spellcasterClass}
                     </div>
                  )}
+
+                 {/* Quick Add Button (Mobile/Tablet) */}
+                 <button
+                    className="md:hidden absolute top-1 left-1 bg-brand-primary text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg border border-white/20 active:scale-95"
+                    onClick={(e) => {
+                        e.stopPropagation(); // Stop drag/select
+                        onQuickAdd();
+                    }}
+                    onPointerDown={(e) => e.stopPropagation()} // Stop drag initiation
+                    onTouchStart={(e) => e.stopPropagation()} // Stop drag initiation
+                 >
+                     <Plus size={14} strokeWidth={3} />
+                 </button>
             </div>
 
             {/* Name Banner - Increased Text Size */}
