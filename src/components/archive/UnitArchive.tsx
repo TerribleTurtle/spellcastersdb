@@ -17,9 +17,16 @@ function getUniqueId(entity: UnifiedEntity): string {
 
 interface UnitArchiveProps {
   initialUnits: UnifiedEntity[];
+  defaultFilters?: {
+    schools?: string[];
+    ranks?: string[];
+    categories?: string[];
+    classes?: string[];
+  };
 }
 
-export function UnitArchive({ initialUnits }: UnitArchiveProps) {
+export function UnitArchive(props: UnitArchiveProps) {
+  const { initialUnits } = props;
   // State
   const [searchQuery, setSearchQuery] = useState("");
   
@@ -35,14 +42,16 @@ export function UnitArchive({ initialUnits }: UnitArchiveProps) {
     schools: string[];
     ranks: string[];
     categories: string[];
+    classes: string[];
   }>({
-    schools: [],
-    ranks: [],
-    categories: [],
+    schools: props.defaultFilters?.schools || [],
+    ranks: props.defaultFilters?.ranks || [],
+    categories: props.defaultFilters?.categories || [],
+    classes: props.defaultFilters?.classes || [],
   });
 
   // Filter Logic
-  const toggleFilter = (type: "schools" | "ranks" | "categories", value: string) => {
+  const toggleFilter = (type: "schools" | "ranks" | "categories" | "classes", value: string) => {
     setActiveFilters((prev) => {
       const current = prev[type];
       const next = current.includes(value)
@@ -53,7 +62,7 @@ export function UnitArchive({ initialUnits }: UnitArchiveProps) {
   };
 
   const clearFilters = () => {
-    setActiveFilters({ schools: [], ranks: [], categories: [] });
+    setActiveFilters({ schools: [], ranks: [], categories: [], classes: [] });
     setSearchQuery("");
   };
 

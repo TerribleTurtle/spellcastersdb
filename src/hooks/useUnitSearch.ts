@@ -6,6 +6,7 @@ interface FilterState {
   schools: string[];
   ranks: string[];
   categories: string[];
+  classes: string[];
 }
 
 // Helper to extract filterable attributes safely
@@ -16,6 +17,7 @@ function getSearchableAttributes(entity: UnifiedEntity) {
       category: "Spellcaster",
       school: "Spellcaster",     // Virtual School for filtering
       rank: "LEGENDARY",  // Virtual Rank
+      class: entity.class || "Unknown",
       tags: ["Spellcaster", entity.name],
     };
   }
@@ -25,6 +27,7 @@ function getSearchableAttributes(entity: UnifiedEntity) {
       category: "Consumable",
       school: "Item",     // Virtual School
       rank: entity.rarity || "COMMON",
+      class: "Item",
       tags: entity.tags || [],
     };
   }
@@ -33,6 +36,7 @@ function getSearchableAttributes(entity: UnifiedEntity) {
     category: entity.category,
     school: entity.magic_school,
     rank: entity.card_config.rank,
+    class: "Unit",
     tags: entity.tags || [],
   };
 }
@@ -86,6 +90,14 @@ export function useUnitSearch(
       if (
         filters.categories.length > 0 &&
         !filters.categories.includes(attrs.category)
+      ) {
+        return false;
+      }
+
+      // Classes
+      if (
+        filters.classes.length > 0 &&
+        !filters.classes.includes(attrs.class)
       ) {
         return false;
       }

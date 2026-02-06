@@ -12,8 +12,9 @@ interface FilterSidebarProps {
     schools: string[];
     ranks: string[];
     categories: string[];
+    classes: string[];
   };
-  toggleFilter: (type: "schools" | "ranks" | "categories", value: string) => void;
+  toggleFilter: (type: "schools" | "ranks" | "categories" | "classes", value: string) => void;
   clearFilters: () => void;
   className?: string;
 }
@@ -21,6 +22,7 @@ interface FilterSidebarProps {
 const SCHOOLS = ["Elemental", "Wild", "War", "Astral", "Holy", "Technomancy", "Necromancy", "Titan"];
 const RANKS = ["I", "II", "III", "IV"];
 const CATEGORIES = ["Spellcaster", "Creature", "Building", "Spell", "Titan", "Consumable"];
+const CLASSES = ["Enchanter", "Duelist", "Conqueror"];
 
 export function FilterSidebar({
   searchQuery,
@@ -35,7 +37,8 @@ export function FilterSidebar({
   const hasActiveFilters =
     activeFilters.schools.length > 0 ||
     activeFilters.ranks.length > 0 ||
-    activeFilters.categories.length > 0;
+    activeFilters.categories.length > 0 ||
+    activeFilters.classes.length > 0;
 
   return (
     <>
@@ -101,6 +104,15 @@ export function FilterSidebar({
             options={CATEGORIES}
             selected={activeFilters.categories}
             onToggle={(val) => toggleFilter("categories", val)}
+          />
+
+          {/* Classes (Only show if 'Spellcaster' category is active OR no categories active, but simpler to always show or conditioning?) */}
+          {/* For now, always show, user can combine as they wish */}
+          <FilterSection
+            title="Class"
+            options={CLASSES}
+            selected={activeFilters.classes}
+            onToggle={(val) => toggleFilter("classes", val)}
           />
 
           {/* Magic Schools */}

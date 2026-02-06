@@ -1,6 +1,7 @@
 import { getUnitById, getUnits } from "@/lib/api";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 interface UnitPageProps {
   params: Promise<{ id: string }>;
@@ -53,8 +54,14 @@ export default async function UnitPage({ params }: UnitPageProps) {
     <div className="min-h-screen bg-surface-main text-foreground p-8">
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
-          <span className="text-brand-primary font-mono text-sm uppercase tracking-wider">
-            {unit.category} • {unit.magic_school}
+          <span className="text-brand-primary font-mono text-sm uppercase tracking-wider flex gap-2">
+            <Link href={`/types/${unit.category.toLowerCase()}s`} className="hover:text-brand-secondary hover:underline underline-offset-4">
+              {unit.category}
+            </Link> 
+            <span>•</span>
+            <Link href={`/schools/${unit.magic_school}`} className="hover:text-brand-secondary hover:underline underline-offset-4">
+              {unit.magic_school}
+            </Link>
           </span>
           <h1 className="text-5xl font-bold mt-2 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary">
             {unit.name}
@@ -90,7 +97,9 @@ export default async function UnitPage({ params }: UnitPageProps) {
           <div className="bg-surface-card rounded-xl p-6 border border-surface-highlight">
             <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
               <span className="text-gray-400">Rank</span>
-              <span className="font-mono text-lg text-brand-secondary">{unit.card_config.rank}</span>
+              <Link href={`/ranks/${unit.card_config.rank}`} className="font-mono text-lg text-brand-secondary hover:underline underline-offset-4">
+                {unit.card_config.rank}
+              </Link>
             </div>
             <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
               <span className="text-gray-400">Population Cost</span>

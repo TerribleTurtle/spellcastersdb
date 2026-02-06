@@ -22,6 +22,8 @@
 - [x] Added **Ko-fi Support Link**: Added support links to Footer and Navbar (Deck Builder).
 - [x] **Documentation Audit**: Established MIT License, created `CONTRIBUTING.md`, and refactored `README.md`.
 - [x] Refined **Navbar Links**: Moved 'Contribute' link to the hamburger menu for a cleaner header.
+- [x] **SEO Listing Pages**: Created dedicated listing pages for Ranks, Schools, Unit Types, and Classes.
+- [x] **Cross-linking**: Added contextual links in Unit and Hero detail pages to the new listing pages.
 
 ## Recent Changes
 

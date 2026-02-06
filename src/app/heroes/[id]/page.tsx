@@ -1,6 +1,7 @@
 import { getSpellcasterById, getSpellcasters } from "@/lib/api";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 interface HeroPageProps {
   params: Promise<{ id: string }>;
@@ -51,9 +52,11 @@ export default async function HeroPage({ params }: HeroPageProps) {
         {/* Header */}
         <div className="mb-8 border-b border-white/10 pb-6">
           <span className="text-brand-primary font-mono text-sm uppercase tracking-wider">
-            Spellcaster Character
+            <Link href={`/classes/${spellcaster.class}`} className="hover:text-brand-secondary hover:underline underline-offset-4">
+              {spellcaster.class}
+            </Link>
           </span>
-          <h1 className="text-6xl font-bold mt-2 mb-2 bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary">
+          <h1 className="text-6xl font-bold mt-2 mb-2 bg-clip-text text-transparent bg-linear-to-r from-brand-primary to-brand-secondary">
             {spellcaster.name}
           </h1>
         </div>
