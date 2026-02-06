@@ -84,3 +84,4 @@
 - [ ] **Phase 7: User Experience Polish** <!-- id: 24 -->
   - [x] Fix drag and drop logic: Dragging unit to spellcaster should cancel drop instead of removing unit <!-- id: 25 -->
   - [x] Remove Deck Tray 'X' buttons (User Request) <!-- id: 26 -->
+- [x] Refactor Navbar: implement primary/secondary links and centered layout <!-- id: 27 -->

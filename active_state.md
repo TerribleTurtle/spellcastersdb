@@ -2,14 +2,17 @@
 
 **Current Phase**: Phase 5: Visual Sharing & OG Images
 **Status**: In Progress
-**Last Action**: Redesigned Roadmap page with 5 item types (bug, feature, enhancement, ux, data) and compact layout.
+**Last Action**: Refactor Navbar: split primary/secondary links and centered alignment for a cleaner, premium UI.
 
 ## Current Focus
 
-The Roadmap is now more readable and detailed. Next up: implementing `@vercel/og` for visual deck sharing on social media.
+The navigation is now cleaner and provides explicit access to the Deck Builder. Next up: implementing `@vercel/og` for visual deck sharing on social media.
 
 ## Recent Accomplishments
 
+- [x] Refactored **Navbar** with Primary/Secondary tiers and centered desktop layout
+- [x] Added explicit **Deck Builder** link (pointing to `/`) for easier navigation back from database/roadmap
+- [x] Enabled **Hamburger Menu on Desktop** for secondary links (Guide, FAQ, About)
 - [x] Implemented **Status Dashboard** at `/roadmap` with JSON-based roadmap management
 - [x] Added **Concept** item type to roadmap for massive requests (visual disclaimer + deprioritized sorting)
 - [x] Moved **Refined Validation Logic** to LIVE (requires Rank I/II Creature)
