@@ -19,6 +19,8 @@
 - [x] SEO: Refine metadata to include ALL terms: "Card", "Deck", "Build", "Loadout".
 - [x] OG: Refined Image Layout (larger text, tighter spacing) and dynamic Spellcaster descriptions.
 - [x] Fixed **Deck Builder Logic**: Resolved "Double Tap" bug where units replaced slot 0. Titans now swap properly, Units fail gracefully if full.
+- [x] Added **Ko-fi Support Link**: Added support links to Footer and Navbar (Deck Builder).
+- [x] Refined **Navbar Links**: Moved 'Contribute' link to the hamburger menu for a cleaner header.
 
 ## Recent Changes
 

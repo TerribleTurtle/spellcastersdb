@@ -26,13 +26,13 @@ export default function Navbar() {
     { name: 'Guide', href: '/guide', internal: true },
     { name: 'FAQ', href: '/faq', internal: true },
     { name: 'About', href: '/about', internal: true },
+    { name: 'Contribute', href: 'https://github.com/TerribleTurtle/spellcasters-community-api', internal: false, icon: Github },
   ];
   
   const allLinks = [...primaryLinks, ...secondaryLinks];
 
   const externalLinks = [
     { name: 'Support', href: 'https://ko-fi.com/terribleturtles', icon: Coffee },
-    { name: 'Contribute', href: 'https://github.com/TerribleTurtle/spellcasters-community-api', icon: Github },
   ];
 
   return (
@@ -122,20 +122,39 @@ export default function Navbar() {
         <div className="absolute top-16 right-0 w-full md:w-64 bg-surface-main/95 backdrop-blur-xl border-l border-b border-white/10 shadow-2xl h-[calc(100vh-4rem)] md:h-auto md:rounded-bl-xl overflow-y-auto">
           <div className="flex flex-col p-4 space-y-1">
              {/* Show all links in the drawer for easy access */}
-             {allLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setIsOpen(false)}
-                className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
-                  isActive(link.href)
-                    ? 'bg-white/5 text-brand-primary'
-                    : 'text-slate-300 hover:bg-white/5 hover:text-brand-accent'
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
+             {allLinks.map((link) => {
+               if (link.internal) {
+                 return (
+                  <Link
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
+                      isActive(link.href)
+                        ? 'bg-white/5 text-brand-primary'
+                        : 'text-slate-300 hover:bg-white/5 hover:text-brand-accent'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                 );
+               }
+               
+               const Icon = (link as { icon?: React.ElementType }).icon;
+               return (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-brand-accent transition-colors"
+                  >
+                    {Icon && <Icon size={18} />}
+                    {link.name}
+                    <ExternalLink size={14} className="opacity-50 ml-auto" />
+                  </a>
+               );
+            })}
 
             <div className="pt-2 mt-2 border-t border-white/10 md:hidden">
             {/* Mobile Only External Links (Desktop has them in bar) */}
