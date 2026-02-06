@@ -5,15 +5,16 @@ import { DeckBuilderApp } from '@/components/deck-builder/DeckBuilderApp';
 import { Metadata } from 'next';
 
 type Props = {
-  params: { id: string }
-  searchParams: { [key: string]: string | string[] | undefined }
+  params: Promise<{ id: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 export async function generateMetadata(
   { searchParams }: Props
 ): Promise<Metadata> {
   // Check for deck hash
-  const deckHash = searchParams?.d;
+  const resolvedParams = await searchParams;
+  const deckHash = resolvedParams?.d;
   
   if (typeof deckHash === 'string' && deckHash) {
     return {
