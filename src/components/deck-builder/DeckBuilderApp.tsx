@@ -180,6 +180,11 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
     if (active.data.current?.type === 'slot') {
         const sourceIndex = active.data.current.index as number;
         
+        // Fix: If dropped on Spellcaster, CANCEL the drop (snap back) instead of removing
+        if (over && (over.id === 'spellcaster-zone' || over.id === 'spellcaster-zone-forge')) {
+            return;
+        }
+
         // Dropped outside or invalid target -> REMOVE
         if (!over || !over.id.toString().startsWith("slot-")) {
              // Basic "Drag to Remove" logic
@@ -237,6 +242,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
 
   return (
     <DndContext 
+        id="deck-builder-dnd"
         sensors={sensors} 
         onDragStart={handleDragStart} 
         onDragEnd={handleDragEnd}

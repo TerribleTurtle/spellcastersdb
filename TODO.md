@@ -76,3 +76,11 @@
 - [x] Fix double "TITAN" label in Deck Builder slot
 - [x] Stabilize Deck Tray layout: absolute position spellcaster passives to prevent slot shift
 - [x] Implement "Swap on Add": dragging a card already in the deck to another slot swaps it instead of clearing the old slot
+- [x] Implement **Roadmap Concepts**: Added 'concept' type for massive requests with visual disclaimers
+- [x] Improve **Roadmap Sorting**: Sort items by type (Bugs first, Concepts last) to manage user expectations
+- [x] Update **Roadmap Metadata**: Added devNote support and implemented disclaimer rendering
+- [x] Pluralize filter categories (Spellcasters, Creatures) in Unit Browser
+- [x] Implement Rank-first (then Alphabetical) sorting in Unit Browser for better grouping
+- [ ] **Phase 7: User Experience Polish** <!-- id: 24 -->
+  - [x] Fix drag and drop logic: Dragging unit to spellcaster should cancel drop instead of removing unit <!-- id: 25 -->
+  - [x] Remove Deck Tray 'X' buttons (User Request) <!-- id: 26 -->

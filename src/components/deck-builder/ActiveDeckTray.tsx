@@ -198,16 +198,7 @@ function Slot({ slot, onRemove, draggedItem, allSlots, onSelect }: {
                     </div>
 
                     {/* Remove Action - Needs pointer-events-auto to work through draggable overlay layer? */}
-                    <button 
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            onRemove();
-                        }}
-                        className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-lg pointer-events-auto"
-                        onPointerDown={(e) => e.stopPropagation()} // Prevent drag start on remove button
-                    >
-                        <X size={12} className="text-white" />
-                    </button>
+
                 </div>
             )}
 
@@ -314,17 +305,7 @@ function SpellcasterSlot({ spellcaster, onRemove, draggedItem, onSelect }: {
                     </div>
 
                     {/* Remove Action */}
-                     {onRemove && (
-                        <button 
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                onRemove();
-                            }}
-                            className="absolute -top-2 -right-2 bg-red-500 rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity z-20 shadow-lg"
-                        >
-                            <X size={12} className="text-white" />
-                        </button>
-                     )}
+
                 </div>
             )}
         </div>

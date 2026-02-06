@@ -1,20 +1,36 @@
-import { getAllEntities } from "@/lib/api";
-import { UnitArchive } from "@/components/archive/UnitArchive";
+import { Suspense } from 'react';
+import { fetchGameData } from '@/lib/api';
+import { DeckBuilderApp } from '@/components/deck-builder/DeckBuilderApp';
 
 export const metadata = {
-  title: "Spellcasters Chronicles Database",
-  description: "The definitive community hub for Spellcasters Chronicles. Search and filter the complete unit database including creatures, spells, buildings, and titans.",
+  title: 'The Forge - Deck Builder',
+  description: 'Build, optimize, and share your Spellcasters Chronicles decks. The ultimate tool for crafting the perfect strategy.',
+  openGraph: {
+    title: 'The Forge - Deck Builder',
+    description: 'Build, optimize, and share your Spellcasters Chronicles decks. The ultimate tool for crafting the perfect strategy.',
+    type: 'website',
+    // images: ['/og-forge.png'], // TODO: Add specific OG image
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'The Forge - Deck Builder',
+    description: 'Build, optimize, and share your Spellcasters Chronicles decks.',
+  }
 };
 
 export default async function Home() {
-  const units = await getAllEntities();
+  // We fetch ALL data to pass to the client for instant search & hydration
+  const data = await fetchGameData();
 
   return (
-    <div className="min-h-screen bg-surface-main text-foreground pt-28 p-4 md:p-8">
-      <div className="max-w-[1600px] mx-auto">
-        {/* The Archive UI */}
-        <UnitArchive initialUnits={units} />
-      </div>
+    <div className="fixed inset-0 top-16 bg-surface-main overflow-hidden z-40">
+        {/* TODO: Replace with proper Skeleton logic if desired, but Suspense needs to be high up */}
+        <Suspense fallback={<div className="flex h-full items-center justify-center text-brand-primary animate-pulse">Loading The Forge...</div>}>
+            <DeckBuilderApp 
+                units={data.units} 
+                spellcasters={data.heroes} 
+            />
+        </Suspense>
     </div>
   );
 }

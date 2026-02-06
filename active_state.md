@@ -10,8 +10,8 @@ The Roadmap is now more readable and detailed. Next up: implementing `@vercel/og
 
 ## Recent Accomplishments
 
-- [x] **Redesigned Roadmap**: Added 5 item types and compact layout with inline icons
 - [x] Implemented **Status Dashboard** at `/roadmap` with JSON-based roadmap management
+- [x] Added **Concept** item type to roadmap for massive requests (visual disclaimer + deprioritized sorting)
 - [x] Moved **Refined Validation Logic** to LIVE (requires Rank I/II Creature)
 - [x] Created flatter data structure for easy item movement between categories
 - [x] Integrated roadmap into navigation with visual consistency across the site
