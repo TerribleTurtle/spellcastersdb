@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Menu, X, Github, ExternalLink } from 'lucide-react';
 
 import { BetaBanner } from './BetaBanner';
+import { FeedbackButton } from '../common/FeedbackButton';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -103,6 +104,7 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <div className="-mr-2 flex items-center gap-2 md:hidden">
             <BetaBanner />
+            <FeedbackButton variant="icon" />
             <button
               onClick={toggleMenu}
               className="inline-flex items-center justify-center rounded-md p-2 text-slate-400 hover:bg-white/5 hover:text-brand-accent focus:outline-none"

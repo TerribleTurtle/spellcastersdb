@@ -70,6 +70,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { FeedbackButton } from "@/components/common/FeedbackButton";
+import Script from "next/script";
 
 
 export default function RootLayout({
@@ -88,6 +90,10 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <div className="hidden md:block">
+          <FeedbackButton variant="fab" />
+        </div>
+        <Script src="https://tally.so/widgets/embed.js" strategy="lazyOnload" />
         <Analytics />
         <SpeedInsights />
       </body>
