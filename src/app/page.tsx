@@ -19,7 +19,23 @@ export async function generateMetadata(
   
   if (typeof deckHash === 'string' && deckHash) {
     const decoded = decodeDeck(deckHash);
-    const deckName = decoded?.name || 'Custom Deck';
+    let deckName = decoded?.name;
+
+    // If no name in the hash, resolve it from the Spellcaster ID
+    if (!deckName && decoded?.spellcasterId) {
+       try {
+         const data = await fetchGameData();
+         const spellcaster = data.heroes.find(h => h.hero_id === decoded.spellcasterId);
+         if (spellcaster) {
+           deckName = `${spellcaster.name} Deck`;
+         }
+       } catch (e) {
+         console.error("Failed to fetch game data for metadata", e);
+       }
+    }
+    
+    // Fallback if still empty
+    if (!deckName) deckName = 'Custom Deck';
 
     return {
       title: `${deckName} - SpellcastersDB`,
