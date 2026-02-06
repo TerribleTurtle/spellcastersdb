@@ -56,7 +56,7 @@ export async function GET(request: NextRequest) {
             backgroundImage: `radial-gradient(circle at 50% 0%, #2e1065 0%, ${bgDark} 50%)`,
             color: 'white',
             fontFamily: '"Inter", sans-serif',
-            padding: '40px 60px',
+            padding: '30px 50px', // Reduced padding for more space
             position: 'relative',
             overflow: 'hidden',
           }}
@@ -66,11 +66,11 @@ export async function GET(request: NextRequest) {
             position: 'absolute',
             top: '-20%',
             left: '-20%',
-            width: '60%',
-            height: '60%',
-            background: '#0f172a', // Darker blob behind logo
-            filter: 'blur(100px)',
-            opacity: 0.8,
+            width: '70%',
+            height: '70%',
+            background: '#020617', // Even darker blob behind logo
+            filter: 'blur(80px)', // Less blur for stronger block
+            opacity: 0.9,
             zIndex: 0,
           }} />
           <div style={{
@@ -97,9 +97,9 @@ export async function GET(request: NextRequest) {
           }} />
 
             {/* Header */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginBottom: 20, width: '100%', zIndex: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', marginBottom: 10, width: '100%', zIndex: 10 }}>
                  {/* Logo Match: SPELLCASTERS(Gradient) DB(White) */}
-                <div style={{ display: 'flex', alignItems: 'center', fontSize: 28, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 12 }}>
+                <div style={{ display: 'flex', alignItems: 'center', fontSize: 24, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 4 }}>
                      <span style={{ 
                          backgroundImage: 'linear-gradient(to right, #a855f7, #ec4899)', 
                          backgroundClip: 'text', 
@@ -112,27 +112,28 @@ export async function GET(request: NextRequest) {
                 </div>
 
                 <div style={{ 
-                    fontSize: 72, 
+                    fontSize: 60, // Reduced from 72 to prevent wrapping
                     fontWeight: 900, 
-                    lineHeight: 1.05, 
+                    lineHeight: 1.1, 
                     textShadow: '0 4px 20px rgba(0,0,0,0.5)',
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
-                    maxWidth: '100%'
+                    maxWidth: '100%',
+                    paddingRight: 20
                 }}>
                     {deckName}
                 </div>
             </div>
 
             {/* Deck Content */}
-            <div style={{ display: 'flex', flexGrow: 1, alignItems: 'flex-end', justifyContent: 'center', gap: 20, width: '100%', paddingBottom: 20, zIndex: 10 }}>
+            <div style={{ display: 'flex', flexGrow: 1, alignItems: 'flex-end', justifyContent: 'center', gap: 20, width: '100%', paddingBottom: 10, zIndex: 10 }}>
                 
                 {/* Spellcaster (Hero) */}
                 {spellcaster && (
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 220, height: 350, position: 'relative', marginRight: 24 }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 220, height: 350, position: 'relative', marginRight: 24, flexShrink: 0 }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                             src={getCardImageUrl(spellcaster)} 
@@ -162,7 +163,7 @@ export async function GET(request: NextRequest) {
                             justifyContent: 'center',
                             padding: '0 8px'
                         }}>
-                             <span style={{ fontSize: 18, fontWeight: 700, color: 'white', textAlign: 'center', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: '100%' }}>
+                             <span style={{ fontSize: 18, fontWeight: 700, color: 'white', textAlign: 'center', width: '100%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                 {spellcaster.name}
                             </span>
                         </div>
@@ -184,7 +185,8 @@ export async function GET(request: NextRequest) {
                                 backgroundColor: 'rgba(255,255,255,0.02)',
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center'
+                                justifyContent: 'center',
+                                flexShrink: 0
                             }}>
                                 <div style={{ width: 12, height: 12, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.2)' }} />
                             </div>
@@ -204,7 +206,7 @@ export async function GET(request: NextRequest) {
                     } as Record<string, string>)[rankKey] || '#94a3b8';
 
                     return (
-                        <div key={i} style={{ display: 'flex', flexDirection: 'column', width: 170, height: 250, position: 'relative', borderRadius: 14, overflow: 'hidden', border: `2px solid ${rarityColor}80`, boxShadow: '0 6px 24px rgba(0,0,0,0.4)' }}>
+                        <div key={i} style={{ display: 'flex', flexDirection: 'column', width: 170, height: 250, position: 'relative', borderRadius: 14, overflow: 'hidden', border: `2px solid ${rarityColor}80`, boxShadow: '0 6px 24px rgba(0,0,0,0.4)', flexShrink: 0 }}>
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img 
                                 src={getCardImageUrl(unit)} 
@@ -229,7 +231,7 @@ export async function GET(request: NextRequest) {
                                 justifyContent: 'center',
                                 padding: '0 8px'
                             }}>
-                                <span style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0', textAlign: 'center', lineHeight: 1.1, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: '100%' }}>
+                                <span style={{ fontSize: 16, fontWeight: 700, color: '#e2e8f0', textAlign: 'center', width: '100%', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                                     {unit.name}
                                 </span>
                             </div>
