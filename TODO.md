@@ -74,3 +74,5 @@
 - [x] Implement "Drag to Remove" interaction for deck tray
 - [x] Enable click-to-inspect for units in the deck tray
 - [x] Fix double "TITAN" label in Deck Builder slot
+- [x] Stabilize Deck Tray layout: absolute position spellcaster passives to prevent slot shift
+- [x] Implement "Swap on Add": dragging a card already in the deck to another slot swaps it instead of clearing the old slot

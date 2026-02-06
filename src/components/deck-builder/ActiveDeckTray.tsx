@@ -51,12 +51,12 @@ export function ActiveDeckTray({ slots, spellcaster, onRemoveSlot, onRemoveSpell
         <div className="w-px h-24 bg-white/10 mx-2 self-center hidden md:block" />
 
         {/* Spellcaster Area - Slot + Passives (Desktop) */}
-        <div className="mx-2 flex items-center gap-3">
+        <div className="mx-2 relative flex items-center">
             <SpellcasterSlot spellcaster={spellcaster} onRemove={onRemoveSpellcaster} draggedItem={draggedItem} onSelect={onSelect} />
             
-            {/* Passives - Desktop Only */}
+            {/* Passives - Desktop Only - Absolute positioning to prevent layout shift */}
             {spellcaster && spellcaster.abilities.passive.length > 0 && (
-                <div className="hidden md:flex flex-col gap-1.5 max-w-[200px] lg:max-w-[280px]">
+                <div className="absolute left-full ml-4 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-1.5 w-[200px] lg:w-[240px]">
                     <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Passives</span>
                     <div className="flex flex-wrap gap-1">
                         {spellcaster.abilities.passive.map((passive, i) => (

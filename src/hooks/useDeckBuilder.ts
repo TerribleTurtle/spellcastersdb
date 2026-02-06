@@ -98,16 +98,18 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
       const newSlots = [...prev.slots] as typeof prev.slots;
 
       // Enforce Singleton: Max 1 copy per card
-      // If the unit exists in another slot, REMOVE it from there (Move behavior) instead of blocking
-      // This allows dragging from Browser -> New Slot to act as a "Move" if already in deck
+      // If the unit exists in another slot, SWAP it with the content of the new slot
+      // This allows [Slot 1: A, Slot 3: B] -> Drag A to Slot 3 -> [Slot 1: B, Slot 3: A]
       if (index < 4) {
           const existingIndex = prev.slots.findIndex((s, i) => 
                i < 4 && i !== index && s.unit?.entity_id === unit.entity_id
           );
           
           if (existingIndex !== -1) {
-               // Remove from old location
-               newSlots[existingIndex] = { ...newSlots[existingIndex], unit: null };
+               // The unit is already in the deck at existingIndex.
+               // We want to put whatever is currently in the TARGET slot (index) into the OLD slot (existingIndex).
+               // This preserves the unit that would otherwise be overwritten if it was a simple move.
+               newSlots[existingIndex] = { ...newSlots[existingIndex], unit: prev.slots[index].unit };
           }
       }
       
