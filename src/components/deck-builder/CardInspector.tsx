@@ -172,7 +172,7 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
                        </>
                   ) : (
                        <>
-                        <PlusCircle size={18} /> Add Titan to Slot 5
+                        <PlusCircle size={18} /> Select as Titan
                        </>
                   )}
                 </button>
