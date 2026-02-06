@@ -219,7 +219,7 @@ export async function GET(request: NextRequest) {
                         // Empty Slot
                         return (
                             <div key={i} style={{ 
-                                width: 170, 
+                                width: 150, 
                                 height: 250, 
                                 borderRadius: 14, 
                                 border: '2px dashed rgba(255,255,255,0.1)', 
@@ -248,7 +248,7 @@ export async function GET(request: NextRequest) {
                         <div key={i} style={{ 
                             display: 'flex', 
                             flexDirection: 'column',
-                            width: 170, 
+                            width: 150, 
                             height: 250, 
                             position: 'relative', 
                             borderRadius: 14, 
