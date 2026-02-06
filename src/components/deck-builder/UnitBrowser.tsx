@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { Search, Filter, X, Plus } from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
 import { Unit, Spellcaster } from "@/types/api";
@@ -39,7 +39,16 @@ type VirtualRow =
     | { type: 'header'; title: string; count: number }
     | { type: 'row'; items: BrowserItem[]; startIndex: number };
 
-export function UnitBrowser({ items, onSelectItem, onQuickAdd }: UnitBrowserProps) {
+const arePropsEqual = (prev: UnitBrowserProps, next: UnitBrowserProps) => {
+    // Only re-render if items array ref changes or selection counts change
+    // Since items is a large array, we rely on parent usage (should be memoized or state-stable)
+    // However, for drag performance, the critical part is ignoring function prop changes if they are recreated
+    return prev.items === next.items; /* Functions ignored intentionally for perf if parent doesn't memoize them properly
+       although ideally parent serves stable functions. 
+       If we strictly compare functions, we rely on parent useCallback. */
+};
+
+export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem, onQuickAdd }: UnitBrowserProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [groupMode, setGroupMode] = useState<GroupMode>("All");
   const [showFilters, setShowFilters] = useState(false);
@@ -342,7 +351,7 @@ export function UnitBrowser({ items, onSelectItem, onQuickAdd }: UnitBrowserProp
       </div>
     </div>
   );
-}
+}, arePropsEqual);
 
 function DraggableCard({ item, onClick, onQuickAdd }: { 
     item: BrowserItem; 

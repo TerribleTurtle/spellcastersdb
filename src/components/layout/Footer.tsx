@@ -2,7 +2,16 @@
 
 
 
+import { usePathname } from 'next/navigation';
+
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Hide footer on Deck Builder for full-screen experience
+  if (pathname?.startsWith('/deck-builder')) {
+    return null;
+  }
+
   return (
     <footer className="border-t border-white/10 bg-surface-main/50 py-12 backdrop-blur-sm">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

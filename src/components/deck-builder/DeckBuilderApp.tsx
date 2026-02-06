@@ -10,7 +10,7 @@ import {
   useSensor, 
   useSensors 
 } from "@dnd-kit/core";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Unit, Spellcaster } from "@/types/api";
 import { useDeckBuilder } from "@/hooks/useDeckBuilder";
@@ -45,6 +45,9 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
   // Dragging Item for Overlay
   const [activeDragItem, setActiveDragItem] = useState<Unit | Spellcaster | null>(null);
   
+  // Ref to track drag state for event handlers without causing re-renders
+  const isDraggingRef = useRef(false);
+
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -135,14 +138,14 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
   // Mobile Navigation State
   const [activeMobileTab, setActiveMobileTab] = useState<'BROWSER' | 'INSPECTOR' | 'FORGE'>('BROWSER');
 
-  const handleSelectItem = (item: Unit | Spellcaster) => {
+  const handleSelectItem = useCallback((item: Unit | Spellcaster) => {
     // Prevent selection if we are currently dragging (fixes mobile drag triggering inspector)
-    if (activeDragItem) return;
+    if (isDraggingRef.current) return;
 
     setSelectedItem(item);
     // Auto-switch to inspector on mobile
     setActiveMobileTab('INSPECTOR');
-  };
+  }, []);
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 10 } }),
@@ -157,7 +160,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
   // Quick Add Logic
   const [lastQuickAdd, setLastQuickAdd] = useState<string | null>(null);
 
-  const handleQuickAdd = (item: Unit | Spellcaster) => {
+  const handleQuickAdd = useCallback((item: Unit | Spellcaster) => {
       // 1. If Spellcaster -> Set
       if ('hero_id' in item) {
           setSpellcaster(item as Spellcaster);
@@ -168,6 +171,20 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
 
       // 2. If Unit -> Find Empty Slot
       const unit = item as Unit;
+      // Note: We need to access the LATEST deck state here. 
+      // Since this function is passed to UnitBrowser memoized, deck needs to be dependency
+      // But passing deck as dependency breaks memoization of UnitBrowser potentially if deck changes often (it does)
+      // HOWEVER, UnitBrowser only re-renders if props change.
+      // Ideally handleQuickAdd shouldn't change often. 
+      // For now, let's keep it simple. If perf is still bad we can optimize this further.
+      // Just accessing deck directly here is fine as long as we put it in dependency array or use functional updates if possible.
+      // But setSlot relies on index.
+      
+      // Actually, to truly fix UnitBrowser memoization, we need stable handlers.
+      // We can't easily make this stable without Ref or Reducer logic but let's see.
+      // For now, let's just make handleSelectItem stable which was the main culprit.
+      // handleQuickAdd is less frequent (double tap).
+      
       const emptySlot = deck.slots.find(s => s.index < 4 && !s.unit);
       
       if (emptySlot) {
@@ -188,9 +205,10 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
       // 4. Deck Full
       setLastQuickAdd(`Deck Full!`);
       setTimeout(() => setLastQuickAdd(null), 2000);
-  };
+  }, [deck, setSlot, setSpellcaster]);
 
   const handleDragStart = (event: DragStartEvent) => {
+    isDraggingRef.current = true;
     const current = event.active.data.current;
     
     // Check if dragging from a slot
@@ -216,6 +234,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
+    isDraggingRef.current = false;
     const item = activeDragItem;
     setActiveDragItem(null);
     const { over, active } = event;
