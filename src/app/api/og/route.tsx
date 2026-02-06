@@ -220,7 +220,7 @@ export async function GET(request: NextRequest) {
                         return (
                             <div key={i} style={{ 
                                 width: 150, 
-                                height: 250, 
+                                height: 220, 
                                 borderRadius: 14, 
                                 border: '2px dashed rgba(255,255,255,0.1)', 
                                 backgroundColor: 'rgba(255,255,255,0.02)',
@@ -245,54 +245,52 @@ export async function GET(request: NextRequest) {
                     } as Record<string, string>)[rankKey] || '#94a3b8';
 
                     return (
-                        <div key={i} style={{ 
-                            display: 'flex', 
-                            flexDirection: 'column',
-                            width: 150, 
-                            height: 250, 
-                            position: 'relative', 
-                            borderRadius: 14, 
-                            overflow: 'hidden', 
-                            border: `2px solid ${rarityColor}80`, 
-                            boxShadow: '0 6px 24px rgba(0,0,0,0.4)', 
-                            flexShrink: 0 
-                        }}>
-                            {/* Full Card Image (No Zoom) */}
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img 
-                                src={getCardImageUrl(unit)} 
-                                alt={unit.name}
-                                style={{ 
-                                    width: '100%', 
-                                    height: '100%', 
-                                    objectFit: 'cover',
-                                }} 
-                            />
+                        <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 150 }}>
+                            <div style={{ 
+                                display: 'flex', 
+                                flexDirection: 'column',
+                                width: '100%', 
+                                height: 220, 
+                                position: 'relative', 
+                                borderRadius: 14, 
+                                overflow: 'hidden', 
+                                border: `2px solid ${rarityColor}80`, 
+                                boxShadow: '0 6px 24px rgba(0,0,0,0.4)', 
+                                flexShrink: 0 
+                            }}>
+                                {/* Full Card Image (No Zoom) */}
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img 
+                                    src={getCardImageUrl(unit)} 
+                                    alt={unit.name}
+                                    style={{ 
+                                        width: '100%', 
+                                        height: '100%', 
+                                        objectFit: 'cover',
+                                    }} 
+                                />
+                            </div>
                             
-                            {/* Floating Name Shadow/Gradient at bottom */}
+                            {/* Name Below Card */}
                             <div style={{
-                                position: 'absolute',
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                height: 60,
-                                background: 'linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent)',
+                                marginTop: 12,
                                 display: 'flex',
-                                alignItems: 'flex-end',
+                                alignItems: 'center',
                                 justifyContent: 'center',
-                                paddingBottom: 8,
-                                paddingLeft: 4,
-                                paddingRight: 4
+                                width: '100%',
                             }}>
                                 <span style={{ 
-                                    fontSize: 20, 
+                                    fontSize: 18, 
                                     fontWeight: 700, 
-                                    color: 'white', 
+                                    color: '#e2e8f0', // slate-200
                                     textAlign: 'center',
-                                    whiteSpace: 'nowrap', 
+                                    lineHeight: 1.2,
+                                    textShadow: '0px 2px 4px rgba(0,0,0,0.5)',
+                                    display: '-webkit-box',
+                                    WebkitLineClamp: 2,
+                                    WebkitBoxOrient: 'vertical',
                                     overflow: 'hidden', 
                                     textOverflow: 'ellipsis',
-                                    textShadow: '0px 2px 4px black, 2px 2px 0px black'
                                 }}>
                                     {unit.name}
                                 </span>
