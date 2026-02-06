@@ -47,6 +47,7 @@
 ## Maintenance & UX Refinement
 
 - [x] Implement persistent dismissal for Beta Banner (localStorage)
+- [x] Fix navbar overlap issue when Beta Banner is dismissed (moved spacing to body)
 - [x] Change Beta Banner to relative positioning (scrolls with page)
 - [x] Fix oversized Spellcaster image in Deck Builder controls
 - [x] Refine Deck Builder Card Inspector UI (Padding + Close button)
@@ -66,3 +67,5 @@
 - [x] Document Rank I/II Creature requirement in guide and design docs (not just any unit)
 - [x] Enhance validation logic documentation with comprehensive rule comments and clearer error messages
 - [x] Redesign roadmap page: add 5 item types (bug/feature/enhancement/ux/data), compact layout with inline icons
+- [x] Improve roadmap density: flatten type subsections into unified grid, tighten card spacing
+- [x] Add explicit type labels to roadmap cards (e.g., "Bug", "Feature") for better accessibility

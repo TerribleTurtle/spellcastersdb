@@ -27,7 +27,7 @@ export function BetaBanner() {
   if (!isHydrated || !isVisible) return null;
 
   return (
-    <div className="relative w-full z-40 bg-linear-to-r from-yellow-900/90 to-orange-900/90 backdrop-blur-sm border-b border-yellow-500/30 mt-16">
+    <div className="relative w-full z-40 bg-linear-to-r from-yellow-900/90 to-orange-900/90 backdrop-blur-sm border-b border-yellow-500/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 flex-1">
