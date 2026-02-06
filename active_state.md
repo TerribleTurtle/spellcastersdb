@@ -9,6 +9,7 @@
 - [x] Updated **Magic Schools**: Aligned Types, API Zod Schema, and UI Filter constants to the new 8-school set.
 - [x] Implemented **Quick Add** (Mobile '+' button, Desktop Double-Click)
 - [x] Fixed **Mobile Drag & Drop**: resolved scroll interference and "Jump to Top Left" glitch
+- [x] Fixed **Desktop Unit Collection**: resolved auto-scroll to bottom on drag start
 - [x] Fixed **Mobile Scrolling**: Removed `touch-none` to allow scrolling; drag now relies on long-press (250ms)
 - [x] Improved **Mobile UX**: Disabled auto-opening of Inspector when dragging cards
 - [x] Refactored **Navbar** with Primary/Secondary tiers and centered desktop layout

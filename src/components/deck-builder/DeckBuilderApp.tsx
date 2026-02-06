@@ -10,7 +10,7 @@ import {
   useSensor, 
   useSensors 
 } from "@dnd-kit/core";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Unit, Spellcaster } from "@/types/api";
 import { useDeckBuilder } from "@/hooks/useDeckBuilder";
@@ -340,10 +340,10 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
   };
 
   // Merge Data for Browser
-  const browserItems = [
+  const browserItems = useMemo(() => [
       ...spellcasters.map(h => ({ ...h, category: 'Spellcaster' as const })), // Add mock category for filter
       ...units
-  ];
+  ], [spellcasters, units]);
 
   return (
     <DndContext 
