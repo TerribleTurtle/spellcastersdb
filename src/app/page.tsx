@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { fetchGameData } from '@/lib/api';
+import { decodeDeck } from '@/lib/encoding';
 import { DeckBuilderApp } from '@/components/deck-builder/DeckBuilderApp';
 
 import { Metadata } from 'next';
@@ -17,19 +18,22 @@ export async function generateMetadata(
   const deckHash = resolvedParams?.d;
   
   if (typeof deckHash === 'string' && deckHash) {
+    const decoded = decodeDeck(deckHash);
+    const deckName = decoded?.name || 'Custom Deck';
+
     return {
-      title: 'Custom Deck Build - The Forge',
-      description: 'Check out this custom deck build for Spellcasters Chronicles. Create, optimize, and share your own loadouts.',
+      title: `${deckName} - SpellcastersDB`,
+      description: `Check out this ${deckName} build for Spellcasters Chronicles. View unit composition, stats, and strategy on SpellcastersDB.`,
       openGraph: {
-        title: 'Custom Deck Build - The Forge',
-        description: 'Check out this custom deck build for Spellcasters Chronicles.',
+        title: `${deckName} - SpellcastersDB`,
+        description: `Check out this ${deckName} build for Spellcasters Chronicles.`,
         type: 'website',
         images: [`/api/og?d=${deckHash}`],
       },
       twitter: {
         card: 'summary_large_image',
-        title: 'Custom Deck Build - The Forge',
-        description: 'Check out this custom deck build for Spellcasters Chronicles.',
+        title: `${deckName} - SpellcastersDB`,
+        description: `Check out this ${deckName} build for Spellcasters Chronicles.`,
         images: [`/api/og?d=${deckHash}`],
       }
     };

@@ -21,3 +21,4 @@
 - Updated `src/app/page.tsx` metadata: "Deck Builder, Card Builds & Loadouts".
 - Updated `src/app/database/page.tsx` metadata: "Card Database & Builds", description mentions "unit", "deck", "loadout".
 - [x] Implemented **Saved Deck Enhancements**: Added Unit Previews, Quick Actions (Duplicate/Copy Link), and Smart Import Logic (Save & Load conflict resolution).
+- [x] Implemented **Vercel OG (Open Graph)**: Dynamic images for shared decks (`/api/og`) displaying deck name, commander, and units.
