@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { Menu, X, Github, ExternalLink } from 'lucide-react';
+import { Menu, X, Github, ExternalLink, Coffee } from 'lucide-react';
 
 import { BetaBanner } from './BetaBanner';
 import { FeedbackButton } from '../common/FeedbackButton';
@@ -31,6 +31,7 @@ export default function Navbar() {
   const allLinks = [...primaryLinks, ...secondaryLinks];
 
   const externalLinks = [
+    { name: 'Support', href: 'https://ko-fi.com/terribleturtles', icon: Coffee },
     { name: 'Contribute', href: 'https://github.com/TerribleTurtle/spellcasters-community-api', icon: Github },
   ];
 

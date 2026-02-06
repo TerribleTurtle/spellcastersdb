@@ -42,7 +42,7 @@ export default function Footer() {
               </a>
             </div>
             <div className="text-xs text-slate-600">
-              Built by <span className="font-medium text-slate-400">TerribleTurtles</span>
+              Built by <a href="https://ko-fi.com/terribleturtles" target="_blank" rel="noopener noreferrer" className="font-medium text-slate-400 hover:text-brand-accent transition-colors">TerribleTurtles</a>
             </div>
           </div>
           
