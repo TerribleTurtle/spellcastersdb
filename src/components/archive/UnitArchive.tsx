@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UnifiedEntity } from "@/types/api"; // Assuming we use Unit type
 import { UnitCard } from "./UnitCard";
 import { FilterSidebar } from "./FilterSidebar";
@@ -33,12 +33,17 @@ export function UnitArchive(props: UnitArchiveProps) {
   
   // Initialize view mode based on screen size (mobile = list, desktop = grid)
   // Using lazy initialization to avoid setState in useEffect
-  const [viewMode, setViewMode] = useState<"grid" | "list">(() => {
-    if (typeof window !== "undefined") {
-      return window.innerWidth < 768 ? "list" : "grid";
+  // Initialize view mode strictly to "grid" for SSR/Hydration match
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  
+  // Adjust to list view on mount if mobile
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setViewMode("list");
     }
-    return "grid"; // SSR fallback
-  });
+  }, []);
+
   const [activeFilters, setActiveFilters] = useState<{
     schools: string[];
     ranks: string[];
@@ -50,6 +55,20 @@ export function UnitArchive(props: UnitArchiveProps) {
     categories: props.defaultFilters?.categories || [],
     classes: props.defaultFilters?.classes || [],
   });
+  
+  // NOTE: Importing useEffect at the top of the file since it wasn't there
+  // Actually line 3 imports useState from "react", need to check if useEffect is imported.
+  // Viewing the file content in Step 154: 'import { useState } from "react";' on line 3.
+  // So I need to add useEffect to imports in a separate replace call or include it here if possible. 
+  // I will make a separate replace call for the import to be safe.
+
+  // ... (rest of the file until buttons) ...
+  
+  // Since replace_file_content for a large block is brittle, I'll do this in smaller chunks.
+  // Chunk 1: State initialization
+  // Chunk 2: Import update
+  // Chunk 3: Button ARIA labels
+
 
   // Filter Logic
   const toggleFilter = (type: "schools" | "ranks" | "categories" | "classes", value: string) => {
@@ -98,6 +117,7 @@ export function UnitArchive(props: UnitArchiveProps) {
                  viewMode === "grid" ? "bg-white/10 text-white shadow-sm" : "text-gray-500 hover:text-gray-300"
                )}
                title="Grid View"
+               aria-label="Switch to Grid View"
              >
                 <LayoutGrid size={16} />
              </button>
@@ -108,6 +128,7 @@ export function UnitArchive(props: UnitArchiveProps) {
                  viewMode === "list" ? "bg-white/10 text-white shadow-sm" : "text-gray-500 hover:text-gray-300"
                )}
                title="List View"
+               aria-label="Switch to List View"
              >
                 <List size={16} />
              </button>

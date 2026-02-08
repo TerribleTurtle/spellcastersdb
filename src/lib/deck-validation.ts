@@ -3,7 +3,6 @@
  * @description CRITICAL CORE COMPONENT. Contains the immutable rules for deck construction (4 units, 1 Titan, etc.).
  * DO NOT DELETE OR MODIFY WITHOUT VERIFICATION.
  */
-import { UnifiedEntity } from "@/types/api";
 import { Deck, DeckStats } from "@/types/deck";
 
 export interface ValidationResult {
