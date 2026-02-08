@@ -836,23 +836,25 @@ function DeckRow({ deck, isActive, isTeamMode, onLoad, onDelete, onDuplicate }: 
                     </div>
 
                     {/* Units Preview (Small) */}
-                    {!isTeamMode && (
-                        <div className="flex items-center -space-x-1 hover:space-x-0 transition-all overflow-hidden">
-                            {deck.slots.slice(0, 4).map((s, i) => (
-                                <div key={i} className="w-6 h-6 rounded-full bg-black/50 border border-white/10 overflow-hidden shrink-0 relative z-0 hover:z-10 transition-all">
-                                   {s.unit &&  (
-                                       <GameImage src={getCardImageUrl(s.unit)} alt="" fill className="object-cover opacity-80" />
-                                   )}
-                                </div>
-                            ))}
-                            {/* Titan */}
-                            <div className="w-6 h-6 rounded-full bg-brand-accent/10 border border-brand-accent/30 overflow-hidden shrink-0 relative z-0 hover:z-10 ml-1">
-                                {deck.slots[4].unit && (
-                                    <GameImage src={getCardImageUrl(deck.slots[4].unit)} alt="" fill className="object-cover opacity-80" />
+                    {/* Units Preview (Small) */}
+                    <div className={cn(
+                        "flex items-center -space-x-1 hover:space-x-0 transition-all overflow-hidden",
+                        isTeamMode && "hidden md:flex" // Hide on very small screens if needed, but for now just flex
+                    )}>
+                        {deck.slots.slice(0, 4).map((s, i) => (
+                            <div key={i} className="w-6 h-6 rounded-full bg-black/50 border border-white/10 overflow-hidden shrink-0 relative z-0 hover:z-10 transition-all">
+                                {s.unit &&  (
+                                    <GameImage src={getCardImageUrl(s.unit)} alt="" fill className="object-cover opacity-80" />
                                 )}
                             </div>
+                        ))}
+                        {/* Titan */}
+                        <div className="w-6 h-6 rounded-full bg-brand-accent/10 border border-brand-accent/30 overflow-hidden shrink-0 relative z-0 hover:z-10 ml-1">
+                            {deck.slots[4].unit && (
+                                <GameImage src={getCardImageUrl(deck.slots[4].unit)} alt="" fill className="object-cover opacity-80" />
+                            )}
                         </div>
-                    )}
+                    </div>
 
                     <div className="grow" />
 

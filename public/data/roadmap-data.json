@@ -56,7 +56,7 @@
       "id": "data-cleanup",
       "title": "Data Cleanup",
       "description": "Remove unnecessary stats from Spells (Health), Pop Count, and Average Speed from metrics",
-      "category": "in-progress",
+      "category": "live",
       "type": "data"
     },
     {
@@ -84,9 +84,9 @@
     {
       "id": "team-builder",
       "title": "Team Builder Mode",
-      "description": "Build and manage up to 9 different deck builds",
-      "category": "community-requests",
-      "type": "concept"
+      "description": "Build and manage up to 3 different deck builds",
+      "category": "live",
+      "type": "feature"
     },
     {
       "id": "build-name",
@@ -127,6 +127,20 @@
       "id": "url-sharing",
       "title": "URL Deck Sharing",
       "description": "Share decks via compressed URLs",
+      "category": "live",
+      "type": "feature"
+    },
+    {
+      "id": "simultaneous-deck-building",
+      "title": "Improve Team Mode UI",
+      "description": "Simultaneous deck building interface for easier team management",
+      "category": "community-requests",
+      "type": "ux"
+    },
+    {
+      "id": "save-management",
+      "title": "Full Deck and Team Save Management",
+      "description": "Comprehensive save system for both individual decks and full teams",
       "category": "live",
       "type": "feature"
     }
