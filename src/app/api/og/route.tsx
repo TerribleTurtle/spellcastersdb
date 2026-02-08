@@ -314,7 +314,7 @@ export async function GET(request: NextRequest) {
                             paddingRight: 6
                         }}>
                              <span style={{ 
-                                 fontSize: 32, 
+                                 fontSize: 36, 
                                  fontWeight: 700, 
                                  color: 'white', 
                                  textAlign: 'center',
@@ -404,12 +404,12 @@ export async function GET(request: NextRequest) {
                                 width: '100%',
                             }}>
                                 <span style={{ 
-                                    fontSize: 24, 
+                                    fontSize: 28, 
                                     fontWeight: 700, 
-                                    color: '#e2e8f0', // slate-200
+                                    color: 'white', // Pure white for max contrast
                                     textAlign: 'center',
-                                    lineHeight: 1.2,
-                                    textShadow: '0px 3px 6px rgba(0,0,0,0.5)',
+                                    lineHeight: 1.1,
+                                    textShadow: '0px 2px 4px rgba(0,0,0,0.9)', // Darker, tighter shadow
                                     display: '-webkit-box',
                                     WebkitLineClamp: 2,
                                     WebkitBoxOrient: 'vertical',
