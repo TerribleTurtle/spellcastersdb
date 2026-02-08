@@ -1,0 +1,21 @@
+Loading data from: C:\Projects\spellcasters-community-api\api\v1\all_data.json
+Loading data from: C:\Projects\spellcasters-community-api\api\v1\all_data.json
+Debug: rawData keys: build_info, spellcasters, consumables, upgrades, units, spells, titans, game_info
+Loading data from: C:\Projects\spellcasters-community-api\api\v1\all_data.json
+✅ Loaded and validated local data successfully.
+Debug: rawData keys: build_info, spellcasters, consumables, upgrades, units, spells, titans, game_info
+Loading data from: C:\Projects\spellcasters-community-api\api\v1\all_data.json
+✅ Loaded and validated local data successfully.
+Debug: rawData keys: build_info, spellcasters, consumables, upgrades, units, spells, titans, game_info
+✅ Loaded and validated local data successfully.
+Debug: rawData keys: build_info, spellcasters, consumables, upgrades, units, spells, titans, game_info
+✅ Loaded and validated local data successfully.
+Loading data from: C:\Projects\spellcasters-community-api\api\v1\all_data.json
+Debug: rawData keys: build_info, spellcasters, consumables, upgrades, units, spells, titans, game_info
+✅ Loaded and validated local data successfully.
+Loading data from: C:\Projects\spellcasters-community-api\api\v1\all_data.json
+Debug: rawData keys: build_info, spellcasters, consumables, upgrades, units, spells, titans, game_info
+✅ Loaded and validated local data successfully.
+Loading data from: C:\Projects\spellcasters-community-api\api\v1\all_data.json
+Debug: rawData keys: build_info, spellcasters, consumables, upgrades, units, spells, titans, game_info
+✅ Loaded and validated local data successfully.

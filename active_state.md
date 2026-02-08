@@ -11,4 +11,7 @@ The changes have been pushed to the remote repository.
 
 - [x] Fix Turbopack Edge Runtime error (fs/promises).
 - [x] Push changes to remote.
-- [x] Fix OG image loading (force remote png assets).
+- [x] Fix Turbopack Edge Runtime error (fs/promises).
+- [x] Push changes to remote.
+- [x] Fix OG image loading (migrated to `next/og`, tuned for sharpness vs timeout).
+- [x] Rename deck slots from 'Unit' to 'Incant.' in UI.

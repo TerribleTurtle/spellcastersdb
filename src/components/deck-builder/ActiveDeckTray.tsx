@@ -171,8 +171,8 @@ function Slot({ slot, draggedItem, allSlots, onSelect }: {
                     <div className="mb-2 flex justify-center">
                         {isTitanSlot ? <Shield size={24} /> : <div className="w-6 h-6 rounded-full border border-current" />}
                     </div>
-                    <span className="text-xs font-bold uppercase tracking-widest">
-                        {isTitanSlot ? "Titan" : `Unit ${slot.index + 1}`}
+                    <span className="text-[9px] md:text-xs font-bold uppercase tracking-wide md:tracking-widest">
+                        {isTitanSlot ? "Titan" : `Incant. ${slot.index + 1}`}
                     </span>
                 </div>
             )}

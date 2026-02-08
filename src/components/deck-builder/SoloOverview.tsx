@@ -127,7 +127,7 @@ export function SoloOverview({
                     {/* Units */}
                     <div className="flex items-center gap-2 md:gap-4">
                          {deck.slots.slice(0, 4).map(s => (
-                            <VisualSlot key={s.index} item={s.unit} type="unit" isEmpty={!s.unit} label={`Unit ${s.index + 1}`} />
+                            <VisualSlot key={s.index} item={s.unit} type="unit" isEmpty={!s.unit} label={`Incant. ${s.index + 1}`} />
                         ))}
                     </div>
 
