@@ -201,93 +201,64 @@ export async function GET(request: NextRequest) {
             display: 'flex',
             flexDirection: 'column',
             backgroundColor: bgDark,
-            backgroundImage: `radial-gradient(circle at 50% 0%, #2e1065 0%, ${bgDark} 50%)`,
+            backgroundImage: `radial-gradient(circle at 10% 10%, #2e1065 0%, ${bgDark} 80%)`,
             color: 'white',
             fontFamily: fontData ? '"Oswald"' : 'sans-serif',
-            padding: '40px 66px',
+            padding: '50px 80px', // More padding for "clean" look
             position: 'relative',
             overflow: 'hidden',
           }}
         >
-          {/* Background Elements - Simple Gradients */}
-          <div style={{
-            position: 'absolute',
-            top: '-10%',
-            left: '20%',
-            width: '40%',
-            height: '40%',
-            background: primary,
-            opacity: 0.1,
-            borderRadius: '50%',
-            zIndex: 0,
-          }} />
-           <div style={{
-            position: 'absolute',
-            bottom: '-10%',
-            right: '-10%',
-            width: '40%',
-            height: '40%',
-            background: accent,
-            opacity: 0.1,
-            borderRadius: '50%',
-             zIndex: 0,
-          }} />
+          {/* Background Elements - Subtle and Clean */}
+          <div style={{ position: 'absolute', top: '-20%', right: '-10%', width: '60%', height: '60%', background: primary, opacity: 0.07, borderRadius: '50%', filter: 'blur(80px)', zIndex: 0 }} />
+          <div style={{ position: 'absolute', bottom: '-20%', left: '-10%', width: '60%', height: '60%', background: accent, opacity: 0.05, borderRadius: '50%', filter: 'blur(80px)', zIndex: 0 }} />
 
             {/* Content Wrapper */}
-            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 40, alignItems: 'center', justifyContent: 'center', zIndex: 10, height: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', zIndex: 10 }}>
             
                 {/* Header */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
-                     {/* Logo */}
-                    <div style={{ display: 'flex', alignItems: 'center', fontSize: 32, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 6 }}>
-                         <span style={{ 
-                             backgroundImage: 'linear-gradient(to right, #a855f7, #ec4899)', 
-                             backgroundClip: 'text', 
-                             color: 'transparent',
-                             marginRight: 0 
-                         }}>
-                             SPELLCASTERS
-                         </span>
-                         <span style={{ color: 'white' }}>DB</span>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginBottom: 40, borderBottom: '2px solid rgba(255,255,255,0.1)', paddingBottom: 20 }}>
+                     
+                     <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        {/* Title */}
+                        <div style={{ 
+                            fontSize: 72, 
+                            fontWeight: 700, 
+                            color: 'white',
+                            lineHeight: 1,
+                            letterSpacing: '-0.02em',
+                        }}>
+                            {deckName}
+                        </div>
+                        {/* Subtitle / Label */}
+                        <div style={{ display: 'flex', alignItems: 'center', fontSize: 24, fontWeight: 400, color: '#94a3b8', marginTop: 8, letterSpacing: '0.05em' }}>
+                             <span style={{ color: primary, fontWeight: 700, marginRight: 8 }}>SPELLCASTERS</span>DB
+                        </div>
                     </div>
-    
-                    {/* Deck Name */}
-                    <div style={{ 
-                        fontSize: 106, // 1.33x Large
-                        fontWeight: 900, 
-                        lineHeight: 1, 
-                        color: 'white',
-                        textShadow: '0px 3px 14px rgba(0,0,0,0.8), 3px 3px 0px #000', 
-                        display: '-webkit-box',
-                        WebkitLineClamp: 1, 
-                        WebkitBoxOrient: 'vertical',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        maxWidth: '100%',
-                    }}>
-                        {deckName}
+
+                    {/* Faction/Data on Right (Optional visual balance) */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                         {/* Could put mana curve or something here later. For now, just clean space. */}
                     </div>
                 </div>
 
-                {/* Deck Content */}
-                <div style={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start', gap: 20, width: '100%' }}>
+                {/* Main Content Area: Hero + Units */}
+                <div style={{ display: 'flex', flex: 1, alignItems: 'center', width: '100%', gap: 40 }}>
                 
-                {/* Spellcaster (Hero) */}
+                {/* HERO CARD (Left) */}
                 {spellcaster && (
                     <div style={{ 
                         display: 'flex', 
-                        flexDirection: 'column', 
-                        alignItems: 'center',
-                        width: 294, 
-                        height: 466, 
+                        width: 320, 
+                        height: 480, 
                         position: 'relative', 
-                        marginRight: 32, 
-                        flexShrink: 0,
-                        borderRadius: 22, 
-                        border: `6px solid ${primary}`, 
-                        boxShadow: `0 0 66px ${primary}60`,
-                        overflow: 'hidden'
+                        borderRadius: 24, 
+                        border: `4px solid ${primary}`, 
+                        boxShadow: `0 20px 50px -10px ${primary}40`, // Soft glow
+                        overflow: 'hidden',
+                        backgroundColor: '#1e293b',
                     }}>
+                        {/* Image */}
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                             src={getImageSrc(spellcaster)} 
@@ -298,91 +269,84 @@ export async function GET(request: NextRequest) {
                                 objectFit: 'cover', 
                             }} 
                         />
-                         {/* Name Bar */}
+                         {/* Name Overlay (Gradient) */}
                          <div style={{
                             position: 'absolute',
-                            bottom: 0,
-                            left: 0,
-                            right: 0,
-                            height: 80,
-                            background: 'linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent)',
+                            bottom: 0, 
+                            left: 0, 
+                            width: '100%',
+                            height: 140,
+                            background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 60%, transparent 100%)',
                             display: 'flex',
-                            alignItems: 'flex-end',
-                            justifyContent: 'center',
-                            paddingBottom: 14,
-                            paddingLeft: 6,
-                            paddingRight: 6
+                            flexDirection: 'column',
+                            justifyContent: 'flex-end',
+                            padding: '0 20px 20px 20px',
                         }}>
                              <span style={{ 
-                                 fontSize: 36, 
+                                 fontSize: 40,
                                  fontWeight: 700, 
                                  color: 'white', 
-                                 textAlign: 'center',
-                                 whiteSpace: 'nowrap', 
-                                 overflow: 'hidden', 
-                                 textOverflow: 'ellipsis',
-                                 textShadow: '0px 3px 6px black, 3px 3px 0px black'
+                                 textShadow: '0 2px 10px rgba(0,0,0,0.5)',
                             }}>
                                 {spellcaster.name}
                             </span>
+                             <span style={{ fontSize: 20, color: primary, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.1em' }}>SPELLCASTER</span>
                         </div>
                     </div>
                 )}
 
-                {/* Units Grid */}
-                {[...Array(5)].map((_, i) => {
-                    const unit = units[i];
-                    if (!unit) {
+                {/* UNITS GRID (Right) */}
+                <div style={{ display: 'flex', flex: 1, height: '100%', alignItems: 'center', justifyContent: 'space-between' }}>
+                    
+                    {[...Array(5)].map((_, i) => {
+                        const unit = units[i];
+                        
                         // Empty Slot
+                        if (!unit) {
+                            return (
+                                <div key={i} style={{ 
+                                    width: 200, 
+                                    height: 300, 
+                                    borderRadius: 16, 
+                                    border: '2px dashed rgba(255,255,255,0.1)', 
+                                    backgroundColor: 'rgba(255,255,255,0.02)',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                }}>
+                                    <div style={{ width: 12, height: 12, borderRadius: '50%', background: 'rgba(255,255,255,0.1)' }} />
+                                </div>
+                            );
+                        }
+
+                        const isTitan = unit.category === 'Titan';
+                        const isSpell = unit.category === 'Spell';
+                        
+                        let rankKey = 'I';
+                        if (isTitan) rankKey = 'Titan';
+                        else if (isSpell) rankKey = 'Spell';
+                        else if ('rank' in unit && unit.rank) rankKey = unit.rank;
+
+                        const rarityColor = ({
+                            'Titan': accent,
+                            'Spell': '#f472b6',
+                            'I': '#94a3b8',
+                            'II': '#60a5fa',
+                            'III': primary,
+                            'IV': '#facc15'
+                        } as Record<string, string>)[rankKey] || '#94a3b8';
+
                         return (
                             <div key={i} style={{ 
-                                width: 200, 
-                                height: 294, 
-                                borderRadius: 19, 
-                                border: '3px dashed rgba(255,255,255,0.1)', 
-                                backgroundColor: 'rgba(255,255,255,0.02)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexShrink: 0
-                            }}>
-                                <div style={{ width: 16, height: 16, borderRadius: '50%', border: '3px solid rgba(255,255,255,0.2)' }} />
-                            </div>
-                        );
-                    }
-
-                    const isTitan = unit.category === 'Titan';
-                    const isSpell = unit.category === 'Spell';
-                    
-                    let rankKey = 'I';
-                    if (isTitan) rankKey = 'Titan';
-                    else if (isSpell) rankKey = 'Spell';
-                    else if ('rank' in unit && unit.rank) rankKey = unit.rank;
-
-                    const rarityColor = ({
-                        'Titan': accent,
-                        'Spell': '#f472b6',
-                        'I': '#94a3b8',
-                        'II': '#60a5fa',
-                        'III': primary,
-                        'IV': '#facc15'
-                    } as Record<string, string>)[rankKey] || '#94a3b8';
-
-                    return (
-                        <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 200 }}>
-                            <div style={{ 
                                 display: 'flex', 
-                                flexDirection: 'column',
-                                width: '100%', 
-                                height: 294, 
+                                width: 200, 
+                                height: 300, 
                                 position: 'relative', 
-                                borderRadius: 19, 
+                                borderRadius: 16, 
                                 overflow: 'hidden', 
-                                border: `3px solid ${rarityColor}80`, 
-                                boxShadow: '0 8px 32px rgba(0,0,0,0.4)', 
-                                flexShrink: 0 
+                                border: `2px solid ${rarityColor}`, 
+                                backgroundColor: '#1e293b',
+                                boxShadow: '0 10px 30px -5px rgba(0,0,0,0.5)', 
                             }}>
-                                {/* Full Card Image (No Zoom) */}
+                                {/* Card Image */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
                                     src={getImageSrc(unit)} 
@@ -393,42 +357,56 @@ export async function GET(request: NextRequest) {
                                         objectFit: 'cover',
                                     }} 
                                 />
-                            </div>
-                            
-                            {/* Name Below Card */}
-                            <div style={{
-                                marginTop: 16,
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '100%',
-                            }}>
-                                <span style={{ 
-                                    fontSize: 28, 
-                                    fontWeight: 700, 
-                                    color: 'white', // Pure white for max contrast
-                                    textAlign: 'center',
-                                    lineHeight: 1.1,
-                                    textShadow: '0px 2px 4px rgba(0,0,0,0.9)', // Darker, tighter shadow
-                                    display: '-webkit-box',
-                                    WebkitLineClamp: 2,
-                                    WebkitBoxOrient: 'vertical',
-                                    overflow: 'hidden', 
-                                    textOverflow: 'ellipsis',
+                                
+                                {/* Rank/Type Badge (Top Right) */}
+                                <div style={{
+                                    position: 'absolute',
+                                    top: 10,
+                                    right: 10,
+                                    backgroundColor: rarityColor,
+                                    color: '#0f172a',
+                                    fontSize: 16,
+                                    fontWeight: 800,
+                                    padding: '4px 10px',
+                                    borderRadius: 8,
+                                    boxShadow: '0 2px 4px rgba(0,0,0,0.3)'
                                 }}>
-                                    {unit.name}
-                                </span>
+                                    {rankKey === 'Spell' ? 'SPL' : rankKey === 'Titan' ? 'TTN' : rankKey}
+                                </div>
+
+                                {/* Name Overlay (Bottom) */}
+                                <div style={{
+                                    position: 'absolute',
+                                    bottom: 0,
+                                    left: 0,
+                                    width: '100%',
+                                    height: 100, // Gradient height
+                                    background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 70%, transparent 100%)',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    justifyContent: 'flex-end',
+                                    padding: '0 12px 16px 12px',
+                                }}>
+                                    <span style={{ 
+                                        fontSize: 24, 
+                                        fontWeight: 700, 
+                                        color: 'white',
+                                        lineHeight: 1.1,
+                                        textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                                    }}>
+                                        {unit.name}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    );
-                })}
+                        );
+                    })}
+                </div>
             </div>
-            
             </div>
         </div>
       ),
       {
-        width: 1600, // 1.33x Resolution
+        width: 1600,
         height: 840,
         headers,
         fonts: fontData ? [
