@@ -209,9 +209,9 @@ export async function GET(request: NextRequest) {
             overflow: 'hidden',
           }}
         >
-          {/* Background Elements - Subtle and Clean */}
-          <div style={{ position: 'absolute', top: '-20%', right: '-10%', width: '60%', height: '60%', background: primary, opacity: 0.07, borderRadius: '50%', filter: 'blur(80px)', zIndex: 0 }} />
-          <div style={{ position: 'absolute', bottom: '-20%', left: '-10%', width: '60%', height: '60%', background: accent, opacity: 0.05, borderRadius: '50%', filter: 'blur(80px)', zIndex: 0 }} />
+          {/* Background Elements - Subtle and Clean (No Blur for Performance) */}
+          <div style={{ position: 'absolute', top: '-20%', right: '-10%', width: '60%', height: '60%', backgroundImage: `radial-gradient(closest-side, ${primary} 0%, transparent 100%)`, opacity: 0.15, zIndex: 0 }} />
+          <div style={{ position: 'absolute', bottom: '-20%', left: '-10%', width: '60%', height: '60%', backgroundImage: `radial-gradient(closest-side, ${accent} 0%, transparent 100%)`, opacity: 0.15, zIndex: 0 }} />
 
             {/* Content Wrapper */}
             <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', zIndex: 10 }}>
@@ -254,7 +254,7 @@ export async function GET(request: NextRequest) {
                         position: 'relative', 
                         borderRadius: 24, 
                         border: `4px solid ${primary}`, 
-                        boxShadow: `0 20px 50px -10px ${primary}40`, // Soft glow
+                        // boxShadow removed for performance
                         overflow: 'hidden',
                         backgroundColor: '#1e293b',
                     }}>
@@ -344,7 +344,7 @@ export async function GET(request: NextRequest) {
                                 overflow: 'hidden', 
                                 border: `2px solid ${rarityColor}`, 
                                 backgroundColor: '#1e293b',
-                                boxShadow: '0 10px 30px -5px rgba(0,0,0,0.5)', 
+                                // boxShadow removed for performance 
                             }}>
                                 {/* Card Image */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
