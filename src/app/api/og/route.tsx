@@ -231,8 +231,9 @@ export async function GET(request: NextRequest) {
                             {deckName}
                         </div>
                         {/* Subtitle / Label */}
-                        <div style={{ display: 'flex', alignItems: 'center', fontSize: 24, fontWeight: 400, color: '#94a3b8', marginTop: 8, letterSpacing: '0.05em' }}>
-                             <span style={{ color: primary, fontWeight: 700, marginRight: 8 }}>SPELLCASTERS</span>DB
+                        <div style={{ display: 'flex', alignItems: 'center', fontSize: 32, fontWeight: 700, color: '#e2e8f0', marginTop: 8, letterSpacing: '0.05em' }}>
+                             <span style={{ color: primary, marginRight: 8 }}>SPELLCASTERS</span>
+                             <span style={{ color: 'white' }}>DB</span>
                         </div>
                     </div>
 
@@ -288,11 +289,11 @@ export async function GET(request: NextRequest) {
                                  color: 'white', 
                                  textShadow: '0 4px 12px rgba(0,0,0,0.8)',
                                  lineHeight: 0.9,
-                                 marginBottom: 8,
+                                 marginBottom: 20, // Moved down since label is gone
                             }}>
                                 {spellcaster.name}
                             </span>
-                             <span style={{ fontSize: 20, color: primary, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.1em' }}>SPELLCASTER</span>
+                             {/* Label removed per user request */}
                         </div>
                     </div>
                 )}
@@ -390,7 +391,7 @@ export async function GET(request: NextRequest) {
                                     padding: '0 14px 20px 14px',
                                 }}>
                                     <span style={{ 
-                                        fontSize: 30, 
+                                        fontSize: 32, // bumped from 30
                                         fontWeight: 900, 
                                         color: 'white',
                                         lineHeight: 1,
