@@ -26,7 +26,6 @@ export async function GET(request: NextRequest) {
   };
     try {
     const { searchParams, origin } = new URL(request.url);
-    console.log("OG: URL Parsed");
     const deckHash = searchParams.get('deck') || searchParams.get('d');
     const teamHash = searchParams.get('team');
 
@@ -40,9 +39,7 @@ export async function GET(request: NextRequest) {
         const { name: teamName, decks } = decodeTeam(teamHash);
 
         // Fetch Game Data
-        console.log("OG: Fetching Game Data");
         const data = await fetchGameData();
-        console.log("OG: Game Data Fetched, Spellcasters count:", data.spellcasters.length);
 
         // Resolve Spellcasters
         const spellcasters = decks.map(d => {
@@ -57,17 +54,14 @@ export async function GET(request: NextRequest) {
         // Load Font (Oswald)
         let fontData: ArrayBuffer | null = null;
         try {
-            console.log("OG: Fetching Font");
             const fontRes = await fetch(fontUrl);
             if (fontRes.ok) {
                  fontData = await fontRes.arrayBuffer();
-                 console.log("OG: Font Fetched Success");
             }
         } catch (e) { console.warn('Font fetch failed', e); }
 
-        console.log("Team OG: About to render ImageResponse");
+
         
-        // Restore ImageResponse (No Custom Font for now to test stability)
         return new ImageResponse(
             (
                 <div style={{
@@ -82,29 +76,29 @@ export async function GET(request: NextRequest) {
                     position: 'relative',
                     overflow: 'hidden',
                 }}>
-                     {/* Background Elements */}
-                    <div style={{ position: 'absolute', top: '-20%', left: '-20%', width: '70%', height: '70%', background: '#020617', filter: 'blur(80px)', opacity: 0.9, zIndex: 0 }} />
-                    <div style={{ position: 'absolute', top: '-10%', left: '20%', width: '40%', height: '40%', background: primary, filter: 'blur(140px)', opacity: 0.25, zIndex: 0 }} />
-                    <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '40%', height: '40%', background: accent, filter: 'blur(140px)', opacity: 0.2, zIndex: 0 }} />
+                     {/* Background Elements - Scaled Blur */}
+                    <div style={{ position: 'absolute', top: '-20%', left: '-20%', width: '70%', height: '70%', background: '#020617', filter: 'blur(160px)', opacity: 0.9, zIndex: 0 }} />
+                    <div style={{ position: 'absolute', top: '-10%', left: '20%', width: '40%', height: '40%', background: primary, filter: 'blur(280px)', opacity: 0.25, zIndex: 0 }} />
+                    <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '40%', height: '40%', background: accent, filter: 'blur(280px)', opacity: 0.2, zIndex: 0 }} />
 
-                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', padding: '40px 60px', zIndex: 10 }}>
-                         <div style={{ fontSize: 60, fontWeight: 900, color: 'white', textAlign: 'center' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', padding: '80px 120px', zIndex: 10 }}>
+                         <div style={{ fontSize: 120, fontWeight: 900, color: 'white', textAlign: 'center' }}>
                             {teamName || "TEAM TRINITY"}
                         </div>
-                        <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center', gap: 40, width: '100%', marginTop: 40 }}>
+                        <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center', gap: 80, width: '100%', marginTop: 80 }}>
                             {spellcasters.map((sc, i) => (
                                 <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <div style={{ 
-                                        width: 150, height: 220, 
+                                        width: 300, height: 440, 
                                         backgroundColor: 'rgba(0,0,0,0.3)', 
-                                        border: `2px solid ${sc ? primary : '#334155'}`,
-                                        borderRadius: 12,
+                                        border: `4px solid ${sc ? primary : '#334155'}`,
+                                        borderRadius: 24,
                                         display: 'flex', alignItems: 'center', justifyContent: 'center'
                                      }}>
                                          {sc ? (
                                             /* eslint-disable-next-line @next/next/no-img-element */
-                                            <img src={resolveUrl(getCardImageUrl(sc, { forceRemote: true, forceFormat: 'png' }))} alt={sc.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10 }} />
-                                         ) : <div style={{ fontSize: 40 }}>?</div>}
+                                            <img src={resolveUrl(getCardImageUrl(sc, { forceRemote: true }))} alt={sc.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 20 }} />
+                                         ) : <div style={{ fontSize: 80 }}>?</div>}
                                     </div>
                                 </div>
                             ))}
@@ -113,8 +107,8 @@ export async function GET(request: NextRequest) {
                 </div>
             ),
             {
-                width: 1200,
-                height: 630,
+                width: 2400,
+                height: 1260,
                 headers,
                 fonts: fontData ? [
                     {
@@ -296,7 +290,7 @@ export async function GET(request: NextRequest) {
                     }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
-                            src={resolveUrl(getCardImageUrl(spellcaster, { forceRemote: true, forceFormat: 'png' }))} 
+                            src={resolveUrl(getCardImageUrl(spellcaster, { forceRemote: true }))} 
                             alt={spellcaster.name}
                             style={{ 
                                 width: '100%', 
@@ -391,7 +385,7 @@ export async function GET(request: NextRequest) {
                                 {/* Full Card Image (No Zoom) */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
-                                    src={resolveUrl(getCardImageUrl(unit, { forceRemote: true, forceFormat: 'png' }))} 
+                                    src={resolveUrl(getCardImageUrl(unit, { forceRemote: true }))} 
                                     alt={unit.name}
                                     style={{ 
                                         width: '100%', 
