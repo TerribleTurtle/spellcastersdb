@@ -4,6 +4,8 @@ import { decodeTeam } from '@/lib/encoding';
 import { fetchGameData } from '@/lib/api';
 import { getCardImageUrl } from '@/lib/utils';
 
+export const runtime = 'edge'; // USE EDGE RUNTIME
+
 const fontUrl = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/oswald/Oswald-Bold.ttf';
 
 export async function GET(request: NextRequest) {
@@ -115,6 +117,7 @@ export async function GET(request: NextRequest) {
     );
      
     // FORCE GENERATION to catch errors
+    // Note: ArrayBuffer might behave differently in Edge, but should be supported via standard Web API.
     const buffer = await imgRes.arrayBuffer();
     
     return new NextResponse(buffer, {

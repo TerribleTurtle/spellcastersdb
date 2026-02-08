@@ -1,5 +1,8 @@
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
+
+export const runtime = 'edge';
+
 import { decodeDeck, decodeTeam } from '@/lib/encoding';
 import { fetchGameData } from '@/lib/api';
 import { getCardImageUrl } from '@/lib/utils';
@@ -53,7 +56,7 @@ export async function GET(request: NextRequest) {
                     backgroundColor: bgDark,
                     backgroundImage: `radial-gradient(circle at 50% 0%, #2e1065 0%, ${bgDark} 50%)`,
                     color: 'white',
-                    fontFamily: 'sans-serif',
+                    fontFamily: fontData ? '"Oswald"' : 'sans-serif',
                     position: 'relative',
                     overflow: 'hidden',
                 }}>
@@ -90,7 +93,15 @@ export async function GET(request: NextRequest) {
             {
                 width: 1200,
                 height: 630,
-                // fonts: undefined // No fonts
+                headers,
+                fonts: fontData ? [
+                    {
+                        name: 'Oswald',
+                        data: fontData,
+                        style: 'normal',
+                        weight: 700,
+                    }
+                ] : undefined,
             }
         );
     }
