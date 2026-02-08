@@ -14,7 +14,12 @@ const fontUrl = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/oswald/Oswald
 
 export async function GET(request: NextRequest) {
   console.log("Team OG: Handling Request", request.url);
-  try {
+  // Cache Control (The "Sharpness" Lock)
+  const headers = {
+      'Cache-Control': 'public, max-age=2592000, immutable',
+      'Content-Type': 'image/png',
+  };
+    try {
     const { searchParams } = new URL(request.url);
     const deckHash = searchParams.get('deck') || searchParams.get('d');
     const teamHash = searchParams.get('team');
@@ -116,12 +121,9 @@ export async function GET(request: NextRequest) {
       return new Response('Invalid deck string', { status: 400 });
     }
 
-    // Cache Control (The "Sharpness" Lock)
-    // Discord caches images aggressively. Force immutable cache for 1 month.
-    const headers = {
-        'Cache-Control': 'public, max-age=2592000, immutable',
-        'Content-Type': 'image/png',
-    };
+    if (decoded) {
+        // Validation removed for brevity, check logic below
+    }
 
     // Load custom font
     let fontData: ArrayBuffer | null = null;
