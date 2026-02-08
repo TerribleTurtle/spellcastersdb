@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ImageResponse } from '@vercel/og';
 import { decodeTeam } from '@/lib/encoding';
 import { fetchGameData } from '@/lib/api';
-import { getCardImageUrl } from '@/lib/utils';
+import { getCardImageUrl } from '@/lib/utils'; // Keep import
 
 // Font fallback strategy:
 const fontUrl = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/oswald/Oswald-Bold.ttf';
@@ -13,7 +13,6 @@ export async function GET(request: NextRequest) {
   const returnImage = searchParams.get('image') === 'true';
 
   if (!teamHash) {
-     // List heroes if no team hash, to help me build a valid hash
      try {
          const data = await fetchGameData();
          return NextResponse.json({ 
@@ -34,11 +33,11 @@ export async function GET(request: NextRequest) {
         return data.heroes.find(h => h.hero_id === d.spellcasterId);
     });
     
-    const spellcasterDebug = decks.map(d => {
-        if (!d || !d.spellcasterId) return { id: null, found: false };
-        const hero = data.heroes.find(h => h.hero_id === d.spellcasterId);
-        return { id: d.spellcasterId, found: !!hero, name: hero?.name || 'Unknown' };
-    });
+    // Debug Info Collection
+    const debugInfo = {
+        envApiUrl: process.env.NEXT_PUBLIC_API_URL,
+        computedImageUrls: spellcasters.map(sc => sc ? getCardImageUrl(sc) : null)
+    };
 
     if (!returnImage) {
         return NextResponse.json({
@@ -47,7 +46,8 @@ export async function GET(request: NextRequest) {
                 teamName,
                 decksCount: decks.length,
             },
-            spellcasters: spellcasterDebug,
+            spellcasters: spellcasters.map(s => s ? { id: s.hero_id, name: s.name } : null),
+            debugInfo, // Return the debug info!
             gameDataHeroesCount: data.heroes.length
         });
     }
