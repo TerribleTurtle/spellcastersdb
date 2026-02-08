@@ -14,32 +14,48 @@ import { getCardImageUrl } from '@/lib/utils';
 import { Unit, Spell, Titan } from '@/types/api';
 
 // Font fallback strategy:
-// We try to fetch Oswald. If it fails, we silently continue, and ImageResponse will use its default.
 const fontUrl = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/oswald/Oswald-Bold.ttf';
 
 export async function GET(request: NextRequest) {
-  console.log("Team OG: Handling Request", request.url);
-  // Cache Control (The "Sharpness" Lock)
+  // Shared Constants
+  const bgDark = '#0f172a';
+  const primary = '#a855f7';
+  const accent = '#22d3ee';
+
+  console.log("OG: Handling Request", request.url);
+
+  // Cache Control
   const headers = {
       'Cache-Control': 'public, max-age=2592000, immutable',
       'Content-Type': 'image/png',
   };
-    try {
+
+  try {
     const { searchParams, origin } = new URL(request.url);
     const deckHash = searchParams.get('deck') || searchParams.get('d');
     const teamHash = searchParams.get('team');
 
     const resolveUrl = (url: string) => {
         if (url.startsWith('/')) return `${origin}${url}`;
+        if (!url.startsWith('http')) return `${origin}/${url}`;
         return url;
     };
+
+    // Load Font (Oswald)
+    let fontData: ArrayBuffer | null = null;
+    try {
+        const fontRes = await fetch(fontUrl);
+         if (fontRes.ok) {
+             fontData = await fontRes.arrayBuffer();
+        }
+    } catch (e) { console.warn('Font fetch failed', e); }
+
+    // Fetch Game Data
+    const data = await fetchGameData();
 
     // --- TEAM MODE ---
     if (teamHash) { 
         const { name: teamName, decks } = decodeTeam(teamHash);
-
-        // Fetch Game Data
-        const data = await fetchGameData();
 
         // Resolve Spellcasters
         const spellcasters = decks.map(d => {
@@ -47,21 +63,6 @@ export async function GET(request: NextRequest) {
             return data.spellcasters.find(h => h.spellcaster_id === d.spellcasterId);
         });
 
-        const bgDark = '#0f172a';
-        const primary = '#a855f7';
-        const accent = '#22d3ee';
-
-        // Load Font (Oswald)
-        let fontData: ArrayBuffer | null = null;
-        try {
-            const fontRes = await fetch(fontUrl);
-            if (fontRes.ok) {
-                 fontData = await fontRes.arrayBuffer();
-            }
-        } catch (e) { console.warn('Font fetch failed', e); }
-
-
-        
         return new ImageResponse(
             (
                 <div style={{
@@ -76,7 +77,7 @@ export async function GET(request: NextRequest) {
                     position: 'relative',
                     overflow: 'hidden',
                 }}>
-                     {/* Background Elements - Simple Gradients (No Blur for Performance) */}
+                     {/* Background Elements - Simple Gradients */}
                     <div style={{ position: 'absolute', top: '-10%', left: '20%', width: '40%', height: '40%', background: primary, opacity: 0.1, borderRadius: '50%', zIndex: 0 }} />
                     <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '40%', height: '40%', background: accent, opacity: 0.1, borderRadius: '50%', zIndex: 0 }} />
 
@@ -119,9 +120,9 @@ export async function GET(request: NextRequest) {
                 ] : undefined,
             }
         );
-    }
-    // --- END TEAM MODE ---
+    } // End Team Mode
 
+    // --- DECK MODE ---
     if (!deckHash) {
       return new Response('Missing deck or team parameter', { status: 400 });
     }
@@ -131,52 +132,65 @@ export async function GET(request: NextRequest) {
       return new Response('Invalid deck string', { status: 400 });
     }
 
-    if (decoded) {
-        // Validation removed for brevity, check logic below
-    }
+    const { name: deckNameFromHash, spellcasterId, slotIds } = decoded;
 
-    // Load custom font
-    let fontData: ArrayBuffer | null = null;
-    try {
-        console.log("OG (Deck): Fetching Font");
-        const fontRes = await fetch(fontUrl);
-        if (fontRes.ok) {
-            fontData = await fontRes.arrayBuffer();
-        } else {
-            console.warn('Failed to fetch font:', fontRes.statusText);
-        }
-    } catch (err) {
-        console.warn('Error fetching font:', err);
-    }
-
-    // Fetch Game Data
-    console.log("OG (Deck): Fetching Game Data");
-    const data = await fetchGameData();
-    console.log("OG (Deck): Validating Entities");
-    
     // Resolve Entities
-    // Resolve Spellcaster
-    const spellcaster = data.spellcasters.find(h => h.spellcaster_id === decoded.spellcasterId);
+    const spellcaster = data.spellcasters.find(s => s.spellcaster_id === spellcasterId);
     
-    const units = decoded.slotIds
-        .map(id => {
-            const u = data.units.find(u => u.entity_id === id);
-            if (u) return u;
-            const s = data.spells.find(s => s.entity_id === id);
-            if (s) return s;
-            const t = data.titans.find(t => t.entity_id === id);
-            if (t) return t;
-            return null;
-        })
-        .filter((u): u is Unit | Spell | Titan => !!u);
+    // Resolve Units/Spells/Titans
+    const units = slotIds.map(id => {
+        if (!id) return null;
+        let found: Unit | Spell | Titan | undefined;
+        found = data.units.find(u => u.entity_id === id);
+        if (!found) found = data.spells.find(s => s.entity_id === id);
+        if (!found) found = data.titans.find(t => t.entity_id === id);
+        return found || null;
+    });
 
-    // Prepare Name
-    const deckName = decoded.name || (spellcaster ? `${spellcaster.name} Deck` : 'Spellcasters Deck');
+    const deckName = deckNameFromHash || `${spellcaster?.name || 'Unknown'}'s Deck`;
 
-    // Brand Colors
-    const bgDark = '#0f172a';
-    const primary = '#a855f7';
-    const accent = '#22d3ee';
+    // --- PRE-FETCH IMAGES FOR PERFORMANCE ---
+    const urlToDataUri = new Map<string, string>();
+    const uniqueUrls = new Set<string>();
+
+    if (spellcaster) uniqueUrls.add(resolveUrl(getCardImageUrl(spellcaster, { forceRemote: true, forceFormat: 'png' })));
+    units.forEach(u => {
+        if (u) uniqueUrls.add(resolveUrl(getCardImageUrl(u, { forceRemote: true, forceFormat: 'png' })));
+    });
+
+    console.log(`OG (Deck): Pre-fetching ${uniqueUrls.size} images`);
+
+    try {
+        await Promise.all(Array.from(uniqueUrls).map(async (url) => {
+            try {
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), 4000); // 4s timeout per image
+                
+                const res = await fetch(url, { signal: controller.signal });
+                clearTimeout(id);
+                
+                if (res.ok) {
+                    const arrayBuffer = await res.arrayBuffer();
+                    const base64 = Buffer.from(arrayBuffer).toString('base64');
+                    const mime = url.endsWith('.webp') ? 'image/webp' : 'image/png';
+                    urlToDataUri.set(url, `data:${mime};base64,${base64}`);
+                } else {
+                    console.warn(`Failed to fetch image: ${url} (${res.status})`);
+                }
+            } catch (err) {
+                console.warn(`Error fetching image: ${url}`, err);
+            }
+        }));
+    } catch (e) {
+        console.error("Critical error during image pre-fetch", e);
+    }
+
+    const getImageSrc = (entity: any) => {
+        const url = resolveUrl(getCardImageUrl(entity, { forceRemote: true, forceFormat: 'png' }));
+        return urlToDataUri.get(url) || url; // Fallback to URL if fetch failed
+    };
+
+    console.log(`OG (Deck): Rendering ImageResponse (1600x840)`);
 
     return new ImageResponse(
       (
@@ -190,7 +204,7 @@ export async function GET(request: NextRequest) {
             backgroundImage: `radial-gradient(circle at 50% 0%, #2e1065 0%, ${bgDark} 50%)`,
             color: 'white',
             fontFamily: fontData ? '"Oswald"' : 'sans-serif',
-            padding: '30px 50px',
+            padding: '40px 66px',
             position: 'relative',
             overflow: 'hidden',
           }}
@@ -220,12 +234,12 @@ export async function GET(request: NextRequest) {
           }} />
 
             {/* Content Wrapper */}
-            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 30, alignItems: 'center', justifyContent: 'center', zIndex: 10, height: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 40, alignItems: 'center', justifyContent: 'center', zIndex: 10, height: '100%' }}>
             
                 {/* Header */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
                      {/* Logo */}
-                    <div style={{ display: 'flex', alignItems: 'center', fontSize: 24, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 4 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', fontSize: 32, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 6 }}>
                          <span style={{ 
                              backgroundImage: 'linear-gradient(to right, #a855f7, #ec4899)', 
                              backgroundClip: 'text', 
@@ -237,16 +251,15 @@ export async function GET(request: NextRequest) {
                          <span style={{ color: 'white' }}>DB</span>
                     </div>
     
-                    {/* Deck Name with Stroke Hack */}
+                    {/* Deck Name */}
                     <div style={{ 
-                        fontSize: 80, // Massive size
+                        fontSize: 106, // 1.33x Large
                         fontWeight: 900, 
                         lineHeight: 1, 
                         color: 'white',
-                        // The "Stroke" Hack: Hard shadows create an outline effect
-                        textShadow: '0px 2px 10px rgba(0,0,0,0.8), 2px 2px 0px #000', 
+                        textShadow: '0px 3px 14px rgba(0,0,0,0.8), 3px 3px 0px #000', 
                         display: '-webkit-box',
-                        WebkitLineClamp: 1, // Keep it one line for cleaner look? Or 2? 
+                        WebkitLineClamp: 1, 
                         WebkitBoxOrient: 'vertical',
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
@@ -257,7 +270,7 @@ export async function GET(request: NextRequest) {
                 </div>
 
                 {/* Deck Content */}
-                <div style={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start', gap: 16, width: '100%' }}>
+                <div style={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start', gap: 20, width: '100%' }}>
                 
                 {/* Spellcaster (Hero) */}
                 {spellcaster && (
@@ -265,19 +278,19 @@ export async function GET(request: NextRequest) {
                         display: 'flex', 
                         flexDirection: 'column', 
                         alignItems: 'center',
-                        width: 220, 
-                        height: 350, 
+                        width: 294, 
+                        height: 466, 
                         position: 'relative', 
-                        marginRight: 24, 
+                        marginRight: 32, 
                         flexShrink: 0,
-                        borderRadius: 16, 
-                        border: `4px solid ${primary}`, 
-                        boxShadow: `0 0 50px ${primary}60`,
+                        borderRadius: 22, 
+                        border: `6px solid ${primary}`, 
+                        boxShadow: `0 0 66px ${primary}60`,
                         overflow: 'hidden'
                     }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
-                            src={resolveUrl(getCardImageUrl(spellcaster, { forceRemote: true, forceFormat: 'png' }))} 
+                            src={getImageSrc(spellcaster)} 
                             alt={spellcaster.name}
                             style={{ 
                                 width: '100%', 
@@ -291,24 +304,24 @@ export async function GET(request: NextRequest) {
                             bottom: 0,
                             left: 0,
                             right: 0,
-                            height: 60,
+                            height: 80,
                             background: 'linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent)',
                             display: 'flex',
                             alignItems: 'flex-end',
                             justifyContent: 'center',
-                            paddingBottom: 10,
-                            paddingLeft: 4,
-                            paddingRight: 4
+                            paddingBottom: 14,
+                            paddingLeft: 6,
+                            paddingRight: 6
                         }}>
                              <span style={{ 
-                                 fontSize: 24, 
+                                 fontSize: 32, 
                                  fontWeight: 700, 
                                  color: 'white', 
                                  textAlign: 'center',
                                  whiteSpace: 'nowrap', 
                                  overflow: 'hidden', 
                                  textOverflow: 'ellipsis',
-                                 textShadow: '0px 2px 4px black, 2px 2px 0px black'
+                                 textShadow: '0px 3px 6px black, 3px 3px 0px black'
                             }}>
                                 {spellcaster.name}
                             </span>
@@ -323,17 +336,17 @@ export async function GET(request: NextRequest) {
                         // Empty Slot
                         return (
                             <div key={i} style={{ 
-                                width: 150, 
-                                height: 220, 
-                                borderRadius: 14, 
-                                border: '2px dashed rgba(255,255,255,0.1)', 
+                                width: 200, 
+                                height: 294, 
+                                borderRadius: 19, 
+                                border: '3px dashed rgba(255,255,255,0.1)', 
                                 backgroundColor: 'rgba(255,255,255,0.02)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 flexShrink: 0
                             }}>
-                                <div style={{ width: 12, height: 12, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.2)' }} />
+                                <div style={{ width: 16, height: 16, borderRadius: '50%', border: '3px solid rgba(255,255,255,0.2)' }} />
                             </div>
                         );
                     }
@@ -343,12 +356,12 @@ export async function GET(request: NextRequest) {
                     
                     let rankKey = 'I';
                     if (isTitan) rankKey = 'Titan';
-                    else if (isSpell) rankKey = 'Spell'; // Spells don't have rank, map to a color?
+                    else if (isSpell) rankKey = 'Spell';
                     else if ('rank' in unit && unit.rank) rankKey = unit.rank;
 
                     const rarityColor = ({
                         'Titan': accent,
-                        'Spell': '#f472b6', // Pink for spells
+                        'Spell': '#f472b6',
                         'I': '#94a3b8',
                         'II': '#60a5fa',
                         'III': primary,
@@ -356,23 +369,23 @@ export async function GET(request: NextRequest) {
                     } as Record<string, string>)[rankKey] || '#94a3b8';
 
                     return (
-                        <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 150 }}>
+                        <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 200 }}>
                             <div style={{ 
                                 display: 'flex', 
                                 flexDirection: 'column',
                                 width: '100%', 
-                                height: 220, 
+                                height: 294, 
                                 position: 'relative', 
-                                borderRadius: 14, 
+                                borderRadius: 19, 
                                 overflow: 'hidden', 
-                                border: `2px solid ${rarityColor}80`, 
-                                boxShadow: '0 6px 24px rgba(0,0,0,0.4)', 
+                                border: `3px solid ${rarityColor}80`, 
+                                boxShadow: '0 8px 32px rgba(0,0,0,0.4)', 
                                 flexShrink: 0 
                             }}>
                                 {/* Full Card Image (No Zoom) */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
-                                    src={resolveUrl(getCardImageUrl(unit, { forceRemote: true, forceFormat: 'png' }))} 
+                                    src={getImageSrc(unit)} 
                                     alt={unit.name}
                                     style={{ 
                                         width: '100%', 
@@ -384,19 +397,19 @@ export async function GET(request: NextRequest) {
                             
                             {/* Name Below Card */}
                             <div style={{
-                                marginTop: 12,
+                                marginTop: 16,
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 width: '100%',
                             }}>
                                 <span style={{ 
-                                    fontSize: 18, 
+                                    fontSize: 24, 
                                     fontWeight: 700, 
                                     color: '#e2e8f0', // slate-200
                                     textAlign: 'center',
                                     lineHeight: 1.2,
-                                    textShadow: '0px 2px 4px rgba(0,0,0,0.5)',
+                                    textShadow: '0px 3px 6px rgba(0,0,0,0.5)',
                                     display: '-webkit-box',
                                     WebkitLineClamp: 2,
                                     WebkitBoxOrient: 'vertical',
@@ -415,8 +428,8 @@ export async function GET(request: NextRequest) {
         </div>
       ),
       {
-        width: 1200,
-        height: 630,
+        width: 1600, // 1.33x Resolution
+        height: 840,
         headers,
         fonts: fontData ? [
             {
@@ -428,35 +441,16 @@ export async function GET(request: NextRequest) {
         ] : undefined,
       },
     );
-  } catch (e) {
-    const message = e instanceof Error ? e.message : 'Unknown error ' + JSON.stringify(e);
-    console.error(`OG Generation Error: ${message}`);
-    const stack = e instanceof Error ? e.stack : undefined;
-    
-    // Return an error image so we can see what's happening in previews
+
+  } catch (e: any) {
+    console.error('OG Error:', e);
     return new ImageResponse(
         (
-            <div style={{
-                display: 'flex',
-                flexDirection: 'column',
-                width: '100%',
-                height: '100%',
-                backgroundColor: '#7f1d1d', // Red 900
-                color: 'white',
-                padding: 40,
-                alignItems: 'flex-start',
-                justifyContent: 'center',
-                fontFamily: 'sans-serif'
-            }}>
-                <h1 style={{ fontSize: 60, marginBottom: 20 }}>OG Generation Failed</h1>
-                <p style={{ fontSize: 30, marginBottom: 10 }}>Error: {message}</p>
-                {stack && <pre style={{ fontSize: 16, maxWidth: '100%', whiteSpace: 'pre-wrap', overflow: 'hidden' }}>{stack.substring(0, 500)}...</pre>}
+            <div style={{ display: 'flex', width: '100%', height: '100%', background: '#0f172a', color: 'white', alignItems: 'center', justifyContent: 'center', fontSize: 32 }}>
+                OG Error: {e.message}
             </div>
         ),
-        {
-            width: 1200,
-            height: 630,
-        }
+        { width: 1200, height: 630 }
     );
   }
 }
