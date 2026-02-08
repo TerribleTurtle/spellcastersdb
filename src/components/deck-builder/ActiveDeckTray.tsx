@@ -1,7 +1,7 @@
-import Image from "next/image";
+import { GameImage } from "@/components/ui/GameImage";
 import { useDroppable, useDraggable } from "@dnd-kit/core";
 import { DeckSlot } from "@/types/deck";
-import { Spellcaster, Unit } from "@/types/api";
+import { Spellcaster, Unit, Spell, Titan } from "@/types/api";
 
 import { Shield, Sparkles, CheckCircle2, AlertCircle } from "lucide-react";
 import { cn, getCardImageUrl } from "@/lib/utils";
@@ -9,8 +9,8 @@ import { cn, getCardImageUrl } from "@/lib/utils";
 interface ActiveDeckTrayProps {
   slots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
   spellcaster: Spellcaster | null;
-  onSelect?: (item: Unit | Spellcaster) => void;
-  draggedItem?: Unit | Spellcaster | null;
+  onSelect?: (item: Unit | Spellcaster | Spell | Titan) => void;
+  draggedItem?: Unit | Spellcaster | Spell | Titan | null;
   validation?: {
       isValid: boolean;
       errors: string[];
@@ -84,9 +84,9 @@ export function ActiveDeckTray({ slots, spellcaster, onSelect, draggedItem, vali
 
 function Slot({ slot, draggedItem, allSlots, onSelect }: { 
     slot: DeckSlot; 
-    draggedItem?: Unit | Spellcaster | null;
+    draggedItem?: Unit | Spellcaster | Spell | Titan | null;
     allSlots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
-    onSelect?: (item: Unit | Spellcaster) => void;
+    onSelect?: (item: Unit | Spellcaster | Spell | Titan) => void;
 }) {
     const { isOver, setNodeRef } = useDroppable({
         id: `slot-${slot.index}`,
@@ -110,8 +110,8 @@ function Slot({ slot, draggedItem, allSlots, onSelect }: {
     // Determine if this slot is a valid drop target for the dragged item
     let isValidTarget = false;
     if (draggedItem && 'entity_id' in draggedItem) {
-        // It's a Unit being dragged
-        const draggedUnit = draggedItem as Unit;
+        // It's a Unit/Spell/Titan being dragged
+        const draggedUnit = draggedItem as Unit | Spell | Titan;
         const isTitan = draggedUnit.category === 'Titan';
         
         // Check type compatibility
@@ -182,7 +182,7 @@ function Slot({ slot, draggedItem, allSlots, onSelect }: {
                 <div className={cn("flex flex-col w-full h-full overflow-hidden rounded text-left pointer-events-none", isDragging && "opacity-0")}>
                     {/* Image Area */}
                     <div className="relative flex-1 bg-slate-800 overflow-hidden">
-                        <Image 
+                        <GameImage 
                              src={getCardImageUrl(slot.unit)} 
                              alt={slot.unit.name}
                              fill
@@ -196,7 +196,7 @@ function Slot({ slot, draggedItem, allSlots, onSelect }: {
                             </div>
                         ) : (
                             <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm">
-                                {slot.unit.card_config.rank}
+                                {slot.unit.rank ?? 'N/A'}
                             </div>
                         )}
                     </div>
@@ -222,8 +222,8 @@ function Slot({ slot, draggedItem, allSlots, onSelect }: {
 
 function SpellcasterSlot({ spellcaster, draggedItem, onSelect }: { 
     spellcaster: Spellcaster | null;
-    draggedItem?: Unit | Spellcaster | null;
-    onSelect?: (item: Unit | Spellcaster) => void;
+    draggedItem?: Unit | Spellcaster | Spell | Titan | null;
+    onSelect?: (item: Unit | Spellcaster | Spell | Titan) => void;
 }) {
     const { isOver, setNodeRef } = useDroppable({
         id: "spellcaster-zone",
@@ -243,7 +243,7 @@ function SpellcasterSlot({ spellcaster, draggedItem, onSelect }: {
     } : undefined;
 
     // Valid target if dragging a Spellcaster
-    const isValidTarget = draggedItem && 'hero_id' in draggedItem;
+    const isValidTarget = draggedItem && 'spellcaster_id' in draggedItem;
 
     return (
         <div 
@@ -294,7 +294,7 @@ function SpellcasterSlot({ spellcaster, draggedItem, onSelect }: {
                 <div className={cn("flex flex-col w-full h-full overflow-hidden rounded text-left pointer-events-none", isDragging && "opacity-0")}>
                     {/* Image Area */}
                     <div className="relative flex-1 bg-slate-800 overflow-hidden">
-                        <Image 
+                        <GameImage 
                              src={getCardImageUrl(spellcaster)} 
                              alt={spellcaster.name}
                              fill

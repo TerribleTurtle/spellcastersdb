@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Unit, Spellcaster } from '@/types/api';
+import { Unit, Spellcaster, Spell, Titan } from '@/types/api';
 import { Deck, DeckSlot } from '@/types/deck';
 import { StoredDeck, reconstructDeck, serializeDeck } from './useDeckBuilder';
 
@@ -37,7 +37,7 @@ interface StoredTeam {
 
 const INITIAL_TEAM_NAME = "New Team";
 
-export function useTeamBuilder(availableUnits: Unit[], availableSpellcasters: Spellcaster[]) {
+export function useTeamBuilder(availableUnits: (Unit | Spell | Titan)[], availableSpellcasters: Spellcaster[]) {
   const [teamName, setTeamName] = useState(INITIAL_TEAM_NAME);
   const [activeTeamId, setActiveTeamId] = useState<string | null>(null);
   const [activeSlot, setActiveSlot] = useState<number | null>(null); // null = Overview Mode

@@ -13,6 +13,26 @@ const nextConfig: NextConfig = {
         destination: '/',
         permanent: true,
       },
+      {
+        source: '/spells',
+        destination: '/incantations/spells',
+        permanent: true,
+      },
+      {
+        source: '/spells/:id',
+        destination: '/incantations/spells/:id',
+        permanent: true,
+      },
+      {
+        source: '/units',
+        destination: '/incantations/units',
+        permanent: true,
+      },
+      {
+        source: '/units/:id',
+        destination: '/incantations/units/:id',
+        permanent: true,
+      },
     ];
   },
   async headers() {

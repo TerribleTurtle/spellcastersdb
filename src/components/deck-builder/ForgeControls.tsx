@@ -4,7 +4,7 @@ import { Deck, DeckStats } from "@/types/deck";
 import { Team } from "@/hooks/useTeamBuilder";
 import { Trash2, Link as LinkIcon, Check, Save, Layers, Users, User, MoreHorizontal, ArrowRight, AlertCircle, GripVertical } from "lucide-react";
 import { cn, getCardImageUrl } from "@/lib/utils";
-import Image from "next/image";
+import { GameImage } from "@/components/ui/GameImage";
 import { encodeDeck, encodeTeam } from "@/lib/encoding";
 import { validateDeck } from "@/lib/deck-validation";
 import { 
@@ -346,6 +346,12 @@ export function ForgeControls({
                                 value={teamName || ''}
                                 onChange={(e) => onRenameTeam?.(e.target.value.slice(0, 50))} 
                                 placeholder="Name your team..."
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.currentTarget.blur();
+                                        handleSave();
+                                    }
+                                }}
                                 className="w-full bg-black/20 border border-white/10 rounded px-3 py-2 text-sm font-bold text-brand-primary placeholder:text-gray-600 focus:outline-none focus:border-brand-primary/50 transition-colors"
                             />
                         </div>
@@ -364,6 +370,12 @@ export function ForgeControls({
                             value={deck.name || ''}
                             onChange={(e) => onRename(e.target.value.slice(0, 50))} 
                             placeholder={deck.spellcaster ? `${deck.spellcaster.name} Deck` : "Name your deck..."}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                    e.currentTarget.blur();
+                                    handleSave();
+                                }
+                            }}
                             className="w-full bg-black/20 border border-white/10 rounded px-3 py-2 text-sm font-bold text-white placeholder:text-gray-600 focus:outline-none focus:border-brand-primary/50 transition-colors"
                         />
                     </div>
@@ -731,7 +743,7 @@ function TeamRow({ team, onLoad, onDelete, onDuplicate }: { team: Team, onLoad: 
                 {team.decks.map((d, i) => (
                     d.spellcaster && (
                         <div key={i} className="w-8 h-8 rounded-full border border-surface-card bg-black/50 overflow-hidden ring-2 ring-surface-card shrink-0 relative">
-                            <Image src={getCardImageUrl(d.spellcaster)} alt="" fill className="object-cover" />
+                            <GameImage src={getCardImageUrl(d.spellcaster)} alt="" fill className="object-cover" />
                         </div>
                     )
                 ))}
@@ -810,7 +822,7 @@ function DeckRow({ deck, isActive, isTeamMode, onLoad, onDelete, onDuplicate }: 
                     <div className="relative shrink-0">
                         <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 bg-black shadow-sm">
                             {deck.spellcaster ? (
-                                <Image src={getCardImageUrl(deck.spellcaster)} alt="" fill className="object-cover" />
+                                <GameImage src={getCardImageUrl(deck.spellcaster)} alt="" fill className="object-cover" />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center text-gray-700 font-bold text-[10px]">?</div>
                             )}
@@ -829,14 +841,14 @@ function DeckRow({ deck, isActive, isTeamMode, onLoad, onDelete, onDuplicate }: 
                             {deck.slots.slice(0, 4).map((s, i) => (
                                 <div key={i} className="w-6 h-6 rounded-full bg-black/50 border border-white/10 overflow-hidden shrink-0 relative z-0 hover:z-10 transition-all">
                                    {s.unit &&  (
-                                       <Image src={getCardImageUrl(s.unit)} alt="" fill className="object-cover opacity-80" />
+                                       <GameImage src={getCardImageUrl(s.unit)} alt="" fill className="object-cover opacity-80" />
                                    )}
                                 </div>
                             ))}
                             {/* Titan */}
                             <div className="w-6 h-6 rounded-full bg-brand-accent/10 border border-brand-accent/30 overflow-hidden shrink-0 relative z-0 hover:z-10 ml-1">
                                 {deck.slots[4].unit && (
-                                    <Image src={getCardImageUrl(deck.slots[4].unit)} alt="" fill className="object-cover opacity-80" />
+                                    <GameImage src={getCardImageUrl(deck.slots[4].unit)} alt="" fill className="object-cover opacity-80" />
                                 )}
                             </div>
                         </div>

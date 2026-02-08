@@ -1,4 +1,4 @@
-import { Unit, Spellcaster } from './api';
+import { Unit, Spell, Titan, Spellcaster } from './api';
 
 export type SlotIndex = 0 | 1 | 2 | 3 | 4;
 
@@ -11,7 +11,7 @@ export type SlotType = 'UNIT' | 'TITAN';
 
 export interface DeckSlot {
   index: SlotIndex;
-  unit: Unit | null;
+  unit: Unit | Spell | Titan | null;
   allowedTypes: SlotType[];
   isLocked?: boolean; // For potential future mechanics
 }
@@ -24,8 +24,7 @@ export interface Deck {
 }
 
 export interface DeckStats {
-  averageCost: number;
-  averageChargeTime: number;
+
   unitCounts: Record<string, number>;
   isValid: boolean;
   validationErrors: string[];

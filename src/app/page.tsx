@@ -28,7 +28,7 @@ export async function generateMetadata(
     if (decoded?.spellcasterId) {
         try {
             const data = await fetchGameData();
-            const spellcaster = data.heroes.find(h => h.hero_id === decoded.spellcasterId);
+            const spellcaster = data.spellcasters.find(h => h.spellcaster_id === decoded.spellcasterId);
             if (spellcaster) {
                 spellcasterName = spellcaster.name;
                 if (!deckName) {
@@ -123,8 +123,8 @@ export default async function Home() {
         {/* Suspense boundary for data loading */}
         <Suspense fallback={<div className="flex h-full items-center justify-center text-brand-primary animate-pulse">Loading The Forge...</div>}>
             <DeckBuilderApp 
-                units={data.units} 
-                spellcasters={data.heroes} 
+                units={[...data.units, ...data.spells, ...data.titans]} 
+                spellcasters={data.spellcasters} 
             />
         </Suspense>
     </div>

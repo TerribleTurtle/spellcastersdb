@@ -9,14 +9,14 @@ interface ConsumablePageProps {
 export async function generateStaticParams() {
   const consumables = await getConsumables();
   return consumables.map((item) => ({
-    id: item.consumable_id,
+    id: item.entity_id,
   }));
 }
 
 export async function generateMetadata({ params }: ConsumablePageProps): Promise<Metadata> {
   const { id } = await params;
   const consumables = await getConsumables();
-  const item = consumables.find(c => c.consumable_id === id);
+  const item = consumables.find(c => c.entity_id === id);
 
   if (!item) {
     return { title: "Item Not Found" };
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: ConsumablePageProps): Promise
 export default async function ConsumablePage({ params }: ConsumablePageProps) {
   const { id } = await params;
   const consumables = await getConsumables();
-  const item = consumables.find(c => c.consumable_id === id);
+  const item = consumables.find(c => c.entity_id === id);
 
   if (!item) {
     notFound();

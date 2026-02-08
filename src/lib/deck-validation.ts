@@ -1,3 +1,9 @@
+/**
+ * @file deck-validation.ts
+ * @description CRITICAL CORE COMPONENT. Contains the immutable rules for deck construction (4 units, 1 Titan, etc.).
+ * DO NOT DELETE OR MODIFY WITHOUT VERIFICATION.
+ */
+import { UnifiedEntity } from "@/types/api";
 import { Deck, DeckStats } from "@/types/deck";
 
 export interface ValidationResult {
@@ -13,22 +19,25 @@ export function validateDeck(deck: Deck): ValidationResult {
         hasSpellcaster: !!deck.spellcaster,
         rank1or2Count: 0,
         rank1or2CreatureCount: 0,
-        averageChargeTime: 0,
-        averageCost: 0,
         unitCounts: { Creature: 0, Building: 0, Spell: 0, Titan: 0 } as Record<string, number>,
         isValid: false,
         validationErrors: [] as string[]
     };
 
-    let totalCharge = 0;
-    let totalPop = 0;
-    let filledCount = 0;
+
 
     deck.slots.forEach(slot => {
         if (slot.unit) {
-            if (slot.index < 4) {
-                const rank = slot.unit.card_config.rank;
-                const category = slot.unit.category;
+                // Titans don't have rank/cost the same way
+            const isTitan = slot.unit.category === 'Titan';
+            
+            if (slot.index < 4 && !isTitan) {
+                // Use 'in' operator for safe property access if types are uncertain
+                // or assume Incantation shape has optional rank
+                const unit = slot.unit;
+                const rank = 'rank' in unit ? unit.rank : undefined;
+                const category = unit.category;
+                
                 if (rank === 'I' || rank === 'II') {
                     stats.rank1or2Count++;
                     if (category === 'Creature') {
@@ -36,17 +45,15 @@ export function validateDeck(deck: Deck): ValidationResult {
                     }
                 }
             }
-            totalCharge += slot.unit.card_config.charge_time;
-            totalPop += slot.unit.card_config.cost_population;
-            filledCount++;
+            
+
 
             const cat = slot.unit.category;
             stats.unitCounts[cat] = (stats.unitCounts[cat] || 0) + 1;
         }
     });
 
-    stats.averageChargeTime = filledCount > 0 ? totalCharge / filledCount : 0;
-    stats.averageCost = filledCount > 0 ? totalPop / filledCount : 0;
+
 
     // Validation Rules
     if (stats.unitCount < 4) stats.validationErrors.push("Must have 4 Units");

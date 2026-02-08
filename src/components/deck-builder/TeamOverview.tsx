@@ -4,11 +4,11 @@ import { copyToClipboard } from "@/lib/clipboard";
 
 import { useState } from 'react';
 import { Deck } from '@/types/deck';
-import { Unit, Spellcaster } from '@/types/api';
+import { UnifiedEntity } from '@/types/api';
 import { getCardImageUrl, cn } from '@/lib/utils';
 import { Link as LinkIcon, Check, CheckCircle2, AlertCircle, Save, Edit } from "lucide-react";
 
-import Image from "next/image";
+import { GameImage } from "@/components/ui/GameImage";
 import { validateDeck } from '@/lib/deck-validation';
 
 interface TeamOverviewProps {
@@ -153,7 +153,7 @@ function TeamDeckRow({ index, deck, onEdit, isReadOnly }: {
 
                     {deck.spellcaster && (
                         <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
-                            <Image 
+                            <GameImage 
                                 src={getCardImageUrl(deck.spellcaster)}
                                 alt=""
                                 fill
@@ -226,7 +226,7 @@ function TeamDeckRow({ index, deck, onEdit, isReadOnly }: {
     );
 }
 
-function VisualSlot({ item, type, isEmpty, label }: { item?: Unit | Spellcaster | null, type: 'spellcaster' | 'unit' | 'titan', isEmpty?: boolean, label?: string }) {
+function VisualSlot({ item, type, isEmpty, label }: { item?: UnifiedEntity | null, type: 'spellcaster' | 'unit' | 'titan', isEmpty?: boolean, label?: string }) {
     if (isEmpty || !item) {
         return (
             <div className={cn(
@@ -242,13 +242,14 @@ function VisualSlot({ item, type, isEmpty, label }: { item?: Unit | Spellcaster 
     }
 
     return (
+        <div className="bg-transparent group">
         <div className={cn(
             "relative rounded-lg overflow-hidden border border-white/10 bg-gray-900 group shadow-lg",
              type === 'spellcaster' 
                 ? "w-16 h-22 md:w-20 md:h-28 border-brand-primary shadow-brand-primary/20" 
                 : "w-12 h-18 md:w-16 md:h-24"
         )}>
-            <Image 
+            <GameImage 
                 src={getCardImageUrl(item)} 
                 alt={item.name}
                 fill
@@ -256,11 +257,11 @@ function VisualSlot({ item, type, isEmpty, label }: { item?: Unit | Spellcaster 
             />
             
             {/* Badges */}
-            {'card_config' in item && item.category === 'Titan' && (
+            {item.category === 'Titan' && (
                  <div className="absolute top-1 left-1 bg-black/60 px-1 py-0.5 rounded text-[8px] font-mono text-brand-accent backdrop-blur-sm">TITAN</div>
             )}
-             {'card_config' in item && item.category !== 'Titan' && (
-                 <div className="absolute top-1 left-1 bg-black/60 px-1 py-0.5 rounded text-[8px] font-mono text-brand-accent backdrop-blur-sm">{item.card_config.rank}</div>
+             {'rank' in item && item.rank && (
+                 <div className="absolute top-1 left-1 bg-black/60 px-1 py-0.5 rounded text-[8px] font-mono text-brand-accent backdrop-blur-sm">{item.rank}</div>
             )}
 
             {/* Name */}
@@ -269,6 +270,7 @@ function VisualSlot({ item, type, isEmpty, label }: { item?: Unit | Spellcaster 
                     {item.name}
                 </p>
             </div>
+        </div>
         </div>
     );
 }

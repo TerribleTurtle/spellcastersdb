@@ -8,13 +8,13 @@ const MAX_NAME_LENGTH = 50;
 
 export function encodeDeck(deck: Deck): string {
   const ids = [
-    deck.spellcaster?.hero_id || "",
+    deck.spellcaster?.spellcaster_id || "",
     deck.slots[0]?.unit?.entity_id || "",
     deck.slots[1]?.unit?.entity_id || "",
     deck.slots[2]?.unit?.entity_id || "",
     deck.slots[3]?.unit?.entity_id || "",
     deck.slots[4]?.unit?.entity_id || "",
-    (deck.name || "").substring(0, MAX_NAME_LENGTH)
+    (deck.name || "").replace(new RegExp(DELIMITER, 'g'), "").replace(new RegExp(TEAM_DELIMITER, 'g'), "").substring(0, MAX_NAME_LENGTH)
   ];
   
   const packed = ids.join(DELIMITER);
@@ -63,7 +63,7 @@ export function encodeTeam(decks: [Deck, Deck, Deck], name: string = ""): string
     const deck3Ids = getDeckIds(decks[2]);
     
     // Combined array: [name, ...deck1, ...deck2, ...deck3]
-    const combined = [name, ...deck1Ids, ...deck2Ids, ...deck3Ids];
+    const combined = [name.replace(new RegExp(DELIMITER, 'g'), ""), ...deck1Ids, ...deck2Ids, ...deck3Ids];
     
     // Join with DELIMITER
     const packed = combined.join(DELIMITER);
@@ -74,7 +74,7 @@ export function encodeTeam(decks: [Deck, Deck, Deck], name: string = ""): string
 
 function getDeckIds(deck: Deck): string[] {
     return [
-        deck.spellcaster?.hero_id || "",
+        deck.spellcaster?.spellcaster_id || "",
         deck.slots[0]?.unit?.entity_id || "",
         deck.slots[1]?.unit?.entity_id || "",
         deck.slots[2]?.unit?.entity_id || "",
@@ -87,7 +87,7 @@ function getDeckIds(deck: Deck): string[] {
         // Let's stick to the structure of `encodeDeck` but without the name for now directly?
         // Actually `encodeDeck` adds name at the end. 
         // Let's include deck names too for completeness if we can.
-        (deck.name || "").substring(0, MAX_NAME_LENGTH)
+        (deck.name || "").replace(new RegExp(DELIMITER, 'g'), "").replace(new RegExp(TEAM_DELIMITER, 'g'), "").substring(0, MAX_NAME_LENGTH)
     ];
 }
 

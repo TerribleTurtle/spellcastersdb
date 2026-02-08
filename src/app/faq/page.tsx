@@ -73,11 +73,11 @@ export default function FAQPage() {
     },
     {
       question: "How do I use the deck builder?",
-      answer: "The deck builder is currently under development. Once complete, you'll be able to select a hero and add units to create valid decks that follow the game's rules. Decks will be shareable via URL."
+      answer: "The deck builder is currently under development. Once complete, you'll be able to select a spellcaster and add incantations to create valid decks that follow the game's rules. Decks will be shareable via URL."
     },
     {
-      question: "Can I filter units by type or faction?",
-      answer: "Yes! The Archive page includes powerful search and filter options. You can filter units by type (creature, spell, building, titan), rank, faction, and more. Use the search bar to find specific units by name."
+      question: "Can I filter cards by type or faction?",
+      answer: "Yes! The Archive page includes powerful search and filter options. You can filter cards by type (creature, spell, building, titan), rank, faction, and more. Use the search bar to find specific cards by name."
     },
     {
       question: "Is the website mobile-friendly?",

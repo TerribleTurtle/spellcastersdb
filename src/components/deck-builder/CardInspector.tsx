@@ -1,11 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { Unit, Spellcaster } from "@/types/api";
+import { GameImage } from "@/components/ui/GameImage";
+import { Unit, Spellcaster, Spell, Titan } from "@/types/api";
 import { cn, getCardImageUrl } from "@/lib/utils";
 import { Swords, Zap, Users, PlusCircle, Crown, Clock, ArrowLeft, X, Heart } from "lucide-react";
 
-export type InspectorItem = Unit | Spellcaster;
+export type InspectorItem = Unit | Spellcaster | Spell | Titan;
 
 interface CardInspectorProps {
   item: InspectorItem | null;
@@ -52,27 +53,45 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
   }
 
   // Type Guard
-  const isUnit = 'entity_id' in item;
-  const isSpellcaster = !isUnit;
+  const isSpellcaster = 'spellcaster_id' in item;
+  const isUnit = !isSpellcaster;
 
-  const category = isUnit ? item.category : 'Spellcaster';
+  // Safe category access
+  const category = isUnit ? (item as Unit | Spell | Titan).category : 'Spellcaster';
   const name = item.name;
-  const rank = isUnit 
-    ? (item.category === "Titan" ? "TITAN" : item.card_config.rank)
-    : item.class.toUpperCase();
+  
+  let rank = "N/A";
+  if (isSpellcaster) {
+      if ('class' in item) {
+          rank = (item as Spellcaster).class.toUpperCase();
+      }
+  } else {
+      const entity = item as Unit | Spell | Titan;
+      if (entity.category === "Titan") {
+          rank = "TITAN";
+      } else if (entity.category === "Spell") {
+           rank = "SPELL"; // Or use magic school? usually spells don't have rank displayed like units do, but let's see. 
+           // Actually Spells don't have rank in the UI usually, but we can show School if needed. 
+           // For now, let's leave it as N/A or just not show it in the rank badge if it's a spell.
+           // Checking the prop, Spells don't have 'rank'.
+      } else if ('rank' in entity && entity.rank) {
+          rank = entity.rank;
+      }
+  }
 
   // Check if item is already in deck
-  const isCurrentSpellcaster = isSpellcaster && currentDeck.spellcaster?.hero_id === (item as Spellcaster).hero_id;
+  const isCurrentSpellcaster = isSpellcaster && currentDeck.spellcaster?.spellcaster_id === (item as Spellcaster).spellcaster_id;
   
   // For units, check specific slots
   const getSlotStatus = (idx: number) => {
       if (!isUnit) return null;
       const slot = currentDeck.slots[idx];
-      const isExample = slot.unit?.entity_id === (item as Unit).entity_id;
+      const entity = item as Unit | Spell | Titan;
+      const isExample = slot.unit?.entity_id === entity.entity_id;
       return isExample ? 'ALREADY_IN' : null;
   };
 
-  const isTitanInDeck = isUnit && item.category === "Titan" && currentDeck.slots[4].unit?.entity_id === (item as Unit).entity_id;
+  const isTitanInDeck = isUnit && (item as Unit | Spell | Titan).category === "Titan" && currentDeck.slots[4].unit?.entity_id === (item as Unit | Spell | Titan).entity_id;
 
   return (
     <div className="h-full w-full bg-surface-main/30 p-1 md:p-2 overflow-y-auto">
@@ -91,7 +110,7 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
        {/* Art / Banner Area */}
        <div className="flex-1 min-h-[90px] max-h-[30vh] w-full bg-slate-800 relative flex items-center justify-center overflow-hidden shrink-0">
             {/* Blurred Background */}
-            <Image 
+            <GameImage 
                 src={getCardImageUrl(item)} 
                 alt={name}
                 fill
@@ -108,7 +127,7 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
             )}
             {/* Main Image (Contained) */}
             <div className="absolute inset-0 flex items-center justify-center p-2 z-10">
-                <Image 
+                <GameImage 
                     src={getCardImageUrl(item)} 
                     alt={name}
                     width={400}
@@ -207,60 +226,99 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
        <div className="p-3 space-y-3 flex-1 overflow-y-auto">
             {/* Core Stats Grid */}
             <div className="grid grid-cols-2 gap-2">
-                <StatBox label="Health" value={item.health} icon={<Heart size={16} className="text-green-500" />} />
+                {'health' in item && <StatBox label="Health" value={item.health} icon={<Heart size={16} className="text-green-500" />} />}
                 
-                {isUnit ? (
+                {/* Unit / Titan Stats */}
+                {(isUnit && category !== 'Spell') && 'damage' in item && (
                     <>
-                        <StatBox label="Damage" value={item.damage} icon={<Swords size={16} className="text-red-400" />} />
-                        <StatBox label="Atk Speed" value={`${item.attack_speed}s`} icon={<Zap size={16} className="text-yellow-400" />} />
-                        <StatBox label="Range" value={item.range} icon={<Users size={16} className="text-blue-400" />} />
+                        <StatBox label="Damage" value={(item as Unit | Titan).damage} icon={<Swords size={16} className="text-red-400" />} />
+                        {/* Only show attack speed for Units (Titans might not have it in schema yet or it's fixed) */}
+                        {'attack_speed' in item && (
+                            <StatBox label="Atk Speed" value={`${(item as Unit).attack_speed ?? 0}s`} icon={<Zap size={16} className="text-yellow-400" />} />
+                        )}
+                        {'range' in item && (item as Unit).range && (
+                             <StatBox label="Range" value={(item as Unit).range} icon={<Users size={16} className="text-blue-400" />} />
+                        )}
+                        {'movement_speed' in item && (item as Unit | Titan).movement_speed && (
+                             <StatBox label="Speed" value={(item as Unit | Titan).movement_speed} icon={<Clock size={16} className="text-cyan-400" />} />
+                        )}
                     </>
-                ) : (
+                )}
+                
+                {/* Spell Stats */}
+                {category === 'Spell' && (
+                     <>
+                        {'damage' in item && (item as Spell).damage && (
+                            <StatBox label="Damage" value={(item as Spell).damage} icon={<Swords size={16} className="text-red-400" />} />
+                        )}
+                        {'duration' in item && (item as Spell).duration && (
+                            <StatBox label="Duration" value={`${(item as Spell).duration}s`} icon={<Clock size={16} className="text-yellow-400" />} />
+                        )}
+                         {'radius' in item && (item as Spell).radius && (
+                            <StatBox label="Radius" value={(item as Spell).radius} icon={<Users size={16} className="text-blue-400" />} />
+                        )}
+                        {'max_targets' in item && (item as Spell).max_targets && (
+                            <StatBox label="Targets" value={(item as Spell).max_targets} icon={<Users size={16} className="text-purple-400" />} />
+                        )}
+                     </>
+                )}
+                
+                {isSpellcaster && (
                     <>
-                         <StatBox label="Minion Dmg" value={item.attack_damage_minion} icon={<Swords size={16} className="text-red-400" />} />
-                         <StatBox label="Summoner Dmg" value={item.attack_damage_summoner} icon={<Swords size={16} className="text-purple-400" />} />
-                         <StatBox label="Move Speed" value={item.movement_speed} icon={<Zap size={16} className="text-yellow-400" />} />
+                         <div className="bg-surface-main border border-white/5 p-1.5 rounded flex flex-col items-center justify-center text-center col-span-2">
+                             <div className="text-[10px] uppercase tracking-widest text-gray-500 mb-1">Difficulty</div>
+                             <div className="flex gap-1">
+                                {[1, 2, 3].map((star) => (
+                                    <div 
+                                        key={star} 
+                                        className={`h-2 w-2 rounded-full ${
+                                            ((item as Spellcaster).difficulty || 1) >= star 
+                                            ? 'bg-brand-primary' 
+                                            : 'bg-white/10'
+                                        }`}
+                                    />
+                                ))}
+                             </div>
+                         </div>
                     </>
                 )}
             </div>
 
-            {/* Economy Stats (Only for Units) */}
-            {isUnit && (
-                <div className="bg-white/5 rounded-lg p-2 space-y-1">
-                    <h3 className="text-xs font-bold uppercase text-gray-500 mb-2">Economy</h3>
-                     <div className="flex justify-between items-center text-sm">
-                        <span className="flex items-center gap-2 text-gray-300">
-                            <Users size={14} /> Pop Cost
-                        </span>
-                        <span className="font-mono font-bold">{item.card_config.cost_population}</span>
-                    </div>
-                     <div className="flex justify-between items-center text-sm">
-                        <span className="flex items-center gap-2 text-gray-300">
-                            <Clock size={14} /> Charge Time
-                        </span>
-                        <span className="font-mono font-bold text-brand-secondary">{item.card_config.charge_time}s</span>
-                    </div>
-                </div>
-            )}
+
             
-            {/* Spellcaster Abilities */}
-            {isSpellcaster && (
-                 <div className="space-y-4">
-                    <h3 className="text-xs font-bold uppercase text-gray-500">Abilities</h3>
-                    {[item.abilities.primary, item.abilities.defense, item.abilities.ultimate].map((ab, i) => (
-                        <div key={i} className="bg-white/5 p-3 rounded border border-white/5">
-                            <div className="flex justify-between mb-1">
-                                <span className="font-bold text-sm text-brand-accent">{ab.name}</span>
-                                {ab.cooldown && <span className="text-xs text-gray-500">{ab.cooldown}s CD</span>}
-                            </div>
-                            <p className="text-xs text-gray-400">{ab.description}</p>
+            {/* Spellcaster Passives & Abilities */}
+            {isSpellcaster && 'abilities' in item && (
+                 <div className="space-y-3">
+                    {/* Passives */}
+                    {(item as Spellcaster).abilities.passive.length > 0 && (
+                        <div className="space-y-1">
+                            <h3 className="text-[10px] font-bold uppercase text-gray-500 tracking-wider">Passive</h3>
+                            {(item as Spellcaster).abilities.passive.map((p, i) => (
+                                <div key={i} className="bg-white/5 p-2 rounded border border-white/5 text-xs">
+                                    <span className="font-bold text-brand-secondary block mb-0.5">{p.name}</span>
+                                    <span className="text-gray-400 leading-tight">{p.description}</span>
+                                </div>
+                            ))}
                         </div>
-                    ))}
+                    )}
+
+                    {/* Active Abilities */}
+                    <div className="space-y-1">
+                        <h3 className="text-[10px] font-bold uppercase text-gray-500 tracking-wider">Abilities</h3>
+                        {[(item as Spellcaster).abilities.primary, (item as Spellcaster).abilities.defense, (item as Spellcaster).abilities.ultimate].map((ab, i) => (
+                            <div key={i} className="bg-white/5 p-2 rounded border border-white/5">
+                                <div className="flex justify-between items-center mb-0.5">
+                                    <span className="font-bold text-xs text-brand-accent">{ab.name}</span>
+                                    {ab.cooldown && <span className="text-[9px] text-gray-500 bg-black/40 px-1 rounded">{ab.cooldown}s</span>}
+                                </div>
+                                <p className="text-[10px] text-gray-400 leading-tight">{ab.description}</p>
+                            </div>
+                        ))}
+                     </div>
                  </div>
             )}
 
             {/* Description */}
-            {/* Some units might not have description in mock data or it's empty, handle optional */}
             {'description' in item && item.description && (
                 <div className="prose prose-invert text-sm text-gray-300">
                     <p>{item.description}</p>
@@ -272,11 +330,11 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
   );
 }
 
-function StatBox({ label, value, icon }: { label: string, value: string | number, icon: React.ReactNode }) {
+function StatBox({ label, value, icon }: { label: string, value: string | number | undefined, icon: React.ReactNode }) {
     return (
         <div className="bg-surface-main border border-white/5 p-1.5 rounded flex flex-col items-center justify-center text-center">
             <div className="opacity-60 scale-75">{icon}</div>
-            <div className="text-sm font-bold font-mono text-white leading-tight">{value}</div>
+            <div className="text-sm font-bold font-mono text-white leading-tight">{value ?? '-'}</div>
             <div className="text-[8px] uppercase tracking-widest text-gray-500">{label}</div>
         </div>
     )

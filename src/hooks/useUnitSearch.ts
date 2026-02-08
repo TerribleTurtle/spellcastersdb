@@ -11,8 +11,8 @@ interface FilterState {
 
 // Helper to extract filterable attributes safely
 function getSearchableAttributes(entity: UnifiedEntity) {
-  // Hero
-  if ("hero_id" in entity) {
+  // Spellcaster
+  if (entity.category === 'Spellcaster') {
     return {
       category: "Spellcaster",
       school: "Spellcaster",     // Virtual School for filtering
@@ -22,7 +22,7 @@ function getSearchableAttributes(entity: UnifiedEntity) {
     };
   }
   // Consumable
-  if ("consumable_id" in entity) {
+  if (entity.category === 'Consumable') {
     return {
       category: "Consumable",
       school: "Item",     // Virtual School
@@ -31,11 +31,26 @@ function getSearchableAttributes(entity: UnifiedEntity) {
       tags: entity.tags || [],
     };
   }
-  // Unit (Standard)
+  // Titan
+  if (entity.category === 'Titan') {
+      return {
+          category: "Titan",
+          school: entity.magic_school,
+          rank: "TITAN",
+          class: "Titan",
+          tags: entity.tags || [],
+      };
+  }
+
+  // Unit or Spell (Incantation)
+  // Both have magic_school.
+  // Unit has flat props. Spell might not (check interface).
+  const rank = ('rank' in entity && entity.rank) ? entity.rank : 'I';
+
   return {
     category: entity.category,
     school: entity.magic_school,
-    rank: entity.card_config.rank,
+    rank: rank,
     class: "Unit",
     tags: entity.tags || [],
   };

@@ -3,12 +3,12 @@
 import { useState } from 'react';
 import { copyToClipboard } from '@/lib/clipboard';
 import { Deck } from '@/types/deck';
-import { Unit, Spellcaster } from '@/types/api';
+import { UnifiedEntity } from '@/types/api';
 import { getCardImageUrl, cn } from '@/lib/utils';
 import { encodeDeck } from '@/lib/encoding';
 import { validateDeck } from "@/lib/deck-validation";
 import { Edit, Link as LinkIcon, Users, Copy, CheckCircle2, AlertCircle } from "lucide-react";
-import Image from "next/image";
+import { GameImage } from "@/components/ui/GameImage";
 
 interface SoloOverviewProps {
   deck: Deck;
@@ -107,7 +107,7 @@ export function SoloOverview({
                 {/* Background Art (Optional: Uses Spellcaster Art) */}
                 {deck.spellcaster && (
                     <div className="absolute inset-0 opacity-10 pointer-events-none">
-                        <Image 
+                        <GameImage 
                             src={getCardImageUrl(deck.spellcaster)} 
                             alt="" 
                             fill 
@@ -194,7 +194,7 @@ export function SoloOverview({
   );
 }
 
-function VisualSlot({ item, type, isEmpty, label }: { item?: Unit | Spellcaster | null, type: 'spellcaster' | 'unit' | 'titan', isEmpty?: boolean, label?: string }) {
+function VisualSlot({ item, type, isEmpty, label }: { item?: UnifiedEntity | null, type: 'spellcaster' | 'unit' | 'titan', isEmpty?: boolean, label?: string }) {
     if (isEmpty || !item) {
         return (
             <div className={cn(
@@ -216,7 +216,7 @@ function VisualSlot({ item, type, isEmpty, label }: { item?: Unit | Spellcaster 
                     ? "w-24 h-36 md:w-32 md:h-48 border-brand-primary ring-2 ring-brand-primary/20" 
                     : "w-16 h-24 md:w-20 md:h-32"
             )}>
-                <Image 
+                <GameImage 
                     src={getCardImageUrl(item)} 
                     alt={item.name}
                     fill
@@ -224,11 +224,11 @@ function VisualSlot({ item, type, isEmpty, label }: { item?: Unit | Spellcaster 
                 />
                 
                 {/* Badges */}
-                {'card_config' in item && item.category === 'Titan' && (
+                {item.category === 'Titan' && (
                      <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm shadow-sm border border-brand-accent/20">TITAN</div>
                 )}
-                 {'card_config' in item && item.category !== 'Titan' && (
-                     <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-gray-300 backdrop-blur-sm border border-white/10">{item.card_config.rank}</div>
+                 {'rank' in item && item.rank && (
+                     <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-gray-300 backdrop-blur-sm border border-white/10">{item.rank}</div>
                 )}
 
                 {/* Name Overlay */}

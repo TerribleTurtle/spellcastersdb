@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { UnifiedEntity } from "@/types/api";
+import { UnifiedEntity, Spellcaster } from "@/types/api";
 import { cn } from "@/lib/utils";
 import { EntityImage } from "@/components/ui/EntityImage";
 
@@ -11,30 +11,47 @@ interface UnitCardProps {
 
 // Helper to determine link and category
 function getEntityMeta(entity: UnifiedEntity) {
-  if ("hero_id" in entity) {
+  if (entity.category === 'Spellcaster') {
     return { 
-      href: `/heroes/${entity.hero_id}`, 
-      category: "Spellcaster", 
+      href: `/spellcasters/${entity.spellcaster_id}`, 
+      category: "Spellcaster",  
       rank: entity.class.toUpperCase(),
-      pop: null,
       school: "Spellcaster"
     };
   }
-  if ("consumable_id" in entity) {
+  if (entity.category === 'Consumable') {
     return { 
-      href: `/consumables/${entity.consumable_id}`, 
+      href: `/consumables/${entity.entity_id}`, 
       category: "Consumable", 
       rank: entity.rarity || "COMMON",
-      pop: null,
       school: "Item"
     };
   }
-  // It's a Unit (Unit | Spell | Building)
+  // Titan
+  if (entity.category === 'Titan') {
+      return {
+          href: `/titans/${entity.entity_id}`,
+          category: "Titan",
+          rank: "TITAN",
+          school: entity.magic_school
+      };
+  }
+
+  // Spell
+  if (entity.category === 'Spell') {
+    return {
+      href: `/incantations/spells/${entity.entity_id}`,
+      category: "Spell",
+      rank: "SPELL",
+      school: entity.magic_school
+    };
+  }
+
+  // Unit or Spell
   return { 
-    href: `/units/${entity.entity_id}`, 
+    href: `/incantations/units/${entity.entity_id}`, 
     category: entity.category, 
-    rank: entity.category === "Titan" ? "TITAN" : entity.card_config.rank,
-    pop: entity.card_config.cost_population,
+    rank: ('rank' in entity && entity.rank) ? entity.rank : 'I',
     school: entity.magic_school
   };
 }
@@ -127,7 +144,7 @@ export function UnitCard({ unit, variant = "default", className }: UnitCardProps
           <div className="grid grid-cols-4 gap-2 pt-2 border-t border-white/5">
             <div className="text-center">
               <div className="text-[9px] text-gray-600 mb-0.5">HP</div>
-              <div className="text-xs text-white font-mono font-bold">{unit.health}</div>
+              <div className="text-xs text-white font-mono font-bold">{"health" in unit ? unit.health : "-"}</div>
             </div>
             <div className="text-center">
               <div className="text-[9px] text-gray-600 mb-0.5">DMG</div>
@@ -135,13 +152,28 @@ export function UnitCard({ unit, variant = "default", className }: UnitCardProps
             </div>
             <div className="text-center">
               <div className="text-[9px] text-gray-600 mb-0.5">RNG</div>
-              <div className="text-xs text-white font-mono font-bold">{unit.range}</div>
+              <div className="text-xs text-white font-mono font-bold">{"range" in unit ? unit.range : "-"}</div>
             </div>
             <div className="text-center">
               <div className="text-[9px] text-gray-600 mb-0.5">SPD</div>
               <div className="text-xs text-white font-mono font-bold">{unit.movement_speed}</div>
             </div>
           </div>
+        ) : unit.category === 'Spellcaster' ? (
+           <div className="pt-2 border-t border-white/5 flex flex-col items-center">
+                <div className="text-[9px] text-gray-500 uppercase tracking-widest mb-1">Difficulty</div>
+                <div className="flex gap-1">
+                    {[1, 2, 3].map(star => (
+                            <div 
+                            key={star}
+                            className={cn(
+                                "w-2 h-2 rounded-full",
+                                ((unit as Spellcaster).difficulty || 1) >= star ? "bg-brand-primary shadow-[0_0_5px_rgba(var(--brand-primary),0.6)]" : "bg-white/10"
+                            )}
+                            />
+                    ))}
+                </div>
+           </div>
         ) : (
           <div className="pt-2 border-t border-white/5">
             <p className="text-gray-400 line-clamp-2 text-[10px] leading-relaxed">

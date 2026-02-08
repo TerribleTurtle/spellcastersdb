@@ -17,9 +17,12 @@ export type MagicSchool =
   | "Necromancy"
   | "Titan";
 
-export type UnitCategory = "Creature" | "Building" | "Spell" | "Titan";
+export type UnitCategory = "Creature" | "Building";
+export type SpellCategory = "Spell";
+export type TitanCategory = "Titan";
+export type IncantationCategory = UnitCategory | SpellCategory;
 
-export type UnitRank = "I" | "II" | "III" | "IV";
+export type UnitRank = "I" | "II" | "III" | "IV" | "V"; // Added V for Titans just in case, though they have their own schema
 
 export type SpellcasterClass = "Enchanter" | "Duelist" | "Conqueror" | "Unknown";
 
@@ -29,52 +32,89 @@ export type MovementType = "Ground" | "Fly" | "Hover" | "Stationary";
 // Core Entity Interfaces
 // ============================================================================
 
-export interface CardConfig {
-  rank: UnitRank;
-  cost_population: number;
-  cost_charges: number;
-  initial_charges: number;
-  charge_time: number;
-  cast_time: number;
-}
+// CardConfig removed - properties flattened into Incantation/Unit
 
-export interface Unit {
+
+/**
+ * Base Interface for all "Deck-able" items (Units + Spells)
+ * Named "Incantation" in the new spec.
+ */
+export interface Incantation {
   $schema?: string;
-  game_version: string;
+  // game_version removed, changelog used instead
   entity_id: string;
   name: string;
-  category: UnitCategory;
+  category: string; // Refined in sub-interfaces
   magic_school: MagicSchool;
   description: string;
   image_required?: boolean;
+  tags: string[];
+  
+  // Flattened Config
+  rank?: UnitRank;
+}
 
+/**
+ * Represents Creatures and Buildings
+ */
+export interface Unit extends Incantation {
+  category: UnitCategory;
+  
   // Combat Stats
   health: number;
-  damage: number;
-  attack_speed: number;
-  range: number;
+  damage?: number;
+  attack_speed?: number;
+  range?: number;
 
-  // Movement (for Creatures/Buildings)
-  movement_speed: number;
+  // Movement
+  movement_speed?: number;
   movement_type?: MovementType;
+}
 
-  // Optional Fields (Spells, Buildings, etc.)
+/**
+ * Represents Spells (Instant Actions)
+ */
+export interface Spell extends Incantation {
+  category: SpellCategory;
+
+  // Spell specifics
   radius?: number;
   duration?: number;
   tick_rate?: number;
   max_targets?: number;
-  collision_radius?: number;
   target_mask?: string[];
+  
+  // Spells usually don't have health/movement
+  damage?: number;
+  range?: number;
+}
 
+/**
+ * Titans (Unique Ultimate Entities)
+ */
+export interface Titan {
+  $schema?: string;
+  entity_id: string;
+  name: string;
+  category: TitanCategory;
+  magic_school: MagicSchool;
+  rank: string; // Usually "V"
+  description: string;
+  image_required?: boolean;
+  
   tags: string[];
-  card_config: CardConfig;
+  
+  // Titan Stats vary, but similar to Units
+  health: number;
+  damage: number;
+  movement_speed: number;
+  heal_amount?: number;
 }
 
 export interface Ability {
-  ability_id: string;
+  ability_id?: string;
   name: string;
   description: string;
-  // Some abilities might not have cooldown in the data yet, but good to keep optional
   cooldown?: number;
 }
 
@@ -87,22 +127,23 @@ export interface SpellcasterAbilities {
 
 export interface Spellcaster {
   $schema?: string;
-  game_version: string;
-  hero_id: string; // Kept as hero_id to match API for now, but Interface is Spellcaster
+  spellcaster_id: string; // Renamed from hero_id
   name: string;
+  category: "Spellcaster";
+  tags: string[];
   class: SpellcasterClass;
   image_required?: boolean;
-
-  // Combat Stats
-  health: number;
-  movement_speed: number;
-  flight_speed: number;
-  health_regen_rate: number;
-  regen_delay?: number | null;
   
-  // Offense
-  attack_damage_summoner: number;
-  attack_damage_minion: number;
+  difficulty?: number;
+
+  // RPG Stats Removed
+  // health: number;
+  // movement_speed: number;
+  // flight_speed: number;
+  // health_regen_rate: number;
+  // regen_delay?: number | null;
+  // attack_damage_summoner: number;
+  // attack_damage_minion: number;
 
   // Kit
   abilities: SpellcasterAbilities;
@@ -110,8 +151,7 @@ export interface Spellcaster {
 
 export interface Consumable {
   $schema?: string;
-  game_version: string;
-  consumable_id: string; // Changed from entity_id
+  entity_id: string; // Renamed from consumable_id in some contexts? Spec says entity_id.
   name: string;
   description: string;
   image_required?: boolean;
@@ -120,14 +160,18 @@ export interface Consumable {
   effect_type?: string;
   effect_value?: number;
   duration?: number;
+  value?: number; // Some have 'value' instead of effect_value
 
   tags: string[];
+  category: "Consumable";
   rarity?: string;
+  stats?: {
+      duration?: number;
+  }
 }
 
 export interface Upgrade {
   $schema?: string;
-  game_version: string;
   entity_id: string;
   name: string;
   description: string;
@@ -151,10 +195,19 @@ export interface BuildInfo {
 
 export interface AllDataResponse {
   build_info: BuildInfo;
-  units: Unit[];
-  heroes: Spellcaster[]; // API returns 'heroes' key, but we type it as Spellcaster[]
+  spellcasters: Spellcaster[]; // Renamed from heroes
+  units: Unit[];        // Creatures + Buildings ONLY
+  spells: Spell[];      // New Array
+  titans: Titan[];      // New Array
   consumables: Consumable[];
   upgrades: Upgrade[];
 }
 
-export type UnifiedEntity = Unit | Spellcaster | Consumable;
+/**
+ * Union for Deck Builder slots (can accept Units or Spells)
+ * "Incantation" is the polymorphic term.
+ */
+// export type Incantation = Unit | Spell; // Already defined as base interface, but practically we use union in code? 
+// No, Interface inheritance is better for shared props.
+
+export type UnifiedEntity = Unit | Spell | Titan | Spellcaster | Consumable;

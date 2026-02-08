@@ -1,16 +1,16 @@
 "use client";
 
-import Image from "next/image";
+import { GameImage } from "@/components/ui/GameImage";
 import React, { useState, useMemo, useEffect } from "react";
 import { Search, Filter, X, Plus } from "lucide-react";
 import { useDraggable } from "@dnd-kit/core";
-import { Unit, Spellcaster } from "@/types/api";
+import { Unit, Spellcaster, Spell, Titan } from "@/types/api";
 import { FilterSection } from "@/components/ui/FilterSection";
 import { cn, getCardImageUrl } from "@/lib/utils";
 import { Virtuoso } from "react-virtuoso";
 
 // Combined type handling
-type BrowserItem = Unit | (Spellcaster & { category: 'Spellcaster' });
+type BrowserItem = Unit | (Spellcaster & { category: 'Spellcaster' }) | Spell | Titan;
 
 interface UnitBrowserProps {
   items: BrowserItem[];
@@ -20,6 +20,7 @@ interface UnitBrowserProps {
 
 const SCHOOLS = ["Elemental", "Wild", "War", "Astral", "Holy", "Technomancy", "Necromancy", "Titan"];
 const RANKS = ["I", "II", "III", "IV"];
+const SPELLCASTER_CLASSES = ["Duelist", "Conqueror", "Enchanter"];
 const CATEGORY_TO_PLURAL: Record<string, string> = {
   Spellcaster: "Spellcasters",
   Creature: "Creatures",
@@ -66,6 +67,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
     schools: [] as string[],
     ranks: [] as string[],
     categories: [] as string[],
+    classes: [] as string[],
   });
 
   // Responsive Columns Hook logic
@@ -87,7 +89,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
       return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const toggleFilter = (type: "schools" | "ranks" | "categories", value: string) => {
+  const toggleFilter = (type: "schools" | "ranks" | "categories" | "classes", value: string) => {
     setActiveFilters((prev) => {
       const current = prev[type];
       const updated = current.includes(value)
@@ -98,24 +100,35 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
   };
   
   const clearFilters = () => {
-      setActiveFilters({ schools: [], ranks: [], categories: [] });
+      setActiveFilters({ schools: [], ranks: [], categories: [], classes: [] });
   };
   
-  const activeFilterCount = activeFilters.schools.length + activeFilters.ranks.length + activeFilters.categories.length;
+  const activeFilterCount = activeFilters.schools.length + activeFilters.ranks.length + activeFilters.categories.length + activeFilters.classes.length;
 
   // 1. Filter Items
   const filteredItems = useMemo(() => {
       return items.filter((item) => {
-        // Search
-        if (searchQuery && !item.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-            return false;
-        }
-        
         const isUnit = 'entity_id' in item;
         const rawCategory = isUnit ? item.category : 'Spellcaster';
         const category = CATEGORY_TO_PLURAL[rawCategory] || rawCategory;
         const school = isUnit ? item.magic_school : 'N/A';
-        const rank = isUnit ? item.card_config.rank : null;
+        // Unified Rank: Check if item has rank property. Spells and Units do. Titans have rank "V".
+        const rank = ('rank' in item) ? (item as Unit | Spell | Titan).rank : null;
+        const spellcasterClass = !isUnit ? (item as Spellcaster).class : null;
+
+        // Search - Expanded
+        if (searchQuery) {
+            const lowQuery = searchQuery.toLowerCase();
+            const matchesName = item.name.toLowerCase().includes(lowQuery);
+            const matchesDesc = 'description' in item && item.description.toLowerCase().includes(lowQuery);
+            const matchesTags = 'tags' in item && item.tags.some(tag => tag.toLowerCase().includes(lowQuery));
+            const matchesSchool = isUnit && item.magic_school.toLowerCase().includes(lowQuery);
+            const matchesCategory = category.toLowerCase().includes(lowQuery); 
+            
+            if (!matchesName && !matchesDesc && !matchesTags && !matchesSchool && !matchesCategory) {
+                 return false;
+            }
+        }
 
         // Overlay Filters
         if (activeFilters.categories.length > 0 && !activeFilters.categories.includes(category)) return false;
@@ -124,7 +137,12 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
             if (!activeFilters.schools.includes(school)) return false;
         }
         if (activeFilters.ranks.length > 0) {
-            if (!rank || !activeFilters.ranks.includes(rank)) return false;
+             // Now includes Spells if they have rank
+             if (!rank || !activeFilters.ranks.includes(rank)) return false;
+        }
+        if (activeFilters.classes.length > 0) {
+            if (!spellcasterClass) return false;
+            if (!activeFilters.classes.includes(spellcasterClass)) return false;
         }
 
         return true;
@@ -147,8 +165,8 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
               });
               if (catItems.length > 0) {
                   catItems.sort((a, b) => {
-                      const rA = 'card_config' in a ? a.card_config.rank : 'I';
-                      const rB = 'card_config' in b ? b.card_config.rank : 'I';
+                      const rA = ('rank' in a) ? (a as Unit).rank || 'I' : 'I';
+                      const rB = ('rank' in b) ? (b as Unit).rank || 'I' : 'I';
                       if (rA !== rB) return rA.localeCompare(rB);
                       return a.name.localeCompare(b.name);
                   });
@@ -159,7 +177,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
           RANKS.forEach(rank => {
               const rankItems = filteredItems.filter(i => {
                   if (!('entity_id' in i)) return false; 
-                  return i.card_config.rank === rank;
+                  return (i as Unit).rank === rank;
               });
               
               if (rankItems.length > 0) {
@@ -195,8 +213,8 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
                       if (pA !== pB) return pA - pB;
 
                       // 2. Rank (Secondary)
-                      const rA = 'card_config' in a ? a.card_config.rank : 'I';
-                      const rB = 'card_config' in b ? b.card_config.rank : 'I';
+                      const rA = ('rank' in a) ? (a as Unit).rank || 'I' : 'I';
+                      const rB = ('rank' in b) ? (b as Unit).rank || 'I' : 'I';
                       if (rA !== rB) return rA.localeCompare(rB);
 
                       // 3. Name
@@ -299,12 +317,18 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
                </div>
                
                <div className="grid grid-cols-2 gap-6">
-                   <FilterSection 
-                        title="Category" 
-                        options={CATEGORIES} 
-                        selected={activeFilters.categories} 
-                        onToggle={(v) => toggleFilter('categories', v)} 
-                    />
+                    <FilterSection 
+                         title="Category" 
+                         options={CATEGORIES} 
+                         selected={activeFilters.categories} 
+                         onToggle={(v) => toggleFilter('categories', v)} 
+                     />
+                    <FilterSection 
+                         title="Class" 
+                         options={SPELLCASTER_CLASSES} 
+                         selected={activeFilters.classes} 
+                         onToggle={(v) => toggleFilter('classes', v)} 
+                     />
                    <div className="space-y-6">
                         <FilterSection 
                             title="Magic School" 
@@ -363,7 +387,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
                             <div className="px-4 py-1 grid gap-2" 
                                  style={{ gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))` }}>
                                 {row.items.map((item) => {
-                                    const id = 'entity_id' in item ? item.entity_id : item.hero_id;
+                                    const id = 'entity_id' in item ? item.entity_id : item.spellcaster_id;
                                     return (
                                         <DraggableCard 
                                             key={id} 
@@ -389,11 +413,11 @@ function DraggableCard({ item, onClick, onQuickAdd }: {
     onClick: () => void;
     onQuickAdd: () => void;
 }) {
-    const id = 'entity_id' in item ? item.entity_id : item.hero_id;
-    const isHero = !('entity_id' in item);
-    const rank = !isHero ? item.card_config.rank : null;
-    const isTitan = !isHero && item.category === 'Titan';
-    const spellcasterClass = isHero ? item.class : null;
+    const id = 'entity_id' in item ? item.entity_id : item.spellcaster_id;
+    const isSpellcaster = !('entity_id' in item);
+    const rank = !isSpellcaster ? (item as Unit).rank : null;
+    const isTitan = !isSpellcaster && item.category === 'Titan';
+    const spellcasterClass = isSpellcaster ? (item as Spellcaster).class : null;
 
     const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
         id: `browser-${id}`,
@@ -418,12 +442,12 @@ function DraggableCard({ item, onClick, onQuickAdd }: {
                 "hover:border-brand-primary/50 transition-all hover:scale-105",
                 "opacity-100", // Reset default
                 isDragging && "opacity-50",
-                isHero && "border-brand-accent/30 shadow-[0_0_10px_rgba(255,255,255,0.05)]"
+                isSpellcaster && "border-brand-accent/30 shadow-[0_0_10px_rgba(255,255,255,0.05)]"
             )}
         >
             {/* Image Area - Touch action allowed to enable scrolling */}
             <div className="relative flex-1 overflow-hidden bg-gray-800">
-                <Image 
+                <GameImage 
                     src={getCardImageUrl(item)} 
                     alt={item.name}
                     fill

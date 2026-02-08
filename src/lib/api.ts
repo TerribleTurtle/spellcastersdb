@@ -4,7 +4,7 @@
  */
 
 import { z } from "zod";
-import type { AllDataResponse, Unit, Spellcaster, Consumable, Upgrade, UnifiedEntity } from "@/types/api";
+import type { AllDataResponse, Unit, Spell, Titan, Spellcaster, Consumable, Upgrade, UnifiedEntity, Incantation } from "@/types/api";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://terribleturtle.github.io/spellcasters-community-api/api/v1";
 
@@ -17,38 +17,59 @@ const REVALIDATE_SECONDS = 60; // 1 minute cache
 // Zod Schemas (Validation Layer)
 // ============================================================================
 
-const CardConfigSchema = z.object({
-  rank: z.enum(["I", "II", "III", "IV"]),
-  cost_population: z.number(),
-  cost_charges: z.number(),
-  initial_charges: z.number().optional().default(0),
-  charge_time: z.number(),
-  cast_time: z.number(),
-});
 
-const UnitSchema = z.object({
+// Base parts shared by Unit and Spell
+const IncantationBase = {
   entity_id: z.string(),
   name: z.string(),
-  category: z.enum(["Creature", "Building", "Spell", "Titan"]),
   magic_school: z.enum(["Elemental", "Wild", "War", "Astral", "Holy", "Technomancy", "Necromancy", "Titan"]),
   description: z.string(),
   image_required: z.boolean().optional(),
+  tags: z.array(z.string()),
+  
+  // Flattened Card Config
+  rank: z.enum(["I", "II", "III", "IV", "V"]).optional(), // Optional for non-units if shared? Actually Units need it.
+};
+
+const UnitSchema = z.object({
+  ...IncantationBase,
+  category: z.enum(["Creature", "Building"]), // Strict subset
   health: z.number(),
-  damage: z.number(),
-  attack_speed: z.number(),
-  range: z.number(),
-  movement_speed: z.number(),
+  damage: z.number().optional(),
+  attack_speed: z.number().optional(),
+  range: z.number().optional(),
+  movement_speed: z.number().optional(),
   movement_type: z.enum(["Ground", "Fly", "Hover", "Stationary"]).nullish(),
+}).passthrough(); 
+
+const SpellSchema = z.object({
+  ...IncantationBase,
+  category: z.literal("Spell"),
   radius: z.number().nullish(),
   duration: z.number().nullish(),
   tick_rate: z.number().nullish(),
   max_targets: z.number().nullish(),
-  collision_radius: z.number().nullish(),
   target_mask: z.array(z.string()).nullish(),
+  damage: z.number().optional(),
+  range: z.number().optional(),
+}).passthrough();
+
+const TitanSchema = z.object({
+  entity_id: z.string(),
+  name: z.string(),
+  category: z.literal("Titan"),
+  magic_school: z.enum(["Elemental", "Wild", "War", "Astral", "Holy", "Technomancy", "Necromancy", "Titan"]),
+  rank: z.string(), // Usually V
+  description: z.string(),
+  image_required: z.boolean().optional(),
   tags: z.array(z.string()),
-  card_config: CardConfigSchema,
-  // Catch-all for extra fields to prevent strict failure on minor schema additions
-}).passthrough(); 
+  
+  // Titan Stats (Flattened)
+  health: z.number(),
+  damage: z.number(),
+  movement_speed: z.number(),
+  heal_amount: z.number().optional(),
+}).passthrough();
 
 const AbilitySchema = z.object({
   ability_id: z.string().optional(),
@@ -58,17 +79,22 @@ const AbilitySchema = z.object({
 });
 
 const SpellcasterSchema = z.object({
-  hero_id: z.string(),
+  spellcaster_id: z.string(), // Renamed from hero_id
   name: z.string(),
+  // category: z.literal("Spellcaster").optional().default("Spellcaster"), // Removed (fixed in source)
   class: z.enum(["Enchanter", "Duelist", "Conqueror", "Unknown"]).optional().default("Unknown"),
   image_required: z.boolean().optional(),
-  health: z.number(),
-  movement_speed: z.number(),
-  flight_speed: z.number(),
-  health_regen_rate: z.number(),
-  regen_delay: z.number().optional().nullable(),
-  attack_damage_summoner: z.number(),
-  attack_damage_minion: z.number(),
+  difficulty: z.number().optional(), // New field
+  
+  // RPG Stats Removed
+  // health: z.number(),
+  // movement_speed: z.number(),
+  // flight_speed: z.number(),
+  // health_regen_rate: z.number(),
+  // regen_delay: z.number().optional().nullable(),
+  // attack_damage_summoner: z.number(),
+  // attack_damage_minion: z.number(),
+  
   abilities: z.object({
     passive: z.array(AbilitySchema),
     primary: AbilitySchema,
@@ -78,10 +104,12 @@ const SpellcasterSchema = z.object({
 }).passthrough();
 
 const ConsumableSchema = z.object({
-  consumable_id: z.string(),
+  entity_id: z.string(), // Renamed from consumable_id
   name: z.string(),
   description: z.string().optional().nullable().default(""),
   tags: z.array(z.string()).optional().default([]),
+  category: z.literal("Consumable").optional().default("Consumable"),
+  rarity: z.string().optional(),
 }).passthrough();
 
 const UpgradeSchema = z.object({
@@ -99,8 +127,10 @@ const AllDataSchema = z.object({
     version: z.string(),
     generated_at: z.string(),
   }),
+  spellcasters: z.array(SpellcasterSchema),
   units: z.array(UnitSchema),
-  heroes: z.array(SpellcasterSchema),
+  spells: z.array(SpellSchema),
+  titans: z.array(TitanSchema),
   consumables: z.array(ConsumableSchema),
   upgrades: z.array(UpgradeSchema),
 });
@@ -114,37 +144,41 @@ const AllDataSchema = z.object({
  * Uses Zod to validate the response. Returns "best effort" empty arrays on total failure.
  */
 export async function fetchGameData(): Promise<AllDataResponse> {
-  /* DEVELOPMENT OVERRIDE: Local File System
-  if (process.env.NODE_ENV === 'development' && process.env.LOCAL_API_PATH) {
-      try {
-          console.log(`[API] Reading from local file: ${process.env.LOCAL_API_PATH}`);
-          const fs = await import('fs/promises'); // Dynamic import to avoid client-side bundling issues
-          const fileContent = await fs.readFile(process.env.LOCAL_API_PATH, 'utf-8');
-          const rawData = JSON.parse(fileContent);
-
-          const result = AllDataSchema.safeParse(rawData);
-          if (!result.success) {
-               console.error("🔴 CRITICAL: Local File Schema Validation Failed", result.error.format());
-               throw new Error(`Local API Validation Failed: ${JSON.stringify(result.error.format(), null, 2)}`);
-          }
-          return result.data as unknown as AllDataResponse;
-      } catch (error) {
-          console.error("Error reading local game data:", error);
-          // Fallthrough to fetch? Or fail hard? Fail hard makes more sense for "Dev Mode Override"
-          return {
-            build_info: { version: "error-local", generated_at: new Date().toISOString() },
-            units: [],
-            heroes: [],
-            consumables: [],
-            upgrades: []
-        };
-      }
-  }
-  */
-
   const url = `${API_BASE_URL}/all_data.json`;
   
-  try {
+    // Local Dev Override
+    if (process.env.NODE_ENV === 'development') {
+        try {
+            console.log("Attempting to load local data...");
+            const fs = await import('fs/promises');
+
+            
+            // CRITICAL: Local Development Source of Truth
+            // This MUST point to the external repo location, NOT a local copy in this repo.
+            const specificPath = "C:\\Projects\\spellcasters-community-api\\api\\v1\\all_data.json";
+            const localPath = specificPath;
+            
+            console.log(`Loading data from: ${localPath}`);
+            const fileContent = await fs.readFile(localPath, 'utf-8');
+            const rawData = JSON.parse(fileContent);
+            
+            const result = AllDataSchema.safeParse(rawData);
+            if (result.success) {
+                console.log("✅ Loaded and validated local data successfully.");
+                return result.data as unknown as AllDataResponse;
+            } else {
+                console.error("🔴 Local Data Validation Failed:", JSON.stringify(result.error.format(), null, 2));
+                // Fallthrough to remote? Or throw?
+                // Throwing in dev is better visibility
+                throw new Error("Local Data Validation Failed");
+            }
+        } catch (e) {
+            console.warn("⚠️ Could not load local data:", e);
+            // Fallback
+        }
+    }
+
+    try {
     const response = await fetch(url, {
       next: { 
         revalidate: REVALIDATE_SECONDS,
@@ -164,23 +198,16 @@ export async function fetchGameData(): Promise<AllDataResponse> {
     if (!result.success) {
       console.error("🔴 CRITICAL: API Schema Validation Failed", result.error.format());
       
-      // FALLBACK: Return whatever we got if it looks vaguely shaped right, OR return safe empties.
-      // For this app, strict correctness is preferred, but "Show nothing" is better than "Crash".
-      // We will try to patch the raw data into our verified shape type casted, 
-      // but alerting the developer is key.
-      
-      // If we have units/heroes keys, return them even if dirty?
-      // No, let's respect the "Anti-Corruption" goal. 
-      // We will return empty arrays to avoid crashing components downstream.
       if (process.env.NODE_ENV === 'development') {
          // In Dev, throw so we see it.
          throw new Error(`API Validation Failed: ${JSON.stringify(result.error.format(), null, 2)}`);
       }
-      console.error("Critical API Validation Error (returning empty fallback):", result.error.format());
       return {
           build_info: { version: "unknown", generated_at: new Date().toISOString() },
+          spellcasters: [],
           units: [],
-          heroes: [],
+          spells: [],
+          titans: [],
           consumables: [],
           upgrades: []
       };
@@ -192,8 +219,10 @@ export async function fetchGameData(): Promise<AllDataResponse> {
     // Return empty safe object
     return {
         build_info: { version: "error", generated_at: new Date().toISOString() },
+        spellcasters: [],
         units: [],
-        heroes: [],
+        spells: [],
+        titans: [],
         consumables: [],
         upgrades: []
     };
@@ -201,7 +230,7 @@ export async function fetchGameData(): Promise<AllDataResponse> {
 }
 
 /**
- * Returns all units (Creatures, Buildings, Spells, Titans)
+ * Returns all Creatures and Buildings
  */
 export async function getUnits(): Promise<Unit[]> {
   const data = await fetchGameData();
@@ -209,12 +238,39 @@ export async function getUnits(): Promise<Unit[]> {
 }
 
 /**
+ * Returns all Spells
+ */
+export async function getSpells(): Promise<Spell[]> {
+  const data = await fetchGameData();
+  return data.spells;
+}
+
+/**
+ * Returns all Titans
+ */
+export async function getTitans(): Promise<Titan[]> {
+  const data = await fetchGameData();
+  return data.titans;
+}
+
+/**
+ * Returns Units + Spells aggregated (for Deck Builder)
+ */
+export async function getIncantations(): Promise<Incantation[]> {
+    const data = await fetchGameData();
+    // Use type assertion to satisfy TS if needed, or rely on compatible interfaces
+    return [...data.units, ...data.spells];
+}
+
+/**
  * Returns all spellcasters (formerly Heroes)
  */
 export async function getSpellcasters(): Promise<Spellcaster[]> {
   const data = await fetchGameData();
-  return data.heroes; // The API JSON key is 'heroes', we return Spellcaster[]
+  return data.spellcasters;
 }
+
+
 
 /**
  * Returns all consumables
@@ -233,45 +289,49 @@ export async function getUpgrades(): Promise<Upgrade[]> {
 }
 
 /**
- * Get a specific unit by entity_id
+ * Get a specific unit or spell by entity_id
+ * Searches units, spells, and titans
  */
-export async function getUnitById(entityId: string): Promise<Unit | null> {
-  const units = await getUnits();
-  return units.find(unit => unit.entity_id === entityId) || null;
+export async function getEntityById(entityId: string): Promise<Unit | Spell | Titan | null> {
+  const data = await fetchGameData();
+  const unit = data.units.find(u => u.entity_id === entityId);
+  if (unit) return unit;
+  
+  const spell = data.spells.find(s => s.entity_id === entityId);
+  if (spell) return spell;
+
+  const titan = data.titans.find(t => t.entity_id === entityId);
+  if (titan) return titan;
+
+  return null;
 }
 
 /**
- * Get a specific spellcaster by id (maps to hero_id for now)
+ * Legacy support: Get Unit by ID (only checks Units)
+ */
+export async function getUnitById(entityId: string): Promise<Unit | null> {
+    const units = await getUnits();
+    return units.find(unit => unit.entity_id === entityId) || null;
+}
+
+/**
+ * Get a specific spellcaster by id
  */
 export async function getSpellcasterById(entityId: string): Promise<Spellcaster | null> {
   const spellcasters = await getSpellcasters();
-  return spellcasters.find(s => s.hero_id === entityId) || null;
+  return spellcasters.find(s => s.spellcaster_id === entityId) || null;
 }
 
 /**
- * Filter units by category
- */
-export async function getUnitsByCategory(category: Unit['category']): Promise<Unit[]> {
-  const units = await getUnits();
-  return units.filter(unit => unit.category === category);
-}
-
-/**
- * Filter units by magic school
- */
-export async function getUnitsByMagicSchool(school: Unit['magic_school']): Promise<Unit[]> {
-  const units = await getUnits();
-  return units.filter(unit => unit.magic_school === school);
-}
-
-/**
- * Returns a unified list of all searchable entities (Units, Spellcasters, Consumables)
+ * Returns a unified list of all searchable entities
  */
 export async function getAllEntities(): Promise<UnifiedEntity[]> {
   const data = await fetchGameData();
   return [
     ...data.units,
-    ...data.heroes,
+    ...data.spells,
+    ...data.titans,
+    ...data.spellcasters,
     ...data.consumables
   ];
 }

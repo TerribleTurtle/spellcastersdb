@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 
-interface HeroPageProps {
+interface SpellcasterPageProps {
   params: Promise<{ id: string }>;
 }
 
@@ -11,12 +11,12 @@ interface HeroPageProps {
 export async function generateStaticParams() {
   const spellcasters = await getSpellcasters();
   return spellcasters.map((s) => ({
-    id: s.hero_id,
+    id: s.spellcaster_id,
   }));
 }
 
 // 2. Generate Dynamic Metadata (SEO)
-export async function generateMetadata({ params }: HeroPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: SpellcasterPageProps): Promise<Metadata> {
   const { id } = await params;
   const spellcaster = await getSpellcasterById(id);
 
@@ -24,8 +24,8 @@ export async function generateMetadata({ params }: HeroPageProps): Promise<Metad
     return { title: "Spellcaster Not Found" };
   }
 
-  // Fallback description since heroes don't have a specific description field
-  const description = `${spellcaster.name} - ${spellcaster.abilities.primary.name} user. Health: ${spellcaster.health}.`;
+  // Fallback description since spellcasters don't have a specific description field
+  const description = `${spellcaster.name} - ${spellcaster.abilities.primary.name} user. Difficulty: ${spellcaster.difficulty || 1}/3.`;
 
   return {
     title: spellcaster.name,
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: HeroPageProps): Promise<Metad
 }
 
 // 3. The UI Component
-export default async function HeroPage({ params }: HeroPageProps) {
+export default async function SpellcasterPage({ params }: SpellcasterPageProps) {
   const { id } = await params;
   const spellcaster = await getSpellcasterById(id);
 
@@ -61,28 +61,28 @@ export default async function HeroPage({ params }: HeroPageProps) {
           </h1>
         </div>
 
-        {/* Combat Stats Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-surface-card p-4 rounded-xl border border-surface-highlight">
-            <p className="text-gray-400 text-xs uppercase tracking-widest mb-1">Health</p>
-            <p className="text-3xl font-bold text-green-400">{spellcaster.health}</p>
-            <p className="text-xs text-gray-500 mt-1">+{spellcaster.health_regen_rate}/s Regen</p>
-          </div>
-          <div className="bg-surface-card p-4 rounded-xl border border-surface-highlight">
-            <p className="text-gray-400 text-xs uppercase tracking-widest mb-1">Damage</p>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold text-red-400">{spellcaster.attack_damage_minion} <span className="text-sm font-normal text-gray-500">vs Minion</span></span>
-              <span className="text-xl font-bold text-orange-400">{spellcaster.attack_damage_summoner} <span className="text-sm font-normal text-gray-500">vs Player</span></span>
+        {/* Difficulty Indicator */}
+        <div className="mb-8">
+            <div className="bg-surface-card p-4 rounded-xl border border-surface-highlight inline-flex items-center gap-4">
+                <p className="text-gray-400 text-xs uppercase tracking-widest">Difficulty</p>
+                <div className="flex gap-1">
+                    {[1, 2, 3].map((star) => (
+                        <div 
+                            key={star} 
+                            className={`h-3 w-3 rounded-full ${
+                                (spellcaster.difficulty || 1) >= star 
+                                ? 'bg-brand-primary shadow-[0_0_8px_rgba(var(--brand-primary),0.6)]' 
+                                : 'bg-white/10'
+                            }`}
+                        />
+                    ))}
+                </div>
+                <span className="text-sm text-gray-400">
+                    {(spellcaster.difficulty || 1) === 1 && "Easy"}
+                    {(spellcaster.difficulty || 1) === 2 && "Medium"}
+                    {(spellcaster.difficulty || 1) === 3 && "Hard"}
+                </span>
             </div>
-          </div>
-          <div className="bg-surface-card p-4 rounded-xl border border-surface-highlight">
-             <p className="text-gray-400 text-xs uppercase tracking-widest mb-1">Move Speed</p>
-             <p className="text-2xl font-bold text-yellow-400">{spellcaster.movement_speed}</p>
-          </div>
-           <div className="bg-surface-card p-4 rounded-xl border border-surface-highlight">
-             <p className="text-gray-400 text-xs uppercase tracking-widest mb-1">Flight Speed</p>
-             <p className="text-2xl font-bold text-brand-accent">{spellcaster.flight_speed}</p>
-          </div>
         </div>
 
         {/* Ability Kit */}

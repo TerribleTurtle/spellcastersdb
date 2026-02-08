@@ -1,7 +1,12 @@
-import Image from "next/image";
+/**
+ * @file EntityImage.tsx
+ * @description CRITICAL CORE COMPONENT. Handles display of all entity images with fallback logic.
+ * DO NOT DELETE OR MODIFY WITHOUT VERIFICATION.
+ */
+import { GameImage } from "@/components/ui/GameImage";
 import { useState } from "react";
 import { UnifiedEntity } from "@/types/api";
-import { cn } from "@/lib/utils";
+import { cn, getCardImageUrl } from "@/lib/utils";
 import { ImageOff } from "lucide-react";
 
 interface EntityImageProps {
@@ -18,22 +23,7 @@ export function EntityImage({ entity, className, alt }: EntityImageProps) {
   // show the placeholder.
   const showPlaceholder = error || entity.image_required === false;
 
-  const getImageUrl = (entity: UnifiedEntity) => {
-    // Derive asset base URL from API URL environment variable
-    // Remove /api/v1 suffix and append /assets
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "https://terribleturtle.github.io/spellcasters-community-api/api/v1";
-    const assetBase = apiUrl.replace(/\/api\/v1$/, "/assets");
 
-    let folder = "units";
-    if ("hero_id" in entity) folder = "heroes";
-    if ("consumable_id" in entity) folder = "consumables";
-
-    const id = "hero_id" in entity ? entity.hero_id : 
-               "consumable_id" in entity ? entity.consumable_id : 
-               entity.entity_id;
-
-    return `${assetBase}/${folder}/${id}_card.png`;
-  };
 
   if (showPlaceholder) {
     return (
@@ -45,8 +35,8 @@ export function EntityImage({ entity, className, alt }: EntityImageProps) {
 
   return (
     <div className={cn("relative overflow-hidden bg-surface-card rounded-lg", className)}>
-      <Image
-        src={getImageUrl(entity)}
+      <GameImage
+        src={getCardImageUrl(entity)}
         alt={alt || entity.name}
         fill
         className={cn(
@@ -54,7 +44,11 @@ export function EntityImage({ entity, className, alt }: EntityImageProps) {
           loaded ? "opacity-100" : "opacity-0"
         )}
         onLoad={() => setLoaded(true)}
-        onError={() => setError(true)}
+        onError={() => {
+            // GameImage handles retry logic internally first.
+            // If it bubbles up to here, it means retry failed too.
+            setError(true);
+        }}
         sizes="(max-width: 768px) 100vw, 50vw"
       />
       

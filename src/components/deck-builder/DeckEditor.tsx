@@ -8,11 +8,12 @@ import {
   MouseSensor, 
   TouchSensor, 
   useSensor, 
-  useSensors 
+  useSensors,
+  MeasuringStrategy 
 } from "@dnd-kit/core";
 import { useEffect, useState, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Unit, Spellcaster } from "@/types/api";
+import { Unit, Spellcaster, Spell, Titan } from "@/types/api";
 import { useDeckBuilder, STORAGE_KEY_SAVED } from "@/hooks/useDeckBuilder";
 import { UnitBrowser } from "./UnitBrowser";
 import { CardInspector } from "./CardInspector";
@@ -24,12 +25,12 @@ import { Deck } from "@/types/deck";
 import { Team } from "@/hooks/useTeamBuilder";
 import { AlertTriangle, Users, CheckCircle2, AlertCircle } from "lucide-react";
 import { validateDeck } from "@/lib/deck-validation";
-import Image from "next/image";
+import { GameImage } from "@/components/ui/GameImage";
 
 
 
 interface DeckEditorProps {
-  units: Unit[];
+  units: (Unit | Spell | Titan)[];
   spellcasters: Spellcaster[];
   storageKey: string;
   isTeamMode: boolean;
@@ -127,9 +128,9 @@ export function DeckEditor({
   const [pendingImport, setPendingImport] = useState<Deck | null>(null);
 
   // Selected Item for Inspector
-  const [selectedItem, setSelectedItem] = useState<Unit | Spellcaster | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Unit | Spellcaster | Spell | Titan | null>(null);
   // Dragging Item for Overlay
-  const [activeDragItem, setActiveDragItem] = useState<Unit | Spellcaster | null>(null);
+  const [activeDragItem, setActiveDragItem] = useState<Unit | Spellcaster | Spell | Titan | null>(null);
   
   // Ref to track drag state for event handlers without causing re-renders
   const isDraggingRef = useRef(false);
@@ -196,7 +197,7 @@ export function DeckEditor({
 
 
   // Handlers
-  const handleSelectItem = useCallback((item: Unit | Spellcaster) => {
+  const handleSelectItem = useCallback((item: Unit | Spellcaster | Spell | Titan) => {
     if (isDraggingRef.current) return;
     setSelectedItem(item);
     handleSwitchTab('INSPECTOR');
@@ -205,21 +206,21 @@ export function DeckEditor({
   // Quick Add Logic
   const [lastQuickAdd, setLastQuickAdd] = useState<string | null>(null);
 
-  const handleQuickAdd = useCallback((item: Unit | Spellcaster) => {
+  const handleQuickAdd = useCallback((item: Unit | Spellcaster | Spell | Titan) => {
       const currentDeck = deckRef.current;
 
-      if ('hero_id' in item) {
-          setSpellcaster(item as Spellcaster);
+      if ('spellcaster_id' in item) {       setSpellcaster(item as Spellcaster);
           setLastQuickAdd(`${item.name} set as Spellcaster`);
           setTimeout(() => setLastQuickAdd(null), 2000);
           return;
       }
 
-      const unit = item as Unit;
+      // It's a Unit, Spell, or Titan
+      const entity = item as Unit | Spell | Titan;
 
-      if (unit.category === 'Titan') {
-           setSlot(4, unit);
-           setLastQuickAdd(`Added ${unit.name} to Titan Slot`);
+      if (entity.category === 'Titan') {
+           setSlot(4, entity);
+           setLastQuickAdd(`Added ${entity.name} to Titan Slot`);
            setTimeout(() => setLastQuickAdd(null), 2000);
            return;
       }
@@ -227,8 +228,8 @@ export function DeckEditor({
       const emptySlot = currentDeck.slots.find(s => s.index < 4 && !s.unit);
       
       if (emptySlot) {
-          setSlot(emptySlot.index, unit);
-          setLastQuickAdd(`Added ${unit.name}`);
+          setSlot(emptySlot.index, entity);
+          setLastQuickAdd(`Added ${entity.name}`);
           setTimeout(() => setLastQuickAdd(null), 2000);
           return;
       }
@@ -251,7 +252,7 @@ export function DeckEditor({
         return;
     }
 
-    if (current?.item && ('entity_id' in current.item || 'hero_id' in current.item)) {
+    if (current?.item && 'spellcaster_id' in current.item) {
          const item = current.item as Unit | Spellcaster;
          setActiveDragItem(item);
     }
@@ -293,7 +294,7 @@ export function DeckEditor({
 
     if (!over || !item) return;
 
-    if ('hero_id' in item) {
+    if ('spellcaster_id' in item) {
         if (over.id === 'spellcaster-zone' || over.id === 'spellcaster-zone-forge') {
              setSpellcaster(item as Spellcaster);
         }
@@ -305,7 +306,7 @@ export function DeckEditor({
     const slotIndex = over.data.current?.index;
 
     if (slotIndex !== undefined) {
-        setSlot(slotIndex, item as Unit);
+        setSlot(slotIndex, item as Unit | Spell | Titan);
     }
   };
 
@@ -354,6 +355,14 @@ export function DeckEditor({
         onDragStart={handleDragStart} 
         onDragEnd={handleDragEnd}
         autoScroll={false}
+        measuring={{
+          droppable: {
+            strategy: MeasuringStrategy.Always
+          }
+        }}
+        accessibility={{
+            restoreFocus: false
+        }}
     >
         <div className="h-dvh md:h-full flex flex-col md:grid md:grid-rows-[1fr_auto] overflow-hidden relative min-h-0 overscroll-none">
 
@@ -405,12 +414,12 @@ export function DeckEditor({
                          onBack={() => handleSwitchTab('BROWSER')}
                          onClose={() => setSelectedItem(null)}
                         onAddSlot={(idx) => {
-                            if (selectedItem && !('hero_id' in selectedItem)) {
+                            if (selectedItem && !('spellcaster_id' in selectedItem)) {
                                 setSlot(idx, selectedItem as Unit);
                             }
                         }}
                         onSetSpellcaster={() => {
-                            if (selectedItem && 'hero_id' in selectedItem) {
+                            if (selectedItem && 'spellcaster_id' in selectedItem) {
                                 setSpellcaster(selectedItem as Spellcaster);
                             }
                         }}
@@ -519,7 +528,7 @@ export function DeckEditor({
                                                  >
                                                      {slotDeck?.spellcaster ? (
                                                          <div className="absolute inset-0">
-                                                             <Image 
+                                                             <GameImage 
                                                                  src={getCardImageUrl(slotDeck.spellcaster)} 
                                                                  alt="" 
                                                                  fill
@@ -629,7 +638,7 @@ export function DeckEditor({
             {activeDragItem ? (
                 <div className="w-32 h-auto aspect-3/4 bg-surface-card border-2 border-brand-primary rounded-lg shadow-2xl overflow-hidden pointer-events-none flex flex-col">
                     <div className="relative flex-1 overflow-hidden bg-gray-800">
-                        <Image 
+                        <GameImage 
                             src={getCardImageUrl(activeDragItem)} 
                             alt={activeDragItem.name} 
                             fill

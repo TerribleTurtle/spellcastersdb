@@ -22,8 +22,8 @@ export default async function ConsumablesIndexPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {consumables.map((item) => (
               <Link 
-                key={item.consumable_id} 
-                href={`/consumables/${item.consumable_id}`}
+                key={item.entity_id} 
+                href={`/consumables/${item.entity_id}`}
                 className="block group bg-surface-card border border-white/10 rounded-xl p-6 transition-all hover:bg-surface-hover hover:border-brand-secondary/50 hover:-translate-y-1"
               >
                 <div className="mb-4 flex justify-center">

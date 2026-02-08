@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Unit, Spellcaster } from "@/types/api";
+import { Unit, Spellcaster, Spell, Titan } from "@/types/api";
 import { Deck } from "@/types/deck";
 import { STORAGE_KEY_CURRENT, STORAGE_KEY_SAVED, StoredDeck, useDeckBuilder } from "@/hooks/useDeckBuilder";
 import { useTeamBuilder, TEAM_SLOT_KEYS, STORAGE_KEY_SAVED_TEAMS } from "@/hooks/useTeamBuilder";
@@ -13,7 +13,7 @@ import { SoloOverview } from "./SoloOverview";
 import { decodeDeck } from "@/lib/encoding";
 
 interface DeckBuilderAppProps {
-  units: Unit[];
+  units: (Unit | Spell | Titan)[];
   spellcasters: Spellcaster[];
 }
 
@@ -238,7 +238,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         const decoded = decodeDeck(deckHash);
         if (decoded) {
             // Reconstruct Deck Object
-            const spellcaster = spellcasters.find(s => s.hero_id === decoded.spellcasterId) || null;
+            const spellcaster = spellcasters.find(s => s.spellcaster_id === decoded.spellcasterId) || null;
             const newDeck: Deck = {
                 spellcaster,
                 slots: [
@@ -277,7 +277,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                         return `${normalizeId(sc)}|${s.map(normalizeId).join('|')}`;
                     };
 
-                    const currentFingerprint = fingerprint(newDeck.spellcaster?.hero_id, newDeck.slots.map(s => s.unit?.entity_id));
+                    const currentFingerprint = fingerprint(newDeck.spellcaster?.spellcaster_id, newDeck.slots.map(s => s.unit?.entity_id));
 
                     const found = savedDecks.find(saved => {
                         const savedFingerprint = fingerprint(saved.spellcasterId, saved.slotIds);

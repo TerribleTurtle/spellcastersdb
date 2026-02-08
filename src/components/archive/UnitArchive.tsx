@@ -10,8 +10,9 @@ import { cn } from "@/lib/utils";
 
 // Helper to safely get unique ID
 function getUniqueId(entity: UnifiedEntity): string {
-  if ("hero_id" in entity) return entity.hero_id;
-  if ("consumable_id" in entity) return entity.consumable_id;
+  if (entity.category === 'Spellcaster') return entity.spellcaster_id;
+  // Consumables use entity_id now, so the default return works, but for safety:
+  if (entity.category === 'Consumable') return entity.entity_id;
   return entity.entity_id;
 }
 

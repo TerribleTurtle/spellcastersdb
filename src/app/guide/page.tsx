@@ -23,11 +23,11 @@ export default function GuidePage() {
             </p>
           </section>
 
-          {/* Unit Types */}
+          {/* Card Types */}
           <section className="bg-surface-card border border-white/10 rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Unit Types</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Card Types</h2>
             <p className="text-slate-300 leading-relaxed mb-4">
-              Units are the core of your deck. There are four main types:
+              Your deck consists of various cards, mainly categorized as Incantations (Creatures, Spells, Buildings) and Titans.
             </p>
             <div className="space-y-4">
               <div className="bg-white/5 border border-white/10 rounded-lg p-4">
@@ -51,7 +51,7 @@ export default function GuidePage() {
               <div className="bg-white/5 border border-white/10 rounded-lg p-4">
                 <h3 className="text-lg font-semibold text-brand-primary mb-2">Titans</h3>
                 <p className="text-slate-300 text-sm">
-                  Powerful, game-changing units with high stats and unique abilities. Titans are expensive but can dominate the battlefield when played correctly.
+                  The ultimate invocation. Titans are powerful, game-changing units with high stats and unique abilities.
                 </p>
               </div>
             </div>
@@ -59,26 +59,26 @@ export default function GuidePage() {
 
           {/* Ranks */}
           <section className="bg-surface-card border border-white/10 rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Unit Ranks</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Ranks</h2>
             <p className="text-slate-300 leading-relaxed mb-4">
-              Units are categorized into four ranks, representing their power level and cost:
+              Incantations are categorized into four ranks, representing their power level and charge time:
             </p>
             <ul className="space-y-2 text-slate-300">
               <li className="flex items-start gap-2">
                 <span className="text-brand-primary font-bold">Rank I:</span>
-                <span>Basic units with lower stats but faster charge times. Great for early game pressure.</span>
+                <span>Basic incantations with lower stats but faster charge times. Great for early game pressure.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-brand-primary font-bold">Rank II:</span>
-                <span>Intermediate units with balanced stats and moderate charge times.</span>
+                <span>Intermediate incantations with balanced stats and moderate charge times.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-brand-primary font-bold">Rank III:</span>
-                <span>Advanced units with strong abilities and longer charge times.</span>
+                <span>Advanced incantations with strong abilities and longer charge times.</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="text-brand-primary font-bold">Rank IV:</span>
-                <span>Elite units with powerful effects but significant resource investment.</span>
+                <span>Elite incantations with powerful effects but significant time investment.</span>
               </li>
             </ul>
           </section>
@@ -90,29 +90,22 @@ export default function GuidePage() {
               Every deck is led by a Spellcaster, which defines your playstyle and provides unique abilities. Spellcasters have:
             </p>
             <ul className="list-disc list-inside text-slate-300 space-y-2">
-              <li><strong>Faction Affinity:</strong> Spellcasters belong to specific factions and may synergize with certain unit types</li>
+              <li><strong>Faction Affinity:</strong> Spellcasters belong to specific factions and may synergize with certain incantations</li>
               <li><strong>Special Abilities:</strong> Unique powers that can be activated during battle</li>
-              <li><strong>Starting Resources:</strong> Spellcasters may influence your starting mana or other resources</li>
             </ul>
           </section>
 
           {/* Resources */}
           <section className="bg-surface-card border border-white/10 rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Resource System</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Charges & Cooldowns</h2>
             <p className="text-slate-300 leading-relaxed mb-4">
-              Understanding resources is key to mastering Spellcasters Chronicles:
+              Mastering the timing of your incantations is key to victory:
             </p>
             <div className="space-y-3">
               <div>
-                <h3 className="font-semibold text-brand-primary mb-1">Mana</h3>
-                <p className="text-slate-300 text-sm">
-                  The primary resource used to play units. Mana costs vary by unit rank and type.
-                </p>
-              </div>
-              <div>
                 <h3 className="font-semibold text-brand-primary mb-1">Charges</h3>
                 <p className="text-slate-300 text-sm">
-                  Units have initial charges and charge times. Higher rank units have fewer initial charges and longer recharge periods.
+                  Incantations have initial charges and charge times. Higher rank incantations have fewer initial charges and longer recharge periods.
                 </p>
               </div>
               <div>
@@ -132,11 +125,11 @@ export default function GuidePage() {
             </p>
             <ul className="list-disc list-inside text-slate-300 space-y-2">
               <li>Each deck must have exactly <strong>1 Spellcaster</strong></li>
-              <li>Decks typically contain <strong>5 units</strong> (exact rules may vary)</li>
+              <li>Decks typically contain <strong>5 Incantations</strong> (exact rules may vary)</li>
               <li><strong className="text-brand-accent">Required:</strong> At least one <strong>Rank I or II Creature</strong></li>
-              <li>Decks must include at least 1 Creature (cannot be all Spells or Buildings)</li>
-              <li>Consider balancing unit ranks for early, mid, and late game presence</li>
-              <li>Build synergies between your Spellcaster and units</li>
+              <li>Decks must include at least 1 Creature</li>
+              <li>Consider balancing ranks for early, mid, and late game presence</li>
+              <li>Build synergies between your Spellcaster and incantations</li>
               <li>Include a mix of offensive and defensive options</li>
               <li>Account for different opponent strategies</li>
             </ul>

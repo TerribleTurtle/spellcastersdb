@@ -55,7 +55,7 @@ export default async function UnitPage({ params }: UnitPageProps) {
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
           <span className="text-brand-primary font-mono text-sm uppercase tracking-wider flex gap-2">
-            <Link href={`/types/${unit.category.toLowerCase()}s`} className="hover:text-brand-secondary hover:underline underline-offset-4">
+            <Link href={`/incantations/${unit.category.toLowerCase()}s`} className="hover:text-brand-secondary hover:underline underline-offset-4">
               {unit.category}
             </Link> 
             <span>•</span>
@@ -63,7 +63,7 @@ export default async function UnitPage({ params }: UnitPageProps) {
               {unit.magic_school}
             </Link>
           </span>
-          <h1 className="text-5xl font-bold mt-2 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary">
+          <h1 className="text-5xl font-bold mt-2 mb-4 bg-clip-text text-transparent bg-linear-to-r from-brand-primary to-brand-secondary">
             {unit.name}
           </h1>
           <p className="text-xl text-gray-300 leading-relaxed">
@@ -77,40 +77,41 @@ export default async function UnitPage({ params }: UnitPageProps) {
             <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Health</p>
             <p className="text-2xl font-bold text-green-400">{unit.health}</p>
           </div>
-          <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-            <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Damage</p>
-            <p className="text-2xl font-bold text-red-400">{unit.damage}</p>
-          </div>
-          <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-            <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Range</p>
-            <p className="text-2xl font-bold text-brand-accent">{unit.range}</p>
-          </div>
-          <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-            <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Speed</p>
-            <p className="text-2xl font-bold text-yellow-400">{unit.movement_speed}</p>
-          </div>
+          {unit.damage !== undefined && unit.damage > 0 && (
+            <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Damage</p>
+                <p className="text-2xl font-bold text-red-400">{unit.damage}</p>
+            </div>
+          )}
+          {unit.range && unit.range > 0 ? (
+             <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Range</p>
+                <p className="text-2xl font-bold text-brand-accent">{unit.range}</p>
+            </div>
+          ) : null}
+          {unit.movement_speed && unit.movement_speed > 0 ? (
+            <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Speed</p>
+                <p className="text-2xl font-bold text-yellow-400">{unit.movement_speed}</p>
+            </div>
+          ) : null}
         </div>
 
-        {/* Card Config */}
+        {/* Card Config - Check if unit has rank (Entity might be spell/titan/unit) */}
+        {'rank' in unit && unit.rank && (
         <div className="mt-8">
           <h2 className="text-xl font-bold mb-4 text-brand-primary">Card Configuration</h2>
           <div className="bg-surface-card rounded-xl p-6 border border-surface-highlight">
             <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
               <span className="text-gray-400">Rank</span>
-              <Link href={`/ranks/${unit.card_config.rank}`} className="font-mono text-lg text-brand-secondary hover:underline underline-offset-4">
-                {unit.card_config.rank}
+              <Link href={`/ranks/${unit.rank}`} className="font-mono text-lg text-brand-secondary hover:underline underline-offset-4">
+                {unit.rank}
               </Link>
             </div>
-            <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
-              <span className="text-gray-400">Population Cost</span>
-              <span className="font-mono text-lg">{unit.card_config.cost_population}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-gray-400">Charge Time</span>
-              <span className="font-mono text-lg">{unit.card_config.charge_time}s</span>
-            </div>
+
           </div>
         </div>
+        )}
       </div>
     </div>
   );

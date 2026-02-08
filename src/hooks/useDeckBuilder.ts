@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useLayoutEffect, useCallback, useRef, useMemo } from 'react';
-import { Unit, Spellcaster } from '@/types/api';
+import { Unit, Spellcaster, Spell, Titan } from '@/types/api';
 import { Deck, DeckSlot, SlotIndex } from '@/types/deck';
 import { v4 as uuidv4 } from 'uuid';
 import { validateDeck } from '@/lib/deck-validation';
@@ -42,13 +42,13 @@ export function serializeDeck(deck: Deck): StoredDeck {
   return {
     id: deck.id,
     name: deck.name,
-    spellcasterId: deck.spellcaster?.hero_id || null, // Ensure we use the ID, not the whole object
+    spellcasterId: deck.spellcaster?.spellcaster_id || null, // Ensure we use the ID, not the whole object
     slotIds: deck.slots.map(s => s.unit?.entity_id || null) as [string | null, string | null, string | null, string | null, string | null]
   };
 }
 
 // Helper: Reconstruct Deck from Stored Format
-export function reconstructDeck(stored: StoredDeck, units: Unit[], spellcasters: Spellcaster[]): Deck {
+export function reconstructDeck(stored: StoredDeck, units: (Unit | Spell | Titan)[], spellcasters: Spellcaster[]): Deck {
     const newSlots = INITIAL_SLOTS.map(s => ({ ...s }));
     
     stored.slotIds.forEach((id, idx) => {
@@ -61,7 +61,7 @@ export function reconstructDeck(stored: StoredDeck, units: Unit[], spellcasters:
     });
 
     const freshSpellcaster = stored.spellcasterId 
-        ? spellcasters.find(s => s.hero_id === stored.spellcasterId) 
+        ? spellcasters.find(s => s.spellcaster_id === stored.spellcasterId) 
         : null;
 
     return {
@@ -73,7 +73,7 @@ export function reconstructDeck(stored: StoredDeck, units: Unit[], spellcasters:
 }
 
 export function useDeckBuilder(
-    availableUnits: Unit[] = [], 
+    availableUnits: (Unit | Spell | Titan)[] = [], 
     availableSpellcasters: Spellcaster[] =[],
     storageKey: string | null = STORAGE_KEY_CURRENT,
     savedDecksKey: string | null = STORAGE_KEY_SAVED,
@@ -305,7 +305,7 @@ export function useDeckBuilder(
     setDeck(prev => ({ ...prev, spellcaster: null }));
   }, []);
 
-  const setSlot = useCallback((index: SlotIndex, unit: Unit) => {
+  const setSlot = useCallback((index: SlotIndex, unit: Unit | Spell | Titan) => {
     setDeck(prev => {
       const newSlots = [...prev.slots] as typeof prev.slots;
 

@@ -1,3 +1,8 @@
+/**
+ * @file route.tsx
+ * @description CRITICAL CORE COMPONENT. Public API for generating Social Share (OG) Images.
+ * DO NOT DELETE OR MODIFY WITHOUT VERIFICATION.
+ */
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 
@@ -6,7 +11,7 @@ export const runtime = 'edge';
 import { decodeDeck, decodeTeam } from '@/lib/encoding';
 import { fetchGameData } from '@/lib/api';
 import { getCardImageUrl } from '@/lib/utils';
-import { Unit } from '@/types/api';
+import { Unit, Spell, Titan } from '@/types/api';
 
 // Font fallback strategy:
 // We try to fetch Oswald. If it fails, we silently continue, and ImageResponse will use its default.
@@ -20,9 +25,14 @@ export async function GET(request: NextRequest) {
       'Content-Type': 'image/png',
   };
     try {
-    const { searchParams } = new URL(request.url);
+    const { searchParams, origin } = new URL(request.url);
     const deckHash = searchParams.get('deck') || searchParams.get('d');
     const teamHash = searchParams.get('team');
+
+    const resolveUrl = (url: string) => {
+        if (url.startsWith('/')) return `${origin}${url}`;
+        return url;
+    };
 
     // --- TEAM MODE ---
     if (teamHash) { 
@@ -34,7 +44,7 @@ export async function GET(request: NextRequest) {
         // Resolve Spellcasters
         const spellcasters = decks.map(d => {
             if (!d || !d.spellcasterId) return null;
-            return data.heroes.find(h => h.hero_id === d.spellcasterId);
+            return data.spellcasters.find(h => h.spellcaster_id === d.spellcasterId);
         });
 
         const bgDark = '#0f172a';
@@ -86,7 +96,7 @@ export async function GET(request: NextRequest) {
                                      }}>
                                          {sc ? (
                                             /* eslint-disable-next-line @next/next/no-img-element */
-                                            <img src={getCardImageUrl(sc)} alt={sc.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10 }} />
+                                            <img src={resolveUrl(getCardImageUrl(sc))} alt={sc.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10 }} />
                                          ) : <div style={{ fontSize: 40 }}>?</div>}
                                     </div>
                                 </div>
@@ -142,11 +152,20 @@ export async function GET(request: NextRequest) {
     const data = await fetchGameData();
     
     // Resolve Entities
-    const spellcaster = data.heroes.find(h => h.hero_id === decoded.spellcasterId);
+    // Resolve Spellcaster
+    const spellcaster = data.spellcasters.find(h => h.spellcaster_id === decoded.spellcasterId);
     
     const units = decoded.slotIds
-        .map(id => data.units.find(u => u.entity_id === id))
-        .filter((u): u is Unit => !!u);
+        .map(id => {
+            const u = data.units.find(u => u.entity_id === id);
+            if (u) return u;
+            const s = data.spells.find(s => s.entity_id === id);
+            if (s) return s;
+            const t = data.titans.find(t => t.entity_id === id);
+            if (t) return t;
+            return null;
+        })
+        .filter((u): u is Unit | Spell | Titan => !!u);
 
     // Prepare Name
     const deckName = decoded.name || (spellcaster ? `${spellcaster.name} Deck` : 'Spellcasters Deck');
@@ -266,7 +285,7 @@ export async function GET(request: NextRequest) {
                     }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
-                            src={getCardImageUrl(spellcaster)} 
+                            src={resolveUrl(getCardImageUrl(spellcaster))} 
                             alt={spellcaster.name}
                             style={{ 
                                 width: '100%', 
@@ -328,9 +347,16 @@ export async function GET(request: NextRequest) {
                     }
 
                     const isTitan = unit.category === 'Titan';
-                    const rankKey = isTitan ? 'Titan' : unit.card_config.rank;
+                    const isSpell = unit.category === 'Spell';
+                    
+                    let rankKey = 'I';
+                    if (isTitan) rankKey = 'Titan';
+                    else if (isSpell) rankKey = 'Spell'; // Spells don't have rank, map to a color?
+                    else if ('rank' in unit && unit.rank) rankKey = unit.rank;
+
                     const rarityColor = ({
                         'Titan': accent,
+                        'Spell': '#f472b6', // Pink for spells
                         'I': '#94a3b8',
                         'II': '#60a5fa',
                         'III': primary,
@@ -354,7 +380,7 @@ export async function GET(request: NextRequest) {
                                 {/* Full Card Image (No Zoom) */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
-                                    src={getCardImageUrl(unit)} 
+                                    src={resolveUrl(getCardImageUrl(unit))} 
                                     alt={unit.name}
                                     style={{ 
                                         width: '100%', 
@@ -410,10 +436,11 @@ export async function GET(request: NextRequest) {
         ] : undefined,
       },
     );
-    } catch (e: any) {
+    } catch (e) {
     const message = e instanceof Error ? e.message : 'Unknown error ' + JSON.stringify(e);
     console.error(`OG Generation Error: ${message}`);
-    return new Response(`Failed to generate the image: ${message} \nStack: ${e?.stack}`, {
+    const stack = e instanceof Error ? e.stack : undefined;
+    return new Response(`Failed to generate the image: ${message} \nStack: ${stack}`, {
       status: 200, // Return 200 to see the message in browser if needed, or 500. Let's use 500 but with text.
       statusText: "Internal Server Error"
     });
