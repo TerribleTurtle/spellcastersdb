@@ -275,18 +275,20 @@ export async function GET(request: NextRequest) {
                             bottom: 0, 
                             left: 0, 
                             width: '100%',
-                            height: 140,
-                            background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 60%, transparent 100%)',
+                            height: 160,
+                            background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%)',
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'flex-end',
-                            padding: '0 20px 20px 20px',
+                            padding: '0 20px 24px 20px',
                         }}>
                              <span style={{ 
-                                 fontSize: 40,
-                                 fontWeight: 700, 
+                                 fontSize: 48,
+                                 fontWeight: 900, 
                                  color: 'white', 
-                                 textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+                                 textShadow: '0 4px 12px rgba(0,0,0,0.8)',
+                                 lineHeight: 0.9,
+                                 marginBottom: 8,
                             }}>
                                 {spellcaster.name}
                             </span>
@@ -342,7 +344,7 @@ export async function GET(request: NextRequest) {
                                 position: 'relative', 
                                 borderRadius: 16, 
                                 overflow: 'hidden', 
-                                border: `2px solid ${rarityColor}`, 
+                                border: `4px solid ${rarityColor}`, 
                                 backgroundColor: '#1e293b',
                                 // boxShadow removed for performance 
                             }}>
@@ -380,19 +382,19 @@ export async function GET(request: NextRequest) {
                                     bottom: 0,
                                     left: 0,
                                     width: '100%',
-                                    height: 100, // Gradient height
-                                    background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.5) 70%, transparent 100%)',
+                                    height: 120, // Taller gradient for safety
+                                    background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 60%, transparent 100%)',
                                     display: 'flex',
                                     flexDirection: 'column',
                                     justifyContent: 'flex-end',
-                                    padding: '0 12px 16px 12px',
+                                    padding: '0 14px 20px 14px',
                                 }}>
                                     <span style={{ 
-                                        fontSize: 24, 
-                                        fontWeight: 700, 
+                                        fontSize: 30, 
+                                        fontWeight: 900, 
                                         color: 'white',
-                                        lineHeight: 1.1,
-                                        textShadow: '0 2px 4px rgba(0,0,0,0.8)',
+                                        lineHeight: 1,
+                                        textShadow: '0 3px 8px rgba(0,0,0,0.9)',
                                     }}>
                                         {unit.name}
                                     </span>
