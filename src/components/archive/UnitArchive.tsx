@@ -1,18 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { UnifiedEntity } from "@/types/api"; // Assuming we use Unit type
-import { UnitCard } from "./UnitCard";
-import { FilterSidebar } from "./FilterSidebar";
-import { useUnitSearch } from "@/hooks/useUnitSearch";
+import { useEffect, useState } from "react";
+
 import { LayoutGrid, List } from "lucide-react";
+
+import { useUnitSearch } from "@/hooks/useUnitSearch";
 import { cn } from "@/lib/utils";
+import { UnifiedEntity } from "@/types/api";
+
+import { FilterSidebar } from "./FilterSidebar";
+// Assuming we use Unit type
+import { UnitCard } from "./UnitCard";
 
 // Helper to safely get unique ID
 function getUniqueId(entity: UnifiedEntity): string {
-  if (entity.category === 'Spellcaster') return entity.spellcaster_id;
+  if (entity.category === "Spellcaster") return entity.spellcaster_id;
   // Consumables use entity_id now, so the default return works, but for safety:
-  if (entity.category === 'Consumable') return entity.entity_id;
+  if (entity.category === "Consumable") return entity.entity_id;
   return entity.entity_id;
 }
 
@@ -30,12 +34,12 @@ export function UnitArchive(props: UnitArchiveProps) {
   const { initialUnits } = props;
   // State
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   // Initialize view mode based on screen size (mobile = list, desktop = grid)
   // Using lazy initialization to avoid setState in useEffect
   // Initialize view mode strictly to "grid" for SSR/Hydration match
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
-  
+
   // Adjust to list view on mount if mobile
   useEffect(() => {
     if (window.innerWidth < 768) {
@@ -55,23 +59,25 @@ export function UnitArchive(props: UnitArchiveProps) {
     categories: props.defaultFilters?.categories || [],
     classes: props.defaultFilters?.classes || [],
   });
-  
+
   // NOTE: Importing useEffect at the top of the file since it wasn't there
   // Actually line 3 imports useState from "react", need to check if useEffect is imported.
   // Viewing the file content in Step 154: 'import { useState } from "react";' on line 3.
-  // So I need to add useEffect to imports in a separate replace call or include it here if possible. 
+  // So I need to add useEffect to imports in a separate replace call or include it here if possible.
   // I will make a separate replace call for the import to be safe.
 
   // ... (rest of the file until buttons) ...
-  
+
   // Since replace_file_content for a large block is brittle, I'll do this in smaller chunks.
   // Chunk 1: State initialization
   // Chunk 2: Import update
   // Chunk 3: Button ARIA labels
 
-
   // Filter Logic
-  const toggleFilter = (type: "schools" | "ranks" | "categories" | "classes", value: string) => {
+  const toggleFilter = (
+    type: "schools" | "ranks" | "categories" | "classes",
+    value: string
+  ) => {
     setActiveFilters((prev) => {
       const current = prev[type];
       const next = current.includes(value)
@@ -106,56 +112,68 @@ export function UnitArchive(props: UnitArchiveProps) {
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div className="text-sm text-gray-400">
-             Showing <strong className="text-white">{filteredUnits.length}</strong> results
+            Showing{" "}
+            <strong className="text-white">{filteredUnits.length}</strong>{" "}
+            results
           </div>
-          
+
           <div className="flex items-center gap-2 bg-surface-card border border-white/5 p-1 rounded-lg">
-             <button 
-               onClick={() => setViewMode("grid")}
-               className={cn(
-                 "p-1.5 rounded transition-colors",
-                 viewMode === "grid" ? "bg-white/10 text-white shadow-sm" : "text-gray-500 hover:text-gray-300"
-               )}
-               title="Grid View"
-               aria-label="Switch to Grid View"
-             >
-                <LayoutGrid size={16} />
-             </button>
-             <button 
-               onClick={() => setViewMode("list")}
-               className={cn(
-                 "p-1.5 rounded transition-colors",
-                 viewMode === "list" ? "bg-white/10 text-white shadow-sm" : "text-gray-500 hover:text-gray-300"
-               )}
-               title="List View"
-               aria-label="Switch to List View"
-             >
-                <List size={16} />
-             </button>
+            <button
+              onClick={() => setViewMode("grid")}
+              className={cn(
+                "p-1.5 rounded transition-colors",
+                viewMode === "grid"
+                  ? "bg-white/10 text-white shadow-sm"
+                  : "text-gray-500 hover:text-gray-300"
+              )}
+              title="Grid View"
+              aria-label="Switch to Grid View"
+            >
+              <LayoutGrid size={16} />
+            </button>
+            <button
+              onClick={() => setViewMode("list")}
+              className={cn(
+                "p-1.5 rounded transition-colors",
+                viewMode === "list"
+                  ? "bg-white/10 text-white shadow-sm"
+                  : "text-gray-500 hover:text-gray-300"
+              )}
+              title="List View"
+              aria-label="Switch to List View"
+            >
+              <List size={16} />
+            </button>
           </div>
         </div>
 
         {/* Results Grid */}
         {filteredUnits.length > 0 ? (
-           <div className={cn(
-             "grid gap-4",
-             viewMode === "grid" 
-               ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" 
-               : "grid-cols-1"
-           )}>
-             {filteredUnits.map((unit) => (
-               <UnitCard 
-                 key={getUniqueId(unit)} 
-                 unit={unit} 
-                 variant={viewMode === "list" ? "compact" : "default"} 
-               />
-             ))}
-           </div>
+          <div
+            className={cn(
+              "grid gap-4",
+              viewMode === "grid"
+                ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                : "grid-cols-1"
+            )}
+          >
+            {filteredUnits.map((unit) => (
+              <UnitCard
+                key={getUniqueId(unit)}
+                unit={unit}
+                variant={viewMode === "list" ? "compact" : "default"}
+              />
+            ))}
+          </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-white/10 rounded-xl">
-            <p className="text-lg font-bold text-gray-400 mb-2">No units found</p>
-            <p className="text-sm text-gray-600">Try adjusting your search or filters.</p>
-            <button 
+            <p className="text-lg font-bold text-gray-400 mb-2">
+              No units found
+            </p>
+            <p className="text-sm text-gray-600">
+              Try adjusting your search or filters.
+            </p>
+            <button
               onClick={clearFilters}
               className="mt-4 text-brand-primary hover:underline text-sm"
             >

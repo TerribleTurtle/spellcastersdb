@@ -1,8 +1,18 @@
-import { getAllEntities } from "@/lib/api";
-import { UnitArchive } from "@/components/archive/UnitArchive";
 import { notFound } from "next/navigation";
 
-const SCHOOLS = ["Elemental", "Wild", "War", "Astral", "Holy", "Technomancy", "Necromancy", "Titan"];
+import { UnitArchive } from "@/components/archive/UnitArchive";
+import { getAllEntities } from "@/lib/api";
+
+const SCHOOLS = [
+  "Elemental",
+  "Wild",
+  "War",
+  "Astral",
+  "Holy",
+  "Technomancy",
+  "Necromancy",
+  "Titan",
+];
 
 export async function generateStaticParams() {
   return SCHOOLS.map((school) => ({
@@ -39,12 +49,14 @@ export default async function SchoolPage({ params }: SchoolPageProps) {
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-brand-primary to-brand-secondary mb-2">
             {decodedSchool} School
           </h1>
-          <p className="text-gray-400">All units practicing {decodedSchool} magic.</p>
+          <p className="text-gray-400">
+            All units practicing {decodedSchool} magic.
+          </p>
         </div>
-        
-        <UnitArchive 
-            initialUnits={allEntities} 
-            defaultFilters={{ schools: [decodedSchool] }}
+
+        <UnitArchive
+          initialUnits={allEntities}
+          defaultFilters={{ schools: [decodedSchool] }}
         />
       </div>
     </div>

@@ -1,5 +1,6 @@
-import type { RoadmapData } from '@/types/roadmap';
-import StatusCategory from './StatusCategory';
+import type { RoadmapData } from "@/types/roadmap";
+
+import StatusCategory from "./StatusCategory";
 
 interface StatusDashboardProps {
   data: RoadmapData;
@@ -14,8 +15,9 @@ export default function StatusDashboard({ data }: StatusDashboardProps) {
           Development Roadmap
         </h1>
         <p className="mx-auto max-w-2xl text-lg text-slate-300">
-          A transparent view into what&apos;s being built, what&apos;s requested, and what&apos;s already live.
-          This roadmap is manually curated to show the most important features and improvements.
+          A transparent view into what&apos;s being built, what&apos;s
+          requested, and what&apos;s already live. This roadmap is manually
+          curated to show the most important features and improvements.
         </p>
       </header>
 
@@ -40,7 +42,7 @@ export default function StatusDashboard({ data }: StatusDashboardProps) {
       {/* Footer Note */}
       <footer className="mt-16 border-t border-white/10 pt-8 text-center">
         <p className="text-sm text-slate-500">
-          Have a feature request?{' '}
+          Have a feature request?{" "}
           <a
             href="https://github.com/TerribleTurtle/spellcasters-community-api"
             target="_blank"

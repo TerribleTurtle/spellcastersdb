@@ -1,7 +1,8 @@
-import { getUnitById, getUnits } from "@/lib/api";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import { getUnitById, getUnits } from "@/lib/api";
 
 interface UnitPageProps {
   params: Promise<{ id: string }>;
@@ -18,7 +19,9 @@ export async function generateStaticParams() {
 
 // 2. Generate Dynamic Metadata (SEO)
 // This fetches the specific unit data to populate the <title> and <meta name="description"> tags.
-export async function generateMetadata({ params }: UnitPageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: UnitPageProps): Promise<Metadata> {
   // Await the params promise first (Next.js 15 requirement)
   const { id } = await params;
   const unit = await getUnitById(id);
@@ -36,7 +39,7 @@ export async function generateMetadata({ params }: UnitPageProps): Promise<Metad
       title: unit.name,
       description: unit.description,
       // We will add dynamic images later
-      // images: [`/assets/units/${unit.entity_id}.png`], 
+      // images: [`/assets/units/${unit.entity_id}.png`],
     },
   };
 }
@@ -55,11 +58,17 @@ export default async function UnitPage({ params }: UnitPageProps) {
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
           <span className="text-brand-primary font-mono text-sm uppercase tracking-wider flex gap-2">
-            <Link href={`/incantations/${unit.category.toLowerCase()}s`} className="hover:text-brand-secondary hover:underline underline-offset-4">
+            <Link
+              href={`/incantations/${unit.category.toLowerCase()}s`}
+              className="hover:text-brand-secondary hover:underline underline-offset-4"
+            >
               {unit.category}
-            </Link> 
+            </Link>
             <span>•</span>
-            <Link href={`/schools/${unit.magic_school}`} className="hover:text-brand-secondary hover:underline underline-offset-4">
+            <Link
+              href={`/schools/${unit.magic_school}`}
+              className="hover:text-brand-secondary hover:underline underline-offset-4"
+            >
               {unit.magic_school}
             </Link>
           </span>
@@ -74,43 +83,59 @@ export default async function UnitPage({ params }: UnitPageProps) {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 gap-4 bg-surface-card rounded-2xl p-6 border border-surface-highlight">
           <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-            <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Health</p>
+            <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">
+              Health
+            </p>
             <p className="text-2xl font-bold text-green-400">{unit.health}</p>
           </div>
           {unit.damage !== undefined && unit.damage > 0 && (
             <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Damage</p>
-                <p className="text-2xl font-bold text-red-400">{unit.damage}</p>
+              <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">
+                Damage
+              </p>
+              <p className="text-2xl font-bold text-red-400">{unit.damage}</p>
             </div>
           )}
           {unit.range && unit.range > 0 ? (
-             <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Range</p>
-                <p className="text-2xl font-bold text-brand-accent">{unit.range}</p>
+            <div className="p-4 bg-black/20 rounded-xl border border-white/5">
+              <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">
+                Range
+              </p>
+              <p className="text-2xl font-bold text-brand-accent">
+                {unit.range}
+              </p>
             </div>
           ) : null}
           {unit.movement_speed && unit.movement_speed > 0 ? (
             <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Speed</p>
-                <p className="text-2xl font-bold text-yellow-400">{unit.movement_speed}</p>
+              <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">
+                Speed
+              </p>
+              <p className="text-2xl font-bold text-yellow-400">
+                {unit.movement_speed}
+              </p>
             </div>
           ) : null}
         </div>
 
         {/* Card Config - Check if unit has rank (Entity might be spell/titan/unit) */}
-        {'rank' in unit && unit.rank && (
-        <div className="mt-8">
-          <h2 className="text-xl font-bold mb-4 text-brand-primary">Card Configuration</h2>
-          <div className="bg-surface-card rounded-xl p-6 border border-surface-highlight">
-            <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
-              <span className="text-gray-400">Rank</span>
-              <Link href={`/ranks/${unit.rank}`} className="font-mono text-lg text-brand-secondary hover:underline underline-offset-4">
-                {unit.rank}
-              </Link>
+        {"rank" in unit && unit.rank && (
+          <div className="mt-8">
+            <h2 className="text-xl font-bold mb-4 text-brand-primary">
+              Card Configuration
+            </h2>
+            <div className="bg-surface-card rounded-xl p-6 border border-surface-highlight">
+              <div className="flex justify-between items-center border-b border-white/10 pb-2 mb-2">
+                <span className="text-gray-400">Rank</span>
+                <Link
+                  href={`/ranks/${unit.rank}`}
+                  className="font-mono text-lg text-brand-secondary hover:underline underline-offset-4"
+                >
+                  {unit.rank}
+                </Link>
+              </div>
             </div>
-
           </div>
-        </div>
         )}
       </div>
     </div>

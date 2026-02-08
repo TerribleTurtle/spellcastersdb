@@ -1,8 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import Link from 'next/link';
-import { AlertTriangle, RefreshCcw } from 'lucide-react';
+import { useEffect } from "react";
+
+import Link from "next/link";
+
+import { AlertTriangle, RefreshCcw } from "lucide-react";
 
 export default function Error({
   error,
@@ -21,12 +23,14 @@ export default function Error({
       <div className="mb-6 rounded-full bg-red-500/10 p-8 ring-1 ring-red-500/20">
         <AlertTriangle size={64} className="text-red-500" />
       </div>
-      
-      <h2 className="mb-2 text-3xl font-bold tracking-tight text-white">Something went wrong!</h2>
+
+      <h2 className="mb-2 text-3xl font-bold tracking-tight text-white">
+        Something went wrong!
+      </h2>
       <p className="mb-8 max-w-md text-gray-400">
         A critical error occurred while rendering this page. The spell fizzled.
       </p>
-      
+
       <div className="flex gap-4">
         <button
           onClick={
@@ -38,8 +42,8 @@ export default function Error({
           <RefreshCcw size={18} />
           Try again
         </button>
-        
-        <Link 
+
+        <Link
           href="/"
           className="flex items-center gap-2 rounded-lg bg-brand-primary px-6 py-3 font-semibold text-white transition-colors hover:bg-brand-primary/90"
         >

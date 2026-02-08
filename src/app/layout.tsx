@@ -1,5 +1,14 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
+
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+
+import { FeedbackButton } from "@/components/common/FeedbackButton";
+import Footer from "@/components/layout/Footer";
+import Navbar from "@/components/layout/Navbar";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,18 +34,22 @@ export const metadata: Metadata = {
     template: "%s | Spellcasters Chronicles Database",
     default: "Spellcasters Chronicles Database | SpellcastersDB",
   },
-  description: "The definitive community hub for Spellcasters Chronicles. Browse units, build decks, and analyze the meta with the most up-to-date data.",
-  keywords: ["Spellcasters Chronicles", "Deck Builder", "Unit Database", "Strategy", "Game Data", "Wiki"],
+  description:
+    "The definitive community hub for Spellcasters Chronicles. Browse units, build decks, and analyze the meta with the most up-to-date data.",
+  keywords: [
+    "Spellcasters Chronicles",
+    "Deck Builder",
+    "Unit Database",
+    "Strategy",
+    "Game Data",
+    "Wiki",
+  ],
   authors: [{ name: "TerribleTurtle" }],
   creator: "TerribleTurtle",
   metadataBase: new URL("https://spellcastersdb.com"),
   icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-    ],
-    apple: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-    ],
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
     title: "SpellcastersDB",
@@ -72,15 +85,6 @@ export const metadata: Metadata = {
     },
   },
 };
-
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import { FeedbackButton } from "@/components/common/FeedbackButton";
-import Script from "next/script";
-
 
 export default function RootLayout({
   children,

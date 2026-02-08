@@ -1,9 +1,11 @@
 import Link from "next/link";
+
 import { ExternalLink } from "lucide-react";
 
 export const metadata = {
   title: "FAQ",
-  description: "Frequently asked questions about SpellcastersDB, the community database for Spellcasters Chronicles. Learn how to use the site and contribute.",
+  description:
+    "Frequently asked questions about SpellcastersDB, the community database for Spellcasters Chronicles. Learn how to use the site and contribute.",
   keywords: ["Spellcasters Chronicles", "FAQ", "Questions", "Help", "Guide"],
 };
 
@@ -11,11 +13,13 @@ export default function FAQPage() {
   const faqs = [
     {
       question: "What is SpellcastersDB?",
-      answer: "SpellcastersDB is a community-driven database and deck builder for Spellcasters Chronicles. It provides comprehensive information about all units, Spellcasters, and consumables in the game, along with tools to help you build and share decks."
+      answer:
+        "SpellcastersDB is a community-driven database and deck builder for Spellcasters Chronicles. It provides comprehensive information about all units, Spellcasters, and consumables in the game, along with tools to help you build and share decks.",
     },
     {
       question: "Is this an official website?",
-      answer: "No, SpellcastersDB is an unofficial, fan-made project created by the community. It is not affiliated with or endorsed by the official Spellcasters Chronicles development team."
+      answer:
+        "No, SpellcastersDB is an unofficial, fan-made project created by the community. It is not affiliated with or endorsed by the official Spellcasters Chronicles development team.",
     },
     {
       question: "How is the data updated?",
@@ -31,9 +35,11 @@ export default function FAQPage() {
             Spellcasters Community API
             <ExternalLink size={14} />
           </a>
-          , which is maintained by community members. The website automatically fetches the latest data from the API, so information stays current as the game evolves.
+          , which is maintained by community members. The website automatically
+          fetches the latest data from the API, so information stays current as
+          the game evolves.
         </>
-      )
+      ),
     },
     {
       question: "Can I contribute to the project?",
@@ -48,10 +54,11 @@ export default function FAQPage() {
           >
             Community API repository
             <ExternalLink size={14} />
-          </a>
-          {" "}by submitting corrections, adding missing data, or improving documentation. All contributions are welcome!
+          </a>{" "}
+          by submitting corrections, adding missing data, or improving
+          documentation. All contributions are welcome!
         </>
-      )
+      ),
     },
     {
       question: "How do I report incorrect data?",
@@ -67,25 +74,30 @@ export default function FAQPage() {
             GitHub Issues page
             <ExternalLink size={14} />
           </a>
-          . Include as much detail as possible about the error and the correct information.
+          . Include as much detail as possible about the error and the correct
+          information.
         </>
-      )
+      ),
     },
     {
       question: "How do I use the deck builder?",
-      answer: "The deck builder is currently under development. Once complete, you'll be able to select a spellcaster and add incantations to create valid decks that follow the game's rules. Decks will be shareable via URL."
+      answer:
+        "The deck builder is currently under development. Once complete, you'll be able to select a spellcaster and add incantations to create valid decks that follow the game's rules. Decks will be shareable via URL.",
     },
     {
       question: "Can I filter cards by type or faction?",
-      answer: "Yes! The Archive page includes powerful search and filter options. You can filter cards by type (creature, spell, building, titan), rank, faction, and more. Use the search bar to find specific cards by name."
+      answer:
+        "Yes! The Archive page includes powerful search and filter options. You can filter cards by type (creature, spell, building, titan), rank, faction, and more. Use the search bar to find specific cards by name.",
     },
     {
       question: "Is the website mobile-friendly?",
-      answer: "Absolutely! SpellcastersDB is designed to work seamlessly on all devices, from desktop computers to smartphones. The interface adapts to your screen size for the best experience."
+      answer:
+        "Absolutely! SpellcastersDB is designed to work seamlessly on all devices, from desktop computers to smartphones. The interface adapts to your screen size for the best experience.",
     },
     {
       question: "Will there be more features in the future?",
-      answer: "Yes! Planned features include a fully functional deck builder with validation, deck sharing via URLs, and potentially tier lists and meta analysis. Check back regularly for updates!"
+      answer:
+        "Yes! Planned features include a fully functional deck builder with validation, deck sharing via URLs, and potentially tier lists and meta analysis. Check back regularly for updates!",
     },
   ];
 
@@ -117,13 +129,19 @@ export default function FAQPage() {
 
         {/* Additional Help */}
         <div className="bg-surface-card border border-white/10 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-3 text-brand-accent">Still have questions?</h2>
+          <h2 className="text-xl font-semibold mb-3 text-brand-accent">
+            Still have questions?
+          </h2>
           <p className="text-slate-300 mb-4">
-            If you have a question that isn&apos;t answered here, feel free to reach out through the Community API GitHub repository or check the{" "}
-            <Link href="/about" className="text-brand-primary hover:text-brand-accent transition-colors">
+            If you have a question that isn&apos;t answered here, feel free to
+            reach out through the Community API GitHub repository or check the{" "}
+            <Link
+              href="/about"
+              className="text-brand-primary hover:text-brand-accent transition-colors"
+            >
               About page
-            </Link>
-            {" "}for more information.
+            </Link>{" "}
+            for more information.
           </p>
         </div>
 

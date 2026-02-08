@@ -1,16 +1,17 @@
-import { getAllEntities } from "@/lib/api";
-import { UnitArchive } from "@/components/archive/UnitArchive";
 import { notFound } from "next/navigation";
+
+import { UnitArchive } from "@/components/archive/UnitArchive";
+import { getAllEntities } from "@/lib/api";
 import { capitalize } from "@/lib/utils";
 
 // Map URL slug to Internal Category
 const CATEGORY_MAP: Record<string, string> = {
-  "spells": "Spell",
-  "buildings": "Building",
-  "creatures": "Creature",
-  "titans": "Titan",
-  "spellcasters": "Spellcaster", 
-  "consumables": "Consumable"
+  spells: "Spell",
+  buildings: "Building",
+  creatures: "Creature",
+  titans: "Titan",
+  spellcasters: "Spellcaster",
+  consumables: "Consumable",
 };
 
 export async function generateStaticParams() {
@@ -28,7 +29,7 @@ interface TypePageProps {
 export async function generateMetadata({ params }: TypePageProps) {
   const { category } = await params;
   const internalCategory = CATEGORY_MAP[category.toLowerCase()];
-  
+
   if (!internalCategory) return { title: "Not Found" };
 
   return {
@@ -56,10 +57,10 @@ export default async function TypePage({ params }: TypePageProps) {
           </h1>
           <p className="text-gray-400">Browse all {category}.</p>
         </div>
-        
-        <UnitArchive 
-            initialUnits={allEntities} 
-            defaultFilters={{ categories: [internalCategory] }}
+
+        <UnitArchive
+          initialUnits={allEntities}
+          defaultFilters={{ categories: [internalCategory] }}
         />
       </div>
     </div>

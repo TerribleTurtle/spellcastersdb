@@ -1,5 +1,7 @@
 import { useMemo } from "react";
+
 import Fuse from "fuse.js";
+
 import { UnifiedEntity } from "@/types/api";
 
 interface FilterState {
@@ -12,40 +14,40 @@ interface FilterState {
 // Helper to extract filterable attributes safely
 function getSearchableAttributes(entity: UnifiedEntity) {
   // Spellcaster
-  if (entity.category === 'Spellcaster') {
+  if (entity.category === "Spellcaster") {
     return {
       category: "Spellcaster",
-      school: "Spellcaster",     // Virtual School for filtering
-      rank: "LEGENDARY",  // Virtual Rank
+      school: "Spellcaster", // Virtual School for filtering
+      rank: "LEGENDARY", // Virtual Rank
       class: entity.class || "Unknown",
       tags: ["Spellcaster", entity.name],
     };
   }
   // Consumable
-  if (entity.category === 'Consumable') {
+  if (entity.category === "Consumable") {
     return {
       category: "Consumable",
-      school: "Item",     // Virtual School
+      school: "Item", // Virtual School
       rank: entity.rarity || "COMMON",
       class: "Item",
       tags: entity.tags || [],
     };
   }
   // Titan
-  if (entity.category === 'Titan') {
-      return {
-          category: "Titan",
-          school: entity.magic_school,
-          rank: "TITAN",
-          class: "Titan",
-          tags: entity.tags || [],
-      };
+  if (entity.category === "Titan") {
+    return {
+      category: "Titan",
+      school: entity.magic_school,
+      rank: "TITAN",
+      class: "Titan",
+      tags: entity.tags || [],
+    };
   }
 
   // Unit or Spell (Incantation)
   // Both have magic_school.
   // Unit has flat props. Spell might not (check interface).
-  const rank = ('rank' in entity && entity.rank) ? entity.rank : 'I';
+  const rank = "rank" in entity && entity.rank ? entity.rank : "I";
 
   return {
     category: entity.category,
@@ -87,7 +89,7 @@ export function useUnitSearch(
   const fuse = useMemo(() => {
     return new Fuse(units, {
       keys: ["name", "category", "magic_school", "tags", "description"],
-      threshold: 0.3, 
+      threshold: 0.3,
       ignoreLocation: true,
       // Custom getFn could be used, but standard keys work if we accept some misses on virtual fields
       // or we map the data first. Mapping is safer.
@@ -116,10 +118,7 @@ export function useUnitSearch(
       }
 
       // Ranks
-      if (
-        filters.ranks.length > 0 &&
-        !filters.ranks.includes(attrs.rank)
-      ) {
+      if (filters.ranks.length > 0 && !filters.ranks.includes(attrs.rank)) {
         return false;
       }
 

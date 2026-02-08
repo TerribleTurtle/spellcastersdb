@@ -15,10 +15,14 @@ interface FeedbackButtonProps {
   className?: string;
 }
 
-export function FeedbackButton({ variant = "fab", className = "" }: FeedbackButtonProps) {
+export function FeedbackButton({
+  variant = "fab",
+  className = "",
+}: FeedbackButtonProps) {
   const openFeedback = () => {
-    const currentUrl = typeof window !== "undefined" ? window.location.href : "";
-    
+    const currentUrl =
+      typeof window !== "undefined" ? window.location.href : "";
+
     if (typeof window !== "undefined" && window.Tally) {
       window.Tally.openPopup("Bz7MdK", {
         layout: "modal",
@@ -33,7 +37,10 @@ export function FeedbackButton({ variant = "fab", className = "" }: FeedbackButt
       });
     } else {
       // Fallback if script hasn't loaded yet or fails
-      window.open(`https://tally.so/r/Bz7MdK?deck_url=${encodeURIComponent(currentUrl)}`, "_blank");
+      window.open(
+        `https://tally.so/r/Bz7MdK?deck_url=${encodeURIComponent(currentUrl)}`,
+        "_blank"
+      );
     }
   };
 

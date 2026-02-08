@@ -24,7 +24,11 @@ export type IncantationCategory = UnitCategory | SpellCategory;
 
 export type UnitRank = "I" | "II" | "III" | "IV" | "V"; // Added V for Titans just in case, though they have their own schema
 
-export type SpellcasterClass = "Enchanter" | "Duelist" | "Conqueror" | "Unknown";
+export type SpellcasterClass =
+  | "Enchanter"
+  | "Duelist"
+  | "Conqueror"
+  | "Unknown";
 
 export type MovementType = "Ground" | "Fly" | "Hover" | "Stationary";
 
@@ -33,7 +37,6 @@ export type MovementType = "Ground" | "Fly" | "Hover" | "Stationary";
 // ============================================================================
 
 // CardConfig removed - properties flattened into Incantation/Unit
-
 
 /**
  * Base Interface for all "Deck-able" items (Units + Spells)
@@ -49,7 +52,7 @@ export interface Incantation {
   description: string;
   image_required?: boolean;
   tags: string[];
-  
+
   // Flattened Config
   rank?: UnitRank;
 }
@@ -59,7 +62,7 @@ export interface Incantation {
  */
 export interface Unit extends Incantation {
   category: UnitCategory;
-  
+
   // Combat Stats
   health: number;
   damage?: number;
@@ -83,7 +86,7 @@ export interface Spell extends Incantation {
   tick_rate?: number;
   max_targets?: number;
   target_mask?: string[];
-  
+
   // Spells usually don't have health/movement
   damage?: number;
   range?: number;
@@ -101,9 +104,9 @@ export interface Titan {
   rank: string; // Usually "V"
   description: string;
   image_required?: boolean;
-  
+
   tags: string[];
-  
+
   // Titan Stats vary, but similar to Units
   health: number;
   damage: number;
@@ -133,7 +136,7 @@ export interface Spellcaster {
   tags: string[];
   class: SpellcasterClass;
   image_required?: boolean;
-  
+
   difficulty?: number;
 
   // RPG Stats Removed
@@ -166,8 +169,8 @@ export interface Consumable {
   category: "Consumable";
   rarity?: string;
   stats?: {
-      duration?: number;
-  }
+    duration?: number;
+  };
 }
 
 export interface Upgrade {
@@ -196,9 +199,9 @@ export interface BuildInfo {
 export interface AllDataResponse {
   build_info: BuildInfo;
   spellcasters: Spellcaster[]; // Renamed from heroes
-  units: Unit[];        // Creatures + Buildings ONLY
-  spells: Spell[];      // New Array
-  titans: Titan[];      // New Array
+  units: Unit[]; // Creatures + Buildings ONLY
+  spells: Spell[]; // New Array
+  titans: Titan[]; // New Array
   consumables: Consumable[];
   upgrades: Upgrade[];
 }
@@ -207,7 +210,7 @@ export interface AllDataResponse {
  * Union for Deck Builder slots (can accept Units or Spells)
  * "Incantation" is the polymorphic term.
  */
-// export type Incantation = Unit | Spell; // Already defined as base interface, but practically we use union in code? 
+// export type Incantation = Unit | Spell; // Already defined as base interface, but practically we use union in code?
 // No, Interface inheritance is better for shared props.
 
 export type UnifiedEntity = Unit | Spell | Titan | Spellcaster | Consumable;

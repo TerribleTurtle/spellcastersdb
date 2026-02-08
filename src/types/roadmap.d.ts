@@ -1,6 +1,12 @@
-export type RoadmapCategoryId = 'community-requests' | 'in-progress' | 'live';
+export type RoadmapCategoryId = "community-requests" | "in-progress" | "live";
 
-export type RoadmapItemType = 'bug' | 'feature' | 'enhancement' | 'ux' | 'data' | 'concept';
+export type RoadmapItemType =
+  | "bug"
+  | "feature"
+  | "enhancement"
+  | "ux"
+  | "data"
+  | "concept";
 
 export interface RoadmapItem {
   id: string;

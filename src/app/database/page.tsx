@@ -1,21 +1,32 @@
-
-import { getAllEntities } from "@/lib/api";
 import { UnitArchive } from "@/components/archive/UnitArchive";
+import { getAllEntities } from "@/lib/api";
 
 export const metadata = {
-  title: 'Card Database & Builds | Spellcasters Chronicles',
-  description: 'Search the complete card database including creatures, spells, and titans. Research units for your next deck, build, or loadout.',
-  keywords: ["Spellcasters Chronicles", "Card Database", "Unit List", "Decks", "Builds", "Loadouts", "Stats", "Wiki"],
+  title: "Card Database & Builds | Spellcasters Chronicles",
+  description:
+    "Search the complete card database including creatures, spells, and titans. Research units for your next deck, build, or loadout.",
+  keywords: [
+    "Spellcasters Chronicles",
+    "Card Database",
+    "Unit List",
+    "Decks",
+    "Builds",
+    "Loadouts",
+    "Stats",
+    "Wiki",
+  ],
   openGraph: {
-    title: 'Card Database & Builds | Spellcasters Chronicles',
-    description: 'Search the complete card database including creatures, spells, and titans. Research units for your next deck, build, or loadout.',
-    type: 'website',
+    title: "Card Database & Builds | Spellcasters Chronicles",
+    description:
+      "Search the complete card database including creatures, spells, and titans. Research units for your next deck, build, or loadout.",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'Card Database & Builds | Spellcasters Chronicles',
-    description: 'Search the complete card database for your next deck, build, or loadout.',
-  }
+    card: "summary_large_image",
+    title: "Card Database & Builds | Spellcasters Chronicles",
+    description:
+      "Search the complete card database for your next deck, build, or loadout.",
+  },
 };
 
 export default async function DatabasePage() {

@@ -1,6 +1,7 @@
-import { getAllEntities } from "@/lib/api";
-import { UnitArchive } from "@/components/archive/UnitArchive";
 import { notFound } from "next/navigation";
+
+import { UnitArchive } from "@/components/archive/UnitArchive";
+import { getAllEntities } from "@/lib/api";
 
 export async function generateStaticParams() {
   return ["I", "II", "III", "IV"].map((rank) => ({
@@ -19,7 +20,7 @@ interface RankPageProps {
 
 export default async function RankPage({ params }: RankPageProps) {
   const { rank } = await params;
-  
+
   if (!["I", "II", "III", "IV"].includes(rank)) {
     notFound();
   }
@@ -35,10 +36,10 @@ export default async function RankPage({ params }: RankPageProps) {
           </h1>
           <p className="text-gray-400">All units of Rank {rank}.</p>
         </div>
-        
-        <UnitArchive 
-            initialUnits={allEntities} 
-            defaultFilters={{ ranks: [rank] }}
+
+        <UnitArchive
+          initialUnits={allEntities}
+          defaultFilters={{ ranks: [rank] }}
         />
       </div>
     </div>

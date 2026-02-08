@@ -4,43 +4,43 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: '/deck-builder',
-        destination: '/',
+        source: "/deck-builder",
+        destination: "/",
         permanent: true,
       },
       {
-        source: '/deck_builder',
-        destination: '/',
+        source: "/deck_builder",
+        destination: "/",
         permanent: true,
       },
       {
-        source: '/spells',
-        destination: '/incantations/spells',
+        source: "/spells",
+        destination: "/incantations/spells",
         permanent: true,
       },
       {
-        source: '/spells/:id',
-        destination: '/incantations/spells/:id',
+        source: "/spells/:id",
+        destination: "/incantations/spells/:id",
         permanent: true,
       },
       {
-        source: '/units',
-        destination: '/incantations/units',
+        source: "/units",
+        destination: "/incantations/units",
         permanent: true,
       },
       {
-        source: '/units/:id',
-        destination: '/incantations/units/:id',
+        source: "/units/:id",
+        destination: "/incantations/units/:id",
         permanent: true,
       },
       {
-        source: '/heroes',
-        destination: '/spellcasters',
+        source: "/heroes",
+        destination: "/spellcasters",
         permanent: true,
       },
       {
-        source: '/heroes/:id',
-        destination: '/spellcasters/:id',
+        source: "/heroes/:id",
+        destination: "/spellcasters/:id",
         permanent: true,
       },
     ];
@@ -71,7 +71,13 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'terribleturtle.github.io',
+        pathname: '/spellcasters-community-api/**',
+      },
+    ],
   },
 };
 

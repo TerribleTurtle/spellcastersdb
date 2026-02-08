@@ -1,4 +1,4 @@
-import { Unit, Spell, Titan, Spellcaster } from './api';
+import { Spell, Spellcaster, Titan, Unit } from "./api";
 
 export type SlotIndex = 0 | 1 | 2 | 3 | 4;
 
@@ -7,7 +7,7 @@ export interface ValidationStatus {
   errors: string[];
 }
 
-export type SlotType = 'UNIT' | 'TITAN';
+export type SlotType = "UNIT" | "TITAN";
 
 export interface DeckSlot {
   index: SlotIndex;
@@ -24,7 +24,6 @@ export interface Deck {
 }
 
 export interface DeckStats {
-
   unitCounts: Record<string, number>;
   isValid: boolean;
   validationErrors: string[];

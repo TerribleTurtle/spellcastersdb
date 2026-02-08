@@ -1,5 +1,5 @@
-import { getUnits } from "@/lib/api";
 import { UnitArchive } from "@/components/archive/UnitArchive";
+import { getUnits } from "@/lib/api";
 
 export const metadata = {
   title: "The Archive | SpellcastersDB",
@@ -16,9 +16,11 @@ export default async function UnitsIndexPage() {
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-accent to-brand-primary mb-2">
             The Archive
           </h1>
-          <p className="text-gray-400">Search and filter the complete unit database.</p>
+          <p className="text-gray-400">
+            Search and filter the complete unit database.
+          </p>
         </div>
-        
+
         <UnitArchive initialUnits={units} />
       </div>
     </div>

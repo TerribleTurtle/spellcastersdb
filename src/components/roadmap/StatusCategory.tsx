@@ -1,5 +1,10 @@
-import type { RoadmapCategory, RoadmapItem, RoadmapItemType } from '@/types/roadmap';
-import StatusItem from './StatusItem';
+import type {
+  RoadmapCategory,
+  RoadmapItem,
+  RoadmapItemType,
+} from "@/types/roadmap";
+
+import StatusItem from "./StatusItem";
 
 interface StatusCategoryProps {
   category: RoadmapCategory;
@@ -16,7 +21,10 @@ const typeConfig: Record<RoadmapItemType, { order: number }> = {
   concept: { order: 99 },
 };
 
-export default function StatusCategory({ category, items }: StatusCategoryProps) {
+export default function StatusCategory({
+  category,
+  items,
+}: StatusCategoryProps) {
   // Sort items by type order (bugs first, then features, etc.)
   const sortedItems = [...items].sort(
     (a, b) => typeConfig[a.type].order - typeConfig[b.type].order
@@ -29,9 +37,7 @@ export default function StatusCategory({ category, items }: StatusCategoryProps)
         <h2 className="text-xl font-bold text-white mb-0.5">
           {category.title}
         </h2>
-        <p className="text-xs text-slate-400">
-          {category.description}
-        </p>
+        <p className="text-xs text-slate-400">{category.description}</p>
       </div>
 
       {/* Unified Items Grid */}

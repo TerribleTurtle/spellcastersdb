@@ -1,6 +1,7 @@
-import { getAllEntities } from "@/lib/api";
-import { UnitArchive } from "@/components/archive/UnitArchive";
 import { notFound } from "next/navigation";
+
+import { UnitArchive } from "@/components/archive/UnitArchive";
+import { getAllEntities } from "@/lib/api";
 
 const CLASSES = ["Enchanter", "Duelist", "Conqueror"];
 
@@ -40,12 +41,14 @@ export default async function ClassPage({ params }: ClassPageProps) {
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-brand-accent to-brand-primary mb-2">
             {decodedClass}
           </h1>
-          <p className="text-gray-400">All {decodedClass} class spellcasters.</p>
+          <p className="text-gray-400">
+            All {decodedClass} class spellcasters.
+          </p>
         </div>
-        
-        <UnitArchive 
-            initialUnits={allEntities} 
-            defaultFilters={{ classes: [decodedClass] }}
+
+        <UnitArchive
+          initialUnits={allEntities}
+          defaultFilters={{ classes: [decodedClass] }}
         />
       </div>
     </div>

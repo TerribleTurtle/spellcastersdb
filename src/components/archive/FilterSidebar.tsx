@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Search, X, SlidersHorizontal } from "lucide-react";
-import { cn } from "@/lib/utils";
+
+import { Search, SlidersHorizontal, X } from "lucide-react";
+
 import { FilterSection } from "@/components/ui/FilterSection";
+import { cn } from "@/lib/utils";
 
 interface FilterSidebarProps {
   searchQuery: string;
@@ -14,14 +16,33 @@ interface FilterSidebarProps {
     categories: string[];
     classes: string[];
   };
-  toggleFilter: (type: "schools" | "ranks" | "categories" | "classes", value: string) => void;
+  toggleFilter: (
+    type: "schools" | "ranks" | "categories" | "classes",
+    value: string
+  ) => void;
   clearFilters: () => void;
   className?: string;
 }
 
-const SCHOOLS = ["Elemental", "Wild", "War", "Astral", "Holy", "Technomancy", "Necromancy", "Titan"];
+const SCHOOLS = [
+  "Elemental",
+  "Wild",
+  "War",
+  "Astral",
+  "Holy",
+  "Technomancy",
+  "Necromancy",
+  "Titan",
+];
 const RANKS = ["I", "II", "III", "IV"];
-const CATEGORIES = ["Spellcaster", "Creature", "Building", "Spell", "Titan", "Consumable"];
+const CATEGORIES = [
+  "Spellcaster",
+  "Creature",
+  "Building",
+  "Spell",
+  "Titan",
+  "Consumable",
+];
 const CLASSES = ["Enchanter", "Duelist", "Conqueror"];
 
 export function FilterSidebar({
@@ -68,7 +89,10 @@ export function FilterSidebar({
       >
         <div className="flex justify-between items-center md:hidden mb-6">
           <h2 className="text-xl font-bold text-white">Filters</h2>
-          <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-gray-400 hover:text-white"
+          >
             <X size={24} />
           </button>
         </div>
@@ -76,7 +100,10 @@ export function FilterSidebar({
         <div className="space-y-4">
           {/* Search Input */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={16} />
+            <Search
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+              size={16}
+            />
             <input
               type="text"
               placeholder="Search units..."
@@ -137,8 +164,6 @@ export function FilterSidebar({
   );
 }
 
-
 // ... (imports will be handled by the user/system or manual edit, but here I replace the bottom function)
 // Actually I need to do imports separately or replacing the whole file content if I want to be clean, but `replace_file_content` is a chunk replacement.
 // I will remove the bottom function first.
-

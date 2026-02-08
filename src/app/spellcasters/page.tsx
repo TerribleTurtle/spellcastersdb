@@ -1,6 +1,8 @@
-import { getSpellcasters } from "@/lib/api";
 import Link from "next/link";
+
 import { Star } from "lucide-react";
+
+import { getSpellcasters } from "@/lib/api";
 
 export const metadata = {
   title: "Spellcasters",
@@ -16,11 +18,11 @@ export default async function SpellcastersIndexPage() {
         <h1 className="text-4xl md:text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary">
           Spellcasters
         </h1>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {spellcasters.map((spellcaster) => (
-            <Link 
-              key={spellcaster.spellcaster_id} 
+            <Link
+              key={spellcaster.spellcaster_id}
               href={`/spellcasters/${spellcaster.spellcaster_id}`}
               className="block group bg-surface-card border border-white/10 rounded-xl p-6 transition-all hover:bg-surface-hover hover:border-brand-primary/50 hover:-translate-y-1"
             >
@@ -29,33 +31,47 @@ export default async function SpellcastersIndexPage() {
                   {spellcaster.name}
                 </h2>
                 <div className="flex gap-1 bg-black/40 px-2 py-1 rounded border border-white/10 items-center">
-                  <span className="text-[10px] uppercase text-gray-500 mr-1 font-bold tracking-wider">Diff</span>
+                  <span className="text-[10px] uppercase text-gray-500 mr-1 font-bold tracking-wider">
+                    Diff
+                  </span>
                   {[1, 2, 3].map((star) => (
-                    <Star 
-                      key={star} 
+                    <Star
+                      key={star}
                       size={12}
                       className={`${
-                        (spellcaster.difficulty || 1) >= star 
-                        ? 'fill-brand-primary text-brand-primary' 
-                        : 'fill-transparent text-gray-600'
+                        (spellcaster.difficulty || 1) >= star
+                          ? "fill-brand-primary text-brand-primary"
+                          : "fill-transparent text-gray-600"
                       }`}
                     />
                   ))}
                 </div>
               </div>
-              
+
               <div className="space-y-2 text-sm text-gray-400">
                 <div className="flex items-center gap-2">
-                  <span className="text-brand-primary text-xs font-bold uppercase w-16">Primary</span>
-                  <span className="truncate text-gray-300">{spellcaster.abilities.primary.name}</span>
+                  <span className="text-brand-primary text-xs font-bold uppercase w-16">
+                    Primary
+                  </span>
+                  <span className="truncate text-gray-300">
+                    {spellcaster.abilities.primary.name}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-brand-accent text-xs font-bold uppercase w-16">Defense</span>
-                  <span className="truncate text-gray-300">{spellcaster.abilities.defense.name}</span>
+                  <span className="text-brand-accent text-xs font-bold uppercase w-16">
+                    Defense
+                  </span>
+                  <span className="truncate text-gray-300">
+                    {spellcaster.abilities.defense.name}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-brand-secondary text-xs font-bold uppercase w-16">Ultimate</span>
-                  <span className="truncate text-gray-300">{spellcaster.abilities.ultimate.name}</span>
+                  <span className="text-brand-secondary text-xs font-bold uppercase w-16">
+                    Ultimate
+                  </span>
+                  <span className="truncate text-gray-300">
+                    {spellcaster.abilities.ultimate.name}
+                  </span>
                 </div>
               </div>
             </Link>

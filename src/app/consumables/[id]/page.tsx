@@ -1,6 +1,7 @@
-import { getConsumables } from "@/lib/api";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+import { getConsumables } from "@/lib/api";
 
 interface ConsumablePageProps {
   params: Promise<{ id: string }>;
@@ -13,10 +14,12 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: ConsumablePageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: ConsumablePageProps): Promise<Metadata> {
   const { id } = await params;
   const consumables = await getConsumables();
-  const item = consumables.find(c => c.entity_id === id);
+  const item = consumables.find((c) => c.entity_id === id);
 
   if (!item) {
     return { title: "Item Not Found" };
@@ -35,7 +38,7 @@ export async function generateMetadata({ params }: ConsumablePageProps): Promise
 export default async function ConsumablePage({ params }: ConsumablePageProps) {
   const { id } = await params;
   const consumables = await getConsumables();
-  const item = consumables.find(c => c.entity_id === id);
+  const item = consumables.find((c) => c.entity_id === id);
 
   if (!item) {
     notFound();
@@ -62,20 +65,32 @@ export default async function ConsumablePage({ params }: ConsumablePageProps) {
           <div className="grid grid-cols-2 gap-4">
             {item.effect_type && (
               <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Type</p>
-                <p className="text-lg font-mono capitalize text-white">{item.effect_type.replace('_', ' ')}</p>
+                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">
+                  Type
+                </p>
+                <p className="text-lg font-mono capitalize text-white">
+                  {item.effect_type.replace("_", " ")}
+                </p>
               </div>
             )}
-             {item.effect_value && (
+            {item.effect_value && (
               <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Value</p>
-                <p className="text-2xl font-bold text-green-400">{item.effect_value}</p>
+                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">
+                  Value
+                </p>
+                <p className="text-2xl font-bold text-green-400">
+                  {item.effect_value}
+                </p>
               </div>
             )}
-             {item.duration && (
+            {item.duration && (
               <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">Duration</p>
-                <p className="text-2xl font-bold text-yellow-400">{item.duration}s</p>
+                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">
+                  Duration
+                </p>
+                <p className="text-2xl font-bold text-yellow-400">
+                  {item.duration}s
+                </p>
               </div>
             )}
           </div>

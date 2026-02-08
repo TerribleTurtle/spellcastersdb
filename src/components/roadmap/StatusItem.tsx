@@ -1,68 +1,73 @@
-import type { RoadmapItem, RoadmapItemType } from '@/types/roadmap';
+import type { RoadmapItem, RoadmapItemType } from "@/types/roadmap";
 
 interface StatusItemProps {
   item: RoadmapItem;
 }
 
 // Type icon and color mapping
-const typeConfig: Record<RoadmapItemType, { icon: string; color: string; label: string; badgeClasses: string }> = {
-  bug: { 
-    icon: '🐛', 
-    color: 'text-red-400', 
-    label: 'Bug',
-    badgeClasses: 'bg-red-500/10 text-red-300 border-red-500/20'
+const typeConfig: Record<
+  RoadmapItemType,
+  { icon: string; color: string; label: string; badgeClasses: string }
+> = {
+  bug: {
+    icon: "🐛",
+    color: "text-red-400",
+    label: "Bug",
+    badgeClasses: "bg-red-500/10 text-red-300 border-red-500/20",
   },
-  feature: { 
-    icon: '✨', 
-    color: 'text-cyan-400', 
-    label: 'Feature',
-    badgeClasses: 'bg-cyan-500/10 text-cyan-300 border-cyan-500/20'
+  feature: {
+    icon: "✨",
+    color: "text-cyan-400",
+    label: "Feature",
+    badgeClasses: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
   },
-  enhancement: { 
-    icon: '⚡', 
-    color: 'text-purple-400', 
-    label: 'Enhancement',
-    badgeClasses: 'bg-purple-500/10 text-purple-300 border-purple-500/20'
+  enhancement: {
+    icon: "⚡",
+    color: "text-purple-400",
+    label: "Enhancement",
+    badgeClasses: "bg-purple-500/10 text-purple-300 border-purple-500/20",
   },
-  ux: { 
-    icon: '🎨', 
-    color: 'text-pink-400', 
-    label: 'UX',
-    badgeClasses: 'bg-pink-500/10 text-pink-300 border-pink-500/20'
+  ux: {
+    icon: "🎨",
+    color: "text-pink-400",
+    label: "UX",
+    badgeClasses: "bg-pink-500/10 text-pink-300 border-pink-500/20",
   },
-  data: { 
-    icon: '📊', 
-    color: 'text-amber-400', 
-    label: 'Data',
-    badgeClasses: 'bg-amber-500/10 text-amber-300 border-amber-500/20'
+  data: {
+    icon: "📊",
+    color: "text-amber-400",
+    label: "Data",
+    badgeClasses: "bg-amber-500/10 text-amber-300 border-amber-500/20",
   },
-  concept: { 
-    icon: '💭', 
-    color: 'text-slate-400', 
-    label: 'Concept',
-    badgeClasses: 'bg-slate-500/10 text-slate-400 border-slate-500/20 border-dashed'
+  concept: {
+    icon: "💭",
+    color: "text-slate-400",
+    label: "Concept",
+    badgeClasses:
+      "bg-slate-500/10 text-slate-400 border-slate-500/20 border-dashed",
   },
 };
 
 // Status badge styles
 const statusConfig = {
-  'community-requests': {
-    label: 'Requested',
-    classes: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
+  "community-requests": {
+    label: "Requested",
+    classes: "bg-slate-500/20 text-slate-300 border-slate-500/30",
   },
-  'in-progress': {
-    label: 'In Progress',
-    classes: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+  "in-progress": {
+    label: "In Progress",
+    classes: "bg-purple-500/20 text-purple-300 border-purple-500/30",
   },
   live: {
-    label: 'Live',
-    classes: 'bg-green-500/20 text-green-300 border-green-500/30',
+    label: "Live",
+    classes: "bg-green-500/20 text-green-300 border-green-500/30",
   },
 };
 
 export default function StatusItem({ item }: StatusItemProps) {
   const { icon, color, label: typeLabel, badgeClasses } = typeConfig[item.type];
-  const { label: statusLabel, classes: statusClasses } = statusConfig[item.category];
+  const { label: statusLabel, classes: statusClasses } =
+    statusConfig[item.category];
 
   return (
     <div className="group relative rounded-lg border border-white/10 bg-surface-card p-3 transition-all hover:border-white/20 hover:bg-surface-hover">
@@ -87,7 +92,9 @@ export default function StatusItem({ item }: StatusItemProps) {
             {statusLabel}
           </span>
           {/* Type Badge */}
-          <span className={`rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${badgeClasses}`}>
+          <span
+            className={`rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider ${badgeClasses}`}
+          >
             {typeLabel}
           </span>
         </div>
@@ -102,18 +109,23 @@ export default function StatusItem({ item }: StatusItemProps) {
       {item.devNote && (
         <div className="mt-3 rounded border border-amber-500/20 bg-amber-900/20 px-2.5 py-2">
           <p className="text-[10px] text-amber-200/80 font-mono leading-relaxed">
-            <span className="font-bold text-amber-500 mr-1.5 uppercase tracking-wider text-[9px]">Dev Note</span>
+            <span className="font-bold text-amber-500 mr-1.5 uppercase tracking-wider text-[9px]">
+              Dev Note
+            </span>
             {item.devNote}
           </p>
         </div>
       )}
 
       {/* Concept Disclaimer */}
-      {item.type === 'concept' && (
+      {item.type === "concept" && (
         <div className="mt-3 rounded border border-white/5 bg-white/5 px-2.5 py-2">
           <p className="text-[10px] text-slate-400 leading-relaxed italic">
-            <span className="font-bold text-slate-300 mr-1 not-italic">Note:</span>
-            Large-scale concept under consideration. No guarantee of implementation.
+            <span className="font-bold text-slate-300 mr-1 not-italic">
+              Note:
+            </span>
+            Large-scale concept under consideration. No guarantee of
+            implementation.
           </p>
         </div>
       )}

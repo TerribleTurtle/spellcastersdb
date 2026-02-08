@@ -1,10 +1,18 @@
 import Link from "next/link";
-import { Github, ExternalLink } from "lucide-react";
+
+import { ExternalLink, Github } from "lucide-react";
 
 export const metadata = {
   title: "About",
-  description: "Learn about SpellcastersDB, a community-driven database and deck builder for Spellcasters Chronicles. Built by fans, for fans.",
-  keywords: ["Spellcasters Chronicles", "About", "Community", "Database", "Open Source"],
+  description:
+    "Learn about SpellcastersDB, a community-driven database and deck builder for Spellcasters Chronicles. Built by fans, for fans.",
+  keywords: [
+    "Spellcasters Chronicles",
+    "About",
+    "Community",
+    "Database",
+    "Open Source",
+  ],
 };
 
 export default function AboutPage() {
@@ -18,15 +26,23 @@ export default function AboutPage() {
         <div className="space-y-8">
           {/* Mission */}
           <section className="bg-surface-card border border-white/10 rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Our Mission</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
+              Our Mission
+            </h2>
             <p className="text-slate-300 leading-relaxed">
-              SpellcastersDB is a community-driven platform dedicated to providing the most comprehensive and up-to-date information about <strong>Spellcasters Chronicles</strong>. Our goal is to help players discover units, build competitive decks, and explore the game&apos;s strategic depth.
+              SpellcastersDB is a community-driven platform dedicated to
+              providing the most comprehensive and up-to-date information about{" "}
+              <strong>Spellcasters Chronicles</strong>. Our goal is to help
+              players discover units, build competitive decks, and explore the
+              game&apos;s strategic depth.
             </p>
           </section>
 
           {/* Data Source */}
           <section className="bg-surface-card border border-white/10 rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Data Source</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
+              Data Source
+            </h2>
             <p className="text-slate-300 leading-relaxed mb-4">
               All game data is sourced from the{" "}
               <a
@@ -38,32 +54,51 @@ export default function AboutPage() {
                 Spellcasters Community API
                 <ExternalLink size={14} />
               </a>
-              , a community-maintained repository that aggregates game information. The API is updated regularly to reflect the latest game balance changes and new content.
+              , a community-maintained repository that aggregates game
+              information. The API is updated regularly to reflect the latest
+              game balance changes and new content.
             </p>
             <p className="text-slate-400 text-sm">
-              <strong>Note:</strong> This is an unofficial, fan-made project and is not affiliated with the official Spellcasters Chronicles development team.
+              <strong>Note:</strong> This is an unofficial, fan-made project and
+              is not affiliated with the official Spellcasters Chronicles
+              development team.
             </p>
           </section>
 
           {/* Technology */}
           <section className="bg-surface-card border border-white/10 rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Technology</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
+              Technology
+            </h2>
             <p className="text-slate-300 leading-relaxed mb-4">
-              SpellcastersDB is built with modern web technologies to ensure fast performance and excellent user experience:
+              SpellcastersDB is built with modern web technologies to ensure
+              fast performance and excellent user experience:
             </p>
             <ul className="list-disc list-inside text-slate-300 space-y-2">
-              <li><strong>Next.js</strong> - React framework with static site generation</li>
-              <li><strong>TypeScript</strong> - Type-safe code for reliability</li>
-              <li><strong>Tailwind CSS</strong> - Modern, responsive design</li>
-              <li><strong>Vercel</strong> - Fast, global CDN hosting</li>
+              <li>
+                <strong>Next.js</strong> - React framework with static site
+                generation
+              </li>
+              <li>
+                <strong>TypeScript</strong> - Type-safe code for reliability
+              </li>
+              <li>
+                <strong>Tailwind CSS</strong> - Modern, responsive design
+              </li>
+              <li>
+                <strong>Vercel</strong> - Fast, global CDN hosting
+              </li>
             </ul>
           </section>
 
           {/* Contribute */}
           <section className="bg-surface-card border border-white/10 rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Get Involved</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
+              Get Involved
+            </h2>
             <p className="text-slate-300 leading-relaxed mb-4">
-              This project is open source and community-driven. You can contribute in several ways:
+              This project is open source and community-driven. You can
+              contribute in several ways:
             </p>
             <div className="space-y-3">
               <a
@@ -88,9 +123,14 @@ export default function AboutPage() {
 
           {/* Credits */}
           <section className="bg-surface-card border border-white/10 rounded-lg p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">Credits</h2>
+            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
+              Credits
+            </h2>
             <p className="text-slate-300 leading-relaxed">
-              Created and maintained by <strong className="text-brand-primary">TerribleTurtles</strong> and the Spellcasters Chronicles community. Special thanks to all contributors who help keep the data accurate and up-to-date.
+              Created and maintained by{" "}
+              <strong className="text-brand-primary">TerribleTurtles</strong>{" "}
+              and the Spellcasters Chronicles community. Special thanks to all
+              contributors who help keep the data accurate and up-to-date.
             </p>
           </section>
 
