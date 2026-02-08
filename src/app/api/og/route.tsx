@@ -3,7 +3,7 @@
  * @description CRITICAL CORE COMPONENT. Public API for generating Social Share (OG) Images.
  * DO NOT DELETE OR MODIFY WITHOUT VERIFICATION.
  */
-import { ImageResponse } from '@vercel/og';
+import { ImageResponse } from 'next/og';
 import { NextRequest } from 'next/server';
 
 export const runtime = 'nodejs';
@@ -26,6 +26,7 @@ export async function GET(request: NextRequest) {
   };
     try {
     const { searchParams, origin } = new URL(request.url);
+    console.log("OG: URL Parsed");
     const deckHash = searchParams.get('deck') || searchParams.get('d');
     const teamHash = searchParams.get('team');
 
@@ -39,7 +40,9 @@ export async function GET(request: NextRequest) {
         const { name: teamName, decks } = decodeTeam(teamHash);
 
         // Fetch Game Data
+        console.log("OG: Fetching Game Data");
         const data = await fetchGameData();
+        console.log("OG: Game Data Fetched, Spellcasters count:", data.spellcasters.length);
 
         // Resolve Spellcasters
         const spellcasters = decks.map(d => {
@@ -54,8 +57,12 @@ export async function GET(request: NextRequest) {
         // Load Font (Oswald)
         let fontData: ArrayBuffer | null = null;
         try {
+            console.log("OG: Fetching Font");
             const fontRes = await fetch(fontUrl);
-            if (fontRes.ok) fontData = await fontRes.arrayBuffer();
+            if (fontRes.ok) {
+                 fontData = await fontRes.arrayBuffer();
+                 console.log("OG: Font Fetched Success");
+            }
         } catch (e) { console.warn('Font fetch failed', e); }
 
         console.log("Team OG: About to render ImageResponse");
@@ -138,6 +145,7 @@ export async function GET(request: NextRequest) {
     // Load custom font
     let fontData: ArrayBuffer | null = null;
     try {
+        console.log("OG (Deck): Fetching Font");
         const fontRes = await fetch(fontUrl);
         if (fontRes.ok) {
             fontData = await fontRes.arrayBuffer();
@@ -149,7 +157,9 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch Game Data
+    console.log("OG (Deck): Fetching Game Data");
     const data = await fetchGameData();
+    console.log("OG (Deck): Validating Entities");
     
     // Resolve Entities
     // Resolve Spellcaster
@@ -175,6 +185,7 @@ export async function GET(request: NextRequest) {
     const primary = '#a855f7';
     const accent = '#22d3ee';
 
+    console.log("OG (Deck): Rendering ImageResponse");
     return new ImageResponse(
       (
         <div
