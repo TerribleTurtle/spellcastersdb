@@ -1,17 +1,16 @@
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
-import { decodeDeck } from '@/lib/encoding';
+import { decodeDeck, decodeTeam } from '@/lib/encoding';
 import { fetchGameData } from '@/lib/api';
 import { getCardImageUrl } from '@/lib/utils';
 import { Unit } from '@/types/api';
-
-export const runtime = 'edge';
 
 // Font fallback strategy:
 // We try to fetch Oswald. If it fails, we silently continue, and ImageResponse will use its default.
 const fontUrl = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/oswald/Oswald-Bold.ttf';
 
 export async function GET(request: NextRequest) {
+  console.log("Team OG: Handling Request", request.url);
   try {
     const { searchParams } = new URL(request.url);
     const deckHash = searchParams.get('deck') || searchParams.get('d');
@@ -19,10 +18,6 @@ export async function GET(request: NextRequest) {
 
     // --- TEAM MODE ---
     if (teamHash) { 
-        // We import decodeTeam dynamically if needed, or just import at top. 
-        // For now, let's assume we update imports.
-        // Actually, let's just do it here to be safe if we didn't update top imports yet.
-        const { decodeTeam } = await import('@/lib/encoding');
         const { name: teamName, decks } = decodeTeam(teamHash);
 
         // Fetch Game Data
@@ -45,6 +40,9 @@ export async function GET(request: NextRequest) {
             if (fontRes.ok) fontData = await fontRes.arrayBuffer();
         } catch (e) { console.warn('Font fetch failed', e); }
 
+        console.log("Team OG: About to render ImageResponse");
+        
+        // Restore ImageResponse (No Custom Font for now to test stability)
         return new ImageResponse(
             (
                 <div style={{
@@ -55,96 +53,33 @@ export async function GET(request: NextRequest) {
                     backgroundColor: bgDark,
                     backgroundImage: `radial-gradient(circle at 50% 0%, #2e1065 0%, ${bgDark} 50%)`,
                     color: 'white',
-                    fontFamily: fontData ? '"Oswald"' : 'sans-serif',
+                    fontFamily: 'sans-serif',
                     position: 'relative',
                     overflow: 'hidden',
                 }}>
-                    {/* Background Elements */}
+                     {/* Background Elements */}
                     <div style={{ position: 'absolute', top: '-20%', left: '-20%', width: '70%', height: '70%', background: '#020617', filter: 'blur(80px)', opacity: 0.9, zIndex: 0 }} />
                     <div style={{ position: 'absolute', top: '-10%', left: '20%', width: '40%', height: '40%', background: primary, filter: 'blur(140px)', opacity: 0.25, zIndex: 0 }} />
                     <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '40%', height: '40%', background: accent, filter: 'blur(140px)', opacity: 0.2, zIndex: 0 }} />
 
-                    {/* Content Wrapper */}
                     <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', padding: '40px 60px', zIndex: 10 }}>
-                        
-                        {/* Header */}
-                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: 30 }}>
-                             <div style={{ display: 'flex', alignItems: 'center', fontSize: 20, fontWeight: 700, letterSpacing: '0.1em', marginBottom: 8, opacity: 0.8 }}>
-                                 SPELLCASTERS CHRONICLES
-                            </div>
-                            <div style={{ 
-                                fontSize: 48, 
-                                fontWeight: 900, 
-                                lineHeight: 1, 
-                                color: 'white',
-                                textShadow: '0px 4px 12px rgba(0,0,0,0.5)',
-                                textAlign: 'center',
-                                display: '-webkit-box',
-                                WebkitLineClamp: 1,
-                                WebkitBoxOrient: 'vertical',
-                                overflow: 'hidden',
-                                maxWidth: '100%',
-                            }}>
-                                {teamName || "TEAM TRINITY"}
-                            </div>
+                         <div style={{ fontSize: 60, fontWeight: 900, color: 'white', textAlign: 'center' }}>
+                            {teamName || "TEAM TRINITY"}
                         </div>
-
-                        {/* Spellcasters Triad */}
-                        <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center', gap: 40, width: '100%' }}>
+                        <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center', gap: 40, width: '100%', marginTop: 40 }}>
                             {spellcasters.map((sc, i) => (
-                                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 200 }}>
-                                    {/* Card */}
+                                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                                     <div style={{ 
-                                        width: 200, 
-                                        height: 320, 
-                                        position: 'relative', 
-                                        borderRadius: 20, 
-                                        overflow: 'hidden', 
-                                        border: `4px solid ${sc ? primary : '#334155'}`, 
-                                        boxShadow: sc ? `0 0 30px ${primary}40` : 'none',
-                                        backgroundColor: 'rgba(0,0,0,0.3)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center'
-                                    }}>
-                                        {sc ? (
-                                            // eslint-disable-next-line @next/next/no-img-element
-                                            <img 
-                                                src={getCardImageUrl(sc)} 
-                                                alt={sc.name}
-                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
-                                            />
-                                        ) : (
-                                            <div style={{ color: '#64748b', fontSize: 48, fontWeight: 900 }}>?</div>
-                                        )}
-                                        
-                                        {/* Slot Badge */}
-                                        <div style={{
-                                            position: 'absolute',
-                                            top: 0,
-                                            left: 0,
-                                            padding: '4px 12px',
-                                            backgroundColor: primary,
-                                            color: 'white',
-                                            fontWeight: 700,
-                                            fontSize: 14,
-                                            borderBottomRightRadius: 12,
-                                            boxShadow: '2px 2px 4px rgba(0,0,0,0.3)'
-                                        }}>
-                                            SLOT {i + 1}
-                                        </div>
-                                    </div>
-
-                                    {/* Name */}
-                                    <div style={{ 
-                                        marginTop: 16, 
-                                        fontSize: 20, 
-                                        fontWeight: 700, 
-                                        color: sc ? 'white' : '#64748b',
-                                        textAlign: 'center',
-                                        textShadow: '0 2px 4px rgba(0,0,0,0.8)'
-                                    }}>
-                                        {sc ? sc.name : "EMPTY SLOT"}
+                                        width: 150, height: 220, 
+                                        backgroundColor: 'rgba(0,0,0,0.3)', 
+                                        border: `2px solid ${sc ? primary : '#334155'}`,
+                                        borderRadius: 12,
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                     }}>
+                                         {sc ? (
+                                            /* eslint-disable-next-line @next/next/no-img-element */
+                                            <img src={getCardImageUrl(sc)} alt={sc.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10 }} />
+                                         ) : <div style={{ fontSize: 40 }}>?</div>}
                                     </div>
                                 </div>
                             ))}
@@ -155,13 +90,7 @@ export async function GET(request: NextRequest) {
             {
                 width: 1200,
                 height: 630,
-                headers: {
-                    'Cache-Control': 'public, max-age=2592000, immutable', // Cache heavily
-                    'Content-Type': 'image/png',
-                },
-                fonts: fontData ? [
-                    { name: 'Oswald', data: fontData, style: 'normal', weight: 700 }
-                ] : undefined,
+                // fonts: undefined // No fonts
             }
         );
     }
@@ -468,11 +397,12 @@ export async function GET(request: NextRequest) {
         ] : undefined,
       },
     );
-  } catch (e) {
-    const message = e instanceof Error ? e.message : 'Unknown error';
+    } catch (e: any) {
+    const message = e instanceof Error ? e.message : 'Unknown error ' + JSON.stringify(e);
     console.error(`OG Generation Error: ${message}`);
-    return new Response(`Failed to generate the image`, {
-      status: 500,
+    return new Response(`Failed to generate the image: ${message} \nStack: ${e?.stack}`, {
+      status: 200, // Return 200 to see the message in browser if needed, or 500. Let's use 500 but with text.
+      statusText: "Internal Server Error"
     });
   }
 }

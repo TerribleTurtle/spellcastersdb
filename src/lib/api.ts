@@ -114,7 +114,7 @@ const AllDataSchema = z.object({
  * Uses Zod to validate the response. Returns "best effort" empty arrays on total failure.
  */
 export async function fetchGameData(): Promise<AllDataResponse> {
-  // DEVELOPMENT OVERRIDE: Local File System
+  /* DEVELOPMENT OVERRIDE: Local File System
   if (process.env.NODE_ENV === 'development' && process.env.LOCAL_API_PATH) {
       try {
           console.log(`[API] Reading from local file: ${process.env.LOCAL_API_PATH}`);
@@ -140,6 +140,7 @@ export async function fetchGameData(): Promise<AllDataResponse> {
         };
       }
   }
+  */
 
   const url = `${API_BASE_URL}/all_data.json`;
   

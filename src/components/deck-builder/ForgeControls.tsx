@@ -721,7 +721,7 @@ function TeamRow({ team, onLoad, onDelete, onDuplicate }: { team: Team, onLoad: 
                         type="TEAM"
                         onCopyLink={async () => {
                             const hash = encodeTeam(team.decks);
-                            const url = `${window.location.origin}${window.location.pathname}?team=${hash}&tname=${encodeURIComponent(team.name)}`;
+                            const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
                             await copyToClipboard(url);
                         }}
                     />
