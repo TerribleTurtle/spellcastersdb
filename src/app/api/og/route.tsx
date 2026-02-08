@@ -94,6 +94,7 @@ export async function GET(request: NextRequest) {
             } catch (e) { console.warn("Team image fetch failed", url); }
         }));
 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const getImageSrc = (entity: any) => {
             const url = resolveUrl(getCardImageUrl(entity, { forceRemote: true, forceFormat: 'png' }));
             return urlToDataUri.get(url) || url;
@@ -285,6 +286,7 @@ export async function GET(request: NextRequest) {
         console.error("Critical error during image pre-fetch", e);
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const getImageSrc = (entity: any) => {
         const url = resolveUrl(getCardImageUrl(entity, { forceRemote: true, forceFormat: 'png' }));
         return urlToDataUri.get(url) || url; // Fallback to URL if fetch failed
@@ -523,6 +525,7 @@ export async function GET(request: NextRequest) {
       },
     );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     console.error('OG Error:', e);
     return new ImageResponse(

@@ -33,6 +33,16 @@ const nextConfig: NextConfig = {
         destination: '/incantations/units/:id',
         permanent: true,
       },
+      {
+        source: '/heroes',
+        destination: '/spellcasters',
+        permanent: true,
+      },
+      {
+        source: '/heroes/:id',
+        destination: '/spellcasters/:id',
+        permanent: true,
+      },
     ];
   },
   async headers() {

@@ -78,10 +78,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
           const width = window.innerWidth;
           // Matches Tailwind Breakpoints logic roughly
           if (width >= 1280) setColumns(4); // xl
-          else if (width >= 1024) setColumns(3); // lg
-          else setColumns(2); // md & sm & default
-          // Note: Mobile formerly used grid-cols-6 but that seems excessive for cards? 
-          // Keeping 3 as minimum ensures usability for 48px-80px cards.
+          else setColumns(3); // lg & md & sm & default (Mobile 3 columns request)
       };
       
       handleResize(); // Init

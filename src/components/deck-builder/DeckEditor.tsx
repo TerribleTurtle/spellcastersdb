@@ -252,8 +252,8 @@ export function DeckEditor({
         return;
     }
 
-    if (current?.item && 'spellcaster_id' in current.item) {
-         const item = current.item as Unit | Spellcaster;
+    if (current?.item && ('spellcaster_id' in current.item || 'entity_id' in current.item)) {
+         const item = current.item as Unit | Spellcaster | Spell | Titan;
          setActiveDragItem(item);
     }
   };

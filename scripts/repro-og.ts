@@ -14,7 +14,8 @@ const mockDeck = {
     name: 'Deck 1'
 };
 
-const teamHash = encodeTeam([mockDeck, mockDeck, mockDeck], "Test Team");
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const teamHash = encodeTeam([mockDeck, mockDeck, mockDeck] as any, "Test Team");
 console.log(`Generated Team Hash: ${teamHash}`);
 console.log(`\nTest URL: http://localhost:3000/api/og?team=${encodeURIComponent(teamHash)}`);
 console.log(`\nCurl Command: curl -v "http://localhost:3000/api/og?team=${encodeURIComponent(teamHash)}" > og_output.png`);

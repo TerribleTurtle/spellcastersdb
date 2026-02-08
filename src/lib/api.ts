@@ -164,6 +164,7 @@ export async function fetchGameData(): Promise<AllDataResponse> {
 
             // Pre-process: Filter units to ensure only Creatures and Buildings are in the units array
             if (Array.isArray(rawData.units)) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 rawData.units = rawData.units.filter((u: any) => u.category === "Creature" || u.category === "Building");
             }
             
@@ -200,6 +201,7 @@ export async function fetchGameData(): Promise<AllDataResponse> {
     // Pre-process: Filter units to ensure only Creatures and Buildings are in the units array
     // The raw data might have Spells mixed in (legacy structure)
     if (Array.isArray(rawData.units)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         rawData.units = rawData.units.filter((u: any) => u.category === "Creature" || u.category === "Building");
     }
 

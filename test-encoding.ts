@@ -20,6 +20,7 @@ const deck = {
     ]
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const encodedDeck = encodeDeck(deck as any);
 const decodedDeck = decodeDeck(encodedDeck);
 
@@ -34,7 +35,8 @@ if (decodedDeck?.name === "EvilDeckName") {
 
 // Test 2: Team Name Sanitization
 const dirtyTeamName = `Bad${DELIMITER}Team`;
-const encodedTeam = encodeTeam([deck as any, deck as any, deck as any], dirtyTeamName);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const encodedTeam = encodeTeam([deck as any, deck as any, deck as any] as any, dirtyTeamName);
 const decodedTeam = decodeTeam(encodedTeam);
 
 console.log(`Original Team Name: ${JSON.stringify(dirtyTeamName)}`);

@@ -14,6 +14,7 @@ const mockDeck = {
     name: 'Iron Sorcerer Deck'
 };
 
-const deckHash = encodeDeck(mockDeck);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const deckHash = encodeDeck(mockDeck as any);
 console.log(`Generated Deck Hash: ${deckHash}`);
 console.log(`\nTest URL: http://localhost:3000/api/og?deck=${encodeURIComponent(deckHash)}`);

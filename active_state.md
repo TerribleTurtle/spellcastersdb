@@ -15,3 +15,4 @@ The changes have been pushed to the remote repository.
 - [x] Push changes to remote.
 - [x] Fix OG image loading (migrated to `next/og`, tuned for sharpness vs timeout).
 - [x] Rename deck slots from 'Unit' to 'Incant.' in UI.
+- [x] Fix Drag and Drop for all unit types.
