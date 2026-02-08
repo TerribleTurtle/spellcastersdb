@@ -99,7 +99,8 @@
   - [x] **Data Flow**: Import "Solo" decks into Team slots; Export Team slots to Solo storage.
   - [x] **Sharing**: specialized `?team=` URL and OG images.
   - [ ] **UX Polish**:
-    - [ ] Decouple solo deck from team deck after import (no longer linked).
+    - [x] Decouple solo deck from team deck after import (no longer linked).
+    - [x] Show Solo Deck Previews in Team Mode (sidebar).
     - [ ] Auto-focus "Saved Teams" list after clicking "Save Team".
     - [ ] Synchronize deck names in team builder automatically on change.
 

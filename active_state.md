@@ -1,6 +1,7 @@
 # Current Focus
 
 Monitor build stability and proceed with any remaining pre-launch checks.
+Improved Team Mode UX by enabling Solo Deck previews in the sidebar.
 
 ## Context
 
@@ -16,3 +17,5 @@ The changes have been pushed to the remote repository.
 - [x] Fix OG image loading (migrated to `next/og`, tuned for sharpness vs timeout).
 - [x] Rename deck slots from 'Unit' to 'Incant.' in UI.
 - [x] Fix Drag and Drop for all unit types.
+- [x] Enable Solo Deck Preview in Team Mode Sidebar.
+- [x] Push all changes to remote.
