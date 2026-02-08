@@ -94,48 +94,58 @@ function getDeckIds(deck: Deck): string[] {
 export function decodeTeam(hash: string): { name: string, decks: (DecodedDeckData | null)[] } {
     if (!hash) return { name: "", decks: [null, null, null] };
 
-    // Check for V2 Headers
-    if (hash.startsWith(TEAM_V2_PREFIX)) {
-        const payload = hash.slice(TEAM_V2_PREFIX.length);
-        const packed = LZString.decompressFromEncodedURIComponent(payload);
-        if (!packed) return { name: "", decks: [null, null, null] };
+    // Clean hash (handle potential space replacements from URL decoding quirks)
+    const cleanHash = hash.replace(/ /g, '+');
 
-        const parts = packed.split(DELIMITER);
-        // Structure: Name (1) + Deck1 (7) + Deck2 (7) + Deck3 (7) = 22 parts
-        // Or if we didn't include deck names, differnet count.
-        // We used getDeckIds which returns 7 items (ids + name).
-        
-        const teamName = parts[0] || "";
-        const deckParts = parts.slice(1);
-        
-        const results: (DecodedDeckData | null)[] = [];
-        
-        for (let i = 0; i < 3; i++) {
-            const start = i * 7;
-            const slice = deckParts.slice(start, start + 7);
-            if (slice.length < 6) {
-                results.push(null);
-                continue;
+    // Check for V2 Headers
+    if (cleanHash.startsWith(TEAM_V2_PREFIX)) {
+        try {
+            const payload = cleanHash.slice(TEAM_V2_PREFIX.length);
+            const packed = LZString.decompressFromEncodedURIComponent(payload);
+            
+            if (!packed) {
+                console.error("decodeTeam: Decompression returned null/empty for payload", payload.substring(0, 20) + "...");
+                return { name: "", decks: [null, null, null] };
             }
-            results.push({
-                spellcasterId: slice[0] || null,
-                slotIds: slice.slice(1, 6).map(id => id || null),
-                name: slice[6] || undefined
-            });
+
+            const parts = packed.split(DELIMITER);
+            // Structure: Name (1) + Deck1 (7) + Deck2 (7) + Deck3 (7) = 22 parts
+            
+            const teamName = parts[0] || "";
+            const deckParts = parts.slice(1);
+            
+            const results: (DecodedDeckData | null)[] = [];
+            
+            for (let i = 0; i < 3; i++) {
+                const start = i * 7;
+                const slice = deckParts.slice(start, start + 7);
+                if (slice.length < 6) {
+                    results.push(null);
+                    continue;
+                }
+                results.push({
+                    spellcasterId: slice[0] || null,
+                    slotIds: slice.slice(1, 6).map(id => id || null),
+                    name: slice[6] || undefined
+                });
+            }
+            
+            return { name: teamName, decks: results };
+        } catch (e) {
+            console.error("decodeTeam: Exception during V2 decoding", e);
+            return { name: "", decks: [null, null, null] };
         }
-        
-        return { name: teamName, decks: results };
     }
 
     // Legacy V1 (Tilde separated individual deck hashes)
-    // Legacy returned just `(DecodedDeckData | null)[]`.
-    // We need to return the new structure.
-    
-    // We can infer legacy because it doesn't start with v2~
-    const parts = hash.split(TEAM_DELIMITER);
-    const results = parts.map(decodeDeck);
-    
-    // Ensure we always return exactly 3 items, padding with null if needed
-    while (results.length < 3) results.push(null);
-    return { name: "", decks: results.slice(0, 3) };
+    try {
+        const parts = cleanHash.split(TEAM_DELIMITER);
+        const results = parts.map(decodeDeck);
+        
+        while (results.length < 3) results.push(null);
+        return { name: "", decks: results.slice(0, 3) };
+    } catch (e) {
+        console.error("decodeTeam: Exception during legacy decoding", e);
+        return { name: "", decks: [null, null, null] };
+    }
 }

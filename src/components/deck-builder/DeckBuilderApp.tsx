@@ -23,6 +23,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
   const [viewSummary, setViewSummary] = useState(false);
   const [viewingTeamData, setViewingTeamData] = useState<Deck[] | null>(null); // PURE VIEW MODE
   const [viewingTeamId, setViewingTeamId] = useState<string | null>(null); // If viewing a saved team
+  const [viewingTeamName, setViewingTeamName] = useState<string>(""); // Name of team being viewed (from URL hash)
   const [viewingDeckData, setViewingDeckData] = useState<Deck | null>(null); // PURE VIEW MODE (SOLO)
   const [viewingDeckId, setViewingDeckId] = useState<string | null>(null); // If viewing a saved deck
   const [pendingImport, setPendingImport] = useState<Deck | null>(null); // passed to editor to trigger import
@@ -53,7 +54,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
         // Clean Team params when entering Solo Mode
         const url = new URL(window.location.href);
         url.searchParams.delete('team');
-        url.searchParams.delete('tname');
+        // tname removal - cleaned up
         router.replace(url.pathname + url.search);
 
         setViewSummary(false);
@@ -207,25 +208,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
              import("@/hooks/useDeckBuilder").then(({ reconstructDeck }) => {
                 const fullDecks = importedDecks.map(d => reconstructDeck(d, units, spellcasters));
                 setViewingTeamData(fullDecks);
-                
-                 // If we found a name in URL, use it for display
-                const tnameParam = searchParams.get('tname');
-                // const finalTeamName = decodedName || tnameParam || "Imported Team";
-
-                // We'll handle this by passing teamName override to TeamOverview via URL param hack or state?
-                // Actually `TeamOverview` takes `teamName` prop.
-                // We are passing `searchParams.get('tname')` to TeamOverview currently.
-                // We should update the URL to include the name if it was decoded but missing in params?
-                // Or just rely on the component using the name we pass.
-                // But `DeckBuilderApp` renders `TeamOverview` with `teamName={searchParams.get('tname') || team.teamName}`
-                // We should update the URL to allow TeamOverview to see it, OR update how we pass it.
-                
-                // Let's update the URL params to match what we found, so the UI is consistent
-                if (decodedName && decodedName !== tnameParam) {
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('tname', decodedName);
-                    router.replace(url.pathname + url.search);
-                }
+                if (decodedName) setViewingTeamName(decodedName);
 
                  // Check if we have this team saved already
                  if (savedTeamsRaw) {
@@ -467,7 +450,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                 >
                     <TeamOverview
                         decks={(viewingTeamData as [Deck, Deck, Deck]) || team.teamDecks!}
-                        teamName={searchParams.get('tname') || team.teamName}
+                        teamName={viewingTeamData ? viewingTeamName : team.teamName}
                         existingId={viewingTeamId}
                         onBack={() => {
                             if (viewingTeamData) {
@@ -498,7 +481,6 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                                   // Clear URL Params
                                   const url = new URL(window.location.href);
                                   url.searchParams.delete('team');
-                                  url.searchParams.delete('tname');
                                   router.replace(url.pathname + url.search);
 
                                   team.enterEditMode(0);
@@ -521,7 +503,6 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                                     // Clear URL Params
                                     const url = new URL(window.location.href);
                                     url.searchParams.delete('team');
-                                    url.searchParams.delete('tname');
                                     router.replace(url.pathname + url.search);
 
                                     team.enterEditMode(idx);
@@ -535,7 +516,6 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                                 // Clear URL Params
                                 const url = new URL(window.location.href);
                                 url.searchParams.delete('team');
-                                url.searchParams.delete('tname');
                                 router.replace(url.pathname + url.search);
 
                                 team.enterEditMode(idx);
