@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ImageResponse } from '@vercel/og';
 import { decodeTeam } from '@/lib/encoding';
 import { fetchGameData } from '@/lib/api';
-import { getCardImageUrl } from '@/lib/utils'; // Keep import
+import { getCardImageUrl } from '@/lib/utils';
 
-// Font fallback strategy:
 const fontUrl = 'https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/oswald/Oswald-Bold.ttf';
 
 export async function GET(request: NextRequest) {
@@ -47,7 +46,7 @@ export async function GET(request: NextRequest) {
                 decksCount: decks.length,
             },
             spellcasters: spellcasters.map(s => s ? { id: s.hero_id, name: s.name } : null),
-            debugInfo, // Return the debug info!
+            debugInfo,
             gameDataHeroesCount: data.heroes.length
         });
     }
@@ -64,7 +63,7 @@ export async function GET(request: NextRequest) {
         if (fontRes.ok) fontData = await fontRes.arrayBuffer();
     } catch (e) { console.warn('Font fetch failed', e); }
 
-    return new ImageResponse(
+    const imgRes = new ImageResponse(
         (
             <div style={{
                 height: '100%',
@@ -78,7 +77,7 @@ export async function GET(request: NextRequest) {
                 position: 'relative',
                 overflow: 'hidden',
             }}>
-                    {/* Background Elements */}
+                {/* Background Elements */}
                 <div style={{ position: 'absolute', top: '-20%', left: '-20%', width: '70%', height: '70%', background: '#020617', filter: 'blur(80px)', opacity: 0.9, zIndex: 0 }} />
                 <div style={{ position: 'absolute', top: '-10%', left: '20%', width: '40%', height: '40%', background: primary, filter: 'blur(140px)', opacity: 0.25, zIndex: 0 }} />
                 <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '40%', height: '40%', background: accent, filter: 'blur(140px)', opacity: 0.2, zIndex: 0 }} />
@@ -111,9 +110,19 @@ export async function GET(request: NextRequest) {
         {
             width: 1200,
             height: 630,
-            // fonts: undefined // No fonts logic matches original
+            // fonts: undefined
         }
     );
+     
+    // FORCE GENERATION to catch errors
+    const buffer = await imgRes.arrayBuffer();
+    
+    return new NextResponse(buffer, {
+        headers: {
+            'content-type': 'image/png',
+            'cache-control': 'no-store, max-age=0' // No cache for debug
+        }
+    });
 
   } catch (e: any) {
     return NextResponse.json({
