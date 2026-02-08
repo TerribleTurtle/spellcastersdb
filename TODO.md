@@ -40,8 +40,8 @@
   - [x] Implement `@vercel/og` for dynamic deck previews <!-- id: og-gen -->
   - [x] Design OG template: Clean, game-accurate view of Spellcaster + Units (Names/Ranks) <!-- id: og-design -->
 - [ ] **Phase 6: Optimization & Automation ("The Deep Dive")** <!-- id: 20 -->
-  - [ ] Configure `next-sitemap` for SEO <!-- id: 21 -->
-  - [ ] Implement metadata generation strategies <!-- id: 22 -->
+  - [x] Configure `next-sitemap` for SEO (Implemented natively in `sitemap.ts`) <!-- id: 21 -->
+  - [x] Implement metadata generation strategies <!-- id: 22 -->
   - [ ] Create Github Action for "Daily Revalidation" <!-- id: 23 -->
 
 ## Maintenance & UX Refinement
@@ -94,7 +94,7 @@
 - [x] Hide global Footer on `/deck-builder` for immersive full-screen experience <!-- id: 29 -->
 
 - [ ] **Phase 8: Team Builder ("The Trinity")** <!-- id: 30 -->
-  - [x] **Core Logic**: Storage segregation (`spellcasters_teams_v1`) and `useTeamBuilder` hook.
+  - [x] **Core Logic**: Storage segregation (`spellcasters_teams_v1` implemented via `useTeamBuilder` generic storage) and `useTeamBuilder` hook.
   - [x] **UI/UX**: Distinct "Team Overview" mode with 3-column layout and visual cues (borders/colors) to distinguish from Solo mode.
   - [x] **Data Flow**: Import "Solo" decks into Team slots; Export Team slots to Solo storage.
   - [x] **Sharing**: specialized `?team=` URL and OG images.

@@ -1,7 +1,7 @@
 # Current Focus
 
-Monitor build stability and proceed with any remaining pre-launch checks.
-Improved Team Mode UX by enabling Solo Deck previews in the sidebar.
+Start Phase 6: Optimization & Automation.
+Focus on GitHub Actions for daily revalidation and remaining SEO tuning.
 
 ## Context
 

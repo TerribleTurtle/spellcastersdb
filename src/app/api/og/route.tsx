@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
   const primary = '#a855f7';
   const accent = '#22d3ee';
 
-  console.log("OG: Handling Request", request.url);
+
 
   // Cache Control
   const headers = {
@@ -91,7 +91,7 @@ export async function GET(request: NextRequest) {
                     const mime = url.endsWith('.webp') ? 'image/webp' : 'image/png';
                     urlToDataUri.set(url, `data:${mime};base64,${base64}`);
                 }
-            } catch (e) { console.warn("Team image fetch failed", url); }
+                } catch (e) { console.warn("Team image fetch failed", url, e); }
         }));
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -110,7 +110,7 @@ export function useDeckBuilder(
             if (!savedCurrent && storageKey === STORAGE_KEY_CURRENT) {
                 const legacy = localStorage.getItem(STORAGE_KEY_LEGACY_CURRENT);
                 if (legacy) {
-                    console.log("Migrating Current Deck from Legacy Storage...");
+
                     savedCurrent = legacy;
                 }
             }
@@ -149,7 +149,7 @@ export function useDeckBuilder(
              if (!savedList && savedDecksKey === STORAGE_KEY_SAVED) {
                  const legacy = localStorage.getItem(STORAGE_KEY_LEGACY_SAVED);
                  if (legacy) {
-                     console.log("Migrating Saved Decks from Legacy Storage...");
+
                      savedList = legacy;
                      // We don't delete legacy yet, just read from it.
                      // The next 'useEffect' (Persistence) will auto-save this to the NEW key, completing migration.

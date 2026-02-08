@@ -87,7 +87,7 @@ export function useTeamBuilder(availableUnits: (Unit | Spell | Titan)[], availab
     if (!storedMeta) {
         const legacy = localStorage.getItem(STORAGE_KEY_LEGACY_TEAM_METADATA);
         if (legacy) {
-            console.log("Migrating Team Metadata from Legacy Storage...");
+
             storedMeta = legacy;
         }
     }
@@ -121,7 +121,7 @@ export function useTeamBuilder(availableUnits: (Unit | Spell | Titan)[], availab
     if (!storedSaved) {
         const legacy = localStorage.getItem(STORAGE_KEY_LEGACY_SAVED_TEAMS);
         if (legacy) {
-            console.log("Migrating Saved Teams from Legacy Storage...");
+
             storedSaved = legacy;
             // Will be auto-saved to new key by persistence effect
         }
