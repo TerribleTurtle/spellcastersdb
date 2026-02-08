@@ -93,6 +93,14 @@
 - [x] Optimize Mobile Drag Performance: implemented `useRef` and `React.memo` to eliminate lag <!-- id: 28 -->
 - [x] Hide global Footer on `/deck-builder` for immersive full-screen experience <!-- id: 29 -->
 
-## Future Backlog
+- [ ] **Phase 8: Team Builder ("The Trinity")** <!-- id: 30 -->
+  - [x] **Core Logic**: Storage segregation (`spellcasters_teams_v1`) and `useTeamBuilder` hook.
+  - [x] **UI/UX**: Distinct "Team Overview" mode with 3-column layout and visual cues (borders/colors) to distinguish from Solo mode.
+  - [x] **Data Flow**: Import "Solo" decks into Team slots; Export Team slots to Solo storage.
+  - [x] **Sharing**: specialized `?team=` URL and OG images.
+  - [ ] **UX Polish**:
+    - [ ] Decouple solo deck from team deck after import (no longer linked).
+    - [ ] Auto-focus "Saved Teams" list after clicking "Save Team".
+    - [ ] Synchronize deck names in team builder automatically on change.
 
-- [ ] **Team Builder**: Implement multi-deck "Team" view (3 decks) with shared URL and simplified OG image. (See `docs/team_builder_feasibility.md`)
+## Future Backlog

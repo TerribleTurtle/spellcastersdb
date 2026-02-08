@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -11,6 +11,14 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  themeColor: "#0f172a",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   title: {
@@ -86,7 +94,7 @@ export default function RootLayout({
       >
         <Navbar />
 
-        <main className="grow">
+        <main className="grow w-full max-w-7xl mx-auto px-0 md:px-4 sm:px-6 lg:px-8 flex flex-col">
           {children}
         </main>
         <Footer />

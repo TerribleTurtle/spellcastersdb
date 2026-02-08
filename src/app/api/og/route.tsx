@@ -15,9 +15,160 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const deckHash = searchParams.get('deck') || searchParams.get('d');
+    const teamHash = searchParams.get('team');
+
+    // --- TEAM MODE ---
+    if (teamHash) { 
+        // We import decodeTeam dynamically if needed, or just import at top. 
+        // For now, let's assume we update imports.
+        // Actually, let's just do it here to be safe if we didn't update top imports yet.
+        const { decodeTeam } = await import('@/lib/encoding');
+        const { name: teamName, decks } = decodeTeam(teamHash);
+
+        // Fetch Game Data
+        const data = await fetchGameData();
+
+        // Resolve Spellcasters
+        const spellcasters = decks.map(d => {
+            if (!d || !d.spellcasterId) return null;
+            return data.heroes.find(h => h.hero_id === d.spellcasterId);
+        });
+
+        const bgDark = '#0f172a';
+        const primary = '#a855f7';
+        const accent = '#22d3ee';
+
+        // Load Font (Oswald)
+        let fontData: ArrayBuffer | null = null;
+        try {
+            const fontRes = await fetch(fontUrl);
+            if (fontRes.ok) fontData = await fontRes.arrayBuffer();
+        } catch (e) { console.warn('Font fetch failed', e); }
+
+        return new ImageResponse(
+            (
+                <div style={{
+                    height: '100%',
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    backgroundColor: bgDark,
+                    backgroundImage: `radial-gradient(circle at 50% 0%, #2e1065 0%, ${bgDark} 50%)`,
+                    color: 'white',
+                    fontFamily: fontData ? '"Oswald"' : 'sans-serif',
+                    position: 'relative',
+                    overflow: 'hidden',
+                }}>
+                    {/* Background Elements */}
+                    <div style={{ position: 'absolute', top: '-20%', left: '-20%', width: '70%', height: '70%', background: '#020617', filter: 'blur(80px)', opacity: 0.9, zIndex: 0 }} />
+                    <div style={{ position: 'absolute', top: '-10%', left: '20%', width: '40%', height: '40%', background: primary, filter: 'blur(140px)', opacity: 0.25, zIndex: 0 }} />
+                    <div style={{ position: 'absolute', bottom: '-10%', right: '-10%', width: '40%', height: '40%', background: accent, filter: 'blur(140px)', opacity: 0.2, zIndex: 0 }} />
+
+                    {/* Content Wrapper */}
+                    <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100%', padding: '40px 60px', zIndex: 10 }}>
+                        
+                        {/* Header */}
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', marginBottom: 30 }}>
+                             <div style={{ display: 'flex', alignItems: 'center', fontSize: 20, fontWeight: 700, letterSpacing: '0.1em', marginBottom: 8, opacity: 0.8 }}>
+                                 SPELLCASTERS CHRONICLES
+                            </div>
+                            <div style={{ 
+                                fontSize: 48, 
+                                fontWeight: 900, 
+                                lineHeight: 1, 
+                                color: 'white',
+                                textShadow: '0px 4px 12px rgba(0,0,0,0.5)',
+                                textAlign: 'center',
+                                display: '-webkit-box',
+                                WebkitLineClamp: 1,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden',
+                                maxWidth: '100%',
+                            }}>
+                                {teamName || "TEAM TRINITY"}
+                            </div>
+                        </div>
+
+                        {/* Spellcasters Triad */}
+                        <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center', gap: 40, width: '100%' }}>
+                            {spellcasters.map((sc, i) => (
+                                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 200 }}>
+                                    {/* Card */}
+                                    <div style={{ 
+                                        width: 200, 
+                                        height: 320, 
+                                        position: 'relative', 
+                                        borderRadius: 20, 
+                                        overflow: 'hidden', 
+                                        border: `4px solid ${sc ? primary : '#334155'}`, 
+                                        boxShadow: sc ? `0 0 30px ${primary}40` : 'none',
+                                        backgroundColor: 'rgba(0,0,0,0.3)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
+                                    }}>
+                                        {sc ? (
+                                            // eslint-disable-next-line @next/next/no-img-element
+                                            <img 
+                                                src={getCardImageUrl(sc)} 
+                                                alt={sc.name}
+                                                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                                            />
+                                        ) : (
+                                            <div style={{ color: '#64748b', fontSize: 48, fontWeight: 900 }}>?</div>
+                                        )}
+                                        
+                                        {/* Slot Badge */}
+                                        <div style={{
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: 0,
+                                            padding: '4px 12px',
+                                            backgroundColor: primary,
+                                            color: 'white',
+                                            fontWeight: 700,
+                                            fontSize: 14,
+                                            borderBottomRightRadius: 12,
+                                            boxShadow: '2px 2px 4px rgba(0,0,0,0.3)'
+                                        }}>
+                                            SLOT {i + 1}
+                                        </div>
+                                    </div>
+
+                                    {/* Name */}
+                                    <div style={{ 
+                                        marginTop: 16, 
+                                        fontSize: 20, 
+                                        fontWeight: 700, 
+                                        color: sc ? 'white' : '#64748b',
+                                        textAlign: 'center',
+                                        textShadow: '0 2px 4px rgba(0,0,0,0.8)'
+                                    }}>
+                                        {sc ? sc.name : "EMPTY SLOT"}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            ),
+            {
+                width: 1200,
+                height: 630,
+                headers: {
+                    'Cache-Control': 'public, max-age=2592000, immutable', // Cache heavily
+                    'Content-Type': 'image/png',
+                },
+                fonts: fontData ? [
+                    { name: 'Oswald', data: fontData, style: 'normal', weight: 700 }
+                ] : undefined,
+            }
+        );
+    }
+    // --- END TEAM MODE ---
 
     if (!deckHash) {
-      return new Response('Missing deck parameter', { status: 400 });
+      return new Response('Missing deck or team parameter', { status: 400 });
     }
 
     const decoded = decodeDeck(deckHash);

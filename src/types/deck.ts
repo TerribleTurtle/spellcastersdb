@@ -29,4 +29,10 @@ export interface DeckStats {
   unitCounts: Record<string, number>;
   isValid: boolean;
   validationErrors: string[];
+  // Validation Helpers
+  unitCount: number;
+  titanCount: number;
+  hasSpellcaster: boolean;
+  rank1or2Count: number;
+  rank1or2CreatureCount: number;
 }

@@ -5,7 +5,7 @@ import { MessageSquare } from "lucide-react";
 declare global {
   interface Window {
     Tally?: {
-      openPopup: (formId: string, options?: any) => void;
+      openPopup: (formId: string, options?: Record<string, unknown>) => void;
     };
   }
 }

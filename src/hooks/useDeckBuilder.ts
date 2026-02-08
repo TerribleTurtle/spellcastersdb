@@ -1,13 +1,17 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+"use client";
+
+import { useState, useEffect, useLayoutEffect, useCallback, useRef, useMemo } from 'react';
 import { Unit, Spellcaster } from '@/types/api';
 import { Deck, DeckSlot, SlotIndex } from '@/types/deck';
 import { v4 as uuidv4 } from 'uuid';
+import { validateDeck } from '@/lib/deck-validation';
 
-const STORAGE_KEY_CURRENT = 'spellcasters_deck_v1';
-const STORAGE_KEY_SAVED = 'spellcasters_saved_decks_v1';
+// Storage Keys
+export const STORAGE_KEY_CURRENT = 'spellcasters_deck_v1';
+export const STORAGE_KEY_SAVED = 'spellcasters_saved_decks_v1';
 
 // Internal Storage Format (IDs only)
-interface StoredDeck {
+export interface StoredDeck {
   id?: string;
   name?: string;
   spellcasterId: string | null;
@@ -29,17 +33,17 @@ const INITIAL_DECK: Deck = {
 };
 
 // Helper: Convert Deck to Stored Format
-function serializeDeck(deck: Deck): StoredDeck {
+export function serializeDeck(deck: Deck): StoredDeck {
   return {
     id: deck.id,
     name: deck.name,
-    spellcasterId: deck.spellcaster?.hero_id || null,
+    spellcasterId: deck.spellcaster?.hero_id || null, // Ensure we use the ID, not the whole object
     slotIds: deck.slots.map(s => s.unit?.entity_id || null) as [string | null, string | null, string | null, string | null, string | null]
   };
 }
 
 // Helper: Reconstruct Deck from Stored Format
-function reconstructDeck(stored: StoredDeck, units: Unit[], spellcasters: Spellcaster[]): Deck {
+export function reconstructDeck(stored: StoredDeck, units: Unit[], spellcasters: Spellcaster[]): Deck {
     const newSlots = INITIAL_SLOTS.map(s => ({ ...s }));
     
     stored.slotIds.forEach((id, idx) => {
@@ -63,65 +67,211 @@ function reconstructDeck(stored: StoredDeck, units: Unit[], spellcasters: Spellc
     };
 }
 
-export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcasters: Spellcaster[] = []) {
-  const [deck, setDeck] = useState<Deck>(INITIAL_DECK);
+export function useDeckBuilder(
+    availableUnits: Unit[] = [], 
+    availableSpellcasters: Spellcaster[] =[],
+    storageKey: string | null = STORAGE_KEY_CURRENT,
+    savedDecksKey: string | null = STORAGE_KEY_SAVED,
+    initialDeck: Deck = INITIAL_DECK
+) {
+  const [deck, setDeck] = useState<Deck>(initialDeck);
   const [savedDecks, setSavedDecks] = useState<Deck[]>([]);
   const [isInitialized, setIsInitialized] = useState(false);
   const [lastError] = useState<string | null>(null);
   const hasHydrated = useRef(false);
+  const loadedKeyRef = useRef<string | null>(storageKey); // Track which key is currently loaded in 'deck'
 
   // 1. Hydration Load (Current Deck + Saved Decks)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (hasHydrated.current) return;
+  const EVENT_SAVED_DECKS_UPDATE = 'spellcasters:saved-decks-update';
 
-    // Load Current Draft
-    const savedCurrent = localStorage.getItem(STORAGE_KEY_CURRENT);
-    if (savedCurrent) {
-      try {
-        const stored: StoredDeck = JSON.parse(savedCurrent);
-        setDeck(reconstructDeck(stored, availableUnits, availableSpellcasters));
-      } catch (e) {
-        console.error('Failed to load current deck', e);
-      }
-    }
+    // Ref to skip persistence if the update came from an external sync
+    const skipPersistence = useRef(false);
 
-    // Load Saved Decks
-    const savedList = localStorage.getItem(STORAGE_KEY_SAVED);
-    if (savedList) {
-        try {
-            const storedList: StoredDeck[] = JSON.parse(savedList);
-            const reconstructedList = storedList.map(d => reconstructDeck(d, availableUnits, availableSpellcasters));
-            setSavedDecks(reconstructedList);
-        } catch (e) {
-            console.error('Failed to load saved decks list', e);
+    // 1. Hydration Load (Current Deck + Saved Decks)
+
+    useLayoutEffect(() => {
+        if (typeof window === 'undefined') return;
+        
+        // We only skip if we've already hydrated AND the key hasn't changed.
+        // But since we want to support key changes without remounting, we should
+        // checking if the current deck state matches the key is hard.
+        // Instead, we'll just allow re-hydration if the key is different from what we last loaded?
+        // Actually, just let it run if storageKey changes.
+
+        if (storageKey) {
+            const savedCurrent = localStorage.getItem(storageKey);
+            if (savedCurrent) {
+                try {
+                    const stored: StoredDeck = JSON.parse(savedCurrent);
+                    // Force update even if initialized, because key changed
+                    const reconstructed = reconstructDeck(stored, availableUnits, availableSpellcasters);
+                    // eslint-disable-next-line
+                    setDeck(prev => {
+                        // Prevent unnecessary updates if data hasn't changed (Deep Compare via serialization)
+                        if (JSON.stringify(serializeDeck(prev)) === JSON.stringify(serializeDeck(reconstructed))) {
+                            return prev;
+                        }
+                        return reconstructed;
+                    });
+                    loadedKeyRef.current = storageKey;
+                } catch (e) {
+                    console.error('Failed to load current deck', e);
+                }
+            } else {
+                 if (hasHydrated.current) {
+                     setDeck(initialDeck);
+                     loadedKeyRef.current = storageKey;
+                 }
+            }
         }
-    }
 
-    hasHydrated.current = true;
-    setIsInitialized(true);
-  }, [availableUnits, availableSpellcasters]);
+        // Load Saved Decks (Only once or if key changes)
+        if (savedDecksKey && (!hasHydrated.current || savedDecksKey !== STORAGE_KEY_SAVED)) {
+             // ... existing saved decks logic ...
+             const savedList = localStorage.getItem(savedDecksKey);
+             if (savedList) {
+                 try {
+                     const storedList: StoredDeck[] = JSON.parse(savedList);
+                     const reconstructedList = storedList.map(d => reconstructDeck(d, availableUnits, availableSpellcasters));
+                     setSavedDecks(reconstructedList);
+                 } catch (e) {
+                     console.error('Failed to load saved decks list', e);
+                 }
+             }
+        }
 
-  // 2. Persistence (Current Deck Auto-Save)
-  useEffect(() => {
-    if (isInitialized) {
-      const stored = serializeDeck(deck);
-      localStorage.setItem(STORAGE_KEY_CURRENT, JSON.stringify(stored));
-    }
-  }, [deck, isInitialized]);
+        hasHydrated.current = true;
+        setIsInitialized(true);
+    }, [availableUnits, availableSpellcasters, storageKey, savedDecksKey, initialDeck]);
 
-  // 3. Persistence (Saved Decks List)
-  useEffect(() => {
-    if (isInitialized) {
-        const storedList = savedDecks.map(serializeDeck);
-        localStorage.setItem(STORAGE_KEY_SAVED, JSON.stringify(storedList));
-    }
-  }, [savedDecks, isInitialized]);
+
+
+    // 2. Persistence (Current Deck Auto-Save)
+    useEffect(() => {
+        if (isInitialized && storageKey) {
+            // Prevent writing race condition: Only save if we are writing the data that belongs to this key
+            if (storageKey !== loadedKeyRef.current) return;
+
+            const stored = serializeDeck(deck);
+            const json = JSON.stringify(stored);
+            localStorage.setItem(storageKey, json);
+            
+            // Dispatch event for local synchronization (e.g. for TeamBuilder to know a slot updated)
+            window.dispatchEvent(new CustomEvent('spellcasters:deck-written', { 
+                detail: { key: storageKey, deck: stored } 
+            }));
+        }
+    }, [deck, isInitialized, storageKey]);
+
+    // 3. Persistence (Saved Decks List) & Synchronization
+    useEffect(() => {
+        // If we are just syncing from another tab/hook, skip writing back to storage
+        if (skipPersistence.current) {
+            skipPersistence.current = false;
+            return;
+        }
+
+        if (isInitialized && savedDecksKey) {
+            const storedList = savedDecks.map(serializeDeck);
+            localStorage.setItem(savedDecksKey, JSON.stringify(storedList));
+            
+            // Dispatch event to notify other hooks in the same window
+            window.dispatchEvent(new Event(EVENT_SAVED_DECKS_UPDATE));
+        }
+    }, [savedDecks, isInitialized, savedDecksKey]);
+
+    const EVENT_CURRENT_DECK_UPDATE = 'spellcasters:current-deck-update';
+
+    // 4. Cross-Instance & Cross-Tab Synchronization (Saved Lists)
+    useEffect(() => {
+        if (!savedDecksKey || !isInitialized) return;
+
+        const handleSync = () => {
+            const savedList = localStorage.getItem(savedDecksKey);
+            if (savedList) {
+                try {
+                    const storedList: StoredDeck[] = JSON.parse(savedList);
+                    const currentString = JSON.stringify(savedDecks.map(serializeDeck));
+                    if (JSON.stringify(storedList) !== currentString) {
+                         const reconstructedList = storedList.map(d => reconstructDeck(d, availableUnits, availableSpellcasters));
+                         skipPersistence.current = true;
+                         setSavedDecks(reconstructedList);
+                    }
+                } catch (e) {
+                    console.error('Failed to sync saved decks', e);
+                }
+            }
+        };
+
+        window.addEventListener(EVENT_SAVED_DECKS_UPDATE, handleSync);
+        window.addEventListener('storage', handleSync); 
+
+        return () => {
+            window.removeEventListener(EVENT_SAVED_DECKS_UPDATE, handleSync);
+            window.removeEventListener('storage', handleSync);
+        };
+    }, [savedDecksKey, isInitialized, availableUnits, availableSpellcasters, savedDecks]);
+
+    // 5. Current Deck Synchronization (For Team/Same-Page updates)
+    useEffect(() => {
+        if (!storageKey || !isInitialized) return;
+
+        const handleCurrentSync = (e: Event) => {
+            // Check if this event targets our key
+            if (e instanceof CustomEvent && e.detail?.key && e.detail.key !== storageKey) {
+                return; 
+            }
+            
+            // For general 'storage' events (cross-tab), we might not have key details, check everything?
+            // Actually 'storage' event provides key.
+            if (e instanceof StorageEvent && e.key !== storageKey) {
+                return;
+            }
+
+            const savedCurrent = localStorage.getItem(storageKey);
+            if (savedCurrent) {
+                try {
+                    const stored: StoredDeck = JSON.parse(savedCurrent);
+                    
+                    // Reconstruction
+                    const newDeck = reconstructDeck(stored, availableUnits, availableSpellcasters);
+
+                    // Compare to avoid loops if we triggered it (though custom events usually stay local)
+                    // Serializing is heavy but safe
+                    if (JSON.stringify(serializeDeck(deck)) !== JSON.stringify(stored)) {
+                         setDeck(newDeck);
+                    }
+                } catch (err) {
+                    console.error('Failed to sync current deck', err);
+                }
+            } else {
+                // Storage cleared (or empty) -> Reset Deck if it has content
+                // We check if it's already "empty" to avoid unnecessary re-renders
+                // An empty deck has no spellcaster, no ID, and no units in slots.
+                const hasContent = deck.id || deck.spellcaster || deck.slots.some(s => s.unit);
+                if (hasContent) {
+                     setDeck({ ...INITIAL_DECK, id: undefined, name: '' });
+                }
+            }
+        };
+
+        window.addEventListener(EVENT_CURRENT_DECK_UPDATE, handleCurrentSync);
+        // We can reuse the 'storage' listener logic if we split it or add another listener
+        // But let's keep it simple.
+
+        return () => {
+            window.removeEventListener(EVENT_CURRENT_DECK_UPDATE, handleCurrentSync);
+        };
+    }, [storageKey, isInitialized, availableUnits, availableSpellcasters, deck]);
 
   // --- Actions ---
 
   const setSpellcaster = useCallback((spellcaster: Spellcaster) => {
-    setDeck(prev => ({ ...prev, spellcaster }));
+    setDeck(prev => ({ 
+        ...prev, 
+        spellcaster,
+        name: prev.name ? prev.name : `${spellcaster.name} Deck`
+    }));
   }, []);
 
   const removeSpellcaster = useCallback(() => {
@@ -206,43 +356,43 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
   // --- Saved Decks Logic ---
 
   const saveDeck = useCallback((nameInput: string) => {
-      setDeck(current => {
-          // Default name logic
-          let finalName = nameInput.trim();
-          if (!finalName) {
-              finalName = current.spellcaster?.name
-                ? `${current.spellcaster.name} Deck`
-                : "Untitled Deck";
+      // Default name logic
+      let finalName = nameInput.trim();
+      if (!finalName) {
+          finalName = deck.spellcaster?.name
+            ? `${deck.spellcaster.name} Deck`
+            : "Untitled Deck";
+      }
+
+      // Smart Save:
+      // 1. If we have an ID, use it.
+      // 2. If no ID, check if a deck with this name already exists.
+      let id = deck.id;
+      if (!id) {
+          const existingByName = savedDecks.find(d => (d.name || "").toLowerCase() === finalName.toLowerCase());
+          if (existingByName) {
+              id = existingByName.id;
+          } else {
+              id = uuidv4();
           }
+      }
 
-          // Smart Save:
-          // 1. If we have an ID, use it.
-          // 2. If no ID, check if a deck with this name already exists.
-          let id = current.id;
-          if (!id) {
-              const existingByName = savedDecks.find(d => (d.name || "").toLowerCase() === finalName.toLowerCase());
-              if (existingByName) {
-                  id = existingByName.id;
-              } else {
-                  id = uuidv4();
-              }
+      const deckToSave: Deck = { ...deck, name: finalName, id };
+
+      setSavedDecks(prev => {
+          const existingIndex = prev.findIndex(d => d.id === id);
+          if (existingIndex >= 0) {
+              const newSaved = [...prev];
+              newSaved[existingIndex] = deckToSave;
+              return newSaved;
           }
-
-          const deckToSave: Deck = { ...current, name: finalName, id };
-
-          setSavedDecks(prev => {
-              const existingIndex = prev.findIndex(d => d.id === id);
-              if (existingIndex >= 0) {
-                  const newSaved = [...prev];
-                  newSaved[existingIndex] = deckToSave;
-                  return newSaved;
-              }
-              return [...prev, deckToSave];
-          });
-
-          return deckToSave;
+          return [...prev, deckToSave];
       });
-  }, [savedDecks]);
+      
+      // Update current deck with the new info (saved status/ID)
+      setDeck(deckToSave);
+
+  }, [deck, savedDecks]);
 
   const loadDeck = useCallback((id: string) => {
       const target = savedDecks.find(d => d.id === id);
@@ -258,8 +408,8 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
 
   const deleteDeck = useCallback((id: string) => {
     setSavedDecks(prev => prev.filter(d => d.id !== id));
-    // If we deleted the current deck, we just clear the ID from the current view so it becomes a "new draft"
-    setDeck(current => current.id === id ? { ...current, id: undefined } : current);
+    // If we deleted the current deck, we clear it completely
+    setDeck(current => current.id === id ? { ...INITIAL_DECK, id: undefined, name: '' } : current);
   }, []);
 
   const importDecks = useCallback((newDecks: Deck[]) => {
@@ -292,67 +442,28 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
 
 
   // --- Validation ---
-  const stats = {
-    unitCount: deck.slots.filter(s => s.unit && s.index < 4).length,
-    titanCount: deck.slots[4].unit ? 1 : 0,
-    hasSpellcaster: !!deck.spellcaster,
-    rank1or2Count: 0,
-    rank1or2CreatureCount: 0,
-    averageChargeTime: 0,
-    averageCost: 0,
-    unitCounts: { Creature: 0, Building: 0, Spell: 0, Titan: 0 } as Record<string, number>,
-    isValid: false,
-    validationErrors: [] as string[]
-  };
-
-  let totalCharge = 0;
-  let totalPop = 0;
-  let filledCount = 0;
-
-  deck.slots.forEach(slot => {
-    if (slot.unit) {
-        if (slot.index < 4) {
-            const rank = slot.unit.card_config.rank;
-            const category = slot.unit.category;
-            if (rank === 'I' || rank === 'II') {
-                stats.rank1or2Count++;
-                if (category === 'Creature') {
-                    stats.rank1or2CreatureCount++;
-                }
-            }
-        }
-        totalCharge += slot.unit.card_config.charge_time;
-        totalPop += slot.unit.card_config.cost_population;
-        filledCount++;
-
-        const cat = slot.unit.category;
-        stats.unitCounts[cat] = (stats.unitCounts[cat] || 0) + 1;
-    }
-  });
-
-  stats.averageChargeTime = filledCount > 0 ? totalCharge / filledCount : 0;
-  stats.averageCost = filledCount > 0 ? totalPop / filledCount : 0;
-
-  if (stats.unitCount < 4) stats.validationErrors.push("Must have 4 Units");
-  if (!stats.titanCount) stats.validationErrors.push("Must have 1 Titan");
-  if (!stats.hasSpellcaster) stats.validationErrors.push("Select a Spellcaster");
-
-  if (stats.unitCount === 4 && stats.rank1or2CreatureCount === 0) {
-      stats.validationErrors.push("Must include at least 1 Rank I or II Creature");
-  }
-
-  const creatureCount = deck.slots.slice(0, 4).filter(s => s.unit && s.unit.category === 'Creature').length;
-  if (stats.unitCount === 4 && creatureCount === 0) {
-      stats.validationErrors.push("Deck must include at least 1 Creature (cannot be all Spells or Buildings)");
-  }
+  const { isValid, errors, stats } = useMemo(() => validateDeck(deck), [deck]);
 
   const rankReminder = stats.unitCount > 0 && stats.unitCount < 4 && stats.rank1or2CreatureCount === 0 
     ? "Tip: Include at least one Rank I or II Creature for early pressure" 
     : null;
 
-  stats.isValid = stats.validationErrors.length === 0;
-
   const isEmpty = !deck.spellcaster && deck.slots.every(s => !s.unit);
+
+  // Check for Unsaved Changes
+  const hasChanges = useMemo(() => {
+     if (!isInitialized) return false;
+     
+     if (!deck.id) {
+         // New Deck: Changes if not empty
+         return !isEmpty;
+     }
+     
+     const saved = savedDecks.find(d => d.id === deck.id);
+     if (!saved) return true; // Should exist, but if not, it's dirty
+     
+     return JSON.stringify(serializeDeck(deck)) !== JSON.stringify(serializeDeck(saved));
+  }, [deck, savedDecks, isInitialized, isEmpty]);
 
   return {
     deck,
@@ -367,6 +478,27 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
     setDeckState,
     setDeckName,
     saveDeck,
+    saveAsCopy: useCallback((nameInput?: string) => {
+        const newId = uuidv4();
+        // Use provided name, or append (Copy) if none provided
+        const finalName = nameInput ? nameInput.trim() : `${deck.name} (Copy)`;
+        
+        const deckToSave: Deck = { ...deck, id: newId, name: finalName };
+        
+        setSavedDecks(prev => [...prev, deckToSave]);
+        setDeck(deckToSave);
+    }, [deck]),
+    saveNow: () => {
+        if (storageKey) {
+            // Apply a default name if missing to prevent "Untitled" in lists
+            const effectiveDeck = {
+                ...deck,
+                name: deck.name || (deck.spellcaster ? `${deck.spellcaster.name} Deck` : "Untitled Deck")
+            };
+            const stored = serializeDeck(effectiveDeck);
+            localStorage.setItem(storageKey, JSON.stringify(stored));
+        }
+    },
     loadDeck,
     deleteDeck,
     importDecks, // New
@@ -374,10 +506,14 @@ export function useDeckBuilder(availableUnits: Unit[] = [], availableSpellcaster
     isEmpty,
     lastError,
     validation: {
-        isValid: stats.isValid,
-        errors: stats.validationErrors,
+        isValid,
+        errors,
         reminder: rankReminder
     },
-    stats
+    stats,
+    reorderDecks: useCallback((newDecks: Deck[]) => {
+        setSavedDecks(newDecks);
+    }, []),
+    hasChanges
   };
 }

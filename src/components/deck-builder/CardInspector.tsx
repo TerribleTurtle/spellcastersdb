@@ -75,8 +75,8 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
   const isTitanInDeck = isUnit && item.category === "Titan" && currentDeck.slots[4].unit?.entity_id === (item as Unit).entity_id;
 
   return (
-    <div className="h-full w-full bg-surface-main/30 p-4 md:p-6 overflow-y-auto">
-       <div className="relative bg-surface-card rounded-xl border border-white/10 shadow-2xl overflow-hidden max-w-[95%] lg:max-w-2xl xl:max-w-3xl mx-auto flex flex-col">
+    <div className="h-full w-full bg-surface-main/30 p-1 md:p-2 overflow-y-auto">
+       <div className="relative bg-surface-card rounded-xl border border-white/10 shadow-2xl overflow-hidden max-w-[95%] md:max-w-[380px] mx-auto flex flex-col">
        
         {/* Close Button (Desktop) */}
         {onClose && (
@@ -89,7 +89,7 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
         )}
 
        {/* Art / Banner Area */}
-       <div className="flex-1 min-h-[120px] max-h-[35vh] lg:max-h-[45vh] w-full bg-slate-800 relative flex items-center justify-center overflow-hidden shrink-0">
+       <div className="flex-1 min-h-[90px] max-h-[30vh] w-full bg-slate-800 relative flex items-center justify-center overflow-hidden shrink-0">
             {/* Blurred Background */}
             <Image 
                 src={getCardImageUrl(item)} 
@@ -111,9 +111,9 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
                 <Image 
                     src={getCardImageUrl(item)} 
                     alt={name}
-                    width={500}
-                    height={300}
-                    className="h-full w-auto max-w-full object-contain drop-shadow-2xl rounded" 
+                    width={400}
+                    height={240}
+                    className="h-full w-auto max-w-full object-contain drop-shadow-2xl rounded scale-90" 
                 />
             </div>
             
@@ -133,7 +133,7 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
        </div>
 
        {/* Quick Add Actions */}
-       <div className="p-4 bg-surface-main/30 sticky top-0 backdrop-blur z-10 border-b border-white/10 shrink-0">
+       <div className="p-2 bg-surface-main/30 sticky top-0 backdrop-blur z-10 border-b border-white/10 shrink-0">
            {isSpellcaster ? (
                <button 
                   onClick={onSetSpellcaster}
@@ -204,9 +204,9 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
        </div>
 
        {/* Detailed Stats */}
-       <div className="p-6 space-y-8 flex-1 overflow-y-auto">
+       <div className="p-3 space-y-3 flex-1 overflow-y-auto">
             {/* Core Stats Grid */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-2">
                 <StatBox label="Health" value={item.health} icon={<Heart size={16} className="text-green-500" />} />
                 
                 {isUnit ? (
@@ -226,7 +226,7 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
 
             {/* Economy Stats (Only for Units) */}
             {isUnit && (
-                <div className="bg-white/5 rounded-xl p-4 space-y-2">
+                <div className="bg-white/5 rounded-lg p-2 space-y-1">
                     <h3 className="text-xs font-bold uppercase text-gray-500 mb-2">Economy</h3>
                      <div className="flex justify-between items-center text-sm">
                         <span className="flex items-center gap-2 text-gray-300">
@@ -274,10 +274,10 @@ export function CardInspector({ item, currentDeck, onAddSlot, onSetSpellcaster, 
 
 function StatBox({ label, value, icon }: { label: string, value: string | number, icon: React.ReactNode }) {
     return (
-        <div className="bg-surface-main border border-white/5 p-3 rounded-lg flex flex-col items-center justify-center text-center">
-            <div className="mb-1 opacity-80">{icon}</div>
-            <div className="text-lg font-bold font-mono text-white">{value}</div>
-            <div className="text-[10px] uppercase tracking-widest text-gray-500">{label}</div>
+        <div className="bg-surface-main border border-white/5 p-1.5 rounded flex flex-col items-center justify-center text-center">
+            <div className="opacity-60 scale-75">{icon}</div>
+            <div className="text-sm font-bold font-mono text-white leading-tight">{value}</div>
+            <div className="text-[8px] uppercase tracking-widest text-gray-500">{label}</div>
         </div>
     )
 }

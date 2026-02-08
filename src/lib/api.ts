@@ -84,6 +84,16 @@ const ConsumableSchema = z.object({
   tags: z.array(z.string()).optional().default([]),
 }).passthrough();
 
+const UpgradeSchema = z.object({
+  entity_id: z.string(),
+  name: z.string(),
+  description: z.string(),
+  image_required: z.boolean().optional(),
+  prerequisite_level: z.number().optional(),
+  cost: z.number().optional(),
+  tags: z.array(z.string()),
+}).passthrough();
+
 const AllDataSchema = z.object({
   build_info: z.object({
     version: z.string(),
@@ -92,7 +102,7 @@ const AllDataSchema = z.object({
   units: z.array(UnitSchema),
   heroes: z.array(SpellcasterSchema),
   consumables: z.array(ConsumableSchema),
-  upgrades: z.array(z.any()), // Loose typing for upgrades for now
+  upgrades: z.array(UpgradeSchema),
 });
 
 // ============================================================================
@@ -104,6 +114,33 @@ const AllDataSchema = z.object({
  * Uses Zod to validate the response. Returns "best effort" empty arrays on total failure.
  */
 export async function fetchGameData(): Promise<AllDataResponse> {
+  // DEVELOPMENT OVERRIDE: Local File System
+  if (process.env.NODE_ENV === 'development' && process.env.LOCAL_API_PATH) {
+      try {
+          console.log(`[API] Reading from local file: ${process.env.LOCAL_API_PATH}`);
+          const fs = await import('fs/promises'); // Dynamic import to avoid client-side bundling issues
+          const fileContent = await fs.readFile(process.env.LOCAL_API_PATH, 'utf-8');
+          const rawData = JSON.parse(fileContent);
+
+          const result = AllDataSchema.safeParse(rawData);
+          if (!result.success) {
+               console.error("🔴 CRITICAL: Local File Schema Validation Failed", result.error.format());
+               throw new Error(`Local API Validation Failed: ${JSON.stringify(result.error.format(), null, 2)}`);
+          }
+          return result.data as unknown as AllDataResponse;
+      } catch (error) {
+          console.error("Error reading local game data:", error);
+          // Fallthrough to fetch? Or fail hard? Fail hard makes more sense for "Dev Mode Override"
+          return {
+            build_info: { version: "error-local", generated_at: new Date().toISOString() },
+            units: [],
+            heroes: [],
+            consumables: [],
+            upgrades: []
+        };
+      }
+  }
+
   const url = `${API_BASE_URL}/all_data.json`;
   
   try {

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { Menu, X, Github, ExternalLink, Coffee } from 'lucide-react';
+import { Menu, X, Github, ExternalLink } from 'lucide-react';
 
 import { BetaBanner } from './BetaBanner';
 import { FeedbackButton } from '../common/FeedbackButton';
@@ -31,9 +31,7 @@ export default function Navbar() {
   
   const allLinks = [...primaryLinks, ...secondaryLinks];
 
-  const externalLinks = [
-    { name: 'Support', href: 'https://ko-fi.com/terribleturtles', icon: Coffee },
-  ];
+
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-surface-main/80 backdrop-blur-md">
@@ -70,25 +68,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-4">
              <BetaBanner />
              {/* External Links */}
-             <div className="flex items-center gap-4">
-              {externalLinks.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 text-sm text-slate-300 hover:text-brand-accent transition-colors"
-                    title={link.name}
-                  >
-                    <Icon size={16} />
-                    <span className="hidden lg:inline">{link.name}</span>
-                    <ExternalLink size={12} className="opacity-50" />
-                  </a>
-                );
-              })}
-            </div>
+
 
             <div className="pl-4 border-l border-white/10">
                 <button
@@ -156,25 +136,7 @@ export default function Navbar() {
                );
             })}
 
-            <div className="pt-2 mt-2 border-t border-white/10 md:hidden">
-            {/* Mobile Only External Links (Desktop has them in bar) */}
-              {externalLinks.map((link) => {
-                const Icon = link.icon;
-                return (
-                  <a
-                    key={link.name}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-brand-accent"
-                  >
-                    <Icon size={18} />
-                    {link.name}
-                    <ExternalLink size={14} className="opacity-50 ml-auto" />
-                  </a>
-                );
-              })}
-            </div>
+
           </div>
         </div>
       )}

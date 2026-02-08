@@ -75,9 +75,9 @@ export const UnitBrowser = React.memo(function UnitBrowser({ items, onSelectItem
       const handleResize = () => {
           const width = window.innerWidth;
           // Matches Tailwind Breakpoints logic roughly
-          if (width >= 1280) setColumns(5); // xl
-          else if (width >= 1024) setColumns(4); // lg
-          else setColumns(3); // md & sm & default
+          if (width >= 1280) setColumns(4); // xl
+          else if (width >= 1024) setColumns(3); // lg
+          else setColumns(2); // md & sm & default
           // Note: Mobile formerly used grid-cols-6 but that seems excessive for cards? 
           // Keeping 3 as minimum ensures usability for 48px-80px cards.
       };
@@ -464,8 +464,8 @@ function DraggableCard({ item, onClick, onQuickAdd }: {
             </div>
 
             {/* Name Banner - Increased Text Size */}
-            <div className="h-8 min-h-8 bg-surface-main/95 border-t border-white/10 flex items-center justify-center px-1 z-10">
-                <span className="text-[10px] font-bold text-gray-200 text-center leading-tight line-clamp-2 w-full px-1">
+            <div className="h-7 min-h-7 bg-surface-main/95 border-t border-white/10 flex items-center justify-center px-1 z-10">
+                <span className="text-[9px] font-bold text-gray-200 text-center leading-tight line-clamp-2 w-full px-1">
                     {item.name}
                 </span>
             </div>

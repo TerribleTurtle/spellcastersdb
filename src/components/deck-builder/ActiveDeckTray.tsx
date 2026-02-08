@@ -3,7 +3,7 @@ import { useDroppable, useDraggable } from "@dnd-kit/core";
 import { DeckSlot } from "@/types/deck";
 import { Spellcaster, Unit } from "@/types/api";
 
-import { Shield, Sparkles } from "lucide-react";
+import { Shield, Sparkles, CheckCircle2, AlertCircle } from "lucide-react";
 import { cn, getCardImageUrl } from "@/lib/utils";
 
 interface ActiveDeckTrayProps {
@@ -11,54 +11,69 @@ interface ActiveDeckTrayProps {
   spellcaster: Spellcaster | null;
   onSelect?: (item: Unit | Spellcaster) => void;
   draggedItem?: Unit | Spellcaster | null;
+  validation?: {
+      isValid: boolean;
+      errors: string[];
+  };
 }
 
-export function ActiveDeckTray({ slots, spellcaster, onSelect, draggedItem }: ActiveDeckTrayProps) {
+export function ActiveDeckTray({ slots, spellcaster, onSelect, draggedItem, validation }: ActiveDeckTrayProps) {
   return (
-    <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 md:pb-3">
-      <div className="grow flex items-center justify-center px-4 py-2 md:py-3 gap-[1.5vw] md:gap-[0.75vw] overflow-x-auto">
+    <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 md:pb-3 relative">
+      <div className="grow flex items-center justify-between md:justify-center px-3 md:px-4 py-2 md:py-3 gap-0.5 md:gap-4">
+        {/* Spellcaster Area - Far Left */}
+        <div className="relative flex items-center flex-1 md:flex-none min-w-0 max-w-[17%] md:max-w-none">
+            <SpellcasterSlot spellcaster={spellcaster} draggedItem={draggedItem} onSelect={onSelect} />
+            
+            {/* Passives - Absolute positioning to prevent layout shift */}
+
+        </div>
+
+        {/* Separator */}
+        <div className="w-px h-24 bg-white/10 mx-2 self-center hidden md:block" />
+
         {/* Unit Slots 1-4 */}
-        <div className="flex gap-[1.5vw] md:gap-[0.75vw] mx-2">
+        <div className="flex gap-0.5 md:gap-4 mx-0 md:mx-2 flex-[4] md:flex-none min-w-0 justify-center">
             {slots.slice(0, 4).map((slot) => (
-                <Slot 
-                    key={slot.index} 
-                    slot={slot} 
-                    draggedItem={draggedItem}
-                    allSlots={slots}
-                    onSelect={onSelect}
-                />
+                <div key={slot.index} className="flex-1 md:flex-none min-w-0">
+                    <Slot 
+                        slot={slot} 
+                        draggedItem={draggedItem}
+                        allSlots={slots}
+                        onSelect={onSelect}
+                    />
+                </div>
             ))}
         </div>
 
         {/* Separator */}
         <div className="w-px h-24 bg-white/10 mx-2 self-center hidden md:block" />
 
-        {/* Titan Slot */}
-        <div className="mx-2">
+        {/* Titan Area - Slot + Validation Indicator (Directly to the right) */}
+        <div className="relative flex items-center flex-1 md:flex-none min-w-0 max-w-[17%] md:max-w-none">
             <Slot 
-                slot={slots[4]} 
+                slot={slots[4]}  
                 draggedItem={draggedItem}
                 allSlots={slots}
                 onSelect={onSelect}
             />
-        </div>
 
-        {/* Separator */}
-        <div className="w-px h-24 bg-white/10 mx-2 self-center hidden md:block" />
-
-        {/* Spellcaster Area - Slot + Passives (Desktop) */}
-        <div className="mx-2 relative flex items-center">
-            <SpellcasterSlot spellcaster={spellcaster} draggedItem={draggedItem} onSelect={onSelect} />
-            
-            {/* Passives - Desktop Only - Absolute positioning to prevent layout shift */}
-            {spellcaster && spellcaster.abilities.passive.length > 0 && (
-                <div className="absolute left-full ml-4 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-1.5 w-[200px] lg:w-[240px]">
-                    <span className="text-[9px] font-bold text-gray-500 uppercase tracking-widest">Passives</span>
-                    <div className="flex flex-wrap gap-1">
-                        {spellcaster.abilities.passive.map((passive, i) => (
-                            <PassiveChip key={`${passive.ability_id}-${i}`} name={passive.name} description={passive.description} />
-                        ))}
-                    </div>
+            {/* Validation Indicator - Directly to the right of Titan */}
+            {validation && (
+                <div className={cn(
+                    "absolute z-50 flex items-center gap-1.5 rounded-full shadow-sm border backdrop-blur-md transition-all cursor-help whitespace-nowrap",
+                    // Mobile: Top-Right Corner Overlay
+                    "-top-2 -right-2 px-1.5 py-0.5",
+                    // Desktop: Side Badge (Reverted per user request)
+                    "md:top-0 md:left-full md:right-auto md:ml-3 md:px-2 md:py-0.5",
+                    validation.isValid 
+                        ? "bg-green-500/10 border-green-500/20 text-green-400" 
+                        : "bg-red-500/10 border-red-500/20 text-red-400"
+                )} title={validation.isValid ? "Deck Valid" : validation.errors.join('\n')}>
+                    {validation.isValid ? <CheckCircle2 size={12} /> : <AlertCircle size={12} />}
+                    <span className="text-[9px] font-bold uppercase tracking-widest hidden md:inline">
+                        {validation.isValid ? "Valid" : `${validation.errors.length} Issues`}
+                    </span>
                 </div>
             )}
         </div>
@@ -114,8 +129,8 @@ function Slot({ slot, draggedItem, allSlots, onSelect }: {
         <div 
             ref={setNodeRef}
             className={cn(
-                "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center",
-                "w-[clamp(48px,12vw,80px)] md:w-[clamp(64px,8vw,96px)] lg:w-[clamp(72px,7vw,112px)]",
+                "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center w-full",
+                "md:w-[clamp(60px,6vw,80px)] lg:w-[clamp(64px,5vw,96px)]",
                 // Valid drop target (not hovering yet)
                 isValidTarget && !isOver && "border-amber-400 bg-amber-400/10 shadow-[0_0_20px_rgba(251,191,36,0.6),0_0_40px_rgba(251,191,36,0.3)] animate-pulse",
                 // Active hover state (brightest)
@@ -239,8 +254,8 @@ function SpellcasterSlot({ spellcaster, draggedItem, onSelect }: {
                 }
             }}
             className={cn(
-                "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg",
-                "w-[clamp(56px,14vw,96px)] md:w-[clamp(80px,10vw,120px)] lg:w-[clamp(88px,8vw,128px)]",
+                "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg w-full",
+                "md:w-[clamp(72px,8vw,100px)] lg:w-[clamp(80px,6vw,120px)]",
                 // Valid drop target (not hovering yet)
                 isValidTarget && !isOver && "border-amber-400 bg-amber-400/10 shadow-[0_0_20px_rgba(251,191,36,0.6),0_0_40px_rgba(251,191,36,0.3)] animate-pulse",
                 // Active hover state (brightest)
@@ -306,19 +321,4 @@ function SpellcasterSlot({ spellcaster, draggedItem, onSelect }: {
     )
 }
 
-function PassiveChip({ name, description }: { name: string; description: string }) {
-    return (
-        <div className="relative group/passive">
-            {/* Chip */}
-            <div className="px-2 py-1 bg-brand-primary/20 border border-brand-primary/30 rounded text-[10px] font-bold text-brand-primary cursor-default hover:bg-brand-primary/30 transition-colors whitespace-nowrap">
-                {name}
-            </div>
-            
-            {/* Tooltip - Shows on hover */}
-            <div className="absolute bottom-full left-0 mb-2 w-64 p-3 bg-surface-main border border-white/20 rounded-lg shadow-2xl opacity-0 invisible group-hover/passive:opacity-100 group-hover/passive:visible transition-all z-50 pointer-events-none">
-                <p className="text-xs font-bold text-brand-accent mb-1">{name}</p>
-                <p className="text-[11px] text-gray-300 leading-relaxed">{description}</p>
-            </div>
-        </div>
-    );
-}
+

@@ -65,6 +65,37 @@ export async function generateMetadata(
     };
   }
 
+  // Check for team hash
+  const teamHash = resolvedParams?.team;
+  if (typeof teamHash === 'string' && teamHash) {
+      // Decode team to get name
+      // We need to import decodeTeam dynamically or add it to imports
+      // Since this is a server component/function, we can just import it at top or require it.
+      // But let's assume we added the import at the top.
+      const { decodeTeam } = await import('@/lib/encoding');
+      const { name } = decodeTeam(teamHash);
+      
+      const teamName = name || "Team Trinity";
+      const description = `Check out this team build for Spellcasters Chronicles.`;
+
+      return {
+          title: `${teamName} - SpellcastersDB`,
+          description: description,
+          openGraph: {
+              title: `${teamName} - SpellcastersDB`,
+              description: description,
+              type: 'website',
+              images: [`/api/og?team=${teamHash}`], // No tname needed anymore!
+          },
+          twitter: {
+              card: 'summary_large_image',
+              title: `${teamName} - SpellcastersDB`,
+              description: description,
+              images: [`/api/og?team=${teamHash}`],
+          }
+      };
+  }
+
   return {
     title: 'The Forge - Deck Builder, Card Builds & Loadouts',
     description: 'Create, optimize, and share your Spellcasters Chronicles decks. The ultimate card strategy tool for custom builds and loadouts.',
@@ -88,8 +119,8 @@ export default async function Home() {
   const data = await fetchGameData();
 
   return (
-    <div className="fixed inset-0 top-16 bg-surface-main overflow-hidden z-40">
-        {/* TODO: Replace with proper Skeleton logic if desired, but Suspense needs to be high up */}
+    <div className="h-[calc(100vh-64px)] w-full overflow-hidden z-40 bg-surface-main border-x border-white/5 shadow-2xl">
+        {/* Suspense boundary for data loading */}
         <Suspense fallback={<div className="flex h-full items-center justify-center text-brand-primary animate-pulse">Loading The Forge...</div>}>
             <DeckBuilderApp 
                 units={data.units} 
