@@ -10,6 +10,11 @@ const STORAGE_KEY_TEAM_METADATA = 'spellcasters_team_meta_v1';
 // We use specific keys for the 3 active slots to leverage the existing useDeckBuilder persistence
 export const STORAGE_KEY_SAVED_TEAMS = 'spellcasters_saved_teams_v1';
 
+// Legacy Keys for Migration
+const STORAGE_KEY_LEGACY_TEAM_METADATA = 'spellcasters_team_meta';
+const STORAGE_KEY_LEGACY_SAVED_TEAMS = 'spellcasters_saved_teams';
+
+
 
 // We use specific keys for the 3 active slots to leverage the existing useDeckBuilder persistence
 export const TEAM_SLOT_KEYS = [
@@ -48,6 +53,11 @@ export function useTeamBuilder(availableUnits: Unit[], availableSpellcasters: Sp
 
     const loadedDecks: Deck[] = TEAM_SLOT_KEYS.map((key) => {
         const raw = localStorage.getItem(key);
+        
+        // MIGRATION: Check Legacy Slots (assuming they were just index based or had no _v1? 
+        // actually if they were 'spellcasters_team_slot_0', they might be same if we didn't change those keys.
+        // I'll stick to migrating the Saved Lists for now as that's the big data loss.
+        
         if (raw) {
             try {
                 const stored: StoredDeck = JSON.parse(raw);
@@ -71,7 +81,17 @@ export function useTeamBuilder(availableUnits: Unit[], availableSpellcasters: Sp
     if (hasHydrated.current) return;
 
     // 1. Load Metadata (Name)
-    const storedMeta = localStorage.getItem(STORAGE_KEY_TEAM_METADATA);
+    let storedMeta = localStorage.getItem(STORAGE_KEY_TEAM_METADATA);
+    
+    // MIGRATION: Check Legacy Meta
+    if (!storedMeta) {
+        const legacy = localStorage.getItem(STORAGE_KEY_LEGACY_TEAM_METADATA);
+        if (legacy) {
+            console.log("Migrating Team Metadata from Legacy Storage...");
+            storedMeta = legacy;
+        }
+    }
+
     if (storedMeta) {
         try {
             const meta = JSON.parse(storedMeta);
@@ -95,7 +115,18 @@ export function useTeamBuilder(availableUnits: Unit[], availableSpellcasters: Sp
     setTimeout(() => refreshTeamDecks(), 0);
     
     // 3. Load Saved Teams List
-    const storedSaved = localStorage.getItem(STORAGE_KEY_SAVED_TEAMS);
+    let storedSaved = localStorage.getItem(STORAGE_KEY_SAVED_TEAMS);
+    
+    // MIGRATION: Check Legacy
+    if (!storedSaved) {
+        const legacy = localStorage.getItem(STORAGE_KEY_LEGACY_SAVED_TEAMS);
+        if (legacy) {
+            console.log("Migrating Saved Teams from Legacy Storage...");
+            storedSaved = legacy;
+            // Will be auto-saved to new key by persistence effect
+        }
+    }
+
     if (storedSaved) {
         try {
             const list: StoredTeam[] = JSON.parse(storedSaved);

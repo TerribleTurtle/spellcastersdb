@@ -7,8 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { validateDeck } from '@/lib/deck-validation';
 
 // Storage Keys
+// STORAGE KEYS
 export const STORAGE_KEY_CURRENT = 'spellcasters_deck_v1';
 export const STORAGE_KEY_SAVED = 'spellcasters_saved_decks_v1';
+
+// LEGACY KEYS (Migration Support)
+const STORAGE_KEY_LEGACY_CURRENT = 'spellcasters_deck';
+const STORAGE_KEY_LEGACY_SAVED = 'spellcasters_saved_decks';
 
 // Internal Storage Format (IDs only)
 export interface StoredDeck {
@@ -99,7 +104,17 @@ export function useDeckBuilder(
         // Actually, just let it run if storageKey changes.
 
         if (storageKey) {
-            const savedCurrent = localStorage.getItem(storageKey);
+            let savedCurrent = localStorage.getItem(storageKey);
+            
+            // MIGRATION: Check Legacy if current is missing
+            if (!savedCurrent && storageKey === STORAGE_KEY_CURRENT) {
+                const legacy = localStorage.getItem(STORAGE_KEY_LEGACY_CURRENT);
+                if (legacy) {
+                    console.log("Migrating Current Deck from Legacy Storage...");
+                    savedCurrent = legacy;
+                }
+            }
+
             if (savedCurrent) {
                 try {
                     const stored: StoredDeck = JSON.parse(savedCurrent);
@@ -128,7 +143,19 @@ export function useDeckBuilder(
         // Load Saved Decks (Only once or if key changes)
         if (savedDecksKey && (!hasHydrated.current || savedDecksKey !== STORAGE_KEY_SAVED)) {
              // ... existing saved decks logic ...
-             const savedList = localStorage.getItem(savedDecksKey);
+             let savedList = localStorage.getItem(savedDecksKey);
+
+             // MIGRATION: Check Legacy if list is missing/empty
+             if (!savedList && savedDecksKey === STORAGE_KEY_SAVED) {
+                 const legacy = localStorage.getItem(STORAGE_KEY_LEGACY_SAVED);
+                 if (legacy) {
+                     console.log("Migrating Saved Decks from Legacy Storage...");
+                     savedList = legacy;
+                     // We don't delete legacy yet, just read from it.
+                     // The next 'useEffect' (Persistence) will auto-save this to the NEW key, completing migration.
+                 }
+             }
+
              if (savedList) {
                  try {
                      const storedList: StoredDeck[] = JSON.parse(savedList);

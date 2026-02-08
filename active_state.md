@@ -6,4 +6,4 @@ Preparing for Production Release (v1.0 Team Builder).
 
 - [x] Verify build and unnecessary files.
 - [x] Clean up temporary scripts.
-- [ ] Push to main.
+- [x] Push to main.
