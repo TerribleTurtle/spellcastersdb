@@ -1,14 +1,14 @@
 # Current Focus
 
-Investigate and fix data validation errors in `src/lib/api.ts`.
+Monitor build stability and proceed with any remaining pre-launch checks.
 
 ## Context
 
-The user is experiencing "Local Data Validation Failed" and "CRITICAL: API Schema Validation Failed" errors.
-The errors suggest mismatches in `spellcasters`, `units` (category enum), `spells`, `titans`, and `consumables`.
+The Turbopack build error related to `fs/promises` in the Edge Runtime has been resolved by switching the OG route to the Node.js runtime.
+The changes have been pushed to the remote repository.
 
 ## Active Tasks
 
-- [ ] Investigate `src/lib/api.ts` and schema definitions.
-- [ ] Inspect the data source (likely `all_data.json`).
-- [ ] Fix schema or data to ensure compatibility.
+- [x] Fix Turbopack Edge Runtime error (fs/promises).
+- [x] Push changes to remote.
+- [x] Fix OG image loading (force remote png assets).

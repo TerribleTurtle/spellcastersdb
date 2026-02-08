@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
                                      }}>
                                          {sc ? (
                                             /* eslint-disable-next-line @next/next/no-img-element */
-                                            <img src={resolveUrl(getCardImageUrl(sc))} alt={sc.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10 }} />
+                                            <img src={resolveUrl(getCardImageUrl(sc, { forceRemote: true, forceFormat: 'png' }))} alt={sc.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10 }} />
                                          ) : <div style={{ fontSize: 40 }}>?</div>}
                                     </div>
                                 </div>
@@ -285,7 +285,7 @@ export async function GET(request: NextRequest) {
                     }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
-                            src={resolveUrl(getCardImageUrl(spellcaster))} 
+                            src={resolveUrl(getCardImageUrl(spellcaster, { forceRemote: true, forceFormat: 'png' }))} 
                             alt={spellcaster.name}
                             style={{ 
                                 width: '100%', 
@@ -380,7 +380,7 @@ export async function GET(request: NextRequest) {
                                 {/* Full Card Image (No Zoom) */}
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img 
-                                    src={resolveUrl(getCardImageUrl(unit))} 
+                                    src={resolveUrl(getCardImageUrl(unit, { forceRemote: true, forceFormat: 'png' }))} 
                                     alt={unit.name}
                                     style={{ 
                                         width: '100%', 
