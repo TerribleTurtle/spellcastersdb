@@ -6,7 +6,7 @@
 import { ImageResponse } from '@vercel/og';
 import { NextRequest } from 'next/server';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 import { decodeDeck, decodeTeam } from '@/lib/encoding';
 import { fetchGameData } from '@/lib/api';

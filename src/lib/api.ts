@@ -161,6 +161,11 @@ export async function fetchGameData(): Promise<AllDataResponse> {
             console.log(`Loading data from: ${localPath}`);
             const fileContent = await fs.readFile(localPath, 'utf-8');
             const rawData = JSON.parse(fileContent);
+
+            // Pre-process: Filter units to ensure only Creatures and Buildings are in the units array
+            if (Array.isArray(rawData.units)) {
+                rawData.units = rawData.units.filter((u: any) => u.category === "Creature" || u.category === "Building");
+            }
             
             const result = AllDataSchema.safeParse(rawData);
             if (result.success) {
@@ -192,6 +197,12 @@ export async function fetchGameData(): Promise<AllDataResponse> {
 
     const rawData = await response.json();
     
+    // Pre-process: Filter units to ensure only Creatures and Buildings are in the units array
+    // The raw data might have Spells mixed in (legacy structure)
+    if (Array.isArray(rawData.units)) {
+        rawData.units = rawData.units.filter((u: any) => u.category === "Creature" || u.category === "Building");
+    }
+
     // Zod Safe Parse
     const result = AllDataSchema.safeParse(rawData);
 
