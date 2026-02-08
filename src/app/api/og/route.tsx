@@ -179,7 +179,6 @@ export async function GET(request: NextRequest) {
     const primary = '#a855f7';
     const accent = '#22d3ee';
 
-    console.log("OG (Deck): Rendering ImageResponse");
     return new ImageResponse(
       (
         <div
@@ -192,7 +191,7 @@ export async function GET(request: NextRequest) {
             backgroundImage: `radial-gradient(circle at 50% 0%, #2e1065 0%, ${bgDark} 50%)`,
             color: 'white',
             fontFamily: fontData ? '"Oswald"' : 'sans-serif',
-            padding: '30px 50px',
+            padding: '60px 100px',
             position: 'relative',
             overflow: 'hidden',
           }}
@@ -205,7 +204,7 @@ export async function GET(request: NextRequest) {
             width: '70%',
             height: '70%',
             background: '#020617',
-            filter: 'blur(80px)',
+            filter: 'blur(160px)',
             opacity: 0.9,
             zIndex: 0,
           }} />
@@ -216,7 +215,7 @@ export async function GET(request: NextRequest) {
             width: '40%',
             height: '40%',
             background: primary,
-            filter: 'blur(140px)',
+            filter: 'blur(280px)',
             opacity: 0.25,
             zIndex: 0,
           }} />
@@ -227,18 +226,18 @@ export async function GET(request: NextRequest) {
             width: '40%',
             height: '40%',
             background: accent,
-            filter: 'blur(140px)',
+            filter: 'blur(280px)',
             opacity: 0.2,
              zIndex: 0,
           }} />
 
             {/* Content Wrapper */}
-            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 30, alignItems: 'center', justifyContent: 'center', zIndex: 10, height: '100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', width: '100%', gap: 60, alignItems: 'center', justifyContent: 'center', zIndex: 10, height: '100%' }}>
             
                 {/* Header */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '100%' }}>
                      {/* Logo */}
-                    <div style={{ display: 'flex', alignItems: 'center', fontSize: 24, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 4 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', fontSize: 48, fontWeight: 700, letterSpacing: '0.05em', marginBottom: 8 }}>
                          <span style={{ 
                              backgroundImage: 'linear-gradient(to right, #a855f7, #ec4899)', 
                              backgroundClip: 'text', 
@@ -252,12 +251,12 @@ export async function GET(request: NextRequest) {
     
                     {/* Deck Name with Stroke Hack */}
                     <div style={{ 
-                        fontSize: 80, // Massive size
+                        fontSize: 160, // Massive size
                         fontWeight: 900, 
                         lineHeight: 1, 
                         color: 'white',
                         // The "Stroke" Hack: Hard shadows create an outline effect
-                        textShadow: '0px 2px 10px rgba(0,0,0,0.8), 2px 2px 0px #000', 
+                        textShadow: '0px 4px 20px rgba(0,0,0,0.8), 4px 4px 0px #000', 
                         display: '-webkit-box',
                         WebkitLineClamp: 1, // Keep it one line for cleaner look? Or 2? 
                         WebkitBoxOrient: 'vertical',
@@ -270,7 +269,7 @@ export async function GET(request: NextRequest) {
                 </div>
 
                 {/* Deck Content */}
-                <div style={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start', gap: 16, width: '100%' }}>
+                <div style={{ display: 'flex', flexGrow: 1, alignItems: 'center', justifyContent: 'flex-start', gap: 32, width: '100%' }}>
                 
                 {/* Spellcaster (Hero) */}
                 {spellcaster && (
@@ -278,14 +277,14 @@ export async function GET(request: NextRequest) {
                         display: 'flex', 
                         flexDirection: 'column', 
                         alignItems: 'center',
-                        width: 220, 
-                        height: 350, 
+                        width: 440, 
+                        height: 700, 
                         position: 'relative', 
-                        marginRight: 24, 
+                        marginRight: 48, 
                         flexShrink: 0,
-                        borderRadius: 16, 
-                        border: `4px solid ${primary}`, 
-                        boxShadow: `0 0 50px ${primary}60`,
+                        borderRadius: 32, 
+                        border: `8px solid ${primary}`, 
+                        boxShadow: `0 0 100px ${primary}60`,
                         overflow: 'hidden'
                     }}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -304,24 +303,24 @@ export async function GET(request: NextRequest) {
                             bottom: 0,
                             left: 0,
                             right: 0,
-                            height: 60,
+                            height: 120,
                             background: 'linear-gradient(to top, rgba(15, 23, 42, 0.95), transparent)',
                             display: 'flex',
                             alignItems: 'flex-end',
                             justifyContent: 'center',
-                            paddingBottom: 10,
-                            paddingLeft: 4,
-                            paddingRight: 4
+                            paddingBottom: 20,
+                            paddingLeft: 8,
+                            paddingRight: 8
                         }}>
                              <span style={{ 
-                                 fontSize: 24, 
+                                 fontSize: 48, 
                                  fontWeight: 700, 
                                  color: 'white', 
                                  textAlign: 'center',
                                  whiteSpace: 'nowrap', 
                                  overflow: 'hidden', 
                                  textOverflow: 'ellipsis',
-                                 textShadow: '0px 2px 4px black, 2px 2px 0px black'
+                                 textShadow: '0px 4px 8px black, 4px 4px 0px black'
                             }}>
                                 {spellcaster.name}
                             </span>
@@ -336,17 +335,17 @@ export async function GET(request: NextRequest) {
                         // Empty Slot
                         return (
                             <div key={i} style={{ 
-                                width: 150, 
-                                height: 220, 
-                                borderRadius: 14, 
-                                border: '2px dashed rgba(255,255,255,0.1)', 
+                                width: 300, 
+                                height: 440, 
+                                borderRadius: 28, 
+                                border: '4px dashed rgba(255,255,255,0.1)', 
                                 backgroundColor: 'rgba(255,255,255,0.02)',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 flexShrink: 0
                             }}>
-                                <div style={{ width: 12, height: 12, borderRadius: '50%', border: '2px solid rgba(255,255,255,0.2)' }} />
+                                <div style={{ width: 24, height: 24, borderRadius: '50%', border: '4px solid rgba(255,255,255,0.2)' }} />
                             </div>
                         );
                     }
@@ -369,17 +368,17 @@ export async function GET(request: NextRequest) {
                     } as Record<string, string>)[rankKey] || '#94a3b8';
 
                     return (
-                        <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 150 }}>
+                        <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 300 }}>
                             <div style={{ 
                                 display: 'flex', 
                                 flexDirection: 'column',
                                 width: '100%', 
-                                height: 220, 
+                                height: 440, 
                                 position: 'relative', 
-                                borderRadius: 14, 
+                                borderRadius: 28, 
                                 overflow: 'hidden', 
-                                border: `2px solid ${rarityColor}80`, 
-                                boxShadow: '0 6px 24px rgba(0,0,0,0.4)', 
+                                border: `4px solid ${rarityColor}80`, 
+                                boxShadow: '0 12px 48px rgba(0,0,0,0.4)', 
                                 flexShrink: 0 
                             }}>
                                 {/* Full Card Image (No Zoom) */}
@@ -397,19 +396,19 @@ export async function GET(request: NextRequest) {
                             
                             {/* Name Below Card */}
                             <div style={{
-                                marginTop: 12,
+                                marginTop: 24,
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 width: '100%',
                             }}>
                                 <span style={{ 
-                                    fontSize: 18, 
+                                    fontSize: 36, 
                                     fontWeight: 700, 
                                     color: '#e2e8f0', // slate-200
                                     textAlign: 'center',
                                     lineHeight: 1.2,
-                                    textShadow: '0px 2px 4px rgba(0,0,0,0.5)',
+                                    textShadow: '0px 4px 8px rgba(0,0,0,0.5)',
                                     display: '-webkit-box',
                                     WebkitLineClamp: 2,
                                     WebkitBoxOrient: 'vertical',
@@ -428,8 +427,8 @@ export async function GET(request: NextRequest) {
         </div>
       ),
       {
-        width: 1200,
-        height: 630,
+        width: 2400,
+        height: 1260,
         headers,
         fonts: fontData ? [
             {
