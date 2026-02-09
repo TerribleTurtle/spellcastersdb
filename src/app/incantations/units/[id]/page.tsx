@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/common/JsonLd";
 
 import { getUnitById, getUnits } from "@/lib/api";
 
@@ -9,7 +10,6 @@ interface UnitPageProps {
 }
 
 // 1. Generate Static Params (SSG)
-// This tells Next.js at build time: "Here is a list of all unit IDs (e.g., 'faerie', 'titan') to build pages for."
 export async function generateStaticParams() {
   const units = await getUnits();
   return units.map((unit) => ({
@@ -18,11 +18,9 @@ export async function generateStaticParams() {
 }
 
 // 2. Generate Dynamic Metadata (SEO)
-// This fetches the specific unit data to populate the <title> and <meta name="description"> tags.
 export async function generateMetadata({
   params,
 }: UnitPageProps): Promise<Metadata> {
-  // Await the params promise first (Next.js 15 requirement)
   const { id } = await params;
   const unit = await getUnitById(id);
 
@@ -33,31 +31,49 @@ export async function generateMetadata({
   }
 
   return {
-    title: unit.name, // Will become "Faerie | SpellcastersDB" due to template in layout.tsx
+    title: unit.name,
     description: unit.description,
     openGraph: {
       title: unit.name,
       description: unit.description,
-      // We will add dynamic images later
-      // images: [`/assets/units/${unit.entity_id}.png`],
     },
   };
 }
 
 // 3. The UI Component
 export default async function UnitPage({ params }: UnitPageProps) {
-  const { id } = await params; // Await params here too
+  const { id } = await params;
   const unit = await getUnitById(id);
 
   if (!unit) {
     notFound();
   }
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": unit.name,
+    "description": unit.description,
+    "genre": "Strategic Card Game",
+    "isFamilyFriendly": true,
+    "keywords": unit.tags.join(", "),
+    "thumbnailUrl": `https://spellcastersdb.com/api/og/unit?id=${unit.entity_id}`, // Assuming this route exists or will be added
+    "mainEntity": {
+      "@type": "Thing",
+      "name": unit.name,
+      "description": unit.description,
+      "category": unit.category,
+    }
+  };
+
   return (
-    <EntityShowcase 
-      item={unit} 
-      backUrl="/incantations/units"
-      backLabel="Back to Units"
-    />
+    <>
+      <JsonLd data={jsonLdData as any} id={`json-ld-unit-${unit.entity_id}`} />
+      <EntityShowcase 
+        item={unit} 
+        backUrl="/incantations/units"
+        backLabel="Back to Units"
+      />
+    </>
   );
 }

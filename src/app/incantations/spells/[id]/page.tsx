@@ -2,6 +2,7 @@ import { Metadata } from "next";
 
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/common/JsonLd";
 
 import { getEntityById, getSpells } from "@/lib/api";
 import { Spell } from "@/types/api";
@@ -47,11 +48,31 @@ export default async function SpellPage({ params }: SpellPageProps) {
     notFound();
   }
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": spell.name,
+    "description": spell.description,
+    "genre": "Strategic Card Game",
+    "isFamilyFriendly": true,
+    "keywords": spell.tags.join(", "),
+    "thumbnailUrl": `https://spellcastersdb.com/api/og/spell?id=${spell.entity_id}`,
+    "mainEntity": {
+      "@type": "Thing",
+      "name": spell.name,
+      "description": spell.description,
+      "category": "Spell",
+    }
+  };
+
   return (
-    <EntityShowcase 
-      item={spell} 
-      backUrl="/incantations/spells"
-      backLabel="Back to Spells"
-    />
+    <>
+      <JsonLd data={jsonLdData as any} id={`json-ld-spell-${spell.entity_id}`} />
+      <EntityShowcase 
+        item={spell} 
+        backUrl="/incantations/spells"
+        backLabel="Back to Spells"
+      />
+    </>
   );
 }

@@ -6,7 +6,7 @@ Focus on GitHub Actions for daily revalidation and remaining SEO tuning.
 ## Context
 
 The Turbopack build error related to `fs/promises` in the Edge Runtime has been resolved by switching the OG route to the Node.js runtime.
-The changes have been pushed to the remote repository.
+Comprehensive JSON-LD structured data has been integrated for all entity types (Spellcasters, Units, Spells, Titans, Consumables) and collection pages.
 
 ## Active Tasks
 
@@ -18,4 +18,5 @@ The changes have been pushed to the remote repository.
 - [x] Rename deck slots from 'Unit' to 'Incant.' in UI.
 - [x] Fix Drag and Drop for all unit types.
 - [x] Enable Solo Deck Preview in Team Mode Sidebar.
+- [x] Implement JSON-LD for all Entities & Collections.
 - [x] Push all changes to remote.

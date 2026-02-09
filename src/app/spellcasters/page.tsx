@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Star } from "lucide-react";
 
 import { getSpellcasters } from "@/lib/api";
+import { JsonLd } from "@/components/common/JsonLd";
 
 export const metadata = {
   title: "Spellcasters",
@@ -12,7 +13,21 @@ export const metadata = {
 export default async function SpellcastersIndexPage() {
   const spellcasters = await getSpellcasters();
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Spellcasters",
+    "description": "Browse all accessible spellcasters in Spellcasters Chronicles.",
+    "hasPart": spellcasters.map((s) => ({
+      "@type": "GameCharacter",
+      "name": s.name,
+      "url": `https://spellcastersdb.com/spellcasters/${s.spellcaster_id}`,
+    })),
+  };
+
   return (
+    <>
+    <JsonLd data={jsonLdData} id="json-ld-spellcasters-collection" />
     <div className="min-h-screen bg-surface-main text-foreground p-8">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl md:text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary">
@@ -79,5 +94,6 @@ export default async function SpellcastersIndexPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }

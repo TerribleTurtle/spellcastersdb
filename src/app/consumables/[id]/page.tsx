@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/common/JsonLd";
 
 import { getConsumables } from "@/lib/api";
 
@@ -44,7 +45,23 @@ export default async function ConsumablePage({ params }: ConsumablePageProps) {
     notFound();
   }
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "Thing",
+    "name": item.name,
+    "description": item.description,
+    "category": "Consumable",
+    "image": `https://spellcastersdb.com/api/og/consumable?id=${item.entity_id}`,
+    "additionalProperty": [
+        item.effect_type ? { "@type": "PropertyValue", "name": "Effect Type", "value": item.effect_type } : null,
+        item.effect_value ? { "@type": "PropertyValue", "name": "Effect Value", "value": item.effect_value } : null,
+        item.duration ? { "@type": "PropertyValue", "name": "Duration", "value": `${item.duration}s` } : null,
+    ].filter(Boolean)
+  };
+
   return (
+    <>
+    <JsonLd data={jsonLdData as any} id={`json-ld-consumable-${item.entity_id}`} />
     <div className="min-h-screen bg-surface-main text-foreground p-8">
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
@@ -97,5 +114,6 @@ export default async function ConsumablePage({ params }: ConsumablePageProps) {
         </div>
       </div>
     </div>
+    </>
   );
 }

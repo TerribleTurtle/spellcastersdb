@@ -1,5 +1,6 @@
 import { UnitArchive } from "@/components/archive/UnitArchive";
 import { getUnits } from "@/lib/api";
+import { JsonLd } from "@/components/common/JsonLd";
 
 export const metadata = {
   title: "The Archive | SpellcastersDB",
@@ -9,7 +10,21 @@ export const metadata = {
 export default async function UnitsIndexPage() {
   const units = await getUnits();
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "The Archive",
+    "description": "Comprehensive database of Units, Spells, and Buildings.",
+    "hasPart": units.map((u) => ({
+      "@type": "Thing", // Or GameCharacter/VisualArtwork depending on what fits best. Units are diverse.
+      "name": u.name,
+      "url": `https://spellcastersdb.com/incantations/units/${u.entity_id}`,
+    })),
+  };
+
   return (
+    <>
+    <JsonLd data={jsonLdData} id="json-ld-units-collection" />
     <div className="min-h-screen bg-surface-main text-foreground p-4 md:p-8">
       <div className="max-w-[1600px] mx-auto">
         <div className="mb-8">
@@ -24,5 +39,6 @@ export default async function UnitsIndexPage() {
         <UnitArchive initialUnits={units} />
       </div>
     </div>
+    </>
   );
 }

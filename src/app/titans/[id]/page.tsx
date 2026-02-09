@@ -2,6 +2,7 @@ import { Metadata } from "next";
 
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/common/JsonLd";
 
 import { getEntityById, getTitans } from "@/lib/api";
 import { Titan } from "@/types/api";
@@ -47,11 +48,31 @@ export default async function TitanPage({ params }: TitanPageProps) {
     notFound();
   }
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": titan.name,
+    "description": titan.description,
+    "genre": "Strategic Card Game",
+    "isFamilyFriendly": true,
+    "keywords": titan.tags.join(", "),
+    "thumbnailUrl": `https://spellcastersdb.com/api/og/titan?id=${titan.entity_id}`,
+    "mainEntity": {
+      "@type": "Thing",
+      "name": titan.name,
+      "description": titan.description,
+      "category": "Titan",
+    }
+  };
+
   return (
-    <EntityShowcase 
-      item={titan} 
-      backUrl="/titans"
-      backLabel="Back to Titans"
-    />
+    <>
+      <JsonLd data={jsonLdData as any} id={`json-ld-titan-${titan.entity_id}`} />
+      <EntityShowcase 
+        item={titan} 
+        backUrl="/titans"
+        backLabel="Back to Titans"
+      />
+    </>
   );
 }

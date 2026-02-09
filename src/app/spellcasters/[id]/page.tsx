@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/common/JsonLd";
 
 import { getSpellcasterById, getSpellcasters } from "@/lib/api";
 
@@ -47,16 +48,33 @@ export default async function SpellcasterPage({
   const { id } = await params;
   const spellcaster = await getSpellcasterById(id);
 
-
   if (!spellcaster) {
     notFound();
   }
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "VisualArtwork",
+    "name": spellcaster.name,
+    "description": `${spellcaster.name} is a ${spellcaster.class} class spellcaster in Spellcasters Chronicles. Abilities include ${spellcaster.abilities.primary.name} and ${spellcaster.abilities.ultimate.name}.`,
+    "genre": "Strategic Card Game",
+    "character": {
+      "@type": "GameCharacter",
+      "name": spellcaster.name,
+      "playabilityMode": "SinglePlayer",
+      "description": spellcaster.abilities.primary.description,
+    },
+    "thumbnailUrl": `https://spellcastersdb.com/api/og?id=${spellcaster.spellcaster_id}`,
+  };
+
   return (
-    <EntityShowcase 
-      item={spellcaster} 
-      backUrl="/spellcasters"
-      backLabel="Back to Spellcasters"
-    />
+    <>
+      <JsonLd data={jsonLdData} id={`json-ld-spellcaster-${spellcaster.spellcaster_id}`} />
+      <EntityShowcase 
+        item={spellcaster} 
+        backUrl="/spellcasters"
+        backLabel="Back to Spellcasters"
+      />
+    </>
   );
 }

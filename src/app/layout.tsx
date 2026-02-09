@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { FeedbackButton } from "@/components/common/FeedbackButton";
+import { JsonLd } from "@/components/common/JsonLd";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 
@@ -105,6 +106,20 @@ export default function RootLayout({
         <div className="hidden md:block">
           <FeedbackButton variant="fab" />
         </div>
+        <JsonLd 
+          id="json-ld-website"
+          data={{
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            "name": "SpellcastersDB",
+            "url": "https://spellcastersdb.com",
+            "potentialAction": {
+              "@type": "SearchAction",
+              "target": "https://spellcastersdb.com/database?q={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          } as any}
+        />
         <Script src="https://tally.so/widgets/embed.js" strategy="lazyOnload" />
         <Analytics />
         <SpeedInsights />
