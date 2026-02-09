@@ -61,7 +61,7 @@ export default async function ConsumablePage({ params }: ConsumablePageProps) {
 
   return (
     <>
-    <JsonLd data={jsonLdData as any} id={`json-ld-consumable-${item.entity_id}`} />
+    <JsonLd data={jsonLdData as Record<string, unknown>} id={`json-ld-consumable-${item.entity_id}`} />
     <div className="min-h-screen bg-surface-main text-foreground p-8">
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">

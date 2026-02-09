@@ -60,10 +60,30 @@ export interface Incantation {
 
   mechanics?: {
     waves?: number;
-    bonus_damage?: {
-      target_type: string;
-      unit: string;
+    aura?: {
+      name?: string;
+      description?: string;
+      radius: number;
       value: number;
+      interval: number;
+      target_type: "Ally" | "Enemy" | "All" | "Building" | "Creature";
+      effect?: string;
+    }[];
+    damage_modifiers?: {
+      target_type: "Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone";
+      multiplier: number;
+      condition?: string;
+    }[];
+    damage_reduction?: {
+      source_type: string;
+      multiplier: number;
+      condition?: string;
+    }[];
+    spawner?: {
+      unit_id: string;
+      count: number;
+      trigger: "Death" | "Interval" | "Spawn";
+      interval?: number;
     }[];
   };
 }

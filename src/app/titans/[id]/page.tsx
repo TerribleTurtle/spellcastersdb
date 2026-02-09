@@ -67,7 +67,7 @@ export default async function TitanPage({ params }: TitanPageProps) {
 
   return (
     <>
-      <JsonLd data={jsonLdData as any} id={`json-ld-titan-${titan.entity_id}`} />
+      <JsonLd data={jsonLdData as Record<string, unknown>} id={`json-ld-titan-${titan.entity_id}`} />
       <EntityShowcase 
         item={titan} 
         backUrl="/titans"

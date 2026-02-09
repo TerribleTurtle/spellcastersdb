@@ -10,6 +10,14 @@ export function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+export function formatEntityName(id: string): string {
+  if (!id) return "";
+  return id
+    .split("_")
+    .map((word) => capitalize(word))
+    .join(" ");
+}
+
 export function getCardImageUrl(
   entity: {
     spellcaster_id?: string;

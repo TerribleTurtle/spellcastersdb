@@ -55,12 +55,45 @@ const IncantationBase = {
 
 const MechanicsSchema = z.object({
   waves: z.number().optional(),
-  bonus_damage: z
+  // New Schema v1.1 - Arrays confirmed via local data
+  aura: z
     .array(
       z.object({
-        target_type: z.string(), // e.g. "Building"
-        unit: z.string(), // e.g. "percent_max_hp"
+        name: z.string().optional(),
+        description: z.string().optional(),
+        radius: z.number(),
         value: z.number(),
+        interval: z.number(),
+        target_type: z.enum(["Ally", "Enemy", "All", "Building", "Creature"]),
+        effect: z.string().optional(), // e.g. "Heal"
+      })
+    )
+    .optional(),
+  damage_modifiers: z
+    .array(
+      z.object({
+        target_type: z.enum(["Building", "Creature", "Spellcaster", "Unit", "Lifestone"]), // Added 'Unit', 'Lifestone' from data
+        multiplier: z.number(),
+        condition: z.string().optional(), // Added condition
+      })
+    )
+    .optional(),
+  damage_reduction: z
+    .array(
+      z.object({
+        source_type: z.string(), // e.g. "Unit"
+        multiplier: z.number(),
+        condition: z.string().optional(),
+      })
+    )
+    .optional(),
+  spawner: z
+    .array(
+      z.object({
+        unit_id: z.string(),
+        count: z.number(),
+        trigger: z.enum(["Death", "Interval", "Spawn"]),
+        interval: z.number().optional(), // Added interval
       })
     )
     .optional(),

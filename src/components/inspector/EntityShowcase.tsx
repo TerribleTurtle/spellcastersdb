@@ -9,11 +9,14 @@ import {
   Users,
   Zap,
   Wind,
-  Target,
+  Wifi, // For Aura
+  Ghost, // For Spawner
+  Sword, // For Damage Modifiers
+  Shield, // For Damage Reduction
 } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
-import { cn, getCardImageUrl } from "@/lib/utils";
+import { cn, getCardImageUrl, formatEntityName } from "@/lib/utils";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 
 export type EntityItem = Unit | Spellcaster | Spell | Titan;
@@ -263,22 +266,84 @@ export function EntityShowcase({
             )}
            </div>
 
-           {/* Mechanics */}
-           {"mechanics" in item && (item as Unit | Spell).mechanics && (item as Unit | Spell).mechanics?.bonus_damage && (item as Unit | Spell).mechanics!.bonus_damage!.length > 0 && (
+           {/* Mechanics v1.1 */}
+           {"mechanics" in item && (item as Unit | Spell).mechanics && (
             <div className="space-y-3 pt-2">
               <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest px-1">Mechanics</h3>
-              {(item as Unit | Spell).mechanics?.bonus_damage?.map((bonus, i) => (
+              
+              {/* Damage Modifiers */}
+              {(item as Unit | Spell).mechanics?.damage_modifiers?.map((mod, i) => (
                 <div
-                  key={i}
-                  className="bg-brand-secondary/10 border border-brand-secondary/20 p-3 rounded-lg flex items-center gap-3 transition-colors hover:bg-brand-secondary/20"
+                  key={`dmg-${i}`}
+                  className="bg-red-500/10 border border-red-500/20 p-3 rounded-lg flex items-center gap-3 transition-colors hover:bg-red-500/20"
                 >
-                  <Target size={16} className="text-brand-secondary shrink-0" />
-                  <span className="text-sm text-brand-secondary font-bold">
-                    +{bonus.value * (bonus.unit === "percent_max_hp" ? 100 : 1)}
-                    {bonus.unit === "percent_max_hp" ? "% Max HP" : ""}{" "}
-                    Damage vs <span className="text-white">{bonus.target_type}</span>
-                  </span>
+                  <Sword size={16} className="text-red-400 shrink-0" />
+                  <div className="flex flex-col">
+                    <span className="text-sm text-red-200 font-bold">
+                      {Math.round((mod.multiplier - 1) * 100)}% Damage vs <span className="text-white">{formatEntityName(mod.target_type)}</span>
+                    </span>
+                    {mod.condition && (
+                      <span className="text-xs text-red-300/50 italic">
+                         Condition: {mod.condition}
+                      </span>
+                    )}
+                  </div>
                 </div>
+              ))}
+
+              {/* Damage Reduction */}
+               {(item as Unit | Spell).mechanics?.damage_reduction?.map((mod, i) => (
+                <div
+                  key={`res-${i}`}
+                  className="bg-green-500/10 border border-green-500/20 p-3 rounded-lg flex items-center gap-3 transition-colors hover:bg-green-500/20"
+                >
+                  <Shield size={16} className="text-green-400 shrink-0" />
+                  <div className="flex flex-col">
+                    <span className="text-sm text-green-200 font-bold">
+                      {Math.round((1 - mod.multiplier) * 100)}% Resistance vs <span className="text-white">{formatEntityName(mod.source_type)}</span>
+                    </span>
+                    {mod.condition && (
+                      <span className="text-xs text-green-300/50 italic">
+                         Condition: {mod.condition}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              ))}
+
+              {/* Aura (Array) */}
+              {(item as Unit | Spell).mechanics?.aura?.map((aura, i) => (
+                <div key={`aura-${i}`} className="bg-blue-500/10 border border-blue-500/20 p-3 rounded-lg flex items-center gap-3 transition-colors hover:bg-blue-500/20">
+                   <Wifi size={16} className="text-blue-400 shrink-0" />
+                   <div className="flex flex-col">
+                      <span className="text-sm text-blue-200 font-bold">
+                        {aura.name || "Aura"}: {aura.value} ({aura.effect || "Effect"}) / {aura.interval}s
+                      </span>
+                      <span className="text-xs text-blue-300/70">
+                        Target: {aura.target_type} • Radius: {aura.radius}m
+                      </span>
+                      {aura.description && (
+                         <span className="text-xs text-blue-300/50 italic mt-0.5">
+                            {aura.description}
+                         </span>
+                      )}
+                   </div>
+                </div>
+              ))}
+
+              {/* Spawner (Array) */}
+              {(item as Unit | Spell).mechanics?.spawner?.map((spawn, i) => (
+                 <div key={`spawn-${i}`} className="bg-purple-500/10 border border-purple-500/20 p-3 rounded-lg flex items-center gap-3 transition-colors hover:bg-purple-500/20">
+                    <Ghost size={16} className="text-purple-400 shrink-0" />
+                    <div className="flex flex-col">
+                       <span className="text-sm text-purple-200 font-bold">
+                         Spawns {spawn.count}x {formatEntityName(spawn.unit_id)}
+                       </span>
+                       <span className="text-xs text-purple-300/70">
+                         Trigger: {spawn.trigger} {spawn.interval ? `every ${spawn.interval}s` : ""}
+                       </span>
+                    </div>
+                 </div>
               ))}
             </div>
           )}

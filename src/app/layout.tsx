@@ -118,7 +118,7 @@ export default function RootLayout({
               "target": "https://spellcastersdb.com/database?q={search_term_string}",
               "query-input": "required name=search_term_string"
             }
-          } as any}
+          } as Record<string, unknown>}
         />
         <Script src="https://tally.so/widgets/embed.js" strategy="lazyOnload" />
         <Analytics />

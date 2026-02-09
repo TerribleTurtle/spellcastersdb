@@ -10,6 +10,12 @@ Comprehensive JSON-LD structured data has been integrated for all entity types (
 
 ## Active Tasks
 
+- [x] Implement Schema v1.1 (Arrays for mechanics, new fields).
+- [x] Improve UI naming consistency (formatEntityName).
+- [x] Fix JSON-LD type errors.
+- [x] Pre-push verification (Linting & Build).
+- [ ] Push changes to remote.
+
 - [x] Fix Turbopack Edge Runtime error (fs/promises).
 - [x] Push changes to remote.
 - [x] Fix Turbopack Edge Runtime error (fs/promises).

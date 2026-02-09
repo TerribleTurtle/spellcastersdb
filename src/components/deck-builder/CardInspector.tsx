@@ -13,11 +13,14 @@ import {
   X,
   Zap,
   Wind,
-  Target,
+  Wifi, // Aura
+  Ghost, // Spawner
+  Sword, // Damage Modifiers
+  Shield, // Damage Reduction
 } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
-import { cn, getCardImageUrl } from "@/lib/utils";
+import { cn, getCardImageUrl, formatEntityName } from "@/lib/utils";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 
 export type InspectorItem = Unit | Spellcaster | Spell | Titan;
@@ -176,6 +179,13 @@ export function CardInspector({
 
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-linear-to-t from-surface-card to-transparent z-20" />
+
+          {/* Name Overlay */}
+          <div className="absolute bottom-2 left-4 right-4 z-30 pointer-events-none text-center">
+            <h2 className="text-2xl font-black text-white uppercase tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] truncate">
+              {name}
+            </h2>
+          </div>
           
           {/* Badges - Top Left (Offset for Back Button on Mobile) */}
           <div className="absolute top-3 left-14 md:left-4 flex flex-col items-start gap-1 z-30">
@@ -385,21 +395,70 @@ export function CardInspector({
             )}
           </div>
 
-          {/* Mechanics Section (Bonus Damage etc) */}
+          {/* Mechanics */}
           {"mechanics" in item && (item as Unit | Spell).mechanics && (
             <div className="space-y-2 mt-2">
-              {(item as Unit | Spell).mechanics?.bonus_damage?.map((bonus, i) => (
+              
+              {/* Damage Modifiers */}
+              {(item as Unit | Spell).mechanics?.damage_modifiers?.map((mod, i) => (
                 <div
-                  key={i}
-                  className="bg-brand-secondary/10 border border-brand-secondary/20 p-2 rounded flex items-center gap-2"
+                  key={`dmg-${i}`}
+                  className="bg-red-500/10 border border-red-500/20 p-2 rounded flex items-center gap-2"
                 >
-                  <Target size={14} className="text-brand-secondary" />
-                  <span className="text-xs text-brand-secondary font-bold">
-                    +{bonus.value * (bonus.unit === "percent_max_hp" ? 100 : 1)}
-                    {bonus.unit === "percent_max_hp" ? "% Max HP" : ""}{" "}
-                    Damage vs {bonus.target_type}
-                  </span>
+                  <Sword size={14} className="text-red-400 shrink-0" />
+                  <div className="flex flex-col">
+                    <span className="text-xs text-red-200 font-bold">
+                      {Math.round((mod.multiplier - 1) * 100)}% Damage vs <span className="text-white">{formatEntityName(mod.target_type)}</span>
+                    </span>
+                    {mod.condition && <span className="text-[10px] text-red-300/50 italic leading-none">{mod.condition}</span>}
+                  </div>
                 </div>
+              ))}
+
+              {/* Damage Reduction */}
+              {(item as Unit | Spell).mechanics?.damage_reduction?.map((mod, i) => (
+                <div
+                  key={`res-${i}`}
+                  className="bg-green-500/10 border border-green-500/20 p-2 rounded flex items-center gap-2"
+                >
+                  <Shield size={14} className="text-green-400 shrink-0" />
+                  <div className="flex flex-col">
+                    <span className="text-xs text-green-200 font-bold">
+                      {Math.round((1 - mod.multiplier) * 100)}% Resistance vs <span className="text-white">{formatEntityName(mod.source_type)}</span>
+                    </span>
+                    {mod.condition && <span className="text-[10px] text-green-300/50 italic leading-none">{mod.condition}</span>}
+                  </div>
+                </div>
+              ))}
+
+              {/* Aura (Array) */}
+              {(item as Unit | Spell).mechanics?.aura?.map((aura, i) => (
+                <div key={`aura-${i}`} className="bg-blue-500/10 border border-blue-500/20 p-2 rounded flex items-center gap-2">
+                   <Wifi size={14} className="text-blue-400 shrink-0" />
+                   <div className="flex flex-col">
+                      <span className="text-xs text-blue-200 font-bold">
+                        {aura.name || "Aura"}: {aura.value} ({aura.effect || "Effect"})
+                      </span>
+                      <span className="text-[10px] text-blue-300/70 leading-tight">
+                        Target: {aura.target_type} • R: {aura.radius}m • T: {aura.interval}s
+                      </span>
+                   </div>
+                </div>
+              ))}
+
+              {/* Spawner (Array) */}
+              {(item as Unit | Spell).mechanics?.spawner?.map((spawn, i) => (
+                 <div key={`spawn-${i}`} className="bg-purple-500/10 border border-purple-500/20 p-2 rounded flex items-center gap-2">
+                    <Ghost size={14} className="text-purple-400 shrink-0" />
+                    <div className="flex flex-col">
+                       <span className="text-xs text-purple-200 font-bold">
+                         Spawns {spawn.count}x {formatEntityName(spawn.unit_id)}
+                       </span>
+                       <span className="text-[10px] text-purple-300/70 leading-tight">
+                         Trigger: {spawn.trigger} {spawn.interval ? `@ ${spawn.interval}s` : ""}
+                       </span>
+                    </div>
+                 </div>
               ))}
             </div>
           )}

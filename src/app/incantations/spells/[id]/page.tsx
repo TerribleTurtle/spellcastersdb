@@ -67,7 +67,7 @@ export default async function SpellPage({ params }: SpellPageProps) {
 
   return (
     <>
-      <JsonLd data={jsonLdData as any} id={`json-ld-spell-${spell.entity_id}`} />
+      <JsonLd data={jsonLdData as Record<string, unknown>} id={`json-ld-spell-${spell.entity_id}`} />
       <EntityShowcase 
         item={spell} 
         backUrl="/incantations/spells"
