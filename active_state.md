@@ -19,4 +19,7 @@ Comprehensive JSON-LD structured data has been integrated for all entity types (
 - [x] Fix Drag and Drop for all unit types.
 - [x] Enable Solo Deck Preview in Team Mode Sidebar.
 - [x] Implement JSON-LD for all Entities & Collections.
-- [x] Push all changes to remote.
+- [x] Update Spellcaster Metadata ("Dual-Search" Targeting).
+- [x] Add CollectionPage JSON-LD to Category Pages.
+- [x] Expand Sitemap (Classes, Schools, Ranks, Titans).
+- [x] Create Content Roadmap (docs/SEO_TODO.md).

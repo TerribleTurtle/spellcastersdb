@@ -28,16 +28,23 @@ export async function generateMetadata({
     return { title: "Spellcaster Not Found" };
   }
 
-  // Fallback description since spellcasters don't have a specific description field
-  const description = `${spellcaster.name} - ${spellcaster.abilities.primary.name} user. Difficulty: ${spellcaster.difficulty || 1}/3.`;
+  const description = `Complete stats, ability breakdown, and deck building guide for ${spellcaster.name} in Spellcasters Chronicles. Master the ${spellcaster.abilities.primary.name} and dominate the arena.`;
 
   return {
-    title: spellcaster.name,
+    title: `${spellcaster.name} Builds, Decks & Stats | SpellcastersDB`,
     description: description,
     openGraph: {
-      title: spellcaster.name,
+      title: `${spellcaster.name} Builds, Decks & Stats`,
       description: description,
     },
+    keywords: [
+      spellcaster.name,
+      `${spellcaster.name} build`,
+      `${spellcaster.name} deck`,
+      `${spellcaster.name} guide`,
+      "Spellcasters Chronicles",
+      "Spellcaster Stats",
+    ],
   };
 }
 

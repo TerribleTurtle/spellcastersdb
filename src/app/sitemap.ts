@@ -13,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     spellcasters,
     consumables,
     spells,
+    titans,
     build_info: { generated_at },
   } = data;
 
@@ -74,6 +75,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  // 4b. Map Titans
+  const titanRoutes: MetadataRoute.Sitemap = titans.map((titan) => ({
+    url: `${baseUrl}/titans/${titan.entity_id}`,
+    lastModified,
+    changeFrequency: "monthly",
+    priority: 0.8,
+  }));
+
   // 4. Map Spellcasters (URLs changed from /heroes/ to /spellcasters/)
   const spellcasterRoutes: MetadataRoute.Sitemap = spellcasters.map((s) => ({
     url: `${baseUrl}/spellcasters/${s.spellcaster_id}`,
@@ -90,11 +99,49 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
+  // 6. Map Categories (Classes, Schools, Ranks)
+  const classes = ["Enchanter", "Duelist", "Conqueror"];
+  const classRoutes: MetadataRoute.Sitemap = classes.map((c) => ({
+    url: `${baseUrl}/classes/${c}`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }));
+
+  const schools = [
+    "Elemental",
+    "Wild",
+    "War",
+    "Astral",
+    "Holy",
+    "Technomancy",
+    "Necromancy",
+    "Titan",
+  ];
+  const schoolRoutes: MetadataRoute.Sitemap = schools.map((s) => ({
+    url: `${baseUrl}/schools/${s}`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }));
+
+  const ranks = ["I", "II", "III", "IV"];
+  const rankRoutes: MetadataRoute.Sitemap = ranks.map((r) => ({
+    url: `${baseUrl}/ranks/${r}`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: 0.7,
+  }));
+
   return [
     ...staticRoutes,
     ...spellcasterRoutes,
     ...unitRoutes,
     ...spellRoutes,
+    ...titanRoutes,
     ...consumableRoutes,
+    ...classRoutes,
+    ...schoolRoutes,
+    ...rankRoutes,
   ];
 }
