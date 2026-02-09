@@ -145,7 +145,7 @@ export interface SpellcasterAbilities {
 
 export interface Spellcaster {
   $schema?: string;
-  spellcaster_id: string; // Renamed from hero_id
+  spellcaster_id: string;
   name: string;
   category: "Spellcaster";
   tags: string[];
@@ -213,7 +213,7 @@ export interface BuildInfo {
 
 export interface AllDataResponse {
   build_info: BuildInfo;
-  spellcasters: Spellcaster[]; // Renamed from heroes
+  spellcasters: Spellcaster[];
   units: Unit[]; // Creatures + Buildings ONLY
   spells: Spell[]; // New Array
   titans: Titan[]; // New Array

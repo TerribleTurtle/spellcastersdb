@@ -76,7 +76,7 @@ export default async function DebugPage() {
   );
 
   // 3. Spellcaster Classes
-  const classes = countBy(data.spellcasters, (hero) => hero.class);
+  const classes = countBy(data.spellcasters, (spellcaster) => spellcaster.class);
 
   // 4. Unit Categories (Existing)
   const categories = countBy(data.units, (unit) => unit.category);
@@ -85,7 +85,7 @@ export default async function DebugPage() {
     <div className="min-h-screen bg-surface-main text-foreground p-8">
       <div className="max-w-6xl mx-auto">
         <header className="mb-8 border-b border-white/10 pb-6">
-          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-primary to-brand-secondary flex items-center gap-3">
+          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-linear-to-r from-brand-primary to-brand-secondary flex items-center gap-3">
             <Activity className="text-brand-primary" size={32} />
             System Status & Data
           </h1>
@@ -114,7 +114,7 @@ export default async function DebugPage() {
             bg="bg-white/10"
           />
           <SummaryCard
-            label="Heroes"
+            label="Spellcasters"
             value={data.spellcasters.length}
             icon={<Users size={18} />}
             color="text-brand-secondary"
@@ -171,7 +171,7 @@ export default async function DebugPage() {
             </Section>
 
             {/* Spellcaster Classes */}
-            <Section title="Hero Classes" icon={<Shield size={20} />}>
+            <Section title="Spellcaster Classes" icon={<Shield size={20} />}>
               <div className="grid grid-cols-1 gap-3">
                 {Object.entries(classes)
                   .sort(([, a], [, b]) => b - a)

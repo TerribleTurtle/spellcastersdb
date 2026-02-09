@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
       const spellcastersDetails = decks.map((d) => {
         if (!d || !d.spellcasterId) return null;
         const sc = data.spellcasters.find(
-          (h) => h.spellcaster_id === d.spellcasterId
+          (s) => s.spellcaster_id === d.spellcasterId
         );
         return {
           spellcaster: sc,
@@ -545,7 +545,7 @@ export async function GET(request: NextRequest) {
             </div>
           </div>
 
-          {/* Main Content Area: Hero + Units */}
+          {/* Main Content Area: Spellcaster + Units */}
           <div
             style={{
               display: "flex",
@@ -555,7 +555,7 @@ export async function GET(request: NextRequest) {
               gap: 40,
             }}
           >
-            {/* HERO CARD (Left) */}
+            {/* SPELLCASTER CARD (Left) */}
             {spellcaster && (
               <div
                 style={{

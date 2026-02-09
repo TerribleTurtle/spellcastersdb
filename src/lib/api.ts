@@ -140,7 +140,7 @@ const AbilitySchema = z.object({
 
 const SpellcasterSchema = z
   .object({
-    spellcaster_id: z.string(), // Renamed from hero_id
+    spellcaster_id: z.string(),
     name: z.string(),
     // category: z.literal("Spellcaster").optional().default("Spellcaster"), // Removed (fixed in source)
     class: z

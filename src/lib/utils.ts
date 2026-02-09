@@ -13,7 +13,6 @@ export function capitalize(str: string): string {
 export function getCardImageUrl(
   entity: {
     spellcaster_id?: string;
-    hero_id?: string;
     entity_id?: string;
     consumable_id?: string;
     category?: string;
@@ -30,8 +29,6 @@ export function getCardImageUrl(
   // Determine folder based on ID presence or Category
   if (
     "spellcaster_id" in entity ||
-    "hero_id" in entity ||
-    entity.category === "Spellcaster" ||
     entity.category === "Spellcaster"
   ) {
     folder = "spellcasters";
