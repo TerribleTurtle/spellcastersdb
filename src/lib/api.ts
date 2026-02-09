@@ -53,6 +53,19 @@ const IncantationBase = {
   rank: z.enum(["I", "II", "III", "IV", "V"]).optional(), // Optional for non-units if shared? Actually Units need it.
 };
 
+const MechanicsSchema = z.object({
+  waves: z.number().optional(),
+  bonus_damage: z
+    .array(
+      z.object({
+        target_type: z.string(), // e.g. "Building"
+        unit: z.string(), // e.g. "percent_max_hp"
+        value: z.number(),
+      })
+    )
+    .optional(),
+});
+
 const UnitSchema = z
   .object({
     ...IncantationBase,
@@ -62,7 +75,8 @@ const UnitSchema = z
     attack_speed: z.number().optional(),
     range: z.number().optional(),
     movement_speed: z.number().optional(),
-    movement_type: z.enum(["Ground", "Fly", "Hover", "Stationary"]).nullish(),
+    movement_type: z.enum(["Ground", "Fly", "Flying", "Hover", "Stationary"]).nullish(),
+    mechanics: MechanicsSchema.optional(),
   })
   .passthrough();
 
@@ -77,6 +91,7 @@ const SpellSchema = z
     target_mask: z.array(z.string()).nullish(),
     damage: z.number().optional(),
     range: z.number().optional(),
+    mechanics: MechanicsSchema.optional(),
   })
   .passthrough();
 
@@ -116,6 +131,11 @@ const AbilitySchema = z.object({
     .nullish()
     .transform((val) => val || ""),
   cooldown: z.number().nullish(),
+  stats: z.record(z.string(), z.union([z.number(), z.null()])).optional(),
+  mechanics: z.array(z.object({
+    name: z.string(),
+    description: z.string(),
+  })).optional(),
 });
 
 const SpellcasterSchema = z

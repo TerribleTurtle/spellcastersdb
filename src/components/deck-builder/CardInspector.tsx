@@ -12,6 +12,8 @@ import {
   Users,
   X,
   Zap,
+  Wind,
+  Target,
 } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
@@ -19,6 +21,15 @@ import { cn, getCardImageUrl } from "@/lib/utils";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 
 export type InspectorItem = Unit | Spellcaster | Spell | Titan;
+
+const getDamageDisplay = (item: InspectorItem) => {
+  if (!("damage" in item) || !item.damage) return undefined;
+  const mechanics = "mechanics" in item ? (item as Unit | Spell).mechanics : undefined;
+  if (mechanics?.waves && mechanics.waves > 1) {
+    return `${item.damage}x${mechanics.waves}`;
+  }
+  return item.damage;
+};
 
 interface CardInspectorProps {
   item: InspectorItem | null;
@@ -91,14 +102,14 @@ export function CardInspector({
     if (entity.category === "Titan") {
       rank = "TITAN";
     } else if (entity.category === "Spell") {
-      rank = "SPELL"; // Or use magic school? usually spells don't have rank displayed like units do, but let's see.
-      // Actually Spells don't have rank in the UI usually, but we can show School if needed.
-      // For now, let's leave it as N/A or just not show it in the rank badge if it's a spell.
-      // Checking the prop, Spells don't have 'rank'.
+      rank = "N/A"; // Don't show rank for spells to avoid duplicate "SPELL" badge
     } else if ("rank" in entity && entity.rank) {
       rank = entity.rank;
     }
   }
+
+  // Magic School
+  const magicSchool = "magic_school" in item ? (item as Unit | Spell | Titan).magic_school : null;
 
   // Check if item is already in deck
   const isCurrentSpellcaster =
@@ -135,7 +146,7 @@ export function CardInspector({
         )}
 
         {/* Art / Banner Area */}
-        <div className="flex-1 min-h-[90px] max-h-[30vh] w-full bg-slate-800 relative flex items-center justify-center overflow-hidden shrink-0">
+        <div className="flex-1 min-h-[140px] max-h-[30vh] w-full bg-slate-800 relative flex items-center justify-center overflow-hidden shrink-0">
           {/* Blurred Background */}
           <GameImage
             src={getCardImageUrl(item)}
@@ -165,14 +176,25 @@ export function CardInspector({
 
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-linear-to-t from-surface-card to-transparent z-20" />
-          {/* Badges - Offset from close button */}
-          <div className="absolute top-4 right-14 md:right-16 flex gap-2 z-30">
-            <span className="bg-black/80 px-3 py-1 rounded text-lg font-bold font-mono text-brand-accent border border-brand-accent/30">
-              {rank}
-            </span>
-          </div>
-          <div className="absolute bottom-4 left-4">
-            <span className="bg-brand-primary/90 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+          
+          {/* Badges - Top Left (Offset for Back Button on Mobile) */}
+          <div className="absolute top-3 left-14 md:left-4 flex flex-col items-start gap-1 z-30">
+            {/* Rank / Class Badge */}
+            {rank && rank !== "N/A" && (
+              <span className="bg-black/80 px-2 py-0.5 rounded text-xs font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md">
+                {["I", "II", "III", "IV", "V"].includes(rank) ? `RANK ${rank}` : rank}
+              </span>
+            )}
+            
+            {/* Magic School Badge */}
+            {magicSchool && (
+              <span className="bg-brand-secondary/90 px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider text-white border border-brand-secondary/30 backdrop-blur-md shadow-sm">
+                {magicSchool}
+              </span>
+            )}
+            
+            {/* Category Badge */}
+            <span className="bg-brand-primary/90 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg backdrop-blur-md">
               {category}
             </span>
           </div>
@@ -270,7 +292,7 @@ export function CardInspector({
               <>
                 <StatBox
                   label="Damage"
-                  value={(item as Unit | Titan).damage}
+                  value={getDamageDisplay(item)}
                   icon={<Swords size={16} className="text-red-400" />}
                 />
                 {/* Only show attack speed for Units (Titans might not have it in schema yet or it's fixed) */}
@@ -296,6 +318,13 @@ export function CardInspector({
                       icon={<Clock size={16} className="text-cyan-400" />}
                     />
                   )}
+                {"movement_type" in item && (item as Unit).movement_type && (
+                  <StatBox
+                    label="Move Type"
+                    value={(item as Unit).movement_type}
+                    icon={<Wind size={16} className="text-sky-300" />}
+                  />
+                )}
               </>
             )}
 
@@ -305,7 +334,7 @@ export function CardInspector({
                 {"damage" in item && (item as Spell).damage && (
                   <StatBox
                     label="Damage"
-                    value={(item as Spell).damage}
+                    value={getDamageDisplay(item)}
                     icon={<Swords size={16} className="text-red-400" />}
                   />
                 )}
@@ -355,6 +384,25 @@ export function CardInspector({
               </>
             )}
           </div>
+
+          {/* Mechanics Section (Bonus Damage etc) */}
+          {"mechanics" in item && (item as Unit | Spell).mechanics && (
+            <div className="space-y-2 mt-2">
+              {(item as Unit | Spell).mechanics?.bonus_damage?.map((bonus, i) => (
+                <div
+                  key={i}
+                  className="bg-brand-secondary/10 border border-brand-secondary/20 p-2 rounded flex items-center gap-2"
+                >
+                  <Target size={14} className="text-brand-secondary" />
+                  <span className="text-xs text-brand-secondary font-bold">
+                    +{bonus.value * (bonus.unit === "percent_max_hp" ? 100 : 1)}
+                    {bonus.unit === "percent_max_hp" ? "% Max HP" : ""}{" "}
+                    Damage vs {bonus.target_type}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Spellcaster Passives & Abilities */}
           {isSpellcaster && "abilities" in item && (
@@ -408,6 +456,33 @@ export function CardInspector({
                     <p className="text-[10px] text-gray-400 leading-tight">
                       {ab.description}
                     </p>
+
+                    {/* Mechanics */}
+                    {"mechanics" in ab && Array.isArray(ab.mechanics) && ab.mechanics.length > 0 && (
+                      <div className="mt-1.5 space-y-1">
+                        {ab.mechanics.map((mech, mIdx) => (
+                           <div key={mIdx} className="bg-black/30 p-1 rounded border border-white/5 text-[9px] flex flex-col gap-0.5">
+                              <span className="text-brand-accent font-bold uppercase tracking-wider">{mech.name}</span>
+                              <span className="text-gray-500">{mech.description}</span>
+                           </div>
+                        ))}
+                      </div>
+                    )}
+                    
+                    {/* Stats */}
+                    {"stats" in ab && ab.stats && (
+                        <div className="mt-1.5 grid grid-cols-2 gap-1 pt-1 border-t border-white/5">
+                           {Object.entries(ab.stats).map(([k, v]) => {
+                               if (v === null || v === undefined) return null;
+                               return (
+                                  <div key={k} className="flex justify-between items-center bg-black/30 px-1.5 py-0.5 rounded text-[9px]">
+                                     <span className="text-gray-500 uppercase font-bold text-[8px] tracking-wide">{String(k).replace('_',' ')}</span>
+                                     <span className="text-white font-mono">{String(v)}</span>
+                                  </div>
+                               );
+                           })}
+                        </div>
+                    )}
                   </div>
                 ))}
               </div>
@@ -416,8 +491,10 @@ export function CardInspector({
 
           {/* Description */}
           {"description" in item && item.description && (
-            <div className="prose prose-invert text-sm text-gray-300">
-              <p>{item.description}</p>
+            <div className="bg-black/20 p-3 rounded-lg border border-white/5 mt-auto">
+              <p className="text-xs text-gray-300 italic leading-relaxed text-center">
+                &quot;{item.description}&quot;
+              </p>
             </div>
           )}
         </div>

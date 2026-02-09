@@ -55,6 +55,17 @@ export interface Incantation {
 
   // Flattened Config
   rank?: UnitRank;
+  
+  movement_type?: MovementType;
+
+  mechanics?: {
+    waves?: number;
+    bonus_damage?: {
+      target_type: string;
+      unit: string;
+      value: number;
+    }[];
+  };
 }
 
 /**
@@ -71,7 +82,6 @@ export interface Unit extends Incantation {
 
   // Movement
   movement_speed?: number;
-  movement_type?: MovementType;
 }
 
 /**
@@ -119,6 +129,11 @@ export interface Ability {
   name: string;
   description: string;
   cooldown?: number;
+  stats?: Record<string, number | null>;
+  mechanics?: {
+    name: string;
+    description: string;
+  }[];
 }
 
 export interface SpellcasterAbilities {
