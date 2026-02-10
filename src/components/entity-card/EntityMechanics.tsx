@@ -51,7 +51,7 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
     (mechanics.spawner?.length ?? 0) > 0 ||
     (mechanics.features?.length ?? 0) > 0 ||
     !!mechanics.initial_attack ||
-    (mechanics.waves && mechanics.interval);
+    (mechanics.waves || mechanics.interval);
 
   if (!hasMechanics) return null;
 
@@ -228,7 +228,7 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
       )}
 
       {/* Waves / Interval */}
-      {mechanics.waves && mechanics.interval && (
+      {(mechanics.waves || mechanics.interval) && (
         <div 
           className={cn(
             "flex items-center gap-2 rounded",
@@ -240,11 +240,13 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
            <Activity size={isCompact ? 14 : 16} className="text-sky-400 shrink-0" />
            <div className="flex flex-col">
               <span className={cn("text-sky-200 font-bold", isCompact ? "text-xs" : "text-sm")}>
-                {mechanics.waves} Waves
+                {mechanics.waves ? `${mechanics.waves} Waves` : "Periodic Effect"}
               </span>
-              <span className={cn("text-sky-300/70", isCompact ? "text-[10px] leading-tight" : "text-xs")}>
-                Interval: {mechanics.interval}s
-              </span>
+              {mechanics.interval && (
+                <span className={cn("text-sky-300/70", isCompact ? "text-[10px] leading-tight" : "text-xs")}>
+                    Interval: {mechanics.interval}s
+                </span>
+              )}
            </div>
         </div>
       )}

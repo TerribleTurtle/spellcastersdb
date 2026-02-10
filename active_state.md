@@ -8,6 +8,11 @@ Focus on GitHub Actions for daily revalidation and remaining SEO tuning.
 The Turbopack build error related to `fs/promises` in the Edge Runtime has been resolved by switching the OG route to the Node.js runtime.
 Comprehensive JSON-LD structured data has been integrated for all entity types (Spellcasters, Units, Spells, Titans, Consumables) and collection pages.
 
+## Audit Status
+
+Completed Code Cleanup & Modernization Audit (2026-02-09). Report available in `docs/CODE_AUDIT_REPORT.md`.
+Identified key areas for refactoring: Data Layer efficiency & Deck Builder component splitting.
+
 ## Active Tasks
 
 - [x] Implement Schema v1.1 (Arrays for mechanics, new fields).
@@ -41,3 +46,8 @@ Comprehensive JSON-LD structured data has been integrated for all entity types (
 - [x] Polymorphic Damage Modifiers (String | Array).
 - [x] Pre-push verification (Linting & Build).
 - [x] Push changes to remote.
+- [x] Code Modernization Phase 1: Data Layer (EntityRegistry & O(1) Lookups).
+- [x] Code Modernization Phase 2: Deck Builder Logic (Hooks Decomposition).
+- [x] Code Modernization Phase 3: Component De-cluttering (ForgeControls Refactor).
+- [x] Automated Verification: New Unit Tests (useDeckValidation) & Build Check.
+- [x] Fix Waves/Interval mechanic display (Show if either exists).

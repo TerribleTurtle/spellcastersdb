@@ -27,6 +27,8 @@ if (!process.env.NEXT_PUBLIC_API_URL) {
 }
 const REVALIDATE_SECONDS = 60; // 1 minute cache
 
+import { registry } from "./registry";
+
 // ============================================================================
 // Fetch Logic
 // ============================================================================
@@ -65,7 +67,9 @@ export async function fetchGameData(): Promise<AllDataResponse> {
       const result = AllDataSchema.safeParse(rawData);
       if (result.success) {
         console.log("✅ Loaded and validated local data successfully.");
-        return result.data as unknown as AllDataResponse;
+        const data = result.data as unknown as AllDataResponse;
+        registry.initialize(data); // Initialize Registry
+        return data;
       } else {
         console.error(
           "🔴 Local Data Validation Failed:",
@@ -115,12 +119,6 @@ export async function fetchGameData(): Promise<AllDataResponse> {
         result.error.format()
       );
 
-      // if (process.env.NODE_ENV === "development") {
-      //   // In Dev, throw so we see it.
-      //   throw new Error(
-      //     `API Validation Failed: ${JSON.stringify(result.error.format(), null, 2)}`
-      //   );
-      // }
       return {
         build_info: {
           version: "unknown",
@@ -135,7 +133,10 @@ export async function fetchGameData(): Promise<AllDataResponse> {
       };
     }
 
-    return result.data as unknown as AllDataResponse;
+    const data = result.data as unknown as AllDataResponse;
+    registry.initialize(data); // Initialize Registry
+    return data;
+
   } catch (error) {
     console.error("Error fetching game data:", error);
     // Return empty safe object
@@ -210,30 +211,27 @@ export async function getUpgrades(): Promise<Upgrade[]> {
 
 /**
  * Get a specific unit or spell by entity_id
- * Searches units, spells, and titans
+ * Searches units, spells, and titans using O(1) Registry
  */
 export async function getEntityById(
   entityId: string
 ): Promise<Unit | Spell | Titan | null> {
-  const data = await fetchGameData();
-  const unit = data.units.find((u) => u.entity_id === entityId);
-  if (unit) return unit;
-
-  const spell = data.spells.find((s) => s.entity_id === entityId);
-  if (spell) return spell;
-
-  const titan = data.titans.find((t) => t.entity_id === entityId);
-  if (titan) return titan;
-
-  return null;
+  // Ensure registry is initialized
+  if (!registry.isInitialized()) {
+    await fetchGameData();
+  }
+  
+  return registry.get(entityId) as Unit | Spell | Titan | null || null;
 }
 
 /**
  * Legacy support: Get Unit by ID (only checks Units)
  */
 export async function getUnitById(entityId: string): Promise<Unit | null> {
-  const units = await getUnits();
-  return units.find((unit) => unit.entity_id === entityId) || null;
+  if (!registry.isInitialized()) {
+    await fetchGameData();
+  }
+  return registry.getUnit(entityId) || null;
 }
 
 /**
@@ -242,8 +240,10 @@ export async function getUnitById(entityId: string): Promise<Unit | null> {
 export async function getSpellcasterById(
   entityId: string
 ): Promise<Spellcaster | null> {
-  const spellcasters = await getSpellcasters();
-  return spellcasters.find((s) => s.spellcaster_id === entityId) || null;
+  if (!registry.isInitialized()) {
+      await fetchGameData();
+  }
+  return registry.getSpellcaster(entityId) || null;
 }
 
 /**
