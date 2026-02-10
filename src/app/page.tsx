@@ -134,7 +134,7 @@ export default async function Home() {
   const data = await fetchGameData();
 
   return (
-    <div className="h-[calc(100dvh-64px)] w-full overflow-hidden z-40 bg-surface-main border-x border-white/5 shadow-2xl overscroll-none">
+    <div className="h-[calc(100vh-64px)] w-full overflow-hidden z-40 bg-surface-main border-x border-white/5 shadow-2xl">
       {/* Suspense boundary for data loading */}
       <Suspense
         fallback={

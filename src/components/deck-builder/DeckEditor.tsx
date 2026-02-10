@@ -390,7 +390,7 @@ export function DeckEditor({
         restoreFocus: false,
       }}
     >
-      <div className="h-full flex flex-col md:grid md:grid-rows-[1fr_auto] overflow-hidden relative min-h-0 overscroll-none">
+      <div className="h-dvh md:h-full flex flex-col md:grid md:grid-rows-[1fr_auto] overflow-hidden relative min-h-0 overscroll-none">
         <div className="md:hidden flex bg-surface-main border-b border-white/10 shrink-0">
           {[
             {
