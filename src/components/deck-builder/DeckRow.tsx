@@ -89,6 +89,7 @@ export function DeckRow({
                   alt=""
                   fill
                   className="object-cover"
+                  draggable={false}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center text-gray-700 font-bold text-xs">
@@ -129,6 +130,7 @@ export function DeckRow({
                     alt=""
                     fill
                     className="object-cover opacity-80"
+                    draggable={false}
                   />
                 )}
               </div>
@@ -141,6 +143,7 @@ export function DeckRow({
                   alt=""
                   fill
                   className="object-cover opacity-80"
+                  draggable={false}
                 />
               )}
             </div>

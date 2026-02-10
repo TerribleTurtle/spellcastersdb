@@ -86,6 +86,7 @@ export function TeamRow({
                       alt=""
                       fill
                       className="object-cover"
+                      draggable={false}
                     />
                   </div>
                 )
