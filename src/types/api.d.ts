@@ -109,6 +109,8 @@ export interface Unit extends Incantation {
   // Combat Stats
   health: number;
   damage?: number;
+  dps?: number;
+  attack_interval?: number;
   attack_speed?: number;
   range?: number;
 
@@ -152,6 +154,8 @@ export interface Titan {
   // Titan Stats vary, but similar to Units
   health: number;
   damage: number;
+  dps?: number;
+  attack_interval?: number;
   movement_speed: number;
   heal_amount?: number;
   passive_health_regen?: number;

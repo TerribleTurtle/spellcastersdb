@@ -75,11 +75,20 @@ export function EntityStats({ item, variant = "detailed" }: EntityStatsProps) {
             icon={<Swords size={variant === "compact" ? 16 : 18} className="text-red-400" />}
             variant={variant}
           />
-          {/* Only show attack speed for Units */}
-          {"attack_speed" in item && (
+          {/* DPS Display */}
+          {"dps" in item && (item as Unit | Titan).dps !== undefined && (
+            <StatBox
+              label="DPS"
+              value={(item as Unit | Titan).dps}
+              icon={<Swords size={variant === "compact" ? 16 : 18} className="text-orange-500" />}
+              variant={variant}
+            />
+          )}
+          {/* Show attack speed / interval for Units and Titans */}
+          {("attack_speed" in item || "attack_interval" in item) && (
             <StatBox
               label="Atk Speed"
-              value={`${(item as Unit).attack_speed ?? 0}s`}
+              value={`${(item as Unit | Titan).attack_interval ?? (item as Unit).attack_speed ?? 0}s`}
               icon={<Zap size={variant === "compact" ? 16 : 18} className="text-yellow-400" />}
               variant={variant}
             />

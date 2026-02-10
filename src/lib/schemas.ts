@@ -87,6 +87,8 @@ export const UnitSchema = z
     category: z.enum(["Creature", "Building"]), // Strict subset
     health: z.number(),
     damage: z.number().optional(),
+    dps: z.number().optional(),
+    attack_interval: z.number().optional(),
     attack_speed: z.number().optional(),
     range: z.number().optional(),
     movement_speed: z.number().optional(),
@@ -133,6 +135,8 @@ export const TitanSchema = z
     // Titan Stats (Flattened)
     health: z.number(),
     damage: z.number(),
+    dps: z.number().optional(),
+    attack_interval: z.number().optional(),
     movement_speed: z.number(),
     heal_amount: z.number().optional(),
     passive_health_regen: z.number().optional(),
