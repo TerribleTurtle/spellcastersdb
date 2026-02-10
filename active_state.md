@@ -61,3 +61,8 @@ Identified key areas for refactoring: Data Layer efficiency & Deck Builder compo
 - [x] Push changes to remote.
 - [x] Performance Phase 1: Localized Fonts (OG) & Debounced Search.
 - [x] Performance Phase 2: Registry Warm-up & Asset Caching.
+- [x] QA Phase 1: Added Unit Tests for Deck Encoding & Validation (100% pass, Type-Safe).
+- [x] QA Phase 1.5: Verified Legacy V1 Decoding & Strict Creature/Building Rules.
+- [x] QA Phase 2: Core Stability (Mocked Network & useDeckBuilder Unit Tests).
+- [x] QA Phase 2.5: Verified Singleton & Type Constraints in Deck Builder.
+- [x] QA Phase 3: Full Lifecycle Logic Verification (Storage, Teams, Imports).

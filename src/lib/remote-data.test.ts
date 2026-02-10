@@ -1,26 +1,79 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { fetchGameData } from './api';
+import { AllDataResponse } from '@/types/api';
 
 describe('Remote Data Validation', () => {
-    afterEach(() => {
-        vi.unstubAllEnvs();
-    });
-    it('should validate remote data against schema', async () => {
-        // Enforce production environment to use remote URL
-        vi.stubEnv('NODE_ENV', 'production');
-        
-        // Ensure API_URL is using the default (remote) one
-        vi.stubEnv('NEXT_PUBLIC_API_URL', 'https://terribleturtle.github.io/spellcasters-community-api/api/v1');
+    // Basic mock data satisfying the strict schema
+    const mockApiResponse: AllDataResponse = {
+        build_info: { version: 'test-v1', generated_at: '2025-01-01' },
+        spellcasters: [
+            { spellcaster_id: 'sc1', name: 'Mage', category: 'Spellcaster', class: 'Enchanter', tags: [], abilities: { passive: [], primary: { name: 'P', description: '' }, defense: { name: 'D', description: '' }, ultimate: { name: 'U', description: '' } } }
+        ],
+        units: [
+            { entity_id: 'u1', name: 'Goblin', category: 'Creature', health: 10, tags: [], magic_school: 'Wild', description: '' }
+        ],
+        spells: [],
+        titans: [],
+        consumables: [],
+        upgrades: []
+    };
 
-        // console.log('Fetching data from remote...');
+    beforeEach(() => {
+        // Spy on fetch
+        global.fetch = vi.fn();
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks();
+    });
+
+    it('should validate and return data on successful fetch', async () => {
+        // Mock success response
+        (global.fetch as any).mockResolvedValue({
+            ok: true,
+            json: async () => mockApiResponse,
+        });
+
         const data = await fetchGameData();
 
-        // Check if data is empty (which indicates validation failure in fetchGameData)
-        if (data.spellcasters.length === 0 && data.units.length === 0) {
-            console.error('Data Validation Failed! Returned empty data.');
-        }
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+        expect(data.spellcasters).toHaveLength(1);
+        expect(data.units).toHaveLength(1);
+        expect(data.build_info.version).toBe('test-v1');
+    });
 
-        expect(data.spellcasters.length).toBeGreaterThan(0);
-        expect(data.units.length).toBeGreaterThan(0);
+    it('should handle API failure (404/500) gracefully', async () => {
+        // Mock error response
+        (global.fetch as any).mockResolvedValue({
+            ok: false,
+            status: 500,
+            statusText: 'Server Error',
+        });
+
+        const data = await fetchGameData();
+
+        // Should return empty "safe" object, not throw
+        expect(data.spellcasters).toHaveLength(0);
+        expect(data.build_info.version).toBe('error');
+    });
+
+    it('should handle malformed JSON (Schema Validation Failure)', async () => {
+        // Mock malformed data (missing required fields)
+        const badData = { foo: 'bar' };
+        
+        (global.fetch as any).mockResolvedValue({
+            ok: true,
+            json: async () => badData,
+        });
+
+        // Use a spy on console.error to suppress the expected error log during test
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        const data = await fetchGameData();
+
+        expect(data.spellcasters).toHaveLength(0);
+        expect(data.build_info.version).toBe('unknown'); // Schema failure returns 'unknown' version
+        
+        consoleSpy.mockRestore();
     });
 });
