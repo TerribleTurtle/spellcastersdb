@@ -75,12 +75,15 @@ const arePropsEqual = (prev: UnitBrowserProps, next: UnitBrowserProps) => {
        If we strictly compare functions, we rely on parent useCallback. */
 };
 
+import { useDebounce } from "@/hooks/useDebounce";
+
 export const UnitBrowser = React.memo(function UnitBrowser({
   items,
   onSelectItem,
   onQuickAdd,
 }: UnitBrowserProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
   const [groupMode, setGroupMode] = useState<GroupMode>("All");
   const [showFilters, setShowFilters] = useState(false);
 
@@ -143,8 +146,8 @@ export const UnitBrowser = React.memo(function UnitBrowser({
       const spellcasterClass = !isUnit ? (item as Spellcaster).class : null;
 
       // Search - Expanded
-      if (searchQuery) {
-        const lowQuery = searchQuery.toLowerCase();
+      if (debouncedSearchQuery) {
+        const lowQuery = debouncedSearchQuery.toLowerCase();
         const matchesName = item.name.toLowerCase().includes(lowQuery);
         const matchesDesc =
           "description" in item &&
@@ -188,7 +191,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
 
       return true;
     });
-  }, [items, searchQuery, activeFilters]);
+  }, [items, debouncedSearchQuery, activeFilters]);
 
   // 2. Group Items based on Mode
   const groupedContent = useMemo(() => {

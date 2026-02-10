@@ -1,4 +1,6 @@
 import { ImageResponse } from "next/og";
+
+import { getCachedAsset } from "@/lib/asset-cache";
 import { decodeTeam } from "@/lib/encoding";
 import { getCardImageUrl } from "@/lib/utils";
 import { AllDataResponse } from "@/types/api";
@@ -60,15 +62,9 @@ export async function renderTeamImage(
   await Promise.all(
     Array.from(uniqueUrls).map(async (url) => {
       try {
-        const controller = new AbortController();
-        const id = setTimeout(() => controller.abort(), 4000);
-        const res = await fetch(url, { signal: controller.signal });
-        clearTimeout(id);
-        if (res.ok) {
-          const arrayBuffer = await res.arrayBuffer();
-          const base64 = Buffer.from(arrayBuffer).toString("base64");
-          const mime = url.endsWith(".webp") ? "image/webp" : "image/png";
-          urlToDataUri.set(url, `data:${mime};base64,${base64}`);
+        const dataUri = await getCachedAsset(url);
+        if (dataUri) {
+          urlToDataUri.set(url, dataUri);
         }
       } catch (e) {
         console.warn("Team image fetch failed", url, e);

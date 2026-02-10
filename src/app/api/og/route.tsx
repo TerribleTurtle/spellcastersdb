@@ -1,8 +1,5 @@
-/**
- * @file route.tsx
- * @description CRITICAL CORE COMPONENT. Public API for generating Social Share (OG) Images.
- * DO NOT DELETE OR MODIFY WITHOUT VERIFICATION.
- */
+import { promises as fs } from "fs";
+import path from "path";
 import { NextRequest } from "next/server";
 
 import { fetchGameData } from "@/lib/api";
@@ -11,10 +8,6 @@ import { renderDeckImage } from "./render-deck";
 import { renderTeamImage } from "./render-team";
 
 export const runtime = "nodejs";
-
-// Font fallback strategy:
-const fontUrl =
-  "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/oswald/Oswald-Bold.ttf";
 
 export async function GET(request: NextRequest) {
   // Rate Limiting
@@ -34,23 +27,20 @@ export async function GET(request: NextRequest) {
     const deckHash = searchParams.get("deck") || searchParams.get("d");
     const teamHash = searchParams.get("team");
 
-    // Load Font (Oswald)
-    let fontData: ArrayBuffer | null = null;
-    try {
-      const fontRes = await fetch(fontUrl);
-      if (fontRes.ok) {
-        fontData = await fontRes.arrayBuffer();
-      }
-    } catch (e) {
-      console.warn("Font fetch failed", e);
-    }
+    // Load Font (Oswald) from local filesystem
+    // We use WOFF format from @fontsource/oswald
+    const fontPath = path.join(
+      process.cwd(),
+      "src/assets/fonts/Oswald-Bold.woff"
+    );
+    const fontData = await fs.readFile(fontPath);
 
     // Fetch Game Data
     const data = await fetchGameData();
 
     // --- TEAM MODE ---
     if (teamHash) {
-      return renderTeamImage(teamHash, data, fontData, origin);
+      return renderTeamImage(teamHash, data, fontData as unknown as ArrayBuffer, origin);
     }
 
     // --- DECK MODE ---
@@ -58,7 +48,7 @@ export async function GET(request: NextRequest) {
       return new Response("Missing deck or team parameter", { status: 400 });
     }
 
-    return renderDeckImage(deckHash, data, fontData, origin);
+    return renderDeckImage(deckHash, data, fontData as unknown as ArrayBuffer, origin);
   } catch (e: unknown) {
     console.error("OG Error:", e);
     const message = e instanceof Error ? e.message : "Unknown error";
