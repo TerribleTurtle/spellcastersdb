@@ -109,12 +109,12 @@ export function ForgeControls({
   const sensors = useSensors(
     useSensor(MouseSensor, {
       activationConstraint: {
-        distance: 8, // Avoid accidental drags when clicking
+        distance: 8,
       },
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        distance: 8,
+        delay: 150,
         tolerance: 5,
       },
     }),

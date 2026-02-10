@@ -53,9 +53,9 @@ export function TeamRow({
       {...attributes}
       {...listeners}
       className={cn(
-        "group flex items-center p-1.5 rounded cursor-grab active:cursor-grabbing touch-none select-none border transition-all relative overflow-visible",
+        "group flex items-center p-1.5 rounded cursor-grab active:cursor-grabbing touch-manipulation select-none border transition-all relative overflow-visible",
         isDragging
-          ? "opacity-50 border-brand-primary cursor-grabbing"
+          ? "scale-105 shadow-xl shadow-brand-primary/20 z-50 border-brand-primary cursor-grabbing"
           : "bg-surface-card border-white/5 hover:border-white/20 hover:bg-white/5"
       )}
     >

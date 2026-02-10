@@ -53,11 +53,12 @@ export function DeckRow({
       {...attributes}
       {...listeners}
       className={cn(
-        "group flex items-center p-1.5 rounded cursor-grab active:cursor-grabbing touch-none select-none border transition-all relative overflow-visible",
+        "group flex items-center p-1.5 rounded cursor-grab active:cursor-grabbing touch-manipulation select-none border transition-all relative overflow-visible",
         isActive
           ? "bg-brand-primary/10 border-brand-primary/50"
           : "bg-surface-card border-white/5 hover:border-white/20 hover:bg-white/5",
-        isDragging && "opacity-50 border-brand-primary cursor-grabbing"
+        isDragging &&
+          "scale-105 shadow-xl shadow-brand-primary/20 z-50 border-brand-primary cursor-grabbing"
       )}
     >
       <div className="p-1 text-gray-600 hover:text-gray-400 -ml-1 mr-1 transition-colors">
