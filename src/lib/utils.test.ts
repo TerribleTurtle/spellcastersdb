@@ -1,12 +1,13 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
+import { describe, it, expect, vi, afterEach, beforeEach } from "vitest";
 import { getCardImageUrl } from "./utils";
 
 describe("getCardImageUrl", () => {
-  const originalEnv = process.env;
+  beforeEach(() => {
+    vi.stubEnv("NEXT_PUBLIC_PREFERRED_ASSET_FORMAT", "png");
+  });
 
   afterEach(() => {
-    process.env = originalEnv;
-    vi.restoreAllMocks();
+    vi.unstubAllEnvs();
   });
 
   it("should return remote URL for a unit by default", () => {
@@ -40,14 +41,14 @@ describe("getCardImageUrl", () => {
   });
 
   it("should return local URL if NEXT_PUBLIC_USE_LOCAL_ASSETS is 'true'", () => {
-    process.env = { ...originalEnv, NEXT_PUBLIC_USE_LOCAL_ASSETS: "true" };
+    vi.stubEnv("NEXT_PUBLIC_USE_LOCAL_ASSETS", "true");
     const unit = { entity_id: "unit_123", category: "Creature", name: "Test Unit" };
     const url = getCardImageUrl(unit);
     expect(url).toBe("/api/local-assets/units/unit_123.png");
   });
 
   it("should ignore local assets setting if forceRemote is true", () => {
-    process.env = { ...originalEnv, NEXT_PUBLIC_USE_LOCAL_ASSETS: "true" };
+    vi.stubEnv("NEXT_PUBLIC_USE_LOCAL_ASSETS", "true");
     const unit = { entity_id: "unit_123", category: "Creature", name: "Test Unit" };
     const url = getCardImageUrl(unit, { forceRemote: true });
     expect(url).toBe("https://terribleturtle.github.io/spellcasters-community-api/assets/units/unit_123.png");

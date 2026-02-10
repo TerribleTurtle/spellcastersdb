@@ -37,5 +37,5 @@ Comprehensive JSON-LD structured data has been integrated for all entity types (
 - [x] Push changes to remote (Fixes & Refactors).
 - [x] Update Schema (Hover units, Initial Attack).
 - [x] Polymorphic Damage Modifiers (String | Array).
-- [ ] Pre-push verification (Linting & Build).
-- [ ] Push changes to remote.
+- [x] Pre-push verification (Linting & Build).
+- [x] Push changes to remote.

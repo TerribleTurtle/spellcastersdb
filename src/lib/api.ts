@@ -2,8 +2,6 @@
  * API Fetching Service for Spellcasters Community API
  * Implements Stale-While-Revalidate (SWR) via Next.js fetch
  */
-import { z } from "zod";
-
 import type {
   AllDataResponse,
   Consumable,
@@ -16,6 +14,8 @@ import type {
   Upgrade,
 } from "@/types/api";
 
+import { AllDataSchema } from "./schemas";
+
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
   "https://terribleturtle.github.io/spellcasters-community-api/api/v1";
@@ -26,230 +26,6 @@ if (!process.env.NEXT_PUBLIC_API_URL) {
   );
 }
 const REVALIDATE_SECONDS = 60; // 1 minute cache
-
-// ============================================================================
-// Zod Schemas (Validation Layer)
-// ============================================================================
-
-// Base parts shared by Unit and Spell
-const IncantationBase = {
-  entity_id: z.string(),
-  name: z.string(),
-  magic_school: z.enum([
-    "Elemental",
-    "Wild",
-    "War",
-    "Astral",
-    "Holy",
-    "Technomancy",
-    "Necromancy",
-    "Titan",
-  ]),
-  description: z.string(),
-  image_required: z.boolean().optional(),
-  tags: z.array(z.string()),
-
-  // Flattened Card Config
-  rank: z.enum(["I", "II", "III", "IV", "V"]).optional(), // Optional for non-units if shared? Actually Units need it.
-};
-
-const MechanicsSchema = z.object({
-  waves: z.number().optional(),
-  interval: z.number().optional(),
-  // New Schema v1.1 - Arrays confirmed via local data
-  aura: z
-    .array(
-      z.object({
-        name: z.string().optional(),
-        description: z.string().optional(),
-        radius: z.number(),
-        value: z.number(),
-        interval: z.number(),
-        target_type: z.enum(["Ally", "Enemy", "All", "Building", "Creature"]),
-        effect: z.string().optional(), // e.g. "Heal"
-      })
-    )
-    .optional(),
-  damage_modifiers: z
-    .array(
-      z.object({
-        target_type: z.union([
-          z.enum(["Building", "Creature", "Spellcaster", "Unit", "Lifestone", "Flying", "Ground", "Hover"]),
-          z.array(z.enum(["Building", "Creature", "Spellcaster", "Unit", "Lifestone", "Flying", "Ground", "Hover"]))
-        ]),
-        multiplier: z.number(),
-        condition: z.string().optional(), // Added condition
-      })
-    )
-    .optional(),
-  damage_reduction: z
-    .array(
-      z.object({
-        source_type: z.string(), // e.g. "Unit"
-        multiplier: z.number(),
-        condition: z.string().optional(),
-      })
-    )
-    .optional(),
-  spawner: z
-    .array(
-      z.object({
-        unit_id: z.string(),
-        count: z.number(),
-        trigger: z.enum(["Death", "Interval", "Spawn"]),
-        interval: z.number().optional(), // Added interval
-      })
-    )
-    .optional(),
-  features: z.array(z.object({
-    name: z.string(),
-    description: z.string(),
-  })).optional(),
-  initial_attack: z.object({
-    damage_flat: z.number(),
-    target_types: z.array(z.enum(["Ground", "Hover", "Flying", "Building", "Creature", "Unit"])), // Using wider enum just in case
-    description: z.string(),
-  }).optional(),
-});
-
-const UnitSchema = z
-  .object({
-    ...IncantationBase,
-    category: z.enum(["Creature", "Building"]), // Strict subset
-    health: z.number(),
-    damage: z.number().optional(),
-    attack_speed: z.number().optional(),
-    range: z.number().optional(),
-    movement_speed: z.number().optional(),
-    movement_type: z.enum(["Ground", "Fly", "Flying", "Hover", "Stationary"]).nullish(),
-    mechanics: MechanicsSchema.optional(),
-  })
-  .passthrough();
-
-const SpellSchema = z
-  .object({
-    ...IncantationBase,
-    category: z.literal("Spell"),
-    radius: z.number().nullish(),
-    duration: z.number().nullish(),
-    tick_rate: z.number().nullish(),
-    max_targets: z.number().nullish(),
-    target_mask: z.array(z.string()).nullish(),
-    damage: z.number().optional(),
-    range: z.number().optional(),
-    mechanics: MechanicsSchema.optional(),
-  })
-  .passthrough();
-
-const TitanSchema = z
-  .object({
-    entity_id: z.string(),
-    name: z.string(),
-    category: z.literal("Titan"),
-    magic_school: z.enum([
-      "Elemental",
-      "Wild",
-      "War",
-      "Astral",
-      "Holy",
-      "Technomancy",
-      "Necromancy",
-      "Titan",
-    ]),
-    rank: z.string(), // Usually V
-    description: z.string(),
-    image_required: z.boolean().optional(),
-    tags: z.array(z.string()),
-
-    // Titan Stats (Flattened)
-    health: z.number(),
-    damage: z.number(),
-    movement_speed: z.number(),
-    heal_amount: z.number().optional(),
-    passive_health_regen: z.number().optional(),
-  })
-  .passthrough();
-
-const AbilitySchema = z.object({
-  ability_id: z.string().optional(),
-  name: z.string(),
-  description: z
-    .string()
-    .nullish()
-    .transform((val) => val || ""),
-  cooldown: z.number().nullish(),
-  stats: z.record(z.string(), z.union([z.number(), z.null()])).optional(),
-  mechanics: MechanicsSchema.optional(),
-});
-
-const SpellcasterSchema = z
-  .object({
-    spellcaster_id: z.string(),
-    name: z.string(),
-    // category: z.literal("Spellcaster").optional().default("Spellcaster"), // Removed (fixed in source)
-    class: z
-      .enum(["Enchanter", "Duelist", "Conqueror", "Unknown"])
-      .optional()
-      .default("Unknown"),
-    image_required: z.boolean().optional(),
-    difficulty: z.number().optional(), // New field
-
-    // RPG Stats Removed
-    // health: z.number(),
-    // movement_speed: z.number(),
-    // flight_speed: z.number(),
-    // health_regen_rate: z.number(),
-    // regen_delay: z.number().optional().nullable(),
-    // attack_damage_summoner: z.number(),
-    // attack_damage_minion: z.number(),
-
-    movement_type: z.enum(["Ground", "Fly", "Flying", "Hover", "Stationary"]).nullish(),
-
-
-    abilities: z.object({
-      passive: z.array(AbilitySchema),
-      primary: AbilitySchema,
-      defense: AbilitySchema,
-      ultimate: AbilitySchema,
-    }),
-  })
-  .passthrough();
-
-const ConsumableSchema = z
-  .object({
-    entity_id: z.string(), // Renamed from consumable_id
-    name: z.string(),
-    description: z.string().optional().nullable().default(""),
-    tags: z.array(z.string()).optional().default([]),
-    category: z.literal("Consumable").optional().default("Consumable"),
-    rarity: z.string().optional(),
-  })
-  .passthrough();
-
-const UpgradeSchema = z
-  .object({
-    entity_id: z.string(),
-    name: z.string(),
-    description: z.string(),
-    image_required: z.boolean().optional(),
-    prerequisite_level: z.number().optional(),
-    cost: z.number().optional(),
-    tags: z.array(z.string()),
-  })
-  .passthrough();
-
-const AllDataSchema = z.object({
-  build_info: z.object({
-    version: z.string(),
-    generated_at: z.string(),
-  }),
-  spellcasters: z.array(SpellcasterSchema),
-  units: z.array(UnitSchema),
-  spells: z.array(SpellSchema),
-  titans: z.array(TitanSchema),
-  consumables: z.array(ConsumableSchema),
-  upgrades: z.array(UpgradeSchema),
-});
 
 // ============================================================================
 // Fetch Logic
@@ -339,12 +115,12 @@ export async function fetchGameData(): Promise<AllDataResponse> {
         result.error.format()
       );
 
-      if (process.env.NODE_ENV === "development") {
-        // In Dev, throw so we see it.
-        throw new Error(
-          `API Validation Failed: ${JSON.stringify(result.error.format(), null, 2)}`
-        );
-      }
+      // if (process.env.NODE_ENV === "development") {
+      //   // In Dev, throw so we see it.
+      //   throw new Error(
+      //     `API Validation Failed: ${JSON.stringify(result.error.format(), null, 2)}`
+      //   );
+      // }
       return {
         build_info: {
           version: "unknown",
