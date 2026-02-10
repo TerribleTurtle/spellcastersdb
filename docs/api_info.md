@@ -1,48 +1,42 @@
-The project keeps raw data (JSON files) separate from images (Assets).
+# Spellcasters Community API
 
-spellcasters-community-api/
-├── assets/ # Images and Icons
-│ ├── units/ # e.g., orc_grunt_card.png
-│ ├── heroes/
-│ ├── consumables/
-│ └── upgrades/
-├── data/ # Raw JSON Data Sources
-│ ├── units/ # e.g., orc_grunt.json
-│ ├── heroes/
-│ ├── consumables/
-│ ├── upgrades/ # Level-up options
-│ └── mechanics/ # Game Logic (Curves, Settings)
-├── schemas/ # Validation Logic
-│ └── v1/ # Versioned JSON Schemas
-│ ├── unit.schema.json
-│ ├── hero.schema.json
-│ ├── consumable.schema.json
-│ ├── upgrade.schema.json
-│ └── ...
-├── scripts/ # Build Tools
-│ └── build_api.py # The Compiler Script
-└── .github/
-├── PULL_REQUEST_TEMPLATE.md
-└── workflows/ # Automation (CI/CD)
-├── .gitignore
+The project consumes data from the [Spellcasters Community API](https://github.com/TerribleTurtle/spellcasters-community-api). This repository hosts the raw JSON data and static assets (images).
 
-We host images directly in the repository for simplicity.
+## Data Structure
 
-Location: assets/[category]/[id].png
-Size Limit: Must be < 1MB per image.
-Total Limit: We aim to keep the repo under 1GB.
-Format: .png preferred.
-Access: Images are fetched directly via the GitHub Pages URL.
-Example: https://terribleturtle.github.io/spellcasters-community-api/assets/units/orc_grunt_card.png
-Validation: scripts/validate_integrity.py checks for these images.
-Note: Missing images are only flagged if "image_required": true is set in the JSON file. If omitted (default true per v1.0), warnings will be issued.
+The API is served via GitHub Pages as static JSON files. The primary endpoint used by this application is the **aggregated data file**:
 
-Accessing the API
-Base URL: https://terribleturtle.github.io/spellcasters-community-api/api/v1/
+- **Endpoint**: `https://terribleturtle.github.io/spellcasters-community-api/api/v1/all_data.json`
+- **Content**: A single JSON object containing arrays for all entity types.
 
-Units: .../units.json
-Cards: .../cards.json
-Heroes: .../heroes.json
-Consumables: .../consumables.json
-Upgrades: .../upgrades.json
-Game Info: .../game_info.json (Singleton)
+### Entity Types
+
+| Type            | Description                                   | Source Key     |
+| :-------------- | :-------------------------------------------- | :------------- |
+| **Spellcaster** | The player characters (formerly Heroes).      | `spellcasters` |
+| **Unit**        | Creatures and Buildings. placed on the board. | `units`        |
+| **Spell**       | Instant actions.                              | `spells`       |
+| **Titan**       | Unique, powerful units (1 per deck).          | `titans`       |
+| **Consumable**  | Items found in chests.                        | `consumables`  |
+| **Upgrade**     | Level-up bonuses.                             | `upgrades`     |
+
+### Asset Locations
+
+Images are hosted in the `assets/` directory of the API repository.
+
+- **Base URL**: `https://terribleturtle.github.io/spellcasters-community-api/assets/`
+- **Spellcasters**: `spellcasters/[id].png`
+- **Units/Spells/Titans**: `units/[id].png` (Shared folder)
+- **Consumables**: `consumables/[id].png`
+- **Upgrades**: `upgrades/[id].png`
+
+## Schema Validation
+
+This project uses **Zod** schemas in `src/lib/schemas.ts` to validate the incoming JSON data. We generally expect the data to conform to the interfaces defined in `src/types/api.d.ts`.
+
+## Local Development
+
+To test with local API changes:
+
+1.  Clone the API repo adjacent to this repo.
+2.  Set `NEXT_PUBLIC_API_URL` in `.env.local` to your local server (if running one) OR rely on the `fs` override in `src/lib/api.ts` (requires modifying the hardcoded path currently).

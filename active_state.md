@@ -2,6 +2,7 @@
 
 Start Phase 6: Optimization & Automation.
 Focus on GitHub Actions for daily revalidation and remaining SEO tuning.
+Documentation Overhaul complete: README is now the entry point.
 
 ## Context
 
@@ -15,6 +16,8 @@ Identified key areas for refactoring: Data Layer efficiency & Deck Builder compo
 
 ## Active Tasks
 
+- [x] Documentation Overhaul (README, CONTRIBUTING, .env.local.example).
+- [x] Remove obsolete docs (ROADMAP.md, MIGRATION_SPEC.md).
 - [x] Implement Schema v1.1 (Arrays for mechanics, new fields).
 - [x] Improve UI naming consistency (formatEntityName).
 - [x] Fix JSON-LD type errors.
