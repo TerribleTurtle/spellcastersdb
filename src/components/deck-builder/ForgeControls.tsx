@@ -114,7 +114,7 @@ export function ForgeControls({
     }),
     useSensor(TouchSensor, {
       activationConstraint: {
-        delay: 150,
+        distance: 8,
         tolerance: 5,
       },
     }),
