@@ -8,6 +8,7 @@ import {
   Shield, // Damage Reduction
   Zap, // Features
   Activity, // Waves
+  Target, // Initial Attack
 } from "lucide-react";
 import { Mechanics } from "@/types/api";
 import { cn, formatEntityName } from "@/lib/utils";
@@ -24,7 +25,8 @@ const PLURAL_TARGETS: Record<string, string> = {
   "Building": "Buildings",
   "Spellcaster": "Spellcasters",
   "Lifestone": "Lifestones",
-  "Flying": "Air Units",
+  "Flying": "Flying Units",
+  "Hover": "Hover Units",
   "Ground": "Ground Units",
   "Ally": "Allies",
   "Enemy": "Enemies",
@@ -48,6 +50,7 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
     (mechanics.aura?.length ?? 0) > 0 ||
     (mechanics.spawner?.length ?? 0) > 0 ||
     (mechanics.features?.length ?? 0) > 0 ||
+    !!mechanics.initial_attack ||
     (mechanics.waves && mechanics.interval);
 
   if (!hasMechanics) return null;
@@ -79,7 +82,11 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
             <Sword size={isCompact ? 14 : 16} className={cn("shrink-0", isBonus ? "text-green-400" : "text-red-400")} />
             <div className="flex flex-col">
                 <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm", isBonus ? "text-green-200" : "text-red-200")}>
-                {(mod.multiplier > 1 ? "+" : "") + ((mod.multiplier - 1) * 100).toFixed(1).replace(/\.0$/, "")}% Damage vs <span className="text-white">{formatTargetName(mod.target_type)}</span>
+                {(mod.multiplier > 1 ? "+" : "") + ((mod.multiplier - 1) * 100).toFixed(1).replace(/\.0$/, "")}% Damage vs <span className="text-white">
+                  {Array.isArray(mod.target_type) 
+                    ? mod.target_type.map(formatTargetName).join(", ") 
+                    : formatTargetName(mod.target_type)}
+                </span>
                 </span>
                 {mod.condition && (
                     <span className={cn("italic leading-none", isCompact ? "text-[10px]" : "text-xs", isBonus ? "text-green-300/50" : "text-red-300/50")}>
@@ -192,6 +199,33 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
             </div>
          </div>
       ))}
+
+      {/* Initial Attack */}
+      {mechanics.initial_attack && (
+        <div
+          className={cn(
+            "flex items-center gap-2 rounded",
+            isCompact
+                ? "bg-orange-500/10 border border-orange-500/20 p-2"
+                : "bg-orange-500/10 border border-orange-500/20 p-3 gap-3 transition-colors hover:bg-orange-500/20"
+          )}
+        >
+           <Target size={isCompact ? 14 : 16} className="text-orange-400 shrink-0" />
+           <div className="flex flex-col">
+              <span className={cn("text-orange-200 font-bold", isCompact ? "text-xs" : "text-sm")}>
+                +{mechanics.initial_attack.damage_flat} Initial Dmg vs{" "}
+                <span className="text-white">
+                  {mechanics.initial_attack.target_types.map(formatTargetName).join(", ")}
+                </span>
+              </span>
+              {shouldShowDescription && mechanics.initial_attack.description && (
+                 <span className={cn("text-orange-300/70 text-xs italic")}>
+                    {mechanics.initial_attack.description}
+                 </span>
+              )}
+           </div>
+        </div>
+      )}
 
       {/* Waves / Interval */}
       {mechanics.waves && mechanics.interval && (

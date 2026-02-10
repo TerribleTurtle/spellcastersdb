@@ -73,7 +73,10 @@ const MechanicsSchema = z.object({
   damage_modifiers: z
     .array(
       z.object({
-        target_type: z.enum(["Building", "Creature", "Spellcaster", "Unit", "Lifestone", "Flying", "Ground"]), // Added 'Unit', 'Lifestone' from data
+        target_type: z.union([
+          z.enum(["Building", "Creature", "Spellcaster", "Unit", "Lifestone", "Flying", "Ground", "Hover"]),
+          z.array(z.enum(["Building", "Creature", "Spellcaster", "Unit", "Lifestone", "Flying", "Ground", "Hover"]))
+        ]),
         multiplier: z.number(),
         condition: z.string().optional(), // Added condition
       })
@@ -102,6 +105,11 @@ const MechanicsSchema = z.object({
     name: z.string(),
     description: z.string(),
   })).optional(),
+  initial_attack: z.object({
+    damage_flat: z.number(),
+    target_types: z.array(z.enum(["Ground", "Hover", "Flying", "Building", "Creature", "Unit"])), // Using wider enum just in case
+    description: z.string(),
+  }).optional(),
 });
 
 const UnitSchema = z

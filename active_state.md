@@ -34,3 +34,8 @@ Comprehensive JSON-LD structured data has been integrated for all entity types (
 - [x] Update Spellcaster Schema (Movement, Standardized Mechanics, Features).
 - [x] Pluralize mechanic labels (Creatures, Buildings, Everything).
 - [x] Fix Team Builder "Edit" button behavior (close overlay).
+- [x] Push changes to remote (Fixes & Refactors).
+- [x] Update Schema (Hover units, Initial Attack).
+- [x] Polymorphic Damage Modifiers (String | Array).
+- [ ] Pre-push verification (Linting & Build).
+- [ ] Push changes to remote.

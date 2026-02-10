@@ -74,7 +74,7 @@ export interface Mechanics {
     effect?: string;
   }[];
   damage_modifiers?: {
-    target_type: "Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone" | "Flying" | "Ground";
+    target_type: "Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone" | "Flying" | "Ground" | "Hover" | ("Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone" | "Flying" | "Ground" | "Hover")[];
     multiplier: number;
     condition?: string;
   }[];
@@ -93,6 +93,11 @@ export interface Mechanics {
     name: string;
     description: string;
   }[];
+  initial_attack?: {
+    damage_flat: number;
+    target_types: ("Ground" | "Hover" | "Flying" | "Building" | "Creature" | "Unit")[];
+    description: string;
+  };
 }
 
 /**
