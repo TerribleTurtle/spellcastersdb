@@ -33,3 +33,4 @@ Comprehensive JSON-LD structured data has been integrated for all entity types (
 - [x] Refactor Entity Views (CardInspector & EntityShowcase) - Shared Components for Stats, Mechanics, Abilities.
 - [x] Update Spellcaster Schema (Movement, Standardized Mechanics, Features).
 - [x] Pluralize mechanic labels (Creatures, Buildings, Everything).
+- [x] Fix Team Builder "Edit" button behavior (close overlay).

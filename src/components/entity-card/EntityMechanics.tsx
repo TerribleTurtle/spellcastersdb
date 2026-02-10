@@ -7,6 +7,7 @@ import {
   Sword, // Damage Modifiers
   Shield, // Damage Reduction
   Zap, // Features
+  Activity, // Waves
 } from "lucide-react";
 import { Mechanics } from "@/types/api";
 import { cn, formatEntityName } from "@/lib/utils";
@@ -46,7 +47,8 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
     (mechanics.damage_reduction?.length ?? 0) > 0 ||
     (mechanics.aura?.length ?? 0) > 0 ||
     (mechanics.spawner?.length ?? 0) > 0 ||
-    (mechanics.features?.length ?? 0) > 0;
+    (mechanics.features?.length ?? 0) > 0 ||
+    (mechanics.waves && mechanics.interval);
 
   if (!hasMechanics) return null;
 
@@ -190,6 +192,28 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
             </div>
          </div>
       ))}
+
+      {/* Waves / Interval */}
+      {mechanics.waves && mechanics.interval && (
+        <div 
+          className={cn(
+            "flex items-center gap-2 rounded",
+             isCompact 
+                ? "bg-sky-500/10 border border-sky-500/20 p-2" 
+                : "bg-sky-500/10 border border-sky-500/20 p-3 gap-3 transition-colors hover:bg-sky-500/20"
+          )}
+        >
+           <Activity size={isCompact ? 14 : 16} className="text-sky-400 shrink-0" />
+           <div className="flex flex-col">
+              <span className={cn("text-sky-200 font-bold", isCompact ? "text-xs" : "text-sm")}>
+                {mechanics.waves} Waves
+              </span>
+              <span className={cn("text-sky-300/70", isCompact ? "text-[10px] leading-tight" : "text-xs")}>
+                Interval: {mechanics.interval}s
+              </span>
+           </div>
+        </div>
+      )}
     </div>
   );
 }

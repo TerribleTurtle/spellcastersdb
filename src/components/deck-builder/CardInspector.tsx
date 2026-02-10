@@ -90,7 +90,8 @@ export function CardInspector({
   } else {
     const entity = item as Unit | Spell | Titan;
     if (entity.category === "Titan") {
-      rank = "TITAN";
+      // Hide rank for Titans to avoid redundant "RANK V" badge
+      rank = "N/A";
     } else if (entity.category === "Spell") {
       rank = "N/A"; // Don't show rank for spells to avoid duplicate "SPELL" badge
     } else if ("rank" in entity && entity.rank) {
@@ -99,7 +100,9 @@ export function CardInspector({
   }
 
   // Magic School
-  const magicSchool = "magic_school" in item ? (item as Unit | Spell | Titan).magic_school : null;
+  const magicSchoolRaw = "magic_school" in item ? (item as Unit | Spell | Titan).magic_school : null;
+  // Hide Magic School badge if it is "Titan" to avoid redundancy
+  const magicSchool = magicSchoolRaw === "Titan" ? null : magicSchoolRaw;
 
   // Check if item is already in deck
   const isCurrentSpellcaster =

@@ -63,6 +63,7 @@ export interface Incantation {
 
 export interface Mechanics {
   waves?: number;
+  interval?: number;
   aura?: {
     name?: string;
     description?: string;
@@ -148,6 +149,7 @@ export interface Titan {
   damage: number;
   movement_speed: number;
   heal_amount?: number;
+  passive_health_regen?: number;
 }
 
 export interface Ability {

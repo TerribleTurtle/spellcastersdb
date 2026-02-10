@@ -46,7 +46,8 @@ export function EntityShowcase({
   } else {
     const entity = item as Unit | Spell | Titan;
     if (entity.category === "Titan") {
-      rank = "TITAN";
+      // Hide rank for Titans (user request: "we don't ever(yet) want to show rank 5")
+      rank = "N/A";
     } else if (entity.category === "Spell") {
       rank = "N/A"; 
     } else if ("rank" in entity && entity.rank) {
@@ -54,8 +55,9 @@ export function EntityShowcase({
     }
   }
 
-  // Magic School for linking if available
-  const magicSchool = "magic_school" in item ? (item as Unit | Spell | Titan).magic_school : null;
+  // Magic School for linking if available - Hide if it's "Titan" to reduce redundancy
+  const magicSchoolRaw = "magic_school" in item ? (item as Unit | Spell | Titan).magic_school : null;
+  const magicSchool = magicSchoolRaw === "Titan" ? null : magicSchoolRaw;
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 md:p-8 bg-surface-main/30 relative overflow-hidden">

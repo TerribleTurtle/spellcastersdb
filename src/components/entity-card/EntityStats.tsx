@@ -8,6 +8,7 @@ import {
   Users,
   Zap,
   Wind,
+  Activity,
 } from "lucide-react";
 import { Unit, Spell, Spellcaster, Titan } from "@/types/api";
 import { cn } from "@/lib/utils";
@@ -43,6 +44,26 @@ export function EntityStats({ item, variant = "detailed" }: EntityStatsProps) {
           icon={<Heart size={variant === "compact" ? 16 : 18} className="text-green-500" />}
           variant={variant}
         />
+      )}
+
+      {/* Titan specific: Health per Second (Passive Regen) */}
+      {"passive_health_regen" in item && (item as Titan).passive_health_regen !== undefined && (item as Titan).passive_health_regen !== 0 && (
+         <StatBox
+           label="Health/Sec"
+           value={(item as Titan).passive_health_regen}
+           icon={<Activity size={variant === "compact" ? 16 : 18} className="text-emerald-400" />}
+           variant={variant}
+         />
+      )}
+
+      {/* Legacy/Other Heal Amount support if needed, safely checked */}
+      {"heal_amount" in item && (item as Titan).heal_amount !== undefined && (item as Titan).heal_amount !== 0 && (
+         <StatBox
+           label="Heal"
+           value={(item as Titan).heal_amount}
+           icon={<Activity size={variant === "compact" ? 16 : 18} className="text-emerald-400" />}
+           variant={variant}
+         />
       )}
 
       {/* Unit / Titan Stats */}

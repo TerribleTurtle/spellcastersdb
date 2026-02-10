@@ -593,6 +593,7 @@ export function DeckBuilderApp({ units, spellcasters }: DeckBuilderAppProps) {
                   // Normal Edit
                   if (!isReadOnly && !viewingTeamData) {
                     team.enterEditMode(idx);
+                    setViewSummary(false);
                   }
                 }
               }}

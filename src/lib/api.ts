@@ -55,6 +55,7 @@ const IncantationBase = {
 
 const MechanicsSchema = z.object({
   waves: z.number().optional(),
+  interval: z.number().optional(),
   // New Schema v1.1 - Arrays confirmed via local data
   aura: z
     .array(
@@ -157,6 +158,7 @@ const TitanSchema = z
     damage: z.number(),
     movement_speed: z.number(),
     heal_amount: z.number().optional(),
+    passive_health_regen: z.number().optional(),
   })
   .passthrough();
 
