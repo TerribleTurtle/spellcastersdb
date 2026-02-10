@@ -18,6 +18,23 @@ interface EntityMechanicsProps {
   showDescriptions?: boolean;
 }
 
+const PLURAL_TARGETS: Record<string, string> = {
+  "Creature": "Creatures",
+  "Building": "Buildings",
+  "Spellcaster": "Spellcasters",
+  "Lifestone": "Lifestones",
+  "Flying": "Air Units",
+  "Ground": "Ground Units",
+  "Ally": "Allies",
+  "Enemy": "Enemies",
+  "All": "Everything",
+};
+
+function formatTargetName(target: string): string {
+  const formatted = formatEntityName(target);
+  return PLURAL_TARGETS[formatted] || formatted;
+}
+
 export function EntityMechanics({ item, variant = "detailed", showDescriptions }: EntityMechanicsProps) {
   // Mechanics only exist on Unit or Spell
   const mechanics = "mechanics" in item ? (item as { mechanics?: Mechanics }).mechanics : undefined;
@@ -60,7 +77,7 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
             <Sword size={isCompact ? 14 : 16} className={cn("shrink-0", isBonus ? "text-green-400" : "text-red-400")} />
             <div className="flex flex-col">
                 <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm", isBonus ? "text-green-200" : "text-red-200")}>
-                {(mod.multiplier > 1 ? "+" : "") + ((mod.multiplier - 1) * 100).toFixed(1).replace(/\.0$/, "")}% Damage vs <span className="text-white">{formatEntityName(mod.target_type)}</span>
+                {(mod.multiplier > 1 ? "+" : "") + ((mod.multiplier - 1) * 100).toFixed(1).replace(/\.0$/, "")}% Damage vs <span className="text-white">{formatTargetName(mod.target_type)}</span>
                 </span>
                 {mod.condition && (
                     <span className={cn("italic leading-none", isCompact ? "text-[10px]" : "text-xs", isBonus ? "text-green-300/50" : "text-red-300/50")}>
@@ -78,7 +95,7 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
           key={`res-${i}`}
           className={cn(
             "flex items-center gap-2 rounded",
-             isCompact 
+            isCompact 
                 ? "bg-green-500/10 border border-green-500/20 p-2" 
                 : "bg-green-500/10 border border-green-500/20 p-3 gap-3 transition-colors hover:bg-green-500/20"
           )}
@@ -86,7 +103,7 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
           <Shield size={isCompact ? 14 : 16} className="text-green-400 shrink-0" />
           <div className="flex flex-col">
             <span className={cn("text-green-200 font-bold", isCompact ? "text-xs" : "text-sm")}>
-              {((1 - mod.multiplier) * 100).toFixed(1).replace(/\.0$/, "")}% Resistance vs <span className="text-white">{formatEntityName(mod.source_type)}</span>
+              {((1 - mod.multiplier) * 100).toFixed(1).replace(/\.0$/, "")}% Resistance vs <span className="text-white">{formatTargetName(mod.source_type)}</span>
             </span>
             {mod.condition && (
                 <span className={cn("text-green-300/50 italic leading-none", isCompact ? "text-[10px]" : "text-xs")}>
@@ -115,7 +132,7 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
                 {!isCompact && ` / ${aura.interval}s`}
               </span>
               <span className={cn("text-blue-300/70", isCompact ? "text-[10px] leading-tight" : "text-xs")}>
-                Target: {aura.target_type} • Radius: {aura.radius}m {isCompact && `• Interval: ${aura.interval}s`}
+                Target: {formatTargetName(aura.target_type)} • Radius: {aura.radius}m {isCompact && `• Interval: ${aura.interval}s`}
               </span>
               {shouldShowDescription && aura.description && (
                  <span className="text-xs text-blue-300/50 italic mt-0.5">
