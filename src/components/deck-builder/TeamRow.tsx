@@ -41,7 +41,7 @@ export function TeamRow({
 
   const style = {
     transform: CSS.Translate.toString(transform),
-    transition,
+    transition: isDragging ? "none" : transition,
     zIndex: isDragging ? 50 : undefined,
   };
 
