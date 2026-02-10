@@ -129,7 +129,12 @@ export default function AboutPage() {
             <p className="text-slate-300 leading-relaxed">
               Created and maintained by{" "}
               <strong className="text-brand-primary">TerribleTurtles</strong>{" "}
-              and the Spellcasters Chronicles community. Special thanks to all
+              and the Spellcasters Chronicles community.
+              <br />
+              <br />
+              Special mention to{" "}
+              <strong className="text-brand-primary">Anonymous Joker</strong>{" "}
+              for their extensive help with data. Special thanks to all
               contributors who help keep the data accurate and up-to-date.
             </p>
           </section>

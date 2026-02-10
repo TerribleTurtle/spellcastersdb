@@ -66,3 +66,6 @@ Identified key areas for refactoring: Data Layer efficiency & Deck Builder compo
 - [x] QA Phase 2: Core Stability (Mocked Network & useDeckBuilder Unit Tests).
 - [x] QA Phase 2.5: Verified Singleton & Type Constraints in Deck Builder.
 - [x] QA Phase 3: Full Lifecycle Logic Verification (Storage, Teams, Imports).
+- [x] Remove PWA configuration and files.
+- [x] Verify build and push changes.
+- [x] Add special mention to Anonymous Joker in About page credits.
