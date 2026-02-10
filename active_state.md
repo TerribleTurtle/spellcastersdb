@@ -51,3 +51,5 @@ Identified key areas for refactoring: Data Layer efficiency & Deck Builder compo
 - [x] Code Modernization Phase 3: Component De-cluttering (ForgeControls Refactor).
 - [x] Automated Verification: New Unit Tests (useDeckValidation) & Build Check.
 - [x] Fix Waves/Interval mechanic display (Show if either exists).
+- [x] Fix "SPELLCASTER" label clipping in ActiveDeckTray on medium screens.
+- [x] Improve Saved Deck/Team Item UI (Rounded squares, consistent styling).

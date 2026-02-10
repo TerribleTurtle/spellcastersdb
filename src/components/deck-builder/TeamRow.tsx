@@ -1,9 +1,7 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, ArrowRight, MoreHorizontal, Layers, Link as LinkIcon, Trash2 } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
-import { createPortal } from "react-dom";
+import { GripVertical, ArrowRight } from "lucide-react";
 
 import { Team } from "@/hooks/useTeamBuilder";
 import { cn, getCardImageUrl } from "@/lib/utils";
@@ -55,58 +53,72 @@ export function TeamRow({
       {...attributes}
       {...listeners}
       className={cn(
-        "group flex flex-col p-2 rounded border bg-surface-card border-white/5 hover:border-white/20 hover:bg-white/5 transition-all relative overflow-visible gap-2 cursor-grab active:cursor-grabbing touch-none select-none",
-        isDragging && "opacity-50 border-brand-primary cursor-grabbing"
+        "group flex items-center p-1.5 rounded cursor-grab active:cursor-grabbing touch-none select-none border transition-all relative overflow-visible",
+        isDragging
+          ? "opacity-50 border-brand-primary cursor-grabbing"
+          : "bg-surface-card border-white/5 hover:border-white/20 hover:bg-white/5"
       )}
     >
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="p-1 text-gray-600 hover:text-gray-400 -ml-1 transition-colors">
-            <GripVertical size={14} />
-          </div>
-          <div className="font-bold text-gray-200 text-sm truncate">
-            {team.name}
-          </div>
-        </div>
-        <div className="flex gap-1 shrink-0 items-center">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onLoad();
-            }}
-            className="px-2 py-0.5 bg-brand-primary/10 text-brand-primary text-[10px] font-bold uppercase rounded hover:bg-brand-primary hover:text-white transition-colors"
-          >
-            Load
-          </button>
-          <ItemMenu
-            onDuplicate={onDuplicate}
-            onDelete={onDelete}
-            type="TEAM"
-            onCopyLink={async () => {
-              const hash = encodeTeam(team.decks, team.name); // Updated to include team name
-              const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
-              await copyToClipboard(url);
-            }}
-          />
-        </div>
+      <div className="p-1 text-gray-600 hover:text-gray-400 -ml-1 mr-1 transition-colors">
+        <GripVertical size={14} />
       </div>
-      <div className="flex -space-x-1.5 overflow-hidden">
-        {team.decks.map(
-          (d, i) =>
-            d.spellcaster && (
-              <div
-                key={i}
-                className="w-8 h-8 rounded-full border border-surface-card bg-black/50 overflow-hidden ring-2 ring-surface-card shrink-0 relative"
-              >
-                <GameImage
-                  src={getCardImageUrl(d.spellcaster)}
-                  alt=""
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            )
-        )}
+
+      {/* Content Container */}
+      <div className="flex-1 grid grid-rows-[auto_1fr] gap-1 min-w-0">
+        {/* Top Row: Name */}
+        <div className="font-bold text-gray-200 text-sm truncate">
+          {team.name}
+        </div>
+
+        {/* Bottom Row: Icons + Actions */}
+        <div className="flex items-center gap-2">
+          {/* Team Decks */}
+          <div className="flex items-center gap-1">
+            {team.decks.map(
+              (d, i) =>
+                d.spellcaster && (
+                  <div
+                    key={i}
+                    className="w-9 h-9 rounded-md border border-white/10 bg-black/50 overflow-hidden shrink-0 relative"
+                  >
+                    <GameImage
+                      src={getCardImageUrl(d.spellcaster)}
+                      alt=""
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                )
+            )}
+          </div>
+
+          <div className="grow" />
+
+          {/* Actions */}
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onLoad();
+              }}
+              className="flex items-center justify-center w-8 h-8 bg-brand-primary text-white rounded-full shadow-lg hover:bg-brand-primary/80 transition-colors"
+              title="Load Team"
+            >
+              <ArrowRight size={16} />
+            </button>
+            <ItemMenu
+              onDuplicate={onDuplicate}
+              onDelete={onDelete}
+              type="TEAM"
+              onCopyLink={async () => {
+                const hash = encodeTeam(team.decks, team.name);
+                const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
+                await copyToClipboard(url);
+              }}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

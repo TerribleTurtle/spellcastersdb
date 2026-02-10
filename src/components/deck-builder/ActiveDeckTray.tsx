@@ -28,7 +28,7 @@ export function ActiveDeckTray({
     <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 md:pb-3 relative">
       <div className="grow flex items-center justify-between md:justify-center px-3 md:px-4 py-2 md:py-3 gap-0.5 md:gap-4">
         {/* Spellcaster Area - Far Left */}
-        <div className="relative flex items-center flex-1 md:flex-none min-w-0 max-w-[17%] md:max-w-none">
+        <div className="relative flex items-center flex-1 md:flex-none min-w-[76px] max-w-[17%] md:max-w-none">
           <SpellcasterSlot
             spellcaster={spellcaster}
             draggedItem={draggedItem}
@@ -42,7 +42,7 @@ export function ActiveDeckTray({
         <div className="w-px h-24 bg-white/10 mx-2 self-center hidden md:block" />
 
         {/* Unit Slots 1-4 */}
-        <div className="flex gap-0.5 md:gap-4 mx-0 md:mx-2 flex-[4] md:flex-none min-w-0 justify-center">
+        <div className="flex gap-0.5 md:gap-4 mx-0 md:mx-2 flex-4 md:flex-none min-w-0 justify-center">
           {slots.slice(0, 4).map((slot) => (
             <div key={slot.index} className="flex-1 md:flex-none min-w-0">
               <Slot
@@ -320,7 +320,7 @@ function SpellcasterSlot({
       }}
       className={cn(
         "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg w-full",
-        "md:w-[clamp(72px,8vw,100px)] lg:w-[clamp(80px,6vw,120px)]",
+        "md:w-[clamp(90px,8vw,100px)] lg:w-[clamp(110px,10vw,140px)]",
         // Valid drop target (not hovering yet)
         isValidTarget &&
           !isOver &&
@@ -352,7 +352,7 @@ function SpellcasterSlot({
           <div className="mb-2 flex justify-center">
             <Sparkles size={28} />
           </div>
-          <span className="text-[9px] md:text-xs font-bold uppercase tracking-normal md:tracking-widest">
+          <span className="text-[9px] md:text-[9px] lg:text-xs font-bold uppercase tracking-tighter md:tracking-tight lg:tracking-wider">
             Spellcaster
           </span>
         </div>

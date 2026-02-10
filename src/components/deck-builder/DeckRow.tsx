@@ -53,7 +53,7 @@ export function DeckRow({
       {...attributes}
       {...listeners}
       className={cn(
-        "group flex items-center p-2 rounded cursor-grab active:cursor-grabbing touch-none select-none border transition-all relative overflow-visible",
+        "group flex items-center p-1.5 rounded cursor-grab active:cursor-grabbing touch-none select-none border transition-all relative overflow-visible",
         isActive
           ? "bg-brand-primary/10 border-brand-primary/50"
           : "bg-surface-card border-white/5 hover:border-white/20 hover:bg-white/5",
@@ -79,10 +79,10 @@ export function DeckRow({
         </div>
 
         {/* Bottom Row: Avatar + Units + Actions */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {/* Avatar with Badge */}
           <div className="relative shrink-0">
-            <div className="w-8 h-8 rounded-full overflow-hidden border border-white/20 bg-black shadow-sm">
+            <div className="w-9 h-9 rounded-full overflow-hidden border border-white/20 bg-black shadow-sm">
               {deck.spellcaster ? (
                 <GameImage
                   src={getCardImageUrl(deck.spellcaster)}
@@ -91,7 +91,7 @@ export function DeckRow({
                   className="object-cover"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-700 font-bold text-[10px]">
+                <div className="w-full h-full flex items-center justify-center text-gray-700 font-bold text-xs">
                   ?
                 </div>
               )}
@@ -111,17 +111,17 @@ export function DeckRow({
             </div>
           </div>
 
-          {/* Units Preview (Small) */}
+          {/* Units Preview */}
           <div
             className={cn(
-              "flex items-center -space-x-1 hover:space-x-0 transition-all overflow-hidden",
-              isTeamMode && "hidden md:flex" // Hide on very small screens if needed, but for now just flex
+              "flex items-center gap-1",
+              isTeamMode && "hidden md:flex" 
             )}
           >
             {deck.slots.slice(0, 4).map((s, i) => (
               <div
                 key={i}
-                className="w-6 h-6 rounded-full bg-black/50 border border-white/10 overflow-hidden shrink-0 relative z-0 hover:z-10 transition-all"
+                className="w-9 h-9 rounded-md bg-black/50 border border-white/10 overflow-hidden shrink-0 relative"
               >
                 {s.unit && (
                   <GameImage
@@ -134,7 +134,7 @@ export function DeckRow({
               </div>
             ))}
             {/* Titan */}
-            <div className="w-6 h-6 rounded-full bg-brand-accent/10 border border-brand-accent/30 overflow-hidden shrink-0 relative z-0 hover:z-10 ml-1">
+            <div className="w-9 h-9 rounded-md bg-brand-accent/10 border border-brand-accent/30 overflow-hidden shrink-0 relative">
               {deck.slots[4].unit && (
                 <GameImage
                   src={getCardImageUrl(deck.slots[4].unit)}
@@ -151,8 +151,8 @@ export function DeckRow({
           {/* Actions */}
           <div className="flex items-center gap-1 shrink-0">
             {isTeamMode && (
-              <button className="flex items-center gap-1 px-1.5 py-0.5 bg-brand-primary text-white text-[9px] font-bold uppercase rounded shadow-lg hover:bg-brand-primary/80 transition-colors">
-                Import <ArrowRight size={8} />
+              <button className="flex items-center justify-center w-8 h-8 bg-brand-primary text-white rounded-full shadow-lg hover:bg-brand-primary/80 transition-colors" title="Import Deck">
+                <ArrowRight size={16} />
               </button>
             )}
             <ItemMenu
