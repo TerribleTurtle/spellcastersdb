@@ -112,10 +112,23 @@ export function SpellcasterAbilities({ item, variant = "detailed" }: Spellcaster
                 <div className={cn("grid gap-1 pt-1 border-t border-white/5", isCompact ? "mt-1.5 grid-cols-2" : "mt-2 grid-cols-2 gap-1.5")}>
                    {Object.entries(ab.stats).map(([k, v]) => {
                        if (v === null || v === undefined) return null;
+                       let displayValue = String(v);
+                       const label = String(k).replace('_', ' ');
+
+                       // Formatting Logic
+                       if (k === 'duration' && typeof v === 'number') {
+                           displayValue = `${v}s`;
+                       } else if (k === 'health' && typeof v === 'number') {
+                           displayValue = v.toLocaleString();
+                       } else if (k.includes('percent') || k.includes('rate') && v <= 1 && v > -1 && v !== 0) {
+                           // Heuristic for percentages if needed, though most seem to be whole numbers or direct values
+                           // displayValue = `${(v * 100).toFixed(0)}%`; 
+                       }
+
                        return (
                           <div key={k} className={cn("flex justify-between items-center bg-black/30 rounded text-gray-500", isCompact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px] border border-white/5")}>
-                             <span className={cn("uppercase font-bold tracking-wide", isCompact ? "text-[8px]" : "text-[9px]")}>{String(k).replace('_',' ')}</span>
-                             <span className={cn("text-white font-mono", !isCompact && "font-bold")}>{String(v)}</span>
+                             <span className={cn("uppercase font-bold tracking-wide", isCompact ? "text-[8px]" : "text-[9px]")}>{label}</span>
+                             <span className={cn("text-white font-mono", !isCompact && "font-bold")}>{displayValue}</span>
                           </div>
                        );
                    })}
