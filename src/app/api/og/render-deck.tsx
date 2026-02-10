@@ -51,6 +51,8 @@ export async function renderDeckImage(
   const deckName =
     deckNameFromHash || `${spellcaster?.name || "Unknown"}'s Deck`;
 
+
+
   // --- PRE-FETCH IMAGES FOR PERFORMANCE ---
   const urlToDataUri = new Map<string, string>();
   const uniqueUrls = new Set<string>();
@@ -105,7 +107,13 @@ export async function renderDeckImage(
     const url = resolveUrl(
       getCardImageUrl(entity, { forceRemote: true, forceFormat: "png" })
     );
-    return urlToDataUri.get(url) || url; // Fallback to URL if fetch failed
+    // CRITICAL: Return cached data URI or fallback. 
+    // Do NOT return the raw URL if fetch failed, as Satori may crash trying to fetch it.
+    const cached = urlToDataUri.get(url);
+    if (cached) return cached;
+    
+    // Fallback: Transparent 1x1 pixel
+    return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
   };
 
   return new ImageResponse(
@@ -238,6 +246,7 @@ export async function renderDeckImage(
                 }}
               >
                 {/* Image */}
+                {/* Image */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={getImageSrc(spellcaster)}
@@ -357,6 +366,7 @@ export async function renderDeckImage(
                       // boxShadow removed for performance
                     }}
                   >
+                    {/* Card Image */}
                     {/* Card Image */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img

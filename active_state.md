@@ -20,7 +20,9 @@ Comprehensive JSON-LD structured data has been integrated for all entity types (
 - [x] Push changes to remote.
 - [x] Fix Turbopack Edge Runtime error (fs/promises).
 - [x] Push changes to remote.
-- [x] Fix OG image loading (migrated to `next/og`, tuned for sharpness vs timeout).
+- [x] Fix Turbopack Edge Runtime error (fs/promises).
+- [x] Push changes to remote.
+- [x] Fix OG image loading (Robutst fetching with fallback to prevent Satori crash).
 - [x] Rename deck slots from 'Unit' to 'Incant.' in UI.
 - [x] Fix Drag and Drop for all unit types.
 - [x] Enable Solo Deck Preview in Team Mode Sidebar.

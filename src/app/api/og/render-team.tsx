@@ -81,7 +81,13 @@ export async function renderTeamImage(
     const url = resolveUrl(
       getCardImageUrl(entity, { forceRemote: true, forceFormat: "png" })
     );
-    return urlToDataUri.get(url) || url;
+    // CRITICAL: Return cached data URI or fallback. 
+    // Do NOT return the raw URL if fetch failed, as Satori may crash trying to fetch it.
+    const cached = urlToDataUri.get(url);
+    if (cached) return cached;
+    
+    // Fallback: Transparent 1x1 pixel
+    return "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=";
   };
 
   return new ImageResponse(
