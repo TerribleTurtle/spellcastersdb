@@ -391,7 +391,7 @@ export function DeckEditor({
       }}
     >
       <div className="h-dvh md:h-full flex flex-col md:grid md:grid-rows-[1fr_auto] overflow-hidden relative min-h-0 overscroll-none">
-        <div className="md:hidden flex bg-surface-main border-b border-white/10 shrink-0">
+        <div className="md:hidden flex bg-surface-main border-b border-white/10 shrink-0 sticky top-0 z-50">
           {[
             {
               id: "BROWSER",
