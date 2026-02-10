@@ -56,3 +56,6 @@ Identified key areas for refactoring: Data Layer efficiency & Deck Builder compo
 - [x] Fix Waves/Interval mechanic display (Show if either exists).
 - [x] Fix "SPELLCASTER" label clipping in ActiveDeckTray on medium screens.
 - [x] Improve Saved Deck/Team Item UI (Rounded squares, consistent styling).
+- [x] Security Remediation: XSS Fixes, Path Traversal Protection, Rate Limiting (Upstash), & CSP Headers.
+- [x] Pre-push verification (Linting, Types, Build).
+- [ ] Push changes to remote.

@@ -30,8 +30,12 @@ export async function GET(
     });
   }
 
+  // Security: Prevent Directory Traversal
+  if (filePathParams.some((segment) => segment.includes(".."))) {
+    return new NextResponse("Invalid path segment", { status: 400 });
+  }
+
   // Construct full path
-  // secure path traversal check? minimal since this is dev tool
   const fullPath = path.join(localAssetsPath, ...filePathParams);
 
   // Verify file exists

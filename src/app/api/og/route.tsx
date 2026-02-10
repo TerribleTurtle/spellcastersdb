@@ -6,6 +6,7 @@
 import { NextRequest } from "next/server";
 
 import { fetchGameData } from "@/lib/api";
+import { ratelimit } from "@/lib/ratelimit";
 import { renderDeckImage } from "./render-deck";
 import { renderTeamImage } from "./render-team";
 
@@ -16,6 +17,18 @@ const fontUrl =
   "https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/oswald/Oswald-Bold.ttf";
 
 export async function GET(request: NextRequest) {
+  // Rate Limiting
+  if (ratelimit) {
+    const ip =
+      request.headers.get("x-forwarded-for") ??
+      request.headers.get("x-real-ip") ??
+      "127.0.0.1";
+    const { success } = await ratelimit.limit(ip);
+    if (!success) {
+      return new Response("Too Many Requests", { status: 429 });
+    }
+  }
+
   try {
     const { searchParams, origin } = new URL(request.url);
     const deckHash = searchParams.get("deck") || searchParams.get("d");
