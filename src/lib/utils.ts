@@ -12,6 +12,7 @@ export function capitalize(str: string): string {
 
 export function formatEntityName(id: string): string {
   if (!id) return "";
+  if (id === "Unit") return "Creatures & Buildings";
   return id
     .split("_")
     .map((word) => capitalize(word))

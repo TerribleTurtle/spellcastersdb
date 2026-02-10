@@ -4,35 +4,22 @@ import Image from "next/image";
 
 import {
   ArrowLeft,
-  Clock,
   Crown,
-  Heart,
   PlusCircle,
-  Swords,
-  Users,
   X,
-  Zap,
-  Wind,
-  Wifi, // Aura
-  Ghost, // Spawner
-  Sword, // Damage Modifiers
-  Shield, // Damage Reduction
 } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
-import { cn, getCardImageUrl, formatEntityName } from "@/lib/utils";
+import { cn, getCardImageUrl } from "@/lib/utils";
+import { EntityDisplayItem } from "@/components/entity-card/types";
+import { EntityStats } from "@/components/entity-card/EntityStats";
+import { EntityMechanics } from "@/components/entity-card/EntityMechanics";
+import { SpellcasterAbilities } from "@/components/entity-card/SpellcasterAbilities";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 
-export type InspectorItem = Unit | Spellcaster | Spell | Titan;
+export type InspectorItem = EntityDisplayItem;
 
-const getDamageDisplay = (item: InspectorItem) => {
-  if (!("damage" in item) || !item.damage) return undefined;
-  const mechanics = "mechanics" in item ? (item as Unit | Spell).mechanics : undefined;
-  if (mechanics?.waves && mechanics.waves > 1) {
-    return `${item.damage}x${mechanics.waves}`;
-  }
-  return item.damage;
-};
+
 
 interface CardInspectorProps {
   item: InspectorItem | null;
@@ -287,266 +274,15 @@ export function CardInspector({
 
         {/* Detailed Stats */}
         <div className="p-3 space-y-3 flex-1 overflow-y-auto">
-          {/* Core Stats Grid */}
-          <div className="grid grid-cols-2 gap-2">
-            {"health" in item && (
-              <StatBox
-                label="Health"
-                value={item.health}
-                icon={<Heart size={16} className="text-green-500" />}
-              />
-            )}
-
-            {/* Unit / Titan Stats */}
-            {isUnit && category !== "Spell" && "damage" in item && (
-              <>
-                <StatBox
-                  label="Damage"
-                  value={getDamageDisplay(item)}
-                  icon={<Swords size={16} className="text-red-400" />}
-                />
-                {/* Only show attack speed for Units (Titans might not have it in schema yet or it's fixed) */}
-                {"attack_speed" in item && (
-                  <StatBox
-                    label="Atk Speed"
-                    value={`${(item as Unit).attack_speed ?? 0}s`}
-                    icon={<Zap size={16} className="text-yellow-400" />}
-                  />
-                )}
-                {"range" in item && (item as Unit).range && (
-                  <StatBox
-                    label="Range"
-                    value={(item as Unit).range}
-                    icon={<Users size={16} className="text-blue-400" />}
-                  />
-                )}
-                {"movement_speed" in item &&
-                  (item as Unit | Titan).movement_speed && (
-                    <StatBox
-                      label="Speed"
-                      value={(item as Unit | Titan).movement_speed}
-                      icon={<Clock size={16} className="text-cyan-400" />}
-                    />
-                  )}
-                {"movement_type" in item && (item as Unit).movement_type && (
-                  <StatBox
-                    label="Move Type"
-                    value={(item as Unit).movement_type}
-                    icon={<Wind size={16} className="text-sky-300" />}
-                  />
-                )}
-              </>
-            )}
-
-            {/* Spell Stats */}
-            {category === "Spell" && (
-              <>
-                {"damage" in item && (item as Spell).damage && (
-                  <StatBox
-                    label="Damage"
-                    value={getDamageDisplay(item)}
-                    icon={<Swords size={16} className="text-red-400" />}
-                  />
-                )}
-                {"duration" in item && (item as Spell).duration && (
-                  <StatBox
-                    label="Duration"
-                    value={`${(item as Spell).duration}s`}
-                    icon={<Clock size={16} className="text-yellow-400" />}
-                  />
-                )}
-                {"radius" in item && (item as Spell).radius && (
-                  <StatBox
-                    label="Radius"
-                    value={(item as Spell).radius}
-                    icon={<Users size={16} className="text-blue-400" />}
-                  />
-                )}
-                {"max_targets" in item && (item as Spell).max_targets && (
-                  <StatBox
-                    label="Targets"
-                    value={(item as Spell).max_targets}
-                    icon={<Users size={16} className="text-purple-400" />}
-                  />
-                )}
-              </>
-            )}
-
-            {isSpellcaster && (
-              <>
-                <div className="bg-surface-main border border-white/5 p-1.5 rounded flex flex-col items-center justify-center text-center col-span-2">
-                  <div className="text-[10px] uppercase tracking-widest text-gray-500 mb-1">
-                    Difficulty
-                  </div>
-                  <div className="flex gap-1">
-                    {[1, 2, 3].map((star) => (
-                      <div
-                        key={star}
-                        className={`h-2 w-2 rounded-full ${
-                          ((item as Spellcaster).difficulty || 1) >= star
-                            ? "bg-brand-primary"
-                            : "bg-white/10"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
+          {/* Stats Grid */}
+          <EntityStats item={item} variant="compact" />
 
           {/* Mechanics */}
-          {"mechanics" in item && (item as Unit | Spell).mechanics && (
-            <div className="space-y-2 mt-2">
-              
-              {/* Damage Modifiers */}
-              {(item as Unit | Spell).mechanics?.damage_modifiers?.map((mod, i) => (
-                <div
-                  key={`dmg-${i}`}
-                  className="bg-red-500/10 border border-red-500/20 p-2 rounded flex items-center gap-2"
-                >
-                  <Sword size={14} className="text-red-400 shrink-0" />
-                  <div className="flex flex-col">
-                    <span className="text-xs text-red-200 font-bold">
-                      {Math.round((mod.multiplier - 1) * 100)}% Damage vs <span className="text-white">{formatEntityName(mod.target_type)}</span>
-                    </span>
-                    {mod.condition && <span className="text-[10px] text-red-300/50 italic leading-none">{mod.condition}</span>}
-                  </div>
-                </div>
-              ))}
-
-              {/* Damage Reduction */}
-              {(item as Unit | Spell).mechanics?.damage_reduction?.map((mod, i) => (
-                <div
-                  key={`res-${i}`}
-                  className="bg-green-500/10 border border-green-500/20 p-2 rounded flex items-center gap-2"
-                >
-                  <Shield size={14} className="text-green-400 shrink-0" />
-                  <div className="flex flex-col">
-                    <span className="text-xs text-green-200 font-bold">
-                      {Math.round((1 - mod.multiplier) * 100)}% Resistance vs <span className="text-white">{formatEntityName(mod.source_type)}</span>
-                    </span>
-                    {mod.condition && <span className="text-[10px] text-green-300/50 italic leading-none">{mod.condition}</span>}
-                  </div>
-                </div>
-              ))}
-
-              {/* Aura (Array) */}
-              {(item as Unit | Spell).mechanics?.aura?.map((aura, i) => (
-                <div key={`aura-${i}`} className="bg-blue-500/10 border border-blue-500/20 p-2 rounded flex items-center gap-2">
-                   <Wifi size={14} className="text-blue-400 shrink-0" />
-                   <div className="flex flex-col">
-                      <span className="text-xs text-blue-200 font-bold">
-                        {aura.name || "Aura"}: {aura.value} ({aura.effect || "Effect"})
-                      </span>
-                      <span className="text-[10px] text-blue-300/70 leading-tight">
-                        Target: {aura.target_type} • R: {aura.radius}m • T: {aura.interval}s
-                      </span>
-                   </div>
-                </div>
-              ))}
-
-              {/* Spawner (Array) */}
-              {(item as Unit | Spell).mechanics?.spawner?.map((spawn, i) => (
-                 <div key={`spawn-${i}`} className="bg-purple-500/10 border border-purple-500/20 p-2 rounded flex items-center gap-2">
-                    <Ghost size={14} className="text-purple-400 shrink-0" />
-                    <div className="flex flex-col">
-                       <span className="text-xs text-purple-200 font-bold">
-                         Spawns {spawn.count}x {formatEntityName(spawn.unit_id)}
-                       </span>
-                       <span className="text-[10px] text-purple-300/70 leading-tight">
-                         Trigger: {spawn.trigger} {spawn.interval ? `@ ${spawn.interval}s` : ""}
-                       </span>
-                    </div>
-                 </div>
-              ))}
-            </div>
-          )}
+          {/* Mechanics */}
+          <EntityMechanics item={item} variant="compact" />
 
           {/* Spellcaster Passives & Abilities */}
-          {isSpellcaster && "abilities" in item && (
-            <div className="space-y-3">
-              {/* Passives */}
-              {(item as Spellcaster).abilities.passive.length > 0 && (
-                <div className="space-y-1">
-                  <h3 className="text-[10px] font-bold uppercase text-gray-500 tracking-wider">
-                    Passive
-                  </h3>
-                  {(item as Spellcaster).abilities.passive.map((p, i) => (
-                    <div
-                      key={i}
-                      className="bg-white/5 p-2 rounded border border-white/5 text-xs"
-                    >
-                      <span className="font-bold text-brand-secondary block mb-0.5">
-                        {p.name}
-                      </span>
-                      <span className="text-gray-400 leading-tight">
-                        {p.description}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Active Abilities */}
-              <div className="space-y-1">
-                <h3 className="text-[10px] font-bold uppercase text-gray-500 tracking-wider">
-                  Abilities
-                </h3>
-                {[
-                  (item as Spellcaster).abilities.primary,
-                  (item as Spellcaster).abilities.defense,
-                  (item as Spellcaster).abilities.ultimate,
-                ].map((ab, i) => (
-                  <div
-                    key={i}
-                    className="bg-white/5 p-2 rounded border border-white/5"
-                  >
-                    <div className="flex justify-between items-center mb-0.5">
-                      <span className="font-bold text-xs text-brand-accent">
-                        {ab.name}
-                      </span>
-                      {ab.cooldown && (
-                        <span className="text-[9px] text-gray-500 bg-black/40 px-1 rounded">
-                          {ab.cooldown}s
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-[10px] text-gray-400 leading-tight">
-                      {ab.description}
-                    </p>
-
-                    {/* Mechanics */}
-                    {"mechanics" in ab && Array.isArray(ab.mechanics) && ab.mechanics.length > 0 && (
-                      <div className="mt-1.5 space-y-1">
-                        {ab.mechanics.map((mech, mIdx) => (
-                           <div key={mIdx} className="bg-black/30 p-1 rounded border border-white/5 text-[9px] flex flex-col gap-0.5">
-                              <span className="text-brand-accent font-bold uppercase tracking-wider">{mech.name}</span>
-                              <span className="text-gray-500">{mech.description}</span>
-                           </div>
-                        ))}
-                      </div>
-                    )}
-                    
-                    {/* Stats */}
-                    {"stats" in ab && ab.stats && (
-                        <div className="mt-1.5 grid grid-cols-2 gap-1 pt-1 border-t border-white/5">
-                           {Object.entries(ab.stats).map(([k, v]) => {
-                               if (v === null || v === undefined) return null;
-                               return (
-                                  <div key={k} className="flex justify-between items-center bg-black/30 px-1.5 py-0.5 rounded text-[9px]">
-                                     <span className="text-gray-500 uppercase font-bold text-[8px] tracking-wide">{String(k).replace('_',' ')}</span>
-                                     <span className="text-white font-mono">{String(v)}</span>
-                                  </div>
-                               );
-                           })}
-                        </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          <SpellcasterAbilities item={item} variant="compact" />
 
           {/* Description */}
           {"description" in item && item.description && (
@@ -562,24 +298,4 @@ export function CardInspector({
   );
 }
 
-function StatBox({
-  label,
-  value,
-  icon,
-}: {
-  label: string;
-  value: string | number | undefined;
-  icon: React.ReactNode;
-}) {
-  return (
-    <div className="bg-surface-main border border-white/5 p-1.5 rounded flex flex-col items-center justify-center text-center">
-      <div className="opacity-60 scale-75">{icon}</div>
-      <div className="text-sm font-bold font-mono text-white leading-tight">
-        {value ?? "-"}
-      </div>
-      <div className="text-[8px] uppercase tracking-widest text-gray-500">
-        {label}
-      </div>
-    </div>
-  );
-}
+

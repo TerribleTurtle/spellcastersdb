@@ -435,6 +435,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
           <Virtuoso
             style={{ height: "100%" }}
             data={virtualData}
+            overscan={500}
             itemContent={(index, row) => {
               if (row.type === "header") {
                 return (
@@ -464,8 +465,8 @@ export const UnitBrowser = React.memo(function UnitBrowser({
                         <DraggableCard
                           key={id}
                           item={item}
-                          onClick={() => onSelectItem(item)}
-                          onQuickAdd={() => onQuickAdd(item)}
+                          onClick={onSelectItem}
+                          onQuickAdd={onQuickAdd}
                         />
                       );
                     })}
@@ -480,14 +481,14 @@ export const UnitBrowser = React.memo(function UnitBrowser({
   );
 }, arePropsEqual);
 
-function DraggableCard({
+const DraggableCard = React.memo(function DraggableCard({
   item,
   onClick,
   onQuickAdd,
 }: {
   item: BrowserItem;
-  onClick: () => void;
-  onQuickAdd: () => void;
+  onClick: (item: BrowserItem) => void;
+  onQuickAdd: (item: BrowserItem) => void;
 }) {
   const id = "entity_id" in item ? item.entity_id : item.spellcaster_id;
   const isSpellcaster = !("entity_id" in item);
@@ -506,11 +507,11 @@ function DraggableCard({
       {...listeners}
       {...attributes}
       onClick={() => {
-        if (!isDragging) onClick();
+        if (!isDragging) onClick(item);
       }}
       onDoubleClick={(e) => {
         e.stopPropagation(); // Prevent inspect
-        onQuickAdd();
+        onQuickAdd(item);
       }}
       className={cn(
         "relative group cursor-grab active:cursor-grabbing flex flex-col",
@@ -555,7 +556,7 @@ function DraggableCard({
           className="md:hidden absolute top-1 left-1 bg-brand-primary text-white w-6 h-6 rounded-full flex items-center justify-center shadow-lg border border-white/20 active:scale-95"
           onClick={(e) => {
             e.stopPropagation(); // Stop drag/select
-            onQuickAdd();
+            onQuickAdd(item);
           }}
           onPointerDown={(e) => e.stopPropagation()} // Stop drag initiation
           onTouchStart={(e) => e.stopPropagation()} // Stop drag initiation
@@ -572,4 +573,4 @@ function DraggableCard({
       </div>
     </div>
   );
-}
+});

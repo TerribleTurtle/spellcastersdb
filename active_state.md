@@ -14,7 +14,7 @@ Comprehensive JSON-LD structured data has been integrated for all entity types (
 - [x] Improve UI naming consistency (formatEntityName).
 - [x] Fix JSON-LD type errors.
 - [x] Pre-push verification (Linting & Build).
-- [ ] Push changes to remote.
+- [x] Push changes to remote.
 
 - [x] Fix Turbopack Edge Runtime error (fs/promises).
 - [x] Push changes to remote.
@@ -29,3 +29,6 @@ Comprehensive JSON-LD structured data has been integrated for all entity types (
 - [x] Add CollectionPage JSON-LD to Category Pages.
 - [x] Expand Sitemap (Classes, Schools, Ranks, Titans).
 - [x] Create Content Roadmap (docs/SEO_TODO.md).
+- [x] Optimize Unit Vault (Mobile Performance) - WebP default, Memoization, Overscan.
+- [x] Refactor Entity Views (CardInspector & EntityShowcase) - Shared Components for Stats, Mechanics, Abilities.
+- [x] Update Spellcaster Schema (Movement, Standardized Mechanics, Features).

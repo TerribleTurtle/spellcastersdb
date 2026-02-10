@@ -58,34 +58,40 @@ export interface Incantation {
   
   movement_type?: MovementType;
 
-  mechanics?: {
-    waves?: number;
-    aura?: {
-      name?: string;
-      description?: string;
-      radius: number;
-      value: number;
-      interval: number;
-      target_type: "Ally" | "Enemy" | "All" | "Building" | "Creature";
-      effect?: string;
-    }[];
-    damage_modifiers?: {
-      target_type: "Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone";
-      multiplier: number;
-      condition?: string;
-    }[];
-    damage_reduction?: {
-      source_type: string;
-      multiplier: number;
-      condition?: string;
-    }[];
-    spawner?: {
-      unit_id: string;
-      count: number;
-      trigger: "Death" | "Interval" | "Spawn";
-      interval?: number;
-    }[];
-  };
+  mechanics?: Mechanics;
+}
+
+export interface Mechanics {
+  waves?: number;
+  aura?: {
+    name?: string;
+    description?: string;
+    radius: number;
+    value: number;
+    interval: number;
+    target_type: "Ally" | "Enemy" | "All" | "Building" | "Creature";
+    effect?: string;
+  }[];
+  damage_modifiers?: {
+    target_type: "Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone" | "Flying" | "Ground";
+    multiplier: number;
+    condition?: string;
+  }[];
+  damage_reduction?: {
+    source_type: string;
+    multiplier: number;
+    condition?: string;
+  }[];
+  spawner?: {
+    unit_id: string;
+    count: number;
+    trigger: "Death" | "Interval" | "Spawn";
+    interval?: number;
+  }[];
+  features?: {
+    name: string;
+    description: string;
+  }[];
 }
 
 /**
@@ -150,10 +156,7 @@ export interface Ability {
   description: string;
   cooldown?: number;
   stats?: Record<string, number | null>;
-  mechanics?: {
-    name: string;
-    description: string;
-  }[];
+  mechanics?: Mechanics;
 }
 
 export interface SpellcasterAbilities {
@@ -184,6 +187,7 @@ export interface Spellcaster {
   // attack_damage_minion: number;
 
   // Kit
+  movement_type?: MovementType;
   abilities: SpellcasterAbilities;
 }
 

@@ -72,7 +72,7 @@ const MechanicsSchema = z.object({
   damage_modifiers: z
     .array(
       z.object({
-        target_type: z.enum(["Building", "Creature", "Spellcaster", "Unit", "Lifestone"]), // Added 'Unit', 'Lifestone' from data
+        target_type: z.enum(["Building", "Creature", "Spellcaster", "Unit", "Lifestone", "Flying", "Ground"]), // Added 'Unit', 'Lifestone' from data
         multiplier: z.number(),
         condition: z.string().optional(), // Added condition
       })
@@ -97,6 +97,10 @@ const MechanicsSchema = z.object({
       })
     )
     .optional(),
+  features: z.array(z.object({
+    name: z.string(),
+    description: z.string(),
+  })).optional(),
 });
 
 const UnitSchema = z
@@ -165,10 +169,7 @@ const AbilitySchema = z.object({
     .transform((val) => val || ""),
   cooldown: z.number().nullish(),
   stats: z.record(z.string(), z.union([z.number(), z.null()])).optional(),
-  mechanics: z.array(z.object({
-    name: z.string(),
-    description: z.string(),
-  })).optional(),
+  mechanics: MechanicsSchema.optional(),
 });
 
 const SpellcasterSchema = z
@@ -191,6 +192,9 @@ const SpellcasterSchema = z
     // regen_delay: z.number().optional().nullable(),
     // attack_damage_summoner: z.number(),
     // attack_damage_minion: z.number(),
+
+    movement_type: z.enum(["Ground", "Fly", "Flying", "Hover", "Stationary"]).nullish(),
+
 
     abilities: z.object({
       passive: z.array(AbilitySchema),

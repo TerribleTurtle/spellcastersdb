@@ -79,6 +79,9 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  env: {
+    NEXT_PUBLIC_PREFERRED_ASSET_FORMAT: process.env.NEXT_PUBLIC_PREFERRED_ASSET_FORMAT,
+  },
 };
 
 export default nextConfig;
