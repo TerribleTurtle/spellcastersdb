@@ -126,7 +126,7 @@ export function CardInspector({
       (item as Unit | Spell | Titan).entity_id;
 
   return (
-    <div className="h-full w-full bg-surface-main/30 p-1 md:p-2 overflow-y-auto">
+    <div className="h-full w-full bg-surface-main/30 p-1 md:p-2 overflow-y-auto overscroll-y-contain">
       <div className="relative bg-surface-card rounded-xl border border-white/10 shadow-2xl overflow-hidden max-w-[95%] md:max-w-[380px] mx-auto flex flex-col">
         {/* Close Button (Desktop) */}
         {onClose && (
@@ -276,7 +276,7 @@ export function CardInspector({
         </div>
 
         {/* Detailed Stats */}
-        <div className="p-3 space-y-3 flex-1 overflow-y-auto">
+        <div className="p-3 space-y-3 flex-1 overflow-y-auto overscroll-y-contain">
           {/* Stats Grid */}
           <EntityStats item={item} variant="compact" />
 

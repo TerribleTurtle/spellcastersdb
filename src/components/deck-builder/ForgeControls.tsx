@@ -497,7 +497,7 @@ export function ForgeControls({
             </div>
           )}
 
-          <div className="flex-1 overflow-y-auto p-2">
+          <div className="flex-1 overflow-y-auto p-2 overscroll-y-contain">
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}

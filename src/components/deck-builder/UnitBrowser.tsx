@@ -437,6 +437,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
         ) : (
           <Virtuoso
             style={{ height: "100%" }}
+            className="overscroll-y-contain"
             data={virtualData}
             overscan={500}
             itemContent={(index, row) => {
