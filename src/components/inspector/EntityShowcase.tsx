@@ -60,7 +60,7 @@ export function EntityShowcase({
   const magicSchool = magicSchoolRaw === "Titan" ? null : magicSchoolRaw;
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 md:p-8 bg-surface-main/30 relative overflow-hidden">
+    <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 md:p-8 bg-surface-main/30 relative">
       
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -69,10 +69,10 @@ export function EntityShowcase({
       </div>
 
       {/* Main Card Container */}
-      <div className="relative z-10 w-full max-w-md bg-surface-card rounded-2xl border border-white/10 shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-500">
+      <div className="relative z-10 w-full max-w-md bg-surface-card rounded-2xl border border-white/10 shadow-2xl animate-in fade-in zoom-in duration-500">
         
         {/* Header / Art Area */}
-        <div className="relative w-full h-64 md:h-80 bg-slate-900 group overflow-hidden">
+        <div className="relative w-full h-64 md:h-80 bg-slate-900 group overflow-hidden rounded-t-2xl">
              {/* Dynamic Background Image (Blurred) */}
              <GameImage
                 src={getCardImageUrl(item)}
@@ -133,7 +133,7 @@ export function EntityShowcase({
         </div>
 
         {/* Content Body */}
-        <div className="p-6 space-y-6 bg-surface-card">
+        <div className="p-6 space-y-6 bg-surface-card rounded-b-2xl">
            
            {/* Title Section */}
            <div className="text-center">

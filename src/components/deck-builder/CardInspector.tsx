@@ -126,8 +126,8 @@ export function CardInspector({
       (item as Unit | Spell | Titan).entity_id;
 
   return (
-    <div className="h-full w-full bg-surface-main/30 p-1 md:p-2 overflow-y-auto overscroll-y-contain">
-      <div className="relative bg-surface-card rounded-xl border border-white/10 shadow-2xl overflow-hidden max-w-[95%] md:max-w-[380px] mx-auto flex flex-col">
+    <div className="h-full w-full bg-surface-main/30 p-1 md:p-2 overflow-y-auto z-10">
+      <div className="relative bg-surface-card rounded-xl border border-white/10 shadow-2xl max-w-[95%] md:max-w-[380px] mx-auto flex flex-col">
         {/* Close Button (Desktop) */}
         {onClose && (
           <button
@@ -139,7 +139,7 @@ export function CardInspector({
         )}
 
         {/* Art / Banner Area */}
-        <div className="flex-1 min-h-[140px] max-h-[30vh] w-full bg-slate-800 relative flex items-center justify-center overflow-hidden shrink-0">
+        <div className="flex-1 min-h-[140px] max-h-[30vh] w-full bg-slate-800 relative flex items-center justify-center overflow-hidden shrink-0 rounded-t-xl">
           {/* Blurred Background */}
           <GameImage
             src={getCardImageUrl(item)}
@@ -276,7 +276,7 @@ export function CardInspector({
         </div>
 
         {/* Detailed Stats */}
-        <div className="p-3 space-y-3 flex-1 overflow-y-auto overscroll-y-contain">
+        <div className="p-3 space-y-3 flex-1 rounded-b-xl">
           {/* Stats Grid */}
           <EntityStats item={item} variant="compact" />
 
