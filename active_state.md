@@ -7,6 +7,8 @@
   - Fix: Updated `src/lib/api.ts` to use `LOCAL_API_PATH` and robust `path.resolve`.
   - Status: **FIXED**. Local dev now loads clean local data.
     ict Types)
+  - [x] Globally disabled Vercel Image Optimization (unoptimized: true)
+  - [x] Changes pushed to remote `origin/main`
 
 ## Next Steps
 
@@ -18,3 +20,4 @@
   - **Tests:** Passed (57/57 passed)
   - **Build:** Passed (`npm run build`)
 - [x] Launch Readiness verified. No issues found.
+- [x] Changes pushed to remote `origin/main`.
