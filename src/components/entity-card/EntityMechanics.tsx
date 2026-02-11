@@ -10,9 +10,12 @@ import {
   Activity, // Waves
   Target, // Initial Attack
 } from "lucide-react";
-import { Mechanics } from "@/types/api";
+import { Mechanics, UnitMechanics, SpellMechanics } from "@/types/api";
 import { cn, formatEntityName } from "@/lib/utils";
 import { EntityDisplayItem, EntityCardVariant } from "./types";
+
+// Loose type for display purposes
+type UnifiedMechanics = Partial<UnitMechanics & SpellMechanics & Mechanics>;
 
 interface EntityMechanicsProps {
   item: { mechanics?: Mechanics } | EntityDisplayItem;
@@ -39,13 +42,13 @@ function formatTargetName(target: string): string {
 }
 
 export function EntityMechanics({ item, variant = "detailed", showDescriptions }: EntityMechanicsProps) {
-  // Mechanics only exist on Unit or Spell
-  const mechanics = "mechanics" in item ? (item as { mechanics?: Mechanics }).mechanics : undefined;
+  // Mechanics only exist on Unit or Spell or Ability (legacy)
+  const mechanics = "mechanics" in item ? (item.mechanics as UnifiedMechanics) : undefined;
 
   if (!mechanics) return null;
 
   const hasMechanics = 
-    (mechanics.damage_modifiers?.length ?? 0) > 0 ||
+    ((mechanics.damage_modifiers && Array.isArray(mechanics.damage_modifiers) && mechanics.damage_modifiers.length > 0) || (typeof mechanics.damage_modifiers === 'string')) ||
     (mechanics.damage_reduction?.length ?? 0) > 0 ||
     (mechanics.aura?.length ?? 0) > 0 ||
     (mechanics.spawner?.length ?? 0) > 0 ||
@@ -67,36 +70,57 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
       )}
 
       {/* Damage Modifiers */}
-      {mechanics.damage_modifiers?.map((mod, i) => {
-        const isBonus = mod.multiplier >= 1;
-        return (
-            <div
-            key={`dmg-${i}`}
-            className={cn(
-                "flex items-center gap-2 rounded",
-                isCompact 
-                    ? (isBonus ? "bg-green-500/10 border border-green-500/20 p-2" : "bg-red-500/10 border border-red-500/20 p-2")
-                    : (isBonus ? "bg-green-500/10 border border-green-500/20 p-3 gap-3 hover:bg-green-500/20" : "bg-red-500/10 border border-red-500/20 p-3 gap-3 hover:bg-red-500/20") + " transition-colors"
-            )}
-            >
-            <Sword size={isCompact ? 14 : 16} className={cn("shrink-0", isBonus ? "text-green-400" : "text-red-400")} />
-            <div className="flex flex-col">
-                <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm", isBonus ? "text-green-200" : "text-red-200")}>
-                {(mod.multiplier > 1 ? "+" : "") + ((mod.multiplier - 1) * 100).toFixed(1).replace(/\.0$/, "")}% Damage vs <span className="text-white">
-                  {Array.isArray(mod.target_type) 
-                    ? mod.target_type.map(formatTargetName).join(", ") 
-                    : formatTargetName(mod.target_type)}
-                </span>
-                </span>
-                {mod.condition && (
-                    <span className={cn("italic leading-none", isCompact ? "text-[10px]" : "text-xs", isBonus ? "text-green-300/50" : "text-red-300/50")}>
-                        {isCompact ? mod.condition : `Condition: ${mod.condition}`}
-                    </span>
-                )}
-            </div>
-            </div>
-        );
-      })}
+      {(() => {
+          if (!mechanics.damage_modifiers) return null;
+          
+          const mods = mechanics.damage_modifiers as unknown; // Cast to unknown to handle Union safely
+
+          // Legacy String Support
+          if (typeof mods === 'string') {
+               return (
+                <div className={cn("flex items-center gap-2 rounded bg-purple-500/10 border border-purple-500/20 p-2", isCompact ? "text-xs" : "p-3")}>
+                    <Sword size={isCompact ? 14 : 16} className="text-purple-400 shrink-0" />
+                    <span className="text-purple-200 font-bold">{mods}</span>
+                </div>
+               );
+          }
+
+          // Strict Array Support
+          if (Array.isArray(mods)) {
+               // We know it's an array of DamageModifier, safe to cast back if needed, or trust the map
+              return (mods as import("@/types/api").DamageModifier[]).map((mod, i) => {
+                const isBonus = mod.multiplier >= 1;
+                return (
+                    <div
+                    key={`dmg-${i}`}
+                    className={cn(
+                        "flex items-center gap-2 rounded",
+                        isCompact 
+                            ? (isBonus ? "bg-green-500/10 border border-green-500/20 p-2" : "bg-red-500/10 border border-red-500/20 p-2")
+                            : (isBonus ? "bg-green-500/10 border border-green-500/20 p-3 gap-3 hover:bg-green-500/20" : "bg-red-500/10 border border-red-500/20 p-3 gap-3 hover:bg-red-500/20") + " transition-colors"
+                    )}
+                    >
+                    <Sword size={isCompact ? 14 : 16} className={cn("shrink-0", isBonus ? "text-green-400" : "text-red-400")} />
+                    <div className="flex flex-col">
+                        <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm", isBonus ? "text-green-200" : "text-red-200")}>
+                        {(mod.multiplier > 1 ? "+" : "") + ((mod.multiplier - 1) * 100).toFixed(1).replace(/\.0$/, "")}% Damage vs <span className="text-white">
+                        {Array.isArray(mod.target_type) 
+                            ? mod.target_type.map(formatTargetName).join(", ") 
+                            : formatTargetName(mod.target_type)}
+                        </span>
+                        </span>
+                        {mod.condition && (
+                            <span className={cn("italic leading-none", isCompact ? "text-[10px]" : "text-xs", isBonus ? "text-green-300/50" : "text-red-300/50")}>
+                                {isCompact ? mod.condition : `Condition: ${mod.condition}`}
+                            </span>
+                        )}
+                    </div>
+                    </div>
+                );
+              });
+          }
+          return null;
+      })()}
 
       {/* Damage Reduction */}
       {mechanics.damage_reduction?.map((mod, i) => (

@@ -57,47 +57,92 @@ export interface Incantation {
   rank?: UnitRank;
   
   movement_type?: MovementType;
-
-  mechanics?: Mechanics;
+  
+  mechanics?: UnitMechanics | SpellMechanics;
 }
 
+export interface Aura {
+  name?: string;
+  description?: string;
+  radius: number;
+  value: number;
+  interval: number;
+  target_type: "Ally" | "Enemy" | "All" | "Building" | "Creature";
+  effect?: string;
+}
+
+export interface DamageModifier {
+  target_type: "Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone" | "Flying" | "Ground" | "Hover" | "All" | ("Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone" | "Flying" | "Ground" | "Hover" | "All")[];
+  multiplier: number;
+  condition?: string;
+}
+
+export interface DamageReduction {
+  source_type: string;
+  multiplier: number;
+  condition?: string;
+}
+
+export interface Spawner {
+  unit_id: string;
+  count: number;
+  trigger: "Death" | "Interval" | "Spawn";
+  interval?: number;
+}
+
+export interface Feature {
+  name: string;
+  description: string;
+}
+
+export interface BonusDamage {
+    value: number;
+    unit: "flat" | "percent_max_hp" | "percent_current_hp";
+    target_type: "Building" | "Creature" | "All";
+}
+
+export interface UnitMechanics {
+    aura?: Aura[];
+    damage_modifiers?: DamageModifier[];
+    damage_reduction?: DamageReduction[];
+    spawner?: Spawner[];
+    features?: Feature[];
+    capture_speed_modifier?: number;
+    initial_attack?: {
+        damage_flat: number;
+        target_types: ("Ground" | "Hover" | "Flying" | "Building" | "Creature" | "Spellcaster" | "Unit" | "All")[];
+        description: string;
+    };
+    bonus_damage?: BonusDamage[];
+}
+
+export interface SpellMechanics {
+    waves?: number;
+    interval?: number;
+    stagger_modifier?: "None" | "Light" | "Medium" | "High";
+    capture_speed_modifier?: number;
+    aura?: Aura[];
+    spawner?: Spawner[];
+    damage_modifiers?: DamageModifier[];
+    damage_reduction?: DamageReduction[];
+    features?: Feature[];
+    bonus_damage?: BonusDamage[];
+}
+
+// Legacy/Loose mechanics for general use
 export interface Mechanics {
   waves?: number;
   interval?: number;
-  aura?: {
-    name?: string;
-    description?: string;
-    radius: number;
-    value: number;
-    interval: number;
-    target_type: "Ally" | "Enemy" | "All" | "Building" | "Creature";
-    effect?: string;
-  }[];
-  damage_modifiers?: {
-    target_type: "Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone" | "Flying" | "Ground" | "Hover" | ("Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone" | "Flying" | "Ground" | "Hover")[];
-    multiplier: number;
-    condition?: string;
-  }[];
-  damage_reduction?: {
-    source_type: string;
-    multiplier: number;
-    condition?: string;
-  }[];
-  spawner?: {
-    unit_id: string;
-    count: number;
-    trigger: "Death" | "Interval" | "Spawn";
-    interval?: number;
-  }[];
-  features?: {
-    name: string;
-    description: string;
-  }[];
-  initial_attack?: {
-    damage_flat: number;
-    target_types: ("Ground" | "Hover" | "Flying" | "Building" | "Creature" | "Unit")[];
-    description: string;
-  };
+  aura?: Aura[];
+  damage_modifiers?: DamageModifier[] | string; // Legacy/Loose support
+  damage_reduction?: DamageReduction[];
+  spawner?: Spawner[];
+  features?: Feature[];
+  // Include others optionally for compatibility
+  initial_attack?: unknown;
+  bonus_damage?: unknown;
+  capture_speed_modifier?: number;
+  stagger_modifier?: unknown;
 }
 
 /**
@@ -105,6 +150,7 @@ export interface Mechanics {
  */
 export interface Unit extends Incantation {
   category: UnitCategory;
+  mechanics?: UnitMechanics;
 
   // Combat Stats
   health: number;
@@ -123,6 +169,7 @@ export interface Unit extends Incantation {
  */
 export interface Spell extends Incantation {
   category: SpellCategory;
+  mechanics?: SpellMechanics;
 
   // Spell specifics
   radius?: number;

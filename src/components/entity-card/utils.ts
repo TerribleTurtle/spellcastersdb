@@ -1,12 +1,15 @@
-
 import { EntityDisplayItem } from "./types";
-import { Unit, Spell } from "@/types/api";
+import { SpellMechanics } from "@/types/api";
 
 export const getDamageDisplay = (item: EntityDisplayItem) => {
   if (!("damage" in item) || !item.damage) return undefined;
-  const mechanics = "mechanics" in item ? (item as Unit | Spell).mechanics : undefined;
-  if (mechanics?.waves && mechanics.waves > 1) {
-    return `${item.damage}x${mechanics.waves}`;
+  
+  if ("mechanics" in item && item.mechanics) {
+    // Only Spells have waves
+    const mechanics = item.mechanics as Partial<SpellMechanics>; 
+    if (mechanics.waves && mechanics.waves > 1) {
+        return `${item.damage}x${mechanics.waves}`;
+    }
   }
   return item.damage;
 };
