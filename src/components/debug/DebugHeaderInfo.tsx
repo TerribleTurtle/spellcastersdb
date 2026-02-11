@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { Clock, Globe, Hash } from "lucide-react";
 
 interface DebugHeaderInfoProps {
@@ -14,14 +14,19 @@ export function DebugHeaderInfo({
   generatedAt,
   apiUrl,
 }: DebugHeaderInfoProps) {
-  const formattedDate = useMemo(() => {
+  const [formattedDate, setFormattedDate] = useState<string>("");
+
+  useEffect(() => {
     try {
-      return new Date(generatedAt).toLocaleString(undefined, {
-        dateStyle: "medium",
-        timeStyle: "long",
-      });
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setFormattedDate(
+        new Date(generatedAt).toLocaleString(undefined, {
+          dateStyle: "medium",
+          timeStyle: "long",
+        })
+      );
     } catch {
-      return "Invalid Date";
+      setFormattedDate("Invalid Date");
     }
   }, [generatedAt]);
 
@@ -36,7 +41,7 @@ export function DebugHeaderInfo({
 
       <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/5">
         <Globe size={14} className="text-blue-400" />
-        <span className="truncate max-w-[300px]" title={apiUrl}>
+        <span className="break-all" title={apiUrl}>
           Source: <span className="text-white font-bold">{apiUrl}</span>
         </span>
       </div>
@@ -45,7 +50,7 @@ export function DebugHeaderInfo({
         <Clock size={14} className="text-yellow-400" />
         <span>
           Build Date:{" "}
-          <span className="text-white" suppressHydrationWarning>
+          <span className="text-white">
             {formattedDate}
           </span>
         </span>
