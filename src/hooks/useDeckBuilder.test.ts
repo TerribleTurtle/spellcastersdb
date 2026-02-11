@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useDeckBuilder } from "./useDeckBuilder";
 import { Unit, Spellcaster } from "@/types/api";
@@ -41,6 +41,7 @@ vi.mock("./deck-builder/useDeckValidation", () => ({
 
 describe("useDeckBuilder", () => {
   const mockSpellcaster: Spellcaster = {
+      entity_id: "sc1",
       spellcaster_id: "sc1",
       name: "Test Mage",
       category: "Spellcaster",
@@ -51,7 +52,9 @@ describe("useDeckBuilder", () => {
           primary: { name: "P", description: "" },
           defense: { name: "D", description: "" },
           ultimate: { name: "U", description: "" }
-      }
+      },
+      health: 100,
+      movement_speed: 30
   };
 
   const mockUnit: Unit = {
@@ -169,7 +172,7 @@ describe("useDeckBuilder", () => {
 
       it("should prevent adding a Titan to a Unit slot", () => {
           const { result } = renderHook(() => useDeckBuilder());
-          const titan: Unit = { ...mockUnit, category: "Titan", entity_id: "t1" } as any;
+          const titan: Unit = { ...mockUnit, category: "Titan", entity_id: "t1" } as unknown as Unit;
 
           act(() => {
               // Slot 0 is allowedTypes: ["UNIT"]
@@ -194,7 +197,7 @@ describe("useDeckBuilder", () => {
 
       it("should prevent swapping invalid types (Titan <-> Unit)", () => {
           const { result } = renderHook(() => useDeckBuilder());
-          const titan: Unit = { ...mockUnit, category: "Titan", entity_id: "t1" } as any;
+          const titan: Unit = { ...mockUnit, category: "Titan", entity_id: "t1" } as unknown as Unit;
 
           act(() => {
               // Setup correct state first

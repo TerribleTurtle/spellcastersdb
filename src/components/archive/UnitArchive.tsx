@@ -14,8 +14,7 @@ import { UnitCard } from "./UnitCard";
 
 // Helper to safely get unique ID
 function getUniqueId(entity: UnifiedEntity): string {
-  if (entity.category === "Spellcaster") return entity.spellcaster_id;
-  // Consumables use entity_id now, so the default return works, but for safety:
+  if (entity.category === "Spellcaster") return entity.spellcaster_id || entity.entity_id;
   if (entity.category === "Consumable") return entity.entity_id;
   return entity.entity_id;
 }

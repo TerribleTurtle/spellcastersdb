@@ -34,23 +34,25 @@ const AuraSchema = z.object({
   radius: z.number(),
   value: z.number(),
   interval: z.number(),
-  target_type: z.enum(["Ally", "Enemy", "All", "Building", "Creature"]),
+  target_type: z.enum(["Ally", "Enemy", "All", "Building", "Creature"]).optional(),
+  target_types: z.array(z.string()).optional(), // V2
   effect: z.string().optional(),
 });
 
 const DamageModifierSchema = z.object({
   target_type: z.union([
     z.enum(["Building", "Creature", "Spellcaster", "Unit", "All", "Lifestone", "Flying", "Ground", "Hover"]),
-    z.array(z.enum(["Building", "Creature", "Spellcaster", "Unit", "All", "Lifestone", "Flying", "Ground", "Hover"]))
-  ]),
+    z.array(z.string())
+  ]).optional(),
+  target_types: z.array(z.string()).optional(), // V2
   multiplier: z.number(),
-  condition: z.string().optional(),
+  condition: z.union([z.string(), z.object({ field: z.string(), operator: z.string(), value: z.union([z.string(), z.number()]) })]).optional(),
 });
 
 const DamageReductionSchema = z.object({
   source_type: z.string(),
   multiplier: z.number(),
-  condition: z.string().optional(),
+  condition: z.union([z.string(), z.object({ field: z.string(), operator: z.string(), value: z.union([z.string(), z.number()]) })]).optional(),
 });
 
 const SpawnerSchema = z.object({
@@ -81,7 +83,8 @@ export const UnitMechanicsSchema = z.object({
   bonus_damage: z.array(z.object({
       value: z.number(),
       unit: z.enum(["flat", "percent_max_hp", "percent_current_hp"]),
-      target_type: z.enum(["Building", "Creature", "All"])
+      target_type: z.string().optional(),
+      target_types: z.array(z.string()).optional(),
   })).optional()
 }).strict();
 
@@ -89,7 +92,7 @@ export const UnitMechanicsSchema = z.object({
 export const SpellMechanicsSchema = z.object({
   waves: z.number().optional(),
   interval: z.number().optional(),
-  stagger_modifier: z.enum(["None", "Light", "Medium", "High"]).optional(),
+  stagger_modifier: z.boolean().optional(), // V2 Boolean
   capture_speed_modifier: z.number().optional(),
   aura: z.array(AuraSchema).optional(),
   spawner: z.array(SpawnerSchema).optional(),
@@ -99,7 +102,8 @@ export const SpellMechanicsSchema = z.object({
   bonus_damage: z.array(z.object({
       value: z.number(),
       unit: z.enum(["flat", "percent_max_hp", "percent_current_hp"]),
-      target_type: z.enum(["Building", "Creature", "All"])
+      target_type: z.string().optional(),
+      target_types: z.array(z.string()).optional(),
   })).optional()
 }).strict();
 
@@ -134,15 +138,18 @@ export const UnitSchema = z
     damage: z.number().optional(),
     dps: z.number().optional(),
     attack_interval: z.number().optional(),
-    attack_speed: z.number().optional(), // Deprecated in favor of attack_interval, but kept if data has it
     range: z.number().optional(),
     movement_speed: z.number().optional(),
     movement_type: z.enum(["Ground", "Fly", "Flying", "Hover", "Stationary"]).optional(),
     mechanics: UnitMechanicsSchema.optional(),
+    population: z.number().optional(),
     
-    // Additional strict Unit fields
-    heal_amount: z.number().optional(),
-    duration: z.number().optional(),
+    // V2 Unit Config
+    charges: z.number().optional(),
+    recharge_time: z.number().optional(),
+    cast_time: z.number().optional(),
+    duration: z.number().optional(), 
+    value: z.number().optional(), // Faerie's "value"? Or maybe another unit's.
   })
   .strict();
 
@@ -151,15 +158,18 @@ export const SpellSchema = z
     ...CommonSchemaParts,
     ...IncantationBase,
     category: z.literal("Spell"),
-    radius: z.number().optional(), // Deprecated in V1.2 mechanics?
-    duration: z.number().optional(),
-    tick_rate: z.number().optional(), // Deprecated
-    max_targets: z.number().optional(), // Deprecated
-    target_mask: z.array(z.string()).optional(), // Deprecated
     damage: z.number().optional(),
     range: z.number().optional(),
-    heal_amount: z.number().optional(),
+    cooldown: z.number().optional(),
     mechanics: SpellMechanicsSchema.optional(),
+
+    // V2 Spell Config
+    charges: z.number().optional(),
+    recharge_time: z.number().optional(),
+    cast_time: z.number().optional(),
+    value: z.number().optional(),
+    duration: z.number().optional(), // V2
+    heal_amount: z.number().optional(),
   })
   .strict();
 
@@ -196,40 +206,38 @@ export const TitanSchema = z
   .passthrough();
 
 export const AbilitySchema = z.object({
-  ability_id: z.string().optional(),
   name: z.string(),
   description: z
     .string()
     .nullish()
     .transform((val) => val || ""),
+  damage: z.number().optional(),
   cooldown: z.number().optional(),
-  stats: z.record(z.string(), z.number()).optional(),
   mechanics: MechanicsSchema.optional(),
+  charges: z.number().optional(),
+  duration: z.number().optional(),
+  interval: z.number().optional(),
+  projectiles: z.number().optional(),
 });
 
 export const SpellcasterSchema = z
   .object({
-    spellcaster_id: z.string(),
+    entity_id: z.string(), // V2 uses entity_id
+    spellcaster_id: z.string().optional(), // Mapping
     name: z.string(),
-    // category: z.literal("Spellcaster").optional().default("Spellcaster"), // Removed (fixed in source)
     class: z
       .enum(["Enchanter", "Duelist", "Conqueror", "Unknown"])
       .optional()
       .default("Unknown"),
     image_required: z.boolean().optional(),
-    difficulty: z.number().optional(), // New field
-
-    // RPG Stats Removed
-    // health: z.number(),
-    // movement_speed: z.number(),
-    // flight_speed: z.number(),
-    // health_regen_rate: z.number(),
-    // regen_delay: z.number().optional().nullable(),
-    // attack_damage_summoner: z.number(),
-    // attack_damage_minion: z.number(),
+    difficulty: z.number().optional(),
     
+    // V2 Stats Re-added
+    health: z.number(),
+    movement_speed: z.number(),
+    population: z.number().optional(),
     movement_type: z.enum(["Ground", "Fly", "Flying", "Hover", "Stationary"]).optional(),
-
+    tags: z.array(z.string()).optional(),
 
     abilities: z.object({
       passive: z.array(AbilitySchema),
@@ -238,7 +246,14 @@ export const SpellcasterSchema = z
       ultimate: AbilitySchema,
     }),
   })
-  .passthrough();
+  .passthrough()
+  .transform((data) => {
+    // Map spellcaster_id if missing from entity_id
+    if (!data.spellcaster_id && data.entity_id) {
+      data.spellcaster_id = data.entity_id;
+    }
+    return data;
+  });
 
 export const ConsumableSchema = z
   .object({

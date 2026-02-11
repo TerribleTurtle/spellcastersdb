@@ -88,7 +88,7 @@ export function EntityStats({ item, variant = "detailed" }: EntityStatsProps) {
           {("attack_speed" in item || "attack_interval" in item) && (
             <StatBox
               label="Atk Speed"
-              value={`${(item as Unit | Titan).attack_interval ?? (item as Unit).attack_speed ?? 0}s`}
+              value={`${(item as Unit | Titan).attack_interval ?? 0}s`}
               icon={<Zap size={variant === "compact" ? 16 : 18} className="text-yellow-400" />}
               variant={variant}
             />
@@ -132,6 +132,14 @@ export function EntityStats({ item, variant = "detailed" }: EntityStatsProps) {
               variant={variant}
             />
           )}
+          {"heal_amount" in item && (item as Spell).heal_amount && (
+            <StatBox
+              label="Heal"
+              value={(item as Spell).heal_amount}
+              icon={<Heart size={variant === "compact" ? 16 : 18} className="text-green-500" />}
+              variant={variant}
+            />
+          )}
           {"duration" in item && (item as Spell).duration && (
             <StatBox
               label="Duration"
@@ -148,10 +156,34 @@ export function EntityStats({ item, variant = "detailed" }: EntityStatsProps) {
               variant={variant}
             />
           )}
-          {"max_targets" in item && (item as Spell).max_targets && (
+          {"population" in item && (item as Unit | Spellcaster).population !== undefined && (item as Unit | Spellcaster).population !== 0 && (
+            <StatBox
+              label="Pop"
+              value={(item as Unit | Spellcaster).population}
+              icon={<Users size={variant === "compact" ? 16 : 18} className="text-purple-400" />}
+              variant={variant}
+            />
+          )}
+          {"charges" in item && (item as Unit & { charges?: number }).charges && (
+            <StatBox
+              label="Charges"
+              value={(item as Unit & { charges?: number }).charges}
+              icon={<Zap size={variant === "compact" ? 16 : 18} className="text-yellow-400" />}
+              variant={variant}
+            />
+          )}
+          {"recharge_time" in item && (item as Unit & { recharge_time?: number }).recharge_time && (
+             <StatBox
+               label="Recharge"
+               value={`${(item as Unit & { recharge_time?: number }).recharge_time}s`}
+               icon={<Clock size={variant === "compact" ? 16 : 18} className="text-blue-300" />}
+               variant={variant}
+             />
+          )}
+          {"max_targets" in item && (item as Spell & { max_targets?: number }).max_targets && (
             <StatBox
               label="Targets"
-              value={(item as Spell).max_targets}
+              value={(item as Spell & { max_targets?: number }).max_targets}
               icon={<Users size={variant === "compact" ? 16 : 18} className="text-purple-400" />}
               variant={variant}
             />

@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 
 import { fetchGameData } from "@/lib/api";
+import { DebugHeaderInfo } from "@/components/debug/DebugHeaderInfo";
 
 export default async function DebugPage() {
   let data;
@@ -89,19 +90,12 @@ export default async function DebugPage() {
             <Activity className="text-brand-primary" size={32} />
             System Status & Data
           </h1>
-          <p className="text-gray-400 mt-2 flex items-center gap-4 text-sm font-mono">
-            <span>
-              Build:{" "}
-              <span className="text-white">{data.build_info.version}</span>
-            </span>
-            <span className="text-white/20">|</span>
-            <span>
-              Generated:{" "}
-              <span className="text-white">
-                {new Date(data.build_info.generated_at).toLocaleString()}
-              </span>
-            </span>
-          </p>
+          
+          <DebugHeaderInfo 
+            buildVersion={data.build_info.version}
+            generatedAt={data.build_info.generated_at}
+            apiUrl={data._source || process.env.NEXT_PUBLIC_API_URL || "Local / Unknown"}
+          />
         </header>
 
         {/* Top Row: High Level Counts */}

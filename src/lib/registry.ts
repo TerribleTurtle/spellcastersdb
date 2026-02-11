@@ -54,8 +54,15 @@ export class EntityRegistry {
     });
 
     data.spellcasters.forEach((sc) => {
-      this.spellcasters.set(sc.spellcaster_id, sc);
-      this.unified.set(sc.spellcaster_id, sc);
+      // Prefer spellcaster_id for legacy compatibility, fallback to entity_id
+      const id = sc.spellcaster_id || sc.entity_id;
+      this.spellcasters.set(id, sc);
+      this.unified.set(id, sc);
+      
+      // Also register by entity_id if different, to ensure V2 lookups work
+      if (sc.entity_id && sc.entity_id !== id) {
+          this.unified.set(sc.entity_id, sc);
+      }
     });
     
     // Consumables and Upgrades could be added here if needed for lookup

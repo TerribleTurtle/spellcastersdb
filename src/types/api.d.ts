@@ -1,6 +1,6 @@
 /**
  * TypeScript type definitions for Spellcasters Community API
- * Based on: https://terribleturtle.github.io/spellcasters-community-api/api/v1/all_data.json
+ * Based on V2 Schema
  */
 
 // ============================================================================
@@ -22,7 +22,7 @@ export type SpellCategory = "Spell";
 export type TitanCategory = "Titan";
 export type IncantationCategory = UnitCategory | SpellCategory;
 
-export type UnitRank = "I" | "II" | "III" | "IV" | "V"; // Added V for Titans just in case, though they have their own schema
+export type UnitRank = "I" | "II" | "III" | "IV" | "V";
 
 export type SpellcasterClass =
   | "Enchanter"
@@ -30,36 +30,11 @@ export type SpellcasterClass =
   | "Conqueror"
   | "Unknown";
 
-export type MovementType = "Ground" | "Fly" | "Hover" | "Stationary";
+export type MovementType = "Ground" | "Fly" | "Flying" | "Hover" | "Stationary";
 
 // ============================================================================
-// Core Entity Interfaces
+// Mechanics
 // ============================================================================
-
-// CardConfig removed - properties flattened into Incantation/Unit
-
-/**
- * Base Interface for all "Deck-able" items (Units + Spells)
- * Named "Incantation" in the new spec.
- */
-export interface Incantation {
-  $schema?: string;
-  // game_version removed, changelog used instead
-  entity_id: string;
-  name: string;
-  category: string; // Refined in sub-interfaces
-  magic_school: MagicSchool;
-  description: string;
-  image_required?: boolean;
-  tags: string[];
-
-  // Flattened Config
-  rank?: UnitRank;
-  
-  movement_type?: MovementType;
-  
-  mechanics?: UnitMechanics | SpellMechanics;
-}
 
 export interface Aura {
   name?: string;
@@ -68,19 +43,21 @@ export interface Aura {
   value: number;
   interval: number;
   target_type: "Ally" | "Enemy" | "All" | "Building" | "Creature";
+  target_types?: string[]; // V2 uses plural array in some places
   effect?: string;
 }
 
 export interface DamageModifier {
-  target_type: "Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone" | "Flying" | "Ground" | "Hover" | "All" | ("Building" | "Creature" | "Spellcaster" | "Unit" | "Lifestone" | "Flying" | "Ground" | "Hover" | "All")[];
+  target_type?: string | string[]; // Legacy/V2 mix
+  target_types?: string[]; // V2 Strict
   multiplier: number;
-  condition?: string;
+  condition?: string | { field: string; operator: string; value: string | number };
 }
 
 export interface DamageReduction {
   source_type: string;
   multiplier: number;
-  condition?: string;
+  condition?: string | { field: string; operator: string; value: string | number };
 }
 
 export interface Spawner {
@@ -110,7 +87,7 @@ export interface UnitMechanics {
     capture_speed_modifier?: number;
     initial_attack?: {
         damage_flat: number;
-        target_types: ("Ground" | "Hover" | "Flying" | "Building" | "Creature" | "Spellcaster" | "Unit" | "All")[];
+        target_types: string[]; 
         description: string;
     };
     bonus_damage?: BonusDamage[];
@@ -119,7 +96,7 @@ export interface UnitMechanics {
 export interface SpellMechanics {
     waves?: number;
     interval?: number;
-    stagger_modifier?: "None" | "Light" | "Medium" | "High";
+    stagger_modifier?: boolean; // V2 changed to boolean
     capture_speed_modifier?: number;
     aura?: Aura[];
     spawner?: Spawner[];
@@ -129,21 +106,34 @@ export interface SpellMechanics {
     bonus_damage?: BonusDamage[];
 }
 
-// Legacy/Loose mechanics for general use
-export interface Mechanics {
-  waves?: number;
-  interval?: number;
-  aura?: Aura[];
-  damage_modifiers?: DamageModifier[] | string; // Legacy/Loose support
-  damage_reduction?: DamageReduction[];
-  spawner?: Spawner[];
-  features?: Feature[];
-  // Include others optionally for compatibility
-  initial_attack?: unknown;
-  bonus_damage?: unknown;
-  capture_speed_modifier?: number;
-  stagger_modifier?: unknown;
+// Loose mechanics for general use
+export type Mechanics = UnitMechanics & SpellMechanics & {
+  // Legacy support
+  damage_modifiers?: DamageModifier[] | string;
+};
+
+// ============================================================================
+// Core Entity Interfaces
+// ============================================================================
+
+/**
+ * Base Interface for all "Deck-able" items (Units + Spells)
+ */
+export interface Incantation {
+  $schema?: string;
+  entity_id: string;
+  name: string;
+  category: string;
+  magic_school: MagicSchool;
+  description: string;
+  image_required?: boolean;
+  tags: string[];
+
+  // Config
+  rank?: UnitRank;
+  mechanics?: UnitMechanics | SpellMechanics;
 }
+
 
 /**
  * Represents Creatures and Buildings
@@ -157,11 +147,14 @@ export interface Unit extends Incantation {
   damage?: number;
   dps?: number;
   attack_interval?: number;
-  attack_speed?: number;
   range?: number;
 
   // Movement
   movement_speed?: number;
+  movement_type?: MovementType;
+  
+  // V2 Specific
+  population?: number;
 }
 
 /**
@@ -171,16 +164,15 @@ export interface Spell extends Incantation {
   category: SpellCategory;
   mechanics?: SpellMechanics;
 
-  // Spell specifics
-  radius?: number;
-  duration?: number;
-  tick_rate?: number;
-  max_targets?: number;
-  target_mask?: string[];
-
   // Spells usually don't have health/movement
   damage?: number;
+  heal_amount?: number;
+  cooldown?: number; // V2 Spells have cooldown
   range?: number;
+  
+  // Legacy fields likely deprecated but kept safe
+  duration?: number;
+  radius?: number;
 }
 
 /**
@@ -209,12 +201,15 @@ export interface Titan {
 }
 
 export interface Ability {
-  ability_id?: string;
   name: string;
   description: string;
+  damage?: number; // V2 flat damage on ability
   cooldown?: number;
-  stats?: Record<string, number | undefined> & { projectiles?: number };
+  charges?: number;
+  duration?: number;
+  interval?: number;
   mechanics?: Mechanics;
+  projectiles?: number;
 }
 
 export interface SpellcasterAbilities {
@@ -226,7 +221,8 @@ export interface SpellcasterAbilities {
 
 export interface Spellcaster {
   $schema?: string;
-  spellcaster_id: string;
+  entity_id: string; // V2 uses entity_id
+  spellcaster_id?: string; // Legacy mapping
   name: string;
   category: "Spellcaster";
   tags: string[];
@@ -235,39 +231,32 @@ export interface Spellcaster {
 
   difficulty?: number;
 
-  // RPG Stats Removed
-  // health: number;
-  // movement_speed: number;
-  // flight_speed: number;
-  // health_regen_rate: number;
-  // regen_delay?: number | null;
-  // attack_damage_summoner: number;
-  // attack_damage_minion: number;
+  // V2 Re-added Stats
+  health: number;
+  movement_speed: number;
+  population?: number;
+  movement_type?: MovementType;
 
   // Kit
-  movement_type?: MovementType;
   abilities: SpellcasterAbilities;
 }
 
 export interface Consumable {
   $schema?: string;
-  entity_id: string; // Renamed from consumable_id in some contexts? Spec says entity_id.
+  entity_id: string;
   name: string;
   description: string;
   image_required?: boolean;
 
   // Consumable-specific
   effect_type?: string;
+  value?: number;
   effect_value?: number;
   duration?: number;
-  value?: number; // Some have 'value' instead of effect_value
 
   tags: string[];
   category: "Consumable";
   rarity?: string;
-  stats?: {
-    duration?: number;
-  };
 }
 
 export interface Upgrade {
@@ -296,18 +285,12 @@ export interface BuildInfo {
 export interface AllDataResponse {
   build_info: BuildInfo;
   spellcasters: Spellcaster[];
-  units: Unit[]; // Creatures + Buildings ONLY
-  spells: Spell[]; // New Array
-  titans: Titan[]; // New Array
+  units: Unit[];
+  spells: Spell[];
+  titans: Titan[];
   consumables: Consumable[];
   upgrades: Upgrade[];
+  _source?: string;
 }
-
-/**
- * Union for Deck Builder slots (can accept Units or Spells)
- * "Incantation" is the polymorphic term.
- */
-// export type Incantation = Unit | Spell; // Already defined as base interface, but practically we use union in code?
-// No, Interface inheritance is better for shared props.
 
 export type UnifiedEntity = Unit | Spell | Titan | Spellcaster | Consumable;

@@ -6,12 +6,15 @@ import { Unit, Spellcaster } from "@/types/api";
 // --- Mocks ---
 
 const mockSpellcaster: Spellcaster = {
+    entity_id: "sc1",
     spellcaster_id: "sc1",
     name: "Test Mage",
     category: "Spellcaster",
     class: "Enchanter",
     tags: [],
-    abilities: { passive: [], primary: { name: "", description: "" }, defense: { name: "", description: "" }, ultimate: { name: "", description: "" } }
+    abilities: { passive: [], primary: { name: "", description: "" }, defense: { name: "", description: "" }, ultimate: { name: "", description: "" } },
+    health: 100,
+    movement_speed: 30
 };
 
 const mockUnit: Unit = {

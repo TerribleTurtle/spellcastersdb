@@ -25,7 +25,7 @@ describe("getCardImageUrl", () => {
   it("should return remote URL for a spellcaster", () => {
     const spellcaster = { spellcaster_id: "hero_789", category: "Spellcaster", name: "Test Spellcaster" };
     const url = getCardImageUrl(spellcaster);
-    expect(url).toBe("https://terribleturtle.github.io/spellcasters-community-api/assets/spellcasters/hero_789.png");
+    expect(url).toBe("https://terribleturtle.github.io/spellcasters-community-api/assets/heroes/hero_789.png");
   });
 
   it("should return remote URL for a consumable", () => {

@@ -30,8 +30,8 @@ export function getCardImageUrl(
 ): string {
   const apiUrl =
     process.env.NEXT_PUBLIC_API_URL ||
-    "https://terribleturtle.github.io/spellcasters-community-api/api/v1";
-  const assetBase = apiUrl.replace(/\/api\/v1$/, "/assets");
+    "https://terribleturtle.github.io/spellcasters-community-api/api/v2";
+  const assetBase = apiUrl.replace(/\/api\/v2$/, "/assets");
 
   let folder = "units";
 
@@ -40,13 +40,15 @@ export function getCardImageUrl(
     "spellcaster_id" in entity ||
     entity.category === "Spellcaster"
   ) {
-    folder = "spellcasters";
+    folder = "heroes";
   } else if ("consumable_id" in entity || entity.category === "Consumable") {
     folder = "consumables";
   } else if (entity.category === "Spell") {
     folder = "spells";
   } else if (entity.category === "Titan") {
     folder = "titans";
+  } else if (entity.category === "Upgrade") {
+    folder = "upgrades";
   }
 
   // Resolve ID: Spellcaster > Consumable > Entity

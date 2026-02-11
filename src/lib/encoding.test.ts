@@ -1,7 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { encodeDeck, decodeDeck, encodeTeam, decodeTeam } from "./encoding";
 import { Deck, DeckSlot } from "@/types/deck";
-import LZString from "lz-string";
+import { Unit, Spellcaster } from "@/types/api";
+
 
 // Mock helpers
 const mockUnit = (id: string, category: string = "Creature") => ({
@@ -13,12 +14,12 @@ const mockUnit = (id: string, category: string = "Creature") => ({
   health: 100,
   tags: [],
   magic_school: "Fire"
-} as any);
+} as unknown as Unit);
 
 const mockDeck = (id: string, name: string, spellcasterId: string, unitIds: string[]): Deck => ({
   id,
   name,
-  spellcaster: { spellcaster_id: spellcasterId, name: "Caster", category: "Spellcaster" } as any,
+  spellcaster: { spellcaster_id: spellcasterId, name: "Caster", category: "Spellcaster" } as Spellcaster,
   slots: [
       { index: 0, unit: unitIds[0] ? mockUnit(unitIds[0]) : null, allowedTypes: ["UNIT"] } as DeckSlot,
       { index: 1, unit: unitIds[1] ? mockUnit(unitIds[1]) : null, allowedTypes: ["UNIT"] } as DeckSlot,

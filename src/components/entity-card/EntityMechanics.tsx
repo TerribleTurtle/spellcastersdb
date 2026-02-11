@@ -106,12 +106,15 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
                         {(mod.multiplier > 1 ? "+" : "") + ((mod.multiplier - 1) * 100).toFixed(1).replace(/\.0$/, "")}% Damage vs <span className="text-white">
                         {Array.isArray(mod.target_type) 
                             ? mod.target_type.map(formatTargetName).join(", ") 
-                            : formatTargetName(mod.target_type)}
+                            : formatTargetName(mod.target_type || "Target")}
                         </span>
                         </span>
                         {mod.condition && (
                             <span className={cn("italic leading-none", isCompact ? "text-[10px]" : "text-xs", isBonus ? "text-green-300/50" : "text-red-300/50")}>
-                                {isCompact ? mod.condition : `Condition: ${mod.condition}`}
+                                {isCompact 
+                                    ? (typeof mod.condition === 'string' ? mod.condition : `${mod.condition.field} ${mod.condition.operator} ${mod.condition.value}`)
+                                    : `Condition: ${typeof mod.condition === 'string' ? mod.condition : `${mod.condition.field} ${mod.condition.operator} ${mod.condition.value}`}`
+                                }
                             </span>
                         )}
                     </div>
@@ -140,7 +143,10 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
             </span>
             {mod.condition && (
                 <span className={cn("text-green-300/50 italic leading-none", isCompact ? "text-[10px]" : "text-xs")}>
-                     {isCompact ? mod.condition : `Condition: ${mod.condition}`}
+                     {isCompact 
+                        ? (typeof mod.condition === 'string' ? mod.condition : `${mod.condition.field} ${mod.condition.operator} ${mod.condition.value}`)
+                        : `Condition: ${typeof mod.condition === 'string' ? mod.condition : `${mod.condition.field} ${mod.condition.operator} ${mod.condition.value}`}`
+                     }
                 </span>
             )}
           </div>

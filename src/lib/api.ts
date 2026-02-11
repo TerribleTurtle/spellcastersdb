@@ -18,7 +18,7 @@ import { AllDataSchema } from "./schemas";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ||
-  "https://terribleturtle.github.io/spellcasters-community-api/api/v1";
+  "https://terribleturtle.github.io/spellcasters-community-api/api/v2";
 
 if (!process.env.NEXT_PUBLIC_API_URL) {
   console.warn(
@@ -49,16 +49,25 @@ export async function fetchGameData(): Promise<AllDataResponse> {
 
       // CRITICAL: Local Development Source of Truth
       // Prioritize explicit env, fallback to sibling directory
+      // V2 MIGRATION: Pointing to api/v2/all_data.json
       const localPath =
         process.env.LOCAL_DATA_PATH ||
-        process.env.LOCAL_API_PATH || // Use correct .env key
-        path.resolve(process.cwd(), "..", "spellcasters-community-api", "api", "v1", "all_data.json");
+        process.env.LOCAL_API_PATH || 
+        path.resolve(process.cwd(), "..", "spellcasters-community-api", "api", "v2", "all_data.json");
 
       console.log(`Loading data from: ${localPath}`);
       const fileContent = await fs.readFile(localPath, "utf-8");
       const rawData = JSON.parse(fileContent);
 
-      // Pre-process: Filter units to ensure only Creatures and Buildings are in the units array
+      // V2 Data contains 'heroes'. Map this to 'spellcasters' for app compatibility if needed, 
+      // or we can strictly use 'heroes' if we update the types. 
+      // For now, we map heroes -> spellcasters to maintain the AllDataResponse interface.
+      if (rawData.heroes && !rawData.spellcasters) {
+        rawData.spellcasters = rawData.heroes;
+      }
+
+      // Pre-process: Filter units is likely no longer strictly necessary if V2 is clean, 
+      // but keeping it for safety doesn't hurt.
       if (Array.isArray(rawData.units)) {
         rawData.units = rawData.units.filter(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -68,17 +77,15 @@ export async function fetchGameData(): Promise<AllDataResponse> {
 
       const result = AllDataSchema.safeParse(rawData);
       if (result.success) {
-        console.log("✅ Loaded and validated local data successfully.");
+        console.log("✅ Loaded and validated local V2 data successfully.");
         const data = result.data as unknown as AllDataResponse;
         registry.initialize(data); // Initialize Registry
-        return data;
+        return { ...data, _source: "Local Filesystem" };
       } else {
         console.error(
           "🔴 Local Data Validation Failed:",
           JSON.stringify(result.error.format(), null, 2)
         );
-        // Fallthrough to remote? Or throw?
-        // Throwing in dev is better visibility
         throw new Error("Local Data Validation Failed");
       }
     } catch (e) {
@@ -103,8 +110,11 @@ export async function fetchGameData(): Promise<AllDataResponse> {
 
     const rawData = await response.json();
 
-    // Pre-process: Filter units to ensure only Creatures and Buildings are in the units array
-    // The raw data might have Spells mixed in (legacy structure)
+    // V2 Mapping
+    if (rawData.heroes && !rawData.spellcasters) {
+      rawData.spellcasters = rawData.heroes;
+    }
+
     if (Array.isArray(rawData.units)) {
       rawData.units = rawData.units.filter(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -137,7 +147,7 @@ export async function fetchGameData(): Promise<AllDataResponse> {
 
     const data = result.data as unknown as AllDataResponse;
     registry.initialize(data); // Initialize Registry
-    return data;
+    return { ...data, _source: `Remote API (${url})` };
 
   } catch (error) {
     console.error("Error fetching game data:", error);

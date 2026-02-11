@@ -140,7 +140,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
       const isUnit = "entity_id" in item;
       const rawCategory = isUnit ? item.category : "Spellcaster";
       const category = CATEGORY_TO_PLURAL[rawCategory] || rawCategory;
-      const school = isUnit ? item.magic_school : "N/A";
+      const school = "magic_school" in item ? item.magic_school : "N/A";
       // Unified Rank: Check if item has rank property. Spells and Units do. Titans have rank "V".
       const rank = "rank" in item ? (item as Unit | Spell | Titan).rank : null;
       const spellcasterClass = !isUnit ? (item as Spellcaster).class : null;
@@ -156,7 +156,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
           "tags" in item &&
           item.tags.some((tag) => tag.toLowerCase().includes(lowQuery));
         const matchesSchool =
-          isUnit && item.magic_school.toLowerCase().includes(lowQuery);
+          "magic_school" in item && item.magic_school.toLowerCase().includes(lowQuery);
         const matchesCategory = category.toLowerCase().includes(lowQuery);
 
         if (
@@ -250,7 +250,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
       SCHOOLS.forEach((school) => {
         const schoolItems = filteredItems.filter((i) => {
           if (!("entity_id" in i)) return false;
-          return i.magic_school === school;
+          return "magic_school" in i && i.magic_school === school;
         });
         if (schoolItems.length > 0) {
           // User Request: Sort "Magic Schools should be Creature > Spells > buildings > (Rank?)"
@@ -461,10 +461,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
                     }}
                   >
                     {row.items.map((item) => {
-                      const id =
-                        "entity_id" in item
-                          ? item.entity_id
-                          : item.spellcaster_id;
+                      const id = item.entity_id;
                       return (
                         <DraggableCard
                           key={id}
@@ -494,7 +491,7 @@ const DraggableCard = React.memo(function DraggableCard({
   onClick: (item: BrowserItem) => void;
   onQuickAdd: (item: BrowserItem) => void;
 }) {
-  const id = "entity_id" in item ? item.entity_id : item.spellcaster_id;
+  const id = item.entity_id;
   const isSpellcaster = !("entity_id" in item);
   const rank = !isSpellcaster ? (item as Unit).rank : null;
   const isTitan = !isSpellcaster && item.category === "Titan";

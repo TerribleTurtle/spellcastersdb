@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { renderHook, act } from "@testing-library/react";
 import { useTeamBuilder, STORAGE_KEY_SAVED_TEAMS, TEAM_SLOT_KEYS } from "./useTeamBuilder";
 import { Deck } from "@/types/deck";
-import { Unit, Spellcaster } from "@/types/api";
+import { Unit } from "@/types/api";
 
 // --- Mocks ---
 
@@ -100,12 +100,12 @@ describe("useTeamBuilder", () => {
       const { result } = renderHook(() => useTeamBuilder([mockUnit], []));
       await waitForHydration();
       
-      // Save first
-      let teamId: string;
+      // Save Team A first
       await act(async () => {
+          result.current.setTeamName("Team A");
           result.current.saveTeam("Team A");
       });
-      teamId = result.current.activeTeamId!;
+      const teamId = result.current.activeTeamId!;
 
       // Create another team (to switch away)
       await act(async () => {

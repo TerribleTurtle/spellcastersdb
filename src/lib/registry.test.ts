@@ -18,7 +18,7 @@ describe('EntityRegistry', () => {
             { entity_id: 't1', name: 'Titan 1', category: 'Titan', health: 1000, damage: 100, movement_speed: 10, rank: 'V', magic_school: 'Titan', description: '', tags: [] }
         ],
         spellcasters: [
-            { spellcaster_id: 'sc1', name: 'Mage 1', category: 'Spellcaster', tags: [], class: 'Enchanter', abilities: { passive: [], primary: { name: 'p', description: '' }, defense: { name: 'd', description: '' }, ultimate: { name: 'u', description: '' } } }
+            { entity_id: 'sc1', spellcaster_id: 'sc1', name: 'Mage 1', category: 'Spellcaster', tags: [], class: 'Enchanter', abilities: { passive: [], primary: { name: 'p', description: '' }, defense: { name: 'd', description: '' }, ultimate: { name: 'u', description: '' } }, health: 100, movement_speed: 30 }
         ],
         consumables: [],
         upgrades: []

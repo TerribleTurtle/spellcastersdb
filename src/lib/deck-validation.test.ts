@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { validateDeck } from "./deck-validation";
 import { Deck, DeckSlot } from "@/types/deck";
-import { Unit, Spellcaster } from "@/types/api";
+import { Unit, Spellcaster, Titan } from "@/types/api";
 
 // --- Type-Safe Mock Helpers ---
 
@@ -19,7 +19,7 @@ function mockSpellcaster(override: Partial<Spellcaster> = {}): Spellcaster {
         ultimate: { name: "U", description: "D" },
     },
     ...override,
-  };
+  } as Spellcaster;
 }
 
 function mockUnit(override: Partial<Unit> = {}): Unit {
@@ -36,13 +36,29 @@ function mockUnit(override: Partial<Unit> = {}): Unit {
   } as Unit;
 }
 
+function mockTitan(override: Partial<Titan> = {}): Titan {
+    return {
+        entity_id: "t_1",
+        name: "Test Titan",
+        category: "Titan",
+        rank: "V",
+        health: 1000,
+        damage: 100,
+        movement_speed: 10,
+        tags: [],
+        magic_school: "Titan",
+        description: "Titan desc",
+        ...override
+    } as Titan;
+}
+
 function createDeck(override: Partial<Deck> = {}): Deck {
   const baseSlots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot] = [
     { index: 0, unit: mockUnit({ name: "Creature 1", rank: "I" }), allowedTypes: ["UNIT"] },
     { index: 1, unit: mockUnit({ name: "Creature 2", rank: "III" }), allowedTypes: ["UNIT"] },
     { index: 2, unit: mockUnit({ name: "Creature 3", rank: "III" }), allowedTypes: ["UNIT"] },
     { index: 3, unit: mockUnit({ name: "Creature 4", rank: "III" }), allowedTypes: ["UNIT"] },
-    { index: 4, unit: mockUnit({ name: "Titan 1", category: "Titan" as any, rank: "V" }), allowedTypes: ["TITAN"] },
+    { index: 4, unit: mockTitan({ name: "Titan 1" }), allowedTypes: ["TITAN"] },
   ];
 
   return {
@@ -115,8 +131,8 @@ describe("validateDeck Logic", () => {
 
     it("should fail if the only Rank I/II unit is a SPELL (must be Creature)", () => {
         const deck = createDeck();
-        // Slot 0 is Rank I, but change it to Spell. We cast as any because Unit type assumes Creature/Building
-        deck.slots[0].unit = mockUnit({ name: "Zap", rank: "I", category: "Spell" as any });
+        // Slot 0 is Rank I, but change it to Spell. Cast as unknown as Unit to simulate invalid type in slot
+        deck.slots[0].unit = { ...mockUnit({ name: "Zap", rank: "I" }), category: "Spell" } as unknown as Unit;
 
         const result = validateDeck(deck);
         expect(result.isValid).toBe(false);

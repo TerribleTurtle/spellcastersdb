@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach, type Mock } from 'vitest';
 import { fetchGameData } from './api';
 import { AllDataResponse } from '@/types/api';
 
@@ -7,7 +7,22 @@ describe('Remote Data Validation', () => {
     const mockApiResponse: AllDataResponse = {
         build_info: { version: 'test-v1', generated_at: '2025-01-01' },
         spellcasters: [
-            { spellcaster_id: 'sc1', name: 'Mage', category: 'Spellcaster', class: 'Enchanter', tags: [], abilities: { passive: [], primary: { name: 'P', description: '' }, defense: { name: 'D', description: '' }, ultimate: { name: 'U', description: '' } } }
+            { 
+                entity_id: 'sc1', 
+                spellcaster_id: 'sc1', 
+                name: 'Mage', 
+                category: 'Spellcaster', 
+                class: 'Enchanter', 
+                tags: [], 
+                health: 100, 
+                movement_speed: 10,
+                abilities: { 
+                    passive: [], 
+                    primary: { name: 'P', description: '' }, 
+                    defense: { name: 'D', description: '' }, 
+                    ultimate: { name: 'U', description: '' } 
+                } 
+            }
         ],
         units: [
             { entity_id: 'u1', name: 'Goblin', category: 'Creature', health: 10, tags: [], magic_school: 'Wild', description: '' }
@@ -29,7 +44,7 @@ describe('Remote Data Validation', () => {
 
     it('should validate and return data on successful fetch', async () => {
         // Mock success response
-        (global.fetch as any).mockResolvedValue({
+        (global.fetch as Mock).mockResolvedValue({
             ok: true,
             json: async () => mockApiResponse,
         });
@@ -44,7 +59,7 @@ describe('Remote Data Validation', () => {
 
     it('should handle API failure (404/500) gracefully', async () => {
         // Mock error response
-        (global.fetch as any).mockResolvedValue({
+        (global.fetch as Mock).mockResolvedValue({
             ok: false,
             status: 500,
             statusText: 'Server Error',
@@ -61,7 +76,7 @@ describe('Remote Data Validation', () => {
         // Mock malformed data (missing required fields)
         const badData = { foo: 'bar' };
         
-        (global.fetch as any).mockResolvedValue({
+        (global.fetch as Mock).mockResolvedValue({
             ok: true,
             json: async () => badData,
         });
