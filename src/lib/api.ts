@@ -45,13 +45,14 @@ export async function fetchGameData(): Promise<AllDataResponse> {
     try {
       console.log("Attempting to load local data...");
       const fs = await import("fs/promises");
+      const path = await import("path");
 
       // CRITICAL: Local Development Source of Truth
-      // This MUST point to the external repo location.
-      // Use ENV var LOCAL_DATA_PATH or assume sibling directory structure.
+      // Prioritize explicit env, fallback to sibling directory
       const localPath =
         process.env.LOCAL_DATA_PATH ||
-        "../spellcasters-community-api/api/v1/all_data.json";
+        process.env.LOCAL_API_PATH || // Use correct .env key
+        path.resolve(process.cwd(), "..", "spellcasters-community-api", "api", "v1", "all_data.json");
 
       console.log(`Loading data from: ${localPath}`);
       const fileContent = await fs.readFile(localPath, "utf-8");

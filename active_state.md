@@ -1,10 +1,13 @@
-# Current Focus
+# Active State
 
-Migrated to Spellcasters API v1.2 (Strict Schema).
+## Current Focus
 
-# Recent Context
+- [x] Investigate "Local Data Validation Failed" error
+  - Root Cause: App was falling back to OUTDATED remote API data because `LOCAL_DATA_PATH` was not resolving correctly.
+  - Fix: Updated `src/lib/api.ts` to use `LOCAL_API_PATH` and robust `path.resolve`.
+  - Status: **FIXED**. Local dev now loads clean local data.
+    ict Types)
 
-- Enforced `additionalProperties: false` on Unit/Spell schemas.
-- Split `Mechanics` into `UnitMechanics` and `SpellMechanics`.
-- Updated UI components to handle strict types.
-- Verified with `vitest` (10/10 passed).
+## Next Steps
+
+- Monitor API integration for any runtime issues with live data.

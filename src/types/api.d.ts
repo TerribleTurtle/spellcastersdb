@@ -213,7 +213,7 @@ export interface Ability {
   name: string;
   description: string;
   cooldown?: number;
-  stats?: Record<string, number | null> & { projectiles?: number | null };
+  stats?: Record<string, number | undefined> & { projectiles?: number };
   mechanics?: Mechanics;
 }
 

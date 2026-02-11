@@ -137,7 +137,7 @@ export const UnitSchema = z
     attack_speed: z.number().optional(), // Deprecated in favor of attack_interval, but kept if data has it
     range: z.number().optional(),
     movement_speed: z.number().optional(),
-    movement_type: z.enum(["Ground", "Fly", "Flying", "Hover", "Stationary"]).nullish(),
+    movement_type: z.enum(["Ground", "Fly", "Flying", "Hover", "Stationary"]).optional(),
     mechanics: UnitMechanicsSchema.optional(),
     
     // Additional strict Unit fields
@@ -151,11 +151,11 @@ export const SpellSchema = z
     ...CommonSchemaParts,
     ...IncantationBase,
     category: z.literal("Spell"),
-    radius: z.number().nullish(), // Deprecated in V1.2 mechanics?
-    duration: z.number().nullish(),
-    tick_rate: z.number().nullish(), // Deprecated
-    max_targets: z.number().nullish(), // Deprecated
-    target_mask: z.array(z.string()).nullish(), // Deprecated
+    radius: z.number().optional(), // Deprecated in V1.2 mechanics?
+    duration: z.number().optional(),
+    tick_rate: z.number().optional(), // Deprecated
+    max_targets: z.number().optional(), // Deprecated
+    target_mask: z.array(z.string()).optional(), // Deprecated
     damage: z.number().optional(),
     range: z.number().optional(),
     heal_amount: z.number().optional(),
@@ -165,6 +165,7 @@ export const SpellSchema = z
 
 export const TitanSchema = z
   .object({
+    $schema: z.string().optional(),
     entity_id: z.string(),
     name: z.string(),
     category: z.literal("Titan"),
@@ -201,8 +202,8 @@ export const AbilitySchema = z.object({
     .string()
     .nullish()
     .transform((val) => val || ""),
-  cooldown: z.number().nullish(),
-  stats: z.record(z.string(), z.union([z.number(), z.null()])).optional(),
+  cooldown: z.number().optional(),
+  stats: z.record(z.string(), z.number()).optional(),
   mechanics: MechanicsSchema.optional(),
 });
 
@@ -227,7 +228,7 @@ export const SpellcasterSchema = z
     // attack_damage_summoner: z.number(),
     // attack_damage_minion: z.number(),
     
-    movement_type: z.enum(["Ground", "Fly", "Flying", "Hover", "Stationary"]).nullish(),
+    movement_type: z.enum(["Ground", "Fly", "Flying", "Hover", "Stationary"]).optional(),
 
 
     abilities: z.object({
