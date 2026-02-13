@@ -137,7 +137,7 @@ export const DraggableCard = React.memo(function DraggableCard({
         onPointerDown={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center gap-1.5 w-full justify-center">
+        <div className="flex items-center gap-2 w-full justify-center">
           <Plus size={12} className="text-brand-accent shrink-0" strokeWidth={4} />
           <span className="text-[10px] font-bold text-gray-200 text-center leading-tight line-clamp-2 uppercase tracking-tight break-words">
             {item.name}

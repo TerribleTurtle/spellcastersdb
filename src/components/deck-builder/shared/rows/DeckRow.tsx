@@ -197,8 +197,8 @@ export function DeckRow({
           {/* Units Preview */}
           <div
             className={cn(
-              "flex items-center gap-1",
-              isTeamMode && "hidden md:flex" 
+              "items-center gap-1",
+              isTeamMode ? "hidden md:flex" : "hidden sm:flex" 
             )}
           >
             {deck.slots.slice(0, 4).map((s, i) => (
@@ -251,7 +251,7 @@ export function DeckRow({
                   }}
                   title="Put Away Deck"
                >
-                  <span>Put Away</span>
+                  <span className="hidden sm:inline">Put Away</span>
                </button>
              ) : (
                <button 
@@ -266,7 +266,7 @@ export function DeckRow({
                   title={isTeamMode ? "Import Deck to Slot" : "Load Deck"}
                >
                   <ArrowRight size={14} />
-                  <span>{isTeamMode ? "Import" : "Load"}</span>
+                  <span className="hidden sm:inline">{isTeamMode ? "Import" : "Load"}</span>
                </button>
              )}
 

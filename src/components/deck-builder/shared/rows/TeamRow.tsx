@@ -191,7 +191,7 @@ export function TeamRow({
                     className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent border border-gray-500 text-gray-400 rounded-full shadow-sm hover:text-white hover:border-white hover:bg-white/5 transition-colors text-xs font-bold uppercase tracking-wider"
                     title="Put Away Team"
                 >
-                    <span>Put Away</span>
+                    <span className="hidden sm:inline">Put Away</span>
                 </button>
             ) : (
             <button
@@ -204,7 +204,7 @@ export function TeamRow({
               title="Load Team"
             >
               <ArrowRight size={14} />
-              <span>Load</span>
+              <span className="hidden sm:inline">Load</span>
             </button>
             )}
             <ItemMenu
