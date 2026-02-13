@@ -13,12 +13,11 @@ interface UseInspectorLogicProps {
 }
 
 export function useInspectorLogic({ item }: UseInspectorLogicProps) {
-  const { currentDeck, setSlot, setSpellcaster, closeInspector } = useDeckStore(
+  const { currentDeck, setSlot, setSpellcaster } = useDeckStore(
     useShallow((state) => ({
       currentDeck: state.currentDeck,
       setSlot: state.setSlot,
       setSpellcaster: state.setSpellcaster,
-      closeInspector: state.closeInspector,
     }))
   );
 
@@ -33,20 +32,17 @@ export function useInspectorLogic({ item }: UseInspectorLogicProps) {
   const handleSelectSpellcaster = () => {
     if (isSpellcaster) {
       setSpellcaster(item as Spellcaster);
-      closeInspector();
     }
   };
 
   const handleSelectTitan = () => {
     if (isTitan(item)) {
        setSlot(TITAN_SLOT_INDEX, item as Titan);
-       closeInspector();
     }
   };
 
   const handleSelectSlot = (idx: SlotIndex) => {
       setSlot(idx, item as Unit | Spell | Titan);
-      closeInspector();
   };
 
   // For units, check specific slots

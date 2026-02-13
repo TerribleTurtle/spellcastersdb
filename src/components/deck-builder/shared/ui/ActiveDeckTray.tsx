@@ -85,6 +85,7 @@ export function ActiveDeckTray({
               title={
                 validation.isValid ? "Deck Valid" : validation.errors.join("\n")
               }
+              data-testid="validation-indicator"
             >
               {validation.isValid ? (
                 <CheckCircle2 size={12} />

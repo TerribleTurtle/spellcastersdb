@@ -88,10 +88,11 @@ export const DraggableCard = React.memo(function DraggableCard({
         }
       }}
       onDoubleClick={handleQuickAdd}
+      onContextMenu={(e) => e.preventDefault()}
       role="button"
       tabIndex={0}
       className={cn(
-        "relative group cursor-pointer flex flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900",
+        "relative group cursor-pointer flex flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 select-none",
         "aspect-[4/5] rounded-lg overflow-hidden border border-white/10 bg-surface-card", // More compact aspect ratio
         "hover:border-brand-primary/50 transition-all hover:scale-105",
         // Actually, we want the bottom bar to be part of the card visuals.
@@ -145,10 +146,7 @@ export const DraggableCard = React.memo(function DraggableCard({
 
       {/* Name Banner / Quick Add Button - Integrated */}
       <div 
-        className="absolute bottom-0 inset-x-0 min-h-[32px] lg:min-h-[40px] bg-black/90 border-t border-white/10 flex items-center justify-center px-1 py-1 z-10 cursor-pointer transition-colors hover:bg-brand-primary/90"
-        onClick={handleQuickAdd}
-        onPointerDown={(e) => e.stopPropagation()}
-        onTouchStart={(e) => e.stopPropagation()}
+        className="absolute bottom-0 inset-x-0 min-h-[32px] lg:min-h-[40px] bg-black/90 border-t border-white/10 flex items-center justify-center px-1 py-1 z-10 transition-colors"
       >
         <div className="w-full flex justify-center px-1">
           <span className="text-[10px] lg:text-xs 2xl:text-sm font-bold text-gray-200 text-center leading-tight line-clamp-2 uppercase tracking-tight break-words">

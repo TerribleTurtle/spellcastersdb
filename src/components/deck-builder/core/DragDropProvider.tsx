@@ -58,6 +58,7 @@ export function DragDropProvider({ children }: DragDropProviderProps) {
       collisionDetection={pointerWithin}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      autoScroll={false}
     >
       {children}
 

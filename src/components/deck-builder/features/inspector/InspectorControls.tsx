@@ -49,7 +49,10 @@ export function InspectorControls({
       {isSpellcaster ? (
         <div className="flex flex-col gap-2">
             <button
-            onClick={handleSelectSpellcaster}
+            onClick={() => {
+                handleSelectSpellcaster();
+                onClose?.();
+            }}
             disabled={isCurrentSpellcaster}
             className={cn(
                 "w-full py-3 font-bold rounded flex items-center justify-center gap-2 transition-colors duration-200",
@@ -89,7 +92,10 @@ export function InspectorControls({
                 </button>
             )}
             <button
-            onClick={handleSelectTitan}
+            onClick={() => {
+                handleSelectTitan();
+                onClose?.();
+            }}
             disabled={isTitanInDeck}
             className={cn(
                 "flex-1 py-3 font-bold rounded flex items-center justify-center gap-2 transition-colors duration-200",
@@ -121,7 +127,10 @@ export function InspectorControls({
                     key={idx}
                     index={idx}
                     isOccupiedBySelf={isOccupiedBySelf}
-                    onClick={() => handleSelectSlot(idx)}
+                    onClick={() => {
+                        handleSelectSlot(idx);
+                        onClose?.();
+                    }}
                 />
                 );
             })}
