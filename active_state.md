@@ -1,8 +1,9 @@
 # Current Focus
 
-Pushing fixes for medium breakpoint layout issues.
+Waiting for next task.
 
 ## Recent Changes
 
-1. Moved `CardInspectorModal` and `HoverInspector` breakpoint to `xl`.
-2. Increased mobile/tablet `DeckDrawer` height to `350px`.
+1. Implemented auto-collapsing sidebar (< 1536px).
+2. Fixed 1280px layout (580px drawer, overlay badge).
+3. Pushed all changes to remote.

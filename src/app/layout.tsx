@@ -9,6 +9,7 @@ import { JsonLd } from "@/components/common/JsonLd";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
+import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
 
 import "./globals.css";
 
@@ -108,11 +109,9 @@ export default async function RootLayout({
 
         <DesktopSidebar />
 
-        <main className="grow w-full px-0 flex flex-col md:pl-64 transition-all duration-300">
-          <div className="w-full mx-auto px-0 md:px-4 sm:px-6 lg:px-8 flex flex-col grow">
-            {children}
-          </div>
-        </main>
+        <MainLayoutWrapper>
+          {children}
+        </MainLayoutWrapper>
         <Footer />
         <JsonLd 
           id="json-ld-website"
