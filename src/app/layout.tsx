@@ -5,10 +5,10 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-import { FeedbackButton } from "@/components/common/FeedbackButton";
 import { JsonLd } from "@/components/common/JsonLd";
 import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
+import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
 
 import "./globals.css";
 
@@ -26,7 +26,6 @@ export const viewport: Viewport = {
   themeColor: "#0f172a",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
   viewportFit: "cover",
 };
 
@@ -87,11 +86,19 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+
+import { ensureDataLoaded } from "@/services/data/api";
+
+// ... imports
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Ensure data is loaded globally for the app
+  await ensureDataLoaded();
+
   return (
     <html lang="en">
       <body
@@ -99,13 +106,14 @@ export default function RootLayout({
       >
         <Navbar />
 
-        <main className="grow w-full max-w-7xl mx-auto px-0 md:px-4 sm:px-6 lg:px-8 flex flex-col">
-          {children}
+        <DesktopSidebar />
+
+        <main className="grow w-full px-0 flex flex-col md:pl-64 transition-all duration-300">
+          <div className="w-full mx-auto px-0 md:px-4 sm:px-6 lg:px-8 flex flex-col grow">
+            {children}
+          </div>
         </main>
         <Footer />
-        <div className="hidden md:block">
-          <FeedbackButton variant="fab" />
-        </div>
         <JsonLd 
           id="json-ld-website"
           data={{

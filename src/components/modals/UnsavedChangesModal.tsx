@@ -1,5 +1,5 @@
 
-import React from 'react';
+
 import { AlertCircle, Save, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils'; // Assuming cn is available here or adjust path
 
@@ -11,6 +11,8 @@ export interface UnsavedChangesModalProps {
   isNew: boolean;
 }
 
+import { useFocusTrap } from '@/hooks/useFocusTrap';
+
 export function UnsavedChangesModal({
   type,
   onConfirm,
@@ -18,6 +20,8 @@ export function UnsavedChangesModal({
   onSaveAndContinue,
   isNew,
 }: UnsavedChangesModalProps) {
+  const modalRef = useFocusTrap(true, onCancel);
+
   const title = type === "IMPORT" ? "Overwrite Slot?" : "Unsaved Changes";
   const description =
     type === "IMPORT"
@@ -33,12 +37,19 @@ export function UnsavedChangesModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-surface-card border border-white/10 rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-4">
+      <div 
+        ref={modalRef}
+        className="bg-surface-card border border-white/10 rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-4"
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         <div className="space-y-2 text-center">
           <div className="w-12 h-12 rounded-full bg-amber-500/20 text-amber-500 mx-auto flex items-center justify-center mb-2">
             <AlertCircle size={24} />
           </div>
-          <h3 className="text-lg font-bold text-white">{title}</h3>
+          <h3 id="modal-title" className="text-lg font-bold text-white">{title}</h3>
           <p className="text-sm text-gray-400">{description}</p>
         </div>
 

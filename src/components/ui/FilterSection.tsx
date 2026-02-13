@@ -67,17 +67,25 @@ export function FilterSection({
             }
 
             return (
-              <label
+              <button
                 key={option}
-                className="flex items-center gap-3 p-2 rounded hover:bg-white/5 cursor-pointer group transition-colors"
+                role="checkbox"
+                aria-checked={isSelected}
+                className="flex items-center gap-3 p-2 rounded hover:bg-white/5 cursor-pointer group transition-colors w-full text-left focus:outline-none focus:bg-white/5"
                 onClick={(e) => {
                   e.preventDefault();
                   onToggle(option);
                 }}
+                onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        onToggle(option);
+                    }
+                }}
               >
                 <div
                   className={cn(
-                    "w-4 h-4 rounded border flex items-center justify-center transition-colors",
+                    "w-4 h-4 rounded border flex items-center justify-center transition-colors lg:w-4 lg:h-4 shrink-0",
                     isSelected
                       ? "bg-brand-primary border-brand-primary"
                       : "border-gray-600 group-hover:border-gray-400"
@@ -95,7 +103,7 @@ export function FilterSection({
                 >
                   {option}
                 </span>
-              </label>
+              </button>
             );
           })}
         </div>

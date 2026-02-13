@@ -4,6 +4,8 @@ import { EntityImage } from "@/components/ui/EntityImage";
 import { cn } from "@/lib/utils";
 import { Spellcaster, UnifiedEntity } from "@/types/api";
 
+
+
 interface UnitCardProps {
   unit: UnifiedEntity;
   variant?: "default" | "compact";
@@ -64,12 +66,13 @@ export function UnitCard({
 }: UnitCardProps) {
   const meta = getEntityMeta(unit);
 
+
   if (variant === "compact") {
     return (
       <Link
         href={meta.href}
         className={cn(
-          "group flex items-center gap-3 p-2.5 rounded-lg border border-white/5 bg-surface-card hover:bg-surface-hover hover:border-brand-accent/30 transition-all",
+          "group flex items-center gap-3 p-2.5 rounded-lg border border-white/5 bg-surface-card md:hover:bg-surface-hover md:hover:border-brand-accent/30 transition-all",
           className
         )}
       >
@@ -116,7 +119,7 @@ export function UnitCard({
     <Link
       href={meta.href}
       className={cn(
-        "block group bg-surface-card border border-white/10 rounded-lg overflow-hidden transition-all hover:bg-surface-hover hover:border-brand-accent/50 hover:-translate-y-1",
+        "block group bg-surface-card border border-white/10 rounded-lg overflow-hidden transition-all md:hover:bg-surface-hover md:hover:border-brand-accent/50 md:hover:-translate-y-1 active:scale-95 md:active:scale-100",
         className
       )}
     >

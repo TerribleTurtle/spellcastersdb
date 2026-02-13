@@ -1,0 +1,70 @@
+﻿
+> spellcastersdb@0.1.0 lint
+> eslint
+
+
+C:\Projects\spellcastersdb\src\app\api\revalidate\route.ts
+  25:12  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Projects\spellcastersdb\src\components\deck-builder\core\SoloBuilderView.tsx
+  50:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Projects\spellcastersdb\src\components\deck-builder\core\SoloBuilderView.tsx:50:9
+  48 |         onClearPendingImport?.();
+  49 |     } else {
+> 50 |         setPendingImport(pendingExternalImport);
+     |         ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  51 |         onClearPendingImport?.();
+  52 |     }
+  53 |   }, [pendingExternalImport, deckBuilder.isEmpty, deckBuilder.hasChanges, deckBuilder, onClearPendingImport]);  react-hooks/set-state-in-effect
+
+C:\Projects\spellcastersdb\src\components\deck-builder\core\TeamBuilderView.tsx
+  69:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Projects\spellcastersdb\src\components\deck-builder\core\TeamBuilderView.tsx:69:9
+  67 |         onClearPendingImport?.();
+  68 |     } else {
+> 69 |         setPendingImport(pendingExternalImport);
+     |         ^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  70 |         onClearPendingImport?.();
+  71 |     }
+  72 |   }, [pendingExternalImport, isEmpty, hasChanges, setDeckState, onClearPendingImport]);  react-hooks/set-state-in-effect
+
+C:\Projects\spellcastersdb\src\components\deck-builder\features\UnitBrowser.tsx
+  3:17  warning  'useEffect' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Projects\spellcastersdb\src\hooks\useUrlSync.ts
+  132:6  warning  React Hook useEffect has a missing dependency: 'hydrateState'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+C:\Projects\spellcastersdb\src\lib\store\createPersistenceSlice.ts
+  5:21  warning  'cloneSlots' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Projects\spellcastersdb\src\lib\store\createSoloSlice.ts
+  5:21  warning  'cloneSlots' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Projects\spellcastersdb\src\lib\store\createTeamSlice.ts
+   5:21  warning  'cloneSlots' is defined but never used  @typescript-eslint/no-unused-vars
+  28:34  warning  'state' is defined but never used       @typescript-eslint/no-unused-vars
+
+C:\Projects\spellcastersdb\src\services\rules\deck-rules.test.ts
+    4:36  warning  'Spell' is defined but never used                @typescript-eslint/no-unused-vars
+  101:17  error    'deck' is never reassigned. Use 'const' instead  prefer-const
+  142:18  error    'deck' is never reassigned. Use 'const' instead  prefer-const
+  155:17  error    'deck' is never reassigned. Use 'const' instead  prefer-const
+  168:17  error    'deck' is never reassigned. Use 'const' instead  prefer-const
+
+Γ£û 14 problems (6 errors, 8 warnings)
+  4 errors and 0 warnings potentially fixable with the `--fix` option.
+

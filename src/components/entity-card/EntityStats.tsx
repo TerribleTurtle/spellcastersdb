@@ -1,19 +1,10 @@
 "use client";
 
 import React from "react";
-import {
-  Clock,
-  Heart,
-  Swords,
-  Users,
-  Zap,
-  Wind,
-  Activity,
-} from "lucide-react";
-import { Unit, Spell, Spellcaster, Titan } from "@/types/api";
+import { Spellcaster } from "@/types/api";
 import { cn } from "@/lib/utils";
 import { EntityDisplayItem, EntityCardVariant } from "./types";
-import { getDamageDisplay } from "./utils";
+import { getStatsStrategy } from "./stats-strategies";
 
 interface EntityStatsProps {
   item: EntityDisplayItem;
@@ -21,177 +12,38 @@ interface EntityStatsProps {
 }
 
 export function EntityStats({ item, variant = "detailed" }: EntityStatsProps) {
-  // Type Guard
   const isSpellcaster = "spellcaster_id" in item;
-  const isUnit = !isSpellcaster;
-
-  // Safe category access
-  const category = isUnit
-    ? (item as Unit | Spell | Titan).category
-    : "Spellcaster";
+  
+  // Strategy Pattern: Get relevant stats configuration
+  const strategies = getStatsStrategy(item);
 
   // Grid columns based on variant
-  // Compact (Inspector): 2 cols
-  // Detailed (Showcase): 3 cols seems to be the pattern in Showcase, but let's stick to responsive grid
   const gridClass = variant === "compact" ? "grid-cols-2" : "grid-cols-3";
 
   return (
     <div className={cn("grid gap-2", gridClass)}>
-      {"health" in item && (
-        <StatBox
-          label="Health"
-          value={item.health}
-          icon={<Heart size={variant === "compact" ? 16 : 18} className="text-green-500" />}
-          variant={variant}
-        />
-      )}
-
-      {/* Titan specific: Health per Second (Passive Regen) */}
-      {"passive_health_regen" in item && (item as Titan).passive_health_regen !== undefined && (item as Titan).passive_health_regen !== 0 && (
-         <StatBox
-           label="Health/Sec"
-           value={(item as Titan).passive_health_regen}
-           icon={<Activity size={variant === "compact" ? 16 : 18} className="text-emerald-400" />}
-           variant={variant}
-         />
-      )}
-
-      {/* Legacy/Other Heal Amount support if needed, safely checked */}
-      {"heal_amount" in item && (item as Titan).heal_amount !== undefined && (item as Titan).heal_amount !== 0 && (
-         <StatBox
-           label="Heal"
-           value={(item as Titan).heal_amount}
-           icon={<Activity size={variant === "compact" ? 16 : 18} className="text-emerald-400" />}
-           variant={variant}
-         />
-      )}
-
-      {/* Unit / Titan Stats */}
-      {isUnit && category !== "Spell" && "damage" in item && (
-        <>
+      {/* Dynamic Stat Rendering */}
+      {strategies.map((stat) => {
+        // 1. Check if stat has a condition function
+        if (stat.condition && !stat.condition(item)) return null;
+        
+        // 2. Get value
+        const value = stat.getValue(item);
+        if (value === undefined || value === 0 || value === "0s") return null; // Filter empty/zero stats if desirable, matching old logic logic roughly
+        // Note: Old logic often checked `!== undefined && !== 0`. 
+        
+        return (
           <StatBox
-            label="Damage"
-            value={getDamageDisplay(item)}
-            icon={<Swords size={variant === "compact" ? 16 : 18} className="text-red-400" />}
+            key={stat.id}
+            label={stat.label}
+            value={value}
+            icon={<stat.icon size={variant === "compact" ? 16 : 18} className={stat.colorClass} />}
             variant={variant}
           />
-          {/* DPS Display */}
-          {"dps" in item && (item as Unit | Titan).dps !== undefined && (
-            <StatBox
-              label="DPS"
-              value={(item as Unit | Titan).dps}
-              icon={<Swords size={variant === "compact" ? 16 : 18} className="text-orange-500" />}
-              variant={variant}
-            />
-          )}
-          {/* Show attack speed / interval for Units and Titans */}
-          {("attack_speed" in item || "attack_interval" in item) && (
-            <StatBox
-              label="Atk Speed"
-              value={`${(item as Unit | Titan).attack_interval ?? 0}s`}
-              icon={<Zap size={variant === "compact" ? 16 : 18} className="text-yellow-400" />}
-              variant={variant}
-            />
-          )}
-          {"range" in item && (item as Unit).range && (
-            <StatBox
-              label="Range"
-              value={(item as Unit).range}
-              icon={<Users size={variant === "compact" ? 16 : 18} className="text-blue-400" />}
-              variant={variant}
-            />
-          )}
-          {"movement_speed" in item &&
-            (item as Unit | Titan).movement_speed && (
-              <StatBox
-                label="Speed"
-                value={(item as Unit | Titan).movement_speed}
-                icon={<Clock size={variant === "compact" ? 16 : 18} className="text-cyan-400" />}
-                variant={variant}
-              />
-            )}
-          {"movement_type" in item && (item as Unit).movement_type && (
-            <StatBox
-              label="Move Type"
-              value={(item as Unit).movement_type}
-              icon={<Wind size={variant === "compact" ? 16 : 18} className="text-sky-300" />}
-              variant={variant}
-            />
-          )}
-        </>
-      )}
+        );
+      })}
 
-      {/* Spell Stats */}
-      {category === "Spell" && (
-        <>
-          {"damage" in item && (item as Spell).damage && (
-            <StatBox
-              label="Damage"
-              value={getDamageDisplay(item)}
-              icon={<Swords size={variant === "compact" ? 16 : 18} className="text-red-400" />}
-              variant={variant}
-            />
-          )}
-          {"heal_amount" in item && (item as Spell).heal_amount && (
-            <StatBox
-              label="Heal"
-              value={(item as Spell).heal_amount}
-              icon={<Heart size={variant === "compact" ? 16 : 18} className="text-green-500" />}
-              variant={variant}
-            />
-          )}
-          {"duration" in item && (item as Spell).duration && (
-            <StatBox
-              label="Duration"
-              value={`${(item as Spell).duration}s`}
-              icon={<Clock size={variant === "compact" ? 16 : 18} className="text-yellow-400" />}
-              variant={variant}
-            />
-          )}
-          {"radius" in item && (item as Spell).radius && (
-            <StatBox
-              label="Radius"
-              value={(item as Spell).radius}
-              icon={<Users size={variant === "compact" ? 16 : 18} className="text-blue-400" />}
-              variant={variant}
-            />
-          )}
-          {"population" in item && (item as Unit | Spellcaster).population !== undefined && (item as Unit | Spellcaster).population !== 0 && (
-            <StatBox
-              label="Pop"
-              value={(item as Unit | Spellcaster).population}
-              icon={<Users size={variant === "compact" ? 16 : 18} className="text-purple-400" />}
-              variant={variant}
-            />
-          )}
-          {"charges" in item && (item as Unit & { charges?: number }).charges && (
-            <StatBox
-              label="Charges"
-              value={(item as Unit & { charges?: number }).charges}
-              icon={<Zap size={variant === "compact" ? 16 : 18} className="text-yellow-400" />}
-              variant={variant}
-            />
-          )}
-          {"recharge_time" in item && (item as Unit & { recharge_time?: number }).recharge_time && (
-             <StatBox
-               label="Recharge"
-               value={`${(item as Unit & { recharge_time?: number }).recharge_time}s`}
-               icon={<Clock size={variant === "compact" ? 16 : 18} className="text-blue-300" />}
-               variant={variant}
-             />
-          )}
-          {"max_targets" in item && (item as Spell & { max_targets?: number }).max_targets && (
-            <StatBox
-              label="Targets"
-              value={(item as Spell & { max_targets?: number }).max_targets}
-              icon={<Users size={variant === "compact" ? 16 : 18} className="text-purple-400" />}
-              variant={variant}
-            />
-          )}
-        </>
-      )}
-
-      {/* Spellcaster Difficulty */}
+      {/* Spellcaster Difficulty (Special Case) */}
       {isSpellcaster && (
          <div className={cn(
              "bg-surface-main border border-white/5 rounded flex flex-col items-center justify-center text-center",
@@ -199,7 +51,7 @@ export function EntityStats({ item, variant = "detailed" }: EntityStatsProps) {
          )}>
             <div className={cn(
                 "uppercase tracking-widest text-gray-500",
-                variant === "compact" ? "text-[10px] mb-1" : "text-[10px] mb-2"
+                variant === "compact" ? "text-[10px] md:text-xs mb-1" : "text-[10px] mb-2"
             )}>
               Difficulty
             </div>
@@ -237,22 +89,22 @@ function StatBox({
   return (
     <div className={cn(
         "bg-surface-main border border-white/5 rounded flex flex-col items-center justify-center text-center transition-colors group",
-        variant === "compact" ? "p-1.5" : "p-3 hover:border-white/10 bg-surface-main/50"
+        variant === "compact" ? "p-1 min-h-[50px]" : "p-3 hover:border-white/10 bg-surface-main/50"
     )}>
       <div className={cn(
-          variant === "compact" ? "scale-75 opacity-60" : "mb-1 opacity-60 scale-90 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300"
+          variant === "compact" ? "scale-75 opacity-60 -mb-1" : "mb-1 opacity-60 scale-90 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300"
       )}>
           {icon}
       </div>
       <div className={cn(
           "font-bold font-mono text-white leading-tight",
-          variant === "compact" ? "text-sm" : "text-base"
+          variant === "compact" ? "text-xs md:text-sm" : "text-base md:text-lg"
       )}>
         {value ?? "-"}
       </div>
       <div className={cn(
           "uppercase tracking-widest text-gray-500",
-          variant === "compact" ? "text-[8px]" : "text-[9px] mt-0.5"
+          variant === "compact" ? "text-[7px] md:text-[9px]" : "text-[9px] mt-0.5"
       )}>
         {label}
       </div>

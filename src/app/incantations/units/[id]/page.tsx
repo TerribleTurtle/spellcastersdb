@@ -3,7 +3,7 @@ import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 
-import { getUnitById, getUnits } from "@/lib/api";
+import { getUnitById, getUnits } from "@/services/data/api";
 
 interface UnitPageProps {
   params: Promise<{ id: string }>;
@@ -57,12 +57,34 @@ export default async function UnitPage({ params }: UnitPageProps) {
     "genre": "Strategic Card Game",
     "isFamilyFriendly": true,
     "keywords": unit.tags.join(", "),
-    "thumbnailUrl": `https://spellcastersdb.com/api/og/unit?id=${unit.entity_id}`, // Assuming this route exists or will be added
+    "thumbnailUrl": `https://spellcastersdb.com/api/og?unitId=${unit.entity_id}`,
     "mainEntity": {
-      "@type": "Thing",
+      "@type": "GameCharacter",
       "name": unit.name,
       "description": unit.description,
       "category": unit.category,
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://spellcastersdb.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Units",
+          "item": "https://spellcastersdb.com/incantations/units"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": unit.name
+        }
+      ]
     }
   };
 

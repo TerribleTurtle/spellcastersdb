@@ -51,6 +51,11 @@
   --text-base: clamp(0.875rem, 0.8rem + 0.4vw, 1rem);
   --text-lg: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
   --text-xl: clamp(1.125rem, 1rem + 0.6vw, 1.5rem);
+
+  /* Semantic Text Colors */
+  --text-primary: #ededed;
+  --text-secondary: #cbd5e1; /* Slate 300 */
+  --text-muted: #94a3b8; /* Slate 400 - Min AA on dark */
 }
 
 body {
@@ -89,4 +94,37 @@ body {
 * {
   scrollbar-width: thin;
   scrollbar-color: rgba(255, 255, 255, 0.15) rgba(255, 255, 255, 0.03);
+}
+
+/* Animations for Inspector */
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-in {
+  animation-duration: 0.3s;
+  animation-fill-mode: forwards;
+  animation-timing-function: ease-out;
+}
+
+.slide-in-from-right {
+  animation-name: slide-in-from-right;
+}
+
+.fade-in {
+  animation-name: fade-in;
 }

@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { fetchGameData } from "@/lib/api";
+import { fetchGameData } from "@/services/data/api";
 
 export const revalidate = 3600; // Revalidate sitemap every hour
 

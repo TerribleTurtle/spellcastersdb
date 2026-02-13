@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
-import { getCardImageUrl } from "@/lib/utils";
+import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { EntityDisplayItem } from "@/components/entity-card/types";
 import { EntityStats } from "@/components/entity-card/EntityStats";
 import { EntityMechanics } from "@/components/entity-card/EntityMechanics";

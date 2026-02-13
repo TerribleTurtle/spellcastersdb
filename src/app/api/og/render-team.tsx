@@ -1,9 +1,9 @@
-import { ImageResponse } from "next/og";
 
-import { getCachedAsset } from "@/lib/asset-cache";
-import { decodeTeam } from "@/lib/encoding";
-import { getCardImageUrl } from "@/lib/utils";
-import { AllDataResponse } from "@/types/api";
+import { ImageResponse } from "next/og";
+import { getCachedAsset } from "@/services/data/asset-cache";
+import { decodeTeam } from "@/services/encoding";
+import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { AllDataResponse, UnifiedEntity } from "@/types/api";
 
 export async function renderTeamImage(
   hash: string,
@@ -72,8 +72,7 @@ export async function renderTeamImage(
     })
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const getImageSrc = (entity: any) => {
+  const getImageSrc = (entity: UnifiedEntity) => {
     const url = resolveUrl(
       getCardImageUrl(entity, { forceRemote: true, forceFormat: "png" })
     );

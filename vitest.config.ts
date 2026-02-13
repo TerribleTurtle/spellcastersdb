@@ -4,11 +4,19 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
+  define: {
+    "process.env.NODE_ENV": '"test"',
+  },
   test: {
     environment: "jsdom",
     globals: true,
-    setupFiles: [], // Add setup files if needed later
+    setupFiles: ["./vitest.setup.ts"],
     include: ["src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    server: {
+      deps: {
+        inline: ["react", "react-dom", "@testing-library/react"],
+      },
+    },
   },
   resolve: {
     alias: {

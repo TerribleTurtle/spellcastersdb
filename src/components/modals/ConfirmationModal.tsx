@@ -1,5 +1,5 @@
 
-import React from 'react';
+
 import { Save, Layers } from 'lucide-react';
 
 export interface ConfirmationModalProps {
@@ -10,6 +10,8 @@ export interface ConfirmationModalProps {
   onCancel: () => void;
 }
 
+import { useFocusTrap } from '@/hooks/useFocusTrap';
+
 export function ConfirmationModal({
   name,
   type,
@@ -17,16 +19,23 @@ export function ConfirmationModal({
   onCopy,
   onCancel,
 }: ConfirmationModalProps) {
+  const modalRef = useFocusTrap(true, onCancel);
   const isUpdate = type === "UPDATE";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="bg-surface-card border border-white/10 rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-4">
+      <div 
+        ref={modalRef}
+        className="bg-surface-card border border-white/10 rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-4"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modal-title"
+      >
         <div className="space-y-2 text-center">
           <div className="w-12 h-12 rounded-full bg-amber-500/20 text-amber-500 mx-auto flex items-center justify-center mb-2">
             <Save size={24} />
           </div>
-          <h3 className="text-lg font-bold text-white">
+          <h3 id="modal-title" className="text-lg font-bold text-white">
             {isUpdate ? "Save Changes?" : "Deck Already Exists"}
           </h3>
           <p className="text-sm text-gray-400">

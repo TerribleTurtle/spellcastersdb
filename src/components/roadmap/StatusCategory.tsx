@@ -49,7 +49,7 @@ export default function StatusCategory({
         </div>
       ) : (
         <div className="rounded-lg border border-dashed border-white/10 bg-surface-card/50 p-6 text-center">
-          <p className="text-xs text-slate-500">
+          <p className="text-xs text-slate-400">
             No items in this category yet
           </p>
         </div>

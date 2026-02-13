@@ -7,6 +7,8 @@
 // Enums & Literal Types
 // ============================================================================
 
+import { EntityCategory } from "./enums";
+
 export type MagicSchool =
   | "Elemental"
   | "Wild"
@@ -17,9 +19,9 @@ export type MagicSchool =
   | "Necromancy"
   | "Titan";
 
-export type UnitCategory = "Creature" | "Building";
-export type SpellCategory = "Spell";
-export type TitanCategory = "Titan";
+export type UnitCategory = EntityCategory.Creature | EntityCategory.Building;
+export type SpellCategory = EntityCategory.Spell;
+export type TitanCategory = EntityCategory.Titan;
 export type IncantationCategory = UnitCategory | SpellCategory;
 
 export type UnitRank = "I" | "II" | "III" | "IV" | "V";
@@ -30,7 +32,7 @@ export type SpellcasterClass =
   | "Conqueror"
   | "Unknown";
 
-export type MovementType = "Ground" | "Fly" | "Flying" | "Hover" | "Stationary";
+export type MovementType = "Ground" | "Flying" | "Hover" | "Stationary" | "Fly";
 
 // ============================================================================
 // Mechanics
@@ -42,7 +44,7 @@ export interface Aura {
   radius: number;
   value: number;
   interval: number;
-  target_type: "Ally" | "Enemy" | "All" | "Building" | "Creature";
+  target_type?: "Ally" | "Enemy" | "All" | "Building" | "Creature";
   target_types?: string[]; // V2 uses plural array in some places
   effect?: string;
 }
@@ -75,7 +77,14 @@ export interface Feature {
 export interface BonusDamage {
     value: number;
     unit: "flat" | "percent_max_hp" | "percent_current_hp";
-    target_type: "Building" | "Creature" | "All";
+    target_type?: string;
+    target_types?: string[];
+}
+
+export interface InitialAttack {
+    damage_flat: number;
+    target_types: string[]; 
+    description: string;
 }
 
 export interface UnitMechanics {
@@ -85,11 +94,7 @@ export interface UnitMechanics {
     spawner?: Spawner[];
     features?: Feature[];
     capture_speed_modifier?: number;
-    initial_attack?: {
-        damage_flat: number;
-        target_types: string[]; 
-        description: string;
-    };
+    initial_attack?: InitialAttack;
     bonus_damage?: BonusDamage[];
 }
 
@@ -107,7 +112,7 @@ export interface SpellMechanics {
 }
 
 // Loose mechanics for general use
-export type Mechanics = UnitMechanics & SpellMechanics & {
+export type Mechanics = Omit<UnitMechanics, "damage_modifiers"> & Omit<SpellMechanics, "damage_modifiers"> & {
   // Legacy support
   damage_modifiers?: DamageModifier[] | string;
 };
@@ -224,7 +229,7 @@ export interface Spellcaster {
   entity_id: string; // V2 uses entity_id
   spellcaster_id?: string; // Legacy mapping
   name: string;
-  category: "Spellcaster";
+  category: EntityCategory.Spellcaster;
   tags: string[];
   class: SpellcasterClass;
   image_required?: boolean;
@@ -255,7 +260,7 @@ export interface Consumable {
   duration?: number;
 
   tags: string[];
-  category: "Consumable";
+  category: EntityCategory.Consumable;
   rarity?: string;
 }
 

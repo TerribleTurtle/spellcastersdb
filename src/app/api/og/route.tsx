@@ -2,10 +2,11 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NextRequest } from "next/server";
 
-import { fetchGameData } from "@/lib/api";
-import { ratelimit } from "@/lib/ratelimit";
+import { fetchGameData } from "@/services/data/api";
+import { ratelimit } from "@/services/ratelimit";
 import { renderDeckImage } from "./render-deck";
 import { renderTeamImage } from "./render-team";
+import { renderEntityImage } from "./render-entity";
 
 export const runtime = "nodejs";
 
@@ -26,6 +27,13 @@ export async function GET(request: NextRequest) {
     const { searchParams, origin } = new URL(request.url);
     const deckHash = searchParams.get("deck") || searchParams.get("d");
     const teamHash = searchParams.get("team");
+    
+    // Entity IDs
+    const spellcasterId = searchParams.get("spellcasterId");
+    const unitId = searchParams.get("unitId");
+    const itemId = searchParams.get("itemId");
+    // Fallback/Generic ID (used by legacy calls)
+    const genericId = searchParams.get("id");
 
     // Load Font (Oswald) from local filesystem
     // We use WOFF format from @fontsource/oswald
@@ -43,9 +51,15 @@ export async function GET(request: NextRequest) {
       return renderTeamImage(teamHash, data, fontData as unknown as ArrayBuffer, origin);
     }
 
+    // --- ENTITY MODE ---
+    const targetEntityId = spellcasterId || unitId || itemId || genericId;
+    if (targetEntityId) {
+        return renderEntityImage(targetEntityId, data, fontData as unknown as ArrayBuffer);
+    }
+
     // --- DECK MODE ---
     if (!deckHash) {
-      return new Response("Missing deck or team parameter", { status: 400 });
+      return new Response("Missing deck, team, or entity parameter", { status: 400 });
     }
 
     return renderDeckImage(deckHash, data, fontData as unknown as ArrayBuffer, origin);

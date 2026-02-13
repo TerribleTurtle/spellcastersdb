@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Clock, Globe, Hash } from "lucide-react";
 
 interface DebugHeaderInfoProps {

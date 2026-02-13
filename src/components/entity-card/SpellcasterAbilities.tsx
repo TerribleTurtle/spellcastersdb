@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+
 import { Spellcaster } from "@/types/api";
 import { cn } from "@/lib/utils";
 import { EntityDisplayItem, EntityCardVariant } from "./types";
@@ -23,7 +23,7 @@ export function SpellcasterAbilities({ item, variant = "detailed" }: Spellcaster
       {/* Passives */}
       {spellcaster.abilities.passive.length > 0 && (
         <div className={cn("space-y-1", !isCompact && "space-y-2")}>
-          <h3 className={cn("font-bold uppercase text-gray-500 tracking-wider", isCompact ? "text-[10px]" : "text-xs px-1")}>
+          <h3 className={cn("font-bold uppercase text-gray-500 tracking-wider", isCompact ? "text-[10px] md:text-xs" : "text-xs px-1")}>
             Passive
           </h3>
           {spellcaster.abilities.passive.map((p, i) => (
@@ -31,8 +31,8 @@ export function SpellcasterAbilities({ item, variant = "detailed" }: Spellcaster
               key={i}
               className={cn(
                 "rounded border border-white/5",
-                isCompact 
-                  ? "bg-white/5 p-2 text-xs" 
+                  isCompact 
+                  ? "bg-white/5 p-2 text-xs md:text-sm" 
                   : "bg-white/5 hover:bg-white/10 p-3 hover:border-white/10 transition-colors"
               )}
             >
@@ -49,7 +49,7 @@ export function SpellcasterAbilities({ item, variant = "detailed" }: Spellcaster
 
       {/* Active Abilities */}
       <div className={cn("space-y-1", !isCompact && "space-y-2")}>
-        <h3 className={cn("font-bold uppercase text-gray-500 tracking-wider", isCompact ? "text-[10px]" : "text-xs px-1")}>
+        <h3 className={cn("font-bold uppercase text-gray-500 tracking-wider", isCompact ? "text-[10px] md:text-xs" : "text-xs px-1")}>
           Abilities
         </h3>
         {[
@@ -68,7 +68,7 @@ export function SpellcasterAbilities({ item, variant = "detailed" }: Spellcaster
           >
             <div className={cn("flex justify-between items-center", isCompact ? "mb-0.5" : "mb-1")}>
               {isCompact ? (
-                  <span className="font-bold text-xs text-brand-accent">
+                  <span className="font-bold text-xs md:text-sm text-brand-accent">
                     {ab.name} <span className="opacity-60 text-[10px] font-normal tracking-wide ml-1">{ab.type}</span>
                   </span>
               ) : (
@@ -96,7 +96,7 @@ export function SpellcasterAbilities({ item, variant = "detailed" }: Spellcaster
                 </span>
               )}
             </div>
-            <p className={cn("text-gray-400 leading-tight", isCompact ? "text-[10px]" : "text-xs leading-relaxed group-hover:text-gray-300 transition-colors")}>
+            <p className={cn("text-gray-400 leading-tight", isCompact ? "text-[10px] md:text-xs" : "text-xs leading-relaxed group-hover:text-gray-300 transition-colors")}>
               {ab.description}
             </p>
 

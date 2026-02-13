@@ -18,9 +18,9 @@
 
 ## Architecture at a Glance
 
-- **Frontend**: Next.js 14+ (App Router), TypeScript, Tailwind CSS.
+- **Frontend**: Next.js 16+ (App Router), TypeScript, Tailwind CSS.
 - **Data Layer**: Fetches static JSON from the [Spellcasters Community API](https://github.com/TerribleTurtle/spellcasters-community-api).
-- **State Management**: React Context + Validation Hooks for the Deck Builder.
+- **State Management**: Zustand (Global Store) + React Context (Drag & Drop) + Validation Hooks.
 - **Assets**: Optimized image delivery via Next.js Image or Vercel OG.
 
 ## Getting Started

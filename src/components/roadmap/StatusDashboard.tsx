@@ -41,7 +41,7 @@ export default function StatusDashboard({ data }: StatusDashboardProps) {
 
       {/* Footer Note */}
       <footer className="mt-16 border-t border-white/10 pt-8 text-center">
-        <p className="text-sm text-slate-500">
+        <p className="text-sm text-slate-400">
           Have a feature request?{" "}
           <a
             href="https://github.com/TerribleTurtle/spellcasters-community-api"

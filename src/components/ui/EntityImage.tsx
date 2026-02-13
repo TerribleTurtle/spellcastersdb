@@ -8,7 +8,8 @@ import { useState } from "react";
 import { ImageOff } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
-import { cn, getCardImageUrl } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { UnifiedEntity } from "@/types/api";
 
 interface EntityImageProps {

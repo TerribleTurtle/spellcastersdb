@@ -1,0 +1,16 @@
+name: Daily Revalidation
+
+on:
+  schedule:
+    # Runs at 00:00 UTC every day
+    - cron: "0 0 * * *"
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  revalidate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Revalidation
+        run: |
+          curl -X GET "${{ secrets.NEXT_PUBLIC_API_URL }}/api/revalidate?secret=${{ secrets.REVALIDATION_SECRET }}"

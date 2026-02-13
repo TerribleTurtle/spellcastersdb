@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { getConsumables } from "@/lib/api";
+import { getConsumables } from "@/services/data/api";
 
 export const metadata = {
   title: "Consumables",

@@ -5,7 +5,7 @@ import mime from "mime";
 import path from "path";
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ path: string[] }> }
 ) {
   // Only allow in development or if explicitly enabled
@@ -45,7 +45,7 @@ export async function GET(
   }
 
   try {
-    const fileBuffer = fs.readFileSync(fullPath);
+    const fileBuffer = await fs.promises.readFile(fullPath);
     const mimeType = mime.getType(fullPath) || "application/octet-stream";
 
     return new NextResponse(fileBuffer, {

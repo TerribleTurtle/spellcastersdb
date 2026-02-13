@@ -4,15 +4,19 @@ import { useState } from "react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useDeckStore } from "@/store/index";
 
-import { ExternalLink, Github, Menu, X } from "lucide-react";
+import { ExternalLink, Github, Menu, X, Library, MessageSquare } from "lucide-react";
 
-import { FeedbackButton } from "../common/FeedbackButton";
-import { BetaBanner } from "./BetaBanner";
+import { useFeedback } from "@/hooks/useFeedback";
+
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const feedback = useFeedback();
   const pathname = usePathname();
+  useFocusTrap(isOpen, () => setIsOpen(false));
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -43,39 +47,48 @@ export default function Navbar() {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-surface-main/80 backdrop-blur-md">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
-          {/* Logo */}
+          {/* Logo / Deck Context */}
           <div className="shrink-0 flex items-center gap-6">
-            <Link href="/" className="flex flex-col">
-              <span className="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-linear-to-r from-brand-primary to-brand-secondary">
-                SPELLCASTERS<span className="text-white">DB</span>
-              </span>
-              <span className="text-[10px] text-gray-500 tracking-wide hidden sm:block">
-                Unofficial community database
-              </span>
+            <Link href="/" className="flex flex-col group">
+                <>
+                <span className="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-linear-to-r from-brand-primary to-brand-secondary">
+                    SPELLCASTERS<span className="text-white">DB</span>
+                </span>
+                <span className="text-[10px] text-gray-400 tracking-wide hidden sm:block">
+                    Unofficial community database
+                </span>
+                </>
             </Link>
           </div>
 
-          {/* Desktop Primary Nav - Centered */}
-          <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-6">
-            {primaryLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className={`px-3 py-2 text-sm font-medium transition-colors hover:text-brand-accent ${
-                  isActive(link.href) ? "text-brand-primary" : "text-slate-300"
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
+          {/* Desktop Primary Nav - HIDDEN (Moved to Sidebar) */}
+          {/* We keep this commented out or removed so it doesn't conflict with the sidebar */
+          /* 
+          {pathname !== "/" && (
+            <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-6">
+                 ...
+            </div>
+          )}
+          */
+          }
 
           {/* Desktop Right Side (External + Menu) */}
           <div className="hidden md:flex items-center gap-4">
-            <BetaBanner />
-            {/* External Links */}
+             {/* Library Button */}
+             <button
+                onClick={() => useDeckStore.getState().openCommandCenter()}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-primary border border-brand-primary hover:bg-brand-primary/90 text-white transition-all text-xs font-bold uppercase tracking-wider shadow-lg shadow-brand-primary/20"
+             >
+                <Library size={16} />
+                <span>Library</span>
+             </button>
 
-            <div className="pl-4 border-l border-white/10">
+            
+            {/* External Links - Hidden on desktop now as they are in sidebar, or keep specifically for some? */}
+            {/* Actually, if we use sidebar, we might trigger the sidebar on mobile via this button, OR just hide this trigger on desktop if the sidebar is always visible.
+                The prompt says "Hide the hamburger on desktop".
+            */}
+            <div className="pl-4 border-l border-white/10 md:hidden">
               <button
                 onClick={toggleMenu}
                 className="inline-flex items-center justify-center rounded-md p-2 text-slate-400 hover:bg-white/5 hover:text-brand-accent focus:outline-none transition-colors"
@@ -89,8 +102,14 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div className="-mr-2 flex items-center gap-2 md:hidden">
-            <BetaBanner />
-            <FeedbackButton variant="icon" />
+            <button
+               onClick={() => useDeckStore.getState().openCommandCenter()}
+               className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-primary border border-brand-primary hover:bg-brand-primary/90 text-white transition-all text-xs font-bold uppercase tracking-wider shadow-lg shadow-brand-primary/20"
+            >
+               <Library size={16} />
+               <span>Library</span>
+            </button>
+
             <button
               onClick={toggleMenu}
               className="inline-flex items-center justify-center rounded-md p-2 text-slate-400 hover:bg-white/5 hover:text-brand-accent focus:outline-none"
@@ -139,6 +158,17 @@ export default function Navbar() {
                   </a>
                 );
               })}
+              
+              <button
+                onClick={() => {
+                  setIsOpen(false);
+                  feedback.openFeedback();
+                }}
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-brand-accent transition-colors w-full text-left"
+              >
+                <MessageSquare size={18} />
+                Feedback
+              </button>
             </div>
           </div>
         )}

@@ -19,7 +19,7 @@ export default function Footer() {
             <span className="text-lg font-bold tracking-wider text-slate-200">
               SPELLCASTERS<span className="text-brand-primary">DB</span>
             </span>
-            <p className="text-sm text-slate-500 max-w-md">
+            <p className="text-sm text-slate-400 max-w-md">
               A community-built database for Spellcasters Chronicles. Not
               affiliated with the game developers. All game assets property of
               their respective owners.

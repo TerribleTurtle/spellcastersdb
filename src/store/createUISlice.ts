@@ -1,0 +1,121 @@
+import { StateCreator } from "zustand";
+import { DeckBuilderState, UIState } from "./types";
+
+export const createUISlice: StateCreator<
+  DeckBuilderState,
+  [],
+  [],
+  UIState
+> = (set, get) => ({
+  mode: "SOLO",
+  viewSummary: false,
+  isReadOnly: false,
+
+  viewingTeamData: null,
+  viewingTeamId: null,
+  viewingTeamName: null,
+  viewingDeckData: null,
+  viewingDeckId: null,
+  pendingImport: null,
+  isImporting: false,
+
+  setMode: (mode) => set({ mode }),
+  setViewSummary: (viewSummary) => set({ viewSummary }),
+  setIsReadOnly: (isReadOnly) => set({ isReadOnly }),
+
+  setViewingTeam: (data, id = null, name = "") => 
+    set({ 
+        viewingTeamData: data, 
+        viewingTeamId: id, 
+        viewingTeamName: name,
+        // When viewing a team, we likely want to be in TEAM mode and View Summary
+        ...(data ? { mode: "TEAM", viewSummary: true, isReadOnly: true } : {})
+    }),
+
+  setViewingDeck: (data, id = null) => 
+    set({ 
+        viewingDeckData: data, 
+        viewingDeckId: id,
+        // When viewing a deck, we likely want to be in SOLO mode
+         ...(data ? { mode: "SOLO", isReadOnly: true } : {})
+    }),
+
+  setPendingImport: (pendingImport) => set({ pendingImport }),
+  setIsImporting: (isImporting) => set({ isImporting }),
+
+  resolvePendingImport: (strategy) => {
+      const { pendingImport, setDeck, saveDeck, currentDeck } = get();
+      
+      if (!pendingImport) return;
+
+      if (strategy === "SAVE_AND_OVERWRITE") {
+          saveDeck(currentDeck.name || "Untitled Deck");
+      }
+
+      if (strategy === "OVERWRITE" || strategy === "SAVE_AND_OVERWRITE") {
+          setDeck(pendingImport);
+      }
+
+      set({ pendingImport: null });
+  },
+
+  activeDragItem: null,
+  setActiveDragItem: (activeDragItem) => set({ activeDragItem }),
+
+  // Inspector State
+  inspectorOpen: false,
+  inspectedCard: null,
+  inspectorPosition: null,
+  inspectorOptions: {},
+  openInspector: (item, position, options) => set({ 
+      inspectorOpen: true, 
+      inspectedCard: item,
+      inspectorPosition: position || null,
+      inspectorOptions: options || {}
+  }),
+  closeInspector: () => set({ inspectorOpen: false, inspectedCard: null, inspectorPosition: null, inspectorOptions: {} }),
+
+  // Hover Inspector State
+  hoveredItem: null,
+  setHoveredItem: (hoveredItem) => set({ hoveredItem }),
+  isInspectorHovered: false,
+  setIsInspectorHovered: (isInspectorHovered) => set({ isInspectorHovered }),
+
+  // Command Center State
+  commandCenterOpen: false,
+  openCommandCenter: () => set({ commandCenterOpen: true }),
+  closeCommandCenter: () => set({ commandCenterOpen: false }),
+
+  // Browser Filters
+  browserFilters: {
+    schools: [],
+    ranks: [],
+    categories: [],
+    classes: [],
+  },
+
+  setBrowserFilters: (browserFilters) => set({ browserFilters }),
+
+  toggleBrowserFilter: (type, value) => set((state) => {
+    const current = state.browserFilters[type];
+    const updated = current.includes(value)
+      ? current.filter((item) => item !== value)
+      : [...current, value];
+    
+    return {
+        browserFilters: {
+            ...state.browserFilters,
+            [type]: updated
+        }
+    };
+  }),
+
+  clearBrowserFilters: () => set({
+    browserFilters: {
+        schools: [],
+        ranks: [],
+        categories: [],
+        classes: [],
+    }
+  }),
+});

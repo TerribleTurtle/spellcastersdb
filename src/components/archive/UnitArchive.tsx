@@ -1,16 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { LayoutGrid, List } from "lucide-react";
 
-import { useUnitSearch } from "@/hooks/useUnitSearch";
+import { useUnitSearch } from "@/components/deck-builder/hooks/domain/useUnitSearch";
 import { cn } from "@/lib/utils";
 import { UnifiedEntity } from "@/types/api";
 
 import { FilterSidebar } from "./FilterSidebar";
 // Assuming we use Unit type
 import { UnitCard } from "./UnitCard";
+import { useUnitFilters } from "./hooks/useUnitFilters";
+import { useViewMode } from "./hooks/useViewMode";
 
 // Helper to safely get unique ID
 function getUniqueId(entity: UnifiedEntity): string {
@@ -34,60 +36,16 @@ export function UnitArchive(props: UnitArchiveProps) {
   // State
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Initialize view mode based on screen size (mobile = list, desktop = grid)
-  // Using lazy initialization to avoid setState in useEffect
-  // Initialize view mode strictly to "grid" for SSR/Hydration match
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const { viewMode, setViewMode } = useViewMode();
 
-  // Adjust to list view on mount if mobile
-  useEffect(() => {
-    if (window.innerWidth < 768) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setViewMode("list");
-    }
-  }, []);
-
-  const [activeFilters, setActiveFilters] = useState<{
-    schools: string[];
-    ranks: string[];
-    categories: string[];
-    classes: string[];
-  }>({
-    schools: props.defaultFilters?.schools || [],
-    ranks: props.defaultFilters?.ranks || [],
-    categories: props.defaultFilters?.categories || [],
-    classes: props.defaultFilters?.classes || [],
-  });
-
-  // NOTE: Importing useEffect at the top of the file since it wasn't there
-  // Actually line 3 imports useState from "react", need to check if useEffect is imported.
-  // Viewing the file content in Step 154: 'import { useState } from "react";' on line 3.
-  // So I need to add useEffect to imports in a separate replace call or include it here if possible.
-  // I will make a separate replace call for the import to be safe.
-
-  // ... (rest of the file until buttons) ...
-
-  // Since replace_file_content for a large block is brittle, I'll do this in smaller chunks.
-  // Chunk 1: State initialization
-  // Chunk 2: Import update
-  // Chunk 3: Button ARIA labels
-
-  // Filter Logic
-  const toggleFilter = (
-    type: "schools" | "ranks" | "categories" | "classes",
-    value: string
-  ) => {
-    setActiveFilters((prev) => {
-      const current = prev[type];
-      const next = current.includes(value)
-        ? current.filter((item) => item !== value)
-        : [...current, value];
-      return { ...prev, [type]: next };
-    });
-  };
+  const {
+    activeFilters,
+    toggleFilter,
+    clearFilters: clearFiltersBase,
+  } = useUnitFilters({ defaultFilters: props.defaultFilters });
 
   const clearFilters = () => {
-    setActiveFilters({ schools: [], ranks: [], categories: [], classes: [] });
+    clearFiltersBase();
     setSearchQuery("");
   };
 

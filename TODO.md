@@ -98,10 +98,11 @@
   - [x] **UI/UX**: Distinct "Team Overview" mode with 3-column layout and visual cues (borders/colors) to distinguish from Solo mode.
   - [x] **Data Flow**: Import "Solo" decks into Team slots; Export Team slots to Solo storage.
   - [x] **Sharing**: specialized `?team=` URL and OG images.
+  - [x] Fix incorrect header "Saved Teams" when importing solo decks
   - [ ] **UX Polish**:
     - [x] Decouple solo deck from team deck after import (no longer linked).
     - [x] Show Solo Deck Previews in Team Mode (sidebar).
-    - [ ] Auto-focus "Saved Teams" list after clicking "Save Team".
-    - [ ] Synchronize deck names in team builder automatically on change.
+    - [x] Auto-focus "Saved Teams" list after clicking "Save Team".
+    - [x] Synchronize deck names in team builder automatically on change.
 
 ## Future Backlog

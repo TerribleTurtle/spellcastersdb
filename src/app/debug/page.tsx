@@ -11,7 +11,7 @@ import {
   Zap,
 } from "lucide-react";
 
-import { fetchGameData } from "@/lib/api";
+import { fetchGameData } from "@/services/data/api";
 import { DebugHeaderInfo } from "@/components/debug/DebugHeaderInfo";
 
 export default async function DebugPage() {

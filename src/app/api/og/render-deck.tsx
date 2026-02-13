@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
-import { decodeDeck } from "@/lib/encoding";
-import { getCardImageUrl } from "@/lib/utils";
-import { AllDataResponse, Spell, Titan, Unit } from "@/types/api";
+import { decodeDeck } from "@/services/encoding";
+import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { AllDataResponse, Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
 
 export async function renderDeckImage(
   hash: string,
@@ -102,8 +102,7 @@ export async function renderDeckImage(
     console.error("Critical error during image pre-fetch", e);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const getImageSrc = (entity: any) => {
+  const getImageSrc = (entity: UnifiedEntity) => {
     const url = resolveUrl(
       getCardImageUrl(entity, { forceRemote: true, forceFormat: "png" })
     );
@@ -258,6 +257,7 @@ export async function renderDeckImage(
                   }}
                 />
                 {/* Name Overlay (Gradient) */}
+                  {/* Name Overlay (Gradient) */}
                 <div
                   style={{
                     position: "absolute",
@@ -280,12 +280,11 @@ export async function renderDeckImage(
                       color: "white",
                       textShadow: "0 4px 12px rgba(0,0,0,0.8)",
                       lineHeight: 0.9,
-                      marginBottom: 20, // Moved down since label is gone
+                      marginBottom: 20,
                     }}
                   >
                     {spellcaster.name}
                   </span>
-                  {/* Label removed per user request */}
                 </div>
               </div>
             )}

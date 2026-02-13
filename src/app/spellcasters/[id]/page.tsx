@@ -3,7 +3,7 @@ import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 
-import { getSpellcasterById, getSpellcasters } from "@/lib/api";
+import { getSpellcasterById, getSpellcasters } from "@/services/data/api";
 
 interface SpellcasterPageProps {
   params: Promise<{ id: string }>;
@@ -71,7 +71,29 @@ export default async function SpellcasterPage({
       "playabilityMode": "SinglePlayer",
       "description": spellcaster.abilities.primary.description,
     },
-    "thumbnailUrl": `https://spellcastersdb.com/api/og?id=${spellcaster.spellcaster_id}`,
+    "thumbnailUrl": `https://spellcastersdb.com/api/og?spellcasterId=${spellcaster.spellcaster_id}`,
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://spellcastersdb.com"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Spellcasters",
+          "item": "https://spellcastersdb.com/spellcasters"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": spellcaster.name
+        }
+      ]
+    }
   };
 
   return (

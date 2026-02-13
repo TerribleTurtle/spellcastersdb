@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import Image, { ImageProps } from "next/image";
 
@@ -25,13 +25,14 @@ export function GameImage({
   const [hasError, setHasError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
 
-  // Reset state if src prop changes
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+  // Track previous src to trigger reset during render
+  const [prevSrc, setPrevSrc] = useState(src);
+  if (src !== prevSrc) {
+    setPrevSrc(src);
     setImgSrc(src);
     setHasError(false);
     setRetryCount(0);
-  }, [src]);
+  }
 
   const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
     // If we've already failed or it's not a string src we can manipulate, just fail
@@ -72,9 +73,10 @@ export function GameImage({
 
   return (
     <Image
+      key={String(src)}
       {...props}
       src={imgSrc}
-      alt={alt}
+      alt={alt || ""}
       className={cn(className, hasError ? "opacity-50 grayscale" : "")}
       onError={handleError}
     />
