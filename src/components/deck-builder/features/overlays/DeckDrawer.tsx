@@ -119,7 +119,7 @@ export function DeckDrawer({
     "bg-surface-main border-t border-brand-primary/20 shadow-2xl transition-all duration-300 ease-in-out flex flex-col pointer-events-auto relative",
     variant === "fixed" && "fixed bottom-0 left-0 right-0 z-40 pb-[max(16px,env(safe-area-inset-bottom))]",
     variant === "static" && "w-full border-x border-b border-white/5 first:border-t",
-    isExpanded ? "h-[200px] xl:h-auto" : "h-[48px] xl:h-auto", // consistent small height for collapsed, auto on desktop
+    isExpanded ? "h-[350px] xl:h-auto" : "h-[48px] xl:h-auto", // consistent small height for collapsed, auto on desktop
     forceActive && "border-brand-primary shadow-[0_-4px_15px_rgba(var(--color-brand-primary),0.1)]",
     className
   );

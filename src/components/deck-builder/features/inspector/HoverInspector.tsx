@@ -84,7 +84,7 @@ export function HoverInspector() {
     <div 
         ref={inspectorRef}
         className={cn(
-            "fixed z-[200] hidden md:block", 
+            "fixed z-[200] hidden xl:block", 
             "w-[360px]", 
             "animate-in fade-in duration-75 pointer-events-auto"
         )}

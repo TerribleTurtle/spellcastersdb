@@ -23,7 +23,7 @@ export function CardInspectorModal() {
   if (!mounted || !inspectorOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex flex-col justify-end isolate pointer-events-none md:hidden">
+    <div className="fixed inset-0 z-50 flex flex-col justify-end isolate pointer-events-none xl:hidden">
         {/* Backdrop - lighter and clickable */}
         <div 
             className="absolute inset-0 bg-black/40 backdrop-blur-[1px] md:bg-transparent md:backdrop-blur-none animate-in fade-in duration-200 pointer-events-auto"
