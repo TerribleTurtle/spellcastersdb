@@ -1,6 +1,9 @@
-# Current Focus
+# Project State
 
-- [x] Modify `UnitInspector` for mobile layout:
-  - Slide in from bottom instead of side
-  - Edge-to-edge width (mostly)
-  - Remove left space/margin on mobile
+## Current Focus
+
+- Completed responsive layout refinement (Intermediate Breakpoint).
+
+## Recent Changes
+
+- Updated `TeamEditorLayout`, `SoloEditorLayout`, `DeckDrawer`, and `ActiveDeckTray` to trigger side-by-side desktop layout only at `xl` (1280px) breakpoint.

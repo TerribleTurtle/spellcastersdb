@@ -134,9 +134,9 @@ export function TeamEditorLayout({
 
   return (
     <>
-    <div className="h-full flex flex-col relative bg-surface-main overflow-hidden md:grid md:grid-cols-[1fr_1fr] xl:grid-cols-[1fr_840px] md:grid-rows-[auto_1fr]">
+    <div className="h-full flex flex-col relative bg-surface-main overflow-hidden xl:grid xl:grid-cols-[1fr_840px] xl:grid-rows-[auto_1fr]">
       {/* Header */}
-      <div className="h-14 border-b border-white/10 flex items-center justify-between px-4 shrink-0 bg-surface-main z-20 md:col-span-2">
+      <div className="h-14 border-b border-white/10 flex items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
         <div className="flex items-center gap-2">
            {/* Team Name Input */}
            <div className="relative group flex items-center gap-2 shrink mr-2 min-w-0">
@@ -202,7 +202,7 @@ export function TeamEditorLayout({
              {/* Mobile Icon Only */}
              <button 
                 onClick={areAllCollapsed ? expandAll : collapseAll}
-                className="p-2 text-gray-400 hover:text-white md:hidden"
+                className="p-2 text-gray-400 hover:text-white xl:hidden"
             >
                 {areAllCollapsed ? <ChevronUp size={18} /> : <ChevronsDown size={18} />}
             </button>
@@ -212,7 +212,7 @@ export function TeamEditorLayout({
       {/* Main Content: Vault */}
       <section 
         aria-label="Unit Library"
-        className="flex-1 overflow-hidden relative transition-[padding] duration-300 ease-in-out md:col-start-1 md:row-start-2 md:pb-0! md:border-r md:border-white/10"
+        className="flex-1 overflow-hidden relative transition-[padding] duration-300 ease-in-out xl:col-start-1 xl:row-start-2 xl:pb-0! xl:border-r xl:border-white/10"
         style={{ paddingBottom: `${footerHeight}px` }}
       > 
           <UnitBrowser
@@ -223,7 +223,7 @@ export function TeamEditorLayout({
       </section>
 
       {/* Stacked Decks Container */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 flex flex-col justify-end pointer-events-none pb-[max(0px,env(safe-area-inset-bottom))] md:static md:col-start-2 md:row-start-2 md:h-full md:pb-32 md:justify-start md:border-l md:border-white/10 md:bg-surface-main/50 md:pointer-events-auto md:overflow-y-auto">
+      <div className="fixed bottom-0 left-0 right-0 z-40 flex flex-col justify-end pointer-events-none pb-[max(0px,env(safe-area-inset-bottom))] xl:static xl:col-start-2 xl:row-start-2 xl:h-full xl:pb-32 xl:justify-start xl:border-l xl:border-white/10 xl:bg-surface-main/50 xl:pointer-events-auto xl:overflow-y-auto">
           {teamDecks?.map((deck, idx) => (
              <DeckDrawer
                 key={idx}

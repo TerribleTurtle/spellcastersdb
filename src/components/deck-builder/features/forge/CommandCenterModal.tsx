@@ -236,6 +236,8 @@ export function CommandCenterModal() {
             </div>
         </div>
 
+
+
         {/* Body - Grid Layout */}
         <div className="flex-1 overflow-hidden grid grid-cols-1 md:grid-cols-12">
             
@@ -333,6 +335,17 @@ export function CommandCenterModal() {
                 </div>
             </div>
 
+        </div>
+
+        {/* Footer with Close Button (Mobile Friendly) */}
+        <div className="p-4 border-t border-white/10 bg-gray-950/50 shrink-0 md:hidden">
+            <button
+                onClick={closeCommandCenter}
+                className="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
+            >
+                <X size={20} />
+                Close Library
+            </button>
         </div>
 
         {/* Hidden File Input */}

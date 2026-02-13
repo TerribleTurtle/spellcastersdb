@@ -109,6 +109,19 @@ export const DraggableCard = React.memo(function DraggableCard({
           alt={item.name}
           className="w-full h-full object-cover object-top transition-transform group-hover:scale-110"
         />
+        
+        {/* Quick Add Badge - Top Left */}
+        <div 
+            className="absolute top-1 left-1 bg-black/80 p-1 rounded text-brand-accent shadow-md border border-white/10 hover:bg-brand-primary hover:text-white transition-colors z-20"
+            onClick={handleQuickAdd}
+            onPointerDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
+            role="button"
+            aria-label="Quick Add"
+        >
+            <Plus size={14} strokeWidth={4} />
+        </div>
+
         {/* Rank Badge - Overlaid on Image */}
         {rank && !isTitan && (
           <div className="absolute top-1 right-1 bg-black/80 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent shadow-md border border-white/10">
@@ -137,8 +150,7 @@ export const DraggableCard = React.memo(function DraggableCard({
         onPointerDown={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center gap-2 w-full justify-center">
-          <Plus size={12} className="text-brand-accent shrink-0" strokeWidth={4} />
+        <div className="w-full flex justify-center px-1">
           <span className="text-[10px] font-bold text-gray-200 text-center leading-tight line-clamp-2 uppercase tracking-tight break-words">
             {item.name}
           </span>

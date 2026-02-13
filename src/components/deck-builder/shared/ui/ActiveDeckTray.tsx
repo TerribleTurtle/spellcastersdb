@@ -28,10 +28,10 @@ export function ActiveDeckTray({
 }: ActiveDeckTrayProps) {
   const { activeDragItem } = useDeckBuilder();
   return (
-    <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 md:pb-4 relative">
-      <div className="grow flex items-center justify-between gap-0.5 px-2 py-1 md:grid md:grid-cols-6 md:gap-4 md:pl-6 md:pr-28 md:py-4 md:items-start md:content-start md:grow-0">
+    <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 xl:pb-4 relative">
+      <div className="grow flex items-center justify-between gap-0.5 px-2 py-1 xl:grid xl:grid-cols-6 xl:gap-4 xl:pl-6 xl:pr-28 xl:py-4 xl:items-start xl:content-start xl:grow-0">
         {/* Spellcaster Area - Fixed Width on Desktop */}
-        <div className="relative flex items-center flex-1 min-w-[76px] max-w-[17%] md:max-w-none md:w-full justify-center">
+        <div className="relative flex items-center flex-1 min-w-[76px] max-w-[17%] xl:max-w-none xl:w-full justify-center">
           <SpellcasterSlot
             spellcaster={spellcaster}
             draggedItem={activeDragItem}
@@ -45,7 +45,7 @@ export function ActiveDeckTray({
 
         {/* Unit Slots 1-4 - Equal Distribution */}
         {slots.slice(0, 4).map((slot) => (
-            <div key={slot.index} className="flex-1 min-w-0 flex justify-center md:col-span-1 md:w-full">
+            <div key={slot.index} className="flex-1 min-w-0 flex justify-center xl:col-span-1 xl:w-full">
               <Slot
                 slot={slot}
                 draggedItem={activeDragItem}
@@ -62,7 +62,7 @@ export function ActiveDeckTray({
         <div className="w-px h-24 bg-white/10 mx-2 self-center hidden" />
 
         {/* Titan Area - Fixed Width on Desktop */}
-        <div className="relative flex items-center flex-1 min-w-0 max-w-[17%] md:max-w-none md:w-full justify-center">
+        <div className="relative flex items-center flex-1 min-w-0 max-w-[17%] xl:max-w-none xl:w-full justify-center">
           <Slot
             slot={slots[4]}
             draggedItem={activeDragItem}
@@ -79,7 +79,7 @@ export function ActiveDeckTray({
                 // Mobile: Top-Right Corner Overlay
                 "-top-2 -right-2 px-1.5 py-0.5",
                 // Desktop: Side Badge (Reverted per user request)
-                "md:top-0 md:left-full md:right-auto md:ml-3 md:px-2 md:py-0.5",
+                "xl:top-0 xl:left-full xl:right-auto xl:ml-3 xl:px-2 xl:py-0.5",
                 validation.isValid
                   ? "bg-green-500/10 border-green-500/20 text-green-400"
                   : "bg-red-500/10 border-red-500/20 text-red-400"
@@ -93,7 +93,7 @@ export function ActiveDeckTray({
               ) : (
                 <AlertCircle size={12} />
               )}
-              <span className="text-[9px] font-bold uppercase tracking-widest hidden md:inline">
+              <span className="text-[9px] font-bold uppercase tracking-widest hidden xl:inline">
                 {validation.isValid
                   ? "Valid"
                   : `${validation.errors.length} Issues`}

@@ -119,7 +119,7 @@ export function DeckDrawer({
     "bg-surface-main border-t border-brand-primary/20 shadow-2xl transition-all duration-300 ease-in-out flex flex-col pointer-events-auto relative",
     variant === "fixed" && "fixed bottom-0 left-0 right-0 z-40 pb-[max(16px,env(safe-area-inset-bottom))]",
     variant === "static" && "w-full border-x border-b border-white/5 first:border-t",
-    isExpanded ? "h-[200px] md:h-auto" : "h-[48px] md:h-auto", // consistent small height for collapsed, auto on desktop
+    isExpanded ? "h-[200px] xl:h-auto" : "h-[48px] xl:h-auto", // consistent small height for collapsed, auto on desktop
     forceActive && "border-brand-primary shadow-[0_-4px_15px_rgba(var(--color-brand-primary),0.1)]",
     className
   );
@@ -142,7 +142,7 @@ export function DeckDrawer({
         )}
         onClick={(e) => {
             // Desktop: Only Activate. Mobile: Toggle.
-            if (window.innerWidth >= 768) {
+            if (window.innerWidth >= 1280) {
                 handleActivate();
             } else {
                 toggle(e);
@@ -185,7 +185,7 @@ export function DeckDrawer({
         {/* Center: Chevron/Count - HIDDEN ON DESKTOP */}
         <button 
             type="button"
-            className="flex items-center gap-2 text-gray-400 hover:text-white rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-primary md:hidden"
+            className="flex items-center gap-2 text-gray-400 hover:text-white rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-primary xl:hidden"
             onClick={(e) => { e.stopPropagation(); toggle(); }}
             aria-expanded={isExpanded}
             aria-controls="drawer-content"
@@ -199,7 +199,7 @@ export function DeckDrawer({
         
         {/* Right: Validation Status OR Action Toolbar */}
         {/* On Desktop: Always show actions. On Mobile: Depends on Expanded. */}
-        <div className={cn("hidden md:flex", "items-center gap-2")} onClick={(e) => e.stopPropagation()}>
+        <div className={cn("hidden xl:flex", "items-center gap-2")} onClick={(e) => e.stopPropagation()}>
              {/* Desktop Action Toolbar (Always Visible) */}
              <ActionToolbar 
                 {...{onImport, onLibraryOpen, hideGlobalActions, onSave, isSaved, onShare, onClear, onExportToSolo}} 
@@ -207,7 +207,7 @@ export function DeckDrawer({
         </div>
 
         {/* Mobile: Conditional Render */}
-        <div className="md:hidden" onClick={(e) => e.stopPropagation()}>
+        <div className="xl:hidden" onClick={(e) => e.stopPropagation()}>
             {isExpanded ? (
                <ActionToolbar 
                   {...{onImport, onLibraryOpen, hideGlobalActions, onSave, isSaved, onShare, onClear, onExportToSolo}} 
@@ -228,12 +228,12 @@ export function DeckDrawer({
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-hidden relative md:overflow-visible">
+      <div className="flex-1 overflow-hidden relative xl:overflow-visible">
         <div className={cn(
             "absolute inset-0 transition-opacity duration-200",
             // Mobile: Conditional. Desktop: Always visible AND static positioning to allow growth
-            isExpanded ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto",
-            "md:relative md:inset-auto" 
+            isExpanded ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none xl:opacity-100 xl:pointer-events-auto",
+            "xl:relative xl:inset-auto" 
         )}>
              <ActiveDeckTray 
                 slots={deck.slots}

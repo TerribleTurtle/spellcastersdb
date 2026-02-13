@@ -80,9 +80,9 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
 
   return (
     <>
-    <div className="h-full flex flex-col relative bg-surface-main overflow-hidden md:grid md:grid-cols-[1fr_1fr] xl:grid-cols-[1fr_840px] md:grid-rows-[auto_1fr]">
+    <div className="h-full flex flex-col relative bg-surface-main overflow-hidden xl:grid xl:grid-cols-[1fr_840px] xl:grid-rows-[auto_1fr]">
       {/* Secondary Header (Solo) */}
-      <div className="h-14 border-b border-white/10 flex items-center justify-between px-4 shrink-0 bg-surface-main z-20 md:col-span-2">
+      <div className="h-14 border-b border-white/10 flex items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
           {/* Deck Name Input */}
           <div className="relative group flex items-center gap-2 shrink mr-2 min-w-0">
                <input 
@@ -138,7 +138,7 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
       {/* Main Content: Vault */}
       <section 
         aria-label="Unit Library"
-        className="flex-1 overflow-hidden relative transition-[padding] duration-300 ease-in-out md:col-start-1 md:row-start-2 md:pb-0! md:border-r md:border-white/10"
+        className="flex-1 overflow-hidden relative transition-[padding] duration-300 ease-in-out xl:col-start-1 xl:row-start-2 xl:pb-0! xl:border-r xl:border-white/10"
         style={{ paddingBottom: `${footerHeight}px` }}
       >
           <UnitBrowser
@@ -162,7 +162,7 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
         onLibraryOpen={openCommandCenter}
         onShare={handleShare}
         hideGlobalActions={true}
-        className="md:col-start-2 md:row-start-2 md:static md:w-full md:h-full md:border-l md:border-t-0 md:bg-surface-main/50"
+        className="xl:col-start-2 xl:row-start-2 xl:static xl:w-full xl:h-full xl:border-l xl:border-t-0 xl:bg-surface-main/50"
       />
 
     </div>
