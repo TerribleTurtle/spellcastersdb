@@ -119,7 +119,7 @@ export function DeckDrawer({
     "bg-surface-main border-t border-brand-primary/20 shadow-2xl transition-all duration-300 ease-in-out flex flex-col pointer-events-auto relative",
     variant === "fixed" && "fixed bottom-0 left-0 right-0 z-40 pb-[max(16px,env(safe-area-inset-bottom))]",
     variant === "static" && "w-full border-x border-b border-white/5 first:border-t",
-    isExpanded ? "h-[350px] xl:h-auto" : "h-[48px] xl:h-auto", // consistent small height for collapsed, auto on desktop
+    isExpanded ? "h-auto xl:h-auto" : "h-[48px] xl:h-auto", // consistent small height for collapsed, auto on desktop
     forceActive && "border-brand-primary shadow-[0_-4px_15px_rgba(var(--color-brand-primary),0.1)]",
     className
   );
@@ -230,10 +230,11 @@ export function DeckDrawer({
       {/* Content */}
       <div className="flex-1 overflow-hidden relative xl:overflow-visible">
         <div className={cn(
-            "absolute inset-0 transition-opacity duration-200",
-            // Mobile: Conditional. Desktop: Always visible AND static positioning to allow growth
-            isExpanded ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none xl:opacity-100 xl:pointer-events-auto",
-            "xl:relative xl:inset-auto" 
+            "transition-opacity duration-200",
+            // Mobile: Relative when expanded to push height, Absolute when collapsed to hide
+            isExpanded ? "relative opacity-100 pointer-events-auto" : "absolute inset-0 opacity-0 pointer-events-none", 
+            // Desktop: Always relative/visible
+            "xl:relative xl:inset-auto xl:opacity-100 xl:pointer-events-auto"
         )}>
              <ActiveDeckTray 
                 slots={deck.slots}

@@ -29,7 +29,7 @@ export function ActiveDeckTray({
   const { activeDragItem } = useDeckBuilder();
   return (
     <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 xl:pb-4 relative">
-      <div className="grow flex items-center justify-between gap-0.5 px-2 py-1 xl:grid xl:grid-cols-6 xl:gap-2 xl:pl-4 xl:pr-4 2xl:gap-4 2xl:pl-6 2xl:pr-28 xl:py-4 xl:items-start xl:content-start xl:grow-0">
+      <div className="grow flex items-center justify-between gap-0.5 px-2 py-1 xl:grid xl:grid-cols-6 xl:gap-2 xl:pl-4 xl:pr-4 xl:py-4 xl:items-start xl:content-start xl:grow-0">
         {/* Spellcaster Area - Fixed Width on Desktop */}
         <div className="relative flex items-center flex-1 min-w-[76px] max-w-[17%] xl:max-w-none xl:w-full justify-center">
           <SpellcasterSlot
@@ -78,8 +78,6 @@ export function ActiveDeckTray({
                 "absolute z-50 flex items-center gap-1.5 rounded-full shadow-sm border backdrop-blur-md transition-all cursor-help whitespace-nowrap",
                 // Mobile AND XL: Top-Right Corner Overlay
                 "-top-2 -right-2 px-1.5 py-0.5 xl:top-0 xl:right-0 xl:p-1 xl:px-2",
-                // 2XL: Side Badge (Reverted per user request)
-                "2xl:top-0 2xl:left-full 2xl:right-auto 2xl:ml-3 2xl:px-2 2xl:py-0.5",
                 validation.isValid
                   ? "bg-green-500/10 border-green-500/20 text-green-400"
                   : "bg-red-500/10 border-red-500/20 text-red-400"
@@ -93,7 +91,7 @@ export function ActiveDeckTray({
               ) : (
                 <AlertCircle size={12} />
               )}
-              <span className="text-[9px] font-bold uppercase tracking-widest hidden 2xl:inline">
+              <span className="text-[9px] font-bold uppercase tracking-widest hidden">
                 {validation.isValid
                   ? "Valid"
                   : `${validation.errors.length} Issues`}

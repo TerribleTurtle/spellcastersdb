@@ -60,8 +60,12 @@ export function DeckBuilderView({
               onImportSolo={handleImportSolo} 
             />
           )}
-          <CardInspectorModal />
-          <HoverInspector />
+
+          <div className="xl:hidden">
+            <CardInspectorModal />
+          </div>
+          {/* HoverInspector disabled/removed per new layout */}
+          {/* <HoverInspector /> */}
           {commandCenterOpen && <CommandCenterModal />}
         </DragDropProvider>
       </DragDropErrorBoundary>

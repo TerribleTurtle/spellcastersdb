@@ -14,7 +14,8 @@ import {
   ExternalLink,
   MessageSquare,
   ChevronLeft,
-  Menu
+  Menu,
+  Bot
 } from "lucide-react";
 import { useFeedback } from "@/hooks/useFeedback";
 import { cn } from "@/lib/utils";
@@ -73,6 +74,7 @@ export function DesktopSidebar() {
   const secondaryItems = [
     { name: "Guide", href: "/guide", icon: BookOpen },
     { name: "FAQ", href: "/faq", icon: HelpCircle },
+    { name: "Bot", href: "/discord-bot", icon: Bot },
     { name: "About", href: "/about", icon: Info },
   ];
   

@@ -7,28 +7,67 @@ import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 export function CardInspectorModal() {
   const { inspectorOpen, inspectedCard, closeInspector } = useDeckStore();
+  // Check for desktop environment to disable modal (InspectorPanel is used instead)
+  const [isDesktop, setIsDesktop] = useState(false);
   const [mounted, setMounted] = useState(false);
-  
-  // Initialize focus trap
-  const containerRef = useFocusTrap(inspectorOpen, closeInspector);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     
-    // Close on Escape key - Handled by useFocusTrap now, but keeping as backup/for unmounted state if needed
-    // Actually useFocusTrap handles escape if we pass onClose.
-  }, []);
+    const checkDesktop = () => {
+        // Use 1280px as hard cutoff for 'xl'
+        const isWide = window.innerWidth >= 1280;
+        setIsDesktop(isWide);
+    };
 
-  if (!mounted || !inspectorOpen) return null;
+    // Check immediately
+    checkDesktop();
+    
+    // Check with matchMedia for listener
+    const mediaQuery = window.matchMedia("(min-width: 1280px)");
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mediaQuery.addEventListener("change", handler);
+    
+    // Also listen to resize as a safety fallback
+    window.addEventListener('resize', checkDesktop);
+
+    return () => {
+        mediaQuery.removeEventListener("change", handler);
+        window.removeEventListener('resize', checkDesktop);
+    };
+  }, []);
+  
+  // Disable modal functionality completely on desktop
+  const shouldRender = inspectorOpen && !isDesktop;
+
+  // Initialize focus trap - only if should render
+  const containerRef = useFocusTrap(shouldRender, closeInspector);
+
+  if (!mounted || !shouldRender) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex flex-col justify-end isolate pointer-events-none xl:hidden">
+    <div 
+        className={cn(
+            "fixed inset-0 z-50 flex flex-col justify-end isolate pointer-events-none xl:hidden card-inspector-modal-container",
+            isDesktop && "hidden!" // Force hidden with high specificity
+        )}
+        style={{ display: isDesktop ? 'none' : undefined }}
+    >
         {/* Backdrop - lighter and clickable */}
         <div 
             className="absolute inset-0 bg-black/40 backdrop-blur-[1px] md:bg-transparent md:backdrop-blur-none animate-in fade-in duration-200 pointer-events-auto"
             onClick={closeInspector}
         />
+        <style dangerouslySetInnerHTML={{__html: `
+            @media (min-width: 1280px) {
+                .card-inspector-modal-container {
+                    display: none !important;
+                    visibility: hidden !important;
+                    pointer-events: none !important;
+                }
+            }
+        `}} />
 
         {/* Side Panel - Slides in from right */}
         <div 

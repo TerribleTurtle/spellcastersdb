@@ -32,6 +32,7 @@ export default function Navbar() {
   const secondaryLinks = [
     { name: "Guide", href: "/guide", internal: true },
     { name: "FAQ", href: "/faq", internal: true },
+    { name: "Bot", href: "/discord-bot", internal: true },
     { name: "About", href: "/about", internal: true },
     {
       name: "Contribute",

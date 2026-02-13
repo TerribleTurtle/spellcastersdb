@@ -119,24 +119,24 @@ export const DraggableCard = React.memo(function DraggableCard({
             role="button"
             aria-label="Quick Add"
         >
-            <Plus size={14} strokeWidth={4} />
+            <Plus className="w-3.5 h-3.5 lg:w-5 lg:h-5 2xl:w-6 2xl:h-6" strokeWidth={4} />
         </div>
 
         {/* Rank Badge - Overlaid on Image */}
         {rank && !isTitan && (
-          <div className="absolute top-1 right-1 bg-black/80 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent shadow-md border border-white/10">
+          <div className="absolute top-1 right-1 bg-black/80 px-1.5 py-0.5 lg:px-2 lg:py-1 rounded text-[10px] lg:text-xs 2xl:text-sm font-mono text-brand-accent shadow-md border border-white/10">
             {rank}
           </div>
         )}
         {/* Titan Badge */}
         {isTitan && (
-          <div className="absolute top-1 right-1 bg-black/80 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent shadow-md border border-white/10">
+          <div className="absolute top-1 right-1 bg-black/80 px-1.5 py-0.5 lg:px-2 lg:py-1 rounded text-[10px] lg:text-xs 2xl:text-sm font-mono text-brand-accent shadow-md border border-white/10">
             TITAN
           </div>
         )}
         {/* Spellcaster Class Badge */}
         {spellcasterClass && (
-          <div className="absolute top-1 right-1 bg-black/80 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent shadow-md border border-white/10 uppercase">
+          <div className="absolute top-1 right-1 bg-black/80 px-1.5 py-0.5 lg:px-2 lg:py-1 rounded text-[10px] lg:text-xs 2xl:text-sm font-mono text-brand-accent shadow-md border border-white/10 uppercase">
             {spellcasterClass}
           </div>
         )}
@@ -145,13 +145,13 @@ export const DraggableCard = React.memo(function DraggableCard({
 
       {/* Name Banner / Quick Add Button - Integrated */}
       <div 
-        className="absolute bottom-0 inset-x-0 min-h-[32px] bg-black/90 border-t border-white/10 flex items-center justify-center px-1 py-1 z-10 cursor-pointer transition-colors hover:bg-brand-primary/90"
+        className="absolute bottom-0 inset-x-0 min-h-[32px] lg:min-h-[40px] bg-black/90 border-t border-white/10 flex items-center justify-center px-1 py-1 z-10 cursor-pointer transition-colors hover:bg-brand-primary/90"
         onClick={handleQuickAdd}
         onPointerDown={(e) => e.stopPropagation()}
         onTouchStart={(e) => e.stopPropagation()}
       >
         <div className="w-full flex justify-center px-1">
-          <span className="text-[10px] font-bold text-gray-200 text-center leading-tight line-clamp-2 uppercase tracking-tight break-words">
+          <span className="text-[10px] lg:text-xs 2xl:text-sm font-bold text-gray-200 text-center leading-tight line-clamp-2 uppercase tracking-tight break-words">
             {item.name}
           </span>
         </div>

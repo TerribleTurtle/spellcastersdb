@@ -37,6 +37,9 @@ import { useAccordionState } from "@/hooks/useAccordionState";
 
 // ... existing imports
 
+
+import { InspectorPanel } from "@/components/deck-builder/features/inspector/InspectorPanel";
+
 export function TeamEditorLayout({ 
     units, 
     spellcasters, 
@@ -83,8 +86,6 @@ export function TeamEditorLayout({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Run only once on mount
   
-// toggleDeck, collapseAll, expandAll, areAllCollapsed removed (now from hook)
-  
   // Renaming Handler
   const { setTeamDecks } = useDeckStore(); // Need access to setter
   const handleRename = (index: number, name: string) => {
@@ -125,16 +126,23 @@ export function TeamEditorLayout({
   };
 
 
-
-
   const {
     browserItems,
     handleQuickAdd,
   } = useDeckEditorUI(units, spellcasters);
 
+
   return (
     <>
-    <div className="h-full flex flex-col relative bg-surface-main overflow-hidden xl:grid xl:grid-cols-[1fr_580px] 2xl:grid-cols-[1fr_840px] xl:grid-rows-[auto_1fr]">
+    {/* Grid Layout:
+        Mobile: Flex Column (standard).
+        Desktop (XL): Grid with 2 columns.
+        Row 1: Header (Col Span 2)
+        Row 2: Content
+            Col 1: Browser
+            Col 2: Inspector (Top) + Drawer Stack (Bottom)
+    */}
+    <div className="h-full flex flex-col relative bg-surface-main overflow-hidden xl:grid xl:grid-cols-[1fr_640px] xl:grid-rows-[auto_1fr]">
       {/* Header */}
       <div className="h-14 border-b border-white/10 flex items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
         <div className="flex items-center gap-2">
@@ -190,15 +198,6 @@ export function TeamEditorLayout({
                   <Trash2 size={18} />
               </button>
 
-            {/* Collapse/Expand All Control - HIDDEN (Drawers forced expanded on Desktop) */}
-            <button 
-                onClick={areAllCollapsed ? expandAll : collapseAll}
-                className="ml-2 p-1.5 text-xs font-bold text-brand-secondary hover:text-white uppercase tracking-wider border border-white/10 rounded items-center gap-1 hidden"
-                title={areAllCollapsed ? "Expand All Decks" : "Collapse All Decks"}
-            >
-                {areAllCollapsed ? <ChevronUp size={14} /> : <ChevronsDown size={14} />}
-                {areAllCollapsed ? "Expand" : "Collapse"}
-            </button>
              {/* Mobile Icon Only */}
              <button 
                 onClick={areAllCollapsed ? expandAll : collapseAll}
@@ -222,15 +221,75 @@ export function TeamEditorLayout({
           />
       </section>
 
-      {/* Stacked Decks Container */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 flex flex-col justify-end pointer-events-none pb-[max(0px,env(safe-area-inset-bottom))] xl:static xl:col-start-2 xl:row-start-2 xl:h-full xl:pb-32 xl:justify-start xl:border-l xl:border-white/10 xl:bg-surface-main/50 xl:pointer-events-auto xl:overflow-y-auto">
+      {/* Right Column: Inspector (Top) + Stacked Decks (Bottom) */}
+      <div className="hidden xl:flex xl:col-start-2 xl:row-start-2 xl:flex-col xl:h-full xl:overflow-hidden bg-surface-main/30">
+          
+           {/* Inspector fills remaining space */}
+           <div className="flex-1 overflow-hidden min-h-0">
+                <InspectorPanel className="h-full border-l border-white/10" />
+           </div>
+
+           {/* Stacked Decks Container - Boxed at bottom of column */}
+           <div className="shrink-0 flex flex-col border-l border-white/10 max-h-[60%] overflow-y-auto bg-surface-main/50">
+              {teamDecks?.map((deck, idx) => (
+                 <DeckDrawer
+                    key={idx}
+                    deck={deck}
+                    onSelect={openInspector}
+                    variant="static"
+                    slotIndex={idx} // Connects to Store
+                    isExpanded={expandedState[idx]}
+                    onToggle={(val) => {
+                        toggleDeck(idx, val);
+                        if(val) setActiveSlot(idx); 
+                    }}
+                    onRename={(name) => handleRename(idx, name)}
+                    onImport={() => {
+                        setActiveSlot(idx);
+                        useDeckStore.getState().setIsImporting(true);
+                        openCommandCenter();
+                    }}
+                    onSave={handleTeamSave}
+                    isSaved={!!activeTeamId}
+                    onShare={handleTeamShare}
+                    onExportToSolo={() => {
+                       setDeckToExport(deck);
+                    }}
+                    hideGlobalActions={true}
+                    onClear={() => {
+                         // Smart Clear Logic for Slot
+                         const isEmpty = isDeckEmpty(deck);
+                         
+                         if (isEmpty) {
+                             if (activeSlot === idx) {
+                                 clearDeck(); 
+                             } else {
+                                 const newDecks = [...teamDecks] as [Deck, Deck, Deck];
+                                 newDecks[idx] = { ...INITIAL_DECK, id: uuidv4(), name: "New Deck" };
+                                 setTeamDecks(newDecks);
+                             }
+                         } else {
+                            setDeckToClear(idx);
+                         }
+                    }}
+                    className="border-b-0 first:border-t-0 border-t border-brand-primary/20 shadow-lg pointer-events-auto" 
+                 />
+              ))}
+           </div>
+      </div>
+
+      {/* Mobile Stacked Decks Container (Fixed Bottom) */}
+      <div className={cn(
+        "fixed bottom-0 left-0 right-0 z-40 flex flex-col justify-end pointer-events-none pb-[max(0px,env(safe-area-inset-bottom))]",
+        "xl:hidden"
+      )}>
           {teamDecks?.map((deck, idx) => (
              <DeckDrawer
                 key={idx}
                 deck={deck}
                 onSelect={openInspector}
                 variant="static"
-                slotIndex={idx} // Connects to Store
+                slotIndex={idx}
                 isExpanded={expandedState[idx]}
                 onToggle={(val) => {
                     toggleDeck(idx, val);
@@ -250,9 +309,7 @@ export function TeamEditorLayout({
                 }}
                 hideGlobalActions={true}
                 onClear={() => {
-                     // Smart Clear Logic for Slot
                      const isEmpty = isDeckEmpty(deck);
-                     
                      if (isEmpty) {
                          if (activeSlot === idx) {
                              clearDeck(); 
@@ -272,6 +329,7 @@ export function TeamEditorLayout({
       
 
     </div>
+
 
     {deckToClear !== null && (
         <DeleteConfirmationModal
