@@ -80,7 +80,10 @@ export function TeamForgeList({
                 <div className="text-center py-8 text-gray-500 text-xs">
                   <p className="mb-2">No saved teams.</p>
                   <span className="text-[10px] text-gray-700 block mb-2">
-                    Build your team and save it below.
+                     Build your team and save it below.
+                  </span>
+                  <span className="text-[10px] text-gray-700 block mt-2">
+                     Teams are saved in your browser&apos;s local storage.
                   </span>
                 </div>
               ) : (

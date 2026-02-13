@@ -52,7 +52,7 @@ export function UnitBrowserHeader({
                 <input
                     ref={inputRef}
                     type="text"
-                    placeholder="Search units..."
+                    placeholder="Search cards..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => {

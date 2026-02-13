@@ -106,7 +106,7 @@ export function FilterSidebar({
             />
             <input
               type="text"
-              placeholder="Search units..."
+              placeholder="Search cards..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-surface-card border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-primary/50 transition-colors"

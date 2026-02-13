@@ -77,7 +77,7 @@ export function DeckNameInput({
 
     return (
         <div 
-            className="flex items-center gap-2 group" 
+            className="flex items-center gap-2 group min-w-0" 
             onClick={handleNameClick}
             role="button"
             tabIndex={0}
@@ -96,7 +96,7 @@ export function DeckNameInput({
                 {name || "Untitled"}
             </span>
             {onRename && (
-                <Edit2 size={14} className="text-gray-400 hover:text-white transition-colors" />
+                <Edit2 size={14} className="text-gray-400 hover:text-white transition-colors shrink-0" />
             )}
         </div>
     );

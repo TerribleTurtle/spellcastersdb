@@ -309,7 +309,7 @@ export function CommandCenterModal() {
             <div className="md:col-span-9 flex flex-col bg-black/20 overflow-hidden">
                 <div className="p-4 border-b border-white/5 bg-white/5">
                     <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">
-                        {mode === "TEAM" && !isImporting ? "Saved Teams" : "Saved Decks Library"}
+                        {mode === "TEAM" && !isImporting ? "Saved Teams" : "Saved Decks"}
                     </h3>
                 </div>
                 

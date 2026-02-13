@@ -134,7 +134,7 @@ export function TeamEditorLayout({
 
   return (
     <>
-    <div className="h-full flex flex-col relative bg-surface-main overflow-hidden md:grid md:grid-cols-[1fr_840px] md:grid-rows-[auto_1fr]">
+    <div className="h-full flex flex-col relative bg-surface-main overflow-hidden md:grid md:grid-cols-[1fr_1fr] xl:grid-cols-[1fr_840px] md:grid-rows-[auto_1fr]">
       {/* Header */}
       <div className="h-14 border-b border-white/10 flex items-center justify-between px-4 shrink-0 bg-surface-main z-20 md:col-span-2">
         <div className="flex items-center gap-2">
