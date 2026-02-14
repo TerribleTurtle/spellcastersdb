@@ -4,7 +4,7 @@ import { Metadata } from "next";
 
 import { FeatureErrorBoundary } from "@/components/error/FeatureErrorBoundary";
 import { DeckBuilderContainer } from "@/components/deck-builder/core/DeckBuilderContainer";
-import { fetchGameData } from "@/services/data/api";
+import { fetchGameData } from "@/services/api/api";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -24,7 +24,7 @@ export default async function Home() {
   const data = await fetchGameData();
 
   return (
-    <div className="h-[calc(100vh-64px)] w-full overflow-hidden z-40 bg-surface-main border-x border-white/5 shadow-2xl">
+    <div className="h-[calc(100vh-64px)] w-full overflow-hidden z-40 bg-surface-main shadow-2xl">
       <h1 className="sr-only">Deck Builder & Loadout Editor</h1>
       {/* Suspense boundary for data loading */}
       <Suspense

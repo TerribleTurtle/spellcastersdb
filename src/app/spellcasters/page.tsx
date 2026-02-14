@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Star } from "lucide-react";
 
-import { getSpellcasters } from "@/services/data/api";
+import { getSpellcasters } from "@/services/api/api";
 import { JsonLd } from "@/components/common/JsonLd";
 
 export const metadata = {

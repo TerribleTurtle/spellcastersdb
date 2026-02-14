@@ -3,7 +3,7 @@ import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 
-import { getUnitById, getUnits } from "@/services/data/api";
+import { getUnitById, getUnits } from "@/services/api/api";
 
 interface UnitPageProps {
   params: Promise<{ id: string }>;

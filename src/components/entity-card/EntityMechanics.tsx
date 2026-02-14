@@ -4,7 +4,7 @@
 import { Shield } from "lucide-react";
 import { Mechanics, UnitMechanics, SpellMechanics } from "@/types/api";
 import { cn } from "@/lib/utils";
-import { formatTargetName } from "@/services/formatting"; // Still needed for Shield logic if not kept here
+import { formatTargetName } from "@/services/utils/formatting"; // Still needed for Shield logic if not kept here
 import { EntityDisplayItem, EntityCardVariant } from "./types";
 
 // Sub-components

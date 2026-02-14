@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 
-import { getConsumables } from "@/services/data/api";
+import { getConsumables } from "@/services/api/api";
 
 interface ConsumablePageProps {
   params: Promise<{ id: string }>;

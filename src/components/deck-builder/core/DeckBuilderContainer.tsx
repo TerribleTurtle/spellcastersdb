@@ -1,9 +1,9 @@
 "use client";
 
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
-import { useUrlSync } from "@/components/deck-builder/hooks/persistence/useUrlSync";
+import { useUrlSync } from "@/features/deck-builder/hooks/persistence/useUrlSync";
 import { DeckBuilderView } from "./DeckBuilderView";
-import { useDeckSync } from "@/components/deck-builder/hooks/persistence/useDeckSync";
+import { useDeckSync } from "@/features/deck-builder/hooks/persistence/useDeckSync";
 import { useToast } from "@/hooks/useToast";
 
 interface DeckBuilderContainerProps {

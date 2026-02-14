@@ -2,8 +2,8 @@ import { promises as fs } from "fs";
 import path from "path";
 import { NextRequest } from "next/server";
 
-import { fetchGameData } from "@/services/data/api";
-import { ratelimit } from "@/services/ratelimit";
+import { fetchGameData } from "@/services/api/api";
+import { ratelimit } from '@/services/infrastructure/ratelimit';
 import { renderDeckImage } from "./render-deck";
 import { renderTeamImage } from "./render-team";
 import { renderEntityImage } from "./render-entity";

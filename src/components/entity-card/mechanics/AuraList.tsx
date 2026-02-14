@@ -4,7 +4,7 @@
 import { Wifi } from "lucide-react";
 import { Aura } from "@/types/api";
 import { cn } from "@/lib/utils";
-import { formatTargetName } from "@/services/formatting";
+import { formatTargetName } from "@/services/utils/formatting";
 
 interface AuraListProps {
   auras?: Aura[];

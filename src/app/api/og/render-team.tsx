@@ -1,7 +1,7 @@
 
 import { ImageResponse } from "next/og";
-import { getCachedAsset } from "@/services/data/asset-cache";
-import { decodeTeam } from "@/services/encoding";
+import { getCachedAsset } from "@/services/api/asset-cache";
+import { decodeTeam } from "@/services/utils/encoding";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { AllDataResponse, UnifiedEntity } from "@/types/api";
 

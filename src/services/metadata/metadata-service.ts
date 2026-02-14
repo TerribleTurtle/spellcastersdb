@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import { fetchGameData } from "@/services/data/api";
-import { decodeDeck, decodeTeam } from "@/services/encoding";
+import { fetchGameData } from "@/services/api/api";
+import { decodeDeck, decodeTeam } from "@/services/utils/encoding";
 
 type Params = {
   [key: string]: string | string[] | undefined;

@@ -49,6 +49,8 @@ const createMockState = (overrides: Partial<DeckBuilderState> = {}): DeckBuilder
   deleteTeam: () => {},
   deleteTeams: () => {}, // New action mock
   duplicateTeam: () => {},
+  upsertSavedTeam: () => {},
+  renameSavedTeam: () => {},
   importSoloDeckToTeam: () => {},
   loadTeamFromData: () => {},
   exportTeamSlotToSolo: () => {},
@@ -59,7 +61,11 @@ const createMockState = (overrides: Partial<DeckBuilderState> = {}): DeckBuilder
   deleteDeck: () => {},
   duplicateDeck: () => {},
   importDecks: () => {},
-  importTeams: () => {}, // New action mock
+
+  importTeams: () => {},
+  moveCardBetweenDecks: () => null,
+  moveSpellcasterBetweenDecks: () => {},
+  checkActiveTeamDeletion: () => {},
   setSavedDecks: () => {},
   clearSavedTeams: () => {},
   // New action mocks
@@ -103,7 +109,7 @@ const createMockState = (overrides: Partial<DeckBuilderState> = {}): DeckBuilder
   commandCenterOpen: false,
   openCommandCenter: () => {},
   closeCommandCenter: () => {},
-  renameSavedTeam: () => {},
+
   deleteDecks: () => {}, // Missing mock
   checkDeckNameAvailable: () => true, // Mock implementation
   renameSavedDeck: () => {},
@@ -111,8 +117,7 @@ const createMockState = (overrides: Partial<DeckBuilderState> = {}): DeckBuilder
   clearSavedDecks: () => {}, // Missing mock
   isImporting: false,
   setIsImporting: () => {},
-  moveCardBetweenDecks: () => {},
-  moveSpellcasterBetweenDecks: () => {},
+
   ...overrides,
 });
 

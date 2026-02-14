@@ -88,7 +88,7 @@ export const metadata: Metadata = {
 };
 
 
-import { ensureDataLoaded } from "@/services/data/api";
+import { ensureDataLoaded } from "@/services/api/api";
 
 // ... imports
 
@@ -107,11 +107,12 @@ export default async function RootLayout({
       >
         <Navbar />
 
-        <DesktopSidebar />
-
-        <MainLayoutWrapper>
-          {children}
-        </MainLayoutWrapper>
+        <div className="flex max-w-[1920px] mx-auto w-full relative">
+          <DesktopSidebar />
+          <MainLayoutWrapper>
+            {children}
+          </MainLayoutWrapper>
+        </div>
         <Footer />
         <JsonLd 
           id="json-ld-website"

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useDeckStore } from './index';
-import { INITIAL_DECK } from "@/services/data/persistence";
+import { INITIAL_DECK } from "@/services/api/persistence";
 import { Unit, Spellcaster } from '@/types/api';
 import { EntityCategory } from '@/types/enums';
 

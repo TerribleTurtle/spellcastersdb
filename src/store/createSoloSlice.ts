@@ -1,8 +1,8 @@
 import { StateCreator } from "zustand";
 import { DeckBuilderState, SoloState } from "./types";
-import { INITIAL_DECK } from "@/services/data/persistence";
+import { INITIAL_DECK } from "@/services/api/persistence";
 import { DeckRules } from "@/services/rules/deck-rules";
-import { cloneDeck } from "@/services/deck-utils";
+import { cloneDeck } from "@/services/utils/deck-utils";
 
 export const createSoloSlice: StateCreator<
   DeckBuilderState,

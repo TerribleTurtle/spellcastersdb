@@ -1,9 +1,10 @@
 import { Deck, SlotIndex, DeckOperationResult, SlotType } from "@/types/deck";
+import { DECK_ERRORS } from "@/services/config/errors";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 import { EntityCategory } from "@/types/enums";
 import { isSpellcaster } from "@/services/validation/guards";
 import { MAX_UNIT_SLOTS, TITAN_SLOT_INDEX } from "@/services/config/constants";
-import { cloneDeck } from "@/services/deck-utils";
+import { cloneDeck } from "@/services/utils/deck-utils";
 
 // --- Helpers ---
 
@@ -15,12 +16,50 @@ function canAcceptUnit(
   const isTitan = unit.category === EntityCategory.Titan;
   
   if (slot.allowedTypes.includes(SlotType.Titan) && !isTitan) {
-    return "Slot expects Titan";
+    return DECK_ERRORS.EXPECTS_TITAN;
   }
   if (slot.allowedTypes.includes(SlotType.Unit) && isTitan) {
-    return "Slot expects Unit";
+    return DECK_ERRORS.EXPECTS_UNIT;
   }
   return null;
+}
+
+
+function addTitan(deck: Deck, entity: Titan): DeckOperationResult<Deck> {
+  const newDeck = cloneDeck(deck);
+  const titanSlotIndex = newDeck.slots.findIndex(s => s.allowedTypes.includes(SlotType.Titan));
+  
+  if (titanSlotIndex !== -1) {
+      newDeck.slots[titanSlotIndex].unit = entity;
+      return { 
+          success: true, 
+          data: newDeck, 
+          message: `Added ${entity.name} to Titan Slot` 
+      };
+  }
+  return { success: false, error: DECK_ERRORS.NO_TITAN_SLOT, code: "NO_TITAN_SLOT" };
+}
+
+function addUnit(deck: Deck, entity: Unit | Spell): DeckOperationResult<Deck> {
+  const newDeck = cloneDeck(deck);
+  
+  // Check Duplicates
+  const isDuplicate = newDeck.slots.some((s, i) => i < MAX_UNIT_SLOTS && s.unit?.entity_id === entity.entity_id);
+  if (isDuplicate) {
+       return { success: false, error: DECK_ERRORS.DUPLICATE_UNIT, code: "DUPLICATE_UNIT" };
+  }
+
+  const emptyIndex = newDeck.slots.findIndex((s) => s.index < MAX_UNIT_SLOTS && !s.unit);
+  if (emptyIndex !== -1) {
+       newDeck.slots[emptyIndex].unit = entity;
+       return { 
+           success: true, 
+           data: newDeck, 
+           message: `Added ${entity.name}` 
+       };
+  }
+
+  return { success: false, error: DECK_ERRORS.DECK_FULL, code: "DECK_FULL" };
 }
 
 export const DeckRules = {
@@ -50,7 +89,7 @@ export const DeckRules = {
     card: Unit | Spell | Titan
   ): DeckOperationResult<Deck> {
     if (isSpellcaster(card)) {
-      return { success: false, error: "Cannot add Spellcaster to a normal slot", code: "INVALID_TYPE" };
+      return { success: false, error: DECK_ERRORS.SPELLCASTER_IN_NORMAL_SLOT, code: "INVALID_TYPE" };
     }
 
     const newDeck = cloneDeck(deck);
@@ -73,10 +112,10 @@ export const DeckRules = {
     const isTitan = card.category === EntityCategory.Titan;
 
     if (slot.allowedTypes.includes(SlotType.Titan) && !isTitan) {
-        return { success: false, error: "Only Titans can go in this slot", code: "SLOT_MISMATCH" };
+        return { success: false, error: DECK_ERRORS.TITAN_SLOT_MISMATCH, code: "SLOT_MISMATCH" };
     }
     if (slot.allowedTypes.includes(SlotType.Unit) && isTitan) {
-        return { success: false, error: "Titans cannot go in this slot", code: "SLOT_MISMATCH" };
+        return { success: false, error: DECK_ERRORS.UNIT_SLOT_MISMATCH, code: "SLOT_MISMATCH" };
     }
 
     newDeck.slots[index] = { ...slot, unit: card };
@@ -98,7 +137,7 @@ export const DeckRules = {
   swapSlots(deck: Deck, indexA: number, indexB: number): DeckOperationResult<Deck> {
       // Bounds check
       if (indexA < 0 || indexA > TITAN_SLOT_INDEX || indexB < 0 || indexB > TITAN_SLOT_INDEX) {
-          return { success: false, error: "Invalid slot index", code: "INVALID_INDEX" };
+          return { success: false, error: DECK_ERRORS.INVALID_SLOT_INDEX, code: "INVALID_INDEX" };
       }
 
       const newDeck = cloneDeck(deck);
@@ -148,40 +187,13 @@ export const DeckRules = {
 
       const entity = card as Unit | Spell | Titan;
       const isTitan = entity.category === EntityCategory.Titan;
-      const newDeck = cloneDeck(deck);
 
       // 2. Titan -> Find Titan Slot
       if (isTitan) {
-          const titanSlotIndex = newDeck.slots.findIndex(s => s.allowedTypes.includes(SlotType.Titan));
-          if (titanSlotIndex !== -1) {
-              newDeck.slots[titanSlotIndex].unit = entity;
-              return { 
-                  success: true, 
-                  data: newDeck, 
-                  message: `Added ${entity.name} to Titan Slot` 
-              };
-          }
-          return { success: false, error: "No Titan Slot Found", code: "NO_TITAN_SLOT" };
+          return addTitan(deck, entity as Titan);
       }
 
       // 3. Unit/Spell -> First Empty Slot (0-3)
-      
-      // Check Duplicates for Units (Slots 0-3)
-      const isDuplicate = newDeck.slots.some((s, i) => i < MAX_UNIT_SLOTS && s.unit?.entity_id === entity.entity_id);
-      if (isDuplicate) {
-           return { success: false, error: "Already in deck!", code: "DUPLICATE_UNIT" };
-      }
-
-      const emptyIndex = newDeck.slots.findIndex((s) => s.index < MAX_UNIT_SLOTS && !s.unit);
-      if (emptyIndex !== -1) {
-           newDeck.slots[emptyIndex].unit = entity;
-           return { 
-               success: true, 
-               data: newDeck, 
-               message: `Added ${entity.name}` 
-           };
-      }
-
-      return { success: false, error: "Deck Full!", code: "DECK_FULL" };
+      return addUnit(deck, entity as Unit | Spell);
   }
 };

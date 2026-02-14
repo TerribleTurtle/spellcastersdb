@@ -5,19 +5,19 @@ import React from "react";
 
 
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
-import { useDeckBuilder } from "@/components/deck-builder/hooks/domain/useDeckBuilder";
-import { useDeckEditorUI } from "@/components/deck-builder/hooks/ui/useDeckEditorUI";
-import { UnitBrowser } from "@/components/deck-builder/features/browser/UnitBrowser";
-import { SoloOverview } from "@/components/deck-builder/features/overlays/SoloOverview";
-import { DeckDrawer } from "@/components/deck-builder/features/overlays/DeckDrawer";
+import { useDeckBuilder } from "@/features/deck-builder/hooks/domain/useDeckBuilder";
+import { useDeckEditorUI } from "@/features/deck-builder/hooks/ui/useDeckEditorUI";
+import { UnitBrowser } from "@/features/deck-builder/browser/UnitBrowser";
+import { SoloOverview } from "@/features/deck-builder/overlays/SoloOverview";
+import { DeckDrawer } from "@/features/shared/deck/drawer/DeckDrawer";
 import { useDeckStore } from "@/store/index";
 import { selectIsSaved } from "@/store/selectors";
 import { useToast } from "@/hooks/useToast";
 import { Deck } from "@/types/deck";
 import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationModal";
-import { Edit2, Save, Check, Share2, Trash2 } from "lucide-react";
+import { Edit2, Save, Check, Share2, Eraser } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { encodeDeck } from "@/services/encoding";
+import { encodeDeck } from "@/services/utils/encoding";
 import { copyToClipboard } from "@/lib/clipboard";
 
 interface SoloEditorLayoutProps {
@@ -28,7 +28,12 @@ interface SoloEditorLayoutProps {
 }
 
 
-import { InspectorPanel } from "@/components/deck-builder/features/inspector/InspectorPanel";
+
+
+import { InspectorPanel } from "@/features/shared/inspector/InspectorPanel";
+
+
+import { UnsavedChangesModal } from "@/components/modals/UnsavedChangesModal";
 
 export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps) {
   const { openInspector, setDeckName, openCommandCenter } = useDeckStore();
@@ -38,14 +43,9 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
 
   // Manage drawer state locally to allow toggling, but default to open
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(true);
-  const [showClearModal, setShowClearModal] = React.useState(false);
+  const [showUnsavedModal, setShowUnsavedModal] = React.useState(false);
   
   // Footer height calculation for padding
-  // On Desktop, the drawer is in the grid, so we might not need padding BOTTOM on the main area
-  // But we need to ensure the grid rows are sized correctly.
-  
-  // For mobile (non-xl), we still need padding bottom if drawer is fixed.
-  // DeckDrawer is fixed on mobile.
   const footerHeight = isDrawerOpen ? 180 : 48;
 
 
@@ -72,7 +72,7 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
        if (isSaved) {
            clearDeck();
        } else {
-           setShowClearModal(true);
+           setShowUnsavedModal(true);
        }
   };
 
@@ -145,7 +145,7 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
                    className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
                    title="Clear Deck"
               >
-                  <Trash2 size={18} />
+                  <Eraser size={18} />
               </button>
           </div>
       </div>
@@ -164,11 +164,11 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
       </section>
 
       {/* Right Column: Inspector (Top) + Drawer (Bottom) */}
-      <div className="hidden xl:flex xl:col-start-2 xl:row-start-2 xl:flex-col xl:h-full xl:overflow-hidden bg-surface-main/30">
+      <div className="hidden xl:flex xl:col-start-2 xl:row-start-2 xl:flex-col xl:justify-between xl:gap-4 xl:h-full xl:overflow-hidden">
           
-          {/* Inspector fills remaining space */}
-          <div className="flex-1 overflow-hidden min-h-0">
-             <InspectorPanel className="h-full border-l border-white/10" />
+          {/* Inspector fills remaining space but shrink wraps if possible */}
+          <div className="flex-initial shrink min-h-0 max-h-full flex flex-col">
+             <InspectorPanel className="h-auto max-h-full border border-white/10 rounded-xl shadow-lg overflow-hidden" />
           </div>
 
           {/* Drawer fixed at bottom of column */}
@@ -186,18 +186,12 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
                 onLibraryOpen={openCommandCenter}
                 onShare={handleShare}
                 hideGlobalActions={true}
-                className="w-full border-l border-white/10 border-t-0 bg-surface-main/50 shadow-none!"
+                className="w-full border border-white/10 rounded-xl bg-surface-main/50 shadow-lg overflow-hidden"
+                idSuffix="desktop"
             />
           </div>
       </div>
 
-      {/* Mobile Drawer (Absolute/Fixed) - Only visible on small screens due to css classes inside DeckDrawer or parent container logic? 
-          Wait, DeckDrawer logic handles its own hiding/positioning often.
-          But here we are rendering it TWICE for different layouts? 
-          No, the previous implementation had conditional rendering or CSS classes.
-          The DeckDrawer component handles 'variant="fixed"' for mobile. 
-          Let's verify if we need a separate Mobile instance or if CSS handles the "hidden xl:flex" vs "xl:hidden".
-      */}
       {/* Mobile Instance Only */}
       <div className="xl:hidden">
          <DeckDrawer 
@@ -213,6 +207,7 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
             onLibraryOpen={openCommandCenter}
             onShare={handleShare}
             hideGlobalActions={true}
+            idSuffix="mobile"
          />
       </div>
 
@@ -236,24 +231,17 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
           </div>
         </div>
       )}
-    {showClearModal && (
-        <DeleteConfirmationModal 
-            title="Clear Deck?"
-            description={
-                <>
-                    Are you sure you want to clear <span className="text-white font-bold">{currentDeck?.name || "this deck"}</span>?
-                    <br/><br/>
-                    Unsaved changes will be lost.
-                </>
-            }
-            confirmText="Clear Deck"
-            onCancel={() => setShowClearModal(false)}
-            onConfirm={() => {
-                clearDeck();
-                setShowClearModal(false);
-            }}
-        />
-    )}
+    
+    <UnsavedChangesModal 
+        isOpen={showUnsavedModal}
+        title="Clear Deck?"
+        description="You have unsaved changes in this deck. Do you want to return to save them, or clear anyway?"
+        onCancel={() => setShowUnsavedModal(false)}
+        onDiscard={() => {
+            clearDeck();
+            setShowUnsavedModal(false);
+        }}
+    />
     </>
   );
 }

@@ -3,7 +3,7 @@ import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 
-import { getSpellcasterById, getSpellcasters } from "@/services/data/api";
+import { getSpellcasterById, getSpellcasters } from "@/services/api/api";
 
 interface SpellcasterPageProps {
   params: Promise<{ id: string }>;

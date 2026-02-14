@@ -125,6 +125,13 @@ body {
   animation-name: slide-in-from-right;
 }
 
-.fade-in {
-  animation-name: fade-in;
+
+/* Utility to hide scrollbar but keep functionality */
+.scrollbar-hidden {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
 }

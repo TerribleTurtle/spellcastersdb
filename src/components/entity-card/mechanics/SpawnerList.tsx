@@ -4,7 +4,7 @@
 import { Ghost } from "lucide-react";
 import { Spawner } from "@/types/api";
 import { cn } from "@/lib/utils";
-import { formatEntityName } from "@/services/formatting";
+import { formatEntityName } from "@/services/utils/formatting";
 
 interface SpawnerListProps {
   spawners?: Spawner[];

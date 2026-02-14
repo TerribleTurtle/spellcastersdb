@@ -85,7 +85,7 @@ export function DesktopSidebar() {
   return (
     <aside 
         className={cn(
-            "hidden md:flex flex-col border-r border-white/10 fixed left-0 top-16 bottom-0 bg-surface-main z-30 transition-[width] duration-300 ease-in-out overflow-y-auto overflow-x-hidden",
+            "hidden md:flex flex-col border-r border-white/10 sticky top-16 h-[calc(100vh-4rem)] bg-surface-main z-30 transition-[width] duration-300 ease-in-out overflow-y-auto overflow-x-hidden",
             isSidebarOpen ? "w-64" : "w-16"
         )}
     >

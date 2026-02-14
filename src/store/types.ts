@@ -35,12 +35,9 @@ export interface TeamDataActions {
   setActiveTeamId: (id: string | null) => void;
   setTeamDecks: (decks: [Deck, Deck, Deck]) => void;
   
-  // Team Persistence Actions
+  // Team Persistence Actions (Editor)
   saveTeam: (newId: string, nameInput?: string, activeSlot?: number, activeDeckOverride?: Deck) => void;
   loadTeam: (id: string) => void;
-  deleteTeam: (id: string) => void;
-  deleteTeams: (ids: string[]) => void;
-  duplicateTeam: (id: string, newId: string) => void;
   
   // Team Slot Actions (Granular)
   setTeamSlot: (deckIndex: number, slotIndex: SlotIndex, item: Unit | Spell | Titan) => void;
@@ -56,12 +53,16 @@ export interface TeamDataActions {
   
   // Cross-Pollenation
   exportTeamSlotToSolo: (slotIndex: number, deck: Deck, newId: string) => void;
-  renameSavedTeam: (id: string, newName: string) => void;
-  clearSavedTeams: () => void;
+  checkActiveTeamDeletion: (ids: string[]) => void;
   
   // Smart Add
   quickAddToTeam: (slotIndex: number, item: Unit | Spell | Titan | Spellcaster) => string | null;
-  moveCardBetweenDecks: (sourceDeckIndex: number, sourceSlotIndex: SlotIndex, targetDeckIndex: number, targetSlotIndex: SlotIndex) => void;
+  moveCardBetweenDecks: (
+    sourceDeckIndex: number,
+    sourceSlotIndex: number,
+    targetDeckIndex: number,
+    targetSlotIndex: number
+  ) => string | null;
   moveSpellcasterBetweenDecks: (sourceDeckIndex: number, targetDeckIndex: number) => void;
 }
 
@@ -76,7 +77,7 @@ export interface TeamDataState extends TeamDataActions {
   teamName: string;
   activeTeamId: string | null;
   teamDecks: Team["decks"]; // The 3 active decks in the team editor
-  savedTeams: Team[];
+  // savedTeams moved to PersistenceState
 }
 
 export interface TeamUIState extends TeamUIActions {
@@ -102,10 +103,19 @@ export interface PersistenceActions {
   importDeckToLibrary: (deck: Deck) => void;
   checkDeckNameAvailable: (name: string, excludeId?: string) => boolean;
   clearSavedDecks: () => void;
+
+  // Team Persistence (Library)
+  upsertSavedTeam: (team: Team) => void;
+  deleteTeam: (id: string) => void;
+  deleteTeams: (ids: string[]) => void;
+  duplicateTeam: (id: string, newId: string) => void;
+  renameSavedTeam: (id: string, newName: string) => void;
+  clearSavedTeams: () => void;
 }
 
 export interface PersistenceState extends PersistenceActions {
   savedDecks: Deck[];
+  savedTeams: Team[];
 }
 
 /**

@@ -4,7 +4,7 @@ import { AlertTriangle } from "lucide-react";
 import { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
-import { DECK_EDITOR_TABS, DeckEditorTab } from "../../ui/constants";
+import { DECK_EDITOR_TABS, DeckEditorTab } from "@/features/deck-builder/constants";
 
 interface DeckEditorShellProps {
   activeTab: DeckEditorTab;

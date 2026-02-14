@@ -4,7 +4,7 @@
 import { Target } from "lucide-react";
 import { InitialAttack } from "@/types/api"; 
 import { cn } from "@/lib/utils";
-import { formatTargetName } from "@/services/formatting";
+import { formatTargetName } from "@/services/utils/formatting";
 
 interface InitialAttackDisplayProps {
   initialAttack?: InitialAttack;

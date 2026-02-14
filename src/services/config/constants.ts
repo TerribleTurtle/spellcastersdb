@@ -27,11 +27,15 @@ export const SCHOOLS = [
   "Technomancy",
   "Necromancy",
   "Titan",
-];
+] as const;
 
-export const RANKS = ["I", "II", "III", "IV"];
+export type School = typeof SCHOOLS[number];
 
-export const SPELLCASTER_CLASSES = ["Duelist", "Conqueror", "Enchanter"];
+export const RANKS = ["I", "II", "III", "IV"] as const;
+export type Rank = typeof RANKS[number];
+
+export const SPELLCASTER_CLASSES = ["Duelist", "Conqueror", "Enchanter"] as const;
+export type SpellcasterClass = typeof SPELLCASTER_CLASSES[number];
 
 // ============================================================================
 // Sort & Filter Config
@@ -77,3 +81,7 @@ export const SPELLCASTER_ZONE_ID = "spellcaster-zone";
 export const SLOT_PREFIX = "slot-";
 export const SLOT_DRAG_PREFIX = "slot-drag-";
 export const SPELLCASTER_SLOT_DRAG_ID = "spellcaster-slot-drag";
+
+export const DEFAULT_SCHOOL = "N/A";
+export const DEFAULT_CATEGORY = "Spellcaster";
+export const DEFAULT_RANK = "N/A";

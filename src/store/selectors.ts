@@ -1,5 +1,5 @@
 import { DeckBuilderState } from "./types";
-import { areDecksEqual } from "@/services/data/persistence";
+import { areDecksEqual } from "@/services/api/persistence";
 
 type SelectorState = Pick<DeckBuilderState, "currentDeck">;
 type ChangesState = Pick<DeckBuilderState, "currentDeck" | "savedDecks">;
@@ -35,4 +35,19 @@ export const selectIsSaved = (state: ChangesState) => {
     if (!saved) return false;
     
     return areDecksEqual(currentDeck, saved);
+};
+
+export const selectIsTeamSaved = (state: Pick<DeckBuilderState, "activeTeamId" | "savedTeams" | "teamName" | "teamDecks">) => {
+    const { activeTeamId, savedTeams, teamName, teamDecks } = state;
+    if (!activeTeamId || !teamDecks) return false;
+
+    const saved = savedTeams.find((t) => t.id === activeTeamId);
+    if (!saved) return false;
+
+    if (saved.name !== teamName) return false;
+
+    // Compare decks
+    if (saved.decks.length !== teamDecks.length) return false;
+
+    return teamDecks.every((deck, index) => areDecksEqual(deck, saved.decks[index]));
 };

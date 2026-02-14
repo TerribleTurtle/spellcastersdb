@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 interface FilterSectionProps {
   title: string;
-  options: string[];
+  options: string[] | readonly string[];
   selected: string[];
   onToggle: (val: string) => void;
   isGrid?: boolean;

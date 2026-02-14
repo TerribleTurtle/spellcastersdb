@@ -63,7 +63,10 @@ describe("DeckBuilder Integration", () => {
             health: 100,
             movement_speed: 10,
             magic_school: "Wild",
-            tags: []
+            tags: [],
+            description: "Test Description",
+            range: 1,
+            damage: 10
         };
         // @ts-expect-error - Testing invalid props handling or mock mismatch
         render(<DeckBuilderContainer units={[mockUnit]} spellcasters={[]} />);
@@ -77,8 +80,9 @@ describe("DeckBuilder Integration", () => {
         expect(unitElement).toBeDefined();
 
         // Interaction: Click to Quick Add
-        // We need to ensure we click the text or the banner which has the handler
-        fireEvent.click(unitElement);
+        // We need to ensure we click the 'Quick Add' button, not just the card (which selects)
+        const quickAddButton = screen.getByLabelText("Quick Add");
+        fireEvent.click(quickAddButton);
 
         // Verification: Check Store State
         // Since we are using the real store logic (unmocked), it should update the slot.

@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 
 import { UnitArchive } from "@/components/archive/UnitArchive";
-import { getAllEntities } from "@/services/data/api";
-import { capitalize } from "@/services/formatting";
+import { getAllEntities } from "@/services/api/api";
+import { capitalize } from "@/services/utils/formatting";
 
 // Map URL slug to Internal Category
 const CATEGORY_MAP: Record<string, string> = {

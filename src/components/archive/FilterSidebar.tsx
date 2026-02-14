@@ -6,6 +6,7 @@ import { Search, SlidersHorizontal, X } from "lucide-react";
 
 import { FilterSection } from "@/components/ui/FilterSection";
 import { cn } from "@/lib/utils";
+import { SCHOOLS, RANKS, SPELLCASTER_CLASSES } from "@/services/config/constants";
 
 interface FilterSidebarProps {
   searchQuery: string;
@@ -24,17 +25,7 @@ interface FilterSidebarProps {
   className?: string;
 }
 
-const SCHOOLS = [
-  "Elemental",
-  "Wild",
-  "War",
-  "Astral",
-  "Holy",
-  "Technomancy",
-  "Necromancy",
-  "Titan",
-];
-const RANKS = ["I", "II", "III", "IV"];
+// CATEGORIES used locally for filter options (Singular)
 const CATEGORIES = [
   "Spellcaster",
   "Creature",
@@ -43,7 +34,6 @@ const CATEGORIES = [
   "Titan",
   "Consumable",
 ];
-const CLASSES = ["Enchanter", "Duelist", "Conqueror"];
 
 export function FilterSidebar({
   searchQuery,
@@ -137,7 +127,7 @@ export function FilterSidebar({
           {/* For now, always show, user can combine as they wish */}
           <FilterSection
             title="Class"
-            options={CLASSES}
+            options={SPELLCASTER_CLASSES}
             selected={activeFilters.classes}
             onToggle={(val) => toggleFilter("classes", val)}
           />

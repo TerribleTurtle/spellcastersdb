@@ -14,12 +14,14 @@
 
 - **The Archive**: A searchable, filterable database of all Units, Spells, Titans, and Spellcasters.
 - **The Forge**: A logic-validating deck builder that enforces game rules (e.g., max 1 Titan, school restrictions).
+- **The Trinity (Team Builder)**: Build and manage teams of 3 decks with shared card pool validation.
 - **Live Updates**: Powered by a static JSON API that allows for rapid balance updates without full site rebuilds.
 
 ## Architecture at a Glance
 
 - **Frontend**: Next.js 16+ (App Router), TypeScript, Tailwind CSS.
 - **Data Layer**: Fetches static JSON from the [Spellcasters Community API](https://github.com/TerribleTurtle/spellcasters-community-api).
+- **Architecture**: Feature-based slices (`src/features/deck-builder`, `src/features/team-builder`) with a shared core (`src/features/shared`) and modular domain services.
 - **State Management**: Zustand (Global Store) + React Context (Drag & Drop) + Validation Hooks.
 - **Assets**: Optimized image delivery via Next.js Image or Vercel OG.
 

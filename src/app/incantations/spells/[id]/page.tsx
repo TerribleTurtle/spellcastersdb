@@ -4,7 +4,7 @@ import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 
-import { getEntityById, getSpells } from "@/services/data/api";
+import { getEntityById, getSpells } from "@/services/api/api";
 import { Spell } from "@/types/api";
 
 interface SpellPageProps {

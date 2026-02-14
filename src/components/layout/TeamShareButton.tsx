@@ -13,7 +13,7 @@ export function TeamShareButton() {
     if (mode !== "TEAM") return null;
 
     const handleShare = async () => {
-        const { encodeTeam } = await import("@/services/encoding");
+        const { encodeTeam } = await import("@/services/utils/encoding");
         const hash = encodeTeam(teamDecks, teamName);
         const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
 

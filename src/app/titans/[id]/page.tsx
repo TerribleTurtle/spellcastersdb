@@ -4,7 +4,7 @@ import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 
-import { getEntityById, getTitans } from "@/services/data/api";
+import { getEntityById, getTitans } from "@/services/api/api";
 import { Titan } from "@/types/api";
 
 interface TitanPageProps {

@@ -1,9 +1,12 @@
 import { StateCreator } from "zustand";
 import { v4 as uuidv4 } from 'uuid';
 import { DeckBuilderState, PersistenceState } from "./types";
-import { INITIAL_DECK } from "@/services/data/persistence";
-import { cloneDeck } from "@/services/deck-utils";
-import { getUniqueName } from "@/services/naming-utils";
+import { INITIAL_DECK } from "@/services/api/persistence";
+import { cloneDeck } from "@/services/utils/deck-utils";
+import { getUniqueName } from "@/services/utils/naming-utils";
+
+import { TeamFactory } from "@/services/domain/team/TeamFactory";
+import { TeamPersistenceHelper } from "@/services/domain/team/TeamPersistenceHelper";
 
 export const createPersistenceSlice: StateCreator<
   DeckBuilderState,
@@ -12,6 +15,7 @@ export const createPersistenceSlice: StateCreator<
   PersistenceState
 > = (set, get) => ({
   savedDecks: [],
+  savedTeams: [],
 
   saveDeck: (nameInput) => set((state) => {
        let finalName = nameInput?.trim();
@@ -148,4 +152,44 @@ export const createPersistenceSlice: StateCreator<
   },
 
   clearSavedDecks: () => set({ savedDecks: [] }),
+
+  // --- Team Persistence ---
+
+  upsertSavedTeam: (team) => set((state) => ({
+      savedTeams: TeamPersistenceHelper.updateSavedTeams(state.savedTeams, team)
+  })),
+
+  deleteTeam: (id) => {
+       get().checkActiveTeamDeletion([id]);
+       set((state) => ({
+           savedTeams: state.savedTeams.filter(t => t.id !== id),
+       }));
+  },
+
+  deleteTeams: (ids) => {
+       get().checkActiveTeamDeletion(ids);
+       set((state) => ({
+           savedTeams: state.savedTeams.filter(t => !ids.includes(t.id!)),
+       }));
+  },
+
+  duplicateTeam: (id, newId) => set((state) => {
+      const target = state.savedTeams.find(t => t.id === id);
+      if (target) {
+          const existingNames = state.savedTeams.map(t => t.name || "");
+          const newTeam = TeamFactory.duplicateTeam(target, newId, existingNames);
+          return { savedTeams: [...state.savedTeams, newTeam] };
+      }
+      return {};
+  }),
+
+  renameSavedTeam: (id, newName) => set((state) => ({
+      savedTeams: state.savedTeams.map(t => 
+        t.id === id ? { ...t, name: newName } : t
+      )
+  })),
+
+  clearSavedTeams: () => set({ savedTeams: [] }),
+
+
 });

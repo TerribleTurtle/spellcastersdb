@@ -6,13 +6,12 @@ import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 import { useDeckStore } from "@/store/index";
 
 import { DragDropProvider } from "./DragDropProvider";
-import { SoloBuilderView } from "./SoloBuilderView";
-import { TeamBuilderView } from "./TeamBuilderView";
+import { SoloBuilderView } from "@/features/deck-builder/components/SoloBuilderView";
+import { TeamBuilderView } from "@/features/team-builder/TeamBuilderView";
 import { DragDropErrorBoundary } from "./DragDropErrorBoundary";
-import { CardInspectorModal } from "../features/inspector/CardInspectorModal";
-import { HoverInspector } from "../features/inspector/HoverInspector";
-import { CommandCenterModal } from "../features/forge/CommandCenterModal";
-import { useDeckHotkeys } from "../hooks/ui/useDeckHotkeys";
+import { CardInspectorModal } from "@/features/shared/inspector/CardInspectorModal";
+import { CommandCenterModal } from "@/features/deck-builder/forge/CommandCenterModal";
+import { useDeckHotkeys } from "@/features/deck-builder/hooks/ui/useDeckHotkeys";
 
 export interface DeckBuilderViewProps {
   units: (Unit | Spell | Titan)[];

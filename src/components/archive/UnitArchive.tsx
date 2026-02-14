@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { LayoutGrid, List } from "lucide-react";
 
-import { useUnitSearch } from "@/components/deck-builder/hooks/domain/useUnitSearch";
+import { useUnitSearch } from "@/features/deck-builder/hooks/domain/useUnitSearch";
 import { cn } from "@/lib/utils";
 import { UnifiedEntity } from "@/types/api";
 

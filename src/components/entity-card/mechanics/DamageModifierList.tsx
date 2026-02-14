@@ -4,7 +4,7 @@
 import { Sword } from "lucide-react";
 import { DamageModifier } from "@/types/api";
 import { cn } from "@/lib/utils";
-import { formatTargetName } from "@/services/formatting";
+import { formatTargetName } from "@/services/utils/formatting";
 
 interface DamageModifierListProps {
   modifiers?: DamageModifier[] | string; // Support legacy string

@@ -1,8 +1,8 @@
 "use client";
 
 import { ReactNode } from "react";
-import { DndContext, DragOverlay, Modifier, pointerWithin } from "@dnd-kit/core";
-import { useDragDrop } from "@/components/deck-builder/hooks/domain/useDragDrop";
+import { DndContext, DragOverlay, Modifier, pointerWithin, useDndMonitor, rectIntersection } from "@dnd-kit/core";
+import { useDragDrop } from "@/features/deck-builder/hooks/domain/useDragDrop";
 import { GameImage } from "@/components/ui/GameImage";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
 
@@ -49,6 +49,9 @@ interface DragDropProviderProps {
   children: ReactNode;
 }
 
+// Internal component to consume DndContext
+
+
 export function DragDropProvider({ children }: DragDropProviderProps) {
   const { sensors, activeDragItem, handleDragStart, handleDragEnd } = useDragDrop();
 
@@ -60,11 +63,12 @@ export function DragDropProvider({ children }: DragDropProviderProps) {
       onDragEnd={handleDragEnd}
       autoScroll={false}
     >
+
       {children}
 
       <DragOverlay zIndex={100} dropAnimation={null} modifiers={[centerUnderCursor]}>
         {activeDragItem ? (
-          <div className="w-[110px] aspect-3/4 rounded-lg border-2 border-brand-secondary/50 bg-slate-800 flex flex-col overflow-hidden shadow-2xl relative cursor-grabbing">
+          <div className="w-[110px] aspect-3/4 rounded-lg border-2 border-brand-secondary/50 bg-slate-800 flex flex-col overflow-hidden shadow-2xl relative cursor-grabbing pointer-events-none">
              {/* Image Area */}
             <div className="relative flex-1 overflow-hidden">
               <GameImage

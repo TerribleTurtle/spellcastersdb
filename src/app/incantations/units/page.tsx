@@ -1,5 +1,5 @@
 import { UnitArchive } from "@/components/archive/UnitArchive";
-import { getUnits } from "@/services/data/api";
+import { getUnits } from "@/services/api/api";
 import { JsonLd } from "@/components/common/JsonLd";
 
 export const metadata = {

@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { decodeDeck } from "@/services/encoding";
+import { decodeDeck } from "@/services/utils/encoding";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { AllDataResponse, Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
 

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import { UnitArchive } from "@/components/archive/UnitArchive";
 import { JsonLd } from "@/components/common/JsonLd";
-import { getAllEntities } from "@/services/data/api";
+import { getAllEntities } from "@/services/api/api";
 import { Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
 
 export async function generateStaticParams() {

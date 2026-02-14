@@ -1,29 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useShallow } from "zustand/react/shallow";
-import { ChevronUp, ChevronsDown, Save, Edit2, Trash2, Share2, Check } from "lucide-react";
-import { copyToClipboard } from "@/lib/clipboard";
+import { ChevronUp, ChevronsDown, Save, Edit2, Share2, Check, Eraser } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { UnifiedEntity, Spell, Spellcaster, Titan, Unit } from "@/types/api";
-import { useTeamBuilder } from "@/components/deck-builder/hooks/domain/useTeamBuilder";
 
-import { useDeckEditorUI } from "@/components/deck-builder/hooks/ui/useDeckEditorUI";
-import { UnitBrowser } from "../../features/browser/UnitBrowser";
-import { DeckDrawer } from "../../features/overlays/DeckDrawer";
-import { DeleteConfirmationModal } from "@/components/modals/DeleteConfirmationModal";
+import { useDeckEditorUI } from "@/features/deck-builder/hooks/ui/useDeckEditorUI";
+import { UnitBrowser } from "@/features/deck-builder/browser/UnitBrowser";
 import { SaveDeckModal } from "@/components/modals/SaveDeckModal";
+import { TeamDeckEditorRow } from "@/features/team-builder/components/TeamDeckEditorRow";
 
 import { useDeckStore } from "@/store/index";
 import { Deck } from "@/types/deck";
 import { useToast } from "@/hooks/useToast";
-import { v4 as uuidv4 } from "uuid";
-import { INITIAL_DECK } from "@/services/data/persistence";
-import { isDeckEmpty } from "@/services/deck-utils";
-
-const TRAY_EXPANDED_HEIGHT = 180;
-const TRAY_COLLAPSED_HEIGHT = 48;
 
 interface TeamEditorLayoutProps {
   units: (Unit | Spell | Titan)[];
@@ -33,12 +22,10 @@ interface TeamEditorLayoutProps {
   onImportSolo?: (deck: Deck) => void;
 }
 
-import { useAccordionState } from "@/hooks/useAccordionState";
+import { UnsavedChangesModal } from "@/components/modals/UnsavedChangesModal";
 
-// ... existing imports
-
-
-import { InspectorPanel } from "@/components/deck-builder/features/inspector/InspectorPanel";
+import { InspectorPanel } from "@/features/shared/inspector/InspectorPanel";
+import { useTeamEditor } from "@/features/deck-builder/hooks/ui/useTeamEditor";
 
 export function TeamEditorLayout({ 
     units, 
@@ -50,80 +37,35 @@ export function TeamEditorLayout({
   const openInspector = (item: UnifiedEntity, pos?: { x: number; y: number }) => {
       originalOpenInspector(item, pos);
   };
+  const { showToast } = useToast();
   
   const {
-    activeSlot,
-    setActiveSlot,
-    teamName,
-    teamDecks,
-  } = useTeamBuilder();
+      setActiveSlot,
+      teamName,
+      setTeamName,
+      teamDecks,
+      activeTeamId,
+      footerHeight,
+      accordion,
+      showUnsavedTeamModal, setShowUnsavedTeamModal,
+      slotToClear, setSlotToClear,
+      deckToExport, setDeckToExport,
+      handleTeamSave,
+      handleTeamClear,
+      handleSlotClear,
+      performSlotClear,
+      handleTeamShare,
+      importDeckToLibrary,
+      clearTeam
+  } = useTeamEditor();
 
-  // State for expanded trays
   const { 
-    expandedState, 
-    toggle: toggleDeck, 
-    collapseAll, 
-    expandAll, 
-    areAllCollapsed 
-  } = useAccordionState(3, 0);
-
-  const [deckToClear, setDeckToClear] = useState<number | null>(null);
-  const [deckToExport, setDeckToExport] = useState<Deck | null>(null);
-
-  // Auto-select Slot 1 if none selected
-  // Optimization: This should ideally be done in the store/hook initialization to avoid effect
-  // For now, we keep it but ensure it doesn't cause loops
-  useEffect(() => {
-    if (activeSlot === null) {
-        // We only set this ONCE on mount if null
-        setActiveSlot(0);
-    }
-    
-    // Desktop: Default to Expand All
-    if (window.innerWidth >= 768) {
-        expandAll();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // Run only once on mount
-  
-  // Renaming Handler
-  const { setTeamDecks } = useDeckStore(); // Need access to setter
-  const handleRename = (index: number, name: string) => {
-      if (!teamDecks) return;
-      const newDecks = [...teamDecks] as [Deck, Deck, Deck];
-      newDecks[index] = { ...newDecks[index], name };
-      setTeamDecks(newDecks);
-  };
-  
-  const footerHeight = expandedState.reduce((acc, expanded) => acc + (expanded ? TRAY_EXPANDED_HEIGHT : TRAY_COLLAPSED_HEIGHT), 0);
-
-  const { showToast } = useToast();
-  const { clearDeck, saveTeam, activeTeamId, importDeckToLibrary } = useDeckStore(
-      useShallow(state => ({
-          clearDeck: state.clearDeck,
-          saveTeam: state.saveTeam,
-          activeTeamId: state.activeTeamId,
-          importDeckToLibrary: state.importDeckToLibrary
-      }))
-  );
-
-  const handleTeamSave = () => {
-      const targetId = activeTeamId || uuidv4();
-      saveTeam(targetId, teamName, activeSlot ?? undefined, undefined); 
-      showToast("Team saved successfully", "success");
-  };
-
-  const handleTeamShare = async () => {
-    if (!teamDecks) return;
-    const { encodeTeam } = await import("@/services/encoding");
-    const hash = encodeTeam(teamDecks, teamName);
-    const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
-
-    const success = await copyToClipboard(url);
-    if (success) {
-        showToast("Team Link Copied!", "success");
-    }
-  };
+      expandedState, 
+      toggle: toggleDeck, 
+      collapseAll, 
+      expandAll, 
+      areAllCollapsed 
+  } = accordion;
 
 
   const {
@@ -150,14 +92,14 @@ export function TeamEditorLayout({
            <div className="relative group flex items-center gap-2 shrink mr-2 min-w-0">
               <input 
                  value={teamName || ""}
-                 onChange={(e) => useDeckStore.getState().setTeamName(e.target.value)}
+                 onChange={(e) => setTeamName(e.target.value)}
                  style={{ width: `${Math.max((teamName || "").length, 14) + 4}ch` }}
                  className="bg-transparent border-b-2 border-transparent hover:border-white/20 focus:border-brand-primary transition-all text-xl md:text-2xl font-black text-white uppercase tracking-wider focus:outline-none py-1 truncate min-w-[200px]"
                  placeholder="UNTITLED TEAM"
               />
-              <Edit2 size={14} className="text-gray-500 shrink-0" />
+               <Edit2 size={14} className="text-gray-500 shrink-0" />
            </div>
-        </div>
+       </div>
         
         <div className="flex items-center gap-1 md:gap-2 shrink-0">
             {/* Library */}
@@ -191,17 +133,17 @@ export function TeamEditorLayout({
 
             {/* Clear Team Button */}
              <button 
-                   onClick={() => useDeckStore.getState().clearTeam()}
+                   onClick={handleTeamClear}
                    className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
                    title="Clear Team"
               >
-                  <Trash2 size={18} />
+                  <Eraser size={18} />
               </button>
 
              {/* Mobile Icon Only */}
              <button 
                 onClick={areAllCollapsed ? expandAll : collapseAll}
-                className="p-2 text-gray-400 hover:text-white xl:hidden"
+                className="p-2 text-gray-400 hover:text-white"
             >
                 {areAllCollapsed ? <ChevronUp size={18} /> : <ChevronsDown size={18} />}
             </button>
@@ -222,141 +164,78 @@ export function TeamEditorLayout({
       </section>
 
       {/* Right Column: Inspector (Top) + Stacked Decks (Bottom) */}
-      <div className="hidden xl:flex xl:col-start-2 xl:row-start-2 xl:flex-col xl:h-full xl:overflow-hidden bg-surface-main/30">
+      <div className="hidden xl:flex xl:col-start-2 xl:row-start-2 xl:flex-col xl:justify-between xl:gap-4 xl:h-full xl:overflow-hidden">
           
-           {/* Inspector fills remaining space */}
-           <div className="flex-1 overflow-hidden min-h-0">
-                <InspectorPanel className="h-full border-l border-white/10" />
+           {/* Inspector fills remaining space but shrink wraps */}
+           <div className="flex-initial shrink min-h-0 max-h-full flex flex-col">
+                <InspectorPanel className="h-auto max-h-full border border-white/10 rounded-xl shadow-lg overflow-hidden" />
            </div>
 
            {/* Stacked Decks Container - Boxed at bottom of column */}
-           <div className="shrink-0 flex flex-col border-l border-white/10 max-h-[60%] overflow-y-auto bg-surface-main/50">
-              {teamDecks?.map((deck, idx) => (
-                 <DeckDrawer
+           <div className="shrink-0 flex flex-col border border-white/10 rounded-xl shadow-lg overflow-hidden bg-surface-main/50">
+               {teamDecks?.map((_, idx) => (
+                  <TeamDeckEditorRow
                     key={idx}
-                    deck={deck}
-                    onSelect={openInspector}
-                    variant="static"
-                    slotIndex={idx} // Connects to Store
-                    isExpanded={expandedState[idx]}
-                    onToggle={(val) => {
-                        toggleDeck(idx, val);
-                        if(val) setActiveSlot(idx); 
-                    }}
-                    onRename={(name) => handleRename(idx, name)}
-                    onImport={() => {
-                        setActiveSlot(idx);
-                        useDeckStore.getState().setIsImporting(true);
-                        openCommandCenter();
-                    }}
-                    onSave={handleTeamSave}
-                    isSaved={!!activeTeamId}
-                    onShare={handleTeamShare}
-                    onExportToSolo={() => {
-                       setDeckToExport(deck);
-                    }}
-                    hideGlobalActions={true}
-                    onClear={() => {
-                         // Smart Clear Logic for Slot
-                         const isEmpty = isDeckEmpty(deck);
-                         
-                         if (isEmpty) {
-                             if (activeSlot === idx) {
-                                 clearDeck(); 
-                             } else {
-                                 const newDecks = [...teamDecks] as [Deck, Deck, Deck];
-                                 newDecks[idx] = { ...INITIAL_DECK, id: uuidv4(), name: "New Deck" };
-                                 setTeamDecks(newDecks);
-                             }
-                         } else {
-                            setDeckToClear(idx);
-                         }
-                    }}
-                    className="border-b-0 first:border-t-0 border-t border-brand-primary/20 shadow-lg pointer-events-auto" 
-                 />
-              ))}
+                    index={idx}
+                    isExpanded={accordion.expandedState[idx]}
+                    onToggle={accordion.toggle}
+                    idSuffix="desktop"
+                    hideGlobalActions
+                  />
+               ))}
            </div>
       </div>
-
+      
       {/* Mobile Stacked Decks Container (Fixed Bottom) */}
       <div className={cn(
         "fixed bottom-0 left-0 right-0 z-40 flex flex-col justify-end pointer-events-none pb-[max(0px,env(safe-area-inset-bottom))]",
         "xl:hidden"
       )}>
-          {teamDecks?.map((deck, idx) => (
-             <DeckDrawer
+          {teamDecks?.map((_, idx) => (
+             <TeamDeckEditorRow
                 key={idx}
-                deck={deck}
-                onSelect={openInspector}
-                variant="static"
-                slotIndex={idx}
+                index={idx}
                 isExpanded={expandedState[idx]}
-                onToggle={(val) => {
-                    toggleDeck(idx, val);
-                    if(val) setActiveSlot(idx); 
-                }}
-                onRename={(name) => handleRename(idx, name)}
-                onImport={() => {
-                    setActiveSlot(idx);
-                    useDeckStore.getState().setIsImporting(true);
-                    openCommandCenter();
-                }}
-                onSave={handleTeamSave}
-                isSaved={!!activeTeamId}
-                onShare={handleTeamShare}
-                onExportToSolo={() => {
-                   setDeckToExport(deck);
-                }}
-                hideGlobalActions={true}
-                onClear={() => {
-                     const isEmpty = isDeckEmpty(deck);
-                     if (isEmpty) {
-                         if (activeSlot === idx) {
-                             clearDeck(); 
-                         } else {
-                             const newDecks = [...teamDecks] as [Deck, Deck, Deck];
-                             newDecks[idx] = { ...INITIAL_DECK, id: uuidv4(), name: "New Deck" };
-                             setTeamDecks(newDecks);
-                         }
-                     } else {
-                        setDeckToClear(idx);
-                     }
-                }}
-                className="border-b-0 first:border-t-0 border-t border-brand-primary/20 shadow-lg pointer-events-auto" 
+                onToggle={accordion.toggle}
+                idSuffix="mobile"
+                hideGlobalActions
              />
           ))}
       </div>
       
+      {/* Modals */}
+      
+      {/* Unsaved Changes for Clear TEAM */}
+      <UnsavedChangesModal 
+          isOpen={showUnsavedTeamModal}
+          title="Clear Team?"
+          description="You have unsaved changes in this team. Do you want to return to save them, or clear anyway?"
+          onCancel={() => setShowUnsavedTeamModal(false)}
+          onDiscard={() => {
+               clearTeam();
+               setShowUnsavedTeamModal(false);
+          }}
+      />
+      
+      {/* Unsaved Changes for Clear SLOT */}
+      <UnsavedChangesModal 
+          isOpen={slotToClear !== null}
+          title={`Clear Slot ${slotToClear !== null ? slotToClear + 1 : ''}?`}
+          description={
+            <>
+                You have unsaved changes in this Team. Clearing <span className="text-white font-bold">{teamDecks && slotToClear !== null ? teamDecks[slotToClear].name : "this deck"}</span> will impact the team.
+                <br/>
+                Do you want to return to Save the Team before clearing this slot?
+            </>
+          }
+          onCancel={() => setSlotToClear(null)}
+          onDiscard={() => {
+               if (slotToClear !== null) performSlotClear(slotToClear);
+               setSlotToClear(null);
+          }}
+      />
 
     </div>
-
-
-    {deckToClear !== null && (
-        <DeleteConfirmationModal
-            title={`Clear Slot ${deckToClear + 1}?`}
-            description={
-                <>
-                    Are you sure you want to clear <span className="text-white font-bold">{teamDecks?.[deckToClear]?.name || "this deck"}</span>?
-                    <br/><br/>
-                    This action cannot be undone.
-                </>
-            }
-            confirmText="Clear Deck"
-            onCancel={() => setDeckToClear(null)}
-            onConfirm={() => {
-                if (teamDecks) {
-                    if (activeSlot === deckToClear) {
-                        clearDeck();
-                    } else {
-                        const newDecks = [...teamDecks] as [Deck, Deck, Deck];
-                        newDecks[deckToClear] = { ...INITIAL_DECK, id: uuidv4(), name: "New Deck" };
-                        setTeamDecks(newDecks);
-                    }
-                }
-                setDeckToClear(null);
-            }}
-        />
-    )}
     
     {deckToExport && (
         <SaveDeckModal 

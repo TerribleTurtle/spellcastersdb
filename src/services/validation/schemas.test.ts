@@ -1,6 +1,6 @@
 
 import { describe, it, expect } from "vitest";
-import { UnitSchema, SpellSchema } from "./schemas";
+import { UnitSchema, SpellSchema } from "./data-schemas";
 
 describe("Schema Migration v1.2", () => {
   it("should validate a valid V1.2 Unit", () => {

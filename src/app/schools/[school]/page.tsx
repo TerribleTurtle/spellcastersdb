@@ -2,19 +2,12 @@ import { notFound } from "next/navigation";
 
 import { UnitArchive } from "@/components/archive/UnitArchive";
 import { JsonLd } from "@/components/common/JsonLd";
-import { getAllEntities } from "@/services/data/api";
+import { getAllEntities } from "@/services/api/api";
 import { Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
+import { SCHOOLS } from "@/services/config/constants";
 
-const SCHOOLS = [
-  "Elemental",
-  "Wild",
-  "War",
-  "Astral",
-  "Holy",
-  "Technomancy",
-  "Necromancy",
-  "Titan",
-];
+// Local SCHOOLS definition removed
+
 
 export async function generateStaticParams() {
   return SCHOOLS.map((school) => ({
@@ -39,7 +32,7 @@ export default async function SchoolPage({ params }: SchoolPageProps) {
   const { school } = await params;
   const decodedSchool = decodeURIComponent(school);
 
-  if (!SCHOOLS.includes(decodedSchool)) {
+  if (!(SCHOOLS as readonly string[]).includes(decodedSchool)) {
     notFound();
   }
 
