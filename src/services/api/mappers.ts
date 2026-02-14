@@ -37,7 +37,10 @@ export function mapRawDataToAllData(rawData: RawData): AllDataResponse {
     const result = AllDataSchema.safeParse(rawData);
     if (!result.success) {
          // Format error into a readable string for production logs
-         const errorDetails = result.error.errors.map(e => `${e.path.join(".")}: ${e.message}`).join(", ");
+         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         const zodErrors = (result.error as any).errors || (result.error as any).issues || [];
+         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         const errorDetails = zodErrors.map((e: any) => `${e.path.join(".")}: ${e.message}`).join(", ");
          const errorMsg = `Data Validation Failed: ${errorDetails}`;
          
          console.error("🔴 Data Validation Failed");

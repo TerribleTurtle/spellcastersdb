@@ -1,6 +1,6 @@
 "use client";
 
-import { useUIStore } from "@/store/ui-store";
+
 import { cn } from "@/lib/utils";
 
 interface MainLayoutWrapperProps {
@@ -8,7 +8,7 @@ interface MainLayoutWrapperProps {
 }
 
 export function MainLayoutWrapper({ children }: MainLayoutWrapperProps) {
-  const isSidebarOpen = useUIStore((state) => state.isSidebarOpen);
+
 
   return (
     <main 

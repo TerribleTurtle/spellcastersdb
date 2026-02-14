@@ -48,6 +48,7 @@ const createMockState = (overrides: Partial<DeckBuilderState> = {}): DeckBuilder
   loadTeam: () => {},
   deleteTeam: () => {},
   deleteTeams: () => {}, // New action mock
+  saveTeamAsCopy: () => {},
   duplicateTeam: () => {},
   upsertSavedTeam: () => {},
   renameSavedTeam: () => {},
@@ -110,14 +111,18 @@ const createMockState = (overrides: Partial<DeckBuilderState> = {}): DeckBuilder
   openCommandCenter: () => {},
   closeCommandCenter: () => {},
 
-  deleteDecks: () => {}, // Missing mock
-  checkDeckNameAvailable: () => true, // Mock implementation
-  renameSavedDeck: () => {},
-  importDeckToLibrary: () => {},
-  clearSavedDecks: () => {}, // Missing mock
+
   isImporting: false,
   setIsImporting: () => {},
 
+  deleteDecks: () => {}, 
+  checkDeckNameAvailable: () => true, 
+  renameSavedDeck: () => {},
+  importDeckToLibrary: () => {},
+  clearSavedDecks: () => {}, 
+  pendingSwapCard: null, 
+  setPendingSwapCard: () => {}, 
+  
   ...overrides,
 });
 

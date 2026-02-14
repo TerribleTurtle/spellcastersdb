@@ -40,9 +40,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Playwright
-/playwright-report/
-/test-results/
+
 
 
 # local test artifacts
@@ -54,3 +52,8 @@ Thumbs.db
 # IDE
 .idea/
 .vscode/
+
+
+# temporary artifacts
+lint_output.txt
+test-results/

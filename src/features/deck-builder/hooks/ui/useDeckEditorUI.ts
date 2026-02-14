@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import { UnifiedEntity, Spellcaster } from "@/types/api";
+import { Spellcaster, Unit, Spell, Titan } from "@/types/api";
 import { useDeckBuilder } from "@/features/deck-builder/hooks/domain/useDeckBuilder";
 import { useToast } from "@/hooks/useToast";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
@@ -33,8 +33,8 @@ export function useDeckEditorUI(
   // Selection Logic
   const {
     selectedItem,
-    setSelectedItem,
-    handleSelectItem: baseHandleSelectItem, // Rename internal
+    // setSelectedItem, // No longer exposed/needed directly, or aliased
+    handleSelectItem: baseHandleSelectItem, 
     closeInspector
   } = useDeckSelection(setActiveMobileTab);
 
@@ -66,10 +66,10 @@ export function useDeckEditorUI(
            // Perform Swap
            if (mode === "TEAM") {
                 if (activeSlot !== null) {
-                    setTeamSlot(activeSlot, slotIndex, pendingSwapCard as any);
+                    setTeamSlot(activeSlot, slotIndex, pendingSwapCard as Unit | Spell | Titan);
                 }
            } else {
-                setSlot(slotIndex, pendingSwapCard as any); 
+                setSlot(slotIndex, pendingSwapCard as Unit | Spell | Titan); 
            }
            
            setPendingSwapCard(null);
@@ -104,7 +104,7 @@ export function useDeckEditorUI(
     
     // Actions
     setActiveMobileTab,
-    setSelectedItem,
+    // setSelectedItem,
     handleQuickAdd,
     handleSelectItem,
     closeInspector,

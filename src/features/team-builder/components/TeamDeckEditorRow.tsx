@@ -3,10 +3,11 @@
 import { memo, useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 import { useDeckStore } from "@/store/index";
+
 import { DeckDrawer } from "@/features/shared/deck/drawer/DeckDrawer";
 import { useToast } from "@/hooks/useToast";
-import { v4 as uuidv4 } from "uuid";
-import { UnifiedEntity } from "@/types/api";
+
+import { Unit, Spell, Titan } from "@/types/api";
 
 interface TeamDeckEditorRowProps {
   index: number;
@@ -14,6 +15,7 @@ interface TeamDeckEditorRowProps {
   onToggle: (index: number, expanded: boolean) => void;
   idSuffix?: string;
   hideGlobalActions?: boolean;
+  onExport?: () => void;
 }
 
 /**
@@ -26,7 +28,8 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
   isExpanded,
   onToggle,
   idSuffix,
-  hideGlobalActions
+  hideGlobalActions,
+  onExport
 }: TeamDeckEditorRowProps) {
   
   // 1. Precise Selector: Only re-renders if THIS deck changes reference
@@ -37,21 +40,15 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
   
   // Actions - Stable References from Store
   const { 
-      setTeamDecks, 
-      saveTeam, 
       openCommandCenter, 
       setActiveSlot, 
-      exportTeamSlotToSolo, 
       openInspector,
       pendingSwapCard,
       setPendingSwapCard,
       setTeamSlot
   } = useDeckStore(useShallow((state) => ({
-      setTeamDecks: state.setTeamDecks,
-      saveTeam: state.saveTeam,
       openCommandCenter: state.openCommandCenter,
       setActiveSlot: state.setActiveSlot,
-      exportTeamSlotToSolo: state.exportTeamSlotToSolo,
       openInspector: state.openInspector,
       pendingSwapCard: state.pendingSwapCard,
       setPendingSwapCard: state.setPendingSwapCard,
@@ -60,43 +57,12 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
 
   const { showToast } = useToast();
 
-  // Handlers - Defined locally to close over 'index'
-  
-  const handleRename = useCallback((name: string) => {
-      // Functional update to avoid dependency on 'teamDecks'
-      const state = useDeckStore.getState();
-      const currentDecks = state.teamDecks;
-      
-      const newDecks = [...currentDecks] as [any, any, any]; // Tuple cast
-      newDecks[index] = { ...newDecks[index], name };
-      
-      state.setTeamDecks(newDecks);
-  }, [index]);
-
-  const handleSave = useCallback(() => {
-      const state = useDeckStore.getState();
-      const targetId = state.activeTeamId || uuidv4();
-      
-      // Save Team with this slot as active to ensure sync
-      state.saveTeam(targetId, undefined, index, undefined); 
-      showToast("Team saved successfully", "success");
-  }, [index, showToast]);
-
   const handleImport = useCallback(() => {
       setActiveSlot(index);
       useDeckStore.getState().setIsImporting(true);
       openCommandCenter();
   }, [index, setActiveSlot, openCommandCenter]);
   
-  const handleExport = useCallback(() => {
-      // deck is stable from props/selector
-      if (deck) {
-          const newId = uuidv4();
-          exportTeamSlotToSolo(index, deck, newId);
-          showToast("Deck exported to Library", "success");
-      }
-  }, [deck, index, exportTeamSlotToSolo, showToast]);
-
   const handleShare = useCallback(async () => {
       const { encodeTeam } = await import("@/services/utils/encoding");
       const { copyToClipboard } = await import("@/lib/clipboard");
@@ -118,9 +84,14 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
 
   if (!deck) return null;
 
+  // Enforce Static Name (DECK 1, DECK 2, etc.)
+  // We explicitly override the name for display purposes.
+  // The underlying deck in store retains its real name, but it is invisible to the user here.
+  const displayDeck = { ...deck, name: `DECK ${index + 1}` };
+
   return (
     <DeckDrawer
-      deck={deck}
+      deck={displayDeck}
             // It bubbles up from ActiveDeckTray -> DeckSlot.
             // ActiveDeckTray calls `onSelect?.(item, pos, slot.index);`
             
@@ -135,7 +106,7 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
             // `onSelect: (item: UnifiedEntity, pos?: { x: number; y: number }, slotIndex?: number) => void;` -> It IS there?
       onSelect={(item, pos, slotIndex) => {
         if (pendingSwapCard && slotIndex !== undefined) {
-             setTeamSlot(index, slotIndex, pendingSwapCard as any);
+             setTeamSlot(index, slotIndex, pendingSwapCard as Unit | Spell | Titan);
              setPendingSwapCard(null);
              showToast(`Swapped ${pendingSwapCard.name} with ${item.name}`, "success");
              return;
@@ -147,13 +118,12 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
       isExpanded={isExpanded}
       onToggle={(val) => onToggle(index, val)}
       
-      onRename={handleRename}
       onActivate={() => setActiveSlot(index)}
-      onSave={handleSave}
+      // onSave={handleSave} // Removed to hide individual save icon
       isSaved={!!activeTeamId}
       
       onImport={handleImport}
-      onExportToSolo={handleExport}
+      onExportToSolo={onExport}
       onShare={handleShare}
       
       hideGlobalActions={hideGlobalActions}

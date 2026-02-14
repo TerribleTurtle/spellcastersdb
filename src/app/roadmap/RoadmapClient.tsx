@@ -13,6 +13,27 @@ interface RoadmapClientProps {
 type FilterType = "all" | "bug" | "feature" | "investigation" | "mobile";
 type SortType = "newest" | "oldest" | "comments";
 
+const FilterButton = ({ type, label, icon: Icon, colorClass, count, activeFilter, onFilterChange }: { type: FilterType, label: string, icon: React.ComponentType<{ className?: string }>, colorClass: string, count: number, activeFilter: FilterType, onFilterChange: (type: FilterType) => void }) => (
+  <button
+    onClick={() => onFilterChange(type)}
+    className={`relative flex flex-col items-center p-4 rounded-xl border transition-all duration-200 w-full
+      ${activeFilter === type 
+        ? `bg-white/10 border-brand-accent/50 shadow-lg shadow-brand-accent/10 ${colorClass}` 
+        : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 text-slate-400"
+      }
+    `}
+  >
+    <div className="text-2xl font-bold mb-1">{count}</div>
+    <div className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider">
+      <Icon className="w-3.5 h-3.5" />
+      {label}
+    </div>
+    {activeFilter === type && (
+      <div className="absolute inset-x-0 -bottom-px h-1 bg-brand-accent/50 mx-4 rounded-t-full filter blur-[2px]" />
+    )}
+  </button>
+);
+
 export default function RoadmapClient({ initialIssues, isLive }: RoadmapClientProps) {
   const [filter, setFilter] = useState<FilterType>("all");
   const [sort, setSort] = useState<SortType>("newest");
@@ -61,27 +82,6 @@ export default function RoadmapClient({ initialIssues, isLive }: RoadmapClientPr
     return result;
   }, [initialIssues, filter, search, sort]);
 
-  const FilterButton = ({ type, label, icon: Icon, colorClass, count }: { type: FilterType, label: string, icon: any, colorClass: string, count: number }) => (
-    <button
-      onClick={() => setFilter(type)}
-      className={`relative flex flex-col items-center p-4 rounded-xl border transition-all duration-200 w-full
-        ${filter === type 
-          ? `bg-white/10 border-brand-accent/50 shadow-lg shadow-brand-accent/10 ${colorClass}` 
-          : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 text-slate-400"
-        }
-      `}
-    >
-      <div className="text-2xl font-bold mb-1">{count}</div>
-      <div className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider">
-        <Icon className="w-3.5 h-3.5" />
-        {label}
-      </div>
-      {filter === type && (
-        <div className="absolute inset-x-0 -bottom-px h-1 bg-brand-accent/50 mx-4 rounded-t-full filter blur-[2px]" />
-      )}
-    </button>
-  );
-
   return (
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 relative z-10">
       
@@ -104,11 +104,11 @@ export default function RoadmapClient({ initialIssues, isLive }: RoadmapClientPr
 
       {/* Interactive Stats / Filters */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
-        <FilterButton type="all" label="All Issues" icon={CheckCircle2} colorClass="text-brand-accent" count={counts.all} />
-        <FilterButton type="bug" label="Bugs" icon={Bug} colorClass="text-red-400" count={counts.bug} />
-        <FilterButton type="feature" label="Features" icon={Lightbulb} colorClass="text-purple-400" count={counts.feature} />
-        <FilterButton type="investigation" label="Research" icon={Search} colorClass="text-yellow-400" count={counts.investigation} />
-        <FilterButton type="mobile" label="Mobile" icon={ArrowDownUp} colorClass="text-blue-400" count={counts.mobile} />
+        <FilterButton type="all" label="All Issues" icon={CheckCircle2} colorClass="text-brand-accent" count={counts.all} activeFilter={filter} onFilterChange={setFilter} />
+        <FilterButton type="bug" label="Bugs" icon={Bug} colorClass="text-red-400" count={counts.bug} activeFilter={filter} onFilterChange={setFilter} />
+        <FilterButton type="feature" label="Features" icon={Lightbulb} colorClass="text-purple-400" count={counts.feature} activeFilter={filter} onFilterChange={setFilter} />
+        <FilterButton type="investigation" label="Research" icon={Search} colorClass="text-yellow-400" count={counts.investigation} activeFilter={filter} onFilterChange={setFilter} />
+        <FilterButton type="mobile" label="Mobile" icon={ArrowDownUp} colorClass="text-blue-400" count={counts.mobile} activeFilter={filter} onFilterChange={setFilter} />
       </div>
 
       {/* Search & Sort Controls */}

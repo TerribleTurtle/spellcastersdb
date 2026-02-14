@@ -1,5 +1,5 @@
 import { RoadmapIssue } from "@/types/roadmap";
-import { Github, ExternalLink, Calendar } from "lucide-react";
+import { ExternalLink, Calendar } from "lucide-react";
 
 interface IssueCardProps {
   issue: RoadmapIssue;

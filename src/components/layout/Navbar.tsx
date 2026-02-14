@@ -4,9 +4,9 @@ import { useState } from "react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useDeckStore } from "@/store/index";
 
-import { ExternalLink, Github, Menu, X, Library, MessageSquare } from "lucide-react";
+
+import { ExternalLink, Github, Menu, X, MessageSquare } from "lucide-react";
 
 import { useFeedback } from "@/hooks/useFeedback";
 
@@ -75,15 +75,6 @@ export default function Navbar() {
 
           {/* Desktop Right Side (External + Menu) */}
           <div className="hidden md:flex items-center gap-4">
-             {/* Library Button */}
-             <button
-                onClick={() => useDeckStore.getState().openCommandCenter()}
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-primary border border-brand-primary hover:bg-brand-primary/90 text-white transition-all text-xs font-bold uppercase tracking-wider shadow-lg shadow-brand-primary/20"
-             >
-                <Library size={16} />
-                <span>Library</span>
-             </button>
-
             
             {/* External Links - Hidden on desktop now as they are in sidebar, or keep specifically for some? */}
             {/* Actually, if we use sidebar, we might trigger the sidebar on mobile via this button, OR just hide this trigger on desktop if the sidebar is always visible.
@@ -103,14 +94,6 @@ export default function Navbar() {
 
           {/* Mobile menu button */}
           <div className="-mr-2 flex items-center gap-2 md:hidden">
-            <button
-               onClick={() => useDeckStore.getState().openCommandCenter()}
-               className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-primary border border-brand-primary hover:bg-brand-primary/90 text-white transition-all text-xs font-bold uppercase tracking-wider shadow-lg shadow-brand-primary/20"
-            >
-               <Library size={16} />
-               <span>Library</span>
-            </button>
-
             <button
               onClick={toggleMenu}
               className="inline-flex items-center justify-center rounded-md p-2 text-slate-400 hover:bg-white/5 hover:text-brand-accent focus:outline-none"

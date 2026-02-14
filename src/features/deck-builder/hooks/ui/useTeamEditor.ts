@@ -32,10 +32,19 @@ export function useTeamEditor() {
     );
 
     // Responsive State
-    const [allowMultiple, setAllowMultiple] = useState(false);
+    const [allowMultiple, setAllowMultiple] = useState(() => {
+        // Default to true on server to avoid hydration mismatch if possible, 
+        // OR default to false and accept it corrects after mount.
+        // Actually, for "Desktop" teams, we probably want it to FEEL like desktop immediately.
+        if (typeof window !== 'undefined') {
+            return window.innerWidth >= 1280;
+        }
+        return false;
+    });
+
     useEffect(() => {
         const checkWidth = () => setAllowMultiple(window.innerWidth >= 1280);
-        checkWidth();
+        // checkWidth(); // Initialized in state now, but double check doesn't hurt, removing to avoid flicker if state is already right
         window.addEventListener('resize', checkWidth);
         return () => window.removeEventListener('resize', checkWidth);
     }, []);
@@ -43,11 +52,32 @@ export function useTeamEditor() {
     // Accordion State
     const accordion = useAccordionState(3, 0, allowMultiple);
     
-    // Auto-select Slot 1 on mount
+    // Auto-select Slot 1 on mount if none selected, OR sync accordion to active slot
+    // Auto-select Slot 1 on mount if none selected, OR sync accordion to active slot
     useEffect(() => {
-        if (activeSlot === null) setActiveSlot(0);
+        if (activeSlot === null) {
+            setActiveSlot(0);
+            // safe to just set one here
+            const newState = [true, false, false];
+            accordion.setExpandedState(newState);
+        } else {
+             // Sync accordion to match active slot on mount/change
+             accordion.setExpandedState(prev => {
+                 const newState = [...prev];
+                 // Always ensure active is open
+                 newState[activeSlot] = true;
+                 
+                 // If NOT allowMultiple (Mobile/Narrow), close others to enforce accordion style
+                 if (!allowMultiple) {
+                     for(let i=0; i<newState.length; i++) {
+                         if (i !== activeSlot) newState[i] = false;
+                     }
+                 }
+                 return newState;
+             });
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [activeSlot, allowMultiple]);
 
     // Footer Height Calculation
     const footerHeight = accordion.expandedState.reduce((acc, expanded) => acc + (expanded ? TRAY_EXPANDED_HEIGHT : TRAY_COLLAPSED_HEIGHT), 0);

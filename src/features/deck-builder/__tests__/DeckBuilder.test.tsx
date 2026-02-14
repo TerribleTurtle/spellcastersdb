@@ -18,8 +18,8 @@ vi.mock("@/hooks/useToast", () => ({
 
 // Mock next/image
 vi.mock("next/image", () => ({
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @next/next/no-img-element, jsx-a11y/alt-text, @typescript-eslint/no-unused-vars
-    default: ({ fill, ...props }: any) => <img {...props} />
+    // eslint-disable-next-line @next/next/no-img-element
+    default: ({ ...props }: React.ComponentProps<'img'> & { fill?: boolean }) => <img alt="" {...props} />
 }));
 
 // Polyfill ResizeObserver
@@ -41,12 +41,17 @@ vi.mock("next/navigation", () => ({
     useSearchParams: () => new URLSearchParams(),
 }));
 
+interface MockUnit {
+    entity_id: string;
+    name: string;
+}
+
 // Mock UnitBrowser to avoid complex filtering/virtualization in integration test
 vi.mock("@/features/deck-builder/browser/UnitBrowser", () => ({
-    UnitBrowser: ({ items, onQuickAdd }: any) => {
+    UnitBrowser: ({ items, onQuickAdd }: { items: MockUnit[], onQuickAdd: (item: MockUnit) => void }) => {
         return (
         <div data-testid="unit-browser-mock">
-            {items.map((item: any) => (
+            {items.map((item) => (
                 <div key={item.entity_id}>
                     {item.name}
                     <button aria-label="Quick Add" onClick={() => onQuickAdd(item)}>

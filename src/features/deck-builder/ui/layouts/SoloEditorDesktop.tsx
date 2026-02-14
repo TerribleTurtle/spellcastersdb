@@ -43,7 +43,7 @@ export function SoloEditorDesktop({
 }: SoloEditorDesktopProps) {
   const isSwapMode = !!pendingSwapCard;
   return (
-    <div className="hidden xl:contents">
+    <div id="active-deck-desktop" className="hidden xl:contents">
       {/* Left Column: Vault / Browser */}
       <section 
         aria-label="Unit Library"

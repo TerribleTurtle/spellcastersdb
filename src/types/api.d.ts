@@ -9,6 +9,8 @@
 
 import { EntityCategory } from "./enums";
 
+export type Mode = "SOLO" | "TEAM";
+
 export type MagicSchool =
   | "Elemental"
   | "Wild"

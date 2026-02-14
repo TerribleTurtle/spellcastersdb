@@ -1,5 +1,5 @@
 import { useDraggable, useDroppable, useDndContext } from "@dnd-kit/core";
-import { useEffect } from "react";
+
 import { Shield } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";

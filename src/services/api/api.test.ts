@@ -50,7 +50,7 @@ describe('Remote Data Validation', () => {
     it('should validate and return data on successful fetch', async () => {
         // Mock success response based on URL
         (global.fetch as Mock).mockImplementation((url: string) => {
-            let body: any = [];
+            let body: unknown = [];
             if (url.includes("units.json")) body = mockApiResponse.units;
             else if (url.includes("spells.json")) body = mockApiResponse.spells;
             else if (url.includes("heroes.json")) body = mockApiResponse.spellcasters;

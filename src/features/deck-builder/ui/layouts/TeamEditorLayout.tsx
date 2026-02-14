@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronUp, ChevronsDown, Save, Edit2, Share2, Check, Eraser, Copy, RefreshCw } from "lucide-react";
+import { ChevronUp, ChevronsDown, Save, Edit2, Share2, Check, Copy, PlusCircle, Book } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { UnifiedEntity, Spell, Spellcaster, Titan, Unit } from "@/types/api";
@@ -8,7 +8,8 @@ import { BrowserItem } from "@/types/browser";
 
 import { useDeckEditorUI } from "@/features/deck-builder/hooks/ui/useDeckEditorUI";
 import { UnitBrowser } from "@/features/deck-builder/browser/UnitBrowser";
-import { SaveDeckModal } from "@/components/modals/SaveDeckModal";
+import { ExportDeckModal } from "@/components/modals/ExportDeckModal";
+
 import { TeamDeckEditorRow } from "@/features/team-builder/components/TeamDeckEditorRow";
 import { SwapModeBanner } from "@/features/deck-builder/ui/overlays/SwapModeBanner";
 
@@ -30,16 +31,22 @@ import { UnsavedChangesModal } from "@/components/modals/UnsavedChangesModal";
 import { InspectorPanel } from "@/features/shared/inspector/InspectorPanel";
 import { useTeamEditor } from "@/features/deck-builder/hooks/ui/useTeamEditor";
 
+import { useState } from "react";
+import { MobileHeader } from "@/features/deck-builder/ui/mobile/MobileHeader";
+import { MobileContextBar } from "@/features/deck-builder/ui/mobile/MobileContextBar";
+import { SaveTeamModal } from "@/components/modals/SaveTeamModal";
+
 export function TeamEditorLayout({ 
     units, 
     spellcasters, 
 }: TeamEditorLayoutProps) {
-  const { openInspector: originalOpenInspector, mode, setMode, pendingSwapCard, setPendingSwapCard } = useDeckStore(useShallow(state => ({
+  const { openInspector: originalOpenInspector, mode, setMode, pendingSwapCard, setPendingSwapCard, openCommandCenter } = useDeckStore(useShallow(state => ({
       openInspector: state.openInspector,
       mode: state.mode,
       setMode: state.setMode,
       pendingSwapCard: state.pendingSwapCard,
-      setPendingSwapCard: state.setPendingSwapCard
+      setPendingSwapCard: state.setPendingSwapCard,
+      openCommandCenter: state.openCommandCenter,
   })));
   
   // Debug wrapper
@@ -84,6 +91,19 @@ export function TeamEditorLayout({
   
   const isSwapMode = !!pendingSwapCard;
 
+  // Modal State
+  const [showSaveTeamModal, setShowSaveTeamModal] = useState(false);
+
+  const handleSaveCopyClick = () => {
+      setShowSaveTeamModal(true);
+  };
+
+  const handleConfirmSaveCopy = (newName: string) => {
+      saveTeamAsCopy(newName);
+      setShowSaveTeamModal(false);
+      showToast("Team copied successfully", "success");
+  };
+
   return (
     <>
     {/* Grid Layout:
@@ -95,8 +115,33 @@ export function TeamEditorLayout({
             Col 2: Inspector (Top) + Drawer Stack (Bottom)
     */}
     <div className="h-full flex flex-col relative bg-surface-main overflow-hidden xl:grid xl:grid-cols-[1fr_640px] xl:grid-rows-[auto_1fr]">
-      {/* Header */}
-      <div className="h-14 border-b border-white/10 flex items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
+      
+      {/* Mobile Header (XL Hidden) */}
+      <div className="xl:hidden">
+          <MobileHeader 
+              mode={mode} 
+              onSetMode={setMode} 
+              onShare={handleTeamShare}
+              onClear={handleTeamClear} 
+              onOpenLibrary={openCommandCenter}
+          />
+          <MobileContextBar 
+              deckName={teamName || ""}
+              onRename={setTeamName}
+              isSaved={isTeamSaved}
+              isExistingDeck={isExistingTeam}
+              onSave={handleTeamSave}
+              onSaveCopy={isExistingTeam ? handleSaveCopyClick : undefined}
+              isEmptyDeck={teamDecks ? teamDecks.every(d => d.slots.every(s => !s.unit) && !d.spellcaster) : true}
+              
+              canCollapse={true}
+              areAllCollapsed={areAllCollapsed}
+              onToggleCollapse={areAllCollapsed ? expandAll : collapseAll}
+          />
+      </div>
+
+      {/* Desktop Header (Hidden on Mobile) */}
+      <div className="hidden xl:flex h-14 border-b border-white/10 items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
         <div className="flex items-center gap-2">
            {/* Team Name Input */}
            <div className="relative group flex items-center gap-2 shrink mr-2 min-w-0 max-w-[150px] md:max-w-none">
@@ -112,6 +157,15 @@ export function TeamEditorLayout({
        </div>
         
         <div className="flex items-center gap-1 md:gap-2 shrink-0">
+            {/* Library */}
+            <button
+                onClick={() => openCommandCenter()}
+                className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors mr-2"
+                title="Open Library"
+            >
+                <Book size={18} />
+            </button>
+
             {/* Mode Switcher */}
             <div className="flex items-center bg-black/20 p-1 rounded-lg border border-white/5 mr-2">
                 <button
@@ -138,9 +192,6 @@ export function TeamEditorLayout({
                 </button>
             </div>
 
-            {/* Library */}
-
-
             {/* Save Team Button */}
             <button
                 onClick={handleTeamSave}
@@ -155,13 +206,22 @@ export function TeamEditorLayout({
                 {!!activeTeamId && isTeamSaved ? (
                      <Check size={18} className="md:w-3.5 md:h-3.5" />
                 ) : isExistingTeam ? (
-                     <RefreshCw size={18} className="md:w-3.5 md:h-3.5" />
+                     <Save size={18} className="md:w-3.5 md:h-3.5" />
                 ) : (
                      <Save size={18} className="md:w-3.5 md:h-3.5" />
                 )}
                 <span className="hidden md:inline text-xs font-bold uppercase tracking-wider">
                     {!!activeTeamId && isTeamSaved ? "Saved" : isExistingTeam ? "Update" : "Save Team"}
                 </span>
+            </button>
+
+             {/* Collapse/Expand All (Desktop) - Moved here */}
+             <button 
+                onClick={areAllCollapsed ? expandAll : collapseAll}
+                className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors"
+                title={areAllCollapsed ? "Expand All" : "Collapse All"}
+            >
+                {areAllCollapsed ? <ChevronsDown size={18} /> : <ChevronUp size={18} />}
             </button>
 
              {/* Save Copy (Only existing teams) */}
@@ -171,11 +231,11 @@ export function TeamEditorLayout({
                           saveTeamAsCopy();
                           showToast("Team copied successfully", "success");
                       }}
-                      className="p-2 md:px-3 md:py-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors border border-white/5"
+                      className="flex items-center gap-2 p-2 md:px-3 md:py-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors border border-white/20"
                       title="Save as Copy"
                   >
                       <Copy size={18} className="md:w-3.5 md:h-3.5" />
-                      <span className="hidden md:inline ml-2 text-xs font-bold uppercase tracking-wider">
+                      <span className="hidden md:inline text-xs font-bold uppercase tracking-wider">
                         Save Copy
                       </span>
                   </button>
@@ -190,24 +250,14 @@ export function TeamEditorLayout({
                  <Share2 size={18} />
              </button>
 
-
-
-            {/* Clear Team Button */}
+             {/* New Team Button (Clear) */}
              <button 
                    onClick={handleTeamClear}
-                   className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
-                   title="Clear Team"
+                   className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors"
+                   title="New Team"
               >
-                  <Eraser size={18} />
+                  <PlusCircle size={18} />
               </button>
-
-             {/* Mobile Icon Only */}
-             <button 
-                onClick={areAllCollapsed ? expandAll : collapseAll}
-                className="p-2 text-gray-400 hover:text-white"
-            >
-                {areAllCollapsed ? <ChevronUp size={18} /> : <ChevronsDown size={18} />}
-            </button>
         </div>
       </div>
 
@@ -253,6 +303,7 @@ export function TeamEditorLayout({
                     onToggle={accordion.toggle}
                     idSuffix="desktop"
                     hideGlobalActions
+                    onExport={() => setDeckToExport(teamDecks[idx])}
                   />
                ))}
            </div>
@@ -271,11 +322,20 @@ export function TeamEditorLayout({
                 onToggle={accordion.toggle}
                 idSuffix="mobile"
                 hideGlobalActions
+                onExport={() => setDeckToExport(teamDecks[idx])}
              />
           ))}
       </div>
       
       {/* Modals */}
+      
+      {/* Save Team Modal */}
+      <SaveTeamModal 
+          isOpen={showSaveTeamModal}
+          teamName={teamName}
+          onClose={() => setShowSaveTeamModal(false)}
+          onSave={handleConfirmSaveCopy}
+      />
       
       {/* Unsaved Changes for Clear TEAM */}
       <UnsavedChangesModal 
@@ -286,7 +346,7 @@ export function TeamEditorLayout({
           onDiscard={() => {
                clearTeam();
                setShowUnsavedTeamModal(false);
-          }}
+           }}
       />
       
       {/* Unsaved Changes for Clear SLOT */}
@@ -310,11 +370,11 @@ export function TeamEditorLayout({
     </div>
     
     {deckToExport && (
-        <SaveDeckModal 
+        <ExportDeckModal 
             deck={deckToExport}
             isOpen={!!deckToExport}
             onClose={() => setDeckToExport(null)}
-            onSave={(newName) => {
+            onExport={(newName) => {
                 importDeckToLibrary({ ...deckToExport, name: newName });
                 showToast(`"${newName}" saved to Solo Library`, "success");
                 setDeckToExport(null);

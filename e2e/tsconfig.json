@@ -1,8 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../test-results",
-    "types": ["node", "@playwright/test"]
-  },
-  "include": ["**/*.ts"]
-}

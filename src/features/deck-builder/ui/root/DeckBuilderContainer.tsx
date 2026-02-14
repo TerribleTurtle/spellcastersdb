@@ -12,7 +12,7 @@ interface DeckBuilderContainerProps {
 }
 
 export function DeckBuilderContainer({ units, spellcasters }: DeckBuilderContainerProps) {
-  const { toasts, showToast } = useToast();
+  const { showToast } = useToast();
   
   // URL & State Sync Hook (Now self-contained)
   useUrlSync({
@@ -26,11 +26,6 @@ export function DeckBuilderContainer({ units, spellcasters }: DeckBuilderContain
 
   return (
     <>
-      <DeckBuilderView 
-        units={units} 
-        spellcasters={spellcasters}
-      />
-      
       <DeckBuilderView 
         units={units} 
         spellcasters={spellcasters}

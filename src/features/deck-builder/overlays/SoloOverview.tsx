@@ -5,7 +5,6 @@ import { useState } from "react";
 import {
   AlertCircle,
   CheckCircle2,
-  Copy,
   Edit,
   Link as LinkIcon,
   Users,

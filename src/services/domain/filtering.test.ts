@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { filterBrowserItems, matchesSearch } from "./filtering";
+import { filterBrowserItems } from "./filtering";
 import { BrowserItem } from "@/types/browser";
 import { EntityCategory } from "@/types/enums";
 
 const MockItems: BrowserItem[] = [
-    { entity_id: "1", name: "Fireball", category: EntityCategory.Spell, description: "A ball of fire", tags: ["fire"], magic_school: "Pyromancy" } as any,
-    { entity_id: "2", name: "Water Elemental", category: EntityCategory.Creature, description: "Effective against fire", tags: ["water"], magic_school: "Hydromancy" } as any,
-    { entity_id: "3", name: "Fireworks", category: EntityCategory.Item, description: "Pretty lights", tags: ["fire"], magic_school: "None" } as any,
+    { entity_id: "1", name: "Fireball", category: EntityCategory.Spell, description: "A ball of fire", tags: ["fire"], magic_school: "Pyromancy" } as unknown as BrowserItem,
+    { entity_id: "2", name: "Water Elemental", category: EntityCategory.Creature, description: "Effective against fire", tags: ["water"], magic_school: "Hydromancy" } as unknown as BrowserItem,
+    { entity_id: "3", name: "Fireworks", category: EntityCategory.Consumable, description: "Pretty lights", tags: ["fire"], magic_school: "None" } as unknown as BrowserItem,
 ];
 
 describe("Filtering Logic", () => {

@@ -179,18 +179,27 @@ export const DeckDrawer = memo(function DeckDrawer({
              // isOver && "bg-brand-primary/20" // Handled by overlay above now
         )}
         onClick={(e) => {
-             // ... existing click logic
-            if (window.innerWidth >= 1280) {
-              if (!isExpanded) {
-                  toggle(e);
-              } else if (forceActive) {
-                  toggle(e);
-              } else {
-                  handleActivate();
-              }
-            } else {
-                toggle(e);
-            }
+             // Smart Click Logic for Team Drawer (Desktop)
+             // Behavior:
+             // 1. Closed -> Open & Activate
+             // 2. Open & Inactive -> Activate (Keep Open)
+             // 3. Open & Active -> Close
+             
+             if (window.innerWidth >= 1280) {
+                 if (!isExpanded) {
+                     // Case 1: Closed -> Open & Activate
+                     toggle(e); // toggle handles calling onActivate internally when opening
+                 } else if (forceActive) {
+                     // Case 3: Open & Active -> Close
+                     toggle(e);
+                 } else {
+                     // Case 2: Open & Inactive -> Just Activate
+                     handleActivate();
+                 }
+             } else {
+                 // Mobile: Simple Toggle
+                 toggle(e);
+             }
         }}
       >
         {/* Left: Check/Status or just Deck Name */}

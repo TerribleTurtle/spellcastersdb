@@ -101,8 +101,8 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
     <>
     <div className="h-full flex flex-col relative bg-surface-main overflow-hidden xl:grid xl:grid-cols-[1fr_640px] xl:grid-rows-[auto_1fr]">
       
-      {/* Shared Header */}
-      <div className="h-14 border-b border-white/10 flex items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
+      {/* Shared Header (Desktop Only) */}
+      <div id="deck-editor-header" className="hidden xl:flex h-14 border-b border-white/10 items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
           {/* Deck Name Input */}
           <div className="relative group flex items-center gap-1.5 shrink mr-2 min-w-0 max-w-[200px] md:max-w-[300px] lg:max-w-[400px]">
                <input 
@@ -174,11 +174,11 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
               {isExistingDeck && (
                   <button
                       onClick={handleSaveCopy}
-                      className="p-2 md:px-3 md:py-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors border border-white/5"
+                      className="flex items-center gap-2 p-2 md:px-3 md:py-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors border border-white/20"
                       title="Save as Copy"
                   >
                       <Copy size={18} className="md:w-3.5 md:h-3.5" />
-                      <span className="hidden md:inline ml-2 text-xs font-bold uppercase tracking-wider">
+                      <span className="hidden md:inline text-xs font-bold uppercase tracking-wider">
                         Save Copy
                       </span>
                   </button>

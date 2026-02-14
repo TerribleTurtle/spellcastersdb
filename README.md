@@ -57,12 +57,10 @@ For detailed contribution guidelines, please see [CONTRIBUTING.md](CONTRIBUTING.
 
 ## Testing
 
-     Run the End-to-End test suite:
+     Run the Unit test suite:
 
      ```bash
-     # Critical Path Tests
-     npx playwright test e2e/deck-builder-solo.spec.ts
-     npx playwright test e2e/deck-builder-team.spec.ts
+     npm run test
      ```
 
      ## Documentation

@@ -43,6 +43,7 @@ export function useAccordionState(count: number, initialOpenIndex: number = 0, a
 
   return {
     expandedState,
+    setExpandedState, // Expose for direct control
     toggle,
     collapseAll,
     expandAll,

@@ -4,11 +4,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 // Mock server-only to prevent crash in test environment
 vi.mock("server-only", () => { return {}; });
 
-import { getUnits, ensureDataLoaded, fetchGameData } from "../api";
+import { getUnits } from "../api";
 import { registry } from "../registry";
 import { DataValidationError } from "../mappers";
 import * as ApiClient from "../api-client";
 import { AllDataResponse } from "@/types/api";
+import { EntityCategory } from "@/types/enums";
 
 // Mock API Client entirely
 vi.mock("../api-client", async (importOriginal) => {
@@ -32,18 +33,27 @@ describe("API Access & Reliability", () => {
 
     describe("Caching Strategy", () => {
         it("should call fetchRemoteData only once when getUnits is called multiple times", async () => {
-            const mockData = {
-                units: [{ entity_id: "u1", name: "Unit 1", category: "Creature", magic_school: "Wild" }],
+            const mockData: AllDataResponse = {
+                units: [{ 
+                    entity_id: "u1", 
+                    name: "Unit 1", 
+                    category: EntityCategory.Creature, 
+                    magic_school: "Wild",
+                    health: 100,
+                    tags: [], // Required by Unit interface
+                    description: "Test Unit" 
+                }],
                 spells: [],
                 titans: [],
                 spellcasters: [],
                 consumables: [],
                 upgrades: [],
                 build_info: { version: "1", generated_at: "now" }
-            } as any;
+            };
+            
             
             // Setup successful fetch
-            (ApiClient.fetchRemoteData as any).mockResolvedValue(mockData);
+            vi.mocked(ApiClient.fetchRemoteData).mockResolvedValue(mockData);
 
             // 1. First Call: Should fetch
             const units1 = await getUnits();
@@ -60,7 +70,7 @@ describe("API Access & Reliability", () => {
     describe("Error Handling", () => {
         it("should propagate DataFetchError (Network Error)", async () => {
             const networkError = new ApiClient.DataFetchError("Network Failure", 500);
-            (ApiClient.fetchRemoteData as any).mockRejectedValue(networkError);
+            vi.mocked(ApiClient.fetchRemoteData).mockRejectedValue(networkError);
 
             await expect(getUnits()).rejects.toThrow("Network Failure");
             
@@ -70,14 +80,14 @@ describe("API Access & Reliability", () => {
 
         it("should propagate DataValidationError (Schema Error)", async () => {
              const validationError = new DataValidationError("Invalid JSON", "Friendly Message");
-             (ApiClient.fetchRemoteData as any).mockRejectedValue(validationError);
+             vi.mocked(ApiClient.fetchRemoteData).mockRejectedValue(validationError);
 
              await expect(getUnits()).rejects.toThrow("Invalid JSON");
              expect(registry.isInitialized()).toBe(false);
         });
         
         it("should unexpected errors propagate", async () => {
-             (ApiClient.fetchRemoteData as any).mockRejectedValue(new Error("Boom"));
+             vi.mocked(ApiClient.fetchRemoteData).mockRejectedValue(new Error("Boom"));
 
              await expect(getUnits()).rejects.toThrow("Boom");
         });

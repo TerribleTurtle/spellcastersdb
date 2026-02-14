@@ -6,7 +6,7 @@ import { DeckSlot } from "@/types/deck";
 
 import { DeckSlot as Slot } from "./DeckSlot";
 import { SpellcasterSlot } from "./SpellcasterSlot";
-import { useRef } from "react";
+
 
 interface ActiveDeckTrayProps {
   slots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];

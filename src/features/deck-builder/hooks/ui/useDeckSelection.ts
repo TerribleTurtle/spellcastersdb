@@ -1,24 +1,29 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { UnifiedEntity } from "@/types/api";
 import { DECK_EDITOR_TABS, DeckEditorTab } from "../../constants";
+import { useShallow } from "zustand/react/shallow";
+import { useDeckStore } from "@/store/index";
 
 export type SelectableItem = UnifiedEntity;
 
 export function useDeckSelection(setActiveMobileTab: (tab: DeckEditorTab) => void) {
-  const [selectedItem, setSelectedItem] = useState<SelectableItem | null>(null);
+  // Use Global Store instead of Local State
+  const { inspectedCard, openInspector, closeInspector } = useDeckStore(
+    useShallow((state) => ({
+      inspectedCard: state.inspectedCard,
+      openInspector: state.openInspector,
+      closeInspector: state.closeInspector,
+    }))
+  );
 
   const handleSelectItem = useCallback((item: SelectableItem) => {
-    setSelectedItem(item);
+    openInspector(item);
     setActiveMobileTab(DECK_EDITOR_TABS.INSPECTOR);
-  }, [setActiveMobileTab]);
-
-  const closeInspector = useCallback(() => {
-    setSelectedItem(null);
-  }, []);
+  }, [openInspector, setActiveMobileTab]);
 
   return {
-    selectedItem,
-    setSelectedItem,
+    selectedItem: inspectedCard,
+    setSelectedItem: openInspector, // Alias for compatibility/completeness
     handleSelectItem,
     closeInspector
   };

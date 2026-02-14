@@ -1,5 +1,5 @@
 import { CONFIG } from "@/lib/config";
-import { RawData, mapRawDataToAllData, DataValidationError } from "./mappers";
+import { RawData, mapRawDataToAllData, DataValidationError, RawUnit } from "./mappers";
 import { AllDataResponse } from "@/types/api";
 
 export { DataValidationError };
@@ -54,12 +54,12 @@ export async function fetchChunkedData(): Promise<AllDataResponse> {
     consumables, 
     upgrades
   ] = await Promise.all([
-    fetchChunk<any[]>("units.json"),
-    fetchChunk<any[]>("spells.json"),
-    fetchChunk<any[]>("heroes.json"),
-    fetchChunk<any[]>("titans.json"),
-    fetchChunk<any[]>("consumables.json"),
-    fetchChunk<any[]>("upgrades.json").catch(err => {
+    fetchChunk<RawUnit[]>("units.json"),
+    fetchChunk<unknown[]>("spells.json"),
+    fetchChunk<unknown[]>("heroes.json"),
+    fetchChunk<unknown[]>("titans.json"),
+    fetchChunk<unknown[]>("consumables.json"),
+    fetchChunk<unknown[]>("upgrades.json").catch(err => {
         console.warn("Failed to fetch upgrades, defaulting to empty array:", err);
         return [];
     }),

@@ -81,7 +81,7 @@ export const TeamDeckRow = memo(function TeamDeckRow({
               </div>
             </div>
             <h3 className="text-lg font-black text-white uppercase tracking-wider truncate max-w-[calc(100vw-6rem)] lg:max-w-full">
-              {deck.name || "Untitled Deck"}
+              Slot {index + 1}
             </h3>
             <p className="text-brand-accent text-xs font-bold uppercase tracking-widest mt-1">
               {deck.spellcaster?.name || "No Spellcaster"}

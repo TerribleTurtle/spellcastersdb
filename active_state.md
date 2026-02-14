@@ -1,18 +1,28 @@
 # Current Focus
 
-- **Deck Persistence UX**
-  - **Phase 1**: Solo Builder Smart Save & Save Copy. `[Completed]`
-  - **Phase 2**: Team Builder Parity (Smart Save & Save Copy). `[Completed]`
-  - **Status**: Released.
+- **Mobile UX Redesign**
+  - **Split UI**: Implemented Mobile Header, Context Bar, and Deck Dock. `[Completed]`
+  - **Team Mode**: Simplified UI (removed deck naming). `[Completed]`
+  - **Phase 8 (Team Builder)**: Complete.
+  - **Status**: **READY FOR DEPLOYMENT**. Verification passed.
 
 # Recent Changes
 
-- **Completed Deck Persistence UX**
-  - **Smart Save**: "Save" button automatically toggles to "Update" for existing decks/teams.
-  - **Save Copy**: Added explicit "Save Copy" button to fork existing decks/teams.
-  - **Store Logic**: Implemented deep cloning for Team forks to ensure data integrity.
+- **Mobile UX Redesign**
+  - **New Layout**: `SoloEditorMobile` now uses a split 4-part layout (Header, Context, Browser, Dock).
+  - **Fix**: infinite loop in store selector resolved with `useShallow`.
+  - **Pre-Deployment Verification**:
+    - **Quality**: Fixed lint/syntax errors in `SoloEditorMobile.tsx`, `Navbar.tsx`, `SaveTeamModal.tsx`.
+    - **Tests**: Validated Unit Tests (Vitest). Removed Playwright.
+    - **Docs**: Updated CHANGELOG and README.
+  - **Team Builder**: Renamed decks to "Slot X" and removed rename input.
 
-- **Completed Phase 9: Code Modernization**
+- **Team Drawer Logic Refresh**
+  - **Interaction Model:** Implemented "Smart Click" logic for Desktop Team Drawers (Closed->Open/Active, Open/Inactive->Active, Open/Active->Close).
+  - **Bug Fix**: Resolved `allowMultiple` state initialization issue in `useTeamEditor`.
+  - **Verification**: Added `DeckDrawer.test.tsx` for unit testing.
+
+- **Completed Deck Persistence UX**
   - **Architecture** Unification: All `src/components/deck-builder` code moved to `src/features`.
   - **Logic**: Decoupled `DragDropProvider` logic into `modifiers.ts` and `useScrollLock.ts`.
   - **Cleanup**: Deleted legacy directories and unused imports.
