@@ -22,8 +22,9 @@ export function SoloInspectOverlay() {
       onClick={() => setViewingDeck(null)}
     >
       <div
-        className="w-full max-w-6xl h-full max-h-[90vh] bg-surface-main rounded-xl border border-white/10 shadow-2xl overflow-hidden relative flex flex-col"
+        className="w-full max-w-6xl h-auto max-h-[90vh] bg-surface-main rounded-xl border border-white/10 shadow-2xl overflow-hidden relative flex flex-col shrink-0"
         onClick={(e) => e.stopPropagation()}
+        style={{ height: 'auto' }}
       >
         <SoloOverview
           deck={viewingDeckData}

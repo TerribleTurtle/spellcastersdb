@@ -276,6 +276,7 @@ export interface Upgrade {
   cost?: number;
 
   tags: string[];
+  category: EntityCategory.Upgrade;
 }
 
 // ============================================================================
@@ -298,4 +299,4 @@ export interface AllDataResponse {
   _source?: string;
 }
 
-export type UnifiedEntity = Unit | Spell | Titan | Spellcaster | Consumable;
+export type UnifiedEntity = Unit | Spell | Titan | Spellcaster | Consumable | Upgrade;

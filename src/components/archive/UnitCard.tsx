@@ -50,12 +50,22 @@ function getEntityMeta(entity: UnifiedEntity) {
     };
   }
 
+  // Upgrade
+  if (entity.category === "Upgrade" || (!("magic_school" in entity) && "cost" in entity)) {
+     return {
+         href: `/upgrades/${entity.entity_id}`,
+         category: "Upgrade",
+         rank: "UPGRADE",
+         school: "Technology",
+     };
+  }
+
   // Unit or Spell
   return {
     href: `/incantations/units/${entity.entity_id}`,
     category: entity.category,
     rank: "rank" in entity && entity.rank ? entity.rank : "I",
-    school: entity.magic_school,
+    school: "magic_school" in entity ? entity.magic_school : "Neutral",
   };
 }
 

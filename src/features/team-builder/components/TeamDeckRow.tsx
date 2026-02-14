@@ -41,7 +41,7 @@ export const TeamDeckRow = memo(function TeamDeckRow({
         {/* Header / Info Column */}
         <div
           className={cn(
-            "w-full lg:w-64 bg-black/20 border-b lg:border-b-0 lg:border-r border-white/5 p-3 md:p-4 flex flex-col justify-between relative overflow-hidden",
+            "w-full lg:w-64 bg-black/20 border-b lg:border-b-0 lg:border-r border-white/5 p-2 md:p-3 flex flex-col justify-between relative overflow-hidden",
             !isReadOnly && "cursor-pointer hover:bg-white/5 transition-colors"
           )}
           onClick={!isReadOnly ? onEdit : undefined}
@@ -80,7 +80,7 @@ export const TeamDeckRow = memo(function TeamDeckRow({
                 )}
               </div>
             </div>
-            <h3 className="text-lg font-black text-white uppercase tracking-wider truncate">
+            <h3 className="text-lg font-black text-white uppercase tracking-wider truncate max-w-[calc(100vw-6rem)] lg:max-w-full">
               {deck.name || "Untitled Deck"}
             </h3>
             <p className="text-brand-accent text-xs font-bold uppercase tracking-widest mt-1">

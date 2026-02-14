@@ -1,6 +1,7 @@
 import { StateCreator } from "zustand";
 import { v4 as uuidv4 } from 'uuid';
 import { DeckBuilderState, PersistenceState } from "./types";
+import { Deck, Team } from "@/types/deck";
 import { INITIAL_DECK } from "@/services/api/persistence";
 import { cloneDeck } from "@/services/utils/deck-utils";
 import { getUniqueName } from "@/services/utils/naming-utils";
@@ -188,6 +189,38 @@ export const createPersistenceSlice: StateCreator<
         t.id === id ? { ...t, name: newName } : t
       )
   })),
+
+  saveTeamAsCopy: (nameInput) => set((state) => {
+      // 1. Generate New IDs
+      const newTeamId = uuidv4();
+      
+      // 2. Resolve Name
+      const existingNames = state.savedTeams.map(t => t.name || "");
+      const baseName = nameInput?.trim() || state.teamName || "Untitled Team";
+      const finalName = getUniqueName(baseName, existingNames);
+
+      // 3. Deep Clone Decks with NEW IDs
+      const newDecks = state.teamDecks.map(deck => ({
+          ...cloneDeck(deck),
+          id: uuidv4(),
+          name: deck.name // Keep deck names, or could suffix them if desired
+      })) as [Deck, Deck, Deck];
+
+      // 4. Construct New Team
+      const newTeam: Team = {
+          id: newTeamId,
+          name: finalName,
+          decks: newDecks
+      };
+
+      // 5. Update State: Save and Set Active
+      return {
+          savedTeams: [...state.savedTeams, newTeam],
+          activeTeamId: newTeamId,
+          teamName: finalName,
+          teamDecks: newDecks 
+      };
+  }),
 
   clearSavedTeams: () => set({ savedTeams: [] }),
 

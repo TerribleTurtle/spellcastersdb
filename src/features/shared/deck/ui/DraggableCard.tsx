@@ -39,7 +39,7 @@ export const DraggableCard = React.memo(function DraggableCard({
     data: draggableData,
   });
 
-  const CLICK_DELAY_MS = 175;
+  const CLICK_DELAY_MS = 120;
 
   const clickTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -66,8 +66,9 @@ export const DraggableCard = React.memo(function DraggableCard({
 
   const handleQuickAdd = useCallback((e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
+    e.preventDefault(); // Prevent default double-click selection
     
-    // If a double click happens, clear the pending single click action
+    // If a double click happens, clear the pending single click action immediately
     if (clickTimeoutRef.current) {
         clearTimeout(clickTimeoutRef.current);
         clickTimeoutRef.current = null;
@@ -79,6 +80,7 @@ export const DraggableCard = React.memo(function DraggableCard({
   return (
     <div
       ref={setNodeRef}
+      data-testid={`browser-item-${item.entity_id}`}
       {...listeners}
       {...attributes}
       onClick={handleClick}

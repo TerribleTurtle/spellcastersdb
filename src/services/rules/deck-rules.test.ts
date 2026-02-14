@@ -71,10 +71,10 @@ const getInitialDeck = (): Deck => ({
 
 describe("DeckRules", () => {
     describe("setSpellcaster", () => {
-        it("should set the spellcaster and update deck name if empty", () => {
+        it("should set the spellcaster and preserve deck name", () => {
             const deck = DeckRules.setSpellcaster(getInitialDeck(), MockSpellcaster);
             expect(deck.spellcaster).toEqual(MockSpellcaster);
-            expect(deck.name).toBe("Test Spellcaster Deck");
+            expect(deck.name).toBe("");
         });
 
         it("should not overwrite an existing custom name", () => {

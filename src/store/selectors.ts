@@ -37,6 +37,18 @@ export const selectIsSaved = (state: ChangesState) => {
     return areDecksEqual(currentDeck, saved);
 };
 
+export const selectIsExistingDeck = (state: ChangesState) => {
+    const { currentDeck, savedDecks } = state;
+    if (!currentDeck.id) return false;
+    return savedDecks.some((d) => d.id === currentDeck.id);
+};
+
+export const selectIsExistingTeam = (state: Pick<DeckBuilderState, "activeTeamId" | "savedTeams">) => {
+    const { activeTeamId, savedTeams } = state;
+    if (!activeTeamId) return false;
+    return savedTeams.some((t) => t.id === activeTeamId);
+};
+
 export const selectIsTeamSaved = (state: Pick<DeckBuilderState, "activeTeamId" | "savedTeams" | "teamName" | "teamDecks">) => {
     const { activeTeamId, savedTeams, teamName, teamDecks } = state;
     if (!activeTeamId || !teamDecks) return false;

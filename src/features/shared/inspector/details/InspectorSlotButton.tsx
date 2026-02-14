@@ -17,6 +17,7 @@ export function InspectorSlotButton({
     return (
         <button
             onClick={onClick}
+            data-testid={`inspector-slot-btn-${index}`}
             disabled={isOccupiedBySelf}
             className={cn(
                 "py-2 text-xs rounded transition-colors flex flex-col items-center justify-center",

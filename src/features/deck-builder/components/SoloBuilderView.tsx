@@ -5,7 +5,7 @@ import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 import { useDeckBuilder } from "@/features/deck-builder/hooks/domain/useDeckBuilder";
 import { useImportLogic } from "@/features/deck-builder/hooks/domain/useImportLogic";
 
-import { SoloEditorLayout } from "@/components/deck-builder/core/layouts/SoloEditorLayout";
+import { SoloEditorLayout } from "@/features/deck-builder/ui/layouts/SoloEditorLayout";
 import { SoloInspectOverlay } from "@/features/deck-builder/overlays/SoloInspectOverlay";
 import { ImportConflictModal } from "@/components/modals/ImportConflictModal";
 

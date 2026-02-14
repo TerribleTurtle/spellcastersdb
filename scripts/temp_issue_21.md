@@ -1,0 +1,2 @@
+> **Context**: User mentioned "If not, the competitive one will most likely."
+> **Action**: Identification needed. Is there a rival builder tool? Or is this a reference to a specific competitive discord server/community? We need to understand the competitive landscape to match features.

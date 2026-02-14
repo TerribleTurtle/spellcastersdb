@@ -71,7 +71,7 @@ export const DeckRules = {
     return {
       ...deck,
       spellcaster,
-      name: isDefaultName ? `${spellcaster.name} Deck` : deck.name,
+      name: deck.name,
     };
   },
 

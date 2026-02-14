@@ -23,6 +23,8 @@ import {
 } from "@dnd-kit/sortable";
 import { v4 as uuidv4 } from "uuid";
 
+import { Virtuoso } from "react-virtuoso";
+
 import { Deck } from "@/types/deck";
 import { useDeckStore } from "@/store/index";
 import { DeckRow } from "@/features/deck-builder/shared/rows/DeckRow";
@@ -62,8 +64,6 @@ export function SoloForgeList({
   const { showToast } = useToast();
 
   const activeDeckId = !isTeamMode ? currentDeck?.id : undefined;
-
-  const listRef = React.useRef<HTMLDivElement>(null);
 
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
@@ -107,14 +107,13 @@ export function SoloForgeList({
   };
 
   return (
-    <div ref={listRef} className="flex-1 overflow-y-auto px-3 py-2 overscroll-y-contain">
+    <div className="flex-1 h-full px-3 py-2">
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
           onDragEnd={handleDragEnd}
           modifiers={[restrictToVerticalAxis, restrictToWindowEdges]}
         >
-          <div className="space-y-1">
             {savedDecksList.length === 0 ? (
               <div className="text-center py-8 text-gray-500 text-xs">
                 <p className="mb-2">No saved decks.</p>
@@ -127,30 +126,36 @@ export function SoloForgeList({
                 items={savedDecksList.map((d) => d.id!)}
                 strategy={verticalListSortingStrategy}
               >
-                {savedDecksList.map((d) => (
-                  <DeckRow
-                    key={d.id}
-                    deck={d}
-                    isActive={activeDeckId === d.id}
-                    isTeamMode={isTeamMode}
-                    onLoad={() => handleLoadOrImport(d)}
-                    onPutAway={!isTeamMode ? () => {
-                        // Only applicable in Solo Mode for now
-                        clearDeck();
-                    } : undefined}
-                    onDelete={() => deleteDeck(d.id!)}
-                    onDuplicate={() => duplicateDeck(d.id!)}
-                    onRename={(newName) => renameSavedDeck(d.id!, newName)}
-                    
-                    // Selection Props
-                    selectionMode={selectionMode}
-                    isSelected={selectedIds?.has(d.id!)}
-                    onToggleSelect={() => onToggleSelect?.(d.id!)}
-                  />
-                ))}
+                 <Virtuoso
+                    style={{ height: "100%" }}
+                    data={savedDecksList}
+                    computeItemKey={(_, item) => item.id!}
+                    itemContent={(_, d) => (
+                       <div className="pb-1 pr-1">
+                          <DeckRow
+                            // Key is handled by Virtuoso via computeItemKey, but passing explicit key is safe/good practice
+                            key={d.id}
+                            deck={d}
+                            isActive={activeDeckId === d.id}
+                            isTeamMode={isTeamMode}
+                            onLoad={() => handleLoadOrImport(d)}
+                            onPutAway={!isTeamMode ? () => {
+                                clearDeck();
+                            } : undefined}
+                            onDelete={() => deleteDeck(d.id!)}
+                            onDuplicate={() => duplicateDeck(d.id!)}
+                            onRename={(newName) => renameSavedDeck(d.id!, newName)}
+                            
+                            // Selection Props
+                            selectionMode={selectionMode}
+                            isSelected={selectedIds?.has(d.id!)}
+                            onToggleSelect={() => onToggleSelect?.(d.id!)}
+                          />
+                       </div>
+                    )}
+                 />
               </SortableContext>
             )}
-          </div>
         </DndContext>
     </div>
   );

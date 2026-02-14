@@ -10,6 +10,7 @@ import Footer from "@/components/layout/Footer";
 import Navbar from "@/components/layout/Navbar";
 import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
 import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
+import { Toaster } from "@/components/ui/Toaster";
 
 import "./globals.css";
 
@@ -131,6 +132,7 @@ export default async function RootLayout({
         <Script src="https://tally.so/widgets/embed.js" strategy="lazyOnload" />
         <Analytics />
         <SpeedInsights />
+        <Toaster />
       </body>
     </html>
   );

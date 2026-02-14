@@ -46,12 +46,46 @@ export const matchesFilters = (item: BrowserItem, filters: FilterState, category
     return true;
 };
 
+const calculateScore = (item: BrowserItem, query: string, category: string): number => {
+    if (!query) return 0;
+    const lowQuery = query.toLowerCase();
+    const lowName = item.name.toLowerCase();
+    let score = 0;
+
+    if (lowName === lowQuery) {
+        score += 1000; // Exact match - Highest Priority
+    } else if (lowName.startsWith(lowQuery)) {
+        score += 500; // Prefix match - High Priority
+    } else if (lowName.includes(lowQuery)) {
+        score += 100; // Partial name match
+    }
+
+    if ("tags" in item && item.tags && item.tags.some((tag) => tag.toLowerCase().includes(lowQuery))) {
+        score += 50;
+    }
+
+    if ("magic_school" in item && item.magic_school && item.magic_school.toLowerCase().includes(lowQuery)) {
+        score += 40;
+    }
+    
+    // Category match shouldn't outweigh name match usually, but good to have
+    if (category && category.toLowerCase().includes(lowQuery)) {
+        score += 30;
+    }
+
+    if ("description" in item && item.description && item.description.toLowerCase().includes(lowQuery)) {
+        score += 10;
+    }
+
+    return score;
+};
+
 export function filterBrowserItems(
     items: BrowserItem[],
     searchQuery: string,
     activeFilters: FilterState
 ): BrowserItem[] {
-    return items.filter((item) => {
+    const scoredItems = items.map(item => {
         const isSpellcasterEntity = isSpellcaster(item);
         const isUnit = "entity_id" in item && !isSpellcasterEntity;
         const rawCategory = isUnit ? item.category : DEFAULT_CATEGORY;
@@ -65,10 +99,25 @@ export function filterBrowserItems(
 
         const spellcasterClass = isSpellcasterEntity ? item.class : null;
 
-        if (!matchesSearch(item, searchQuery, category)) return false;
-        if (!matchesFilters(item, activeFilters, category, school, rank, spellcasterClass, isUnit)) return false;
+        // Check Hard Filters First
+         if (!matchesFilters(item, activeFilters, category, school, rank, spellcasterClass, isUnit)) {
+             return { item, score: -1 };
+         }
 
-        return true;
+        // Calculate Search Score
+        const score = searchQuery ? calculateScore(item, searchQuery, category) : 1;
+        
+        // If searching but no match, filter out
+        if (searchQuery && score === 0) {
+            return { item, score: -1 };
+        }
+
+        return { item, score };
     });
+
+    return scoredItems
+        .filter(entry => entry.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .map(entry => entry.item);
 }
 

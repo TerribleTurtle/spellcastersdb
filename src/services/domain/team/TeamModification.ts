@@ -1,8 +1,9 @@
-import { Team, DeckOperationResult } from "@/types/deck";
+import { Team, DeckOperationResult, Deck } from "@/types/deck";
 import { DECK_ERRORS } from "@/services/config/errors";
 import { UnifiedEntity, Spellcaster, Unit, Spell, Titan } from "@/types/api";
 import { DeckRules } from "@/services/rules/deck-rules";
 import { isUnit, isSpell, isTitan, isSpellcaster } from "@/services/validation/guards";
+import { cloneDeck } from "@/services/utils/deck-utils";
 
 export const TeamModification = {
   /**
@@ -155,5 +156,42 @@ export const TeamModification = {
       }
 
       return { success: false, error: DECK_ERRORS.INVALID_TYPE_QUICK_ADD, code: "INVALID_TYPE" };
+  },
+
+  /**
+   * Imports a solo deck into a specific team slot.
+   */
+  importDeck(
+      teamDecks: Team["decks"],
+      slotIndex: number,
+      deck: Deck,
+      newId: string
+  ): DeckOperationResult<Team["decks"]> {
+      const newDecks = [...teamDecks] as Team["decks"];
+      
+      if (slotIndex < 0 || slotIndex >= newDecks.length) {
+          return { success: false, error: "Invalid slot index" };
+      }
+
+      newDecks[slotIndex] = {
+          ...cloneDeck(deck),
+          id: newId
+      };
+
+      return { success: true, data: newDecks };
+  },
+
+  /**
+   * Prepares a team deck for export to the solo library.
+   */
+  exportDeck(
+      deck: Deck,
+      newId: string
+  ): Deck {
+      return {
+          ...cloneDeck(deck),
+          id: newId,
+          name: `${deck.name} (From Team)`
+      };
   }
 };

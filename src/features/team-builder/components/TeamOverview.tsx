@@ -10,6 +10,7 @@ interface TeamOverviewProps {
   isReadOnly?: boolean;
   onSave?: () => void;
   existingId?: string | null;
+  teamName?: string | null;
 }
 
 export function TeamOverview({
@@ -18,17 +19,27 @@ export function TeamOverview({
   onBack,
   isReadOnly,
   onSave,
+
   existingId,
+  teamName,
 }: TeamOverviewProps) {
   const openInspector = useDeckStore((state) => state.openInspector);
   const closeInspector = useDeckStore((state) => state.closeInspector);
 
   return (
-    <div className="h-full flex flex-col bg-surface-main overflow-hidden">
+    <div className="h-auto w-full flex flex-col bg-surface-main rounded-xl">
       {/* TeamHeader removed - Unified into Global Navbar */}
+      {/* UPDATE: Added Back for Mobile Context in Overlay */}
+      {teamName && (
+        <div className="shrink-0 p-4 pb-2 text-center border-b border-white/5">
+             <h2 className="text-xl md:text-3xl font-black text-white uppercase tracking-wider line-clamp-2 max-w-[250px] md:max-w-xl mx-auto">
+                {teamName}
+             </h2>
+        </div>
+      )}
 
       {/* Main Content - Scrollable List of Horizontal Decks */}
-      <div className="flex-1 overflow-y-auto p-2 md:p-4 space-y-2 bg-black/20">
+      <div className="overflow-y-auto p-2 md:p-4 space-y-2 bg-black/20 shrink-0">
         <div className="max-w-5xl mx-auto w-full space-y-2">
           {decks.map((deck, index) => (
             <TeamDeckRow

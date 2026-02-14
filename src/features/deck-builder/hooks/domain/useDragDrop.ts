@@ -13,9 +13,11 @@ import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 import { useDeckBuilder } from "./useDeckBuilder";
 import { useToast } from "@/hooks/useToast";
+import { DRAG_CONFIG } from "@/services/config/dnd-config";
+import { DragAction } from "@/services/dnd/drag-routing";
 import { DragRoutingService } from "@/services/dnd/drag-routing";
-import { DragData } from "@/types/dnd";
-import { Unit, Spell, Titan } from "@/types/api";
+import { DragData, DraggableEntity } from "@/types/dnd";
+import { findAutoFillSlot } from "@/services/utils/deck-utils";
 
 export function useDragDrop() {
   const {
@@ -47,9 +49,12 @@ export function useDragDrop() {
   const { showToast } = useToast();
 
   const sensors = useSensors(
-    useSensor(MouseSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(MouseSensor, { activationConstraint: { distance: DRAG_CONFIG.SENSORS.MOUSE.DISTANCE } }),
     useSensor(TouchSensor, {
-      activationConstraint: { delay: 150, tolerance: 5 },
+      activationConstraint: { 
+        delay: DRAG_CONFIG.SENSORS.TOUCH.DELAY, 
+        tolerance: DRAG_CONFIG.SENSORS.TOUCH.TOLERANCE 
+      },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
@@ -58,121 +63,156 @@ export function useDragDrop() {
 
   const handleDragStart = (event: DragStartEvent) => {
     closeInspector(); // Close inspector when drag starts
-    const current = event.active.data.current as DragData | undefined;
+    const current = event.active.data.current as DragData<DraggableEntity> | undefined;
     
     // Safety check for typed item
     if (current && current.item) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setActiveDragItem(current.item as any);
+        setActiveDragItem(current.item);
     }
+  };
+
+  const getDeckIndex = (id?: string) => {
+      if (!id || !teamDecks) return -1;
+      return teamDecks.findIndex(d => d.id === id);
+  };
+
+  const handleMoveSlot = (action: DragAction & { type: 'MOVE_SLOT' }, isTeamMode: boolean, targetDeckIndex: number) => {
+      if (isTeamMode) {
+          const sourceDeckIndex = action.sourceDeckId ? getDeckIndex(action.sourceDeckId) : targetDeckIndex;
+          
+          let finalTargetIndex = action.targetIndex;
+          
+          // Auto-Fill Logic (Move)
+          if (finalTargetIndex === -1) {
+              const targetDeck = teamDecks![targetDeckIndex];
+              // Use shared helper
+              // We need the item to know if it is a Titan. 
+              // However, MOVE_SLOT action usually comes from a slot, so we might need to look up the item if not provided in action.
+              // DragRoutingService adds 'item' to action for SET_SLOT mostly.
+              // For MOVE_SLOT, the item is at the source.
+              // We can try to assume it's a unit moving to 0-3 if finding first empty.
+              // But if it's a Titan moving... we need to know.
+              
+              // Simplification: DragRoutingService *should* probably pass the item in the action or we look it up.
+              // But for now, let's use the activeDragItem from state if available, or try to find it.
+              
+              if (activeDragItem) {
+                  finalTargetIndex = findAutoFillSlot(targetDeck, activeDragItem);
+              } else {
+                   // Fallback: If we don't know the item, we can only default to first empty unit slot (0-3).
+                   // Titan moves might fail this fallback if drag item state is lost.
+                   // But activeDragItem should be set.
+                   const firstEmpty = targetDeck.slots.find(s => !s.unit && s.index < 4);
+                   finalTargetIndex = firstEmpty ? firstEmpty.index : -1;
+              }
+
+              if (finalTargetIndex === -1) {
+                  showToast("Deck is full", "error");
+                  return;
+              }
+          }
+
+          if (sourceDeckIndex !== -1 && sourceDeckIndex !== targetDeckIndex) {
+              const error = moveCardBetweenDecks(sourceDeckIndex, action.sourceIndex, targetDeckIndex, finalTargetIndex);
+              if (error) {
+                  showToast(error, "error");
+              }
+          } else {
+              if (finalTargetIndex !== -1)
+                  swapTeamSlots(targetDeckIndex, action.sourceIndex, finalTargetIndex);
+          }
+      } else {
+          // Solo Mode Move
+          if (action.targetIndex !== -1)
+              moveSlot(action.sourceIndex, action.targetIndex);
+      }
+  };
+
+  const handleSetSlot = (action: DragAction & { type: 'SET_SLOT' }, isTeamMode: boolean, targetDeckIndex: number) => {
+      let finalIndex = action.index;
+
+      if (isTeamMode) {
+          if (finalIndex === -1) {
+              const targetDeck = teamDecks![targetDeckIndex];
+              finalIndex = findAutoFillSlot(targetDeck, action.item);
+              
+              if (finalIndex === -1) {
+                  showToast("Deck is full", "error");
+                  return;
+              }
+          }
+          setTeamSlot(targetDeckIndex, finalIndex, action.item);
+      } else {
+          // Solo Mode
+          if (finalIndex === -1 && currentDeck) {
+              finalIndex = findAutoFillSlot(currentDeck, action.item);
+
+              if (finalIndex === -1) {
+                  showToast("Deck is full", "error");
+                  return;
+              }
+          }
+
+          if (finalIndex !== -1) {
+              setSlot(finalIndex, action.item);
+          }
+      }
+  };
+
+  const handleSpellcasterAction = (action: DragAction, type: 'SET' | 'REMOVE', isTeamMode: boolean, targetDeckIndex: number) => {
+      if (type === 'SET' && action.type === 'SET_SPELLCASTER') {
+          if (isTeamMode) {
+              const sourceDeckIndex = action.sourceDeckId ? getDeckIndex(action.sourceDeckId) : -1;
+               
+              if (sourceDeckIndex !== -1 && sourceDeckIndex !== targetDeckIndex) {
+                  moveSpellcasterBetweenDecks(sourceDeckIndex, targetDeckIndex);
+              } else {
+                  setTeamSpellcaster(targetDeckIndex, action.item);
+              }
+          } else {
+              setSpellcaster(action.item);
+          }
+      } else if (type === 'REMOVE' && action.type === 'REMOVE_SPELLCASTER') {
+          if (isTeamMode && action.deckId) {
+              const idx = getDeckIndex(action.deckId);
+              if (idx !== -1) removeTeamSpellcaster(idx);
+          } else {
+              removeSpellcaster();
+          }
+      }
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    setActiveDragItem(null);
-
+    
+    // Capture Drag Item before clearing it (needed for logic)
+    // We already have activeDragItem in state, but let's be safe
+    
     const action = DragRoutingService.determineAction(active, over);
+    
+    // Clear drag item state *after* processing could be better, but existing logic cleared it early.
+    // For our refactor, we rely on activeDragItem being present in scope or passed.
+    // However, react state updates are async. `activeDragItem` is from the hook scope (previous render).
+    // So it should still be valid during this function execution even if we call setActiveDragItem(null).
+    setActiveDragItem(null); 
 
     if (action.type === 'NO_OP') return;
 
-    // Helper to find deck index by ID
-    const getDeckIndex = (id?: string) => {
-        if (!id || !teamDecks) return -1;
-        return teamDecks.findIndex(d => d.id === id);
-    };
-
     const isTeamMode = mode === "TEAM" && !!action.deckId;
-    
     const targetDeckIndex = isTeamMode ? getDeckIndex(action.deckId) : -1;
 
     // Guard: If in team mode but can't find deck, abort
     if (isTeamMode && targetDeckIndex === -1 && action.type !== 'REMOVE_SPELLCASTER') {
-        console.warn("Dropped onto unknown deck in Team Mode", action.deckId);
+        showToast("Invalid Drop Target", "error");
         return;
     }
 
     switch (action.type) {
       case 'MOVE_SLOT':
-        if (isTeamMode) {
-             const sourceDeckIndex = action.sourceDeckId ? getDeckIndex(action.sourceDeckId) : targetDeckIndex;
-             
-             // Target Index -1 means "Auto - Find Empty"
-             let finalTargetIndex = action.targetIndex;
-             
-             if (finalTargetIndex === -1) {
-                 const targetDeck = teamDecks![targetDeckIndex];
-                 // Find first empty non-titan slot (0-3)
-                 // TODO: Handle Titan move intelligently if needed
-                 const firstEmpty = targetDeck.slots.find(s => !s.unit && s.index < 4); 
-                 
-                 if (firstEmpty) {
-                     finalTargetIndex = firstEmpty.index;
-                 } else {
-                     showToast("Deck is full", "error");
-                     return;
-                 }
-             }
-
-             if (sourceDeckIndex !== -1 && sourceDeckIndex !== targetDeckIndex) {
-                 const error = moveCardBetweenDecks(sourceDeckIndex, action.sourceIndex, targetDeckIndex, finalTargetIndex);
-                 if (error) {
-                     showToast(error, "error");
-                 }
-             } else {
-                 if (finalTargetIndex !== -1)
-                    swapTeamSlots(targetDeckIndex, action.sourceIndex, finalTargetIndex);
-             }
-        } else {
-             // Solo Mode Move
-             if (action.targetIndex !== -1)
-                moveSlot(action.sourceIndex, action.targetIndex);
-        }
+        handleMoveSlot(action, isTeamMode, targetDeckIndex);
         break;
       case 'SET_SLOT':
-        if (isTeamMode) {
-             let finalIndex = action.index;
-             if (finalIndex === -1) {
-                 // Auto-Fill Logic
-                 const targetDeck = teamDecks![targetDeckIndex];
-                 const isTitan = (action.item as Titan).category === "Titan";
-                 
-                 if (isTitan) {
-                     finalIndex = 4; // Titan Slot
-                 } else {
-                     const firstEmpty = targetDeck.slots.find(s => !s.unit && s.index < 4);
-                     if (firstEmpty) finalIndex = firstEmpty.index;
-                 }
-                 
-                 if (finalIndex === -1) {
-                      showToast("Deck is full", "error");
-                      return;
-                 }
-             }
-             setTeamSlot(targetDeckIndex, finalIndex, action.item);
-        } else {
-             // Solo Mode SET
-             let finalIndex = action.index;
-
-             if (finalIndex === -1 && currentDeck) {
-                 // Auto-Fill for Solo
-                 const isTitan = (action.item as Titan).category === "Titan";
-                 if (isTitan) {
-                     finalIndex = 4;
-                 } else {
-                     const firstEmpty = currentDeck.slots.find(s => !s.unit && s.index < 4);
-                     if (firstEmpty) finalIndex = firstEmpty.index;
-                 }
-
-                 if (finalIndex === -1) {
-                      showToast("Deck is full", "error");
-                      return;
-                 }
-             }
-
-             if (finalIndex !== -1) {
-                setSlot(finalIndex, action.item);
-             }
-        }
+        handleSetSlot(action, isTeamMode, targetDeckIndex);
         break;
       case 'CLEAR_SLOT':
         if (isTeamMode) {
@@ -183,25 +223,10 @@ export function useDragDrop() {
         }
         break;
       case 'SET_SPELLCASTER':
-        if (isTeamMode) {
-             const sourceDeckIndex = action.sourceDeckId ? getDeckIndex(action.sourceDeckId) : -1;
-             
-             if (sourceDeckIndex !== -1 && sourceDeckIndex !== targetDeckIndex) {
-                 moveSpellcasterBetweenDecks(sourceDeckIndex, targetDeckIndex);
-             } else {
-                 setTeamSpellcaster(targetDeckIndex, action.item);
-             }
-        } else {
-             setSpellcaster(action.item);
-        }
+        handleSpellcasterAction(action, 'SET', isTeamMode, targetDeckIndex);
         break;
       case 'REMOVE_SPELLCASTER':     
-        if (isTeamMode && action.deckId) {
-             const idx = getDeckIndex(action.deckId);
-             if (idx !== -1) removeTeamSpellcaster(idx);
-        } else {
-             removeSpellcaster();
-        }
+        handleSpellcasterAction(action, 'REMOVE', isTeamMode, targetDeckIndex);
         break;
       default:
         break;

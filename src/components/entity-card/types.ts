@@ -1,6 +1,6 @@
 
-import { Unit, Spellcaster, Spell, Titan, Consumable } from "@/types/api";
-
-export type EntityDisplayItem = Unit | Spellcaster | Spell | Titan | Consumable;
+import { UnifiedEntity } from "@/types/api";
+ 
+ export type EntityDisplayItem = UnifiedEntity;
 
 export type EntityCardVariant = "compact" | "detailed";

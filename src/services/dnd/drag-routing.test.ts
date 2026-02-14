@@ -3,7 +3,7 @@ import { describe, it, expect } from 'vitest';
 import { DragRoutingService } from './drag-routing';
 import { EntityCategory } from '@/types/enums';
 import { DragData, DropData } from '@/types/dnd';
-import { Unit } from '@/types/api';
+import { Unit, Spellcaster } from '@/types/api';
 
 // Minimal mock factories
 const createActive = (data: DragData) => ({
@@ -46,7 +46,7 @@ describe('DragRoutingService (Data-Driven)', () => {
       });
 
       it('returns NO_OP if item is Spellcaster being dropped on unit slot', () => {
-          const item = { spellcaster_id: "s1", name: "Caster" };
+          const item = { spellcaster_id: "s1", name: "Caster" } as unknown as Spellcaster;
           const active = createActive({ type: "BROWSER_CARD", item });
           const over = createOver({ type: "DECK_SLOT", slotIndex: 0 });
           

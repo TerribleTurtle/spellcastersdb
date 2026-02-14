@@ -6,18 +6,19 @@ import { DeckSlot } from "@/types/deck";
 
 import { DeckSlot as Slot } from "./DeckSlot";
 import { SpellcasterSlot } from "./SpellcasterSlot";
-import { useDeckBuilder } from "@/features/deck-builder/hooks/domain/useDeckBuilder";
+import { useRef } from "react";
 
 interface ActiveDeckTrayProps {
   slots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
   spellcaster: Spellcaster | null;
-  onSelect?: (item: UnifiedEntity, pos?: {x:number, y:number}) => void;
+  onSelect?: (item: UnifiedEntity, pos?: {x:number, y:number}, slotIndex?: number) => void;
   validation?: {
     isValid: boolean;
     errors: string[];
   };
-  deckId?: string; // NEW
+  deckId?: string;
   idSuffix?: string;
+  isSwapMode?: boolean; // NEW: controlled by parent
 }
 
 export function ActiveDeckTray({
@@ -27,16 +28,18 @@ export function ActiveDeckTray({
   validation,
   deckId,
   idSuffix,
+  isSwapMode = false,
 }: ActiveDeckTrayProps) {
-  const { activeDragItem } = useDeckBuilder();
   return (
-    <div className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 xl:pb-4 relative">
+    <div 
+        id={idSuffix ? `active-deck-${idSuffix}` : undefined}
+        className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 xl:pb-4 relative"
+    >
       <div className="grow flex items-center justify-between gap-0.5 px-2 py-1 xl:grid xl:grid-cols-6 xl:gap-2 xl:pl-4 xl:pr-4 xl:py-4 xl:items-start xl:content-start xl:grow-0">
         {/* Spellcaster Area - Fixed Width on Desktop */}
         <div className="relative flex items-center flex-1 min-w-[76px] max-w-[17%] xl:max-w-none xl:w-full justify-center">
           <SpellcasterSlot
             spellcaster={spellcaster}
-            draggedItem={activeDragItem}
             onSelect={(item, pos) => onSelect?.(item, pos)}
             deckId={deckId}
             idSuffix={idSuffix}
@@ -48,17 +51,27 @@ export function ActiveDeckTray({
 
         {/* Unit Slots 1-4 - Equal Distribution */}
         {slots.slice(0, 4).map((slot) => (
-            <div key={slot.index} className="flex-1 min-w-0 flex justify-center xl:col-span-1 xl:w-full">
-              <Slot
+            <div 
+                key={slot.index} 
+                className={cn(
+                    "flex-1 min-w-0 flex justify-center xl:col-span-1 xl:w-full transition-all duration-300",
+                    isSwapMode && "scale-105 z-10"
+                )}
+            >
+              <div className={cn(
+                  "w-full h-full rounded-lg transition-all",
+                  isSwapMode && "ring-2 ring-brand-primary ring-offset-2 ring-offset-gray-900 animate-pulse cursor-pointer shadow-[0_0_15px_rgba(59,130,246,0.5)]"
+              )}>
+                  <Slot
                 slot={slot}
-                draggedItem={activeDragItem}
                 allSlots={slots}
                 onSelect={(item, pos) => {
-                    onSelect?.(item, pos);
+                    onSelect?.(item, pos, slot.index);
                 }}
                 deckId={deckId}
                 idSuffix={idSuffix}
               />
+              </div>
             </div>
         ))}
 
@@ -69,9 +82,8 @@ export function ActiveDeckTray({
         <div className="relative flex items-center flex-1 min-w-0 max-w-[17%] xl:max-w-none xl:w-full justify-center">
           <Slot
             slot={slots[4]}
-            draggedItem={activeDragItem}
             allSlots={slots}
-            onSelect={(item, pos) => onSelect?.(item, pos)}
+            onSelect={(item, pos) => onSelect?.(item, pos, slots[4].index)}
             deckId={deckId}
             idSuffix={idSuffix}
           />

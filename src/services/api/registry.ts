@@ -4,7 +4,9 @@ import {
   Titan,
   Unit,
   UnifiedEntity,
-  AllDataResponse
+  AllDataResponse,
+  Consumable,
+  Upgrade
 } from "@/types/api";
 
 /**
@@ -17,6 +19,8 @@ export class EntityRegistry {
   private spells = new Map<string, Spell>();
   private titans = new Map<string, Titan>();
   private spellcasters = new Map<string, Spellcaster>();
+  private consumables = new Map<string, Consumable>();
+  private upgrades = new Map<string, Upgrade>();
   private unified = new Map<string, UnifiedEntity>();
 
   private initialized = false;
@@ -64,7 +68,15 @@ export class EntityRegistry {
       }
     });
     
-    // Consumables and Upgrades could be added here if needed for lookup
+    data.consumables.forEach((c) => {
+      this.consumables.set(c.entity_id, c);
+      this.unified.set(c.entity_id, c);
+    });
+
+    data.upgrades.forEach((u) => {
+      this.upgrades.set(u.entity_id, u);
+      this.unified.set(u.entity_id, u);
+    });
 
     this.initialized = true;
 
@@ -94,11 +106,42 @@ export class EntityRegistry {
     return this.initialized;
   }
 
+  // Bulk Getters
+  public getAllUnits(): Unit[] {
+    return Array.from(this.units.values());
+  }
+
+  public getAllSpells(): Spell[] {
+    return Array.from(this.spells.values());
+  }
+
+  public getAllTitans(): Titan[] {
+    return Array.from(this.titans.values());
+  }
+
+  public getAllSpellcasters(): Spellcaster[] {
+    return Array.from(this.spellcasters.values());
+  }
+
+  public getAllConsumables(): Consumable[] {
+    return Array.from(this.consumables.values());
+  }
+
+  public getAllUpgrades(): Upgrade[] {
+    return Array.from(this.upgrades.values());
+  }
+
+  public reset() {
+    this.clear();
+  }
+
   private clear() {
     this.units.clear();
     this.spells.clear();
     this.titans.clear();
     this.spellcasters.clear();
+    this.consumables.clear();
+    this.upgrades.clear();
     this.unified.clear();
     this.initialized = false;
   }

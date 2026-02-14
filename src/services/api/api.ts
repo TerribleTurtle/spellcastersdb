@@ -78,9 +78,8 @@ export async function fetchGameData(): Promise<AllDataResponse> {
  * Returns all Creatures and Buildings
  */
 export async function getUnits(): Promise<Unit[]> {
-  // Ensure data is loaded before access
-  if (!registry.isInitialized()) await ensureDataLoaded();
-  const data = await fetchGameData(); // Fallback for now to stay safe, but we should rely on registry
+  if (registry.isInitialized()) return registry.getAllUnits();
+  const data = await fetchGameData(); 
   return data.units;
 }
 
@@ -88,7 +87,7 @@ export async function getUnits(): Promise<Unit[]> {
  * Returns all Spells
  */
 export async function getSpells(): Promise<Spell[]> {
-  if (!registry.isInitialized()) await ensureDataLoaded();
+  if (registry.isInitialized()) return registry.getAllSpells();
   const data = await fetchGameData();
   return data.spells;
 }
@@ -97,7 +96,7 @@ export async function getSpells(): Promise<Spell[]> {
  * Returns all Titans
  */
 export async function getTitans(): Promise<Titan[]> {
-  if (!registry.isInitialized()) await ensureDataLoaded();
+  if (registry.isInitialized()) return registry.getAllTitans();
   const data = await fetchGameData();
   return data.titans;
 }
@@ -106,9 +105,10 @@ export async function getTitans(): Promise<Titan[]> {
  * Returns Units + Spells aggregated (for Deck Builder)
  */
 export async function getIncantations(): Promise<Incantation[]> {
-  if (!registry.isInitialized()) await ensureDataLoaded();
+  if (registry.isInitialized()) {
+      return [...registry.getAllUnits(), ...registry.getAllSpells()];
+  }
   const data = await fetchGameData();
-  // Use type assertion to satisfy TS if needed, or rely on compatible interfaces
   return [...data.units, ...data.spells];
 }
 
@@ -116,7 +116,7 @@ export async function getIncantations(): Promise<Incantation[]> {
  * Returns all spellcasters (formerly Heroes)
  */
 export async function getSpellcasters(): Promise<Spellcaster[]> {
-  if (!registry.isInitialized()) await ensureDataLoaded();
+  if (registry.isInitialized()) return registry.getAllSpellcasters();
   const data = await fetchGameData();
   return data.spellcasters;
 }
@@ -125,7 +125,7 @@ export async function getSpellcasters(): Promise<Spellcaster[]> {
  * Returns all consumables
  */
 export async function getConsumables(): Promise<Consumable[]> {
-  if (!registry.isInitialized()) await ensureDataLoaded();
+  if (registry.isInitialized()) return registry.getAllConsumables();
   const data = await fetchGameData();
   return data.consumables;
 }
@@ -134,7 +134,7 @@ export async function getConsumables(): Promise<Consumable[]> {
  * Returns all upgrades
  */
 export async function getUpgrades(): Promise<Upgrade[]> {
-  if (!registry.isInitialized()) await ensureDataLoaded();
+  if (registry.isInitialized()) return registry.getAllUpgrades();
   const data = await fetchGameData();
   return data.upgrades;
 }
@@ -185,6 +185,19 @@ export async function getSpellcasterById(
  * Returns a unified list of all searchable entities
  */
 export async function getAllEntities(): Promise<UnifiedEntity[]> {
+  if (registry.isInitialized()) {
+      return [
+          ...registry.getAllUnits(),
+          ...registry.getAllSpells(),
+          ...registry.getAllTitans(),
+          ...registry.getAllSpellcasters(),
+          ...registry.getAllConsumables(),
+          // Upgrades included? Original code didn't include them in getAllEntities but did in mapped list?
+          // Original code: ...data.consumables, ]; (End of list)
+          // Wait, original code had: units, spells, titans, spellcasters, consumables. Upgrades were MISSING in original getAllEntities.
+          // I will replicate original behavior exactly to avoid side effects.
+      ];
+  }
   const data = await fetchGameData();
   return [
     ...data.units,

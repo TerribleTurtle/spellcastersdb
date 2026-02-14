@@ -13,8 +13,8 @@ export function InspectorPanel({ className }: InspectorPanelProps) {
 
   return (
     <div className={cn("w-full bg-gray-950/50 flex flex-col relative", className)}>
-       {/* Removed overflow-y-auto to allow content to dictate height, inner BaseInspector handles its own scroll if needed */}
-       <div className="flex-1 min-h-0 flex flex-col">
+       {/* Scrollable Content Area */}
+       <div className="flex-1 min-h-0 flex flex-col overflow-y-auto custom-scrollbar">
           <CardInspector 
             item={inspectedCard} 
             // No onClose/onBack needed for persistent panel

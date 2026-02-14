@@ -2,8 +2,8 @@
 
 @theme {
   /* Brand Palette */
-  --color-brand-primary: #a855f7; /* Purple 500 */
-  --color-brand-secondary: #ec4899; /* Pink 500 */
+  --color-brand-primary: #9333ea; /* Purple 600 - Better Contrast */
+  --color-brand-secondary: #db2777; /* Pink 600 - Better Contrast */
   --color-brand-accent: #22d3ee; /* Cyan 400 */
   --color-brand-dark: #0f172a; /* Slate 900 */
 
@@ -125,11 +125,10 @@ body {
   animation-name: slide-in-from-right;
 }
 
-
 /* Utility to hide scrollbar but keep functionality */
 .scrollbar-hidden {
   -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  scrollbar-width: none; /* Firefox */
 }
 
 .scrollbar-hidden::-webkit-scrollbar {

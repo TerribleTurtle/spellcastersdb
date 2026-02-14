@@ -7,29 +7,7 @@ import { TEAM_LIMIT } from "@/services/config/constants";
 import { TeamFactory } from "@/services/domain/team/TeamFactory";
 import { TeamModification } from "@/services/domain/team/TeamModification";
 import { TeamMovement } from "@/services/domain/team/TeamMovement";
-
-
-
-
-/**
- * Helper to sync changes to teamDecks with the main editor state if a slot is active.
- * Used to ensure the Deck Editor receives updates when modifying a deck in Team Mode.
- */
-const syncToEditor = (
-  activeSlot: number | null, 
-  newDecks: Team["decks"]
-): Partial<TeamState & DeckBuilderState> => {
-    // 1. Always update the Team Decks
-    const update: Partial<TeamState & DeckBuilderState> = { teamDecks: newDecks };
-    
-    // 2. If the user is currently "editing" a specific slot (Team Mode),
-    // we must update the global 'currentDeck' so the editor UI reflects the change.
-    if (activeSlot !== null && newDecks[activeSlot]) {
-        update.currentDeck = cloneDeck(newDecks[activeSlot]);
-    }
-    
-    return update;
-};
+import { EditorSyncService } from "@/services/domain/team/EditorSyncService";
 
 export const createTeamSlice: StateCreator<
   DeckBuilderState,
@@ -121,12 +99,12 @@ export const createTeamSlice: StateCreator<
 
 
   importSoloDeckToTeam: (slotIndex, deck, newId) => set((state) => {
-      const newDecks = [...state.teamDecks] as Team["decks"];
-      newDecks[slotIndex] = {
-          ...cloneDeck(deck),
-          id: newId
-      };
-      return { teamDecks: newDecks };
+      const result = TeamModification.importDeck(state.teamDecks, slotIndex, deck, newId);
+      if (result.success && result.data) {
+          // Import implies overwriting a slot, so we might need to sync if that slot is active
+          return EditorSyncService.getSyncUpdate(state.activeSlot, result.data);
+      }
+      return {};
   }),
 
   loadTeamFromData: (decks, newIds) => set((state) => {
@@ -146,11 +124,7 @@ export const createTeamSlice: StateCreator<
   }),
 
   exportTeamSlotToSolo: (_slotIndex, deck, newId) => {
-       const newDeck = {
-           ...deck,
-           id: newId,
-           name: `${deck.name} (From Team)`
-       };
+       const newDeck = TeamModification.exportDeck(deck, newId);
        get().importDeckToLibrary(newDeck);
   },
 
@@ -170,7 +144,7 @@ export const createTeamSlice: StateCreator<
   setTeamSlot: (deckIndex, slotIndex, item) => set((state) => {
       const result = TeamModification.setSlot(state.teamDecks, deckIndex, slotIndex, item);
       if (result.success && result.data) {
-          return syncToEditor(state.activeSlot, result.data);
+          return EditorSyncService.getSyncUpdate(state.activeSlot, result.data);
       }
       return {};
   }),
@@ -178,7 +152,7 @@ export const createTeamSlice: StateCreator<
   clearTeamSlot: (deckIndex, slotIndex) => set((state) => {
       const result = TeamModification.clearSlot(state.teamDecks, deckIndex, slotIndex);
       if (result.success && result.data) {
-          return syncToEditor(state.activeSlot, result.data);
+          return EditorSyncService.getSyncUpdate(state.activeSlot, result.data);
       }
       return {};
   }),
@@ -186,7 +160,7 @@ export const createTeamSlice: StateCreator<
   setTeamSpellcaster: (deckIndex, item) => set((state) => {
        const result = TeamModification.setSpellcaster(state.teamDecks, deckIndex, item);
        if (result.success && result.data) {
-           return syncToEditor(state.activeSlot, result.data);
+           return EditorSyncService.getSyncUpdate(state.activeSlot, result.data);
        }
        return {};
   }),
@@ -194,7 +168,7 @@ export const createTeamSlice: StateCreator<
   removeTeamSpellcaster: (deckIndex) => set((state) => {
        const result = TeamModification.removeSpellcaster(state.teamDecks, deckIndex);
        if (result.success && result.data) {
-           return syncToEditor(state.activeSlot, result.data);
+           return EditorSyncService.getSyncUpdate(state.activeSlot, result.data);
        }
        return {};
   }),
@@ -202,7 +176,7 @@ export const createTeamSlice: StateCreator<
   swapTeamSlots: (deckIndex, indexA, indexB) => set((state) => {
        const result = TeamModification.swapSlots(state.teamDecks, deckIndex, indexA, indexB);
        if (result.success && result.data) {
-           return syncToEditor(state.activeSlot, result.data);
+           return EditorSyncService.getSyncUpdate(state.activeSlot, result.data);
        }
        return {};
   }),
@@ -215,7 +189,7 @@ export const createTeamSlice: StateCreator<
           const result = TeamModification.quickAdd(state.teamDecks, slotIndex, item);
           
           if (result.success && result.data) {
-              return syncToEditor(state.activeSlot, result.data);
+              return EditorSyncService.getSyncUpdate(state.activeSlot, result.data);
           }
           
           if (result.error) {
@@ -241,7 +215,7 @@ export const createTeamSlice: StateCreator<
               // Note: syncToEditor handles if we are editing EITHER source or target, 
               // because it only cares about `state.activeSlot`.
               // If activeSlot is source, it syncs source. If activeSlot is target, it syncs target.
-              return syncToEditor(state.activeSlot, result.data);
+              return EditorSyncService.getSyncUpdate(state.activeSlot, result.data);
           }
           
           if (result.error) {
@@ -260,7 +234,7 @@ export const createTeamSlice: StateCreator<
       );
 
       if (result.success && result.data) {
-          return syncToEditor(state.activeSlot, result.data);
+          return EditorSyncService.getSyncUpdate(state.activeSlot, result.data);
       }
       return {};
   }),

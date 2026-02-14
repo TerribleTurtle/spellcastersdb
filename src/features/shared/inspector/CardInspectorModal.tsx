@@ -75,7 +75,7 @@ export function CardInspectorModal() {
             aria-modal="true"
             role="dialog"
             className={cn(
-                "relative h-[85vh] w-full bg-gray-950 border-t border-white/10 shadow-2xl overflow-hidden flex flex-col focus:outline-none pointer-events-auto rounded-t-xl",
+                "relative h-[85vh] w-full bg-gray-950 border-t border-white/10 shadow-2xl overflow-y-auto custom-scrollbar flex flex-col focus:outline-none pointer-events-auto rounded-t-xl",
                 "pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]",
                 "animate-in slide-in-from-bottom duration-300 ease-out"
             )}

@@ -39,3 +39,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Playwright
+/playwright-report/
+/test-results/
+
+
+# local test artifacts
+all_data_test.json
+
+# OS generated files
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/

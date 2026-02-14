@@ -6,7 +6,8 @@ export enum EntityCategory {
   Spell = "Spell",
   Building = "Building",
   Artifact = "Artifact",
-  Consumable = "Consumable"
+  Consumable = "Consumable",
+  Upgrade = "Upgrade"
 }
 
 export enum SlotType {

@@ -16,8 +16,10 @@ export const createUISlice: StateCreator<
   viewingTeamName: null,
   viewingDeckData: null,
   viewingDeckId: null,
+
   pendingImport: null,
   isImporting: false,
+  pendingSwapCard: null,
 
   setMode: (mode) => set({ mode }),
   setViewSummary: (viewSummary) => set({ viewSummary }),
@@ -58,6 +60,8 @@ export const createUISlice: StateCreator<
 
       set({ pendingImport: null });
   },
+
+  setPendingSwapCard: (card) => set({ pendingSwapCard: card }),
 
   activeDragItem: null,
   setActiveDragItem: (activeDragItem) => set({ activeDragItem }),

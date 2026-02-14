@@ -1,4 +1,7 @@
+import { Unit, Spell, Titan, Spellcaster } from "./api";
+
 export type SlotIndex = 0 | 1 | 2 | 3 | 4;
+
 
 export type DragSourceType =
     | "BROWSER_CARD"
@@ -12,9 +15,11 @@ export type DropTargetType =
     | "DECK_HEADER" // For auto-expand or "add to deck"
     | "VOID"; // Dropped outside valid area
 
-export interface DragData {
+export type DraggableEntity = Unit | Spell | Titan | Spellcaster;
+
+export interface DragData<T = DraggableEntity> {
     type: DragSourceType;
-    item: unknown; // Typed strictly in components (Unit | Spell | Titan | Spellcaster)
+    item: T; // Typed strictly
     
     // Source Information
     sourceDeckId?: string;

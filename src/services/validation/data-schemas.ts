@@ -270,14 +270,36 @@ export const ConsumableSchema = z
 
 export const UpgradeSchema = z
   .object({
-    entity_id: z.string(),
+    entity_id: z.string().optional(),
+    upgrade_id: z.string().optional(),
     name: z.string(),
     description: z.string(),
     image_required: z.boolean().optional(),
     prerequisite_level: z.number().optional(),
     cost: z.number().optional(),
-    tags: z.array(z.string()),
-  });
+    tags: z.array(z.string()).optional().default([]), // Allow missing tags or default empty
+    target_tags: z.array(z.string()).optional(), // V2 Placeholder often has target_tags
+    category: z.literal(EntityCategory.Upgrade).default(EntityCategory.Upgrade),
+  })
+  .passthrough()
+  .transform((data) => {
+      // Map upgrade_id to entity_id
+      if (!data.entity_id && data.upgrade_id) {
+          data.entity_id = data.upgrade_id;
+      }
+      return data as {
+          entity_id: string; // Ensure entity_id is present after transform
+          name: string;
+          description: string;
+          image_required?: boolean;
+          prerequisite_level?: number;
+          cost?: number;
+          tags: string[];
+          category: EntityCategory.Upgrade;
+          [key: string]: unknown;
+      };
+  })
+  .refine((data) => !!data.entity_id, { message: "entity_id or upgrade_id is required" });
 
 export const AllDataSchema = z.object({
   build_info: z.object({

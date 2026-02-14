@@ -1,5 +1,5 @@
 import { Deck, SlotIndex, Team } from "@/types/deck";
-import { Unit, Spell, Titan, Spellcaster, Consumable } from "@/types/api";
+import { Unit, Spell, Titan, Spellcaster, UnifiedEntity } from "@/types/api";
 
 export type DeckBuilderMode = "SOLO" | "TEAM";
 
@@ -16,7 +16,8 @@ export interface DeckActions {
   clearSlot: (index: SlotIndex) => void;
   swapSlots: (indexA: number, indexB: number) => void;
   /** Attempts to add an item to the first available slot. Returns error message if failed. */
-  quickAdd: (item: Unit | Spellcaster | Spell | Titan) => string | null; 
+  /** Attempts to add an item to the first available slot. Returns error message if failed. */
+  quickAdd: (item: UnifiedEntity) => string | null;  
   clearDeck: () => void;
   setDeckName: (name: string) => void;
 }
@@ -56,7 +57,7 @@ export interface TeamDataActions {
   checkActiveTeamDeletion: (ids: string[]) => void;
   
   // Smart Add
-  quickAddToTeam: (slotIndex: number, item: Unit | Spell | Titan | Spellcaster) => string | null;
+  quickAddToTeam: (slotIndex: number, item: UnifiedEntity) => string | null;
   moveCardBetweenDecks: (
     sourceDeckIndex: number,
     sourceSlotIndex: number,
@@ -110,6 +111,7 @@ export interface PersistenceActions {
   deleteTeams: (ids: string[]) => void;
   duplicateTeam: (id: string, newId: string) => void;
   renameSavedTeam: (id: string, newName: string) => void;
+  saveTeamAsCopy: (nameInput?: string) => void;
   clearSavedTeams: () => void;
 }
 
@@ -143,27 +145,31 @@ export interface UIState {
   setViewingTeam: (data: Deck[] | null, id?: string | null, name?: string) => void;
   setViewingDeck: (data: Deck | null, id?: string | null) => void;
   setPendingImport: (deck: Deck | null) => void;
-  resolvePendingImport: (strategy: "OVERWRITE" | "SAVE_AND_OVERWRITE") => void;
+  resolvePendingImport: (strategy: "OVERWRITE" | "SAVE_AND_OVERWRITE" | "CANCEL") => void;
+  pendingSwapCard: UnifiedEntity | null;
+  setPendingSwapCard: (card: UnifiedEntity | null) => void;
 
   // Import State
   isImporting: boolean;
   setIsImporting: (isImporting: boolean) => void;
 
   // Global Drag State
-  activeDragItem: Unit | Spell | Titan | Spellcaster | Consumable | null;
-  setActiveDragItem: (item: Unit | Spell | Titan | Spellcaster | Consumable | null) => void;
+  activeDragItem: UnifiedEntity | null;
+  setActiveDragItem: (item: UnifiedEntity | null) => void;
 
   // Inspector State
+  // Inspector State
   inspectorOpen: boolean;
-  inspectedCard: Unit | Spell | Titan | Spellcaster | Consumable | null;
+  inspectedCard: UnifiedEntity | null;
   inspectorPosition: { x: number; y: number } | null;
   inspectorOptions?: { isReadOnly?: boolean };
-  openInspector: (item: Unit | Spell | Titan | Spellcaster | Consumable, position?: { x: number; y: number }, options?: { isReadOnly?: boolean }) => void;
+  openInspector: (item: UnifiedEntity, position?: { x: number; y: number }, options?: { isReadOnly?: boolean }) => void;
   closeInspector: () => void;
 
   // Hover Inspector State
-  hoveredItem: Unit | Spell | Titan | Spellcaster | Consumable | null;
-  setHoveredItem: (item: Unit | Spell | Titan | Spellcaster | Consumable | null) => void;
+  // Hover Inspector State
+  hoveredItem: UnifiedEntity | null;
+  setHoveredItem: (item: UnifiedEntity | null) => void;
   isInspectorHovered: boolean;
   setIsInspectorHovered: (isHovered: boolean) => void;
 

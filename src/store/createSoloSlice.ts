@@ -1,5 +1,6 @@
 import { StateCreator } from "zustand";
 import { DeckBuilderState, SoloState } from "./types";
+import { Unit, Spell, Titan, Spellcaster } from "@/types/api";
 import { INITIAL_DECK } from "@/services/api/persistence";
 import { DeckRules } from "@/services/rules/deck-rules";
 import { cloneDeck } from "@/services/utils/deck-utils";
@@ -45,9 +46,14 @@ export const createSoloSlice: StateCreator<
   }),
 
   quickAdd: (item) => {
+      if (item.category === "Consumable" || item.category === "Upgrade") {
+          return "Cannot add this item to deck.";
+      }
+
       let error: string | null = null;
       set((state) => {
-          const result = DeckRules.quickAdd(state.currentDeck, item);
+          // We've already filtered out Consumable/Upgrade so this cast is safe
+          const result = DeckRules.quickAdd(state.currentDeck, item as Unit | Spell | Titan | Spellcaster);
           if (result.success && result.data) {
               return { currentDeck: result.data };
           }

@@ -182,8 +182,8 @@ export const STATS: Record<string, StatDefinition> = {
 export const STAT_STRATEGIES: Record<EntityCategory, StatDefinition[]> = {
   Unit: [
     STATS.health,
-    STATS.damage,
     STATS.dps,
+    STATS.damage,
     STATS.attack_speed,
     STATS.range,
     STATS.movement_speed,

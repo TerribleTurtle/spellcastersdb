@@ -18,7 +18,7 @@ import { EntityCategory } from "@/types/enums";
 
 interface DeckDrawerProps {
   deck: Deck;
-  onSelect?: (item: UnifiedEntity, pos?: { x: number; y: number }) => void;
+  onSelect?: (item: UnifiedEntity, pos?: { x: number; y: number }, slotIndex?: number) => void;
   variant?: "fixed" | "static";
   isExpanded?: boolean;
   onToggle?: (expanded: boolean) => void;
@@ -62,16 +62,22 @@ export const DeckDrawer = memo(function DeckDrawer({
     idSuffix,
 }: DeckDrawerProps) {
   // Store Connection
-  const { activeSlot, setActiveSlot } = useDeckStore(
+  const { activeSlot, setActiveSlot, pendingSwapCard } = useDeckStore(
       useShallow(state => ({
           activeSlot: state.activeSlot,
-          setActiveSlot: state.setActiveSlot
+          setActiveSlot: state.setActiveSlot,
+          pendingSwapCard: state.pendingSwapCard
       }))
   );
 
   const isStoreActive = slotIndex !== undefined && activeSlot === slotIndex;
   // Prefer controlled prop if present (Solo mode), fallback to store
   const forceActive = controlledActive ?? isStoreActive;
+  
+  // Swap Mode Logic - Scoped to this deck if it is active (or if we are in solo mode/no slotIndex)
+  // If slotIndex is undefined, we assume Solo Mode (or single deck context), so we glow if swap is pending.
+  // If slotIndex IS defined (Team Mode), we only glow if THIS slot is the active one.
+  const isSwapTarget = !!pendingSwapCard && (slotIndex === undefined || activeSlot === slotIndex);
 
   const handleActivate = () => {
       // Always call controlled handler if present
@@ -146,6 +152,7 @@ export const DeckDrawer = memo(function DeckDrawer({
     <div 
       className={containerClasses}
       onClick={handleActivate} 
+      data-testid={slotIndex !== undefined ? `deck-drawer-${slotIndex}` : "deck-drawer"}
     >
       {/* Active Tint Overlay */}
       {forceActive && (
@@ -165,6 +172,7 @@ export const DeckDrawer = memo(function DeckDrawer({
       {/* Handle / Header */}
       <div 
         ref={setNodeRef} // Make header droppable
+        data-testid="deck-drawer-header"
         className={cn(
             "h-14 w-full flex items-center justify-between px-4 shrink-0 transition-colors cursor-pointer select-none relative z-40",
             forceActive ? "bg-brand-primary/10" : "hover:bg-white/5",
@@ -187,7 +195,7 @@ export const DeckDrawer = memo(function DeckDrawer({
       >
         {/* Left: Check/Status or just Deck Name */}
         <div className="flex items-center gap-3 max-w-[50%]">
-            <div className={cn("w-3 h-3 rounded-full shrink-0", forceActive ? "bg-brand-primary" : "bg-gray-600")} />
+            <div className={cn("w-3 h-3 rounded-full shrink-0", forceActive ? "bg-brand-primary" : "bg-gray-500")} />
             
             <DeckNameInput 
                 name={deck.name || "Untitled"}
@@ -276,7 +284,7 @@ export const DeckDrawer = memo(function DeckDrawer({
 
       {/* Content */}
       <div className={cn("flex-1 overflow-hidden relative", isExpanded && "xl:overflow-visible")}>
-        <div className={cn(
+        <div id="drawer-content" className={cn(
             "transition-opacity duration-200",
             // Mobile: Relative when expanded to push height, Absolute when collapsed to hide
             isExpanded ? "relative opacity-100 pointer-events-auto" : "absolute inset-0 opacity-0 pointer-events-none",
@@ -286,12 +294,13 @@ export const DeckDrawer = memo(function DeckDrawer({
                 slots={deck.slots}
                 spellcaster={deck.spellcaster}
                 validation={validation}
-                onSelect={(item, pos) => {
+                onSelect={(item, pos, slotIndex) => {
                     handleActivate(); // Critical: Ensure this deck is active context before opening inspector
-                    onSelect?.(item, pos);
+                    onSelect?.(item, pos, slotIndex);
                 }}
                 deckId={deck.id}
                 idSuffix={idSuffix}
+                isSwapMode={isSwapTarget}
              />
         </div>
       </div>

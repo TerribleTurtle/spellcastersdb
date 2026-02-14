@@ -45,6 +45,8 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
   - Run `npm test` to execute Vitest unit tests.
 - **Data Verification**:
   - Run `npm run check-data` to verify the application can correctly fetch and parse the external API data.
+    - **Use this when:** You encounter "Failed to fetch" errors or want to debug raw API responses.
+    - **Output:** It will log the number of entities fetched and any validation errors.
 
 ## Project Structure (Quick Reference)
 

@@ -28,6 +28,7 @@ export function DeckActionToolbar({
       {onImport && (
         <button
           onClick={onImport}
+          data-testid="toolbar-import-btn"
           className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-card border border-white/10 hover:bg-white/5 text-gray-300 hover:text-white rounded text-xs font-bold uppercase tracking-wider transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary"
           title="Import Deck"
           aria-label="Import Deck"
@@ -41,6 +42,7 @@ export function DeckActionToolbar({
       {onLibraryOpen && !hideGlobalActions && (
         <button
           onClick={onLibraryOpen}
+          data-testid="toolbar-library-btn"
           className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-card border border-white/10 hover:bg-white/5 text-gray-300 hover:text-white rounded text-xs font-bold uppercase tracking-wider transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary"
           title="Open Deck Library"
           aria-label="Open Deck Library"
@@ -54,6 +56,7 @@ export function DeckActionToolbar({
       {onSave && !hideGlobalActions && (
         <button
           onClick={onSave}
+          data-testid="toolbar-save-btn"
           className={cn(
             "flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary",
             isSaved
@@ -84,6 +87,7 @@ export function DeckActionToolbar({
       {onClear && (
         <button
           onClick={onClear}
+          data-testid="toolbar-clear-btn"
           className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
           title="Clear Deck"
           aria-label="Clear Deck"

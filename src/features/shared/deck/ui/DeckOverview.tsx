@@ -16,7 +16,7 @@ interface DeckOverviewProps {
 
 export function DeckOverview({ deck, className, size = "sm", onInspect, onStopInspect }: DeckOverviewProps) {
   return (
-    <div className={cn("flex items-center gap-2 md:gap-4 min-w-max", className)}>
+    <div className={cn("flex flex-col md:flex-row items-center gap-2 md:gap-4", className)}>
       {/* Spellcaster */}
       <VisualSlot 
         item={deck.spellcaster} 
@@ -26,30 +26,35 @@ export function DeckOverview({ deck, className, size = "sm", onInspect, onStopIn
         onStopInspect={onStopInspect}
       />
 
-      {/* Separator */}
+      {/* Separator - Horizontal on Mobile, Vertical on Desktop */}
       <div className={cn(
         "bg-white/10 mx-2",
-        size === "lg" ? "hidden md:block w-px h-32" : "w-px h-16"
+        "w-16 h-px md:w-px md:h-16", // Default sizes
+        size === "lg" && "hidden md:block md:h-32" 
       )} />
 
-      {/* Units 0-3 */}
-      {deck.slots.slice(0, 4).map((s) => (
-        <VisualSlot
-          key={s.index}
-          item={s.unit}
-          type="unit"
-          isEmpty={!s.unit}
-          label={`Incant. ${s.index + 1}`}
-          size={size}
-          onInspect={onInspect}
-          onStopInspect={onStopInspect}
-        />
-      ))}
+       {/* Units Container - Grid on Mobile, Row on Desktop */}
+       <div className="grid grid-cols-2 gap-2 md:flex md:gap-4">
+          {/* Units 0-3 */}
+          {deck.slots.slice(0, 4).map((s) => (
+            <VisualSlot
+              key={s.index}
+              item={s.unit}
+              type="unit"
+              isEmpty={!s.unit}
+              label={`Incant. ${s.index + 1}`}
+              size={size}
+              onInspect={onInspect}
+              onStopInspect={onStopInspect}
+            />
+          ))}
+      </div>
 
       {/* Separator */}
       <div className={cn(
         "bg-white/10 mx-2",
-        size === "lg" ? "hidden md:block w-px h-32" : "w-px h-16"
+         "w-16 h-px md:w-px md:h-16",
+        size === "lg" && "hidden md:block md:h-32"
       )} />
 
       {/* Titan */}
@@ -85,8 +90,8 @@ function VisualSlot({ item, type, isEmpty, label, size, onInspect, onStopInspect
         className={cn(
           "rounded-lg border-2 border-dashed border-white/10 bg-white/5 flex flex-col items-center justify-center gap-2 transition-all",
           type === "spellcaster"
-            ? (isLarge ? "w-24 h-36 md:w-32 md:h-48 border-brand-primary/20" : "w-16 h-22 md:w-20 md:h-28 border-brand-primary/30")
-            : (isLarge ? "w-16 h-24 md:w-20 md:h-32" : "w-12 h-18 md:w-16 md:h-24")
+        ? (isLarge ? "w-16 h-24 md:w-32 md:h-48 rounded-xl shadow-lg border-2 border-brand-primary" : "w-16 h-22 rounded-lg border border-white/20")
+        : (isLarge ? "w-12 h-18 md:w-20 md:h-32 rounded-lg shadow-md border border-white/20" : "w-12 h-18 rounded border border-white/10")
         )}
       >
         {type === "spellcaster" && (

@@ -3,7 +3,7 @@ import { Suspense } from "react";
 import { Metadata } from "next";
 
 import { FeatureErrorBoundary } from "@/components/error/FeatureErrorBoundary";
-import { DeckBuilderContainer } from "@/components/deck-builder/core/DeckBuilderContainer";
+import { DeckBuilderContainer } from "@/features/deck-builder/ui/root/DeckBuilderContainer";
 import { fetchGameData } from "@/services/api/api";
 
 type Props = {

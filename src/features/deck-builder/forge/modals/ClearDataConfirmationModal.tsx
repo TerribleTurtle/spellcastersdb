@@ -28,7 +28,7 @@ export function ClearDataConfirmationModal({ isOpen, onClose, onConfirm }: Clear
             <div className="p-2 bg-red-500/10 rounded-full">
               <AlertTriangle size={24} />
             </div>
-            <h3 id="clear-data-title" className="text-lg font-bold text-white">Clear All Data</h3>
+            <h3 id="clear-data-title" className="text-lg font-bold text-white">Delete All Data</h3>
           </div>
           
           <div className="space-y-3">

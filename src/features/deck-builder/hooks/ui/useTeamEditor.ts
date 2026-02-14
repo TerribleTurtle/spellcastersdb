@@ -5,7 +5,7 @@ import { useDeckStore } from "@/store/index";
 import { useTeamBuilder } from "@/features/team-builder/hooks/useTeamBuilder";
 import { useAccordionState } from "@/hooks/useAccordionState";
 import { useToast } from "@/hooks/useToast";
-import { selectIsTeamSaved } from "@/store/selectors";
+import { selectIsTeamSaved, selectIsExistingTeam } from "@/store/selectors";
 import { Deck } from "@/types/deck";
 import { copyToClipboard } from "@/lib/clipboard";
 import { INITIAL_DECK } from "@/services/api/persistence"; 
@@ -54,13 +54,24 @@ export function useTeamEditor() {
 
     // Actions & State
     const { showToast } = useToast();
-    const { clearDeck, saveTeam, activeTeamId, importDeckToLibrary, isTeamSaved, clearTeam } = useDeckStore(
+    const { 
+        clearDeck, 
+        saveTeam, 
+        saveTeamAsCopy,
+        activeTeamId, 
+        importDeckToLibrary, 
+        isTeamSaved, 
+        isExistingTeam,
+        clearTeam 
+    } = useDeckStore(
         useShallow(state => ({
             clearDeck: state.clearDeck,
             saveTeam: state.saveTeam,
+            saveTeamAsCopy: state.saveTeamAsCopy,
             activeTeamId: state.activeTeamId,
             importDeckToLibrary: state.importDeckToLibrary,
             isTeamSaved: selectIsTeamSaved(state),
+            isExistingTeam: selectIsExistingTeam(state),
             clearTeam: state.clearTeam
         }))
     );
@@ -146,6 +157,8 @@ export function useTeamEditor() {
         teamDecks,
         activeTeamId,
         isTeamSaved,
+        isExistingTeam,
+        saveTeamAsCopy,
         footerHeight,
         
         // Accordion

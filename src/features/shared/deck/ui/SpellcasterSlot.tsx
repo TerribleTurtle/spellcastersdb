@@ -5,13 +5,12 @@ import { GameImage } from "@/components/ui/GameImage";
 import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { UnifiedEntity, Spellcaster } from "@/types/api";
-import { DragData, DropData } from "@/types/dnd";
+import { DragData, DropData, DraggableEntity } from "@/types/dnd";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
 
 
 interface SpellcasterSlotProps {
   spellcaster: Spellcaster | null;
-  draggedItem?: UnifiedEntity | null;
   onSelect?: (item: UnifiedEntity, pos?: {x:number, y:number}) => void;
   deckId?: string; // Context ID for Team Mode
   idSuffix?: string;
@@ -19,7 +18,6 @@ interface SpellcasterSlotProps {
 
 export function SpellcasterSlot({
   spellcaster,
-  draggedItem,
   onSelect,
   deckId,
   idSuffix,
@@ -42,7 +40,7 @@ export function SpellcasterSlot({
 
   const dragData: DragData = { 
       type: "SPELLCASTER_SLOT", 
-      item: spellcaster,
+      item: spellcaster as DraggableEntity,
       sourceDeckId: deckId 
   };
 
@@ -83,6 +81,7 @@ export function SpellcasterSlot({
   return (
     <div
       ref={setNodeRef}
+      data-testid="spellcaster-slot"
       className={cn(
         "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg w-full",
         "md:w-full md:max-w-[160px]",

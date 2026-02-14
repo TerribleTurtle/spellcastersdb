@@ -48,38 +48,60 @@ describe('Remote Data Validation', () => {
     });
 
     it('should validate and return data on successful fetch', async () => {
-        // Mock success response
-        (global.fetch as Mock).mockResolvedValue({
-            ok: true,
-            json: async () => mockApiResponse,
+        // Mock success response based on URL
+        (global.fetch as Mock).mockImplementation((url: string) => {
+            let body: any = [];
+            if (url.includes("units.json")) body = mockApiResponse.units;
+            else if (url.includes("spells.json")) body = mockApiResponse.spells;
+            else if (url.includes("heroes.json")) body = mockApiResponse.spellcasters;
+            else if (url.includes("titans.json")) body = mockApiResponse.titans;
+            else if (url.includes("consumables.json")) body = mockApiResponse.consumables;
+            else if (url.includes("upgrades.json")) body = mockApiResponse.upgrades;
+
+            return Promise.resolve({
+                ok: true,
+                json: async () => body,
+            });
         });
 
         const data = await fetchGameData();
 
-        expect(global.fetch).toHaveBeenCalledTimes(1);
+        // 6 chunks expected
+        expect(global.fetch).toHaveBeenCalledTimes(6);
         expect(data.spellcasters).toHaveLength(1);
         expect(data.units).toHaveLength(1);
-        expect(data.build_info.version).toBe('test-v1');
+        // build_info is mocked in api-client, so we check if it is present and has version
+        expect(data.build_info.version).toBe('v2-chunked');
     });
 
     it('should throw DataFetchError on API failure (404/500)', async () => {
-        // Mock error response
-        (global.fetch as Mock).mockResolvedValue({
-            ok: false,
-            status: 500,
-            statusText: 'Server Error',
+        // Mock error response for one of the chunks
+        (global.fetch as Mock).mockImplementation((url: string) => {
+            if (url.includes("units.json")) {
+                return Promise.resolve({
+                    ok: false,
+                    status: 500,
+                    statusText: 'Server Error',
+                });
+            }
+            return Promise.resolve({ ok: true, json: async () => [] });
         });
 
         await expect(fetchGameData()).rejects.toThrow('Failed to fetch: 500 Server Error');
     });
 
     it('should throw DataFetchError on malformed JSON (Schema Validation Failure)', async () => {
-        // Mock malformed data (missing required fields)
-        const badData = { foo: 'bar' };
+        // Mock malformed data (invalid unit: has category to pass filter, but missing required fields)
+        const badUnit = { category: 'Creature', foo: 'bar' };
         
-        (global.fetch as Mock).mockResolvedValue({
-            ok: true,
-            json: async () => badData,
+        (global.fetch as Mock).mockImplementation((url: string) => {
+             if (url.includes("units.json")) {
+                 return Promise.resolve({
+                     ok: true,
+                     json: async () => [badUnit],
+                 });
+             }
+             return Promise.resolve({ ok: true, json: async () => [] });
         });
 
         // Use a spy on console.error to suppress the expected error log during test

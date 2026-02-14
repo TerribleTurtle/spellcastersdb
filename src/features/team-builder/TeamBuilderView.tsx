@@ -5,7 +5,7 @@ import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 
 import { useTeamBuilder } from "@/features/team-builder/hooks/useTeamBuilder";
 
-import { TeamEditorLayout } from "@/components/deck-builder/core/layouts/TeamEditorLayout";
+import { TeamEditorLayout } from "@/features/deck-builder/ui/layouts/TeamEditorLayout";
 import { TeamOverview } from "@/features/team-builder/components/TeamOverview";
 import { ImportConflictModal } from "@/components/modals/ImportConflictModal";
 
@@ -60,8 +60,9 @@ export function TeamBuilderView({
         <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-200"
           onClick={() => { if (!viewingTeamData && handleBack) handleBack(); }}
         >
-           <div className="w-full max-w-6xl h-full max-h-[90vh] bg-surface-main rounded-xl border border-white/10 shadow-2xl overflow-hidden relative flex flex-col"
+           <div className="w-full max-w-6xl h-auto max-h-[90vh] bg-surface-main rounded-xl border border-white/10 shadow-2xl overflow-hidden relative flex flex-col shrink-0"
             onClick={(e) => e.stopPropagation()}
+            style={{ height: 'auto' }}
            >
                <TeamOverview
                    decks={(viewingTeamData as [Deck, Deck, Deck]) || teamDecks!}

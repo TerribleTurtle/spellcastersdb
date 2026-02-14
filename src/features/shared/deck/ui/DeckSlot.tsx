@@ -8,12 +8,11 @@ import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { UnifiedEntity, Unit, Spell, Titan } from "@/types/api";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
 import { type DeckSlot, SlotType } from "@/types/deck";
-import { DragData, DropData } from "@/types/dnd";
+import { DragData, DropData, DraggableEntity } from "@/types/dnd";
 
 
 interface DeckSlotProps {
   slot: DeckSlot;
-  draggedItem?: UnifiedEntity | null;
   allSlots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
   onSelect?: (item: UnifiedEntity, pos?: {x:number, y:number}) => void;
   deckId?: string; // Context ID for Team Mode
@@ -22,7 +21,6 @@ interface DeckSlotProps {
 
 export function DeckSlot({
   slot,
-  draggedItem, // Legacy prop, we prefer DND Context active
   allSlots,
   onSelect,
   deckId,
@@ -51,7 +49,7 @@ export function DeckSlot({
 
   const dragData: DragData = { 
       type: "DECK_SLOT", 
-      item: slot.unit, 
+      item: slot.unit as DraggableEntity, 
       sourceDeckId: deckId, 
       sourceSlotIndex: slot.index 
   };
@@ -114,6 +112,7 @@ export function DeckSlot({
   return (
     <div
       ref={setNodeRef}
+      data-testid={`deck-slot-${slot.index}`}
       className={cn(
         "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center w-full z-50",
         "md:w-full md:max-w-[140px]",
@@ -129,6 +128,12 @@ export function DeckSlot({
         slot.unit && "border-brand-secondary/50",
         isDragging && "opacity-50"
       )}
+      onClick={(e) => {
+        if (!isDragging && onSelect && slot.unit) {
+            e.stopPropagation();
+            onSelect(slot.unit, { x: e.clientX, y: e.clientY });
+        }
+      }}
     >
       {/* Draggable Wrapper */}
       {slot.unit && (

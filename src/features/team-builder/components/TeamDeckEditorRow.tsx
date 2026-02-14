@@ -42,14 +42,20 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
       openCommandCenter, 
       setActiveSlot, 
       exportTeamSlotToSolo, 
-      openInspector
+      openInspector,
+      pendingSwapCard,
+      setPendingSwapCard,
+      setTeamSlot
   } = useDeckStore(useShallow((state) => ({
       setTeamDecks: state.setTeamDecks,
       saveTeam: state.saveTeam,
       openCommandCenter: state.openCommandCenter,
       setActiveSlot: state.setActiveSlot,
       exportTeamSlotToSolo: state.exportTeamSlotToSolo,
-      openInspector: state.openInspector
+      openInspector: state.openInspector,
+      pendingSwapCard: state.pendingSwapCard,
+      setPendingSwapCard: state.setPendingSwapCard,
+      setTeamSlot: state.setTeamSlot
   })));
 
   const { showToast } = useToast();
@@ -115,7 +121,27 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
   return (
     <DeckDrawer
       deck={deck}
-      onSelect={(item, pos) => openInspector(item, pos)}
+            // It bubbles up from ActiveDeckTray -> DeckSlot.
+            // ActiveDeckTray calls `onSelect?.(item, pos, slot.index);`
+            
+            // We need to capture that 3rd argument. 
+            // BUT DeckDrawer prop `onSelect` is `(item: UnifiedEntity, pos: {x,y}) => void`.
+            // It seems the interface ignores the 3rd arg?
+            // I need to update DeckDrawer to pass the index or handle it differently.
+            // Actually, for now, let's assume DeckDrawer passes the slot index as valid 3rd arg even if TS complains, 
+            // OR I should check DeckDrawer definition.
+            
+            // Checking DeckDrawer.tsx...
+            // `onSelect: (item: UnifiedEntity, pos?: { x: number; y: number }, slotIndex?: number) => void;` -> It IS there?
+      onSelect={(item, pos, slotIndex) => {
+        if (pendingSwapCard && slotIndex !== undefined) {
+             setTeamSlot(index, slotIndex, pendingSwapCard as any);
+             setPendingSwapCard(null);
+             showToast(`Swapped ${pendingSwapCard.name} with ${item.name}`, "success");
+             return;
+        }
+        openInspector(item, pos);
+      }}
       variant="static"
       slotIndex={index}
       isExpanded={isExpanded}
