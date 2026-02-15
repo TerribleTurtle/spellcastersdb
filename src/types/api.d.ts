@@ -40,6 +40,14 @@ export type MovementType = "Ground" | "Flying" | "Hover" | "Stationary" | "Fly";
 // Mechanics
 // ============================================================================
 
+export interface ConditionObject {
+  field: string;
+  operator: string;
+  value: string | number;
+}
+
+export type Condition = ConditionObject | string;
+
 export interface Aura {
   name?: string;
   description?: string;
@@ -55,13 +63,13 @@ export interface DamageModifier {
   target_type?: string | string[]; // Legacy/V2 mix
   target_types?: string[]; // V2 Strict
   multiplier: number;
-  condition?: string | { field: string; operator: string; value: string | number };
+  condition?: Condition;
 }
 
 export interface DamageReduction {
   source_type: string;
   multiplier: number;
-  condition?: string | { field: string; operator: string; value: string | number };
+  condition?: Condition;
 }
 
 export interface Spawner {
@@ -89,7 +97,21 @@ export interface InitialAttack {
     description: string;
 }
 
+export interface Stealth {
+  duration: number;
+  break_on_attack: boolean;
+}
+
+export interface Cleave {
+  radius: number;
+  arc: number; 
+  damage_dropoff: number;
+}
+
 export interface UnitMechanics {
+    pierce?: boolean;
+    stealth?: Stealth;
+    cleave?: Cleave | boolean;
     aura?: Aura[];
     damage_modifiers?: DamageModifier[];
     damage_reduction?: DamageReduction[];
@@ -101,6 +123,9 @@ export interface UnitMechanics {
 }
 
 export interface SpellMechanics {
+    pierce?: boolean;
+    stealth?: Stealth;
+    cleave?: Cleave | boolean;
     waves?: number;
     interval?: number;
     stagger_modifier?: boolean; // V2 changed to boolean

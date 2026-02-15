@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  allowedDevOrigins: ["localhost:3000", "192.168.2.202:3000", "192.168.2.202"],
   async redirects() {
     return [
       {
@@ -68,7 +69,9 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://tally.so; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://terribleturtle.github.io; font-src 'self';",
+            // CSP Note: 'unsafe-eval' and 'unsafe-inline' are currently required for Next.js dev mode and hydration.
+            // TODO: Implement Nonce-based CSP for stricter production security.
+            value: `default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://tally.so; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://terribleturtle.github.io; font-src 'self'; connect-src 'self' https://terribleturtle.github.io https://vitals.vercel-insights.com; ${process.env.NODE_ENV === 'development' ? '' : 'upgrade-insecure-requests;'}`,
           },
         ],
       },

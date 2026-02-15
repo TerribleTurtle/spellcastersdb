@@ -39,7 +39,7 @@ export function useUnitSearch(
     }
 
     // Step B: Filter
-    return result.filter((entity) => {
+    result = result.filter((entity) => {
       const attrs = getSearchableAttributes(entity);
 
       // Magic Schools

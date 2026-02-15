@@ -13,6 +13,7 @@ import {
 
 import { fetchGameData } from "@/services/api/api";
 import { DebugHeaderInfo } from "@/components/debug/DebugHeaderInfo";
+import { DebugFeatures } from "@/components/debug/DebugFeatures";
 
 export default async function DebugPage() {
   let data;
@@ -219,6 +220,22 @@ export default async function DebugPage() {
               </div>
             </Section>
           </div>
+        </div>
+
+        {/* Advanced Tools */}
+        <div className="mb-12">
+            <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+                <Database className="text-brand-accent" />
+                Advanced Tools
+            </h2>
+            <DebugFeatures
+                units={data.units}
+                spells={data.spells}
+                titans={data.titans}
+                spellcasters={data.spellcasters}
+                consumables={data.consumables}
+                upgrades={data.upgrades}
+            />
         </div>
 
         {/* Sample Data */}

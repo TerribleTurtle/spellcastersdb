@@ -1,9 +1,10 @@
 import { Team, DeckOperationResult, Deck } from "@/types/deck";
-import { DECK_ERRORS } from "@/services/config/errors";
+import { TEAM_ERRORS } from "@/services/config/errors";
 import { UnifiedEntity, Spellcaster, Unit, Spell, Titan } from "@/types/api";
 import { DeckRules } from "@/services/rules/deck-rules";
 import { isUnit, isSpell, isTitan, isSpellcaster } from "@/services/validation/guards";
 import { cloneDeck } from "@/services/utils/deck-utils";
+import { applyDeckTransaction } from "@/services/domain/team/TeamUtils";
 
 export const TeamModification = {
   /**
@@ -15,30 +16,17 @@ export const TeamModification = {
     slotIndex: number,
     item: UnifiedEntity | null
   ): DeckOperationResult<Team["decks"]> {
-    const newDecks = [...teamDecks] as Team["decks"];
-    const targetDeck = newDecks[deckIndex];
-    
-    if (!targetDeck) {
-        return { success: false, error: DECK_ERRORS.INVALID_DECK_INDEX };
-    }
-
-
-    
-    if (!item) {
-        return TeamModification.clearSlot(teamDecks, deckIndex, slotIndex);
-    }
-
-    if (isUnit(item) || isSpell(item) || isTitan(item)) {
-        const result = DeckRules.setSlot(targetDeck, slotIndex, item as Unit | Spell | Titan);
-        
-        if (result.success && result.data) {
-            newDecks[deckIndex] = result.data;
-            return { success: true, data: newDecks };
+    return applyDeckTransaction(teamDecks, deckIndex, (deck) => {
+        if (!item) {
+            return { success: true, data: DeckRules.clearSlot(deck, slotIndex) };
         }
-        return { success: false, error: result.error, code: result.code };
-    }
 
-    return { success: false, error: DECK_ERRORS.INVALID_TYPE_SLOT, code: "INVALID_TYPE" };
+        if (isUnit(item) || isSpell(item) || isTitan(item)) {
+            return DeckRules.setSlot(deck, slotIndex, item as Unit | Spell | Titan);
+        }
+
+        return { success: false, error: TEAM_ERRORS.INVALID_TYPE_SLOT, code: "INVALID_TYPE" };
+    });
   },
 
   /**
@@ -49,17 +37,10 @@ export const TeamModification = {
     deckIndex: number,
     slotIndex: number
   ): DeckOperationResult<Team["decks"]> {
-     const newDecks = [...teamDecks] as Team["decks"];
-     const targetDeck = newDecks[deckIndex];
-
-     if (!targetDeck) {
-         return { success: false, error: "Invalid deck index" };
-     }
-
-     const newDeck = DeckRules.clearSlot(targetDeck, slotIndex);
-     newDecks[deckIndex] = newDeck;
-     
-     return { success: true, data: newDecks };
+     return applyDeckTransaction(teamDecks, deckIndex, (deck) => ({
+         success: true,
+         data: DeckRules.clearSlot(deck, slotIndex)
+     }));
   },
 
   /**
@@ -70,17 +51,10 @@ export const TeamModification = {
       deckIndex: number,
       item: Spellcaster
   ): DeckOperationResult<Team["decks"]> {
-      const newDecks = [...teamDecks] as Team["decks"];
-      const targetDeck = newDecks[deckIndex];
-
-      if (!targetDeck) {
-          return { success: false, error: "Invalid deck index" };
-      }
-
-      const newDeck = DeckRules.setSpellcaster(targetDeck, item);
-      newDecks[deckIndex] = newDeck;
-
-      return { success: true, data: newDecks };
+      return applyDeckTransaction(teamDecks, deckIndex, (deck) => ({
+          success: true,
+          data: DeckRules.setSpellcaster(deck, item)
+      }));
   },
 
   /**
@@ -90,17 +64,10 @@ export const TeamModification = {
       teamDecks: Team["decks"],
       deckIndex: number
   ): DeckOperationResult<Team["decks"]> {
-      const newDecks = [...teamDecks] as Team["decks"];
-      const targetDeck = newDecks[deckIndex];
-
-      if (!targetDeck) {
-          return { success: false, error: "Invalid deck index" };
-      }
-
-      const newDeck = DeckRules.removeSpellcaster(targetDeck);
-      newDecks[deckIndex] = newDeck;
-
-      return { success: true, data: newDecks };
+      return applyDeckTransaction(teamDecks, deckIndex, (deck) => ({
+          success: true,
+          data: DeckRules.removeSpellcaster(deck)
+      }));
   },
 
   /**
@@ -112,21 +79,9 @@ export const TeamModification = {
       indexA: number,
       indexB: number
   ): DeckOperationResult<Team["decks"]> {
-      const newDecks = [...teamDecks] as Team["decks"];
-      const targetDeck = newDecks[deckIndex];
-
-      if (!targetDeck) {
-          return { success: false, error: "Invalid deck index" };
-      }
-
-      const result = DeckRules.swapSlots(targetDeck, indexA, indexB);
-      
-      if (result.success && result.data) {
-          newDecks[deckIndex] = result.data;
-          return { success: true, data: newDecks };
-      }
-
-      return { success: false, error: result.error, code: result.code };
+      return applyDeckTransaction(teamDecks, deckIndex, (deck) => 
+          DeckRules.swapSlots(deck, indexA, indexB)
+      );
   },
 
   /**
@@ -137,25 +92,13 @@ export const TeamModification = {
       deckIndex: number,
       item: UnifiedEntity
   ): DeckOperationResult<Team["decks"]> {
-      const newDecks = [...teamDecks] as Team["decks"];
-      const targetDeck = newDecks[deckIndex];
-
-      if (!targetDeck) {
-          return { success: false, error: "Invalid deck index" };
-      }
-
-      // Type Guard for Quick Add (Unit | Spell | Titan | Spellcaster)
-      if (isUnit(item) || isSpell(item) || isTitan(item) || isSpellcaster(item)) {
-          const result = DeckRules.quickAdd(targetDeck, item as Unit | Spell | Titan | Spellcaster);
-
-          if (result.success && result.data) {
-               newDecks[deckIndex] = result.data;
-               return { success: true, data: newDecks };
+      return applyDeckTransaction(teamDecks, deckIndex, (deck) => {
+          // Type Guard for Quick Add (Unit | Spell | Titan | Spellcaster)
+          if (isUnit(item) || isSpell(item) || isTitan(item) || isSpellcaster(item)) {
+              return DeckRules.quickAdd(deck, item as Unit | Spell | Titan | Spellcaster);
           }
-          return { success: false, error: result.error, code: result.code };
-      }
-
-      return { success: false, error: DECK_ERRORS.INVALID_TYPE_QUICK_ADD, code: "INVALID_TYPE" };
+          return { success: false, error: TEAM_ERRORS.INVALID_TYPE_QUICK_ADD, code: "INVALID_TYPE" };
+      });
   },
 
   /**
@@ -170,7 +113,7 @@ export const TeamModification = {
       const newDecks = [...teamDecks] as Team["decks"];
       
       if (slotIndex < 0 || slotIndex >= newDecks.length) {
-          return { success: false, error: "Invalid slot index" };
+          return { success: false, error: TEAM_ERRORS.INVALID_SLOT_INDEX };
       }
 
       newDecks[slotIndex] = {

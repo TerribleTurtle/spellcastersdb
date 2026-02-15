@@ -90,8 +90,9 @@ export function SoloEditorDesktop({
                 onLibraryOpen={onOpenLibrary}
                 onShare={onShare}
                 hideGlobalActions={true}
-                className="w-full border border-white/10 rounded-xl bg-surface-main/50 shadow-lg overflow-hidden"
+                className="w-full border border-white/10 rounded-xl shadow-lg overflow-hidden"
                 idSuffix="desktop"
+                forceActive={true}
             />
           </div>
       </div>

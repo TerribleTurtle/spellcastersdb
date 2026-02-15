@@ -13,6 +13,7 @@ export type DropTargetType =
     | "DECK_SLOT"
     | "SPELLCASTER_SLOT"
     | "DECK_HEADER" // For auto-expand or "add to deck"
+    | "DECK_BACKGROUND" // For snap-back (blocking void drops)
     | "VOID"; // Dropped outside valid area
 
 export type DraggableEntity = Unit | Spell | Titan | Spellcaster;

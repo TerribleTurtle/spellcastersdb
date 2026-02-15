@@ -11,4 +11,8 @@ export class LocalDataSource implements GameDataSource {
         }
         return data;
     }
+
+    async fetchCritical(): Promise<AllDataResponse> {
+        return this.fetch();
+    }
 }

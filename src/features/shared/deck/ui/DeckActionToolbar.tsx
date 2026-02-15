@@ -1,5 +1,6 @@
-import { Import, Library, Check, Save, Share2, Eraser, CopyPlus } from "lucide-react";
+import { Import, Check, Save, Share2, Eraser, CopyPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { LibraryButton } from "@/components/ui/LibraryButton";
 
 export interface DeckActionToolbarProps {
   onImport?: () => void;
@@ -40,16 +41,10 @@ export function DeckActionToolbar({
 
       {/* Library Action */}
       {onLibraryOpen && !hideGlobalActions && (
-        <button
+        <LibraryButton
           onClick={onLibraryOpen}
           data-testid="toolbar-library-btn"
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-card border border-white/10 hover:bg-white/5 text-gray-300 hover:text-white rounded text-xs font-bold uppercase tracking-wider transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary"
-          title="Open Deck Library"
-          aria-label="Open Deck Library"
-        >
-          <Library size={16} />
-          <span className="hidden md:inline">Library</span>
-        </button>
+        />
       )}
 
       {/* Save Action */}

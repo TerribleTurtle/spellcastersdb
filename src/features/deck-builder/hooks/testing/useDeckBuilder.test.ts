@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { act } from "react";
@@ -196,6 +197,41 @@ describe("useDeckBuilder", () => {
           // Should remain unchanged
           expect(result.current.currentDeck.slots[0].unit?.entity_id).toBe("u1");
           expect(result.current.currentDeck.slots[4].unit?.entity_id).toBe("t1");
+      });
+  });
+
+  describe("Team Integration", () => {
+      it("should import solo deck to team slot", () => {
+          const { result } = renderHook(() => useDeckBuilder());
+          
+          // Setup: Switch to Team Mode and initialize team decks
+          act(() => {
+             useDeckStore.setState({ 
+                 mode: "TEAM",
+                 teamDecks: [
+                     { id: "t1", name: "Empty 1", slots: [] as any, spellcaster: null },
+                     { id: "t2", name: "Empty 2", slots: [] as any, spellcaster: null },
+                     { id: "t3", name: "Empty 3", slots: [] as any, spellcaster: null }
+                 ]
+             });
+          });
+
+          const mockDeck = {
+              id: "d1",
+              name: "Imported Deck",
+              spellcaster: mockSpellcaster,
+              slots: [{ unit: mockUnit, unit_id: mockUnit.entity_id }]
+          };
+
+          act(() => {
+
+              result.current.importSoloDeckToTeam(0, mockDeck, "new-uuid");
+          });
+
+          const teamDecks = useDeckStore.getState().teamDecks;
+          expect(teamDecks[0].name).toBe("Imported Deck");
+          expect(teamDecks[0].spellcaster?.entity_id).toBe("sc1");
+          expect(teamDecks[0].slots[0].unit?.entity_id).toBe("u1");
       });
   });
 });

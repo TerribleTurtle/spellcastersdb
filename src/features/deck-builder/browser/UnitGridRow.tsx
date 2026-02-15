@@ -7,6 +7,7 @@ interface UnitGridRowProps {
   columns: number;
   onSelectItem: (item: BrowserItem, pos?: { x: number; y: number }) => void;
   onQuickAdd: (item: BrowserItem) => void;
+  priority?: boolean;
 }
 
 export const UnitGridRow = React.memo(function UnitGridRow({
@@ -14,6 +15,7 @@ export const UnitGridRow = React.memo(function UnitGridRow({
   columns,
   onSelectItem,
   onQuickAdd,
+  priority = false,
 }: UnitGridRowProps) {
   return (
     <div
@@ -28,6 +30,7 @@ export const UnitGridRow = React.memo(function UnitGridRow({
           item={item}
           onClick={onSelectItem}
           onQuickAdd={onQuickAdd}
+          priority={priority}
         />
       ))}
     </div>

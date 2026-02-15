@@ -1,6 +1,7 @@
 import { AllDataSchema } from "@/services/validation/data-schemas";
 import { AllDataResponse } from "@/types/api";
 import { EntityCategory } from "@/types/enums";
+import { validateIntegrity } from "@/services/validation/integrity-checker";
  
  export class DataValidationError extends Error {
    constructor(message: string, public userFriendlyMessage: string) {
@@ -21,7 +22,17 @@ export interface RawData {
   [key: string]: unknown;
 }
 
+
+// Simple Memoization Cache
+let lastRawData: RawData | null = null;
+let lastResult: AllDataResponse | null = null;
+
 export function mapRawDataToAllData(rawData: RawData): AllDataResponse {
+    // 1. Cache Hit Check
+    if (lastRawData === rawData && lastResult) {
+        return lastResult;
+    }
+
     // V2 Mapping: Handle legacy "heroes" field
     if (rawData.heroes && !rawData.spellcasters) {
       rawData.spellcasters = rawData.heroes;
@@ -50,5 +61,19 @@ export function mapRawDataToAllData(rawData: RawData): AllDataResponse {
          throw new DataValidationError(errorMsg, "Game data structure is invalid. Please contact support.");
     }
     
+    // 2. Integrity Check (Post-Parse)
+    const integrityIssues = validateIntegrity(result.data);
+    if (integrityIssues.length > 0) {
+        console.warn("⚠️ Data Integrity Issues Found:", integrityIssues.length);
+        integrityIssues.forEach(issue => {
+            const label = issue.severity === "error" ? "🔴" : "UD"; 
+            console.warn(`${label} ${issue.message} (@ ${issue.path})`);
+        });
+    }
+    
+    // 3. Update Cache
+    lastRawData = rawData;
+    lastResult = result.data;
+
     return result.data;
 }

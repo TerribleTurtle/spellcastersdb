@@ -2,7 +2,7 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Check, AlertCircle, ArrowRight } from "lucide-react";
+import { GripVertical, Check, AlertCircle, ArrowRight, ArrowLeft } from "lucide-react";
 
 import { Deck } from "@/types/deck";
 import { cn } from "@/lib/utils";
@@ -198,7 +198,7 @@ export function DeckRow({
           <div
             className={cn(
               "items-center gap-1",
-              isTeamMode ? "hidden md:flex" : "hidden sm:flex" 
+              isTeamMode ? "hidden md:flex" : "flex" 
             )}
           >
             {deck.slots.slice(0, 4).map((s, i) => (
@@ -251,6 +251,7 @@ export function DeckRow({
                   }}
                   title="Put Away Deck"
                >
+                  <ArrowLeft size={14} />
                   <span className="hidden sm:inline">Put Away</span>
                </button>
              ) : (

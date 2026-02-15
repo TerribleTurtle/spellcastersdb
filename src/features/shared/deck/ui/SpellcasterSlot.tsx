@@ -110,7 +110,7 @@ export function SpellcasterSlot({
         />
       )}
       {!spellcaster && (
-        <div className="text-center opacity-30 text-brand-primary">
+        <div className="text-center opacity-80 text-brand-primary group-hover:opacity-100 transition-opacity">
           <div className="mb-2 flex justify-center">
             <Sparkles size={28} />
           </div>

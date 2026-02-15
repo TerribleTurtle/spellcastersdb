@@ -39,12 +39,14 @@ export const TeamDeckRow = memo(function TeamDeckRow({
     <div className="bg-surface-card border border-white/10 rounded-xl overflow-hidden hover:border-brand-primary/30 transition-all group">
       <div className="flex flex-col lg:flex-row h-full">
         {/* Header / Info Column */}
-        <div
+        <button
+          type="button"
           className={cn(
-            "w-full lg:w-64 bg-black/20 border-b lg:border-b-0 lg:border-r border-white/5 p-2 md:p-3 flex flex-col justify-between relative overflow-hidden",
+            "w-full lg:w-64 bg-black/20 border-b lg:border-b-0 lg:border-r border-white/5 p-2 md:p-3 flex flex-col justify-between relative overflow-hidden text-left",
             !isReadOnly && "cursor-pointer hover:bg-white/5 transition-colors"
           )}
           onClick={!isReadOnly ? onEdit : undefined}
+          disabled={isReadOnly}
         >
           {deck.spellcaster && (
             <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
@@ -72,6 +74,7 @@ export const TeamDeckRow = memo(function TeamDeckRow({
                     : "bg-red-500 text-white border-red-400"
                 )}
                 title={isValid ? "Deck Valid" : errors.join("\n")}
+                aria-label={isValid ? "Deck Valid" : "Deck Invalid"}
               >
                 {isValid ? (
                   <CheckCircle2 size={10} strokeWidth={3} />
@@ -90,18 +93,14 @@ export const TeamDeckRow = memo(function TeamDeckRow({
 
           {!isReadOnly && (
             <div className="mt-4 flex gap-2 relative z-10">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onEdit();
-                }}
-                className="w-full py-2 rounded bg-brand-primary text-white text-xs font-bold uppercase tracking-wider hover:bg-brand-primary/80 transition-colors"
+              <div
+                className="w-full py-2 rounded bg-brand-primary text-white text-xs font-bold uppercase tracking-wider hover:bg-brand-primary/80 transition-colors text-center"
               >
                 Edit
-              </button>
+              </div>
             </div>
           )}
-        </div>
+        </button>
 
         {/* Deck Visuals - Horizontal Tray */}
         <div className="flex-1 p-2 lg:p-4 overflow-x-auto">

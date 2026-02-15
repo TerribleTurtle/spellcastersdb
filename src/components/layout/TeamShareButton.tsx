@@ -1,14 +1,16 @@
 "use client";
 
-import { useState } from "react";
+
 import { Check, Share2 } from "lucide-react";
 import { useDeckStore } from "@/store/index";
 import { copyToClipboard } from "@/lib/clipboard";
 import { cn } from "@/lib/utils";
 
+import { useEphemeralState } from "@/hooks/useEphemeralState";
+
 export function TeamShareButton() {
     const { teamDecks, teamName, mode } = useDeckStore();
-    const [copied, setCopied] = useState(false);
+    const { isActive: copied, trigger: triggerCopied } = useEphemeralState(2000);
 
     if (mode !== "TEAM") return null;
 
@@ -19,8 +21,7 @@ export function TeamShareButton() {
 
         const success = await copyToClipboard(url);
         if (success) {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
+            triggerCopied();
         }
     };
 

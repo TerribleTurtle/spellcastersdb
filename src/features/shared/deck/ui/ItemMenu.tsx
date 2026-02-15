@@ -1,7 +1,15 @@
+"use client";
 
-import { useState, useRef, useEffect } from "react";
-import { createPortal } from "react-dom";
+import { useState } from "react";
 import { MoreHorizontal, Layers, Link as LinkIcon, Trash2, Edit2, Download } from "lucide-react";
+import { 
+  DropdownMenu, 
+  DropdownMenuTrigger, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuSeparator 
+} from "@/components/ui/dropdown-menu";
+import { createPortal } from "react-dom";
 
 export function ItemMenu({
   onDuplicate,
@@ -18,163 +26,66 @@ export function ItemMenu({
   onExport?: () => void;
   type: "DECK" | "TEAM";
 }) {
-  const [showMenu, setShowMenu] = useState(false);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-  const [menuPos, setMenuPos] = useState({ top: 0, left: 0 });
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   // Derived labels
   const duplicateLabel = type === "TEAM" ? "Duplicate Team" : "Duplicate Deck";
   const shareLabel = type === "TEAM" ? "Share Team" : "Share Deck";
 
-  // Close on scroll/resize/click outside
-  useEffect(() => {
-    if (!showMenu) return;
-    const handleScroll = () => setShowMenu(false);
-    const handleResize = () => setShowMenu(false);
-    const handleClick = (e: MouseEvent) => {
-      // If click is outside button and outside menu (handled by portal stopPropagation)
-      if (buttonRef.current && !buttonRef.current.contains(e.target as Node)) {
-        setShowMenu(false);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { capture: true });
-    window.addEventListener("resize", handleResize);
-    document.addEventListener("mousedown", handleClick);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll, { capture: true });
-      window.removeEventListener("resize", handleResize);
-      document.removeEventListener("mousedown", handleClick);
-    };
-  }, [showMenu]);
-
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
-  const toggleMenu = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!showMenu && buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      setMenuPos({
-        top: rect.bottom + 4,
-        left: rect.right - 128 + 20,
-      });
-    }
-    setShowMenu(!showMenu);
-  };
-
   return (
     <>
-      <button
-        ref={buttonRef}
-        onClick={toggleMenu}
-        className="h-8 w-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition-colors"
-      >
-        <MoreHorizontal size={18} />
-      </button>
-
-      {showMenu &&
-        typeof document !== "undefined" &&
-        createPortal(
-          <div
-            className="fixed w-56 bg-surface-main border border-white/10 rounded-lg shadow-2xl overflow-hidden flex flex-col py-1 animate-in fade-in zoom-in-95 duration-100"
-            style={{
-              top: menuPos.top,
-              left: Math.max(
-                10,
-                Math.min(window.innerWidth - 200, menuPos.left)
-              ),
-              zIndex: 9999,
-            }}
-            onMouseDown={(e) => e.stopPropagation()}
-            onClick={(e) => e.stopPropagation()}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button
+            className="h-8 w-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition-colors outline-none focus:ring-2 focus:ring-brand-primary"
+            aria-label="Open menu"
           >
-            {onDuplicate && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onDuplicate();
-                  setShowMenu(false);
-                }}
-                className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors cursor-pointer"
-              >
-                <Layers size={14} />
-                <span>{duplicateLabel}</span>
-              </button>
-            )}
+            <MoreHorizontal size={18} />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-56">
+          {onDuplicate && (
+            <DropdownMenuItem onClick={onDuplicate} className="cursor-pointer">
+              <Layers size={14} className="mr-2" />
+              <span>{duplicateLabel}</span>
+            </DropdownMenuItem>
+          )}
 
-            {onCopyLink && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onCopyLink();
-                  setShowMenu(false);
-                }}
-                className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors cursor-pointer"
-              >
-                <LinkIcon size={14} />
-                <span>{shareLabel}</span>
-              </button>
-            )}
+          {onCopyLink && (
+            <DropdownMenuItem onClick={onCopyLink} className="cursor-pointer">
+              <LinkIcon size={14} className="mr-2" />
+              <span>{shareLabel}</span>
+            </DropdownMenuItem>
+          )}
 
-            {onExport && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onExport();
-                  setShowMenu(false);
-                }}
-                className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors cursor-pointer"
-              >
-                <Download size={14} />
-                <span>Export JSON</span>
-              </button>
-            )}
+          {onExport && (
+            <DropdownMenuItem onClick={onExport} className="cursor-pointer">
+              <Download size={14} className="mr-2" />
+              <span>Export JSON</span>
+            </DropdownMenuItem>
+          )}
 
-            {onRename && (
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  onRename();
-                  setShowMenu(false);
-                }}
-                className="w-full px-4 py-2 text-left text-sm text-gray-300 hover:bg-white/10 hover:text-white flex items-center gap-2 transition-colors cursor-pointer"
-              >
-                <Edit2 size={14} />
-                <span>Rename</span>
-              </button>
-            )}
+          {onRename && (
+            <DropdownMenuItem onClick={onRename} className="cursor-pointer">
+              <Edit2 size={14} className="mr-2" />
+              <span>Rename</span>
+            </DropdownMenuItem>
+          )}
 
-            <div className="h-px bg-white/5 my-1" />
+          <DropdownMenuSeparator />
 
-            <button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                // Close menu, open modal
-                setShowMenu(false);
-                setShowDeleteConfirm(true);
-              }}
-              className="w-full px-4 py-2 text-left text-sm text-red-400 hover:bg-red-500/10 flex items-center gap-2 transition-colors cursor-pointer"
-            >
-              <Trash2 size={14} />
-              <span>Delete</span>
-            </button>
-          </div>,
-          document.body
-        )}
+          <DropdownMenuItem 
+            onClick={() => setShowDeleteConfirm(true)}
+            className="text-red-400 focus:text-red-400 focus:bg-red-500/10 cursor-pointer"
+          >
+            <Trash2 size={14} className="mr-2" />
+            <span>Delete</span>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
       {showDeleteConfirm &&
+        typeof document !== "undefined" &&
         createPortal(
           <DeleteConfirmationModal
             type={type}
@@ -201,7 +112,7 @@ function DeleteConfirmationModal({
 }) {
   return (
     <div
-      className="fixed inset-0 z-10000 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200"
       onClick={(e) => {
         e.stopPropagation();
         onCancel();

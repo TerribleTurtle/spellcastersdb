@@ -3,6 +3,8 @@ import { Deck } from "@/types/deck";
 import { Save, X, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useDeckStore } from "@/store/index";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface SaveDeckModalProps {
   deck: Deck;
@@ -16,8 +18,6 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalPr
   const [error, setError] = useState<string | null>(null);
   
   const checkDeckNameAvailable = useDeckStore(state => state.checkDeckNameAvailable);
-
-
 
   const handleSave = () => {
     const trimmedName = name.trim();
@@ -50,12 +50,14 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalPr
             <Save size={20} className="text-brand-primary" />
             Save Copy to Library
           </h3>
-          <button 
+          <Button 
+            variant="ghost"
+            size="icon"
             onClick={onClose}
-            className="text-gray-400 hover:text-white transition-colors"
+            className="text-gray-400 hover:text-white"
           >
             <X size={20} />
-          </button>
+          </Button>
         </div>
 
         {/* Content */}
@@ -64,7 +66,7 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalPr
             <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">
               Deck Name
             </label>
-            <input
+            <Input
               type="text"
               value={name}
               onChange={(e) => {
@@ -73,10 +75,8 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalPr
               }}
               onKeyDown={(e) => e.key === "Enter" && handleSave()}
               className={cn(
-                "w-full bg-black/40 border rounded-lg px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:ring-2 transition-all",
-                error 
-                  ? "border-red-500/50 focus:ring-red-500/50" 
-                  : "border-white/10 focus:ring-brand-primary/50 focus:border-brand-primary/50"
+                "bg-black/40 border-white/10 text-white placeholder-gray-600 focus-visible:ring-brand-primary/50",
+                error && "border-red-500/50 focus-visible:ring-red-500/50"
               )}
               placeholder="Enter deck name..."
               autoFocus
@@ -96,20 +96,19 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalPr
 
         {/* Footer */}
         <div className="p-4 border-t border-white/10 bg-white/5 flex items-center justify-end gap-3">
-          <button
+          <Button
+            variant="ghost"
             onClick={onClose}
-            className="px-4 py-2 text-gray-400 hover:text-white text-sm font-medium transition-colors"
           >
             Cancel
-          </button>
-          <button
+          </Button>
+          <Button
             onClick={handleSave}
             disabled={!name.trim()}
-            className="px-4 py-2 bg-brand-primary hover:bg-brand-primary/90 text-white text-sm font-bold rounded-lg shadow-lg shadow-brand-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
-            <Save size={16} />
+            <Save size={16} className="mr-2" />
             Save Copy
-          </button>
+          </Button>
         </div>
       </div>
     </div>

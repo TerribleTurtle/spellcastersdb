@@ -11,6 +11,7 @@ import { ExternalLink, Github, Menu, X, MessageSquare } from "lucide-react";
 import { useFeedback } from "@/hooks/useFeedback";
 
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { Button } from "@/components/ui/button";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,45 +63,33 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Desktop Primary Nav - HIDDEN (Moved to Sidebar) */}
-          {/* We keep this commented out or removed so it doesn't conflict with the sidebar */
-          /* 
-          {pathname !== "/" && (
-            <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center gap-6">
-                 ...
-            </div>
-          )}
-          */
-          }
-
           {/* Desktop Right Side (External + Menu) */}
           <div className="hidden md:flex items-center gap-4">
-            
-            {/* External Links - Hidden on desktop now as they are in sidebar, or keep specifically for some? */}
-            {/* Actually, if we use sidebar, we might trigger the sidebar on mobile via this button, OR just hide this trigger on desktop if the sidebar is always visible.
-                The prompt says "Hide the hamburger on desktop".
-            */}
             <div className="pl-4 border-l border-white/10 md:hidden">
-              <button
+              <Button
+                variant="ghost"
+                size="icon"
                 onClick={toggleMenu}
-                className="inline-flex items-center justify-center rounded-md p-2 text-slate-400 hover:bg-white/5 hover:text-brand-accent focus:outline-none transition-colors"
+                className="text-slate-400 hover:text-brand-accent"
                 title="Menu"
               >
                 <span className="sr-only">Open menu</span>
                 {isOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* Mobile menu button */}
           <div className="-mr-2 flex items-center gap-2 md:hidden">
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={toggleMenu}
-              className="inline-flex items-center justify-center rounded-md p-2 text-slate-400 hover:bg-white/5 hover:text-brand-accent focus:outline-none"
+              className="text-slate-400 hover:text-brand-accent"
             >
               <span className="sr-only">Open main menu</span>
               {isOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
+            </Button>
           </div>
         </div>
 
@@ -143,16 +132,17 @@ export default function Navbar() {
                 );
               })}
               
-              <button
+              <Button
+                variant="ghost"
                 onClick={() => {
                   setIsOpen(false);
                   feedback.openFeedback();
                 }}
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-brand-accent transition-colors w-full text-left"
+                className="justify-start px-3 py-2 text-base font-medium text-slate-300 hover:bg-white/5 hover:text-brand-accent w-full"
               >
-                <MessageSquare size={18} />
+                <MessageSquare size={18} className="mr-2" />
                 Feedback
-              </button>
+              </Button>
             </div>
           </div>
         )}
@@ -160,3 +150,4 @@ export default function Navbar() {
     </nav>
   );
 }
+

@@ -29,12 +29,8 @@ export function CardInspectorModal() {
     const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
     mediaQuery.addEventListener("change", handler);
     
-    // Also listen to resize as a safety fallback
-    window.addEventListener('resize', checkDesktop);
-
     return () => {
         mediaQuery.removeEventListener("change", handler);
-        window.removeEventListener('resize', checkDesktop);
     };
   }, []);
   

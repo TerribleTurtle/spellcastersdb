@@ -1,7 +1,7 @@
 "use client";
 
 
-import { Shield } from "lucide-react";
+import { Shield, Eye, Sword, ArrowRight } from "lucide-react";
 import { Mechanics, UnitMechanics, SpellMechanics } from "@/types/api";
 import { cn } from "@/lib/utils";
 import { formatTargetName } from "@/services/utils/formatting"; // Still needed for Shield logic if not kept here
@@ -31,7 +31,10 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
   if (!mechanics) return null;
 
   const hasMechanics = 
-    ((mechanics.damage_modifiers && Array.isArray(mechanics.damage_modifiers) && mechanics.damage_modifiers.length > 0) || (typeof mechanics.damage_modifiers === 'string')) ||
+    mechanics.pierce ||
+    mechanics.stealth ||
+    mechanics.cleave ||
+    (mechanics.damage_modifiers && mechanics.damage_modifiers.length > 0) ||
     (mechanics.damage_reduction?.length ?? 0) > 0 ||
     (mechanics.aura?.length ?? 0) > 0 ||
     (mechanics.spawner?.length ?? 0) > 0 ||
@@ -52,17 +55,51 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
         </h3>
       )}
 
-      {/* Damage Modifiers */}
-      <DamageModifierList 
-        modifiers={mechanics.damage_modifiers} 
+      {/* Pierce Mechanic */}
+      {mechanics.pierce && (
+        <div className={cn("flex items-center gap-1.5 rounded bg-blue-500/10 border border-blue-500/20 p-2 text-blue-200")}>
+            <ArrowRight size={isCompact ? 13 : 16} className="text-blue-400 shrink-0" />
+            <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm")}>Target Pierce</span>
+        </div>
+      )}
+
+      {/* Stealth Mechanic */}
+      {mechanics.stealth && (
+        <div className={cn("flex items-center gap-1.5 rounded bg-zinc-700/50 border border-zinc-600 p-2 text-zinc-300")}>
+            <Eye size={isCompact ? 13 : 16} className="text-zinc-400 shrink-0" />
+            <div className="flex flex-col">
+                <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm")}>Stealth</span>
+                {shouldShowDescription && (
+                    <span className="text-[10px] italic opacity-70">
+                        {mechanics.stealth.duration === -1 ? "Infinite" : `${mechanics.stealth.duration}s`} duration
+                        {mechanics.stealth.break_on_attack && ", breaks on attack"}
+                    </span>
+                )}
+            </div>
+        </div>
+      )}
+
+      {/* Cleave Mechanic */}
+      {mechanics.cleave && (
+        <div className={cn("flex items-center gap-1.5 rounded bg-red-900/20 border border-red-500/30 p-2 text-red-200")}>
+            <Sword size={isCompact ? 13 : 16} className="text-red-400/80 shrink-0 rotate-90" />
+            <div className="flex flex-col">
+                <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm")}>Cleave</span>
+                {shouldShowDescription && typeof mechanics.cleave === 'object' && (
+                    <span className="text-[10px] italic opacity-70">
+                        {mechanics.cleave.arc}° Cone, {mechanics.cleave.radius}m Radius ({Math.max(0, Math.min(1, 1 - mechanics.cleave.damage_dropoff)) * 100}% Dmg at edge)
+                    </span>
+                )}
+            </div>
+        </div>
+      )}
+
+       {/* Damage Modifiers */}
+       <DamageModifierList 
+        modifiers={mechanics.damage_modifiers /* as DamageModifier[] */} 
         isCompact={isCompact} 
       />
 
-      {/* Damage Reduction - Keeping inline strictly to show we considered it, or we could extract it to a list too. 
-          Given the pattern, let's keep it inline for now as it wasn't explicitly planned for extraction in my list, 
-          but for consistency I'll extract it next if I see it fits. 
-          For now, preserving original logic for DR.
-      */}
       {mechanics.damage_reduction?.map((mod, i) => (
         <div
           key={`res-${i}`}
@@ -80,9 +117,12 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
             </span>
             {mod.condition && (
                 <span className={cn("text-green-300/50 italic leading-none", isCompact ? "text-[9px] md:text-[10px]" : "text-xs")}>
-                     {isCompact 
-                        ? (typeof mod.condition === 'string' ? mod.condition : `${mod.condition.field} ${mod.condition.operator} ${mod.condition.value}`)
-                        : `Condition: ${typeof mod.condition === 'string' ? mod.condition : `${mod.condition.field} ${mod.condition.operator} ${mod.condition.value}`}`
+                     {typeof mod.condition === 'string' 
+                        ? mod.condition
+                        : (isCompact 
+                            ? `${mod.condition.field} ${mod.condition.operator} ${mod.condition.value}`
+                            : `Condition: ${mod.condition.field} ${mod.condition.operator} ${mod.condition.value}`
+                          )
                      }
                 </span>
             )}

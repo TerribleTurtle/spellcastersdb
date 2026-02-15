@@ -17,10 +17,9 @@ export async function fetchJson<T>(url: string, options?: RequestInit): Promise<
     const response = await fetch(url, options);
 
     if (!response.ok) {
-        throw new DataFetchError(
-          `Failed to fetch: ${response.status} ${response.statusText}`,
-          response.status
-        );
+        const errorMsg = `Failed to fetch ${url}: ${response.status} ${response.statusText}`;
+        console.error(errorMsg);
+        throw new DataFetchError(errorMsg, response.status);
     }
 
     return (await response.json()) as T;
@@ -57,8 +56,14 @@ export async function fetchChunkedData(): Promise<AllDataResponse> {
     fetchChunk<RawUnit[]>("units.json"),
     fetchChunk<unknown[]>("spells.json"),
     fetchChunk<unknown[]>("heroes.json"),
-    fetchChunk<unknown[]>("titans.json"),
-    fetchChunk<unknown[]>("consumables.json"),
+    fetchChunk<unknown[]>("titans.json").catch(err => {
+        console.warn("Failed to fetch titans, defaulting to empty:", err);
+        return [];
+    }),
+    fetchChunk<unknown[]>("consumables.json").catch(err => {
+        console.warn("Failed to fetch consumables, defaulting to empty:", err);
+        return [];
+    }),
     fetchChunk<unknown[]>("upgrades.json").catch(err => {
         console.warn("Failed to fetch upgrades, defaulting to empty array:", err);
         return [];
@@ -82,7 +87,53 @@ export async function fetchChunkedData(): Promise<AllDataResponse> {
   return { ...data, _source: `Remote API (Chunked)` };
 }
 
+export async function fetchCriticalChunkedData(): Promise<AllDataResponse> {
+  const [
+    units, 
+    spells, 
+    spellcasters, 
+    titans, 
+  ] = await Promise.all([
+    fetchChunk<RawUnit[]>("units.json"),
+    fetchChunk<unknown[]>("spells.json"),
+    fetchChunk<unknown[]>("heroes.json"),
+    fetchChunk<unknown[]>("titans.json").catch(err => {
+        console.warn("Failed to fetch titans, defaulting to empty:", err);
+        return [];
+    }),
+  ]);
+
+  const rawData: RawData = {
+    build_info: {
+        version: "v2-critical",
+        generated_at: new Date().toISOString(),
+    },
+    units,
+    spells,
+    spellcasters,
+    titans,
+    consumables: [],
+    upgrades: [],
+  };
+
+  const data = mapRawDataToAllData(rawData);
+  return { ...data, _source: `Remote API (Critical)` };
+}
+
+export async function fetchMockData(): Promise<AllDataResponse> {
+    throw new Error("Mock data has been removed. Please use the local API or remote dev data.");
+}
+
 export async function fetchRemoteData(): Promise<AllDataResponse> {
+  // Manual toggle for V2 dev while API is V1
+  if (process.env.NEXT_PUBLIC_USE_MOCK_DATA === "true" || process.env.NODE_ENV === "development") {
+      try {
+        return await fetchMockData();
+      } catch (e) {
+        console.error("Mock fetch failed, falling back to remote:", e);
+      }
+  }
+
   try {
       return await fetchChunkedData();
   } catch (error) {
@@ -97,6 +148,25 @@ export async function fetchRemoteData(): Promise<AllDataResponse> {
     }
 
     console.error("❌ Unexpected Error fetching game data:", error);
+    throw error;
+  }
+}
+
+export async function fetchRemoteCriticalData(): Promise<AllDataResponse> {
+  try {
+      return await fetchCriticalChunkedData();
+  } catch (error) {
+    if (error instanceof DataValidationError) {
+        console.error("❌ Critical Game Data Validation Failed:", error.message);
+        throw error;
+    }
+    
+    if (error instanceof DataFetchError) {
+         console.error(`❌ Critical Network Error (${error.status}):`, error.message);
+         throw error;
+    }
+
+    console.error("❌ Unexpected Error fetching critical game data:", error);
     throw error;
   }
 }

@@ -1,4 +1,4 @@
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -9,20 +9,29 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // Revalidate all critical static paths
-    revalidatePath('/incantations/units/[id]');
-    revalidatePath('/incantations/spells/[id]');
-    revalidatePath('/spellcasters/[id]');
-    revalidatePath('/titans/[id]');
-    revalidatePath('/ranks/[rank]');
-    revalidatePath('/types/[category]');
-    revalidatePath('/schools/[school]');
+    const startTime = Date.now();
     
-    // Revalidate sitemap
+    // 1. Revalidate Data Cache (This updates all pages that use fetch with 'game-data' tag)
+    // This is much more robust than guessing paths.
+    // 'max' is required by this Next.js version (16.1.6) for revalidateTag.
+    revalidateTag('game-data', 'max');
+    
+    // 2. Revalidate Sitemap (Static route, not data-driven in the same way)
     revalidatePath('/sitemap.xml');
 
-    return NextResponse.json({ revalidated: true, now: Date.now() });
-  } catch {
-    return NextResponse.json({ message: 'Error revalidating' }, { status: 500 });
+    const duration = Date.now() - startTime;
+    console.log(`[Revalidation] Success in ${duration}ms. Tag: 'game-data', Path: '/sitemap.xml'`);
+
+    return NextResponse.json({ 
+      revalidated: true, 
+      now: Date.now(),
+      message: "Game data and sitemap revalidation triggered" 
+    });
+  } catch (err) {
+    console.error('[Revalidation] Error:', err);
+    return NextResponse.json({ 
+      message: 'Error revalidating', 
+      error: err instanceof Error ? err.message : 'Unknown error' 
+    }, { status: 500 });
   }
 }

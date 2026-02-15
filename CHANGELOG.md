@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-02-15
+
 ### Added
 
 - **Team Builder (Phase 8)**: Full support for building teams of 3 decks with shared validation logic.
@@ -14,6 +16,9 @@ All notable changes to this project will be documented in this file.
   - Simplified Redux slices.
   - Moved business logic to domain services (`TeamModification`, `TeamEditor`).
   - Standardized error handling.
+  - **Inspector UI**:
+    - Unified styling for Spellcaster and Titan selection buttons to match Unit Slot buttons.
+    - Created reusable `InspectorActionButton` component.
   - **Deck Persistence**:
     - **Smart Save**: "Save" button intelligently toggles to "Update" for existing decks.
     - **Save Copy**: Added explicit flow to fork decks/teams.

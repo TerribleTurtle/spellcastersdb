@@ -8,7 +8,7 @@ export function DeckTitle() {
     if (mode === "TEAM") {
         return (
             <div className="flex flex-col items-start animate-in fade-in duration-300">
-                 <span className="text-xl font-bold tracking-wider text-white truncate max-w-[200px] sm:max-w-md">
+                 <span className="text-xl font-bold tracking-wider text-white truncate max-w-48 sm:max-w-md">
                     {teamName || "Untitled Team"}
                 </span>
                  <span className="text-[10px] text-brand-accent font-bold tracking-widest uppercase">

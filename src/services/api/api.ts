@@ -73,6 +73,36 @@ export async function fetchGameData(): Promise<AllDataResponse> {
   }
 }
 
+/**
+ * Fetches only the critical game data (Units, Spells, Titans, Spellcasters).
+ * Skips Consumables and Upgrades to reduce TTFB.
+ */
+export async function fetchCriticalGameData(): Promise<AllDataResponse> {
+  let source: GameDataSource;
+
+  if (process.env.NODE_ENV === "development") {
+      source = new LocalDataSource();
+  } else {
+      source = new RemoteDataSource();
+  }
+
+  try {
+      const data = await source.fetchCritical();
+      registry.initialize(data);
+      return data;
+  } catch (error) {
+     console.error("Failed to fetch critical game data:", error);
+     if (process.env.NODE_ENV === "development" && source instanceof LocalDataSource) {
+         console.warn("Local critical data failed, attempting remote fallback...");
+         const remote = new RemoteDataSource();
+         const data = await remote.fetchCritical();
+         registry.initialize(data);
+         return data;
+     }
+     throw error;
+  }
+}
+
 
 /**
  * Returns all Creatures and Buildings

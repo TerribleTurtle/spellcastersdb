@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDeckBuilder } from "../domain/useDeckBuilder";
 import { Deck } from "@/types/deck";
 import { v4 as uuidv4 } from "uuid";
+import { useEphemeralState } from "@/hooks/useEphemeralState";
 
 export type SavedListTab = "TEAMS" | "SOLO";
 
@@ -35,7 +36,7 @@ export function useDeckPersistence({ onClear, onImportSolo }: UseDeckPersistence
 
   // --- Local State ---
   const [savedListTab, setSavedListTab] = useState<SavedListTab>("TEAMS");
-  const [justSaved, setJustSaved] = useState(false);
+  const { isActive: justSaved, trigger: triggerSaved } = useEphemeralState(2000);
   
   const [confirmSave, setConfirmSave] = useState<{
     name: string;
@@ -75,27 +76,25 @@ export function useDeckPersistence({ onClear, onImportSolo }: UseDeckPersistence
 
   const performSave = (name: string, onSuccess?: () => void) => {
     saveDeck(name);
-    setJustSaved(true);
+    triggerSaved();
     if (onSuccess) {
       onSuccess();
     } else {
       onClear();
     }
     setConfirmSave(null);
-    setTimeout(() => setJustSaved(false), 2000);
   };
 
   const performSaveAsCopy = (name: string, onSuccess?: () => void) => {
     if (saveAsCopy) {
       saveAsCopy(name);
-      setJustSaved(true);
+      triggerSaved();
       if (onSuccess) {
         onSuccess();
       } else {
         onClear();
       }
       setConfirmSave(null);
-      setTimeout(() => setJustSaved(false), 2000);
     }
   };
 
@@ -118,8 +117,7 @@ export function useDeckPersistence({ onClear, onImportSolo }: UseDeckPersistence
     if (isTeamMode) {
       saveTeam?.(uuidv4());
       setSavedListTab("TEAMS");
-      setJustSaved(true);
-      setTimeout(() => setJustSaved(false), 2000);
+      triggerSaved();
       onSuccess?.();
       return;
     }

@@ -1,4 +1,5 @@
 import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { useDroppable } from "@dnd-kit/core";
 
 import { cn } from "@/lib/utils";
 import { UnifiedEntity, Spellcaster } from "@/types/api";
@@ -6,6 +7,7 @@ import { DeckSlot } from "@/types/deck";
 
 import { DeckSlot as Slot } from "./DeckSlot";
 import { SpellcasterSlot } from "./SpellcasterSlot";
+import { DropData } from "@/types/dnd";
 
 
 interface ActiveDeckTrayProps {
@@ -30,10 +32,26 @@ export function ActiveDeckTray({
   idSuffix,
   isSwapMode = false,
 }: ActiveDeckTrayProps) {
+  
+  // Background Droppable
+  const dropId = idSuffix ? `deck-background-${deckId}-${idSuffix}` : `deck-background-${deckId}`;
+  
+  const dropData: DropData = {
+      type: "DECK_BACKGROUND",
+      deckId
+  };
+
+  const { setNodeRef } = useDroppable({
+      id: dropId,
+      data: dropData,
+      disabled: !deckId // Only active if we have a deck ID
+  });
+
   return (
     <div 
+        ref={setNodeRef}
         id={idSuffix ? `active-deck-${idSuffix}` : undefined}
-        className="h-full bg-surface-main border-t border-brand-primary/20 flex flex-col pb-2 xl:pb-4 relative"
+        className="h-auto min-h-[140px] bg-transparent border-t border-brand-primary/20 flex flex-col pb-2 xl:pb-4 relative"
     >
       <div className="grow flex items-center justify-between gap-0.5 px-2 py-1 xl:grid xl:grid-cols-6 xl:gap-2 xl:pl-4 xl:pr-4 xl:py-4 xl:items-start xl:content-start xl:grow-0">
         {/* Spellcaster Area - Fixed Width on Desktop */}
@@ -121,4 +139,5 @@ export function ActiveDeckTray({
     </div>
   );
 }
+
 

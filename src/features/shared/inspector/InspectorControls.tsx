@@ -5,8 +5,10 @@ import { cn } from "@/lib/utils";
 import { UnifiedEntity } from "@/types/api";
 import { DECK_SLOTS } from "@/services/config/constants";
 import { InspectorSlotButton } from "./details/InspectorSlotButton";
+import { InspectorActionButton } from "./details/InspectorActionButton";
 import { useInspectorLogic } from "@/features/deck-builder/hooks/domain/useInspectorLogic";
 import { useDeckStore } from "@/store/index";
+import { Button } from "@/components/ui/button";
 
 interface InspectorControlsProps {
   item: UnifiedEntity;
@@ -33,12 +35,13 @@ export function InspectorControls({
   if (isReadOnly) {
       if (onClose) {
           return (
-            <button 
+            <Button 
                 onClick={onClose}
-                className="w-full py-3 bg-surface-card hover:bg-surface-hover border border-white/10 rounded-lg text-muted hover:text-white transition-colors font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2"
+                variant="outline"
+                className="w-full py-6 font-bold uppercase tracking-wider text-sm flex items-center justify-center gap-2"
             >
                 <ChevronDown size={18} /> Close Inspector
-            </button>
+            </Button>
           );
       }
       return null;
@@ -48,77 +51,74 @@ export function InspectorControls({
     <div className="w-full flex flex-col gap-3">
       {isSpellcaster ? (
         <div className="flex flex-col gap-2">
-            <button
-            onClick={() => {
-                handleSelectSpellcaster();
-                onClose?.();
-            }}
-            disabled={isCurrentSpellcaster}
-            className={cn(
-                "w-full py-3 text-sm font-bold rounded flex items-center justify-center gap-2 transition-all duration-200",
-                isCurrentSpellcaster
-                ? "bg-white/10 text-gray-500 cursor-not-allowed border border-white/5"
-                : "bg-surface-card hover:bg-brand-secondary/50 border border-white/10 hover:border-brand-secondary text-white"
-            )}
+            <InspectorActionButton
+                onClick={() => {
+                    handleSelectSpellcaster();
+                    onClose?.();
+                }}
+                isSelected={isCurrentSpellcaster}
+                className={cn(
+                    "w-full py-6 text-sm font-bold flex items-center justify-center gap-2"
+                )}
             >
-            {isCurrentSpellcaster ? (
-                <>
-                <Crown size={18} className="opacity-50" /> Selected
-                </>
-            ) : (
-                <>
-                <Crown size={18} /> Select Spellcaster
-                </>
-            )}
-            </button>
+                {isCurrentSpellcaster ? (
+                    <>
+                    <Crown size={18} className="opacity-50" /> Selected
+                    </>
+                ) : (
+                    <>
+                    <Crown size={18} /> Select Spellcaster
+                    </>
+                )}
+            </InspectorActionButton>
             
              {onClose && (
-                <button 
+                <Button 
                     onClick={onClose}
-                    className="w-full py-2 flex items-center justify-center gap-2 text-sm font-bold text-muted hover:text-white bg-surface-card hover:bg-surface-hover rounded border border-white/10 transition-colors"
+                    variant="outline"
+                    className="w-full"
                 >
                     <ChevronDown size={16} /> Close
-                </button>
+                </Button>
             )}
         </div>
       ) : isTitan ? (
         <div className="flex gap-2">
             {onClose && (
-                <button 
+                <Button 
                     onClick={onClose}
+                    variant="outline"
                     aria-label="Close Inspector"
-                    className="px-4 bg-surface-card hover:bg-surface-hover border border-white/10 rounded text-muted hover:text-white transition-colors"
+                    className="px-4"
                 >
                     <ChevronDown size={20} />
-                </button>
+                </Button>
             )}
-            <button
-            onClick={() => {
-                handleSelectTitan();
-                onClose?.();
-            }}
-            disabled={isTitanInDeck}
-            className={cn(
-                "flex-1 py-3 text-sm font-bold rounded flex items-center justify-center gap-2 transition-all duration-200",
-                isTitanInDeck
-                ? "bg-white/10 text-gray-500 cursor-not-allowed border border-white/5"
-                : "bg-surface-card hover:bg-brand-secondary/50 border border-white/10 hover:border-brand-secondary text-white"
-            )}
+            <InspectorActionButton
+                onClick={() => {
+                    handleSelectTitan();
+                    onClose?.();
+                }}
+                isSelected={isTitanInDeck}
+                className={cn(
+                    "flex-1 py-6 text-sm font-bold flex items-center justify-center gap-2",
+                    isTitanInDeck && "opacity-50"
+                )}
             >
-            {isTitanInDeck ? (
-                <>
-                <PlusCircle size={18} className="opacity-50" /> Selected
-                </>
-            ) : (
-                <>
-                <PlusCircle size={18} /> Select Titan
-                </>
-            )}
-            </button>
+                {isTitanInDeck ? (
+                    <>
+                    <PlusCircle size={18} className="opacity-50" /> Selected
+                    </>
+                ) : (
+                    <>
+                    <PlusCircle size={18} /> Select Titan
+                    </>
+                )}
+            </InspectorActionButton>
         </div>
       ) : (
         <>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             {DECK_SLOTS.map((idx) => {
                 const status = getStatus(idx);
                 const isOccupiedBySelf = status === "ALREADY_IN";
@@ -137,16 +137,16 @@ export function InspectorControls({
             })}
             </div>
             {onClose && (
-                <button 
+                <Button 
                     onClick={onClose}
-                    className="w-full py-2 flex items-center justify-center gap-2 text-sm font-bold text-muted hover:text-white bg-surface-card hover:bg-surface-hover rounded border border-white/10 transition-colors"
+                    variant="outline"
+                    className="w-full"
                 >
                     <ChevronDown size={16} /> Close
-                </button>
+                </Button>
             )}
         </>
       )}
     </div>
   );
 }
-

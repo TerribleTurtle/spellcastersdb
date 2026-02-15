@@ -34,7 +34,7 @@ export const roadmapService = {
         headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
       }
 
-      console.log("[RoadmapService] Fetching issues from GitHub...");
+
       
       const res = await fetch(GITHUB_API_URL, {
         headers,

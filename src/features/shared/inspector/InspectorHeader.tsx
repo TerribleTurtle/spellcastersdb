@@ -56,6 +56,7 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
         <button
           onClick={onBack}
           className="md:hidden absolute top-3 left-3 z-50 p-2 bg-black/60 hover:bg-black/80 rounded-full text-white backdrop-blur-md border border-white/10 shadow-lg"
+          aria-label="Go back"
         >
           <ArrowLeft size={18} />
         </button>

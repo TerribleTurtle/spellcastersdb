@@ -17,20 +17,21 @@
 - **The Trinity (Team Builder)**: Build and manage teams of 3 decks with shared card pool validation.
 - **Live Updates**: Powered by a static JSON API that allows for rapid balance updates without full site rebuilds.
 - **Roadmap**: A live, interactive issue tracker connected to GitHub, featuring search, filtering, and "premium" UI.
+- **Debug Suite**: Internal analytics tools for tracking data integrity, balance statistics, and keyword frequency.
 
 ## Architecture at a Glance
 
 - **Frontend**: Next.js 16+ (App Router), TypeScript, Tailwind CSS.
-- **Data Layer**: High-performance, read-through cached registry interacting with the [Spellcasters Community API](https://github.com/TerribleTurtle/spellcasters-community-api).
-  - Fetches static JSON once per session (O(1) subsequent lookups).
-  - Includes `EntityRegistry` for instant access to Units, Spells, Titans, Consumables, and Upgrades.
-- **Architecture**: Feature-based slices (`src/features/deck-builder`, `src/features/team-builder`) with a shared core (`src/features/shared`) and modular domain services. `src/components` is reserved for generic UI atoms.
-- **State Management**: Zustand (Global Store) + React Context (Drag & Drop) + Validation Hooks.
-- **Assets**: Optimized image delivery via Next.js Image or Vercel OG.
+- **Data Layer**:
+  - **Static Fetch**: Fetches JSON data from the [Spellcasters Community API](https://github.com/TerribleTurtle/spellcasters-community-api).
+  - **Registry**: An in-memory, O(1) lookup map (`src/services/api/registry.ts`) that initializes once per session.
+  - **Domain Services**: Feature-based logic (e.g., `DeckRules`, `TeamRules`) that interacts with the Registry.
+- **State Management**: Zustand (Global Store) split into slices (`solo`, `team`, `ui`) for robust state handling.
 - **Performance**:
-  - **Parallel Data Fetching**: Concurrent loading of game data chunks for faster TTI.
-  - **Virtualization**: `react-virtuoso` handles large lists (Limitless saved decks) without performance degradation.
-  - **Hybrid Caching**: Environment-aware asset caching strategy (FileReader for Browser, Buffer for Node.js).
+  - **Read-Through Caching**: Optimizes data fetching.
+  - **Virtualization**: `react-virtuoso` for large lists.
+  - **Zod Validation**: Ensures data integrity at runtime.
+  - **Revalidation API**: On-demand cache invalidation via `/api/revalidate?secret=...` using `revalidateTag` for robust content updates.
 
 ## Getting Started
 
@@ -53,19 +54,22 @@
     npm run dev
     ```
 
-For detailed contribution guidelines, please see [CONTRIBUTING.md](CONTRIBUTING.md).
+For detailed setup instructions, including **Local API Development**, please see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Testing
+## Available Scripts
 
-     Run the Unit test suite:
-
-     ```bash
-     npm run test
-     ```
+| Command              | Description                           |
+| :------------------- | :------------------------------------ |
+| `npm run dev`        | Starts the development server         |
+| `npm run build`      | Builds the application for production |
+| `npm run start`      | Starts the production server          |
+| `npm run test`       | Runs the test suite (Vitest)          |
+| `npm run lint`       | Runs ESLint                           |
+| `npm run type-check` | Runs TypeScript compiler check        |
 
      ## Documentation
 
-- [**Active State**](active_state.md): The current development focus and daily progress log. **Start here to see what we are working on.**
+- [**Active State**](active_state.md): The current development focus and daily progress log.
 - [**API Info**](docs/api_info.md): Specification for the JSON data consumed by this app.
 - [**Brand Guidelines**](docs/BRAND_GUIDELINES.md): Colors, fonts, and styling rules.
 

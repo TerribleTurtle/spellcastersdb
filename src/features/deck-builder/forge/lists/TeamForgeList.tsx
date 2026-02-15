@@ -10,6 +10,7 @@ import {
   TouchSensor,
   KeyboardSensor,
 } from "@dnd-kit/core";
+import { Ghost } from "lucide-react";
 import {
   restrictToVerticalAxis,
   restrictToWindowEdges,
@@ -77,14 +78,19 @@ export function TeamForgeList({
         >
           <div className="space-y-1">
               {savedTeams.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 text-xs">
-                  <p className="mb-2">No saved teams.</p>
-                  <span className="text-[10px] text-gray-700 block mb-2">
-                     Build your team and save it below.
-                  </span>
-                  <span className="text-[10px] text-gray-700 block mt-2">
-                     Teams are saved in your browser&apos;s local storage.
-                  </span>
+                <div className="flex flex-col items-center justify-center py-12 text-center animate-in fade-in duration-300">
+                  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
+                    <Ghost size={32} className="text-gray-500 opacity-50" />
+                  </div>
+                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-1">
+                    No Saved Teams
+                  </h3>
+                  <p className="text-xs text-gray-500 max-w-[200px] mb-4">
+                    Your team roster is empty. Start building your dream team now.
+                  </p>
+                  <p className="text-[10px] text-gray-700 uppercase tracking-widest font-bold">
+                     Locally Saved
+                  </p>
                 </div>
               ) : (
                 <SortableContext

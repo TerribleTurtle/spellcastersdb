@@ -1,10 +1,9 @@
 import Link from "next/link";
 
 import { EntityImage } from "@/components/ui/EntityImage";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Spellcaster, UnifiedEntity } from "@/types/api";
-
-
 
 interface UnitCardProps {
   unit: UnifiedEntity;
@@ -117,9 +116,12 @@ export function UnitCard({
         )}
 
         {/* Rank Badge */}
-        <div className="flex items-center justify-center w-7 h-7 rounded bg-brand-dark border border-brand-primary/20 text-[9px] font-mono font-bold text-brand-primary shrink-0">
+        <Badge 
+          variant="outline" 
+          className="w-7 h-7 flex items-center justify-center p-0 rounded bg-brand-dark border-brand-primary/20 text-[9px] font-mono font-bold text-brand-primary shrink-0"
+        >
           {meta.rank}
-        </div>
+        </Badge>
       </Link>
     );
   }
@@ -142,9 +144,12 @@ export function UnitCard({
           <span className="text-[10px] font-mono text-gray-500 uppercase tracking-wide">
             {meta.category}
           </span>
-          <span className="text-[10px] font-mono font-bold text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border border-brand-primary/20">
+          <Badge 
+            variant="outline"
+            className="text-[10px] font-mono font-bold text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border-brand-primary/20"
+          >
             {meta.rank}
-          </span>
+          </Badge>
         </div>
 
         <h2 className="text-base font-bold text-white group-hover:text-brand-accent transition-colors mb-1 truncate">

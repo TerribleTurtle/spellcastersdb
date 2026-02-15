@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { Share2, PlusCircle, Library } from "lucide-react";
+import { Share2, PlusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Mode } from "@/types/api";
+import { LibraryButton } from "@/components/ui/LibraryButton";
 
 interface MobileHeaderProps {
   mode: Mode;
@@ -18,14 +19,10 @@ export function MobileHeader({ mode, onSetMode, onShare, onClear, onOpenLibrary 
   return (
     <header data-testid="mobile-header" className="h-14 flex items-center justify-between px-4 bg-surface-main/95 backdrop-blur-sm border-b border-white/10 shrink-0 sticky top-0 z-50">
       {/* Left: Library */}
-      <button
+      <LibraryButton
           onClick={onOpenLibrary}
-          className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-primary border border-brand-primary hover:bg-brand-primary/90 text-white transition-all text-xs font-bold uppercase tracking-wider shadow-lg shadow-brand-primary/20 -ml-1"
-          title="Open Library"
-      >
-          <Library size={14} />
-          <span>Library</span>
-      </button>
+          className="-ml-1"
+      />
 
       {/* Center: Mode Switcher */}
       <div className="flex bg-black/30 p-1 rounded-lg border border-white/5">

@@ -57,7 +57,11 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
   if (hasError) {
       // Fallback placeholder
       return (
-          <div className={cn(className, "bg-gray-800 flex items-center justify-center text-white/20")}>
+          <div 
+            className={cn(className, "bg-gray-800 flex items-center justify-center text-white/20")}
+            role="img"
+            aria-label="No image available"
+          >
               <span className="text-[10px]">No Image</span>
           </div>
       );
@@ -67,10 +71,10 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
+        loading="lazy"
         {...props}
         src={imgSrc}
         alt={alt || ""}
-        loading="lazy"
         decoding="async"
         className={cn(className, "object-cover")}
         onError={handleError}

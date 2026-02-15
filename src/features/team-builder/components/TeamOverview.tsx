@@ -32,7 +32,7 @@ export function TeamOverview({
       {/* UPDATE: Added Back for Mobile Context in Overlay */}
       {teamName && (
         <div className="shrink-0 p-4 pb-2 text-center border-b border-white/5">
-             <h2 className="text-xl md:text-3xl font-black text-white uppercase tracking-wider line-clamp-2 max-w-[250px] md:max-w-xl mx-auto">
+             <h2 className="text-xl md:text-3xl font-black text-white uppercase tracking-wider line-clamp-2 max-w-xs md:max-w-xl mx-auto">
                 {teamName}
              </h2>
         </div>

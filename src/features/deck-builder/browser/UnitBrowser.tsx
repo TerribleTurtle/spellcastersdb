@@ -70,7 +70,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
 
   // Optimize Row Rendering
   const rowContent = useCallback(
-    (_: number, row: VirtualRow) => {
+    (index: number, row: VirtualRow) => {
       if (row.type === "header") {
         return (
             <UnitGroupHeader 
@@ -87,6 +87,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
             columns={columns}
             onSelectItem={onSelectItem}
             onQuickAdd={onQuickAdd}
+            priority={index < 2}
           />
         );
       }

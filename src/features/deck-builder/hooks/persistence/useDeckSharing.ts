@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEphemeralState } from "@/hooks/useEphemeralState";
 import { copyToClipboard } from "@/lib/clipboard";
 import { encodeDeck, encodeTeam } from "@/services/utils/encoding";
 import { Deck } from "@/types/deck";
@@ -18,7 +18,7 @@ export function useDeckSharing({
   teamName,
   activeSlot
 }: UseDeckSharingProps) {
-  const [copied, setCopied] = useState(false);
+  const { isActive: copied, trigger: triggerCopied } = useEphemeralState(2000);
 
   const handleShare = async () => {
     let url = window.location.href; 
@@ -43,8 +43,7 @@ export function useDeckSharing({
 
     const success = await copyToClipboard(url);
     if (success) {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      triggerCopied();
     } else {
       console.error("Failed to copy URL");
       alert("Failed to copy URL. Please copy manually from address bar.");
@@ -56,3 +55,4 @@ export function useDeckSharing({
     copied
   };
 }
+

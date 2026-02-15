@@ -59,6 +59,7 @@ export function TeamBuilderView({
       {(showSummary || viewingTeamData) && (
         <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-200"
           onClick={() => { if (!viewingTeamData && handleBack) handleBack(); }}
+          role="presentation"
         >
            <div className="w-full max-w-6xl h-auto max-h-[90vh] bg-surface-main rounded-xl border border-white/10 shadow-2xl overflow-hidden relative flex flex-col shrink-0"
             onClick={(e) => e.stopPropagation()}

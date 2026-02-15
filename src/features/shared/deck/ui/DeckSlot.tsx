@@ -149,12 +149,12 @@ export function DeckSlot({
 
       {/* Label for Empty Slot */}
       {!slot.unit && (
-        <div className="text-center opacity-30">
+        <div className="text-center opacity-70 group-hover:opacity-100 transition-opacity text-gray-200">
           <div className="mb-2 flex justify-center">
             {isTitanSlot ? (
               <Shield size={24} />
             ) : (
-              <div className="w-6 h-6 rounded-full border border-current" />
+              <div className="w-6 h-6 rounded-full border-2 border-current border-dashed opacity-50" />
             )}
           </div>
           <span className="text-[9px] md:text-xs font-bold uppercase tracking-wide md:tracking-widest">

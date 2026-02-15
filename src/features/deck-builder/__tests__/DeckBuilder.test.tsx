@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
 import { DeckBuilderContainer } from "../ui/root/DeckBuilderContainer";
 import { useDeckStore } from "@/store/index";
 import { EntityCategory } from "@/types/enums";
@@ -74,7 +74,7 @@ describe("DeckBuilder Integration", () => {
 
     // TODO: Fix jsdom rendering for responsive layouts (hidden xl:contents not rendering in test environment)
     // E2E tests verify this functionality works correctly in real browsers
-    it.skip("should render unit browser content", async () => {
+    it("should render unit browser content", async () => {
          const mockUnit = DeckFactory.createUnit({
             entity_id: "u1",
             name: "Test Unit",
@@ -87,12 +87,20 @@ describe("DeckBuilder Integration", () => {
         expect(screen.getAllByTitle("Save Deck").length).toBeGreaterThan(0);
         
         // Check for unit content (async because virtualization/filtering might be async)
-        const unitElement = await screen.findByText("Test Unit");
+        // Since JSDOM renders both mobile and desktop layouts, we might find duplicates.
+        // We scope to the desktop container to be precise.
+        const desktopContainer = document.getElementById("active-deck-desktop");
+        expect(desktopContainer).not.toBeNull();
+        
+        const { findByText } = within(desktopContainer!);
+        const unitElement = await findByText("Test Unit");
         expect(unitElement).toBeDefined();
 
         // Interaction: Click to Quick Add
         // We need to ensure we click the 'Quick Add' button, not just the card (which selects)
-        const quickAddButton = screen.getByLabelText("Quick Add");
+        // Again, scope to desktop to avoid ambiguity
+        const { getByLabelText } = within(desktopContainer!);
+        const quickAddButton = getByLabelText("Quick Add");
         fireEvent.click(quickAddButton);
 
         // Verification: Check Store State

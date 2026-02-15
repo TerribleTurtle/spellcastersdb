@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -27,8 +28,15 @@ vi.mock("../DeckNameInput", () => ({
 vi.mock("../../ui/ActiveDeckTray", () => ({
     ActiveDeckTray: () => <div>Tray Content</div>
 }));
+// Update mock to be interactive
 vi.mock("../../ui/DeckActionToolbar", () => ({
-    DeckActionToolbar: () => <div>Toolbar</div>
+    DeckActionToolbar: ({ onSave, onClear, onShare }: any) => (
+        <div data-testid="toolbar">
+            <button onClick={onSave} aria-label="Save">Save</button>
+            <button onClick={onClear} aria-label="Clear">Clear</button>
+            <button onClick={onShare} aria-label="Share">Share</button>
+        </div>
+    )
 }));
 
 // Helper to mock store state
@@ -149,5 +157,50 @@ describe("DeckDrawer Click Logic", () => {
          expect(mockOnToggle).toHaveBeenCalledWith(true);
       });
   });
+});
 
+describe("Toolbar Actions", () => {
+    const mockOnSave = vi.fn();
+    const mockOnClear = vi.fn();
+    const mockOnShare = vi.fn();
+
+    const defaultProps = {
+        deck: { id: "deck-1", name: "Test Deck", slots: [] } as unknown as Deck,
+        onToggle: vi.fn(),
+        onActivate: vi.fn(),
+        onSave: mockOnSave,
+        onClear: mockOnClear,
+        onShare: mockOnShare,
+        isExpanded: true
+    };
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+        (useDeckStore as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+           activeSlot: 0, 
+           setActiveSlot: vi.fn(),
+           pendingSwapCard: null,
+        });
+    });
+
+    it("should trigger callback when Save is clicked", () => {
+        render(<DeckDrawer {...defaultProps} />);
+        const saves = screen.getAllByLabelText("Save");
+        fireEvent.click(saves[0]);
+        expect(mockOnSave).toHaveBeenCalled();
+    });
+
+    it("should trigger callback when Clear is clicked", () => {
+        render(<DeckDrawer {...defaultProps} />);
+        const clears = screen.getAllByLabelText("Clear");
+        fireEvent.click(clears[0]);
+        expect(mockOnClear).toHaveBeenCalled();
+    });
+
+    it("should trigger callback when Share is clicked", () => {
+        render(<DeckDrawer {...defaultProps} />);
+        const shares = screen.getAllByLabelText("Share");
+        fireEvent.click(shares[0]);
+        expect(mockOnShare).toHaveBeenCalled();
+    });
 });

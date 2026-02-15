@@ -1,60 +1,76 @@
 # Documentation Health & Usability Report
 
-**Date:** 2026-02-10
+**Date:** 2026-02-14
 **Repository:** SpellcastersDB
+**Auditor:** Antigravity
 
 ## Executive Summary
 
-The **SpellcastersDB** repository has a good technical foundation with a modern Next.js stack. The code itself is generally well-structured with helpful inline comments in complex logic (e.g., `useDeckBuilder.ts`). The `docs/` directory contains valuable specific information regarding API specs and migration.
+The codebase is generally well-structured with strong typing and inline documentation for complex logic (e.g., `api.ts`). However, significant **Documentation Drift** has occurred in environment configuration and script definitions. New contributors may struggle to set up the environment correctly due to missing variables in `.env.local.example`.
 
-However, the **onboarding experience for a new developer is currently fragmented**. The root `README.md` is minimal and does not effectively act as an entry point to the deeper documentation available. There is no high-level architectural overview, making it difficult to understand how the data layer, UI, and deck builder logic connect without diving into the code.
-
-**Score: B-** (Strong technical internals, weak entry-point/onboarding docs)
+**Overall Health Score: B-** (Strong internals, drifting onboarding docs)
 
 ---
 
-## Critical Gaps (High Priority)
+## 🔴 DRIFT (Misleading Information)
 
-These items represent barriers to entry or missing essential information.
+_The following items are actively incorrect or incomplete and may cause errors._
 
-- **[ ] Comprehensive `README.md`**: The current README is a standard Next.js template. It needs:
-  - A high-level project description (What does this app actually _do_? Deck building, database viewing, etc.).
-  - Links to the rich sub-documentation in `docs/`.
-  - Architecture Overview (e.g., "We fetch static JSON data, validate it with Zod, and render via Next.js").
-- **[ ] Environment Variable Documentation**: usage of `NEXT_PUBLIC_API_URL` is seen in the code (`api.ts`), but there is no `.env.example` explanation or documentation in the README about what values are expected or how to override them for local dev vs. prod.
-- **[ ] `CONTRIBUTING.md` Expansion**: The current file is very basic. It should include:
-  - Code style guidelines (prettier, eslint).
-  - Branch naming conventions.
-  - Explanation of the "Source of Truth" (referencing `active_state.md`).
+### 1. Environment Variables Gap
 
-## Clarity & Accuracy (Medium Priority)
+The code relies on several environment variables that are missing from `.env.local.example`:
 
-These items cause confusion but don't stop development.
+- `NEXT_PUBLIC_USE_LOCAL_ASSETS` (Found in `config.ts`)
+- `LOCAL_DATA_PATH` (Found in `config.ts`)
+- `UPSTASH_REDIS_REST_URL` & `TOKEN` (Found in `ratelimit.ts`)
 
-- **[ ] Ambiguous Script Usage**: `npm run check-data` is listed, but its output and purpose (troubleshooting API connection) could be better explained.
-- **[ ] Roadmap Synchronization**: `ROADMAP.md` appears slightly outdated compared to `active_state.md` (which tracks daily progress). This can confuse a new contributor about what is effectively "live" vs "planned".
-- **[ ] Inline Comments Cleanup**: Some components (e.g., `TeamRow.tsx`) contain "note to self" style comments (e.g., // Let's create a shared ItemMenu component...) which should be resolved or moved to an issue tracker.
-- **[ ] "Magic" Logic Documentation**: The `api.ts` file has specific logic for "Local Dev Override" hardcoded to a specific windows path. This will fail for any other developer. This needs to be documented or, better yet, moved to a config/env variable.
+**Impact:** A new developer following the "copy example env" step will have a partially broken environment (missing rate limiting, asset toggles).
 
-## Structure & Formatting (Low Priority)
+### 2. Script Definitions
 
-- **[ ] Standardized Headers**: `MIGRATION_SPEC.md` and `api_info.md` use slightly different header styles.
-- **[ ] Image/Asset management**: There is no documentation on where to put new assets or how the `public/` folder is organized.
+There is inconsistency between `README.md`, `CONTRIBUTING.md`, and `package.json`:
+
+- `README.md` lists `npm run test:watch`.
+- `CONTRIBUTING.md` is the most accurate but dictates `npm run check-data` which is absent from README.
+- `package.json` contains `lint` and `type-check` which are only mentioned in `CONTRIBUTING.md`.
+
+**Recommendation:** `README.md` should link to `CONTRIBUTING.md` for detailed workflows to avoid duplication drift.
 
 ---
 
-## Action Plan
+## 🟡 MISSING (Knowledge Gaps)
 
-To improve the Documentation Health to an **A** standard:
+_The following items are defined in code but lack high-level documentation._
 
-1.  **Immediate Fixes (The "Front Door"):**
-    - [ ] Update **`README.md`** to be the true "Table of Contents" for the project. Link to `active_state.md`, `ROADMAP.md`, and `docs/*.md`.
-    - [ ] Add an "Architecture" section to `README.md` explaining the Data Layer -> Registry -> UI flow.
+### 1. State Management (Zustand)
 
-2.  **Developer Experience:**
-    - [ ] Update **`CONTRIBUTING.md`** with specific steps for setting up the environment, including the `NEXT_PUBLIC_API_URL` requirement.
-    - [ ] Document the "Local Dev Override" logic in `api.ts` so new devs know how to point to their own local API repo if needed.
+The global store is complex, split into slices (`createSoloSlice`, `createTeamSlice`, etc.), but these files lack JSDoc headers explaining their specific responsibilities or how they interact.
 
-3.  **Cleanup:**
-    - [ ] Sync `ROADMAP.md` with the reality in `active_state.md` (or deprecate one).
-    - [ ] Scan codebase for `// TODO` or `// NOTE` comments and either convert them to GitHub Issues or resolve them.
+- **Location:** `src/store/`
+
+### 2. "Magic" Logic Documentation
+
+- **API Fallbacks:** `src/services/api/api.ts` contains logic for sticking to specific data sources based on environment, which is critical but only documented in code comments.
+- **Asset Handling:** The preference for `webp` vs `png` is configurable but undocumented in user-facing docs.
+
+### 3. Orphaned Documentation
+
+- `docs/GITHUB_TOKEN_SETUP.md` exists but is not linked from `README.md` or `CONTRIBUTING.md`. Users may miss this optimization step.
+- `ROADMAP.md` is referenced in legacy reports but is missing from the project root (superseded by `active_state.md`?).
+
+---
+
+## 🟢 STYLE & CLARITY
+
+_Improvements for readability and maintenance._
+
+- **Type Safety:** The API layer (`api.ts`) has excellent return type coverage (`Promise<UnifiedEntity[]>`), setting a good standard.
+- **Onboarding:** The "Getting Started" section in `README.md` is clean but should explicitly mention the need for the API repo if working on data features.
+
+---
+
+## Recommended Action Plan
+
+1.  **fix(env):** Update `.env.local.example` with all current variables (marked as optional where appropriate).
+2.  **docs(readme):** Consolidate script commands. Link `GITHUB_TOKEN_SETUP.md`.
+3.  **docs(store):** Add high-level JSDoc to `src/store/index.ts` and slices.

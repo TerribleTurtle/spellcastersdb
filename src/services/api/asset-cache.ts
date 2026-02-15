@@ -12,9 +12,15 @@ export const assetCache = new Map<string, string>();
 // Request deduplication map
 const pendingRequests = new Map<string, Promise<string | null>>();
 
+const MAX_CACHE_SIZE = 50;
+
 export async function getCachedAsset(url: string): Promise<string | null> {
   if (assetCache.has(url)) {
-    return assetCache.get(url)!;
+    // LRU: Move to end
+    const val = assetCache.get(url)!;
+    assetCache.delete(url);
+    assetCache.set(url, val);
+    return val;
   }
 
   // Deduplication: Return existing promise if already fetching
@@ -49,7 +55,11 @@ export async function getCachedAsset(url: string): Promise<string | null> {
                 dataUri = `data:${mime};base64,${base64}`;
             }
             
-            // Cache it
+            // Cache it (LRU Check)
+            if (assetCache.size >= MAX_CACHE_SIZE) {
+                const firstKey = assetCache.keys().next().value;
+                if (firstKey) assetCache.delete(firstKey);
+            }
             assetCache.set(url, dataUri);
             return dataUri;
         }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+
+import { useEphemeralState } from "@/hooks/useEphemeralState";
 
 import {
   AlertCircle,
@@ -40,7 +41,7 @@ export function SoloOverview({
   onSave,
   existingId,
 }: SoloOverviewProps) {
-  const [copied, setCopied] = useState(false);
+  const { isActive: copied, trigger: triggerCopied } = useEphemeralState(2000);
   const { isValid, errors } = validateDeck(deck);
   
   const openInspector = useDeckStore((state) => state.openInspector);
@@ -87,8 +88,7 @@ export function SoloOverview({
 
     const success = await copyToClipboard(url);
     if (success) {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      triggerCopied();
     }
   };
 

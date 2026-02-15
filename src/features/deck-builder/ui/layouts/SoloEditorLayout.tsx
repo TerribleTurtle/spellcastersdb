@@ -11,13 +11,14 @@ import { selectIsSaved, selectIsExistingDeck } from "@/store/selectors";
 import { useToast } from "@/hooks/useToast";
 import { Deck } from "@/types/deck";
 import { UnsavedChangesModal } from "@/components/modals/UnsavedChangesModal";
-import { Edit2, Save, Check, Share2, Eraser, Library, RefreshCw, Copy } from "lucide-react";
+import { Edit2, Save, Check, Share2, Eraser, RefreshCw, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { encodeDeck } from "@/services/utils/encoding";
 import { copyToClipboard } from "@/lib/clipboard";
 import { BrowserItem } from "@/types/browser";
 import { SoloEditorDesktop } from "./SoloEditorDesktop";
 import { SoloEditorMobile } from "./SoloEditorMobile";
+import { LibraryButton } from "@/components/ui/LibraryButton";
 
 interface SoloEditorLayoutProps {
   units: (Unit | Spell | Titan)[];
@@ -117,6 +118,13 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
           {/* Actions */}
           <div className="flex items-center gap-1 md:gap-2 shrink-0">
              
+              {/* Library / Command Center */}
+              <LibraryButton
+                  onClick={openCommandCenter}
+                  data-testid="header-library-btn"
+                  className="mr-2"
+              />
+
               {/* Mode Switcher */}
               <div className="flex items-center bg-black/20 p-1 rounded-lg border border-white/5 mr-2">
                   <button
@@ -202,15 +210,7 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
                   <Eraser size={18} />
               </button>
 
-              {/* Library / Command Center */}
-              <button
-                   onClick={openCommandCenter}
-                   data-testid="header-library-btn"
-                   className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors border border-white/5"
-                   title="Open Library"
-              >
-                  <Library size={18} />
-              </button>
+
           </div>
       </div>
 

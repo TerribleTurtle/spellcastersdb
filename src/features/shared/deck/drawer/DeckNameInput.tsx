@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Edit2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 
 interface DeckNameInputProps {
     name: string;
@@ -62,14 +63,14 @@ export function DeckNameInput({
     
     if (isEditing) {
         return (
-             <input
+             <Input
                 ref={inputRef}
                 value={editName}
                 onChange={(e) => setEditName(e.target.value)}
                 onBlur={handleSave}
                 onKeyDown={handleKeyDown}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-black/40 border border-brand-primary/50 rounded px-2 py-1 text-sm font-bold text-white uppercase w-full focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                className="bg-black/40 border-brand-primary/50 text-sm font-bold text-white uppercase w-full h-8"
                 aria-label="Edit deck name"
              />
         );

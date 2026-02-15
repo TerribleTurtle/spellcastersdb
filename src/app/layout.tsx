@@ -11,6 +11,7 @@ import Navbar from "@/components/layout/Navbar";
 import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
 import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
 import { Toaster } from "@/components/ui/Toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 import "./globals.css";
 
@@ -106,33 +107,35 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen pt-16`}
       >
-        <Navbar />
+        <TooltipProvider>
+          <Navbar />
 
-        <div className="flex max-w-[1920px] mx-auto w-full relative">
-          <DesktopSidebar />
-          <MainLayoutWrapper>
-            {children}
-          </MainLayoutWrapper>
-        </div>
-        <Footer />
-        <JsonLd 
-          id="json-ld-website"
-          data={{
-            "@context": "https://schema.org",
-            "@type": "WebSite",
-            "name": "SpellcastersDB",
-            "url": "https://spellcastersdb.com",
-            "potentialAction": {
-              "@type": "SearchAction",
-              "target": "https://spellcastersdb.com/database?q={search_term_string}",
-              "query-input": "required name=search_term_string"
-            }
-          } as Record<string, unknown>}
-        />
-        <Script src="https://tally.so/widgets/embed.js" strategy="lazyOnload" />
-        <Analytics />
-        <SpeedInsights />
-        <Toaster />
+          <div className="flex max-w-[1920px] mx-auto w-full relative">
+            <DesktopSidebar />
+            <MainLayoutWrapper>
+              {children}
+            </MainLayoutWrapper>
+          </div>
+          <Footer />
+          <JsonLd 
+            id="json-ld-website"
+            data={{
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "SpellcastersDB",
+              "url": "https://spellcastersdb.com",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": "https://spellcastersdb.com/database?q={search_term_string}",
+                "query-input": "required name=search_term_string"
+              }
+            } as Record<string, unknown>}
+          />
+          <Script src="https://tally.so/widgets/embed.js" strategy="lazyOnload" />
+          <Analytics />
+          <SpeedInsights />
+          <Toaster />
+        </TooltipProvider>
       </body>
     </html>
   );

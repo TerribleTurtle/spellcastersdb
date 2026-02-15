@@ -32,19 +32,16 @@ export function useTeamEditor() {
     );
 
     // Responsive State
+    // Initialize based on current width if available (client-side)
     const [allowMultiple, setAllowMultiple] = useState(() => {
-        // Default to true on server to avoid hydration mismatch if possible, 
-        // OR default to false and accept it corrects after mount.
-        // Actually, for "Desktop" teams, we probably want it to FEEL like desktop immediately.
         if (typeof window !== 'undefined') {
             return window.innerWidth >= 1280;
         }
-        return false;
+        return false; // Default to mobile/accordion for SSR/initial
     });
 
     useEffect(() => {
         const checkWidth = () => setAllowMultiple(window.innerWidth >= 1280);
-        // checkWidth(); // Initialized in state now, but double check doesn't hurt, removing to avoid flicker if state is already right
         window.addEventListener('resize', checkWidth);
         return () => window.removeEventListener('resize', checkWidth);
     }, []);

@@ -1,7 +1,8 @@
 "use client";
 
-import { ChevronUp, ChevronsDown, Save, Edit2, Share2, Check, Copy, PlusCircle, Book } from "lucide-react";
+import { ChevronUp, ChevronsDown, Save, Edit2, Share2, Check, Copy, PlusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { LibraryButton } from "@/components/ui/LibraryButton";
 
 import { UnifiedEntity, Spell, Spellcaster, Titan, Unit } from "@/types/api";
 import { BrowserItem } from "@/types/browser";
@@ -158,13 +159,11 @@ export function TeamEditorLayout({
         
         <div className="flex items-center gap-1 md:gap-2 shrink-0">
             {/* Library */}
-            <button
+            {/* Library */}
+            <LibraryButton
                 onClick={() => openCommandCenter()}
-                className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors mr-2"
-                title="Open Library"
-            >
-                <Book size={18} />
-            </button>
+                className="mr-2"
+            />
 
             {/* Mode Switcher */}
             <div className="flex items-center bg-black/20 p-1 rounded-lg border border-white/5 mr-2">
@@ -215,14 +214,7 @@ export function TeamEditorLayout({
                 </span>
             </button>
 
-             {/* Collapse/Expand All (Desktop) - Moved here */}
-             <button 
-                onClick={areAllCollapsed ? expandAll : collapseAll}
-                className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors"
-                title={areAllCollapsed ? "Expand All" : "Collapse All"}
-            >
-                {areAllCollapsed ? <ChevronsDown size={18} /> : <ChevronUp size={18} />}
-            </button>
+
 
              {/* Save Copy (Only existing teams) */}
              {isExistingTeam && (
@@ -258,6 +250,16 @@ export function TeamEditorLayout({
               >
                   <PlusCircle size={18} />
               </button>
+
+             {/* Collapse/Expand All (Desktop) - Moved to far right */}
+             <div className="w-px h-6 bg-white/10 mx-2" />
+             <button 
+                onClick={areAllCollapsed ? expandAll : collapseAll}
+                className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors"
+                title={areAllCollapsed ? "Expand All" : "Collapse All"}
+            >
+                {areAllCollapsed ? <ChevronsDown size={18} /> : <ChevronUp size={18} />}
+            </button>
         </div>
       </div>
 

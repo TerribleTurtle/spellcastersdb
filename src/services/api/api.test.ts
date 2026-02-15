@@ -87,7 +87,7 @@ describe('Remote Data Validation', () => {
             return Promise.resolve({ ok: true, json: async () => [] });
         });
 
-        await expect(fetchGameData()).rejects.toThrow('Failed to fetch: 500 Server Error');
+        await expect(fetchGameData()).rejects.toThrow(/Failed to fetch.*500 Server Error/);
     });
 
     it('should throw DataFetchError on malformed JSON (Schema Validation Failure)', async () => {

@@ -1,6 +1,11 @@
 import React, { useMemo, useCallback, useRef, useEffect } from "react";
 import { useDraggable } from "@dnd-kit/core";
-import { Plus } from "lucide-react";
+import { Plus, Shield, Wand2, Swords, HelpCircle } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import { OptimizedCardImage } from "@/features/deck-builder/browser/OptimizedCardImage";
 import { cn } from "@/lib/utils";
@@ -14,15 +19,17 @@ interface DraggableCardProps {
   item: BrowserItem;
   onClick: (item: BrowserItem, pos?: { x: number; y: number }) => void;
   onQuickAdd: (item: BrowserItem) => void;
+  priority?: boolean;
 }
 
 export const DraggableCard = React.memo(function DraggableCard({
   item,
   onClick,
   onQuickAdd,
+  priority = false,
 }: DraggableCardProps) {
   const id = item.entity_id;
-  const isSpellcaster = !("entity_id" in item);
+  const isSpellcaster = item.category === "Spellcaster";
   // Casting to Unit for rank acccess is safe because Spells/Titans either have Rank or we check category
   const rank = !isSpellcaster && "rank" in item ? (item as Unit).rank : null;
   const isTitan = !isSpellcaster && item.category === "Titan";
@@ -114,6 +121,7 @@ export const DraggableCard = React.memo(function DraggableCard({
         <OptimizedCardImage
           src={getCardImageUrl(item)}
           alt={item.name}
+          loading={priority ? "eager" : "lazy"}
           className="w-full h-full object-cover object-top transition-transform group-hover:scale-110"
         />
         
@@ -141,11 +149,30 @@ export const DraggableCard = React.memo(function DraggableCard({
             TITAN
           </div>
         )}
-        {/* Spellcaster Class Badge */}
+        {/* Spellcaster Class Badge - Icon + Tooltip */}
         {spellcasterClass && (
-          <div className="absolute top-1 right-1 bg-black/80 px-1.5 py-0.5 lg:px-2 lg:py-1 rounded text-[10px] lg:text-xs 2xl:text-sm font-mono text-brand-accent shadow-md border border-white/10 uppercase">
-            {spellcasterClass}
-          </div>
+           <Tooltip>
+             <TooltipTrigger asChild>
+                <div 
+                  className="absolute top-1 right-1 bg-black/80 p-1.5 rounded-full border border-white/10 shadow-md transition-colors hover:border-brand-primary/50 hover:bg-black/90 cursor-help z-20 pointer-events-auto"
+                  onClick={(e) => e.stopPropagation()}
+                  onPointerDown={(e) => e.stopPropagation()}
+                >
+                  {spellcasterClass === "Conqueror" ? (
+                    <Shield size={14} className="text-red-400" />
+                  ) : spellcasterClass === "Enchanter" ? (
+                    <Wand2 size={14} className="text-purple-400" />
+                  ) : spellcasterClass === "Duelist" ? (
+                    <Swords size={14} className="text-yellow-400" />
+                  ) : (
+                    <HelpCircle size={14} className="text-gray-400" />
+                  )}
+                </div>
+             </TooltipTrigger>
+             <TooltipContent side="bottom" className="z-50 bg-black/90 border-brand-primary/30 text-brand-primary font-bold uppercase tracking-wider text-xs">
+               <p>{spellcasterClass}</p>
+             </TooltipContent>
+           </Tooltip>
         )}
 
       </div>

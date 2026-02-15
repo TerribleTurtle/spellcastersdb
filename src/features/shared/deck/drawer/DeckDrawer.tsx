@@ -140,7 +140,7 @@ export const DeckDrawer = memo(function DeckDrawer({
 
   // Base classes based on variant
   const containerClasses = cn(
-    "bg-surface-main border-t border-brand-primary/20 shadow-2xl transition-all duration-300 ease-in-out flex flex-col pointer-events-auto relative",
+    "bg-[var(--color-surface-deck)] border-t border-brand-primary/20 shadow-2xl transition-all duration-300 ease-in-out flex flex-col pointer-events-auto relative overflow-hidden",
     variant === "fixed" && "fixed bottom-0 left-0 right-0 z-40 pb-[max(16px,env(safe-area-inset-bottom))]",
     variant === "static" && "w-full border-x border-b border-white/5 first:border-t",
     isExpanded ? "h-auto" : "h-[48px]", // consistent small height for collapsed
@@ -156,7 +156,7 @@ export const DeckDrawer = memo(function DeckDrawer({
     >
       {/* Active Tint Overlay */}
       {forceActive && (
-          <div className="absolute inset-0 bg-brand-primary/5 pointer-events-none" />
+          <div className="absolute inset-0 bg-brand-primary/15 pointer-events-none mix-blend-overlay" />
       )}
 
       {/* Hover Feedback Overlay for Dragging */}
@@ -175,7 +175,7 @@ export const DeckDrawer = memo(function DeckDrawer({
         data-testid="deck-drawer-header"
         className={cn(
             "h-14 w-full flex items-center justify-between px-4 shrink-0 transition-colors cursor-pointer select-none relative z-40",
-            forceActive ? "bg-brand-primary/10" : "hover:bg-white/5",
+            forceActive ? "bg-brand-primary/20" : "bg-white/5 hover:bg-white/10",
              // isOver && "bg-brand-primary/20" // Handled by overlay above now
         )}
         onClick={(e) => {
@@ -244,27 +244,29 @@ export const DeckDrawer = memo(function DeckDrawer({
             aria-controls="drawer-content"
             aria-label={isExpanded ? "Collapse deck drawer" : "Expand deck drawer"}
         >
-            {isExpanded ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+            {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
         </button>
         
         {/* Right: Validation Status OR Action Toolbar */}
         {/* On Desktop: Always show actions. On Mobile: Depends on Expanded. */}
         <div className={cn("hidden xl:flex", "items-center gap-2")} onClick={(e) => e.stopPropagation()}>
-             {/* Desktop Toggle Button */}
-             <button 
-                type="button"
-                className="flex items-center gap-2 text-gray-400 hover:text-white rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                onClick={(e) => { e.stopPropagation(); toggle(); }}
-                aria-label={isExpanded ? "Collapse deck drawer" : "Expand deck drawer"}
-            >
-                {!isExpanded && (
-                    <span className="text-xs uppercase font-bold tracking-widest">
-                        {`${totalCount}/6 Cards`}
-                    </span>
-                )}
-                {isExpanded ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
-            </button>
-             {/* Desktop Action Toolbar (Always Visible) */}
+             {/* Desktop Toggle Button - Only show if NOT static */}
+             {variant !== "static" && (
+                 <button 
+                    type="button"
+                    className="flex items-center gap-2 text-gray-400 hover:text-white rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                    onClick={(e) => { e.stopPropagation(); toggle(); }}
+                    aria-label={isExpanded ? "Collapse deck drawer" : "Expand deck drawer"}
+                >
+                    {!isExpanded && (
+                        <span className="text-xs uppercase font-bold tracking-widest">
+                            {`${totalCount}/6 Cards`}
+                        </span>
+                    )}
+                    {isExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </button>
+             )}
+             {/* Action Toolbar */}
              <ActionToolbar 
                 {...{onImport, onLibraryOpen, hideGlobalActions, onSave, isSaved, onShare, onClear, onExportToSolo}} 
              />

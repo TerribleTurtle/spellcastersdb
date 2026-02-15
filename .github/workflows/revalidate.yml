@@ -7,10 +7,17 @@ on:
   # Allow manual trigger
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   revalidate:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - name: Trigger Revalidation
+        env:
+          API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          SECRET: ${{ secrets.REVALIDATION_SECRET }}
         run: |
-          curl -X GET "${{ secrets.NEXT_PUBLIC_API_URL }}/api/revalidate?secret=${{ secrets.REVALIDATION_SECRET }}"
+          curl -X GET "$API_URL/api/revalidate?secret=$SECRET"

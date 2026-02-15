@@ -8,6 +8,12 @@ import { createPersistenceSlice } from './createPersistenceSlice';
 import { createUISlice } from './createUISlice';
 
 // Create the unified store
+/**
+ * Global State Store (Zustand).
+ * composed of Solo, Team, Persistence, and UI slices.
+ *
+ * @see {@link docs/STATE_MANAGEMENT.md} for architecture details.
+ */
 export const useDeckStore = create<DeckBuilderState>()(
   devtools(
     persist(

@@ -1,6 +1,7 @@
 import { Active, Over } from "@dnd-kit/core";
 import { Unit, Spell, Titan, Spellcaster } from "@/types/api";
 import { DragData, DropData } from "@/types/dnd";
+import { SlotType, EntityCategory } from "@/types/enums";
 
 export type DragAction =
   | { type: 'NO_OP' }
@@ -10,18 +11,45 @@ export type DragAction =
   | { type: 'SET_SPELLCASTER'; item: Spellcaster; deckId?: string; sourceDeckId?: string }
   | { type: 'REMOVE_SPELLCASTER'; deckId?: string };
 
+// Helper to check compatibility
+const isCompatible = (item: Unit | Spell | Titan, allowedTypes?: SlotType[] | string[]): boolean => {
+    if (!allowedTypes || allowedTypes.length === 0) return true; // Detailed validation usually happens at UI/Hook level, but we want strict routing too.
+
+    // If "TITAN" is in allowedTypes, item MUST be Titan
+    // This depends on how specific the slot types are.
+    // Titan Slot: ["TITAN"]
+    // Unit Slot: ["UNIT"]
+    
+    const isTitan = item.category === EntityCategory.Titan;
+    
+    // Check if allowed types include Titan
+    const allowsTitan = allowedTypes.includes(SlotType.Titan);
+    const allowsUnit = allowedTypes.includes(SlotType.Unit);
+
+    if (isTitan) {
+        return allowsTitan;
+    } else {
+        // Not a Titan (Unit or Spell)
+        // If slot ONLY allows Titan, return false
+        if (allowsTitan && !allowsUnit) return false;
+        
+        return allowsUnit;
+    }
+};
+
 export const DragRoutingService = {
   determineAction(active: Active, over: Over | null): DragAction {
-    if (!active.data.current || !over?.data.current) {
+    if (!active.data.current) {
         return { type: 'NO_OP' };
     }
 
     const dragData = active.data.current as DragData;
-    const dropData = over.data.current as DropData;
+    const dropData = over?.data.current as DropData | undefined;
 
     // 1. Drop into Void (or invalid target)
-    if (!over) {
+    if (!over || !dropData) {
         if (dragData.type === "DECK_SLOT" && dragData.sourceSlotIndex !== undefined) {
+             // Drag-to-Remove
              return { type: 'CLEAR_SLOT', index: dragData.sourceSlotIndex, deckId: dragData.sourceDeckId };
         }
         if (dragData.type === "SPELLCASTER_SLOT") {
@@ -38,6 +66,11 @@ export const DragRoutingService = {
         const item = dragData.item as Unit | Spell | Titan;
         if (!item || "spellcaster_id" in item) return { type: 'NO_OP' }; // Safety
 
+        // Validation
+        if (!isCompatible(item, dropData.accepts)) {
+            return { type: 'NO_OP' };
+        }
+
         return { 
             type: 'SET_SLOT', 
             index: dropData.slotIndex, 
@@ -48,14 +81,6 @@ export const DragRoutingService = {
 
     // 3. Browser -> Header (Auto-Add)
     if (dragData.type === "BROWSER_CARD" && dropData.type === "DECK_HEADER") {
-        // We return a special SET_SLOT with index -1 or let the hook handle finding the first empty slot?
-        // Let's keep the action generic and let useDragDrop handle the "Find Slot" logic?
-        // OR: We define a new Action 'ADD_TO_DECK'
-        // For now, let's reuse SET_SLOT but we need to know WHICH slot. 
-        // Logic: Routing Service shouldn't know about Deck State (filled slots).
-        // LIMITATION: UseDragDrop needs to find the slot. 
-        // So we return a specialized action or just handle it there.
-        // Let's return a "SET_SLOT" with index -1 to signal "Auto"
         const item = dragData.item as Unit | Spell | Titan;
         if (!item || "spellcaster_id" in item) return { type: 'NO_OP' };
 
@@ -70,6 +95,13 @@ export const DragRoutingService = {
     // 4. Slot -> Slot (Move/Swap)
     if (dragData.type === "DECK_SLOT" && dropData.type === "DECK_SLOT") {
          if (dragData.sourceSlotIndex === undefined || dropData.slotIndex === undefined) return { type: 'NO_OP' };
+
+         const item = dragData.item as Unit | Spell | Titan;
+         
+         // Validation check for Move
+         if (item && !isCompatible(item, dropData.accepts)) {
+             return { type: 'NO_OP' };
+         }
 
          return {
              type: 'MOVE_SLOT',
@@ -119,6 +151,12 @@ export const DragRoutingService = {
         };
     }
 
+    // 7. Background Drops (Snap Back)
+    if (dropData.type === "DECK_BACKGROUND") {
+        return { type: "NO_OP" };
+    }
+
     return { type: 'NO_OP' };
   }
 };
+
