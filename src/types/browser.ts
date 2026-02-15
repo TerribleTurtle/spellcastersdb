@@ -10,3 +10,8 @@ export type BrowserItem =
 export type VirtualRow =
   | { type: "header"; title: string; count: number; isCollapsed?: boolean }
   | { type: "row"; items: BrowserItem[]; startIndex: number };
+
+export interface ItemUsageState {
+  isActive: boolean;
+  memberOfDecks: number[];
+}

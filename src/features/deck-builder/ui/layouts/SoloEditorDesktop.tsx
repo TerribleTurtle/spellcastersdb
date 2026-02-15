@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { BrowserItem } from "@/types/browser";
+import { BrowserItem, ItemUsageState } from "@/types/browser";
 import { Deck } from "@/types/deck";
 import { UnifiedEntity } from "@/types/api";
 import { InspectorPanel } from "@/features/shared/inspector/InspectorPanel";
@@ -42,6 +42,24 @@ export function SoloEditorDesktop({
   onCancelSwap
 }: SoloEditorDesktopProps) {
   const isSwapMode = !!pendingSwapCard;
+
+  const itemStates = React.useMemo(() => {
+    const states = new Map<string, ItemUsageState>();
+    
+    // Helper to mark active
+    const markActive = (id: string) => {
+        states.set(id, { isActive: true, memberOfDecks: [] });
+    };
+
+    if (currentDeck.spellcaster) markActive(currentDeck.spellcaster.entity_id);
+    
+    currentDeck.slots.forEach((s) => {
+      if (s.unit) markActive(s.unit.entity_id);
+    });
+
+    return states;
+  }, [currentDeck]);
+
   return (
     <div id="active-deck-desktop" className="hidden xl:contents">
       {/* Left Column: Vault / Browser */}
@@ -63,9 +81,11 @@ export function SoloEditorDesktop({
                 items={browserItems}
                 onSelectItem={onSelectItem}
                 onQuickAdd={onQuickAdd}
+                itemStates={itemStates}
             />
           </div>
       </section>
+
 
       {/* Right Column: Inspector (Top) + Drawer (Bottom) */}
       <div className="xl:flex xl:col-start-2 xl:row-start-2 xl:flex-col xl:justify-between xl:gap-4 xl:h-full xl:overflow-hidden">

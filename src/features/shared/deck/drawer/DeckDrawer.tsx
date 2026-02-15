@@ -36,6 +36,14 @@ interface DeckDrawerProps {
   onExportToSolo?: () => void;
   hideGlobalActions?: boolean;
   idSuffix?: string;
+  activeBorderClassName?: string; // Kept for backwards compatibility or specific simple overrides
+  activeTheme?: {
+      overlay?: string;
+      header?: string;
+      dot?: string;
+      border?: string; // Can replace activeBorderClassName
+  };
+  tintClassName?: string;
 }
 
 const ActionToolbar = DeckActionToolbar; 
@@ -60,6 +68,9 @@ export const DeckDrawer = memo(function DeckDrawer({
     onExportToSolo,
     hideGlobalActions,
     idSuffix,
+    activeBorderClassName,
+    activeTheme,
+    tintClassName,
 }: DeckDrawerProps) {
   // Store Connection
   const { activeSlot, setActiveSlot, pendingSwapCard } = useDeckStore(
@@ -144,7 +155,8 @@ export const DeckDrawer = memo(function DeckDrawer({
     variant === "fixed" && "fixed bottom-0 left-0 right-0 z-40 pb-[max(16px,env(safe-area-inset-bottom))]",
     variant === "static" && "w-full border-x border-b border-white/5 first:border-t",
     isExpanded ? "h-auto" : "h-[48px]", // consistent small height for collapsed
-    forceActive && "border-brand-primary shadow-[0_-4px_15px_rgba(var(--color-brand-primary),0.1)]",
+    // Order of precedence: activeTheme.border -> activeBorderClassName -> default brand
+    forceActive && (activeTheme?.border || activeBorderClassName || "border-brand-primary shadow-[0_-4px_15px_rgba(var(--color-brand-primary),0.1)]"),
     className
   );
 
@@ -154,9 +166,17 @@ export const DeckDrawer = memo(function DeckDrawer({
       onClick={handleActivate} 
       data-testid={slotIndex !== undefined ? `deck-drawer-${slotIndex}` : "deck-drawer"}
     >
+      {/* Permanent Theme Tint (Color Coding) */}
+      {tintClassName && (
+          <div className={cn("absolute inset-0 pointer-events-none", tintClassName)} />
+      )}
+
       {/* Active Tint Overlay */}
       {forceActive && (
-          <div className="absolute inset-0 bg-brand-primary/15 pointer-events-none mix-blend-overlay" />
+          <div className={cn(
+              "absolute inset-0 pointer-events-none mix-blend-overlay",
+              activeTheme?.overlay || "bg-brand-primary/15"
+          )} />
       )}
 
       {/* Hover Feedback Overlay for Dragging */}
@@ -175,7 +195,9 @@ export const DeckDrawer = memo(function DeckDrawer({
         data-testid="deck-drawer-header"
         className={cn(
             "h-14 w-full flex items-center justify-between px-4 shrink-0 transition-colors cursor-pointer select-none relative z-40",
-            forceActive ? "bg-brand-primary/20" : "bg-white/5 hover:bg-white/10",
+            forceActive 
+                ? (activeTheme?.header || "bg-brand-primary/20") 
+                : "bg-white/5 hover:bg-white/10",
              // isOver && "bg-brand-primary/20" // Handled by overlay above now
         )}
         onClick={(e) => {
@@ -204,7 +226,10 @@ export const DeckDrawer = memo(function DeckDrawer({
       >
         {/* Left: Check/Status or just Deck Name */}
         <div className="flex items-center gap-3 max-w-[50%]">
-            <div className={cn("w-3 h-3 rounded-full shrink-0", forceActive ? "bg-brand-primary" : "bg-gray-500")} />
+            <div className={cn(
+                "w-3 h-3 rounded-full shrink-0", 
+                forceActive ? (activeTheme?.dot || "bg-brand-primary") : "bg-gray-500"
+            )} />
             
             <DeckNameInput 
                 name={deck.name || "Untitled"}

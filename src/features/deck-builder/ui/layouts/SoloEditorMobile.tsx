@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { BrowserItem } from "@/types/browser";
+import { BrowserItem, ItemUsageState } from "@/types/browser";
 import { Deck, DeckSlot } from "@/types/deck";
 
 import { UnifiedEntity } from "@/types/api"; // Added Mode import
@@ -136,6 +136,20 @@ export function SoloEditorMobile({
       */
   // };
 
+  const itemStates = React.useMemo(() => {
+      const states = new Map<string, ItemUsageState>();
+      
+      const markActive = (id: string) => {
+          states.set(id, { isActive: true, memberOfDecks: [] });
+      };
+
+      if (currentDeck.spellcaster) markActive(currentDeck.spellcaster.entity_id);
+      currentDeck.slots.forEach((s) => {
+        if (s.unit) markActive(s.unit.entity_id);
+      });
+      return states;
+  }, [currentDeck]);
+
   return (
     <div id="active-deck-mobile" className="flex flex-col h-[calc(100dvh-4rem)] xl:hidden bg-surface-main overflow-hidden">
        
@@ -175,9 +189,11 @@ export function SoloEditorMobile({
                 items={browserItems}
                 onSelectItem={onSelectItem}
                 onQuickAdd={onQuickAdd}
+                itemStates={itemStates}
               />
           </div>
        </main>
+
 
        {/* 4. Bottom Dock (Fixed) */}
        <MobileDeckDock 

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { LibraryButton } from "@/components/ui/LibraryButton";
 
 import { UnifiedEntity, Spell, Spellcaster, Titan, Unit } from "@/types/api";
-import { BrowserItem } from "@/types/browser";
+import { BrowserItem, ItemUsageState } from "@/types/browser";
 
 import { useDeckEditorUI } from "@/features/deck-builder/hooks/ui/useDeckEditorUI";
 import { UnitBrowser } from "@/features/deck-builder/browser/UnitBrowser";
@@ -32,7 +32,7 @@ import { UnsavedChangesModal } from "@/components/modals/UnsavedChangesModal";
 import { InspectorPanel } from "@/features/shared/inspector/InspectorPanel";
 import { useTeamEditor } from "@/features/deck-builder/hooks/ui/useTeamEditor";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { MobileHeader } from "@/features/deck-builder/ui/mobile/MobileHeader";
 import { MobileContextBar } from "@/features/deck-builder/ui/mobile/MobileContextBar";
 import { SaveTeamModal } from "@/components/modals/SaveTeamModal";
@@ -57,6 +57,7 @@ export function TeamEditorLayout({
   const { showToast } = useToast();
   
   const {
+      activeSlot,
       teamName,
       setTeamName,
       teamDecks,
@@ -104,6 +105,39 @@ export function TeamEditorLayout({
       setShowSaveTeamModal(false);
       showToast("Team copied successfully", "success");
   };
+
+  const itemStates = useMemo(() => {
+    const states = new Map<string, ItemUsageState>();
+    if (!teamDecks) return states;
+
+    const getState = (id: string) => {
+        if (!states.has(id)) {
+            states.set(id, { isActive: false, memberOfDecks: [] });
+        }
+        return states.get(id)!;
+    };
+
+    teamDecks.forEach((deck, deckIndex) => {
+        const processItem = (id: string) => {
+            const state = getState(id);
+            if (activeSlot === deckIndex) {
+                state.isActive = true;
+            } else {
+                // Add badge for other decks
+                if (!state.memberOfDecks.includes(deckIndex)) {
+                     state.memberOfDecks.push(deckIndex);
+                }
+            }
+        };
+
+        if (deck.spellcaster) processItem(deck.spellcaster.entity_id);
+        deck.slots.forEach(s => {
+            if (s.unit) processItem(s.unit.entity_id);
+        });
+    });
+
+    return states;
+  }, [teamDecks, activeSlot]);
 
   return (
     <>
@@ -283,9 +317,11 @@ export function TeamEditorLayout({
                 items={browserItems as BrowserItem[]}
                 onSelectItem={openInspector}
                 onQuickAdd={handleQuickAdd}
+                itemStates={itemStates}
             />
         </div>
       </section>
+
 
       {/* Right Column: Inspector (Top) + Stacked Decks (Bottom) */}
       <div className="hidden xl:flex xl:col-start-2 xl:row-start-2 xl:flex-col xl:justify-between xl:gap-4 xl:h-full xl:overflow-hidden">

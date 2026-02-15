@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserItem } from "@/types/browser";
+import { BrowserItem, ItemUsageState } from "@/types/browser";
 import { DraggableCard } from "@/features/shared/deck/ui/DraggableCard";
 
 interface UnitGridRowProps {
@@ -8,6 +8,7 @@ interface UnitGridRowProps {
   onSelectItem: (item: BrowserItem, pos?: { x: number; y: number }) => void;
   onQuickAdd: (item: BrowserItem) => void;
   priority?: boolean;
+  itemStates?: Map<string, ItemUsageState>;
 }
 
 export const UnitGridRow = React.memo(function UnitGridRow({
@@ -16,6 +17,7 @@ export const UnitGridRow = React.memo(function UnitGridRow({
   onSelectItem,
   onQuickAdd,
   priority = false,
+  itemStates,
 }: UnitGridRowProps) {
   return (
     <div
@@ -24,15 +26,20 @@ export const UnitGridRow = React.memo(function UnitGridRow({
         gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
       }}
     >
-      {items.map((item) => (
-        <DraggableCard
-          key={item.entity_id}
-          item={item}
-          onClick={onSelectItem}
-          onQuickAdd={onQuickAdd}
-          priority={priority}
-        />
-      ))}
+      {items.map((item) => {
+        const state = itemStates?.get(item.entity_id);
+        return (
+          <DraggableCard
+            key={item.entity_id}
+            item={item}
+            onClick={onSelectItem}
+            onQuickAdd={onQuickAdd}
+            priority={priority}
+            isDimmed={state?.isActive}
+            otherDeckIndices={state?.memberOfDecks}
+          />
+        );
+      })}
     </div>
   );
 });

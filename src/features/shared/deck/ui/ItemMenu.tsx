@@ -50,7 +50,7 @@ export function ItemMenu({
         </DropdownMenuTrigger>
         <DropdownMenuContent 
           align="end" 
-          className="w-56 z-9999 bg-surface-card border border-white/10 shadow-xl p-1 text-gray-200"
+          className="w-56 z-[9999] bg-slate-900 border border-white/10 shadow-xl p-1 text-gray-200"
         >
           {onDuplicate && (
             <DropdownMenuItem onClick={onDuplicate} className="cursor-pointer">

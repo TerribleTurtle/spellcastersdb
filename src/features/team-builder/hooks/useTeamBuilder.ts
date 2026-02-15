@@ -61,10 +61,8 @@ export function useTeamBuilder() {
 
   const {
       teamDecks,
-      teamName,
       viewSummary,
       viewingTeamData,
-      viewingTeamName,
   } = state;
 
   const {
@@ -123,10 +121,10 @@ export function useTeamBuilder() {
     setViewingTeam(null);
   }, [setViewSummary, setViewingTeam]);
 
-  const handleEditDeck = useCallback((idx: number) => {
+  const handleEditDeck = useCallback((idx: number, forceDiscard: boolean = false) => {
     if (viewingTeamData) {
-      if (hasChanges && !window.confirm("You have unsaved changes. Discard them to edit this team?")) {
-          return;
+      if (hasChanges && !forceDiscard) {
+          return false; // Halted
       }
       const newIds = viewingTeamData.map(() => uuidv4());
       loadTeamFromData(viewingTeamData, newIds);
@@ -134,6 +132,7 @@ export function useTeamBuilder() {
     }
     setActiveSlot(idx);
     setViewSummary(false);
+    return true;
   }, [viewingTeamData, loadTeamFromData, setViewingTeam, setActiveSlot, setViewSummary, hasChanges]);
 
   return {
@@ -143,6 +142,7 @@ export function useTeamBuilder() {
     isReadOnly: !!viewingTeamData || state.isReadOnly,
     showSummary: viewSummary && teamDecks,
     showConflictModal,
+    hasChanges, // Exposed for UI modals
     
     // Handlers
     handleBack,

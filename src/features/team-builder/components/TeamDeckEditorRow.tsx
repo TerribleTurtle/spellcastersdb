@@ -6,6 +6,8 @@ import { useDeckStore } from "@/store/index";
 
 import { DeckDrawer } from "@/features/shared/deck/drawer/DeckDrawer";
 import { useToast } from "@/hooks/useToast";
+import { DECK_THEMES, DeckThemeIndex } from "@/services/config/theme-constants";
+import { cn } from "@/lib/utils";
 
 import { Unit, Spell, Titan } from "@/types/api";
 
@@ -84,11 +86,12 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
 
   if (!deck) return null;
 
-  // Enforce Static Name (DECK 1, DECK 2, etc.)
+  // Enforce Static Name (DECK 1, DECK 2, etc.) -> Now Themed Name
   // We explicitly override the name for display purposes.
   // The underlying deck in store retains its real name, but it is invisible to the user here.
-  const displayDeck = { ...deck, name: `DECK ${index + 1}` };
-
+  const theme = DECK_THEMES[index as DeckThemeIndex];
+  const displayDeck = { ...deck, name: theme?.deckName || `DECK ${index + 1}` };
+  
   return (
     <DeckDrawer
       deck={displayDeck}
@@ -127,7 +130,17 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
       onShare={handleShare}
       
       hideGlobalActions={hideGlobalActions}
-      className="border-b-0 first:border-t-0 border-t border-brand-primary/20 shadow-lg pointer-events-auto"
+      className={cn(
+          "border-b-0 first:border-t-0 border-t shadow-lg pointer-events-auto",
+          // Removed theme?.drawer from here to prevent overriding background opacity
+      )}
+      tintClassName={theme?.drawer} // Pass tint here for overlay
+      activeTheme={{
+        overlay: theme?.activeOverlay,
+        header: theme?.activeHeader,
+        dot: theme?.activeDot,
+        border: theme?.border
+      }}
       idSuffix={idSuffix}
     />
   );

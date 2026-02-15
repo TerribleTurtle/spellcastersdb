@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
   - Resolved `useToast` type mismatch in `SoloOverview` and `TeamOverview`.
   - Fixed `encodeTeam` signature mismatch in `TeamOverview`.
   - Removed unused variables in `useTeamImport` and `SoloOverview`.
+  - Cleaned up unused logic in `TeamBuilderView` and `useTeamBuilder`.
 
 ## [1.0.0] - 2026-02-15
 

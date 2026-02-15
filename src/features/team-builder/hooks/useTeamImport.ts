@@ -40,7 +40,6 @@ export function useTeamImport({
     const { showConflictModal } = useTeamImportAutoResolve({ isEmpty, hasChanges });
 
     const handleSave = useCallback(() => {
-        console.log("handleSave called");
         setShowSaveModal(true);
     }, []);
 

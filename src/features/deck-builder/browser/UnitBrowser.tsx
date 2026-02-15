@@ -13,22 +13,22 @@ import {
 } from "@/services/config/constants";
 import { prepareVirtualizationRows } from "./utils";
 import { useUnitBrowserState } from "@/features/deck-builder/hooks/ui/useUnitBrowserState";
-import { BrowserItem, VirtualRow } from "@/types/browser";
+import { BrowserItem, VirtualRow, ItemUsageState } from "@/types/browser";
 
 interface UnitBrowserProps {
   items: BrowserItem[];
   onSelectItem: (item: BrowserItem, pos?: { x: number; y: number }) => void;
   onQuickAdd: (item: BrowserItem) => void;
+  itemStates?: Map<string, ItemUsageState>;
 }
 
-const arePropsEqual = (prev: UnitBrowserProps, next: UnitBrowserProps) => {
-  return prev.items === next.items;
-};
+
 
 export const UnitBrowser = React.memo(function UnitBrowser({
   items,
   onSelectItem,
   onQuickAdd,
+  itemStates,
 }: UnitBrowserProps) {
   const {
       searchQuery,
@@ -88,11 +88,12 @@ export const UnitBrowser = React.memo(function UnitBrowser({
             onSelectItem={onSelectItem}
             onQuickAdd={onQuickAdd}
             priority={index < 2}
+            itemStates={itemStates}
           />
         );
       }
     },
-    [columns, onSelectItem, onQuickAdd, toggleSection]
+    [columns, onSelectItem, onQuickAdd, toggleSection, itemStates]
   );
 
   return (
@@ -135,4 +136,4 @@ export const UnitBrowser = React.memo(function UnitBrowser({
       </div>
     </div>
   );
-}, arePropsEqual);
+});

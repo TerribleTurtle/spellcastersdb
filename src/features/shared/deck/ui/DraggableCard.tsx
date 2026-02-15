@@ -13,6 +13,7 @@ import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { Spellcaster, Unit } from "@/types/api";
 
 import { BrowserItem } from "@/types/browser";
+import { DECK_THEMES, DeckThemeIndex } from "@/services/config/theme-constants";
 import { DragData } from "@/types/dnd";
 
 interface DraggableCardProps {
@@ -20,14 +21,20 @@ interface DraggableCardProps {
   onClick: (item: BrowserItem, pos?: { x: number; y: number }) => void;
   onQuickAdd: (item: BrowserItem) => void;
   priority?: boolean;
+  isDimmed?: boolean;
+  otherDeckIndices?: number[];
 }
+
 
 export const DraggableCard = React.memo(function DraggableCard({
   item,
   onClick,
   onQuickAdd,
   priority = false,
+  isDimmed = false,
+  otherDeckIndices,
 }: DraggableCardProps) {
+
   const id = item.entity_id;
   const isSpellcaster = item.category === "Spellcaster";
   // Casting to Unit for rank acccess is safe because Spells/Titans either have Rank or we check category
@@ -109,12 +116,14 @@ export const DraggableCard = React.memo(function DraggableCard({
         "hover:border-brand-primary/50 transition-all hover:scale-105",
         // Actually, we want the bottom bar to be part of the card visuals.
         isDragging && "opacity-50",
+        isDimmed && "opacity-40 grayscale",
         isSpellcaster &&
           "border-brand-accent/30 shadow-[0_0_10px_rgba(255,255,255,0.05)]",
           "will-change-transform",
           // Fix touch action to allow scrolling but also dragging
           "touch-manipulation"
-      )}
+      )
+}
     >
       {/* Image Area - Touch action allowed to enable scrolling */}
       <div className="relative flex-1 overflow-hidden bg-gray-800 pointer-events-none">
@@ -174,6 +183,30 @@ export const DraggableCard = React.memo(function DraggableCard({
              </TooltipContent>
            </Tooltip>
         )}
+
+
+      {/* Deck Usage Badges (Team Mode) */}
+      {otherDeckIndices && otherDeckIndices.length > 0 && (
+          <div className="absolute bottom-9 lg:bottom-11 right-1 flex flex-col items-end gap-1 pointer-events-none z-20">
+              {otherDeckIndices.map((deckIndex) => {
+                  // Safe lookup for theme, fallback to default if index out of bounds (shouldn't happen in normal team flow)
+                  const theme = DECK_THEMES[deckIndex as DeckThemeIndex];
+                  if (!theme) return null;
+
+                  return (
+                    <div 
+                        key={deckIndex}
+                        className={cn(
+                            "px-1.5 py-0.5 rounded text-[10px] font-bold shadow-sm backdrop-blur-sm border",
+                            theme.badge
+                        )}
+                    >
+                        {theme.textData}
+                    </div>
+                  );
+              })}
+          </div>
+      )}
 
       </div>
 
