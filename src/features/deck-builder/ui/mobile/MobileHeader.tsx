@@ -33,7 +33,7 @@ export function MobileHeader({ mode, onSetMode, onShare, onClear, onOpenLibrary 
             "px-4 py-1.5 text-xs font-bold uppercase rounded transition-all",
             mode === "SOLO" 
               ? "bg-brand-primary text-white shadow-sm" 
-              : "text-gray-500 hover:text-gray-300"
+              : "text-gray-400 hover:text-gray-300"
           )}
         >
           Solo
@@ -44,7 +44,7 @@ export function MobileHeader({ mode, onSetMode, onShare, onClear, onOpenLibrary 
             "px-4 py-1.5 text-xs font-bold uppercase rounded transition-all",
             mode === "TEAM" 
               ? "bg-brand-primary text-white shadow-sm" 
-              : "text-gray-500 hover:text-gray-300"
+              : "text-gray-400 hover:text-gray-300"
           )}
         >
           Team

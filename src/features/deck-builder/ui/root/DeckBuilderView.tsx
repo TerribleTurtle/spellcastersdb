@@ -13,6 +13,7 @@ import { DragDropErrorBoundary } from "../providers/DragDropErrorBoundary";
 // import { CardInspectorModal } from "@/features/shared/inspector/CardInspectorModal";
 // import { CommandCenterModal } from "@/features/deck-builder/forge/CommandCenterModal";
 import { useDeckHotkeys } from "@/features/deck-builder/hooks/ui/useDeckHotkeys";
+import { PageSkeleton } from "./PageSkeleton";
 
 // Lazy Load Heavy Components
 import { SoloBuilderView } from "@/features/deck-builder/components/SoloBuilderView";
@@ -20,14 +21,7 @@ import { SoloBuilderView } from "@/features/deck-builder/components/SoloBuilderV
 const TeamBuilderView = dynamic(
   () => import("@/features/team-builder/TeamBuilderView").then(mod => mod.TeamBuilderView),
   {
-    loading: () => (
-      <div className="h-full w-full flex items-center justify-center bg-surface-main">
-         <div className="flex flex-col items-center gap-2">
-            <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
-            <span className="text-xs text-muted-foreground animate-pulse">Initializing Team Editor...</span>
-         </div>
-      </div>
-    )
+    loading: () => <PageSkeleton />
   }
 );
 

@@ -66,7 +66,7 @@ export function UnitBrowserHeader({
                 />
              </div>
         ) : (
-             <div className="flex gap-4 text-xs font-bold text-gray-500 h-full items-center animate-in fade-in slide-in-from-left-2 duration-200">
+             <div className="flex gap-4 text-xs font-bold text-gray-400 h-full items-center animate-in fade-in slide-in-from-left-2 duration-200">
                 {GROUP_MODES.map((mode) => (
                 <button
                     key={mode}

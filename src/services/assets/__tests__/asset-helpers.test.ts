@@ -18,6 +18,7 @@ describe("getCardAltText", () => {
       category: EntityCategory.Spellcaster,
       tags: [],
       health: 1000,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       abilities: {} as any
     };
     expect(getCardAltText(spellcaster)).toBe("Kael'thas - Enchanter Spellcaster");

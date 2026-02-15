@@ -6,5 +6,6 @@
 - [x] Phase 8: Desktop Right Bar Fix
 - [x] Implement Dynamic Alt Text (Card Images)
 - [x] Button Accessibility & Standardization
+- [x] Accessibility Color Contrast Fixes (WCAG)
 - [x] Update Changelog
 - [x] Push to `main`

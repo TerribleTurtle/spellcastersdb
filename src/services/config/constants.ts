@@ -44,25 +44,25 @@ export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: strin
   II: {
     label: "II",
     color: "text-white",
-    bg: "bg-emerald-600",
+    bg: "bg-emerald-700",
     border: "border-slate-400",
   },
   III: {
     label: "III",
     color: "text-white",
-    bg: "bg-blue-600",
+    bg: "bg-blue-700",
     border: "border-slate-400",
   },
   IV: {
     label: "IV",
     color: "text-white",
-    bg: "bg-purple-600",
+    bg: "bg-purple-700",
     border: "border-slate-400",
   },
   V: {
     label: "V", // Will be overridden for Titans in component if needed, or we can treat V as Titan rank generically
     color: "text-white",
-    bg: "bg-amber-600",
+    bg: "bg-amber-800",
     border: "border-slate-400",
   },
 };

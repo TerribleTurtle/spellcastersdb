@@ -59,18 +59,18 @@ export function PageSkeleton() {
             </div>
             {/* Slots */}
             <div className="flex gap-2 p-2 h-full items-start">
-                 <Skeleton className="flex-1 aspect-[3/4] rounded-lg bg-white/5" />
-                 <Skeleton className="flex-1 aspect-[3/4] rounded-lg bg-white/5" />
-                 <Skeleton className="flex-1 aspect-[3/4] rounded-lg bg-white/5" />
-                 <Skeleton className="flex-1 aspect-[3/4] rounded-lg bg-white/5" />
-                 <Skeleton className="flex-1 aspect-[3/4] rounded-lg bg-white/5" />
+                 <Skeleton className="flex-1 aspect-3/4 rounded-lg bg-white/5" />
+                 <Skeleton className="flex-1 aspect-3/4 rounded-lg bg-white/5" />
+                 <Skeleton className="flex-1 aspect-3/4 rounded-lg bg-white/5" />
+                 <Skeleton className="flex-1 aspect-3/4 rounded-lg bg-white/5" />
+                 <Skeleton className="flex-1 aspect-3/4 rounded-lg bg-white/5" />
             </div>
        </div>
 
        {/* === DESKTOP RIGHT COL (Inspector + Drawer) === */}
        <div className="hidden xl:flex flex-col gap-4 h-full p-4 overflow-hidden xl:col-start-2 xl:row-start-2">
            {/* Inspector Skeleton */}
-           <div className="flex-initial shrink min-h-0 max-h-full flex flex-col border border-white/10 rounded-xl bg-surface-card overflow-hidden">
+           <div className="flex-1 shrink min-h-0 max-h-full flex flex-col border border-white/10 rounded-xl bg-surface-card overflow-hidden">
                <div className="h-12 border-b border-white/5 bg-white/5 animate-pulse" /> 
                <div className="flex-1 bg-white/5 animate-pulse" /> 
            </div>

@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.11] - 2026-02-15
+
+### Fixed
+
+- **Accessibility**: Color Contrast Improvements.
+  - **Legibility**: Updated text colors in `MobileHeader`, `ContextBar`, `UnitGroupHeader`, and `UnitBrowserHeader` from `text-gray-500/600` to `text-gray-400` to improve readability on dark backgrounds.
+  - **Badges**: Darkened background colors for Ranks II-V (Emerald, Blue, Purple, Amber) to ensure a contrast ratio of >4.5:1 with white text.
+
+## [1.0.10] - 2026-02-15
+
+### Fixed
+
+- **Performance**:
+  - **CLS**: Eliminated layout shift on Unit Browser by refactoring `BrowserSkeleton` to match exact DOM structure (padding, backgrounds, containers).
+  - **Bundle Size**: Updated `browserslist` to `last 3 major versions`, removing ~13KB of legacy polyfills.
+- **Visual Polish**:
+  - **Loading States**: Replaced "Initializing..." spinner with `PageSkeleton` to eliminate layout flashes.
+  - **Sidebar**: Fixed `DesktopSidebar` to use `sticky` positioning during loading, preventing layout collapse.
+  - **Skeleton**: Added category headers to `BrowserSkeleton` and fixed Inspector alignment.
+
 ## [1.0.9] - 2026-02-15
 
 ### Fixed

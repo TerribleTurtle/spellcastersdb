@@ -23,7 +23,7 @@ export const UnitGroupHeader = React.memo(function UnitGroupHeader({
       <h3 className="text-brand-primary font-bold text-sm uppercase tracking-widest border-b border-white/5 pb-1 flex items-center justify-between max-w-[1920px] mx-auto">
         <span>
             {title}{" "}
-            <span className="text-gray-600 text-xs ml-2">({count})</span>
+            <span className="text-gray-400 text-xs ml-2">({count})</span>
         </span>
         <span className="text-gray-500 group-hover:text-white transition-colors">
             {isCollapsed ? <ChevronRight size={16} /> : <ChevronDown size={16} />}
