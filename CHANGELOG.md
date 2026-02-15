@@ -18,6 +18,11 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 
+- **Performance Optimization**:
+  - **Core Web Vitals**: Implemented code splitting for Deck Builder views and heavy modals, reducing initial bundle size.
+  - **Search**: Added 300ms debounce and decoupled search input from virtual list rendering to eliminate typing lag.
+  - **Rendering**: Verified virtualization for large card lists.
+  - **Caching**: Configured 1-year cache TTL for images on Vercel to reduce transformation costs.
 - **Team Builder (Phase 8)**: Full support for building teams of 3 decks with shared validation logic.
 - **Drag & Drop**: Improved drag-and-drop experience with `dnd-kit`.
 - **Optimization**: CSP and LCP improvements.

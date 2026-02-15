@@ -1,8 +1,7 @@
 import { useMemo } from "react";
-
 import Fuse from "fuse.js";
-
 import { UnifiedEntity } from "@/types/api";
+import { useDebounce } from "@/hooks/useDebounce";
 
 interface FilterState {
   schools: string[];
@@ -29,13 +28,16 @@ export function useUnitSearch(
     });
   }, [units]);
 
-  // 2. Search & Filter Logic
+  // 2. Debounce the search query
+  const debouncedQuery = useDebounce(searchQuery, 300);
+
+  // 3. Search & Filter Logic
   const filteredUnits = useMemo(() => {
     let result = units;
 
-    // Step A: Search
-    if (searchQuery.trim().length > 0) {
-      result = fuse.search(searchQuery).map((res) => res.item);
+    // Step A: Search (Use debounced query)
+    if (debouncedQuery.trim().length > 0) {
+      result = fuse.search(debouncedQuery).map((res) => res.item);
     }
 
     // Step B: Filter
@@ -79,7 +81,7 @@ export function useUnitSearch(
     // "Magic Schools should be Creature > Spells > buildings"
     // Condition: Only apply when School or Rank filters are active to preserve "All" view.
     if (
-      searchQuery.trim().length === 0 &&
+      debouncedQuery.trim().length === 0 &&
       (filters.schools.length > 0 || filters.ranks.length > 0)
     ) {
       result.sort((a, b) => {
@@ -103,7 +105,7 @@ export function useUnitSearch(
     }
 
     return result;
-  }, [units, searchQuery, filters, fuse]);
+  }, [units, debouncedQuery, filters, fuse]);
 
   return filteredUnits;
 }

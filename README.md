@@ -32,6 +32,7 @@
   - **Virtualization**: `react-virtuoso` for large lists.
   - **Zod Validation**: Ensures data integrity at runtime.
   - **Revalidation API**: On-demand cache invalidation via `/api/revalidate?secret=...` using `revalidateTag` for robust content updates.
+  - **Image Optimization**: Configured with a 1-year cache TTL on Vercel to minimize transformation costs. **Important:** Images are treated as immutable. To update an image, you MUST change its filename (e.g., `hero-v2.png`) or add a version query parameter.
 
 ## Getting Started
 

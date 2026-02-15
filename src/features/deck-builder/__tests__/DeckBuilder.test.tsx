@@ -82,16 +82,20 @@ describe("DeckBuilder Integration", () => {
          });
         render(<DeckBuilderContainer units={[mockUnit]} spellcasters={[]} />);
         
-        // Check for static UI
-
-        expect(screen.getAllByTitle("Save Deck").length).toBeGreaterThan(0);
+        // Check for static UI - Wait for it to load
+        await waitFor(() => {
+            expect(screen.getAllByTitle("Save Deck").length).toBeGreaterThan(0);
+        });
         
         // Check for unit content (async because virtualization/filtering might be async)
         // Since JSDOM renders both mobile and desktop layouts, we might find duplicates.
         // We scope to the desktop container to be precise.
-        const desktopContainer = document.getElementById("active-deck-desktop");
-        expect(desktopContainer).not.toBeNull();
+        await waitFor(() => {
+            const desktopContainer = document.getElementById("active-deck-desktop");
+            expect(desktopContainer).not.toBeNull();
+        });
         
+        const desktopContainer = document.getElementById("active-deck-desktop");
         const { findByText } = within(desktopContainer!);
         const unitElement = await findByText("Test Unit");
         expect(unitElement).toBeDefined();
@@ -124,7 +128,9 @@ describe("DeckBuilder Integration", () => {
         // Check for validation indicator (e.g. "X Issues")
         // Deck starts empty, so it should have multiple issues (missing spellcaster, missing units)
         // Use container query selector to bypass visibility checks since the element is hidden
-        const indicator = container.querySelector('[data-testid="validation-indicator"]');
-        expect(indicator).not.toBeNull();
+        await waitFor(() => {
+             const indicator = container.querySelector('[data-testid="validation-indicator"]');
+             expect(indicator).not.toBeNull();
+        });
     });
 });

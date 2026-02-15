@@ -42,6 +42,58 @@ export const UnitBrowser = React.memo(function UnitBrowser({
       activeFilterCount
   } = useUnitBrowserState();
 
+  return (
+    <div className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
+      <UnitBrowserHeader
+          activeFilterCount={activeFilterCount}
+          showFilters={showFilters}
+          setShowFilters={setShowFilters}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          groupMode={groupMode}
+          setGroupMode={setGroupMode}
+      />
+
+      {/* Filter Overlay */}
+      {showFilters && (
+        <UnitFilterOverlay
+            onClose={() => setShowFilters(false)}
+        />
+      )}
+
+      {/* Main Content Area - Memoized List */}
+      <MemoizedUnitBrowserList 
+        items={items}
+        debouncedSearchQuery={debouncedSearchQuery}
+        activeFilters={activeFilters}
+        groupMode={groupMode}
+        onSelectItem={onSelectItem}
+        onQuickAdd={onQuickAdd}
+        itemStates={itemStates}
+      />
+    </div>
+  );
+});
+
+interface UnitBrowserListProps {
+    items: BrowserItem[];
+    debouncedSearchQuery: string;
+    activeFilters: FilterState; 
+    groupMode: GroupMode;
+    onSelectItem: (item: BrowserItem, pos?: { x: number; y: number }) => void;
+    onQuickAdd: (item: BrowserItem) => boolean | void;
+    itemStates?: Map<string, ItemUsageState>;
+}
+
+const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
+    items,
+    debouncedSearchQuery,
+    activeFilters,
+    groupMode,
+    onSelectItem,
+    onQuickAdd,
+    itemStates
+}: UnitBrowserListProps) {
   // Responsive Columns Hook logic
   const columns = useResponsiveGrid(DEFAULT_BROWSER_COLUMNS);
 
@@ -97,25 +149,6 @@ export const UnitBrowser = React.memo(function UnitBrowser({
   );
 
   return (
-    <div className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
-      <UnitBrowserHeader
-          activeFilterCount={activeFilterCount}
-          showFilters={showFilters}
-          setShowFilters={setShowFilters}
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          groupMode={groupMode}
-          setGroupMode={setGroupMode}
-      />
-
-      {/* Filter Overlay */}
-      {showFilters && (
-        <UnitFilterOverlay
-            onClose={() => setShowFilters(false)}
-        />
-      )}
-
-      {/* Main Content Area */}
       <div className="flex-1 bg-black/20 overflow-hidden">
         {!virtualData || virtualData.length === 0 ? (
           <div className="text-center text-gray-500 py-10 mt-10">
@@ -126,14 +159,13 @@ export const UnitBrowser = React.memo(function UnitBrowser({
             style={{ height: "100%" }}
             className="overscroll-y-contain"
             data={virtualData}
-            overscan={200} // Reduced from 500 to improve performance
+            overscan={200} 
             itemContent={rowContent}
             components={{
-              Footer: () => <div className="h-64" />, // Increased buffer for fixed bottom tray
+              Footer: () => <div className="h-64" />, 
             }}
           />
         )}
       </div>
-    </div>
   );
 });
