@@ -32,7 +32,7 @@ function getPreloadImageUrls(
 ): string[] {
   return items.slice(0, count).map((item) => {
     const rawUrl = getCardImageUrl(item);
-    return `/_next/image?url=${encodeURIComponent(rawUrl)}&w=384&q=60`;
+    return `/_next/image?url=${encodeURIComponent(rawUrl)}&w=384&q=45`;
   });
 }
 
@@ -56,7 +56,6 @@ export default async function Home() {
           rel="preload"
           as="image"
           href={url}
-          type="image/avif"
           fetchPriority="high"
         />
       ))}

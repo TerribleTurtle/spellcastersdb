@@ -137,7 +137,7 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
                           "px-3 py-1 text-xs font-bold uppercase rounded transition-all",
                           mode === "SOLO" 
                               ? "bg-brand-primary text-white shadow-sm" 
-                              : "text-gray-500 hover:text-gray-300"
+                              : "text-gray-400 hover:text-gray-300"
                       )}
                   >
                       Solo
@@ -148,7 +148,7 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
                           "px-3 py-1 text-xs font-bold uppercase rounded transition-all",
                           mode === "TEAM" 
                               ? "bg-brand-primary text-white shadow-sm" 
-                              : "text-gray-500 hover:text-gray-300"
+                              : "text-gray-400 hover:text-gray-300"
                       )}
                   >
                       Team

@@ -25,7 +25,7 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
   entity,
   className,
   priority = false,
-  quality = 60,
+  quality = 45,
   ...props
 }: OptimizedCardImageProps) {
   const [imgSrc, setImgSrc] = useState<string>(src);

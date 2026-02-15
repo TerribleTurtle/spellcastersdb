@@ -29,7 +29,7 @@ export function RankBadge({ rank, className, isTitan, mode = "icon" }: RankBadge
   // Icon Mode (Geometric Shapes via SVG)
   if (mode === "icon") {
     const strokeClass = finalConfig.stroke;
-    const fillClass = finalConfig.bg; 
+    // const fillClass = finalConfig.bg;  
     // Wait, previous constants change added `fill` key like `fill-emerald-700`.
     // Let's use `finalConfig.fill` directly.
     const svgFill = finalConfig.fill; // e.g. "fill-emerald-700"

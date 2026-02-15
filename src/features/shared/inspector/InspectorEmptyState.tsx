@@ -27,7 +27,7 @@ export function InspectorEmptyState() {
 
         <div className="h-px w-16 bg-linear-to-r from-transparent via-white/20 to-transparent my-4" />
 
-        <h3 className="text-lg font-bold text-gray-200">Ready to Forge?</h3>
+        <h2 className="text-lg font-bold text-gray-200">Ready to Forge?</h2>
         <p className="text-sm text-gray-400 mt-2 max-w-[200px]">
           Select a Unit or Spellcaster from the vault to inspect details.
         </p>
