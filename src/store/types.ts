@@ -16,7 +16,6 @@ export interface DeckActions {
   clearSlot: (index: SlotIndex) => void;
   swapSlots: (indexA: number, indexB: number) => void;
   /** Attempts to add an item to the first available slot. Returns error message if failed. */
-  /** Attempts to add an item to the first available slot. Returns error message if failed. */
   quickAdd: (item: UnifiedEntity) => string | null;  
   clearDeck: () => void;
   setDeckName: (name: string) => void;
@@ -158,7 +157,6 @@ export interface UIState {
   setActiveDragItem: (item: UnifiedEntity | null) => void;
 
   // Inspector State
-  // Inspector State
   inspectorOpen: boolean;
   inspectedCard: UnifiedEntity | null;
   inspectorPosition: { x: number; y: number } | null;
@@ -166,7 +164,6 @@ export interface UIState {
   openInspector: (item: UnifiedEntity, position?: { x: number; y: number }, options?: { isReadOnly?: boolean }) => void;
   closeInspector: () => void;
 
-  // Hover Inspector State
   // Hover Inspector State
   hoveredItem: UnifiedEntity | null;
   setHoveredItem: (item: UnifiedEntity | null) => void;

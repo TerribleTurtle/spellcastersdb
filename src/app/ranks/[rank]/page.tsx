@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { UnitArchive } from "@/components/archive/UnitArchive";
+import { UnitArchive } from "@/components/database/UnitArchive";
 import { JsonLd } from "@/components/common/JsonLd";
 import { getAllEntities } from "@/services/api/api";
 import { Spell, Titan, UnifiedEntity, Unit } from "@/types/api";

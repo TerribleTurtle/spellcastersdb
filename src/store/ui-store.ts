@@ -1,14 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface UIState {
+interface SidebarState {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
   setSidebarOpen: (open: boolean) => void;
   hasManuallyToggled: boolean; // Track if user has overridden auto-logic
 }
 
-export const useUIStore = create<UIState>()(
+export const useUIStore = create<SidebarState>()(
   persist(
     (set) => ({
       isSidebarOpen: true, // Default

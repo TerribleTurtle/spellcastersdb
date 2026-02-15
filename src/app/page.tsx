@@ -32,7 +32,7 @@ function getPreloadImageUrls(
 ): string[] {
   return items.slice(0, count).map((item) => {
     const rawUrl = getCardImageUrl(item);
-    return `/_next/image?url=${encodeURIComponent(rawUrl)}&w=384&q=75`;
+    return `/_next/image?url=${encodeURIComponent(rawUrl)}&w=384&q=60`;
   });
 }
 

@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import { UnitArchive } from "@/components/archive/UnitArchive";
+import { UnitArchive } from "@/components/database/UnitArchive";
 import { getAllEntities } from "@/services/api/api";
 import { capitalize } from "@/services/utils/formatting";
 

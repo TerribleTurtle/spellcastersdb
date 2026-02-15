@@ -45,32 +45,48 @@ export async function ensureDataLoaded(): Promise<void> {
  * 
  * @returns The complete game data object.
  */
+// Helper to select data source based on environment
+function getDataSource(): GameDataSource {
+    return process.env.NODE_ENV === "development" 
+        ? new LocalDataSource() 
+        : new RemoteDataSource();
+}
+
+/**
+ * Generic fetcher with fallback strategy for development.
+ */
+async function fetchWithFallback(
+    fetcher: (source: GameDataSource) => Promise<AllDataResponse>
+): Promise<AllDataResponse> {
+    const source = getDataSource();
+    try {
+        const data = await fetcher(source);
+        registry.initialize(data);
+        return data;
+    } catch (error) {
+        console.error("Failed to fetch game data:", error);
+        
+        // Fallback to remote if local fails in dev
+        if (process.env.NODE_ENV === "development" && source instanceof LocalDataSource) {
+            console.warn("Local data failed, attempting remote fallback...");
+            const remote = new RemoteDataSource();
+            const data = await fetcher(remote);
+            registry.initialize(data);
+            return data;
+        }
+        throw error;
+    }
+}
+
+/**
+ * Fetches the complete game data from the data source (Local or Remote).
+ * 
+ * Uses the DataSource pattern to select the appropriate strategy based on the environment.
+ * 
+ * @returns The complete game data object.
+ */
 export async function fetchGameData(): Promise<AllDataResponse> {
-  let source: GameDataSource;
-
-  if (process.env.NODE_ENV === "development") {
-      source = new LocalDataSource();
-  } else {
-      source = new RemoteDataSource();
-  }
-
-  try {
-      const data = await source.fetch();
-      registry.initialize(data);
-      return data;
-  } catch (error) {
-     console.error("Failed to fetch game data:", error);
-     // Fallback to remote if local fails in dev? Or just rethrow?
-     // For now, adhering to original behavior of "best effort" empty or throw
-     if (process.env.NODE_ENV === "development" && source instanceof LocalDataSource) {
-         console.warn("Local data failed, attempting remote fallback...");
-         const remote = new RemoteDataSource();
-         const data = await remote.fetch();
-         registry.initialize(data);
-         return data;
-     }
-     throw error;
-  }
+    return fetchWithFallback(source => source.fetch());
 }
 
 /**
@@ -78,29 +94,7 @@ export async function fetchGameData(): Promise<AllDataResponse> {
  * Skips Consumables and Upgrades to reduce TTFB.
  */
 export async function fetchCriticalGameData(): Promise<AllDataResponse> {
-  let source: GameDataSource;
-
-  if (process.env.NODE_ENV === "development") {
-      source = new LocalDataSource();
-  } else {
-      source = new RemoteDataSource();
-  }
-
-  try {
-      const data = await source.fetchCritical();
-      registry.initialize(data);
-      return data;
-  } catch (error) {
-     console.error("Failed to fetch critical game data:", error);
-     if (process.env.NODE_ENV === "development" && source instanceof LocalDataSource) {
-         console.warn("Local critical data failed, attempting remote fallback...");
-         const remote = new RemoteDataSource();
-         const data = await remote.fetchCritical();
-         registry.initialize(data);
-         return data;
-     }
-     throw error;
-  }
+    return fetchWithFallback(source => source.fetchCritical());
 }
 
 

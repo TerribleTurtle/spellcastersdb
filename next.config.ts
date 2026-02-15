@@ -84,6 +84,10 @@ const nextConfig: NextConfig = {
               process.env.NODE_ENV === 'development' ? "" : "upgrade-insecure-requests",
             ].filter(Boolean).join("; "),
           },
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=63072000; includeSubDomains; preload",
+          },
         ],
       },
     ];
@@ -91,6 +95,8 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 31536000,
+    deviceSizes: [640, 828, 1200, 1920],
+    imageSizes: [96, 128, 256, 384],
     remotePatterns: [
       {
         protocol: 'https',

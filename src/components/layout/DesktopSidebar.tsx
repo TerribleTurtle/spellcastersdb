@@ -80,7 +80,7 @@ export function DesktopSidebar() {
   ];
   
   if (!mounted) return (
-      <aside className="hidden md:flex flex-col w-64 border-r border-white/10 sticky top-16 h-[calc(100vh-4rem)] bg-surface-main z-30" />
+      <aside className="hidden md:flex flex-col w-16 2xl:w-64 border-r border-white/10 sticky top-16 h-[calc(100vh-4rem)] bg-surface-main z-30" />
   );
 
   return (

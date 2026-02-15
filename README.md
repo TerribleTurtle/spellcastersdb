@@ -32,9 +32,9 @@
   - **Read-Through Caching**: Optimizes data fetching.
   - **Virtualization**: `react-virtuoso` for large lists.
   - **Zod Validation**: Ensures data integrity at runtime.
-  - **Revalidation API**: On-demand cache invalidation via `/api/revalidate?secret=...` using `revalidateTag` for robust content updates.
+  - **Revalidation API**: On-demand cache invalidation via `/api/revalidate` (using `Authorization` header) with `revalidateTag` for robust content updates.
 
-  - **Image Optimization**: Configured with a 1-year cache TTL on Vercel to minimize transformation costs. Critical images use `priority` loading for LCP.
+  - **Image Optimization**: Configured with a 1-year cache TTL, AVIF support, and constrained device sizes to minimize bandwidth. Critical images use `priority` loading for LCP.
   - **Browser Support**: Targets modern browsers (Chrome 100+, Safari 15+, Firefox 100+) for smaller bundles and better performance.
 
 ## Getting Started

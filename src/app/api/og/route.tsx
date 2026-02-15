@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     return renderDeckImage(deckHash, data, fontData as unknown as ArrayBuffer, origin);
   } catch (e: unknown) {
     console.error("OG Error:", e);
-    const message = e instanceof Error ? e.message : "Unknown error";
-    return new Response(`OG Error: ${message}`, { status: 500 });
+
+    return new Response("Internal Server Error", { status: 500 });
   }
 }

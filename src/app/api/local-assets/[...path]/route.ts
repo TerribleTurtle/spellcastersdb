@@ -38,6 +38,14 @@ export async function GET(
   // Construct full path
   const fullPath = path.join(localAssetsPath, ...filePathParams);
 
+  // Defense-in-depth: Verify resolved path determines to be underneath localAssetsPath
+  const resolvedPath = path.resolve(fullPath);
+  const resolvedRoot = path.resolve(localAssetsPath);
+  
+  if (!resolvedPath.startsWith(resolvedRoot)) {
+     return new NextResponse("Invalid path traversal", { status: 403 });
+  }
+
   // Verify file exists
   if (!fs.existsSync(fullPath)) {
     console.error(`Asset not found: ${fullPath}`);

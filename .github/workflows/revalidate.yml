@@ -20,4 +20,4 @@ jobs:
           API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
           SECRET: ${{ secrets.REVALIDATION_SECRET }}
         run: |
-          curl -X GET "$API_URL/api/revalidate?secret=$SECRET"
+          curl -X GET "$API_URL/api/revalidate" -H "Authorization: Bearer $SECRET"

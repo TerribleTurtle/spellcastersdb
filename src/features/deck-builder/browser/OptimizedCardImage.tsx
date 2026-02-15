@@ -12,6 +12,7 @@ interface OptimizedCardImageProps extends Omit<ImageProps, "src" | "alt"> {
   entity?: UnifiedEntity; // Optional: Pass entity to auto-generate alt
   className?: string;
   priority?: boolean;
+  quality?: number;
 }
 
 /**
@@ -24,6 +25,7 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
   entity,
   className,
   priority = false,
+  quality = 60,
   ...props
 }: OptimizedCardImageProps) {
   const [imgSrc, setImgSrc] = useState<string>(src);
@@ -81,6 +83,7 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
         fill
         sizes="(max-width: 768px) 33vw, 200px"
         priority={priority}
+        quality={quality}
         className="object-cover"
         onError={handleError}
         {...props}

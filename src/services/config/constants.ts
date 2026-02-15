@@ -4,11 +4,7 @@
 
 import { EntityCategory } from "@/types/enums";
 
-// ============================================================================
-// Entity Categories
-// ============================================================================
-
-export { EntityCategory } from "@/types/enums";
+export { EntityCategory };
 
 // Retain backward compatibility for local usage if needed, or fully deprecate.
 // For now, we will alias it to the Enum to match expected usage patterns.

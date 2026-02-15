@@ -1,4 +1,4 @@
-import { UnitArchive } from "@/components/archive/UnitArchive";
+import { UnitArchive } from "@/components/database/UnitArchive";
 import { getAllEntities } from "@/services/api/api";
 import { JsonLd } from "@/components/common/JsonLd";
 

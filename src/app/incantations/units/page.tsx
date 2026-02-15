@@ -1,4 +1,4 @@
-import { UnitArchive } from "@/components/archive/UnitArchive";
+import { UnitArchive } from "@/components/database/UnitArchive";
 import { getUnits } from "@/services/api/api";
 import { JsonLd } from "@/components/common/JsonLd";
 
@@ -28,7 +28,7 @@ export default async function UnitsIndexPage() {
     <div className="min-h-screen bg-surface-main text-foreground p-4 md:p-8">
       <div className="max-w-[1600px] mx-auto">
         <div className="mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-accent to-brand-primary mb-2">
+          <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-brand-accent to-brand-primary mb-2">
             The Archive
           </h1>
           <p className="text-gray-400">

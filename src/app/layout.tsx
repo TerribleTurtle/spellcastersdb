@@ -94,7 +94,7 @@ export const metadata: Metadata = {
 
 import { ensureDataLoaded } from "@/services/api/api";
 
-// ... imports
+
 
 export default async function RootLayout({
   children,

@@ -2,7 +2,11 @@ import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
-  const secret = request.nextUrl.searchParams.get('secret');
+  // Securely get secret from Authorization header
+  const authHeader = request.headers.get('authorization');
+  const secret = authHeader?.startsWith('Bearer ') 
+    ? authHeader.substring(7) 
+    : request.nextUrl.searchParams.get('secret'); // Fallback for backward compatibility during rollout
 
   if (secret !== process.env.REVALIDATION_SECRET) {
     return NextResponse.json({ message: 'Invalid token' }, { status: 401 });
@@ -31,7 +35,7 @@ export async function GET(request: NextRequest) {
     console.error('[Revalidation] Error:', err);
     return NextResponse.json({ 
       message: 'Error revalidating', 
-      error: err instanceof Error ? err.message : 'Unknown error' 
+      error: 'Internal Server Error' 
     }, { status: 500 });
   }
 }

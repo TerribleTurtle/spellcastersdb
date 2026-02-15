@@ -16,7 +16,7 @@ vi.mock("../api-client", async (importOriginal) => {
   const actual = await importOriginal<typeof import("../api-client")>();
   return {
     ...actual,
-    fetchRemoteData: vi.fn(),
+    fetchChunkedData: vi.fn(),
   };
 });
 
@@ -32,7 +32,7 @@ describe("API Access & Reliability", () => {
     });
 
     describe("Caching Strategy", () => {
-        it("should call fetchRemoteData only once when getUnits is called multiple times", async () => {
+        it("should call fetchChunkedData only once when getUnits is called multiple times", async () => {
             const mockData: AllDataResponse = {
                 units: [{ 
                     entity_id: "u1", 
@@ -53,24 +53,24 @@ describe("API Access & Reliability", () => {
             
             
             // Setup successful fetch
-            vi.mocked(ApiClient.fetchRemoteData).mockResolvedValue(mockData);
+            vi.mocked(ApiClient.fetchChunkedData).mockResolvedValue(mockData);
 
             // 1. First Call: Should fetch
             const units1 = await getUnits();
             expect(units1).toHaveLength(1);
-            expect(ApiClient.fetchRemoteData).toHaveBeenCalledTimes(1);
+            expect(ApiClient.fetchChunkedData).toHaveBeenCalledTimes(1);
 
             // 2. Second Call: Should use cache (fetch count remains 1)
             const units2 = await getUnits();
             expect(units2).toHaveLength(1);
-            expect(ApiClient.fetchRemoteData).toHaveBeenCalledTimes(1);
+            expect(ApiClient.fetchChunkedData).toHaveBeenCalledTimes(1);
         });
     });
 
     describe("Error Handling", () => {
         it("should propagate DataFetchError (Network Error)", async () => {
             const networkError = new ApiClient.DataFetchError("Network Failure", 500);
-            vi.mocked(ApiClient.fetchRemoteData).mockRejectedValue(networkError);
+            vi.mocked(ApiClient.fetchChunkedData).mockRejectedValue(networkError);
 
             await expect(getUnits()).rejects.toThrow("Network Failure");
             
@@ -80,14 +80,14 @@ describe("API Access & Reliability", () => {
 
         it("should propagate DataValidationError (Schema Error)", async () => {
              const validationError = new DataValidationError("Invalid JSON", "Friendly Message");
-             vi.mocked(ApiClient.fetchRemoteData).mockRejectedValue(validationError);
+             vi.mocked(ApiClient.fetchChunkedData).mockRejectedValue(validationError);
 
              await expect(getUnits()).rejects.toThrow("Invalid JSON");
              expect(registry.isInitialized()).toBe(false);
         });
         
         it("should unexpected errors propagate", async () => {
-             vi.mocked(ApiClient.fetchRemoteData).mockRejectedValue(new Error("Boom"));
+             vi.mocked(ApiClient.fetchChunkedData).mockRejectedValue(new Error("Boom"));
 
              await expect(getUnits()).rejects.toThrow("Boom");
         });
