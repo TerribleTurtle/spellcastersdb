@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { UnifiedEntity, Spellcaster } from "@/types/api";
 import { DragData, DropData, DraggableEntity } from "@/types/dnd";
-import { ENTITY_CATEGORY } from "@/services/config/constants";
+import { ENTITY_CATEGORY, CLASS_CONFIG } from "@/services/config/constants";
 
 
 interface SpellcasterSlotProps {
@@ -14,6 +14,7 @@ interface SpellcasterSlotProps {
   onSelect?: (item: UnifiedEntity, pos?: {x:number, y:number}) => void;
   deckId?: string; // Context ID for Team Mode
   idSuffix?: string;
+  priority?: boolean;
 }
 
 export function SpellcasterSlot({
@@ -21,6 +22,7 @@ export function SpellcasterSlot({
   onSelect,
   deckId,
   idSuffix,
+  priority = false,
 }: SpellcasterSlotProps) {
   const baseZoneId = deckId ? `spellcaster-zone-${deckId}` : "spellcaster-zone";
   const zoneId = idSuffix ? `${baseZoneId}-${idSuffix}` : baseZoneId;
@@ -133,12 +135,18 @@ export function SpellcasterSlot({
               src={getCardImageUrl(spellcaster)}
               alt={spellcaster.name || "Spellcaster Image"}
               fill
+              priority={priority}
               sizes="(max-width: 768px) 100vw, 33vw"
               className="object-cover object-top"
             />
             {/* Spellcaster Class Badge - Icon */}
             {/* Spellcaster Class Badge - Icon */}
-            <div className="absolute bottom-1 left-1 flex items-center justify-center w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 border-slate-400 bg-slate-900 shadow-sm backdrop-blur-sm z-20">
+            <div className={cn(
+               "absolute bottom-1 left-1 flex items-center justify-center w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 shadow-sm backdrop-blur-sm z-20",
+               spellcaster.class && CLASS_CONFIG[spellcaster.class] 
+                  ? cn(CLASS_CONFIG[spellcaster.class].bg, CLASS_CONFIG[spellcaster.class].border)
+                  : "bg-slate-900 border-slate-400"
+            )}>
                {spellcaster.class === "Conqueror" ? (
                   <Shield size={14} className="text-red-400 scale-110" />
                ) : spellcaster.class === "Enchanter" ? (

@@ -86,18 +86,34 @@ export class EntityRegistry {
     return this.unified.get(id);
   }
 
+  /**
+   * Retrieves a Unit by its ID.
+   * @returns The Unit object if found, otherwise undefined.
+   */
   public getUnit(id: string): Unit | undefined {
     return this.units.get(id);
   }
 
+  /**
+   * Retrieves a Spell by its ID.
+   * @returns The Spell object if found, otherwise undefined.
+   */
   public getSpell(id: string): Spell | undefined {
     return this.spells.get(id);
   }
   
+  /**
+   * Retrieves a Titan by its ID.
+   * @returns The Titan object if found, otherwise undefined.
+   */
   public getTitan(id: string): Titan | undefined {
     return this.titans.get(id);
   }
 
+  /**
+   * Retrieves a Spellcaster by its ID.
+   * @returns The Spellcaster object if found, otherwise undefined.
+   */
   public getSpellcaster(id: string): Spellcaster | undefined {
     return this.spellcasters.get(id);
   }

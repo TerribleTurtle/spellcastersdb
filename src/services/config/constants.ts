@@ -34,36 +34,41 @@ export type School = typeof SCHOOLS[number];
 export const RANKS = ["I", "II", "III", "IV", "V"] as const;
 export type Rank = typeof RANKS[number];
 
-export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: string; border: string }> = {
+export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: string; border: string; borderBg: string }> = {
   I: {
     label: "I",
     color: "text-white",
     bg: "bg-slate-600",
     border: "border-slate-400",
+    borderBg: "bg-slate-400",
   },
   II: {
     label: "II",
     color: "text-white",
     bg: "bg-emerald-700",
-    border: "border-slate-400",
+    border: "border-emerald-500",
+    borderBg: "bg-emerald-500",
   },
   III: {
     label: "III",
     color: "text-white",
     bg: "bg-blue-700",
-    border: "border-slate-400",
+    border: "border-blue-500",
+    borderBg: "bg-blue-500",
   },
   IV: {
     label: "IV",
     color: "text-white",
     bg: "bg-purple-700",
-    border: "border-slate-400",
+    border: "border-purple-500",
+    borderBg: "bg-purple-500",
   },
   V: {
     label: "V", // Will be overridden for Titans in component if needed, or we can treat V as Titan rank generically
     color: "text-white",
     bg: "bg-amber-800",
-    border: "border-slate-400",
+    border: "border-amber-600",
+    borderBg: "bg-amber-600",
   },
 };
 
@@ -74,19 +79,19 @@ export const CLASS_CONFIG: Record<string, { label: string; bg: string; border: s
   Conqueror: {
     label: "Conqueror",
     bg: "bg-slate-900",
-    border: "border-slate-400",
+    border: "border-slate-600",
     iconColor: "text-red-400"
   },
   Duelist: {
     label: "Duelist",
     bg: "bg-slate-900",
-    border: "border-slate-400",
+    border: "border-slate-600",
     iconColor: "text-amber-400"
   },
   Enchanter: {
     label: "Enchanter",
     bg: "bg-slate-900",
-    border: "border-slate-400",
+    border: "border-slate-600",
     iconColor: "text-purple-400"
   },
   Unknown: {
@@ -125,7 +130,7 @@ export const GROUP_MODES = ["All", "Rank", "Magic School"] as const;
 
 export type GroupMode = (typeof GROUP_MODES)[number];
 
-export const DEFAULT_BROWSER_COLUMNS = 3;
+export const DEFAULT_BROWSER_COLUMNS = 4;
 
 // ============================================================================
 // Deck Builder Config

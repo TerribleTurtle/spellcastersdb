@@ -33,7 +33,9 @@
   - **Virtualization**: `react-virtuoso` for large lists.
   - **Zod Validation**: Ensures data integrity at runtime.
   - **Revalidation API**: On-demand cache invalidation via `/api/revalidate?secret=...` using `revalidateTag` for robust content updates.
-  - **Image Optimization**: Configured with a 1-year cache TTL on Vercel to minimize transformation costs. **Important:** Images are treated as immutable. To update an image, you MUST change its filename (e.g., `hero-v2.png`) or add a version query parameter.
+
+  - **Image Optimization**: Configured with a 1-year cache TTL on Vercel to minimize transformation costs. Critical images use `priority` loading for LCP.
+  - **Browser Support**: Targets modern browsers (Chrome 100+, Safari 15+, Firefox 100+) for smaller bundles and better performance.
 
 ## Getting Started
 
@@ -66,8 +68,10 @@ For detailed setup instructions, including **Local API Development**, please see
 | `npm run build`      | Builds the application for production |
 | `npm run start`      | Starts the production server          |
 | `npm run test`       | Runs the test suite (Vitest)          |
+| `npm run test:watch` | Runs tests in watch mode              |
 | `npm run lint`       | Runs ESLint                           |
 | `npm run type-check` | Runs TypeScript compiler check        |
+| `npm run check-data` | Verifies API data fetching logic      |
 
      ## Documentation
 

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.12] - 2026-02-15
+
+### Fixed
+
+- **Static Analysis**: Resolved `no-explicit-any` linting errors in `UnitBrowser.test.tsx` to ensure type safety in tests.
+
 ## [1.0.11] - 2026-02-15
 
 ### Fixed

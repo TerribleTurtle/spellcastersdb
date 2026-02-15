@@ -26,7 +26,7 @@ export function MobileDeckDock({
     isSwapMode
 }: MobileDeckDockProps) {
   return (
-    <div data-testid="mobile-deck-dock" className="fixed bottom-0 left-0 right-0 bg-[var(--color-surface-deck)] border-t border-brand-primary/20 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] z-40 pb-[env(safe-area-inset-bottom)]">
+    <div data-testid="mobile-deck-dock" className="fixed bottom-0 left-0 right-0 bg-surface-deck border-t border-brand-primary/20 shadow-[0_-4px_20px_rgba(0,0,0,0.5)] z-40 pb-[env(safe-area-inset-bottom)]">
         {/* Active Header for Mobile */}
         <div className="h-6 w-full bg-brand-primary/20 border-b border-brand-primary/10 flex items-center justify-center">
             <div className="w-12 h-1 rounded-full bg-white/10" />
@@ -40,6 +40,7 @@ export function MobileDeckDock({
                 deckId={deckId}
                 isSwapMode={isSwapMode}
                 idSuffix="mobile-dock"
+                prioritySpellcaster={true}
              />
              
              {/* Gradient fade to show it continues */}

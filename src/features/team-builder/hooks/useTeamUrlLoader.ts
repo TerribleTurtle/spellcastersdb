@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useDeckStore } from "@/store/index";
 import { ReconstructionService } from "@/services/api/reconstruction";
@@ -33,21 +33,33 @@ export function useTeamUrlLoader({
   // Track the last processed hash to allow handling URL changes without infinite loops
   const lastProcessedUrlHash = useRef<string | null>(null);
 
+  const [isProcessing, setIsProcessing] = useState(() => {
+    // If there is a 'team' param, we are initially processing
+    if (typeof window !== 'undefined') {
+        return !!new URLSearchParams(window.location.search).get("team");
+    }
+    return false;
+  });
+
   useEffect(() => {
     const teamHash = searchParams.get("team");
-    if (!teamHash) return;
+    
+    // Safety check: If param disappeared, stop processing
+    if (!teamHash) {
+        if (isProcessing) setIsProcessing(false);
+        return;
+    }
 
     // 1. Prevent reprocessing the exact same hash in this session
-    if (lastProcessedUrlHash.current === teamHash) return;
+    if (lastProcessedUrlHash.current === teamHash) {
+         if (isProcessing) setIsProcessing(false);
+         return;
+    }
 
-    // 2. Optimization: If the URL matches what we already have in persistence, don't re-parse.
-    // However, if the user explicitly navigated here, we might want to ensure the UI state (modals) is correct.
-    // If we skip parsing, we should still ensure modals are closed if this is the "first" time we see it this session.
-    // For now, let's trust the persistence check for data, but we might miss the "Close Modal" side effect if we return early.
-    // BUT: If it's persisted, we likely aren't "opening" it from a link in the same way as a fresh load.
-    // Let's stick to the data loading logic first.
+    // 2. Optimization check
     if (lastTeamHash === teamHash && hydratedMode === "TEAM") {
         lastProcessedUrlHash.current = teamHash;
+        setIsProcessing(false);
         return;
     }
 
@@ -62,15 +74,20 @@ export function useTeamUrlLoader({
         lastProcessedUrlHash.current = teamHash;
 
         setViewingTeam(decks, null, name);
-        closeCommandCenter(); // Ensure Library is closed to show the Team Overview
+        closeCommandCenter(); 
         
       } catch (err) {
          console.error("Failed to load team from URL", err);
          if (onError) onError("Failed to load team from URL");
+      } finally {
+         setIsProcessing(false);
       }
     }).catch((err) => {
       console.error("Failed to load team module", err);
+      setIsProcessing(false);
     });
 
-  }, [searchParams, lastTeamHash, hydratedMode, units, spellcasters, setViewingTeam, closeCommandCenter, onError]);
+  }, [searchParams, lastTeamHash, hydratedMode, units, spellcasters, setViewingTeam, closeCommandCenter, onError, isProcessing]);
+
+  return { isProcessing };
 }

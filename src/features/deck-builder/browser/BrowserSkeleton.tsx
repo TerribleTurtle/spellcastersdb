@@ -32,7 +32,7 @@ export function BrowserSkeleton() {
              </div>
              <div className="px-4 py-1 grid grid-cols-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
                 {Array.from({ length: 6 }).map((_, i) => (
-                    <div key={`sc-${i}`} className="aspect-3/4 rounded-lg bg-white/5 border border-white/5 relative overflow-hidden">
+                    <div key={`sc-${i}`} className="aspect-4/5 rounded-lg bg-white/5 border border-white/5 relative overflow-hidden">
                         <div className="absolute inset-0 bg-white/5" />
                         <div className="absolute bottom-0 w-full h-8 bg-black/20" />
                     </div>
@@ -45,7 +45,7 @@ export function BrowserSkeleton() {
              </div>
              <div className="px-4 py-1 grid grid-cols-4 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2">
                 {Array.from({ length: 18 }).map((_, i) => (
-                    <div key={`cr-${i}`} className="aspect-3/4 rounded-lg bg-white/5 border border-white/5 relative overflow-hidden">
+                    <div key={`cr-${i}`} className="aspect-4/5 rounded-lg bg-white/5 border border-white/5 relative overflow-hidden">
                         <div className="absolute inset-0 bg-white/5" />
                         <div className="absolute bottom-0 w-full h-8 bg-black/20" />
                     </div>

@@ -5,6 +5,7 @@ import { useUrlSync } from "@/features/deck-builder/hooks/persistence/useUrlSync
 import { DeckBuilderView } from "./DeckBuilderView";
 import { useDeckSync } from "@/features/deck-builder/hooks/persistence/useDeckSync";
 import { useToast } from "@/hooks/useToast";
+import { PageSkeleton } from "./PageSkeleton";
 
 interface DeckBuilderContainerProps {
   units: (Unit | Spell | Titan)[];
@@ -15,7 +16,7 @@ export function DeckBuilderContainer({ units, spellcasters }: DeckBuilderContain
   const { showToast } = useToast();
   
   // URL & State Sync Hook (Now self-contained)
-  useUrlSync({
+  const { isHydrated, isProcessing } = useUrlSync({
       units,
       spellcasters,
       onError: (msg) => showToast(msg, "error"),
@@ -23,6 +24,12 @@ export function DeckBuilderContainer({ units, spellcasters }: DeckBuilderContain
 
   // Sync Store Side-Effects
   useDeckSync();
+
+  // Prevent flash of wrong mode or empty deck by waiting for hydration + processing
+  // The server sends PageSkeleton, we keep it until we know the client mode AND have loaded data
+  if (!isHydrated || isProcessing) {
+      return <PageSkeleton />;
+  }
 
   return (
     <>

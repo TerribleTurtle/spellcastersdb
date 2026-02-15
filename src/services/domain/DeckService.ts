@@ -17,6 +17,7 @@ export const DeckService = {
 
   /**
    * Validates a deck and returns status and errors.
+   * @returns A ValidationResult object containing { valid: boolean, errors: string[] }.
    */
   validate(deck: Deck) {
     return validateDeck(deck);

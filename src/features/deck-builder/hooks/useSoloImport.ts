@@ -1,11 +1,10 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useDeckStore } from "@/store/index";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 import { useShallow } from "zustand/react/shallow";
-import { decodeDeck } from "@/services/utils/encoding";
 import { createNewDeck } from "@/services/api/deck-factory";
 
 interface UseSoloImportProps {
@@ -39,6 +38,13 @@ export function useSoloImport({
   
   // Use a string ref to track the last processed hash, allowing updates if the URL changes
   const lastProcessedHash = useRef<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(() => {
+      // If there is a 'd' param, we are initially processing
+      if (typeof window !== 'undefined') {
+          return !!new URLSearchParams(window.location.search).get("d");
+      }
+      return false;
+  });
 
   useEffect(() => {
     const deckHash = searchParams.get("d");
@@ -53,36 +59,46 @@ export function useSoloImport({
     // If team param exists, useTeamImport handles it.
     if (mode !== "SOLO") return;
 
-    // 4. Processing
-    try {
-        const decoded = decodeDeck(deckHash);
-        if (decoded) {
-          const spellcaster = spellcasters.find(s => s.spellcaster_id === decoded.spellcasterId) || undefined;
-          
-          // Use Factory
-          const deckName = decoded.name || (spellcaster ? `${spellcaster.name} Import` : "Imported Deck");
-          const newDeck = createNewDeck(deckName, spellcaster);
-          
-          decoded.slotIds.forEach((id, idx) => {
-            if (idx > 4) return;
-            if (id) {
-              const unit = units.find((u) => u.entity_id === id);
-              if (unit) newDeck.slots[idx] = { ...newDeck.slots[idx], unit };
-            }
-          });
-          
-          // Mark as processed BEFORE state updates to prevent loops
-          lastProcessedHash.current = deckHash;
+  // 4. Processing
+    const loadDeck = async () => {
+        try {
+            const { decodeDeck } = await import("@/services/utils/encoding");
+            const decoded = decodeDeck(deckHash);
+            if (decoded) {
+              const spellcaster = spellcasters.find(s => s.spellcaster_id === decoded.spellcasterId) || undefined;
+              
+              // Use Factory
+              const deckName = decoded.name || (spellcaster ? `${spellcaster.name} Import` : "Imported Deck");
+              const newDeck = createNewDeck(deckName, spellcaster);
+              
+              decoded.slotIds.forEach((id, idx) => {
+                if (idx > 4) return;
+                if (id) {
+                  const unit = units.find((u) => u.entity_id === id);
+                  if (unit) newDeck.slots[idx] = { ...newDeck.slots[idx], unit };
+                }
+              });
+              
+              // Mark as processed BEFORE state updates to prevent loops
+              lastProcessedHash.current = deckHash;
 
-          // 5. State Updates
-          setViewingDeck(newDeck, null);
-          setViewSummary(true);       // Force the Overview to show
-          closeCommandCenter();       // Ensure Library is closed
-          closeInspector();           // Ensure Inspector is closed
-        }
-      } catch (e) {
-          console.error("Failed to decode deck", e);
-          if (onError) onError("Failed to load deck from URL");
-      }
+              // 5. State Updates
+              setViewingDeck(newDeck, null);
+              setViewSummary(true);       // Force the Overview to show
+              closeCommandCenter();       // Ensure Library is closed
+              closeInspector();           // Ensure Inspector is closed
+            }
+          } catch (e) {
+              console.error("Failed to decode deck", e);
+              if (onError) onError("Failed to load deck from URL");
+          } finally {
+             setIsProcessing(false);
+          }
+    };
+
+    loadDeck();
+
   }, [searchParams, mode, units, spellcasters, setViewingDeck, setViewSummary, closeCommandCenter, closeInspector, onError]);
+
+  return { isProcessing };
 }

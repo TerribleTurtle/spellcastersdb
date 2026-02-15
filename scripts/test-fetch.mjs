@@ -76,10 +76,10 @@ function validate(data, source) {
                   (data.upgrades?.length || 0);
 
     console.log(`   TOTAL ENTITIES: ${total}`);
-    if (total !== 47) {
-        console.warn(`\n⚠️  WARNING: Expected 47 entities, found ${total}.`);
+    if (total !== 52) {
+        console.warn(`\n⚠️  WARNING: Expected 52 entities, found ${total}.`);
     } else {
-        console.log(`\n✅ Total count matches expected (47).`);
+        console.log(`\n✅ Total count matches expected (52).`);
     }
     process.exit(0);
 }

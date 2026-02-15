@@ -47,7 +47,7 @@ describe('Asset Cache (Server Implementation)', () => {
         if (typeof window === 'undefined') {
              expect(bufferSpy).toHaveBeenCalled();
         } else {
-             console.log("Test running in Browser-like env (JSDOM), skipping Buffer check or forcing it?");
+
         }
         
         expect(result?.startsWith("data:image/png;base64,")).toBe(true);

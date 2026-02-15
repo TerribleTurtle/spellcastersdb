@@ -7,7 +7,7 @@ import { DeckFactory } from "@/tests/factories/deck-factory";
 
 // Mock Hooks
 vi.mock("@/features/deck-builder/hooks/persistence/useUrlSync", () => ({
-    useUrlSync: vi.fn()
+    useUrlSync: () => ({ isHydrated: true, isProcessing: false })
 }));
 vi.mock("@/features/deck-builder/hooks/persistence/useDeckSync", () => ({
     useDeckSync: vi.fn()

@@ -17,7 +17,7 @@ export const CONFIG = {
   FEATURES: {
     USE_LOCAL_ASSETS: process.env.NEXT_PUBLIC_USE_LOCAL_ASSETS === "true",
     PREFERRED_ASSET_FORMAT:
-      process.env.NEXT_PUBLIC_PREFERRED_ASSET_FORMAT || "png",
+      process.env.NEXT_PUBLIC_PREFERRED_ASSET_FORMAT || "webp",
   },
 
   // Local Development Overrides

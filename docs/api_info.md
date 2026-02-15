@@ -40,3 +40,13 @@ To test with local API changes:
 
 1.  Clone the API repo adjacent to this repo.
 2.  Set `NEXT_PUBLIC_API_URL` in `.env.local` to your local server (if running one) OR rely on the `fs` override in `src/lib/api.ts` (requires modifying the hardcoded path currently).
+
+## ISR & Revalidation
+
+This application uses **Incremental Static Regeneration (ISR)** to keep data fresh without rebuilding.
+
+- **Revalidation Interval**: Defined in `src/lib/config.ts` (default: 60 seconds).
+- **On-Demand Revalidation**:
+  - Endpoint: `/api/revalidate?secret=YOUR_SECRET`
+  - Requires `REVALIDATION_SECRET` in `.env.local` (and production environment variables).
+  - This triggers a cache purge for the `game-data` tag, ensuring the next request fetches fresh data from the API.

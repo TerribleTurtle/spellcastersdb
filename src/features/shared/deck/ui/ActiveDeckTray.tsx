@@ -21,6 +21,7 @@ interface ActiveDeckTrayProps {
   deckId?: string;
   idSuffix?: string;
   isSwapMode?: boolean; // NEW: controlled by parent
+  prioritySpellcaster?: boolean;
 }
 
 export function ActiveDeckTray({
@@ -31,6 +32,7 @@ export function ActiveDeckTray({
   deckId,
   idSuffix,
   isSwapMode = false,
+  prioritySpellcaster = false,
 }: ActiveDeckTrayProps) {
   
   // Background Droppable
@@ -61,6 +63,7 @@ export function ActiveDeckTray({
             onSelect={(item, pos) => onSelect?.(item, pos)}
             deckId={deckId}
             idSuffix={idSuffix}
+            priority={prioritySpellcaster}
           />
         </div>
 

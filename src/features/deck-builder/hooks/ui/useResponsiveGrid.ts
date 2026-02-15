@@ -1,21 +1,30 @@
-import { useState, useEffect } from "react";
+import { useState, useLayoutEffect, useEffect } from "react";
 
-export function useResponsiveGrid(defaultColumns = 3) {
+// SSR-safe useLayoutEffect
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
+
+export function useResponsiveGrid(defaultColumns = 4) {
   const [columns, setColumns] = useState(defaultColumns);
+  const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
-      if (width >= 1280) setColumns(6); // xl - Fewer columns = Bigger cards
-      else if (width >= 1024) setColumns(5); // lg
-      else if (width >= 768) setColumns(4); // md
-      else setColumns(4); // mobile (increased density as requested)
+      
+      let newCols = defaultColumns;
+      if (width >= 1280) newCols = 6; // xl - Fewer columns = Bigger cards
+      else if (width >= 1024) newCols = 5; // lg
+      else if (width >= 768) newCols = 4; // md
+      else newCols = 4; // mobile (increased density as requested)
+
+      setColumns(newCols);
+      setIsReady(true);
     };
 
-    handleResize(); // Init
+    handleResize(); // Init immediately
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  return columns;
+  return { columns, isReady };
 }

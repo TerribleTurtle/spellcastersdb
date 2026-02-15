@@ -21,7 +21,7 @@ export function useUrlSync({
   const { lastTeamHash, hydratedMode } = useAppHydration();
 
   // 2. Handle Team Imports (?team=...)
-  useTeamUrlLoader({
+  const { isProcessing: isTeamProcessing } = useTeamUrlLoader({
       units,
       spellcasters,
       lastTeamHash,
@@ -30,10 +30,15 @@ export function useUrlSync({
   });
 
   // 3. Handle Solo Imports (?d=...)
-  useSoloImport({
+  const { isProcessing: isSoloProcessing } = useSoloImport({
       units,
       spellcasters,
       mode: hydratedMode || "SOLO",
       onError
   });
+
+  return { 
+      isHydrated: !!hydratedMode, 
+      isProcessing: isTeamProcessing || isSoloProcessing
+  }; 
 }

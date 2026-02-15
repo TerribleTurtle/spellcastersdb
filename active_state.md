@@ -1,11 +1,11 @@
-# Current Focus: Deploying v1.0.8 (Grid Parity)
+# Current Focus
+
+- Deployment.
 
 ## Active Tasks
 
-- [x] Phase 8: Grid Parity (Mobile & Desktop)
-- [x] Phase 8: Desktop Right Bar Fix
-- [x] Implement Dynamic Alt Text (Card Images)
-- [x] Button Accessibility & Standardization
-- [x] Accessibility Color Contrast Fixes (WCAG)
-- [x] Update Changelog
-- [x] Push to `main`
+- [x] Fix Inspector/Drawer Flash (Hydration & URL Processing).
+- [x] Run full test suite.
+- [x] Code Hygiene (Remove logs/TODOs).
+- [x] Update Documentation.
+- [x] Deployment Readiness Verified (Lint/Type/Test/Data OK).

@@ -1,18 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { UnitBrowser } from "../UnitBrowser";
+
+
 import { BrowserItem, VirtualRow } from "@/types/browser";
 import { EntityCategory } from "@/types/enums";
+import { useResponsiveGrid } from "@/features/deck-builder/hooks/ui/useResponsiveGrid";
 
 // --- Mocks ---
 
 // Mock Virtuoso to render items directly (JSDOM specific)
 vi.mock("react-virtuoso", () => ({
-  Virtuoso: ({ data, itemContent }: any) => (
+  Virtuoso: ({ data, itemContent }: { data: unknown[]; itemContent: (index: number, item: unknown) => React.ReactNode }) => (
     <div data-testid="virtuoso-container">
-      {data.map((item: any, index: number) => (
+      {data.map((item: unknown, index: number) => (
         <div key={index} data-testid="virtuoso-item-wrapper">
           {itemContent(index, item)}
         </div>
@@ -43,7 +44,7 @@ vi.mock("@/features/deck-builder/hooks/domain/useUnitFiltering", () => ({
 }));
 
 vi.mock("@/features/deck-builder/hooks/ui/useResponsiveGrid", () => ({
-  useResponsiveGrid: vi.fn(() => 2) // Fixed 2 columns
+  useResponsiveGrid: vi.fn(() => ({ columns: 2, isReady: true })) // Fixed 2 columns, ready
 }));
 
 // Mock Utils to control what is rendered regardless of inputs
@@ -56,16 +57,16 @@ vi.mock("../UnitBrowserHeader", () => ({
     UnitBrowserHeader: () => <div data-testid="browser-header">Header</div>
 }));
 vi.mock("../UnitGroupHeader", () => ({
-    UnitGroupHeader: ({ title, count, onToggle }: any) => (
+    UnitGroupHeader: ({ title, count, onToggle }: { title: string; count: number; onToggle: () => void }) => (
         <div data-testid="group-header" onClick={onToggle}>
             {title} ({count})
         </div>
     )
 }));
 vi.mock("../UnitGridRow", () => ({
-    UnitGridRow: ({ items, onQuickAdd }: any) => (
+    UnitGridRow: ({ items, onQuickAdd }: { items: BrowserItem[]; onQuickAdd: (item: BrowserItem) => void }) => (
         <div data-testid="grid-row">
-            {items.map((item: any) => (
+            {items.map((item: BrowserItem) => (
                 <div key={item.entity_id} data-testid="grid-item">
                     {item.name}
                     <button aria-label="Quick Add" onClick={() => onQuickAdd(item)}>
@@ -77,13 +78,17 @@ vi.mock("../UnitGridRow", () => ({
     )
 }));
 
+vi.mock("../BrowserSkeleton", () => ({
+    BrowserSkeleton: () => <div data-testid="browser-skeleton">Skeleton</div>
+}));
+
 import { prepareVirtualizationRows } from "../utils";
 
 describe("UnitBrowser", () => {
     const mockOnSelect = vi.fn();
     const mockOnQuickAdd = vi.fn();
     const mockItems: BrowserItem[] = [
-        { entity_id: "u1", name: "Goblin", category: EntityCategory.Creature } as any
+        { entity_id: "u1", name: "Goblin", category: EntityCategory.Creature } as BrowserItem
     ];
 
     beforeEach(() => {
@@ -91,7 +96,7 @@ describe("UnitBrowser", () => {
     });
 
     it("should render empty state if no virtual data", () => {
-        (prepareVirtualizationRows as any).mockReturnValue([]);
+        vi.mocked(prepareVirtualizationRows).mockReturnValue([]);
         
         // We pass items to ensure the Skeleton check (items.length === 0) is bypassed,
         // allowing us to test the "No results found" state which occurs when filtering yields no matches.
@@ -111,7 +116,7 @@ describe("UnitBrowser", () => {
             { type: "header", title: "Creatures", count: 1, isCollapsed: false },
             { type: "row", items: mockItems, startIndex: 0 }
         ];
-        (prepareVirtualizationRows as any).mockReturnValue(mockRows);
+        vi.mocked(prepareVirtualizationRows).mockReturnValue(mockRows);
 
         render(
             <UnitBrowser 
@@ -128,10 +133,11 @@ describe("UnitBrowser", () => {
     });
 
     it("should handle quick add interaction", () => {
+        // ... (previous test content)
         const mockRows: VirtualRow[] = [
             { type: "row", items: mockItems, startIndex: 0 }
         ];
-        (prepareVirtualizationRows as any).mockReturnValue(mockRows);
+        vi.mocked(prepareVirtualizationRows).mockReturnValue(mockRows);
 
         render(
             <UnitBrowser 
@@ -145,5 +151,19 @@ describe("UnitBrowser", () => {
         fireEvent.click(btn);
 
         expect(mockOnQuickAdd).toHaveBeenCalledWith(mockItems[0]);
+    });
+
+    it("should render skeleton when grid is not ready", () => {
+        vi.mocked(useResponsiveGrid).mockReturnValue({ columns: 4, isReady: false });
+
+        render(
+            <UnitBrowser 
+                items={mockItems} 
+                onSelectItem={mockOnSelect} 
+                onQuickAdd={mockOnQuickAdd} 
+            />
+        );
+
+        expect(screen.getByTestId("browser-skeleton")).toBeDefined();
     });
 });

@@ -67,8 +67,10 @@
     "vitest": "^4.0.18"
   },
   "browserslist": [
-    "last 3 major versions",
-    "not dead",
-    "not IE 11"
+    "defaults",
+    "chrome >= 100",
+    "safari >= 15",
+    "ios >= 15",
+    "firefox >= 100"
   ]
 }

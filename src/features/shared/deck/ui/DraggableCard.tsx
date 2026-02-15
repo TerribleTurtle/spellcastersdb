@@ -14,6 +14,7 @@ import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers
 import { Spellcaster, Unit } from "@/types/api";
 
 import { BrowserItem } from "@/types/browser";
+import { CLASS_CONFIG } from "@/services/config/constants";
 import { DECK_THEMES, DeckThemeIndex } from "@/services/config/theme-constants";
 import { DragData } from "@/types/dnd";
 
@@ -166,10 +167,10 @@ export const DraggableCard = React.memo(function DraggableCard({
                   className={cn(
                     "absolute bottom-9 lg:bottom-12 left-1 flex items-center justify-center w-6 h-6 rounded-full border-2 shadow-sm transition-colors cursor-help z-20 pointer-events-auto scale-100 lg:scale-125 origin-bottom-left",
                      // Apply colors from config manually or use inline styles if needed, but here we can map
-                     spellcasterClass === "Conqueror" ? "bg-slate-900 border-slate-400" :
-                     spellcasterClass === "Enchanter" ? "bg-slate-900 border-slate-400" :
-                     spellcasterClass === "Duelist" ? "bg-slate-900 border-slate-400" :
-                     "bg-slate-900 border-slate-400"
+                     // Apply colors from config manually or use inline styles if needed, but here we can map
+                     spellcasterClass && CLASS_CONFIG[spellcasterClass] 
+                        ? cn(CLASS_CONFIG[spellcasterClass].bg, CLASS_CONFIG[spellcasterClass].border)
+                        : "bg-slate-900 border-slate-400"
                   )}
                   onClick={(e) => e.stopPropagation()}
                   onPointerDown={(e) => e.stopPropagation()}

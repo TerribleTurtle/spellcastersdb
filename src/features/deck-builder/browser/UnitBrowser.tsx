@@ -44,6 +44,19 @@ export const UnitBrowser = React.memo(function UnitBrowser({
       activeFilterCount
   } = useUnitBrowserState();
 
+  // Responsive Columns Hook logic
+  const { columns, isReady } = useResponsiveGrid(DEFAULT_BROWSER_COLUMNS);
+
+  // 1. Loading State (Grid not ready) overrides everything to prevent flash
+  if (!isReady) {
+      return (
+        <div className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
+             <BrowserSkeleton />
+        </div>
+      );
+  }
+
+  // 2. Empty State (No items, no search)
   if (items.length === 0 && !searchQuery) {
       return (
         <div className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
@@ -74,6 +87,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
       {/* Main Content Area - Memoized List */}
       <MemoizedUnitBrowserList 
         items={items}
+        columns={columns}
         debouncedSearchQuery={debouncedSearchQuery}
         activeFilters={activeFilters}
         groupMode={groupMode}
@@ -87,6 +101,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
 
 interface UnitBrowserListProps {
     items: BrowserItem[];
+    columns: number;
     debouncedSearchQuery: string;
     activeFilters: FilterState; 
     groupMode: GroupMode;
@@ -97,6 +112,7 @@ interface UnitBrowserListProps {
 
 const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
     items,
+    columns,
     debouncedSearchQuery,
     activeFilters,
     groupMode,
@@ -104,9 +120,6 @@ const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
     onQuickAdd,
     itemStates
 }: UnitBrowserListProps) {
-  // Responsive Columns Hook logic
-  const columns = useResponsiveGrid(DEFAULT_BROWSER_COLUMNS);
-
   // Collapsible Sections State
   const [collapsedSections, setCollapsedSections] = React.useState<Set<string>>(new Set());
 
@@ -169,7 +182,8 @@ const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
             style={{ height: "100%" }}
             className="overscroll-y-contain"
             data={virtualData}
-            defaultItemHeight={230} // Estimate for CLS (Mobile: ~180px width * 1.25 = 225px)
+            // Mobile (4 cols, 390px) -> ~105px height. Desktop (6 cols, 1280px) -> ~250px height.
+            defaultItemHeight={columns <= 4 ? 120 : 250}
             overscan={200} 
             itemContent={rowContent}
             components={{

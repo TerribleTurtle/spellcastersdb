@@ -42,7 +42,11 @@ export function RankBadge({ rank, className, isTitan, mode = "icon" }: RankBadge
     const renderClippedShape = (polygon: string, scale = "scale-100") => (
         <>
             <div 
-                className={cn("absolute inset-0 bg-slate-400", scale)}
+                className={cn(
+                    "absolute inset-0", 
+                    finalConfig.borderBg, // Use explicit borderBg for the fake border layer
+                    scale
+                )}
                 style={{ clipPath: polygon }}
             />
             <div 
