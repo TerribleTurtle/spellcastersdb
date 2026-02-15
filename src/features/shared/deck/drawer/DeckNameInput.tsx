@@ -79,16 +79,7 @@ export function DeckNameInput({
     return (
         <div 
             className="flex items-center gap-2 group min-w-0" 
-            onClick={handleNameClick}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleNameClick(e);
-                }
-            }}
-            aria-label={`Edit deck name: ${name || "Untitled"}`}
+            // Removed onClick, role, tabIndex, onKeyDown to allow click to bubble up to drawer header
         >
             <span className={cn(
                 "text-sm font-bold uppercase tracking-wider truncate", 
@@ -97,7 +88,14 @@ export function DeckNameInput({
                 {name || "Untitled"}
             </span>
             {onRename && (
-                <Edit2 size={14} className="text-gray-400 hover:text-white transition-colors shrink-0" />
+                <button
+                    onClick={handleNameClick}
+                    className="flex items-center justify-center text-gray-400 hover:text-white transition-colors shrink-0 focus:outline-none focus:ring-2 focus:ring-brand-primary rounded-sm"
+                    aria-label="Rename deck"
+                    type="button"
+                >
+                    <Edit2 size={14} />
+                </button>
             )}
         </div>
     );

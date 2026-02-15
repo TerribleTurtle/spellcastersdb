@@ -12,6 +12,9 @@ All notable changes to this project will be documented in this file.
 
 ### Performance
 
+- **Core Web Vitals**: Drastically reduced LCP on mobile by removing blocking data fetches in `RootLayout`.
+- **Preloading**: Switched `DeckBuilderView` to eager loading to eliminate "Double Jump" render delay.
+- **Stability**: Added `display: swap` to fonts and `aspect-ratio` to cards to eliminate Cumulative Layout Shift (CLS).
 - **Optimization**: Comprehensive performance improvements including caching strategies, search optimization, and lazy-loading.
 
 ## [1.0.1] - 2026-02-15

@@ -15,12 +15,7 @@ import { DragDropErrorBoundary } from "../providers/DragDropErrorBoundary";
 import { useDeckHotkeys } from "@/features/deck-builder/hooks/ui/useDeckHotkeys";
 
 // Lazy Load Heavy Components
-const SoloBuilderView = dynamic(
-  () => import("@/features/deck-builder/components/SoloBuilderView").then(mod => mod.SoloBuilderView),
-  { 
-    loading: () => <div className="h-full w-full flex items-center justify-center text-brand-primary/50">Loading Solo Editor...</div>
-  }
-);
+import { SoloBuilderView } from "@/features/deck-builder/components/SoloBuilderView";
 
 const TeamBuilderView = dynamic(
   () => import("@/features/team-builder/TeamBuilderView").then(mod => mod.TeamBuilderView),
