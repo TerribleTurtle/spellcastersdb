@@ -69,9 +69,20 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            // CSP Note: 'unsafe-eval' and 'unsafe-inline' are currently required for Next.js dev mode and hydration.
-            // TODO: Implement Nonce-based CSP for stricter production security.
-            value: `default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://tally.so; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data: https://terribleturtle.github.io; font-src 'self'; connect-src 'self' https://terribleturtle.github.io https://vitals.vercel-insights.com; frame-src 'self' https://tally.so; ${process.env.NODE_ENV === 'development' ? '' : 'upgrade-insecure-requests;'}`,
+            value: [
+              "default-src 'none'",
+              `script-src 'self' 'unsafe-inline' ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ""} https://va.vercel-scripts.com https://tally.so`,
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' blob: data: https://terribleturtle.github.io",
+              "font-src 'self'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'none'",
+              "connect-src 'self' https://terribleturtle.github.io https://vitals.vercel-insights.com",
+              "frame-src 'self' https://tally.so",
+              process.env.NODE_ENV === 'development' ? "" : "upgrade-insecure-requests",
+            ].filter(Boolean).join("; "),
           },
         ],
       },

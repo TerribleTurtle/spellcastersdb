@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 
 interface OptimizedCardImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   fallbackSrc?: string;
+  fetchPriority?: "high" | "low" | "auto";
 }
 
 /**
@@ -71,6 +72,8 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
+
+        fetchPriority={props.fetchPriority}
         loading="lazy"
         {...props}
         src={imgSrc}

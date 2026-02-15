@@ -160,6 +160,7 @@ const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
             style={{ height: "100%" }}
             className="overscroll-y-contain"
             data={virtualData}
+            defaultItemHeight={300} // Estimate for CLS
             overscan={200} 
             itemContent={rowContent}
             components={{
