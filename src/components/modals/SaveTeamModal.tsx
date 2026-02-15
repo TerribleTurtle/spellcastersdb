@@ -12,13 +12,16 @@ interface SaveTeamModalProps {
   onSave: (newName: string) => void;
 }
 
-export function SaveTeamModal({ teamName, isOpen, onClose, onSave }: SaveTeamModalProps) {
+import { createPortal } from "react-dom";
+
+export function SaveTeamModal({ teamName, isOpen, onClose, onSave, onOverwrite }: SaveTeamModalProps & { onOverwrite?: (name: string) => void }) {
   const [name, setName] = useState(teamName || "");
   const [error, setError] = useState<string | null>(null);
+  const [showOverwrite, setShowOverwrite] = useState(false);
   
   const savedTeams = useDeckStore(state => state.savedTeams);
 
-  const handleSave = () => {
+  const handleSaveAttempt = () => {
     const trimmedName = name.trim();
     if (!trimmedName) {
       setError("Team name cannot be empty");
@@ -29,7 +32,12 @@ export function SaveTeamModal({ teamName, isOpen, onClose, onSave }: SaveTeamMod
     const isDuplicate = savedTeams.some(t => t.name.toLowerCase() === trimmedName.toLowerCase());
     
     if (isDuplicate) {
-       setError("A team with this name already exists.");
+       if (onOverwrite) {
+           setError(`A team named "${trimmedName}" already exists.`);
+           setShowOverwrite(true);
+       } else {
+           setError("A team with this name already exists.");
+       }
        return;
     }
 
@@ -37,9 +45,16 @@ export function SaveTeamModal({ teamName, isOpen, onClose, onSave }: SaveTeamMod
     onClose();
   };
 
+  const handleOverwrite = () => {
+      if (onOverwrite) {
+          onOverwrite(name.trim());
+          onClose();
+      }
+  };
+
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div 
         className="w-full max-w-md bg-surface-card border border-white/10 rounded-xl shadow-2xl flex flex-col overflow-hidden"
@@ -49,7 +64,7 @@ export function SaveTeamModal({ teamName, isOpen, onClose, onSave }: SaveTeamMod
         <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
           <h3 className="text-lg font-bold text-white flex items-center gap-2">
             <Save size={20} className="text-brand-primary" />
-            Save Team Copy
+            {showOverwrite ? "Overwrite Team?" : "Save Team Copy"}
           </h3>
           <Button 
             variant="ghost"
@@ -72,9 +87,12 @@ export function SaveTeamModal({ teamName, isOpen, onClose, onSave }: SaveTeamMod
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
-                if (error) setError(null);
+                if (error) {
+                    setError(null);
+                    setShowOverwrite(false); 
+                }
               }}
-              onKeyDown={(e) => e.key === "Enter" && handleSave()}
+              onKeyDown={(e) => e.key === "Enter" && (showOverwrite ? handleOverwrite() : handleSaveAttempt())}
               className={cn(
                 "bg-black/40 border-white/10 text-white placeholder-gray-600 focus-visible:ring-brand-primary/50",
                 error && "border-red-500/50 focus-visible:ring-red-500/50"
@@ -91,7 +109,10 @@ export function SaveTeamModal({ teamName, isOpen, onClose, onSave }: SaveTeamMod
           </div>
           
           <div className="text-sm text-gray-400 bg-white/5 p-3 rounded-lg border border-white/5">
-             This will create a new copy of <strong>{teamName || "this team"}</strong> in your Library.
+             {showOverwrite
+                ? <>This will <strong>overwrite</strong> the existing team data for <strong>{name}</strong>.</>
+                : <>This will create a new copy of <strong>{teamName || "this team"}</strong> in your Library.</>
+             }
           </div>
         </div>
 
@@ -103,15 +124,28 @@ export function SaveTeamModal({ teamName, isOpen, onClose, onSave }: SaveTeamMod
           >
             Cancel
           </Button>
-          <Button
-            onClick={handleSave}
-            disabled={!name.trim()}
-          >
-            <Save size={16} className="mr-2" />
-            Save Copy
-          </Button>
+
+          {showOverwrite ? (
+              <Button
+                onClick={handleOverwrite}
+                className="bg-red-500 hover:bg-red-600 text-white"
+              >
+                <AlertTriangle size={16} className="mr-2" />
+                Overwrite
+              </Button>
+          ) : (
+              <Button
+                onClick={handleSaveAttempt}
+                disabled={!name.trim()}
+              >
+                <Save size={16} className="mr-2" />
+                Save Copy
+              </Button>
+          )}
+
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

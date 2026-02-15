@@ -65,22 +65,11 @@ export default function Navbar() {
 
           {/* Desktop Right Side (External + Menu) */}
           <div className="hidden md:flex items-center gap-4">
-            <div className="pl-4 border-l border-white/10 md:hidden">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleMenu}
-                className="text-slate-400 hover:text-brand-accent"
-                title="Menu"
-              >
-                <span className="sr-only">Open menu</span>
-                {isOpen ? <X size={24} /> : <Menu size={24} />}
-              </Button>
-            </div>
+            {/* Desktop specific items if any */}
           </div>
 
           {/* Mobile menu button */}
-          <div className="-mr-2 flex items-center gap-2 md:hidden">
+          <div className="-mr-2 flex items-center gap-2 md:hidden relative z-50">
             <Button
               variant="ghost"
               size="icon"

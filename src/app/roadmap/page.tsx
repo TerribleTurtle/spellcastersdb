@@ -14,10 +14,7 @@ export default async function RoadmapPage() {
   const { issues, isLive } = await roadmapService.getIssues();
 
   return (
-    <div className="min-h-screen bg-transparent">
-      {/* Background Gradient */}
-      <div className="fixed inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top,var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent opacity-50" />
-
+    <div className="min-h-screen bg-surface-main text-foreground pt-28 p-4 md:p-8 overflow-x-hidden w-full">
       {/* Client Component handles the UI and State */}
       <RoadmapClient initialIssues={issues} isLive={isLive} />
     </div>

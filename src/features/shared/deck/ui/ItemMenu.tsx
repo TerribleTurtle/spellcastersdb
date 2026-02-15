@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator 
 } from "@/components/ui/dropdown-menu";
 import { createPortal } from "react-dom";
+import { useToast } from "@/hooks/useToast";
 
 export function ItemMenu({
   onDuplicate,
@@ -27,6 +28,7 @@ export function ItemMenu({
   type: "DECK" | "TEAM";
 }) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const { showToast } = useToast();
 
   // Derived labels
   const duplicateLabel = type === "TEAM" ? "Duplicate Team" : "Duplicate Deck";
@@ -34,16 +36,22 @@ export function ItemMenu({
 
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <button
-            className="h-8 w-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition-colors outline-none focus:ring-2 focus:ring-brand-primary"
+            className="h-8 w-8 flex items-center justify-center text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition-colors outline-none focus:ring-2 focus:ring-brand-primary active:scale-95 duration-200"
             aria-label="Open menu"
+            onPointerDown={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
+            onFocus={(e) => e.stopPropagation()}
           >
             <MoreHorizontal size={18} />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuContent 
+          align="end" 
+          className="w-56 z-9999 bg-surface-card border border-white/10 shadow-xl p-1 text-gray-200"
+        >
           {onDuplicate && (
             <DropdownMenuItem onClick={onDuplicate} className="cursor-pointer">
               <Layers size={14} className="mr-2" />
@@ -52,7 +60,13 @@ export function ItemMenu({
           )}
 
           {onCopyLink && (
-            <DropdownMenuItem onClick={onCopyLink} className="cursor-pointer">
+            <DropdownMenuItem 
+                onClick={() => {
+                    onCopyLink();
+                    showToast("Link copied to clipboard");
+                }} 
+                className="cursor-pointer"
+            >
               <LinkIcon size={14} className="mr-2" />
               <span>{shareLabel}</span>
             </DropdownMenuItem>

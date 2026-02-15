@@ -23,11 +23,12 @@ export function useTeamEditor() {
         teamDecks,
     } = useTeamBuilder();
 
-    const { setTeamDecks, setTeamName, openCommandCenter } = useDeckStore(
+    const { setTeamDecks, setTeamName, openCommandCenter, currentDeck } = useDeckStore(
         useShallow(state => ({
             setTeamDecks: state.setTeamDecks,
             setTeamName: state.setTeamName,
             openCommandCenter: state.openCommandCenter,
+            currentDeck: state.currentDeck,
         }))
     );
 
@@ -118,7 +119,9 @@ export function useTeamEditor() {
 
     const handleTeamSave = () => {
         const targetId = activeTeamId || uuidv4();
-        saveTeam(targetId, teamName, activeSlot ?? undefined, undefined); 
+        // Explicitly pass currentDeck if we are editing a slot, to ensure we save the latest state 
+        // regardless of whether the async sync has finished or not.
+        saveTeam(targetId, teamName, activeSlot ?? undefined, activeSlot !== null ? currentDeck : undefined); 
         showToast("Team saved successfully", "success");
     };
 

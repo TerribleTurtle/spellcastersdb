@@ -75,6 +75,7 @@ export function DeckRow({
     attributes,
     listeners,
     setNodeRef,
+    // setActivatorNodeRef, // Removed for full row drag
     transform,
     transition,
     isDragging,
@@ -106,7 +107,9 @@ export function DeckRow({
       )}
       onClick={selectionMode ? onToggleSelect : undefined}
     >
-      <div className="p-1 text-gray-600 hover:text-gray-400 -ml-1 mr-1 transition-colors">
+      <div 
+        className="p-1 text-gray-600 hover:text-gray-400 -ml-1 mr-1 transition-colors cursor-grab active:cursor-grabbing touch-none"
+      >
         {selectionMode ? (
             <div className={cn(
                 "w-4 h-4 rounded border flex items-center justify-center transition-colors",
@@ -237,7 +240,7 @@ export function DeckRow({
 
           {/* Actions - Hide in selection mode */}
           {!selectionMode && (
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2 shrink-0 relative z-10">
              {/* Load/Import Button - Now for BOTH modes */}
              {isActive && onPutAway ? (
                <button 

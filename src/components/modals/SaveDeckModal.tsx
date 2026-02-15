@@ -13,13 +13,16 @@ interface SaveDeckModalProps {
   onSave: (newName: string) => void;
 }
 
-export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalProps) {
+import { createPortal } from "react-dom";
+
+export function SaveDeckModal({ deck, isOpen, onClose, onSave, onOverwrite }: SaveDeckModalProps & { onOverwrite?: (name: string) => void }) {
   const [name, setName] = useState(deck.name || "");
   const [error, setError] = useState<string | null>(null);
+  const [showOverwrite, setShowOverwrite] = useState(false);
   
   const checkDeckNameAvailable = useDeckStore(state => state.checkDeckNameAvailable);
 
-  const handleSave = () => {
+  const handleSaveAttempt = () => {
     const trimmedName = name.trim();
     if (!trimmedName) {
       setError("Deck name cannot be empty");
@@ -28,7 +31,12 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalPr
 
     const isAvailable = checkDeckNameAvailable(trimmedName);
     if (!isAvailable) {
-      setError("A deck with this name already exists in your library.");
+      if (onOverwrite) {
+         setError(`A deck named "${trimmedName}" already exists.`);
+         setShowOverwrite(true);
+      } else {
+         setError("A deck with this name already exists in your library.");
+      }
       return;
     }
 
@@ -36,9 +44,16 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalPr
     onClose();
   };
 
+  const handleOverwrite = () => {
+      if (onOverwrite) {
+          onOverwrite(name.trim());
+          onClose();
+      }
+  };
+
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div 
         className="w-full max-w-md bg-surface-card border border-white/10 rounded-xl shadow-2xl flex flex-col overflow-hidden"
@@ -48,7 +63,7 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalPr
         <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
           <h3 className="text-lg font-bold text-white flex items-center gap-2">
             <Save size={20} className="text-brand-primary" />
-            Save Copy to Library
+            {showOverwrite ? "Overwrite Deck?" : "Save Copy to Library"}
           </h3>
           <Button 
             variant="ghost"
@@ -71,9 +86,12 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalPr
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
-                if (error) setError(null);
+                if (error) {
+                    setError(null);
+                    setShowOverwrite(false);
+                }
               }}
-              onKeyDown={(e) => e.key === "Enter" && handleSave()}
+              onKeyDown={(e) => e.key === "Enter" && (showOverwrite ? handleOverwrite() : handleSaveAttempt())}
               className={cn(
                 "bg-black/40 border-white/10 text-white placeholder-gray-600 focus-visible:ring-brand-primary/50",
                 error && "border-red-500/50 focus-visible:ring-red-500/50"
@@ -90,7 +108,10 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalPr
           </div>
           
           <div className="text-sm text-gray-400 bg-white/5 p-3 rounded-lg border border-white/5">
-             This will create a new copy of <strong>{deck.name || "this deck"}</strong> in your Solo Library.
+             {showOverwrite 
+                ? <>This will <strong>overwrite</strong> the existing deck data for <strong>{name}</strong>.</>
+                : <>This will create a new copy of <strong>{deck.name || "this deck"}</strong> in your Solo Library.</>
+             }
           </div>
         </div>
 
@@ -102,15 +123,27 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave }: SaveDeckModalPr
           >
             Cancel
           </Button>
-          <Button
-            onClick={handleSave}
-            disabled={!name.trim()}
-          >
-            <Save size={16} className="mr-2" />
-            Save Copy
-          </Button>
+          
+          {showOverwrite ? (
+              <Button
+                onClick={handleOverwrite}
+                className="bg-red-500 hover:bg-red-600 text-white"
+              >
+                <AlertTriangle size={16} className="mr-2" />
+                Overwrite
+              </Button>
+          ) : (
+              <Button
+                onClick={handleSaveAttempt}
+                disabled={!name.trim()}
+              >
+                <Save size={16} className="mr-2" />
+                Save Copy
+              </Button>
+          )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

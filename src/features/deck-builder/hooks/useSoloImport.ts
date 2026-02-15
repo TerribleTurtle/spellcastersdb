@@ -22,22 +22,38 @@ export function useSoloImport({
   onError
 }: UseSoloImportProps) {
   const searchParams = useSearchParams();
-  const setViewingDeck = useDeckStore(useShallow((state) => state.setViewingDeck));
   
-  const hasProcessedDeck = useRef(false);
+  const { 
+      setViewingDeck, 
+      setViewSummary, 
+      closeCommandCenter, 
+      closeInspector 
+  } = useDeckStore(
+    useShallow((state) => ({
+      setViewingDeck: state.setViewingDeck,
+      setViewSummary: state.setViewSummary,
+      closeCommandCenter: state.closeCommandCenter,
+      closeInspector: state.closeInspector,
+    }))
+  );
+  
+  // Use a string ref to track the last processed hash, allowing updates if the URL changes
+  const lastProcessedHash = useRef<string | null>(null);
 
   useEffect(() => {
-    if (hasProcessedDeck.current) return;
-
     const deckHash = searchParams.get("d");
+    
+    // 1. Validation
     if (!deckHash) return;
+    
+    // 2. Prevent redundant processing of the same hash
+    if (lastProcessedHash.current === deckHash) return;
 
-    // Solo Import only happens if we are in SOLO mode (or defaulting to it)
+    // 3. Mode Check: Solo Import only happens if we are in SOLO mode
     // If team param exists, useTeamImport handles it.
     if (mode !== "SOLO") return;
 
-    hasProcessedDeck.current = true;
-
+    // 4. Processing
     try {
         const decoded = decodeDeck(deckHash);
         if (decoded) {
@@ -55,11 +71,18 @@ export function useSoloImport({
             }
           });
           
+          // Mark as processed BEFORE state updates to prevent loops
+          lastProcessedHash.current = deckHash;
+
+          // 5. State Updates
           setViewingDeck(newDeck, null);
+          setViewSummary(true);       // Force the Overview to show
+          closeCommandCenter();       // Ensure Library is closed
+          closeInspector();           // Ensure Inspector is closed
         }
       } catch (e) {
           console.error("Failed to decode deck", e);
           if (onError) onError("Failed to load deck from URL");
       }
-  }, [searchParams, mode, units, spellcasters, setViewingDeck, onError]);
+  }, [searchParams, mode, units, spellcasters, setViewingDeck, setViewSummary, closeCommandCenter, closeInspector, onError]);
 }

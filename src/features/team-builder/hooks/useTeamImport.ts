@@ -1,12 +1,12 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Deck, Team } from "@/types/deck";
 import { useTeamImportAutoResolve } from "./useTeamImportAutoResolve";
 
 interface UseTeamImportProps {
     viewingTeamData: Deck[] | null;
-    viewingTeamName: string | null;
-    teamName: string;
+
+
     loadTeamFromData: (decks: Deck[], newIds: string[]) => void;
     saveTeam: (id: string, name: string) => void;
     setViewingTeam: (decks: Deck[] | null) => void;
@@ -21,8 +21,7 @@ interface UseTeamImportProps {
 
 export function useTeamImport({
     viewingTeamData,
-    viewingTeamName,
-    teamName,
+
     loadTeamFromData,
     saveTeam,
     setViewingTeam,
@@ -35,70 +34,45 @@ export function useTeamImport({
     savedTeams
 }: UseTeamImportProps) {
 
+    // State for Save Modal
+    const [showSaveModal, setShowSaveModal] = useState(false);
+
     const { showConflictModal } = useTeamImportAutoResolve({ isEmpty, hasChanges });
 
     const handleSave = useCallback(() => {
-        let nameToSpec = viewingTeamName || teamName || "Untitled Team";
+        console.log("handleSave called");
+        setShowSaveModal(true);
+    }, []);
 
-        // If checking for duplicates or naming
-        // 1. Prompt for name
-        const promptName = window.prompt("Enter a name for this team:", nameToSpec);
-        if (promptName === null) return; // Users cancelled
-        
-        nameToSpec = promptName.trim() || "Untitled Team";
+    const performSave = useCallback((name: string) => {
+        const existing = savedTeams.find(t => t.name === name);
+        const idToUse = existing ? existing.id : uuidv4();
 
-        // 2. Check for duplicates (requires savedTeams prop - added below)
-        const existing = savedTeams.find(t => t.name === nameToSpec);
-        
-        // 3. Confirm overwrite
-        if (existing) {
-             if (!window.confirm(`A team named "${nameToSpec}" already exists. Overwrite it?`)) {
-                 return;
-             }
-             // Use existing ID to overwrite
-             if (viewingTeamData) {
-                  // Import case: overwrite existing
-                  const newIds = viewingTeamData.map(() => uuidv4());
-                  loadTeamFromData(viewingTeamData, newIds);
-                  saveTeam(existing.id || uuidv4(), nameToSpec);
-                  setViewingTeam(null);
-                  setViewSummary(false);
-                  setActiveSlot(0);
-                  return;
-             } else {
-                  // Regular save case: overwrite existing
-                  saveTeam(existing.id || uuidv4(), nameToSpec);
-                  setActiveSlot(0);
-                  setViewSummary(false);
-                  return;
-             }
-        }
-
-        // 4. Save New
+        // 4. Save Logic
         if (viewingTeamData) {
+            // If we are viewing a "Link" or "Import", and saving, we overwrite/create based on ID.
+            // But here we are saving by NAME.
+            // Logic:
+            // 1. If existing found -> Overwrite (SaveTeamModal confirmed this)
+            // 2. If no existing -> Create New
             setActiveSlot(null);
+            
+            // If importing data, regenerate IDs for the new copy
             const newIds = viewingTeamData.map(() => uuidv4());
             loadTeamFromData(viewingTeamData, newIds);
-            saveTeam(uuidv4(), nameToSpec);
+            
+            saveTeam(idToUse || uuidv4(), name);
             setViewingTeam(null);
             setViewSummary(false);
             setActiveSlot(0);
         } else {
-            saveTeam(uuidv4(), nameToSpec);
+            // Just saving the current workspace
+            saveTeam(idToUse || uuidv4(), name);
             setActiveSlot(0);
             setViewSummary(false);
         }
-    }, [
-        viewingTeamData,
-        viewingTeamName,
-        teamName,
-        savedTeams,
-        loadTeamFromData,
-        saveTeam,
-        setViewingTeam,
-        setViewSummary,
-        setActiveSlot
-    ]);
+        setShowSaveModal(false);
+    }, [viewingTeamData, savedTeams, loadTeamFromData, saveTeam, setViewingTeam, setViewSummary, setActiveSlot]);
 
     const handleImportCancel = useCallback(() => {
         setPendingImport(null);
@@ -114,6 +88,9 @@ export function useTeamImport({
 
     return {
         handleSave,
+        performSave,
+        showSaveModal,
+        setShowSaveModal,
         handleImportCancel,
         handleImportConfirm,
         handleImportSaveAndOverwrite,

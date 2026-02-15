@@ -30,8 +30,6 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
     const entity = item as Unit | Spell | Titan;
     if (entity.category === "Titan") {
       rank = "N/A";
-    } else if (entity.category === "Spell") {
-      rank = "N/A";
     } else if ("rank" in entity && entity.rank) {
       rank = entity.rank;
     }

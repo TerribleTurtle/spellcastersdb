@@ -27,7 +27,12 @@ export function TeamBuilderView({
       existingId,
       isReadOnly,
       showSummary,
+
       showConflictModal,
+      
+      // Data
+      viewingTeamName,
+      teamName,
       
       // Handlers
       handleBack,
@@ -72,6 +77,7 @@ export function TeamBuilderView({
                    onBack={handleBack}
                    onSave={handleSave}
                    onEditDeck={handleEditDeck}
+                   teamName={viewingTeamName || (teamName || "")}
                />
            </div>
         </div>

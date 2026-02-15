@@ -56,6 +56,10 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
     closeSummary,
   } = useDeckEditorUI(units, spellcasters);
 
+  const viewingDeckData = useDeckStore(state => state.viewingDeckData);
+  const viewingDeckId = useDeckStore(state => state.viewingDeckId);
+  const setDeck = useDeckStore(state => state.setDeck);
+  const setViewingDeck = useDeckStore(state => state.setViewingDeck);
   const saveDeck = useDeckStore(state => state.saveDeck);
   const saveAsCopy = useDeckStore(state => state.saveAsCopy);
   const clearDeck = useDeckStore(state => state.clearDeck);
@@ -262,9 +266,20 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
             style={{ height: 'auto' }}
           >
             <SoloOverview
-              deck={currentDeck}
-              onEdit={closeSummary}
-              onBack={closeSummary}
+              deck={viewingDeckData || currentDeck}
+              isReadOnly={!!viewingDeckData}
+              existingId={viewingDeckData ? viewingDeckId : (isSaved ? currentDeck.spellcaster?.spellcaster_id : null)} 
+              onEdit={() => {
+                  if (viewingDeckData) {
+                      setDeck(viewingDeckData);
+                      setViewingDeck(null); // Clear viewing state
+                  }
+                  closeSummary();
+              }}
+              onBack={() => {
+                  setViewingDeck(null);
+                  closeSummary();
+              }}
             />
           </div>
         </div>

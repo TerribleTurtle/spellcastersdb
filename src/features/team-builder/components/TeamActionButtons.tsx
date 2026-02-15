@@ -45,7 +45,7 @@ export function TeamActionButtons({
       ) : (
         /* Case 2: New Team -> Save OR Try */
         <>
-          {isReadOnly && onSave && (
+          {onSave && (
             <button
               onClick={onSave}
               className="px-6 md:px-8 py-3 bg-brand-primary text-white font-black uppercase tracking-widest rounded-lg shadow-lg hover:bg-brand-primary/90 hover:scale-105 transition-all flex items-center gap-2 text-xs md:text-sm"

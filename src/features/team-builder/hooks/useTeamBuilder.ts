@@ -94,14 +94,16 @@ export function useTeamBuilder() {
   // --- Extracted Import Logic ---
   const {
     handleSave,
+    performSave,
+    showSaveModal,
+    setShowSaveModal,
     handleImportCancel,
     handleImportConfirm,
     handleImportSaveAndOverwrite,
     showConflictModal
   } = useTeamImport({
     viewingTeamData,
-    viewingTeamName,
-    teamName,
+
     loadTeamFromData,
     saveTeam,
     setViewingTeam,
@@ -145,6 +147,9 @@ export function useTeamBuilder() {
     // Handlers
     handleBack,
     handleSave,
+    performSave,
+    showSaveModal,
+    setShowSaveModal,
     handleEditDeck,
     handleImportCancel,
     handleImportConfirm,

@@ -85,7 +85,8 @@ export function encodeTeam(
   return TEAM_V2_PREFIX + LZString.compressToEncodedURIComponent(packed);
 }
 
-function getDeckIds(deck: Deck): string[] {
+function getDeckIds(deck: Deck | null | undefined): string[] {
+  if (!deck) return ["", "", "", "", "", "", ""];
   return [
     deck.spellcaster?.spellcaster_id || "",
     deck.slots[0]?.unit?.entity_id || "",

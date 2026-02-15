@@ -25,7 +25,7 @@ export function Toaster() {
   const { toasts, dismissToast } = useToastStore();
 
   return (
-    <div className="fixed top-16 right-4 left-4 md:left-auto md:top-4 md:right-4 z-50 flex flex-col gap-2 max-w-[420px] pointer-events-none">
+    <div className="fixed top-16 right-4 left-4 md:left-auto md:top-4 md:right-4 z-[10000] flex flex-col gap-2 max-w-[420px] pointer-events-none">
       {toasts.map((toast) => (
         <div
           key={toast.id}
