@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { GameImage } from "@/components/ui/GameImage";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { UnifiedEntity, Spellcaster, Unit, Spell, Titan } from "@/types/api";
+import { RankBadge } from "@/components/ui/rank-badge";
 
 interface InspectorHeaderProps {
   item: UnifiedEntity;
@@ -29,7 +30,7 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
   } else {
     const entity = item as Unit | Spell | Titan;
     if (entity.category === "Titan") {
-      rank = "N/A";
+      rank = "V"; // Use V logic for Titan
     } else if ("rank" in entity && entity.rank) {
       rank = entity.rank;
     }
@@ -85,9 +86,18 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
       <div className="absolute top-3 right-3 md:right-auto md:left-4 flex flex-col items-end md:items-start gap-1 z-30 scale-90 origin-top-right md:origin-top-left pointer-events-none">
         {/* Rank / Class Badge */}
         {rank && rank !== "N/A" && (
-          <span className="bg-black/80 px-2 py-0.5 rounded text-[10px] font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md">
-            {["I", "II", "III", "IV", "V"].includes(rank) ? `RANK ${rank}` : rank}
-          </span>
+             (rank === "V" || ["I", "II", "III", "IV"].includes(rank)) ? (
+                <RankBadge 
+                    rank={rank} 
+                    isTitan={rank === "V" && item.category === "Titan"} 
+                    mode="text"
+                    className="bg-black/80 px-2 py-0.5 rounded text-[10px] font-bold font-mono shadow-md backdrop-blur-md"
+                />
+             ) : (
+                <span className="bg-black/80 px-2 py-0.5 rounded text-[10px] font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md">
+                    {rank}
+                </span>
+             )
         )}
         
         {/* Magic School Badge */}

@@ -13,6 +13,7 @@ All notable changes to this project will be documented in this file.
   - Fixed `encodeTeam` signature mismatch in `TeamOverview`.
   - Removed unused variables in `useTeamImport` and `SoloOverview`.
   - Cleaned up unused logic in `TeamBuilderView` and `useTeamBuilder`.
+  - Removed unused variables in `rank-badge.tsx` and `DragOverlayContainer.tsx`.
 
 ## [1.0.0] - 2026-02-15
 

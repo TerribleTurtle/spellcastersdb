@@ -31,11 +31,71 @@ export const SCHOOLS = [
 
 export type School = typeof SCHOOLS[number];
 
-export const RANKS = ["I", "II", "III", "IV"] as const;
+export const RANKS = ["I", "II", "III", "IV", "V"] as const;
 export type Rank = typeof RANKS[number];
+
+export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: string; border: string }> = {
+  I: {
+    label: "I",
+    color: "text-white",
+    bg: "bg-slate-600",
+    border: "border-slate-400",
+  },
+  II: {
+    label: "II",
+    color: "text-white",
+    bg: "bg-emerald-600",
+    border: "border-slate-400",
+  },
+  III: {
+    label: "III",
+    color: "text-white",
+    bg: "bg-blue-600",
+    border: "border-slate-400",
+  },
+  IV: {
+    label: "IV",
+    color: "text-white",
+    bg: "bg-purple-600",
+    border: "border-slate-400",
+  },
+  V: {
+    label: "V", // Will be overridden for Titans in component if needed, or we can treat V as Titan rank generically
+    color: "text-white",
+    bg: "bg-amber-600",
+    border: "border-slate-400",
+  },
+};
 
 export const SPELLCASTER_CLASSES = ["Duelist", "Conqueror", "Enchanter"] as const;
 export type SpellcasterClass = typeof SPELLCASTER_CLASSES[number];
+
+export const CLASS_CONFIG: Record<string, { label: string; bg: string; border: string; iconColor: string }> = {
+  Conqueror: {
+    label: "Conqueror",
+    bg: "bg-slate-900",
+    border: "border-slate-400",
+    iconColor: "text-red-400"
+  },
+  Duelist: {
+    label: "Duelist",
+    bg: "bg-slate-900",
+    border: "border-slate-400",
+    iconColor: "text-amber-400"
+  },
+  Enchanter: {
+    label: "Enchanter",
+    bg: "bg-slate-900",
+    border: "border-slate-400",
+    iconColor: "text-purple-400"
+  },
+  Unknown: {
+    label: "?",
+    bg: "bg-slate-900",
+    border: "border-slate-400",
+    iconColor: "text-gray-400"
+  }
+};
 
 // ============================================================================
 // Sort & Filter Config

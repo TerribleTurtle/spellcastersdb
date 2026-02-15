@@ -20,7 +20,6 @@ describe('Remote Data Validation', () => {
                 class: 'Enchanter', 
                 tags: [], 
                 health: 100, 
-                movement_speed: 10,
                 abilities: { 
                     passive: [], 
                     primary: { name: 'P', description: '' }, 

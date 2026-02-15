@@ -9,10 +9,11 @@ import { UnitFilterOverlay } from "./UnitFilterOverlay";
 import { useUnitFiltering } from "@/features/deck-builder/hooks/domain/useUnitFiltering";
 import { useResponsiveGrid } from "@/features/deck-builder/hooks/ui/useResponsiveGrid";
 import { 
-    DEFAULT_BROWSER_COLUMNS
+    DEFAULT_BROWSER_COLUMNS,
+    GroupMode
 } from "@/services/config/constants";
 import { prepareVirtualizationRows } from "./utils";
-import { useUnitBrowserState } from "@/features/deck-builder/hooks/ui/useUnitBrowserState";
+import { useUnitBrowserState, FilterState } from "@/features/deck-builder/hooks/ui/useUnitBrowserState";
 import { BrowserItem, VirtualRow, ItemUsageState } from "@/types/browser";
 
 interface UnitBrowserProps {

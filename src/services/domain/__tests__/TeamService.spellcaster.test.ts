@@ -16,7 +16,6 @@ const MockSCA: Spellcaster = {
     class: "Conqueror",
     tags: [],
     health: 100,
-    movement_speed: 10,
     abilities: {
         passive: [],
         primary: { name: "P", description: "D" },
@@ -33,7 +32,6 @@ const MockSCB: Spellcaster = {
     class: "Duelist",
     tags: [],
     health: 120,
-    movement_speed: 8,
     abilities: {
         passive: [],
         primary: { name: "P", description: "D" },

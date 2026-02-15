@@ -215,7 +215,6 @@ export const STAT_STRATEGIES: Record<EntityCategory, StatDefinition[]> = {
   ],
   Spellcaster: [
       STATS.health,
-      STATS.movement_speed,
       STATS.population,
   ]
 };

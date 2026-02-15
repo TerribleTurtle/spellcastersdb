@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback, useRef, useEffect } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { Plus, Shield, Wand2, Swords, HelpCircle } from "lucide-react";
+import { RankBadge } from "@/components/ui/rank-badge";
 import {
   Tooltip,
   TooltipContent,
@@ -147,15 +148,14 @@ export const DraggableCard = React.memo(function DraggableCard({
         </div>
 
         {/* Rank Badge - Overlaid on Image */}
-        {rank && !isTitan && (
-          <div className="absolute top-1 right-1 bg-black/80 px-1.5 py-0.5 lg:px-2 lg:py-1 rounded text-[10px] lg:text-xs 2xl:text-sm font-mono text-brand-accent shadow-md border border-white/10">
-            {rank}
-          </div>
-        )}
-        {/* Titan Badge */}
-        {isTitan && (
-          <div className="absolute top-1 right-1 bg-black/80 px-1.5 py-0.5 lg:px-2 lg:py-1 rounded text-[10px] lg:text-xs 2xl:text-sm font-mono text-brand-accent shadow-md border border-white/10">
-            TITAN
+        {(rank || isTitan) && (
+          <div className="absolute bottom-9 lg:bottom-12 left-1 z-20">
+             <RankBadge 
+               rank={isTitan ? "V" : rank!} 
+               isTitan={isTitan}
+               mode="icon"
+               className={isTitan ? "bg-black/80 backdrop-blur-md shadow-md text-[10px] lg:text-xs 2xl:text-sm px-1.5 py-0.5 lg:px-2 lg:py-1 rounded border-white/10 scale-100 lg:scale-125 origin-bottom-left" : "scale-100 lg:scale-125 origin-bottom-left"} 
+             />
           </div>
         )}
         {/* Spellcaster Class Badge - Icon + Tooltip */}
@@ -163,18 +163,25 @@ export const DraggableCard = React.memo(function DraggableCard({
            <Tooltip>
              <TooltipTrigger asChild>
                 <div 
-                  className="absolute top-1 right-1 bg-black/80 p-1.5 rounded-full border border-white/10 shadow-md transition-colors hover:border-brand-primary/50 hover:bg-black/90 cursor-help z-20 pointer-events-auto"
+                  className={cn(
+                    "absolute bottom-9 lg:bottom-12 left-1 flex items-center justify-center w-6 h-6 rounded-full border-2 shadow-sm transition-colors cursor-help z-20 pointer-events-auto scale-100 lg:scale-125 origin-bottom-left",
+                     // Apply colors from config manually or use inline styles if needed, but here we can map
+                     spellcasterClass === "Conqueror" ? "bg-slate-900 border-slate-400" :
+                     spellcasterClass === "Enchanter" ? "bg-slate-900 border-slate-400" :
+                     spellcasterClass === "Duelist" ? "bg-slate-900 border-slate-400" :
+                     "bg-slate-900 border-slate-400"
+                  )}
                   onClick={(e) => e.stopPropagation()}
                   onPointerDown={(e) => e.stopPropagation()}
                 >
                   {spellcasterClass === "Conqueror" ? (
-                    <Shield size={14} className="text-red-400" />
+                    <Shield size={14} className="text-red-400 scale-110" />
                   ) : spellcasterClass === "Enchanter" ? (
-                    <Wand2 size={14} className="text-purple-400" />
+                    <Wand2 size={14} className="text-purple-400 scale-110" />
                   ) : spellcasterClass === "Duelist" ? (
-                    <Swords size={14} className="text-yellow-400" />
+                    <Swords size={14} className="text-amber-400 scale-110" />
                   ) : (
-                    <HelpCircle size={14} className="text-gray-400" />
+                    <HelpCircle size={14} className="text-gray-400 scale-110" />
                   )}
                 </div>
              </TooltipTrigger>

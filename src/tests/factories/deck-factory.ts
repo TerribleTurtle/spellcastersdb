@@ -48,7 +48,6 @@ export const DeckFactory = {
     class: "Duelist",
     tags: [],
     health: 1000,
-    movement_speed: 10,
     abilities: {
         passive: [{ name: "Passive", description: "Desc" }],
         primary: { name: "Primary", description: "Desc" },

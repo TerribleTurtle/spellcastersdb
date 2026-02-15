@@ -279,7 +279,6 @@ export const SpellcasterSchema = z
     
     // V2 Stats Re-added
     health: z.number(),
-    movement_speed: z.number(),
     population: z.number().optional(),
     movement_type: z.enum(["Ground", "Fly", "Flying", "Hover", "Stationary"]).optional(),
     tags: z.array(z.string()).default([]),
@@ -291,7 +290,7 @@ export const SpellcasterSchema = z
       ultimate: AbilitySchema,
     }),
   })
-  .strict() // Enforce strict schema
+  // .strict() removed to allow stripping of legacy/unused API fields like movement_speed
   .transform((data) => {
     // Map spellcaster_id if missing from entity_id
     if (!data.spellcaster_id && data.entity_id) {

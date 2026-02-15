@@ -36,7 +36,6 @@ const mockSpellcaster: Spellcaster = {
   class: "Duelist",
   tags: ["magic"],
   health: 200,
-  movement_speed: 12,
   abilities: {
       passive: [],
       primary: { name: "test", description: "test" },

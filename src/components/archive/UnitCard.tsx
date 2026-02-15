@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { RankBadge } from "@/components/ui/rank-badge";
 
 import { EntityImage } from "@/components/ui/EntityImage";
 import { Badge } from "@/components/ui/badge";
@@ -29,13 +30,14 @@ function getEntityMeta(entity: UnifiedEntity) {
       school: "Item",
     };
   }
-  // Titan
+  // Titan - Updated to use RankBadge logic (rank V)
   if (entity.category === "Titan") {
     return {
       href: `/titans/${entity.entity_id}`,
       category: "Titan",
-      rank: "TITAN",
+      rank: "V", 
       school: entity.magic_school,
+      isTitan: true,
     };
   }
 
@@ -116,12 +118,20 @@ export function UnitCard({
         )}
 
         {/* Rank Badge */}
-        <Badge 
-          variant="outline" 
-          className="w-7 h-7 flex items-center justify-center p-0 rounded bg-brand-dark border-brand-primary/20 text-[9px] font-mono font-bold text-brand-primary shrink-0"
-        >
-          {meta.rank}
-        </Badge>
+        {meta.isTitan || (meta.rank !== "SPELL" && meta.rank !== "UPGRADE" && meta.rank !== "COMMON" && !["ENCHANTER", "DUELIST", "CONQUEROR", "UNKNOWN"].includes(meta.rank)) ? (
+             <RankBadge 
+               rank={meta.rank} 
+               isTitan={meta.isTitan} 
+               className="w-7 h-7 flex items-center justify-center p-0 rounded text-[9px] shrink-0" 
+             />
+        ) : (
+             <Badge 
+               variant="outline" 
+               className="w-7 h-7 flex items-center justify-center p-0 rounded bg-brand-dark border-brand-primary/20 text-[9px] font-mono font-bold text-brand-primary shrink-0"
+             >
+               {meta.rank}
+             </Badge>
+        )}
       </Link>
     );
   }
@@ -144,12 +154,20 @@ export function UnitCard({
           <span className="text-[10px] font-mono text-gray-500 uppercase tracking-wide">
             {meta.category}
           </span>
-          <Badge 
-            variant="outline"
-            className="text-[10px] font-mono font-bold text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border-brand-primary/20"
-          >
-            {meta.rank}
-          </Badge>
+          {meta.isTitan || (meta.rank !== "SPELL" && meta.rank !== "UPGRADE" && meta.rank !== "COMMON" && !["ENCHANTER", "DUELIST", "CONQUEROR", "UNKNOWN"].includes(meta.rank)) ? (
+             <RankBadge 
+               rank={meta.rank} 
+               isTitan={meta.isTitan}
+               className="text-[10px] px-2 py-0.5 rounded"
+             />
+          ) : (
+              <Badge 
+                variant="outline"
+                className="text-[10px] font-mono font-bold text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border-brand-primary/20"
+              >
+                {meta.rank}
+              </Badge>
+          )}
         </div>
 
         <h2 className="text-base font-bold text-white group-hover:text-brand-accent transition-colors mb-1 truncate">

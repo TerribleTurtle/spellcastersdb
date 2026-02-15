@@ -1,4 +1,5 @@
 import { useDraggable, useDroppable, useDndContext } from "@dnd-kit/core";
+import { RankBadge } from "@/components/ui/rank-badge";
 
 import { Shield } from "lucide-react";
 
@@ -181,14 +182,15 @@ export function DeckSlot({
               className="object-cover object-top"
             />
             {/* Rank/Titan Badge */}
-            {slot.unit.category === ENTITY_CATEGORY.Titan ? (
-              <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm">
-                TITAN
-              </div>
-            ) : (
-              <div className="absolute top-1 left-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm">
-                {slot.unit.rank ?? "N/A"}
-              </div>
+            {(slot.unit.rank || slot.unit.category === ENTITY_CATEGORY.Titan) && (
+                <div className="absolute bottom-1 left-1 z-20">
+                     <RankBadge 
+                        rank={slot.unit.category === ENTITY_CATEGORY.Titan ? "V" : slot.unit.rank!} 
+                        isTitan={slot.unit.category === ENTITY_CATEGORY.Titan}
+                        mode="icon"
+                        className="scale-75 lg:scale-100 origin-bottom-left bg-black/60 backdrop-blur-sm shadow-md"
+                     />
+                </div>
             )}
           </div>
           {/* Name Banner */}

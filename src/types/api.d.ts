@@ -265,7 +265,6 @@ export interface Spellcaster {
 
   // V2 Re-added Stats
   health: number;
-  movement_speed: number;
   population?: number;
   movement_type?: MovementType;
 

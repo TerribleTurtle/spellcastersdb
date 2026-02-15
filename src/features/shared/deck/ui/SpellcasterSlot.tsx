@@ -1,5 +1,5 @@
 import { useDraggable, useDroppable, useDndContext } from "@dnd-kit/core";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Shield, Wand2, Swords, HelpCircle } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
 import { cn } from "@/lib/utils";
@@ -136,9 +136,18 @@ export function SpellcasterSlot({
               sizes="(max-width: 768px) 100vw, 33vw"
               className="object-cover object-top"
             />
-            {/* Spellcaster Class Badge */}
-            <div className="absolute top-1 right-1 bg-black/60 px-1.5 py-0.5 rounded text-[10px] font-mono text-brand-accent backdrop-blur-sm uppercase">
-              {spellcaster.class}
+            {/* Spellcaster Class Badge - Icon */}
+            {/* Spellcaster Class Badge - Icon */}
+            <div className="absolute bottom-1 left-1 flex items-center justify-center w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 border-slate-400 bg-slate-900 shadow-sm backdrop-blur-sm z-20">
+               {spellcaster.class === "Conqueror" ? (
+                  <Shield size={14} className="text-red-400 scale-110" />
+               ) : spellcaster.class === "Enchanter" ? (
+                  <Wand2 size={14} className="text-purple-400 scale-110" />
+               ) : spellcaster.class === "Duelist" ? (
+                  <Swords size={14} className="text-amber-400 scale-110" />
+               ) : (
+                  <HelpCircle size={14} className="text-gray-400 scale-110" />
+               )}
             </div>
           </div>
           {/* Name Banner */}

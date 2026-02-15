@@ -10,8 +10,10 @@ import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { EntityDisplayItem } from "@/components/entity-card/types";
 import { EntityStats } from "@/components/entity-card/EntityStats";
 import { EntityMechanics } from "@/components/entity-card/EntityMechanics";
+
 import { SpellcasterAbilities } from "@/components/entity-card/SpellcasterAbilities";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
+import { RankBadge } from "@/components/ui/rank-badge";
 
 export type EntityItem = EntityDisplayItem;
 
@@ -39,6 +41,7 @@ export function EntityShowcase({
   const name = item.name;
 
   let rank = "N/A";
+  let isTitan = false;
   if (isSpellcaster) {
     if ("class" in item) {
       rank = (item as Spellcaster).class.toUpperCase();
@@ -47,7 +50,9 @@ export function EntityShowcase({
     const entity = item as Unit | Spell | Titan;
     if (entity.category === "Titan") {
       // Hide rank for Titans (user request: "we don't ever(yet) want to show rank 5")
-      rank = "N/A";
+      // Update: User now wants TITAN with Legendary styling
+      rank = "V";
+      isTitan = true;
     } else if (entity.category === "Spell") {
       rank = "N/A"; 
     } else if ("rank" in entity && entity.rank) {
@@ -112,9 +117,18 @@ export function EntityShowcase({
                  <div className="flex flex-col gap-2 items-start">
                     {/* Rank Badge */}
                     {rank && rank !== "N/A" && (
-                      <span className="bg-black/60 px-3 py-1 rounded text-xs font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md shadow-lg">
-                        {["I", "II", "III", "IV", "V"].includes(rank) ? `RANK ${rank}` : rank}
-                      </span>
+                         isTitan || ["I", "II", "III", "IV", "V"].includes(rank) ? (
+                            <RankBadge 
+                                rank={rank} 
+                                isTitan={isTitan}
+                                mode="text"
+                                className="px-3 py-1 rounded text-xs font-bold font-mono shadow-lg"
+                            />
+                         ) : (
+                            <span className="bg-black/60 px-3 py-1 rounded text-xs font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md shadow-lg">
+                                {rank}
+                            </span>
+                         )
                     )}
                     
                     {/* School Badge (Linkable maybe?) */}

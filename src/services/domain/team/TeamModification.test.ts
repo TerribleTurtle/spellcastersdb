@@ -43,10 +43,9 @@ const MockSpellcaster: Spellcaster = {
     spellcaster_id: "caster_1",
     name: "Test Caster",
     category: ENTITY_CATEGORY.Spellcaster,
-    class: "Enchanter",
-    tags: [],
+    class: "Duelist",
+    tags: ['hero'],
     health: 100,
-    movement_speed: 10,
     abilities: {
         passive: [],
         primary: { name: "A", description: "D" },

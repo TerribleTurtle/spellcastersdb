@@ -37,7 +37,6 @@ describe("useDeckBuilder", () => {
           ultimate: { name: "U", description: "" }
       },
       health: 100,
-      movement_speed: 30
   };
 
   const mockUnit: Unit = {

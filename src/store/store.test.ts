@@ -29,7 +29,6 @@ const MockSpellcaster: Spellcaster = {
     class: "Conqueror",
     tags: [],
     health: 100,
-    movement_speed: 10,
     abilities: {
         passive: [{ name: "P", description: "D" }],
         primary: { name: "P1", description: "D" },
