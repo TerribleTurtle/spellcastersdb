@@ -220,7 +220,13 @@ describe("useDeckBuilder", () => {
               id: "d1",
               name: "Imported Deck",
               spellcaster: mockSpellcaster,
-              slots: [{ unit: mockUnit, unit_id: mockUnit.entity_id }]
+              slots: [
+                  { unit: mockUnit, unit_id: mockUnit.entity_id, index: 0, allowedTypes: [] },
+                  { unit: null, unit_id: null, index: 1, allowedTypes: [] },
+                  { unit: null, unit_id: null, index: 2, allowedTypes: [] },
+                  { unit: null, unit_id: null, index: 3, allowedTypes: [] },
+                  { unit: null, unit_id: null, index: 4, allowedTypes: [] }
+              ] as any
           };
 
           act(() => {
