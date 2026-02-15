@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.5] - 2026-02-15
+
+### Fixed
+
+- **CLS**: Implemented `BrowserSkeleton` to reserve grid space during initial load, eliminating layout shifts (0.31 -> ~0).
+- **LCP**: Optimized resource contention by limiting eager loading (`fetchpriority=high`) to the first row of cards only.
+
 ## [1.0.4] - 2026-02-15
 
 ### Fixed

@@ -15,6 +15,7 @@ import {
 import { prepareVirtualizationRows } from "./utils";
 import { useUnitBrowserState, FilterState } from "@/features/deck-builder/hooks/ui/useUnitBrowserState";
 import { BrowserItem, VirtualRow, ItemUsageState } from "@/types/browser";
+import { BrowserSkeleton } from "./BrowserSkeleton";
 
 interface UnitBrowserProps {
   items: BrowserItem[];
@@ -42,6 +43,14 @@ export const UnitBrowser = React.memo(function UnitBrowser({
       activeFilters,
       activeFilterCount
   } = useUnitBrowserState();
+
+  if (items.length === 0 && !searchQuery) {
+      return (
+        <div className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
+            <BrowserSkeleton />
+        </div>
+      );
+  }
 
   return (
     <div className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
@@ -140,7 +149,7 @@ const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
             columns={columns}
             onSelectItem={onSelectItem}
             onQuickAdd={onQuickAdd}
-            priority={index < 4}
+            priority={index < 1}
             itemStates={itemStates}
           />
         );
