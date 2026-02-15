@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import { validateDeck } from "@/services/validation/deck-validation";
 import { UnitSchema } from "@/services/validation/data-schemas";
 import { EntityCategory } from "@/types/enums";
+import { BackupService } from "@/services/domain/BackupService";
 
 describe("Logic Hardening (Torture Tests)", () => {
 
@@ -35,11 +36,8 @@ describe("Logic Hardening (Torture Tests)", () => {
                 magic_school: "Wild",
                 tags: []
             };
-            UnitSchema.safeParse(badUnit); // This assumes Schema enforces min length 1
-            // If schema doesn't enforce, we should update strictness or check if it fails.
-            // Zod .min(1) is common.
-            // For now, assume it fails or passing means schema gap.
-            // expect(result.success).toBe(false); 
+            const result = UnitSchema.safeParse(badUnit);
+            expect(result.success).toBe(false);
         });
 
         it("should reject units with dangerous number (NaN)", () => {
@@ -90,25 +88,18 @@ describe("Logic Hardening (Torture Tests)", () => {
     describe("Data Volume & Backup", () => {
          it("should validate a massive backup file (1000 items) without crashing", () => {
              const hugeBackup = {
-                 version: "1.0",
-                 source: "Spellcasters DB",
-                 timestamp: Date.now(),
+                 version: 1,
+                 timestamp: new Date().toISOString(),
                  decks: Array.from({ length: 1000 }, (_, i) => ({
                      id: `deck_${i}`,
                      name: `Massive Deck ${i}`,
-                     slots: [] // Empty slots for speed, we test structure parse speed
+                     slots: []
                  })),
                  teams: []
              };
-             
-             const start = performance.now();
-             // We can't easily test BackupService.validateBackup because it's static and simple.
-             // But we can verify it processes large arrays.
-             const isValid = Array.isArray(hugeBackup.decks) && hugeBackup.decks.length === 1000;
-             const end = performance.now();
-             
+
+             const isValid = BackupService.validateBackup(hugeBackup);
              expect(isValid).toBe(true);
-             expect(end - start).toBeLessThan(100); // Should be instant
          });
     });
 

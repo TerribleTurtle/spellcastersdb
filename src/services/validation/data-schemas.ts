@@ -8,7 +8,7 @@ import { EntityCategory } from "@/types/enums";
 // Base parts shared by Unit and Spell
 export const IncantationBase = {
   entity_id: z.string(),
-  name: z.string(),
+  name: z.string().min(1),
   magic_school: z.enum([
     "Elemental",
     "Wild",
