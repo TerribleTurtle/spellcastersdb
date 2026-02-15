@@ -3,6 +3,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { GripVertical, Check, AlertCircle, ArrowRight, ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 import { Deck } from "@/types/deck";
 import { cn } from "@/lib/utils";
@@ -108,15 +109,30 @@ export function DeckRow({
       onClick={selectionMode ? onToggleSelect : undefined}
     >
       <div 
-        className="p-1 text-gray-600 hover:text-gray-400 -ml-1 mr-1 transition-colors cursor-grab active:cursor-grabbing touch-none"
+        className="p-1 text-gray-600 hover:text-gray-400 -ml-1 mr-1 transition-colors cursor-grab active:cursor-grabbing touch-none outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded"
+        role="button"
+        tabIndex={0}
+        aria-label="Drag to reorder deck"
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            // Logic for keyboard reordering would go here, 
+            // for now just prevent default to avoid confusion
+            e.preventDefault();
+          }
+        }}
       >
         {selectionMode ? (
-            <div className={cn(
+            <div 
+                className={cn(
                 "w-4 h-4 rounded border flex items-center justify-center transition-colors",
                 isSelected 
                     ? "bg-brand-primary border-brand-primary text-black" 
                     : "border-white/20 group-hover:border-white/50"
-            )}>
+                )}
+                role="checkbox"
+                aria-checked={isSelected}
+                aria-label="Select deck"
+            >
                 {isSelected && <Check size={10} strokeWidth={4} />}
             </div>
         ) : (
@@ -243,35 +259,41 @@ export function DeckRow({
           <div className="flex items-center gap-2 shrink-0 relative z-10">
              {/* Load/Import Button - Now for BOTH modes */}
              {isActive && onPutAway ? (
-               <button 
+               <Button 
+                  variant="outline"
+                  size="sm"
                   className={cn(
-                      "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-sm transition-colors text-xs font-bold uppercase tracking-wider",
-                      "bg-transparent border border-gray-500 text-gray-400 hover:text-white hover:border-white hover:bg-white/5"
+                      "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-sm transition-colors text-xs font-bold uppercase tracking-wider h-8",
+                      "bg-transparent border-gray-500 text-gray-400 hover:text-white hover:border-white hover:bg-white/5"
                   )}
                   onClick={(e) => {
                       e.stopPropagation();
                       onPutAway();
                   }}
                   title="Put Away Deck"
+                  aria-label="Put Away Deck"
                >
                   <ArrowLeft size={14} />
                   <span className="hidden sm:inline">Put Away</span>
-               </button>
+               </Button>
              ) : (
-               <button 
+               <Button 
+                  variant="default"
+                  size="sm"
                   className={cn(
-                      "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-sm transition-colors text-xs font-bold uppercase tracking-wider",
-                      "bg-brand-primary text-white hover:bg-brand-primary/80"
+                      "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-sm transition-colors text-xs font-bold uppercase tracking-wider h-8",
+                      "bg-brand-primary text-white hover:bg-brand-primary/80 border-0"
                   )}
                   onClick={(e) => {
                       e.stopPropagation();
                       onLoad?.();
                   }}
                   title={isTeamMode ? "Import Deck to Slot" : "Load Deck"}
+                  aria-label={isTeamMode ? "Import Deck to Slot" : "Load Deck"}
                >
                   <ArrowRight size={14} />
                   <span className="hidden sm:inline">{isTeamMode ? "Import" : "Load"}</span>
-               </button>
+               </Button>
              )}
 
             <ItemMenu

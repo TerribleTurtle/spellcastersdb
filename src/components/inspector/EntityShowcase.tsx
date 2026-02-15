@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
-import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
 import { EntityDisplayItem } from "@/components/entity-card/types";
 import { EntityStats } from "@/components/entity-card/EntityStats";
 import { EntityMechanics } from "@/components/entity-card/EntityMechanics";
@@ -81,7 +81,7 @@ export function EntityShowcase({
              {/* Dynamic Background Image (Blurred) */}
              <GameImage
                 src={getCardImageUrl(item)}
-                alt={name}
+                alt={getCardAltText(item)}
                 fill
                 className="object-cover opacity-40 blur-2xl scale-110 group-hover:scale-125 transition-transform duration-700"
               />
@@ -101,7 +101,7 @@ export function EntityShowcase({
               <div className="absolute inset-0 flex items-center justify-center p-6 z-10">
                 <GameImage
                   src={getCardImageUrl(item)}
-                  alt={name}
+                  alt={getCardAltText(item)}
                   width={500}
                   height={500}
                   className="h-full w-auto max-w-full object-contain drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)] scale-100 group-hover:scale-105 transition-transform duration-500"

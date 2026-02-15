@@ -2,7 +2,7 @@
 import { ImageResponse } from "next/og";
 import { getCachedAsset } from "@/services/api/asset-cache";
 import { decodeTeam } from "@/services/utils/encoding";
-import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
 import { AllDataResponse, UnifiedEntity } from "@/types/api";
 
 export async function renderTeamImage(
@@ -224,7 +224,7 @@ export async function renderTeamImage(
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={getImageSrc(sc)}
-                        alt={sc.name}
+                        alt={getCardAltText(sc)}
                         style={{
                           width: "100%",
                           height: "100%",

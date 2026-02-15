@@ -4,7 +4,7 @@ import { Shield } from "lucide-react";
 import { GameImage } from "@/components/ui/GameImage";
 import { RankBadge } from "@/components/ui/rank-badge";
 import { cn } from "@/lib/utils";
-import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
 import { Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
 import { type DeckSlot, SlotType } from "@/types/deck";
@@ -192,7 +192,7 @@ export function DeckSlot({
           <div className="relative flex-1 bg-slate-800 overflow-hidden">
             <GameImage
               src={getCardImageUrl(slot.unit)}
-              alt={slot.unit.name || "Unit Image"}
+              alt={getCardAltText(slot.unit)}
               fill
               sizes="(max-width: 768px) 100vw, 33vw"
               className="object-cover object-top"

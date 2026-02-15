@@ -3,10 +3,13 @@
 import { useState, memo } from "react";
 import Image, { ImageProps } from "next/image";
 import { cn } from "@/lib/utils";
+import { getCardAltText } from "@/services/assets/asset-helpers";
+import { UnifiedEntity } from "@/types/api";
 
 interface OptimizedCardImageProps extends Omit<ImageProps, "src" | "alt"> {
   src: string;
-  alt: string;
+  alt?: string;
+  entity?: UnifiedEntity; // Optional: Pass entity to auto-generate alt
   className?: string;
   priority?: boolean;
 }
@@ -18,6 +21,7 @@ interface OptimizedCardImageProps extends Omit<ImageProps, "src" | "alt"> {
 export const OptimizedCardImage = memo(function OptimizedCardImage({
   src,
   alt,
+  entity,
   className,
   priority = false,
   ...props
@@ -73,7 +77,7 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
     <div className={cn("relative overflow-hidden", className)}>
       <Image
         src={imgSrc}
-        alt={alt}
+        alt={alt || (entity ? getCardAltText(entity) : "")}
         fill
         sizes="(max-width: 768px) 33vw, 200px"
         priority={priority}

@@ -20,6 +20,7 @@ import {
 import { useFeedback } from "@/hooks/useFeedback";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/ui-store";
+import { Button } from "@/components/ui/button";
 
 export function DesktopSidebar() {
   const pathname = usePathname();
@@ -93,13 +94,16 @@ export function DesktopSidebar() {
         
         {/* Toggle Button (Sidebar Header) */}
         {!isSidebarOpen && (
-            <button 
+            <Button 
+                variant="ghost" 
+                size="icon"
                 onClick={toggleSidebar}
-                className="p-2 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-colors mb-2"
+                className="text-slate-400 hover:bg-white/5 hover:text-white transition-colors mb-2"
                 title="Expand Menu"
+                aria-label="Expand sidebar"
             >
                 <Menu size={20} />
-            </button>
+            </Button>
         )}
 
         {/* Primary Navigation */}
@@ -107,9 +111,9 @@ export function DesktopSidebar() {
           {isSidebarOpen && (
               <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider px-3 mb-2 flex justify-between items-center">
                 Menu
-                <button onClick={toggleSidebar} className="hover:text-white transition-colors" title="Collapse Menu">
+                <Button variant="ghost" size="icon" onClick={toggleSidebar} className="h-6 w-6 hover:text-white transition-colors" title="Collapse Menu" aria-label="Collapse sidebar">
                     <ChevronLeft size={14} />
-                </button>
+                </Button>
               </h3>
           )}
           
@@ -174,17 +178,19 @@ export function DesktopSidebar() {
           })}
         </div>
 
-        <button
+        <Button
+          variant="ghost"
           onClick={openFeedback}
           className={cn(
-              "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all group w-full",
-              !isSidebarOpen ? "justify-center px-2" : "text-left"
+              "flex items-center gap-3 px-3 py-2 h-auto rounded-lg text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all group w-full justify-start",
+              !isSidebarOpen && "justify-center px-2"
           )}
           title={!isSidebarOpen ? "Feedback" : undefined}
+          aria-label="Submit feedback"
         >
           <MessageSquare size={18} className="text-slate-500 group-hover:text-white transition-colors shrink-0" />
           {isSidebarOpen && "Feedback"}
-        </button>
+        </Button>
         
         {/* External Links */}
         <div className={cn("mt-auto pt-4 border-t border-white/10 w-full", !isSidebarOpen && "flex justify-center")}>

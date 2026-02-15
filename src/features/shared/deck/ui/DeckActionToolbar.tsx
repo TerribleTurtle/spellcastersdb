@@ -1,4 +1,5 @@
 import { Import, Check, Save, Share2, Eraser, CopyPlus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { LibraryButton } from "@/components/ui/LibraryButton";
 
@@ -27,16 +28,17 @@ export function DeckActionToolbar({
     <div className="flex items-center gap-2">
       {/* Import Action */}
       {onImport && (
-        <button
+        <Button
           onClick={onImport}
+          variant="ghost"
           data-testid="toolbar-import-btn"
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-card border border-white/10 hover:bg-white/5 text-gray-300 hover:text-white rounded text-xs font-bold uppercase tracking-wider transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary"
+          className="h-auto flex items-center gap-1.5 px-3 py-1.5 bg-surface-card border border-white/10 hover:bg-white/5 text-gray-300 hover:text-white rounded text-xs font-bold uppercase tracking-wider transition-all focus-visible:ring-2 focus-visible:ring-brand-primary"
           title="Import Deck"
           aria-label="Import Deck"
         >
           <Import size={16} />
           <span className="hidden md:inline">Import</span>
-        </button>
+        </Button>
       )}
 
       {/* Library Action */}
@@ -49,13 +51,13 @@ export function DeckActionToolbar({
 
       {/* Save Action */}
       {onSave && !hideGlobalActions && (
-        <button
+        <Button
           onClick={onSave}
           data-testid="toolbar-save-btn"
           className={cn(
-            "flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all focus:outline-none focus:ring-2 focus:ring-brand-primary",
+            "h-auto flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all focus-visible:ring-2 focus-visible:ring-brand-primary",
             isSaved
-              ? "bg-green-500/10 text-green-400 cursor-default"
+              ? "bg-green-500/10 text-green-400 cursor-default hover:bg-green-500/20"
               : "bg-brand-primary text-white hover:bg-brand-primary/90 shadow-brand-primary/20 shadow-lg"
           )}
           title={isSaved ? "Deck Saved" : "Save Deck"}
@@ -63,44 +65,50 @@ export function DeckActionToolbar({
         >
           {isSaved ? <Check size={16} /> : <Save size={16} />}
           <span className="hidden md:inline">{isSaved ? "Saved" : "Save"}</span>
-        </button>
+        </Button>
       )}
 
       {/* Share Action */}
       {onShare && !hideGlobalActions && (
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onShare}
-          className="p-2 text-gray-400 hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-brand-accent"
+          className="text-gray-400 hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors focus-visible:ring-2 focus-visible:ring-brand-accent h-9 w-9"
           title="Share"
           aria-label="Share"
         >
           <Share2 size={18} />
-        </button>
+        </Button>
       )}
 
       {/* Clear Action */}
       {onClear && (
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onClear}
           data-testid="toolbar-clear-btn"
-          className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors focus-visible:ring-2 focus-visible:ring-red-500 h-9 w-9"
           title="Clear Deck"
           aria-label="Clear Deck"
         >
           <Eraser size={18} />
-        </button>
+        </Button>
       )}
 
       {/* Export to Solo Action */}
       {onExportToSolo && (
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={onExportToSolo}
-          className="p-2 text-gray-400 hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors focus:outline-none focus:ring-2 focus:ring-brand-accent"
+          className="text-gray-400 hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors focus-visible:ring-2 focus-visible:ring-brand-accent h-9 w-9"
           title="Save Copy to Solo Library"
           aria-label="Save Copy to Solo Library"
         >
           <CopyPlus size={18} />
-        </button>
+        </Button>
       )}
     </div>
   );

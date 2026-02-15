@@ -93,9 +93,11 @@ describe("UnitBrowser", () => {
     it("should render empty state if no virtual data", () => {
         (prepareVirtualizationRows as any).mockReturnValue([]);
         
+        // We pass items to ensure the Skeleton check (items.length === 0) is bypassed,
+        // allowing us to test the "No results found" state which occurs when filtering yields no matches.
         render(
             <UnitBrowser 
-                items={[]} 
+                items={mockItems} 
                 onSelectItem={mockOnSelect} 
                 onQuickAdd={mockOnQuickAdd} 
             />

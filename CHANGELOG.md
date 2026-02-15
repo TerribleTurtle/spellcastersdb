@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.9] - 2026-02-15
+
+### Fixed
+
+- **Accessibility**: Button Standardization.
+  - Replaced raw HTML buttons with accessible `Button` components across `UnitBrowser`, `MobileHeader`, `DeckActionToolbar`, `DesktopSidebar`, and `DeckRow`.
+  - Added descriptive `aria-label` attributes to all icon-only buttons for screen reader support.
+  - Added `role="button"` and `role="checkbox"` to interactive list elements.
+- **Code Health**: Fixed strict type check errors in `DraggableCard` and `assets-helpers.test.ts`.
+
+## [1.0.8] - 2026-02-15
+
+### Fixed
+
+- **Grid Layout Parity**:
+  - **Mobile**: Locked `BrowserSkeleton` to 4 columns to match `useResponsiveGrid` (removed 5-col jump on larger phones).
+  - **Desktop**: Locked `BrowserSkeleton` to 6 columns to match Desktop Grid.
+- **Desktop Right Bar**: Increased `PageSkeleton` drawer height to 230px to align the Inspector panel correctly.
+- **Accessibility**: Implemented dynamic alt text generation for all card images (Units, Spellcasters, spells, Titans) across Deck Builder, Inspector, and Open Graph images.
+
+## [1.0.7] - 2026-02-15
+
+### Fixed
+
+- **CLS Regression**: Fixed 0.513 layout shift on mobile by aligning `PageSkeleton` height with real components.
+  - Added missing `ContextBar` skeleton (56px).
+  - Updated Mobile Dock skeleton to be `fixed` positioned with correct height (~180px).
+
 ## [1.0.6] - 2026-02-15
 
 ### Fixed

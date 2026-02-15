@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { Button } from "@/components/ui/button";
 import { Share2, PlusCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Mode } from "@/types/api";
@@ -52,20 +53,26 @@ export function MobileHeader({ mode, onSetMode, onShare, onClear, onOpenLibrary 
 
       {/* Right: Actions (Share, New) */}
       <div className="flex items-center gap-1">
-        <button
+        <Button
+           variant="ghost"
+           size="icon"
            onClick={onShare}
-           className="p-2 text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+           className="text-gray-400 hover:text-white rounded-full hover:bg-white/10"
            title="Share"
+           aria-label="Share deck"
         >
             <Share2 size={20} />
-        </button>
-        <button
+        </Button>
+        <Button
+           variant="ghost"
+           size="icon"
            onClick={onClear}
-           className="p-2 -mr-2 text-gray-400 hover:text-white rounded-full hover:bg-white/10 transition-colors"
+           className="-mr-1 text-gray-400 hover:text-white rounded-full hover:bg-white/10"
            title="New Deck"
+           aria-label="Create a new deck"
         >
             <PlusCircle size={20} />
-        </button>
+        </Button>
       </div>
     </header>
   );

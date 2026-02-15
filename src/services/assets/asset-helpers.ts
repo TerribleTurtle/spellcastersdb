@@ -45,3 +45,45 @@ export function getCardImageUrl(
   // Production/Remote URL
   return `${assetBase}/${folder}/${id}.${preferredFormat}`;
 }
+
+export function getCardAltText(
+  entity: {
+    name?: string;
+    category?: string;
+    class?: string;
+    rank?: string;
+    magic_school?: string;
+    // We use a loose type here to avoid circular deps or complex discriminated unions in helpers
+    // but in practice it receives UnifiedEntity
+  }
+): string {
+  const name = entity.name || "Card Image";
+
+  // 1. Spellcaster
+  if (entity.category === "Spellcaster" && entity.class) {
+    return `${name} - ${entity.class} Spellcaster`;
+  }
+
+  // 2. Titan
+  if (entity.category === "Titan") {
+    // Titans are always Rank V conceptually, but we can explicitly say it
+    return `${name} - Titan (Rank V)`;
+  }
+
+  // 3. Unit (Creature/Building)
+  if (
+    (entity.category === "Creature" || entity.category === "Building") &&
+    entity.rank &&
+    entity.magic_school
+  ) {
+    return `${name} - Rank ${entity.rank} ${entity.magic_school} ${entity.category}`;
+  }
+
+  // 4. Spell
+  if (entity.category === "Spell" && entity.magic_school) {
+    return `${name} - ${entity.magic_school} Spell`;
+  }
+
+  // Fallback
+  return name;
+}

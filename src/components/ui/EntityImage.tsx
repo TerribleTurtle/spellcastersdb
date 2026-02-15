@@ -9,7 +9,7 @@ import { ImageOff } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
 import { cn } from "@/lib/utils";
-import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
 import { UnifiedEntity } from "@/types/api";
 
 interface EntityImageProps {
@@ -48,7 +48,7 @@ export function EntityImage({ entity, className, alt }: EntityImageProps) {
     >
       <GameImage
         src={getCardImageUrl(entity)}
-        alt={alt || entity.name}
+        alt={alt || getCardAltText(entity)}
         fill
         className={cn(
           "object-contain transition-opacity duration-300",

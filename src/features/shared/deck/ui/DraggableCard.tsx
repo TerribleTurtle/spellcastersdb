@@ -10,7 +10,7 @@ import {
 
 import { OptimizedCardImage } from "@/features/deck-builder/browser/OptimizedCardImage";
 import { cn } from "@/lib/utils";
-import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
 import { Spellcaster, Unit } from "@/types/api";
 
 import { BrowserItem } from "@/types/browser";
@@ -130,7 +130,7 @@ export const DraggableCard = React.memo(function DraggableCard({
       <div className="relative flex-1 overflow-hidden bg-gray-800 pointer-events-none">
         <OptimizedCardImage
           src={getCardImageUrl(item)}
-          alt={item.name}
+          alt={getCardAltText(item)}
           priority={priority}
           className="w-full h-full object-cover object-top transition-transform group-hover:scale-110"
         />

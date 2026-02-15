@@ -1,4 +1,5 @@
 import { Filter, Search, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 
 import { cn } from "@/lib/utils";
@@ -88,42 +89,51 @@ export function UnitBrowserHeader({
       <div className="flex items-center gap-1 shrink-0">
          {/* Search Toggle / Close */}
          {isSearchExpanded ? (
-             <button
+             <Button
+                variant="ghost"
+                size="icon"
                 onClick={handleClearSearch}
-                className="p-2 text-gray-400 hover:text-white rounded-lg transition-colors"
+                className="text-gray-400 hover:text-white rounded-lg hover:bg-white/10"
                 title="Close Search"
+                aria-label="Clear search"
              >
                  <X size={18} />
-             </button>
+             </Button>
          ) : (
-             <button
+             <Button
+                variant="ghost"
+                size="icon"
                 onClick={() => setIsSearchExpanded(true)}
                 className={cn(
-                    "p-2 rounded-lg transition-colors",
-                    searchQuery ? "text-brand-primary bg-brand-primary/10" : "text-gray-400 hover:text-white hover:bg-white/5"
+                    "rounded-lg",
+                    searchQuery ? "text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20" : "text-gray-400 hover:text-white hover:bg-white/5"
                 )}
                 title="Search"
+                aria-label="Search cards"
              >
                  <Search size={18} />
-             </button>
+             </Button>
          )}
 
          {/* Filter Toggle */}
-        <button
+        <Button
+          variant="ghost"
+          size="icon"
           onClick={() => setShowFilters(!showFilters)}
           className={cn(
-            "relative p-2 rounded-lg transition-all",
+            "relative rounded-lg",
             activeFilterCount > 0
-              ? "text-brand-primary bg-brand-primary/10"
+              ? "text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20"
               : "text-gray-400 hover:text-white hover:bg-white/5"
           )}
           title="Filters"
+          aria-label={showFilters ? "Close filters" : "Filter cards"}
         >
           <Filter size={18} />
           {activeFilterCount > 0 && (
-            <span className="absolute top-1 right-1 flex h-2 w-2 rounded-full bg-brand-primary shadow-sm ring-1 ring-bg-surface-main" />
+            <span className="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-brand-primary shadow-sm ring-1 ring-bg-surface-main" />
           )}
-        </button>
+        </Button>
       </div>
       </div>
     </div>

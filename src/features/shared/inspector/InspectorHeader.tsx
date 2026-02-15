@@ -1,8 +1,10 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { GameImage } from "@/components/ui/GameImage";
-import { getCardImageUrl } from "@/services/assets/asset-helpers";
+
+import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
 import { UnifiedEntity, Spellcaster, Unit, Spell, Titan } from "@/types/api";
 import { RankBadge } from "@/components/ui/rank-badge";
 
@@ -45,27 +47,29 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
       {/* Blurred Background */}
       <GameImage
         src={getCardImageUrl(item)}
-        alt={name}
+        alt={getCardAltText(item)}
         fill
         className="object-cover opacity-20 blur-xl scale-125"
       />
       
       {/* Back Button (Mobile Only) */}
       {onBack && (
-        <button
+        <Button
           onClick={onBack}
-          className="md:hidden absolute top-3 left-3 z-50 p-2 bg-black/60 hover:bg-black/80 rounded-full text-white backdrop-blur-md border border-white/10 shadow-lg"
+          variant="ghost"
+          size="icon"
+          className="md:hidden absolute top-3 left-3 z-50 rounded-full text-white backdrop-blur-md border border-white/10 shadow-lg bg-black/60 hover:bg-black/80 hover:text-white"
           aria-label="Go back"
         >
           <ArrowLeft size={18} />
-        </button>
+        </Button>
       )}
       
       {/* Main Image (Contained) */}
       <div className="absolute inset-0 flex items-center justify-center p-2 z-10">
         <GameImage
           src={getCardImageUrl(item)}
-          alt={name}
+          alt={getCardAltText(item)}
           width={400}
           height={240}
           className="h-full w-auto max-w-full object-contain drop-shadow-2xl rounded scale-95"

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import { decodeDeck } from "@/services/utils/encoding";
-import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
 import { AllDataResponse, Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
 
 export async function renderDeckImage(
@@ -249,7 +249,7 @@ export async function renderDeckImage(
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={getImageSrc(spellcaster)}
-                  alt={spellcaster.name}
+                  alt={getCardAltText(spellcaster)}
                   style={{
                     width: "100%",
                     height: "100%",
@@ -370,7 +370,7 @@ export async function renderDeckImage(
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={getImageSrc(unit)}
-                      alt={unit.name}
+                      alt={getCardAltText(unit)}
                       style={{
                         width: "100%",
                         height: "100%",
