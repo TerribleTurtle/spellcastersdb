@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+import { v4 as uuidv4 } from "uuid";
+
 export type ToastType = "success" | "error" | "info" | "destructive" | "default";
 
 export interface Toast {
@@ -17,7 +19,7 @@ interface ToastStore {
 export const useToastStore = create<ToastStore>((set) => ({
   toasts: [],
   showToast: (message, type = "default") => {
-    const id = crypto.randomUUID();
+    const id = uuidv4();
     set((state) => ({ toasts: [...state.toasts, { id, message, type }] }));
 
     setTimeout(() => {

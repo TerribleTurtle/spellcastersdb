@@ -2,13 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [1.0.2] - 2026-02-15
+
+### Fixed
+
+- **Content Security Policy**: Added frame-src directive to allow embedding Tally forms.
+- **Mobile Layouts**: Refined theme constants and fixed layout issues on mobile devices.
+- **Static Analysis**: Resolved linting and type errors in `useDragDrop` tests and `DeckSlot` component.
+
+### Performance
+
+- **Optimization**: Comprehensive performance improvements including caching strategies, search optimization, and lazy-loading.
+
+## [1.0.1] - 2026-02-15
 
 ## [1.0.1] - 2026-02-15
 
 ### Fixed
 
-- **Static Analysis & Type Safety**:
+- **Scroll Lock**: Fixed an issue where scrolling remained locked if a card drag was cancelled (e.g., via quick tap or system interruption).
   - Resolved `useToast` type mismatch in `SoloOverview` and `TeamOverview`.
   - Fixed `encodeTeam` signature mismatch in `TeamOverview`.
   - Removed unused variables in `useTeamImport` and `SoloOverview`.

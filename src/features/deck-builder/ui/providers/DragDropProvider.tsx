@@ -11,7 +11,7 @@ interface DragDropProviderProps {
 
 export const DragDropProvider = memo(function DragDropProvider({ children }: DragDropProviderProps) {
   // Only subscribe to handlers, NOT activeDragItem
-  const { sensors, handleDragStart, handleDragEnd } = useDragDrop();
+  const { sensors, handleDragStart, handleDragEnd, handleDragCancel } = useDragDrop();
   
   // Mobile Scroll Lock - needs to know if dragging, but we can get that from store if needed
   // Or better, let useScrollLock handle its own subscription if it doesn't already.
@@ -30,6 +30,7 @@ export const DragDropProvider = memo(function DragDropProvider({ children }: Dra
       collisionDetection={pointerWithin}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
+      onDragCancel={handleDragCancel}
       autoScroll={false}
     >
       {/* Children are passed through. If this component re-renders (due to isDragging), 

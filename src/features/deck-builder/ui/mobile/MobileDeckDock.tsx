@@ -12,7 +12,7 @@ interface MobileDeckDockProps {
     isValid: boolean;
     errors: string[];
   };
-  onSelect: (item: UnifiedEntity, pos: { x: number; y: number } | undefined, slotIndex?: number) => void;
+  onSelect: (item: UnifiedEntity | undefined, pos: { x: number; y: number } | undefined, slotIndex?: number) => void;
   deckId?: string;
   isSwapMode?: boolean;
 }

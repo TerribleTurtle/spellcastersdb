@@ -13,7 +13,7 @@ import { DropData } from "@/types/dnd";
 interface ActiveDeckTrayProps {
   slots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
   spellcaster: Spellcaster | null;
-  onSelect?: (item: UnifiedEntity, pos?: {x:number, y:number}, slotIndex?: number) => void;
+  onSelect?: (item: UnifiedEntity | undefined, pos?: {x:number, y:number}, slotIndex?: number) => void;
   validation?: {
     isValid: boolean;
     errors: string[];

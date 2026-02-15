@@ -16,7 +16,7 @@ describe('Sorting Logic', () => {
         });
 
         it('compareByCategoryPriority should prioritize Spellcasters', () => {
-             expect(compareByCategoryPriority(spellcaster, unitRank1)).toBeGreaterThan(0); // Spellcaster (99/default) > Unit (Priority 1)
+             expect(compareByCategoryPriority(spellcaster, unitRank1)).toBeLessThan(0); // Spellcaster (1) < Unit (2)
         });
     });
 

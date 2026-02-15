@@ -18,7 +18,7 @@ import { EntityCategory } from "@/types/enums";
 
 interface DeckDrawerProps {
   deck: Deck;
-  onSelect?: (item: UnifiedEntity, pos?: { x: number; y: number }, slotIndex?: number) => void;
+  onSelect?: (item: UnifiedEntity | undefined, pos?: { x: number; y: number }, slotIndex?: number) => void;
   variant?: "fixed" | "static";
   isExpanded?: boolean;
   onToggle?: (expanded: boolean) => void;

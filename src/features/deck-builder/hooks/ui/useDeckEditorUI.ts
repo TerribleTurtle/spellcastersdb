@@ -62,7 +62,7 @@ export function useDeckEditorUI(
     [quickAdd, showToast, setPendingSwapCard]
   );
   
-  const handleSelectItem = useCallback((item: SelectableItem, pos?: { x: number; y: number }, slotIndex?: number) => {
+  const handleSelectItem = useCallback((item: SelectableItem | undefined, pos?: { x: number; y: number }, slotIndex?: number) => {
       // Corrective Action #18: Swap Workflow Execution
       if (pendingSwapCard && slotIndex !== undefined && slotIndex >= 0) {
            // Perform Swap
@@ -74,13 +74,17 @@ export function useDeckEditorUI(
                 setSlot(slotIndex, pendingSwapCard as Unit | Spell | Titan); 
            }
            
+           
            setPendingSwapCard(null);
-           showToast(`Swapped ${pendingSwapCard.name} with ${item.name}`, "success");
+           const targetName = item ? item.name : "Empty Slot";
+           showToast(`Swapped ${pendingSwapCard.name} with ${targetName}`, "success");
            return;
       }
       
       // Standard Behavior: Open Inspector
-      baseHandleSelectItem(item);
+      if (item) {
+          baseHandleSelectItem(item);
+      }
 
   }, [pendingSwapCard, mode, activeSlot, setTeamSlot, setSlot, setPendingSwapCard, showToast, baseHandleSelectItem]);
 

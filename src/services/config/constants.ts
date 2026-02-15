@@ -112,14 +112,14 @@ export const CATEGORY_TO_PLURAL: Record<string, string> = {
 export const CATEGORIES = Object.values(CATEGORY_TO_PLURAL);
 
 export const CATEGORY_PRIORITY: Record<string, number> = {
-  Titan: 1,
+  Spellcaster: 1,
   Creature: 2,
-  Spell: 3,
-  Building: 4,
-  Spellcaster: 5,
+  Building: 3,
+  Spell: 4,
+  Titan: 5,
 };
 
-export const BROWSER_CATEGORY_ORDER = ["Spellcaster", "Creature", "Spell", "Building", "Titan"];
+export const BROWSER_CATEGORY_ORDER = ["Spellcaster", "Creature", "Building", "Spell", "Titan"];
 
 export const GROUP_MODES = ["All", "Rank", "Magic School"] as const;
 

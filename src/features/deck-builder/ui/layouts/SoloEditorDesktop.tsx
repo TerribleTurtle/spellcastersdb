@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 interface SoloEditorDesktopProps {
   currentDeck: Deck;
   browserItems: BrowserItem[];
-  onSelectItem: (item: UnifiedEntity, pos?: { x: number; y: number }, slotIndex?: number) => void;
+  onSelectItem: (item: UnifiedEntity | undefined, pos?: { x: number; y: number }, slotIndex?: number) => void;
   onQuickAdd: (item: BrowserItem) => boolean | void;
   onDeckNameChange: (name: string) => void;
   isSaved: boolean;

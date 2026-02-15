@@ -1,11 +1,11 @@
 import { UnifiedEntity } from "@/types/api";
 
 export const CATEGORY_PRIORITY: Record<string, number> = {
-  Titan: 1,
+  Spellcaster: 1,
   Creature: 2,
-  Spell: 3,
-  Building: 4,
-  Spellcaster: 5,
+  Building: 3,
+  Spell: 4,
+  Titan: 5,
   Consumable: 6,
   Item: 6,
 };

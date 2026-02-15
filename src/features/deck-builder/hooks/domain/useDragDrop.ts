@@ -233,10 +233,16 @@ export function useDragDrop() {
     }
   };
 
+  const handleDragCancel = () => {
+    setActiveDragItem(null);
+    showToast("Drag cancelled", "info");
+  };
+
   return {
     sensors,
     activeDragItem,
     handleDragStart,
     handleDragEnd,
+    handleDragCancel,
   };
 }

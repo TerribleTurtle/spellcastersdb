@@ -108,13 +108,20 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
             // Checking DeckDrawer.tsx...
             // `onSelect: (item: UnifiedEntity, pos?: { x: number; y: number }, slotIndex?: number) => void;` -> It IS there?
       onSelect={(item, pos, slotIndex) => {
+        // Corrective Action #19: Allow empty slot selection for Swap
         if (pendingSwapCard && slotIndex !== undefined) {
              setTeamSlot(index, slotIndex, pendingSwapCard as Unit | Spell | Titan);
              setPendingSwapCard(null);
-             showToast(`Swapped ${pendingSwapCard.name} with ${item.name}`, "success");
+             // Use "Empty Slot" if item is undefined
+             const targetName = item ? item.name : "Empty Slot"; 
+             showToast(`Swapped ${pendingSwapCard.name} with ${targetName}`, "success");
              return;
         }
-        openInspector(item, pos);
+        
+        // Standard Inspector - Only if item exists
+        if (item) {
+            openInspector(item, pos);
+        }
       }}
       variant="static"
       slotIndex={index}
