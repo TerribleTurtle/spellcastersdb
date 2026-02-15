@@ -34,13 +34,15 @@ export type School = typeof SCHOOLS[number];
 export const RANKS = ["I", "II", "III", "IV", "V"] as const;
 export type Rank = typeof RANKS[number];
 
-export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: string; border: string; borderBg: string }> = {
+export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: string; border: string; borderBg: string; fill: string; stroke: string }> = {
   I: {
     label: "I",
     color: "text-white",
     bg: "bg-slate-600",
     border: "border-slate-400",
     borderBg: "bg-slate-400",
+    fill: "fill-slate-600",
+    stroke: "stroke-slate-400",
   },
   II: {
     label: "II",
@@ -48,6 +50,8 @@ export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: strin
     bg: "bg-emerald-700",
     border: "border-emerald-500",
     borderBg: "bg-emerald-500",
+    fill: "fill-emerald-700",
+    stroke: "stroke-emerald-500",
   },
   III: {
     label: "III",
@@ -55,6 +59,8 @@ export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: strin
     bg: "bg-blue-700",
     border: "border-blue-500",
     borderBg: "bg-blue-500",
+    fill: "fill-blue-700",
+    stroke: "stroke-blue-500",
   },
   IV: {
     label: "IV",
@@ -62,6 +68,8 @@ export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: strin
     bg: "bg-purple-700",
     border: "border-purple-500",
     borderBg: "bg-purple-500",
+    fill: "fill-purple-700",
+    stroke: "stroke-purple-500",
   },
   V: {
     label: "V", // Will be overridden for Titans in component if needed, or we can treat V as Titan rank generically
@@ -69,6 +77,8 @@ export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: strin
     bg: "bg-amber-800",
     border: "border-amber-600",
     borderBg: "bg-amber-600",
+    fill: "fill-amber-800",
+    stroke: "stroke-amber-600",
   },
 };
 

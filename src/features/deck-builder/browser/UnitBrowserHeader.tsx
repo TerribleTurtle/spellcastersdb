@@ -72,7 +72,7 @@ export function UnitBrowserHeader({
                     key={mode}
                     onClick={() => setGroupMode(mode)}
                     className={cn(
-                    "h-full border-b-2 transition-all uppercase tracking-wider flex items-center px-1",
+                    "h-full border-b-2 transition-colors uppercase tracking-wider flex items-center px-1",
                     groupMode === mode
                         ? "text-brand-accent border-brand-accent"
                         : "border-transparent hover:text-gray-300 hover:border-white/10"

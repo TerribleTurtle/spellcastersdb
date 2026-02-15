@@ -209,7 +209,7 @@ export function DeckSlot({
                   }
                   isTitan={slot.unit.category === ENTITY_CATEGORY.Titan}
                   mode="icon"
-                  className="scale-75 lg:scale-100 origin-bottom-left bg-black/60 backdrop-blur-sm shadow-md"
+                  className="scale-75 lg:scale-100 origin-bottom-left"
                 />
               </div>
             )}

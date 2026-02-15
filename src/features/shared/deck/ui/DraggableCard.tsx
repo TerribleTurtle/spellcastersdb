@@ -155,7 +155,7 @@ export const DraggableCard = React.memo(function DraggableCard({
                rank={isTitan ? "V" : rank!} 
                isTitan={isTitan}
                mode="icon"
-               className={isTitan ? "bg-black/80 backdrop-blur-md shadow-md text-[10px] lg:text-xs 2xl:text-sm px-1.5 py-0.5 lg:px-2 lg:py-1 rounded border-white/10 scale-100 lg:scale-125 origin-bottom-left" : "scale-100 lg:scale-125 origin-bottom-left"} 
+               className={isTitan ? "scale-100 lg:scale-125 origin-bottom-left" : "scale-100 lg:scale-125 origin-bottom-left"} 
              />
           </div>
         )}
