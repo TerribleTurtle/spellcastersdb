@@ -19,6 +19,8 @@ export async function generateMetadata({
   return generateDeckMetadata(searchParams);
 }
 
+import { PageSkeleton } from "@/features/deck-builder/ui/root/PageSkeleton";
+
 export default async function Home() {
   // We fetch CRITICAL data only to pass to the client for instant search & hydration
   // Consumables/Upgrades are skipped for initial load
@@ -28,13 +30,7 @@ export default async function Home() {
     <div className="h-[calc(100vh-64px)] w-full overflow-hidden z-40 bg-surface-main shadow-2xl">
       <h1 className="sr-only">Deck Builder & Loadout Editor</h1>
       {/* Suspense boundary for data loading */}
-      <Suspense
-        fallback={
-          <div className="flex h-full items-center justify-center text-brand-primary animate-pulse">
-            Loading Deck Builder...
-          </div>
-        }
-      >
+      <Suspense fallback={<PageSkeleton />}>
         <FeatureErrorBoundary>
           <DeckBuilderContainer
             units={[...data.units, ...data.spells, ...data.titans]}

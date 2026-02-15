@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.6] - 2026-02-15
+
+### Fixed
+
+- **Visual Polish**: Replaced jarring "Loading..." text flashes with `PageSkeleton` logic.
+  - Implemented **Responsive** full-page skeleton that adapts to Mobile (Dock) and Desktop (Grid/Inspector) layouts.
+  - Softened the "Initializing Team Editor" loading state.
+
 ## [1.0.5] - 2026-02-15
 
 ### Fixed

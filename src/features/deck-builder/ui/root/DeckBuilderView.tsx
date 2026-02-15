@@ -20,7 +20,14 @@ import { SoloBuilderView } from "@/features/deck-builder/components/SoloBuilderV
 const TeamBuilderView = dynamic(
   () => import("@/features/team-builder/TeamBuilderView").then(mod => mod.TeamBuilderView),
   {
-    loading: () => <div className="h-full w-full flex items-center justify-center text-brand-primary/50">Loading Team Editor...</div>
+    loading: () => (
+      <div className="h-full w-full flex items-center justify-center bg-surface-main">
+         <div className="flex flex-col items-center gap-2">
+            <div className="w-8 h-8 border-2 border-brand-primary border-t-transparent rounded-full animate-spin" />
+            <span className="text-xs text-muted-foreground animate-pulse">Initializing Team Editor...</span>
+         </div>
+      </div>
+    )
   }
 );
 
