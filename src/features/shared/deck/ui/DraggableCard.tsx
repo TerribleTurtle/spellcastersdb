@@ -131,8 +131,7 @@ export const DraggableCard = React.memo(function DraggableCard({
         <OptimizedCardImage
           src={getCardImageUrl(item)}
           alt={item.name}
-          loading={priority ? "eager" : "lazy"}
-          fetchPriority={priority ? "high" : "auto"}
+          priority={priority}
           className="w-full h-full object-cover object-top transition-transform group-hover:scale-110"
         />
         

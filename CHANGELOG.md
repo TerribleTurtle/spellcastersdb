@@ -2,7 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.0.2] - 2026-02-15
+## [1.0.4] - 2026-02-15
+
+### Fixed
+
+- **Performance**: Reverted `OptimizedCardImage` to `next/image` to restore Vercel Edge Caching (1 Year TTL). This fixes cache misses on repeat visits.
+- **LCP**: Tuned `UnitBrowser` to eagerly load the first 4 rows of cards.
+- **CLS**: Adjusted `Virtuoso` estimated height to match mobile card dimensions (230px).
+
+## [1.0.3] - 2026-02-15
 
 ### Fixed
 

@@ -1,44 +1,47 @@
 "use client";
 
 import { useState, SyntheticEvent, memo } from "react";
+import Image, { ImageProps } from "next/image";
 import { cn } from "@/lib/utils";
 
-interface OptimizedCardImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-  fallbackSrc?: string;
-  fetchPriority?: "high" | "low" | "auto";
+interface OptimizedCardImageProps extends Omit<ImageProps, "src" | "alt"> {
+  src: string;
+  alt: string;
+  className?: string;
+  priority?: boolean;
 }
 
 /**
- * A lightweight image component for high-frequency lists.
- * Bypasses next/image overhead in favor of raw <img> for better scroll performance.
+ * A lightweight wrapper around next/image for card displays.
+ * Re-enabled next/image to leverage Vercel's Edge Global Cache (1 Year TTL).
  */
 export const OptimizedCardImage = memo(function OptimizedCardImage({
   src,
   alt,
   className,
-  onError,
+  priority = false,
   ...props
 }: OptimizedCardImageProps) {
-  const [imgSrc, setImgSrc] = useState<string>(src as string);
+  const [imgSrc, setImgSrc] = useState<string>(src);
   const [hasError, setHasError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
   
-  // Track previous src to trigger reset during render (avoids double-render effect)
+  // Track previous src to trigger reset during render
   const [prevSrc, setPrevSrc] = useState(src);
   if (src !== prevSrc) {
     setPrevSrc(src);
-    setImgSrc(src as string);
+    setImgSrc(src);
     setHasError(false);
     setRetryCount(0);
   }
 
-  const handleError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleError = () => {
     if (!imgSrc) {
         setHasError(true);
         return;
     }
 
-    // Attempt Fallback Logic: Toggle Extension (same logic as GameImage but lighter)
+    // Toggle Extension Fallback
     if (retryCount === 0) {
       if (imgSrc.endsWith(".png")) {
         setImgSrc(imgSrc.replace(/\.png$/, ".webp"));
@@ -52,11 +55,9 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
     }
 
     setHasError(true);
-    if (onError) onError(e);
   };
 
   if (hasError) {
-      // Fallback placeholder
       return (
           <div 
             className={cn(className, "bg-gray-800 flex items-center justify-center text-white/20")}
@@ -69,19 +70,17 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
   }
 
   return (
-    <>
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-
-        fetchPriority={props.fetchPriority}
-        loading="lazy"
-        {...props}
+    <div className={cn("relative overflow-hidden", className)}>
+      <Image
         src={imgSrc}
-        alt={alt || ""}
-        decoding="async"
-        className={cn(className, "object-cover")}
+        alt={alt}
+        fill
+        sizes="(max-width: 768px) 33vw, 200px"
+        priority={priority}
+        className="object-cover"
         onError={handleError}
+        {...props}
       />
-    </>
+    </div>
   );
 });

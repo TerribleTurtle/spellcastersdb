@@ -140,7 +140,7 @@ const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
             columns={columns}
             onSelectItem={onSelectItem}
             onQuickAdd={onQuickAdd}
-            priority={index < 2}
+            priority={index < 4}
             itemStates={itemStates}
           />
         );
@@ -160,7 +160,7 @@ const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
             style={{ height: "100%" }}
             className="overscroll-y-contain"
             data={virtualData}
-            defaultItemHeight={300} // Estimate for CLS
+            defaultItemHeight={230} // Estimate for CLS (Mobile: ~180px width * 1.25 = 225px)
             overscan={200} 
             itemContent={rowContent}
             components={{
