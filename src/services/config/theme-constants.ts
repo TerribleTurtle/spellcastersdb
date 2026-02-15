@@ -1,33 +1,36 @@
 export const DECK_THEMES = {
   0: {
-    badge: "bg-red-950 text-red-100 border-red-800",
-    drawer: "bg-red-500/10",
-    border: "border-red-500 shadow-[0_-4px_20px_rgba(239,68,68,0.25)]", 
+    // Deck 1: Brand Primary (Purple)
+    badge: "bg-brand-primary text-primary-foreground border-brand-primary",
+    drawer: "bg-brand-primary/5",
+    border: "border-brand-primary shadow-[0_-4px_20px_rgba(147,51,234,0.25)]", 
     textData: "DECK 1",
     deckName: "DECK 1",
-    activeOverlay: "bg-red-500/10",
-    activeHeader: "bg-red-500/20",
-    activeDot: "bg-red-400"
+    activeOverlay: "bg-brand-primary/10",
+    activeHeader: "bg-brand-primary/20",
+    activeDot: "bg-brand-primary"
   },
   1: {
-    badge: "bg-green-950 text-green-100 border-green-800",
-    drawer: "bg-green-500/10",
-    border: "border-green-500 shadow-[0_-4px_20px_rgba(34,197,94,0.25)]", // Green-500
+    // Deck 2: Brand Accent (Cyan) - Swapped from Pink
+    badge: "bg-brand-accent text-accent-foreground border-brand-accent",
+    drawer: "bg-brand-accent/5",
+    border: "border-brand-accent shadow-[0_-4px_20px_rgba(34,211,238,0.25)]", 
     textData: "DECK 2",
     deckName: "DECK 2", 
-    activeOverlay: "bg-green-500/10",
-    activeHeader: "bg-green-500/20",
-    activeDot: "bg-green-400"
+    activeOverlay: "bg-brand-accent/10",
+    activeHeader: "bg-brand-accent/20",
+    activeDot: "bg-brand-accent"
   },
   2: {
-    badge: "bg-blue-950 text-blue-100 border-blue-800",
-    drawer: "bg-blue-500/10",
-    border: "border-blue-500 shadow-[0_-4px_20px_rgba(59,130,246,0.25)]", // Blue-500
+    // Deck 3: Brand Secondary (Pink) - Swapped from Cyan
+    badge: "bg-brand-secondary text-secondary-foreground border-brand-secondary",
+    drawer: "bg-brand-secondary/5",
+    border: "border-brand-secondary shadow-[0_-4px_20px_rgba(219,39,119,0.25)]", 
     textData: "DECK 3",
     deckName: "DECK 3",
-    activeOverlay: "bg-blue-500/10",
-    activeHeader: "bg-blue-500/20",
-    activeDot: "bg-blue-400"
+    activeOverlay: "bg-brand-secondary/10",
+    activeHeader: "bg-brand-secondary/20",
+    activeDot: "bg-brand-secondary"
   }
 } as const;
 

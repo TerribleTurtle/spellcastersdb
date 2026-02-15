@@ -49,13 +49,15 @@ export function useDeckEditorUI(
         if (message.includes("Full") || message.includes("Limit Reached")) {
             setPendingSwapCard(item);
             showToast("Deck Full. Select a slot to replace.", "info");
-            return;
+            return false;
         }
 
         // Generic Error
         const isError = message.includes("Cannot") || message.includes("Already");
         showToast(message, isError ? "destructive" : "default");
+        return false;
       }
+      return true;
     },
     [quickAdd, showToast, setPendingSwapCard]
   );

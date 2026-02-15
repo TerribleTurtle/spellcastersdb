@@ -15,13 +15,14 @@ import { cn } from "@/lib/utils";
 import { useDeckStore } from "@/store/index";
 import { selectIsExistingDeck } from "@/store/selectors";
 import { useShallow } from "zustand/react/shallow";
+import { useToast } from "@/hooks/useToast";
 
 // ...
 interface SoloEditorMobileProps {
   currentDeck: Deck;
   browserItems: BrowserItem[];
   onSelectItem: (item: UnifiedEntity, pos?: { x: number; y: number }, slotIndex?: number) => void;
-  onQuickAdd: (item: BrowserItem) => void;
+  onQuickAdd: (item: BrowserItem) => boolean | void;
   onDeckNameChange: (name: string) => void;
   isSaved: boolean;
   onSave: () => void;
@@ -63,7 +64,14 @@ export function SoloEditorMobile({
 
   // Modal State
   // const [showSaveCopyModal, setShowSaveCopyModal] = React.useState(false);
-  // const { showToast } = useToast();
+  const { showToast } = useToast();
+
+  const handleMobileQuickAdd = (item: BrowserItem) => {
+      const success = onQuickAdd(item);
+      if (success === true) {
+          showToast("Card Added", "success");
+      }
+  };
 
   // const handleSaveCopyClick = () => {
   //      setShowSaveCopyModal(true);
@@ -188,7 +196,7 @@ export function SoloEditorMobile({
               <UnitBrowser
                 items={browserItems}
                 onSelectItem={onSelectItem}
-                onQuickAdd={onQuickAdd}
+                onQuickAdd={handleMobileQuickAdd}
                 itemStates={itemStates}
               />
           </div>

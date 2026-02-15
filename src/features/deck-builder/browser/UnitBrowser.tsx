@@ -18,7 +18,7 @@ import { BrowserItem, VirtualRow, ItemUsageState } from "@/types/browser";
 interface UnitBrowserProps {
   items: BrowserItem[];
   onSelectItem: (item: BrowserItem, pos?: { x: number; y: number }) => void;
-  onQuickAdd: (item: BrowserItem) => void;
+  onQuickAdd: (item: BrowserItem) => boolean | void;
   itemStates?: Map<string, ItemUsageState>;
 }
 
