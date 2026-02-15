@@ -67,7 +67,6 @@
     "vitest": "^4.0.18"
   },
   "browserslist": [
-    "defaults",
     "chrome >= 100",
     "safari >= 15",
     "ios >= 15",

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.13] - 2026-02-15
+
+### Fixed
+
+- **Swap Mode**: Resolved an issue where cards could not be placed into empty slots on other decks during swap mode.
+- **Static Analysis**: Fixed `no-explicit-any` linting errors in `UnitBrowser.test.tsx`.
+
 ## [1.0.12] - 2026-02-15
 
 ### Fixed

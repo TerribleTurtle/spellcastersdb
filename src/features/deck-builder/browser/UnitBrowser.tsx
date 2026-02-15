@@ -162,7 +162,7 @@ const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
             columns={columns}
             onSelectItem={onSelectItem}
             onQuickAdd={onQuickAdd}
-            priority={index < 1}
+            priority={index < 4}
             itemStates={itemStates}
           />
         );
@@ -184,7 +184,9 @@ const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
             data={virtualData}
             // Mobile (4 cols, 390px) -> ~105px height. Desktop (6 cols, 1280px) -> ~250px height.
             defaultItemHeight={columns <= 4 ? 120 : 250}
-            overscan={200} 
+            overscan={200}
+            // Pre-render first items so LCP images are discoverable in initial HTML
+            initialItemCount={Math.min(4, virtualData.length)}
             itemContent={rowContent}
             components={{
               Footer: () => <div className="h-64" />, 
