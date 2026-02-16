@@ -19,10 +19,11 @@ Test Suite Audit Complete.
 
 ## Current Focus
 
-- **Deployment Prep** (Codebase is strictly verified and ready for release candidate build)
+- **CI/CD Hardening** — Phase 1 complete, Phase 2 (build + gate job) pending
 
 ## Notes
 
+- CI/CD Phase 1: Added concurrency group, corrected all version comments in `test.yml`.
 - Deployment complete. Codebase is clean and pushed to `main`.
 - Lighthouse audit fixes applied.
 - All verification checks passed (Lint, Type-Check, Test, Build).
