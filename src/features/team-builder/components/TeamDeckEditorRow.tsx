@@ -34,10 +34,11 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
   onExport
 }: TeamDeckEditorRowProps) {
   
-  // 1. Precise Selector: Only re-renders if THIS deck changes reference
-  // We use a selector that returns the specific deck object.
-  // Assuming the store update logic creates a new object reference ONLY for the changed deck.
-  const deck = useDeckStore(useShallow((state) => state.teamDecks[index]));
+  // 1. Precise Selector: Refined to include activeSlot for styling
+  const { deck, activeSlot } = useDeckStore(useShallow((state) => ({
+    deck: state.teamDecks[index],
+    activeSlot: state.activeSlot
+  })));
   const activeTeamId = useDeckStore((state) => state.activeTeamId);
   
   // Actions - Stable References from Store
@@ -138,7 +139,8 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
       
       hideGlobalActions={hideGlobalActions}
       className={cn(
-          "border-b-0 first:border-t-0 border-t shadow-lg pointer-events-auto",
+          activeSlot === index ? "border-b border-brand-primary" : "border-b border-white/5",
+          "border-t shadow-lg pointer-events-auto first:rounded-t-xl last:rounded-b-xl",
           // Removed theme?.drawer from here to prevent overriding background opacity
       )}
       tintClassName={theme?.drawer} // Pass tint here for overlay
