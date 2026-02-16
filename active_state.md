@@ -31,4 +31,5 @@ Patch History Integration — Complete. All card surfaces display balance badges
 - Hotfix: Whitelisted www.spellcastersdb.com for images.
 - Performance: Added `partialize` to Zustand persist, replaced `transition-all` on critical-path components.
 - Patch History: New Zustand store (`patch-history-store.ts`), Zod schemas, PatchBadge component, PatchHistorySection for full card pages.
+- UI Fix: Added `color-scheme: dark` to prevent forced browser dark mode from distorting rank badge colors.
 - Deployment complete.
