@@ -34,6 +34,7 @@
   - **Zod Validation**: Ensures data integrity at runtime.
   - **Comprehensive Testing**: 195+ unit and integration tests (Vitest) covering core logic, validation, and data integrity.
   - **Revalidation API**: On-demand cache invalidation via `/api/revalidate` (using `Authorization` header) with `revalidateTag` for robust content updates.
+    - **CI/CD**: The "Daily Revalidation" workflow requires `REVALIDATION_SECRET` and optionally `APP_URL` (defaults to `https://www.spellcastersdb.com`) in GitHub Secrets.
   - **State Persistence**: Optimized `zustand/persist` with `partialize` to serialize only critical user data, excluding transient UI state for consistent high performance.
 
   - **Image Optimization**: Configured with a 1-year cache TTL, AVIF support, and constrained device sizes to minimize bandwidth. Critical images use `priority` loading for LCP.

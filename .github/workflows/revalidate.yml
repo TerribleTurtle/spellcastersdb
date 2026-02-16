@@ -17,7 +17,10 @@ jobs:
     steps:
       - name: Trigger Revalidation
         env:
-          API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+          # Prefer APP_URL secret, fallback to production domain if not set
+          APP_URL: ${{ secrets.APP_URL }}
           SECRET: ${{ secrets.REVALIDATION_SECRET }}
         run: |
-          curl -X GET "$API_URL/api/revalidate" -H "Authorization: Bearer $SECRET"
+          TARGET_URL="${APP_URL:-https://www.spellcastersdb.com}"
+          echo "Targeting: $TARGET_URL"
+          curl -X GET "$TARGET_URL/api/revalidate" -H "Authorization: Bearer $SECRET"
