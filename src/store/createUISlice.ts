@@ -88,7 +88,7 @@ export const createUISlice: StateCreator<
   // Command Center State
   commandCenterOpen: false,
   openCommandCenter: () => set({ commandCenterOpen: true }),
-  closeCommandCenter: () => set({ commandCenterOpen: false }),
+  closeCommandCenter: () => set({ commandCenterOpen: false, isImporting: false }),
 
   // Browser Filters
   browserFilters: {

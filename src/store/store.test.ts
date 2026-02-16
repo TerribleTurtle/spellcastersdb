@@ -109,6 +109,25 @@ describe('DeckStore', () => {
              expect(savedTeams[0].id).toBeDefined();
         });
     });
+    describe('UI Actions', () => {
+        it('should reset isImporting when closing Command Center', () => {
+            const { setIsImporting, openCommandCenter, closeCommandCenter } = useDeckStore.getState();
+            
+            // Set up importing state
+            setIsImporting(true);
+            openCommandCenter();
+            
+            expect(useDeckStore.getState().isImporting).toBe(true);
+            expect(useDeckStore.getState().commandCenterOpen).toBe(true);
+            
+            // Close Command Center
+            closeCommandCenter();
+            
+            expect(useDeckStore.getState().commandCenterOpen).toBe(false);
+            expect(useDeckStore.getState().isImporting).toBe(false);
+        });
+    });
+
     describe('Persistence Actions', () => {
         it('should check if deck name is available', () => {
             const { saveDeck, setDeckName, checkDeckNameAvailable } = useDeckStore.getState();
