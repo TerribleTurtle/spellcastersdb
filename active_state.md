@@ -25,10 +25,10 @@ Patch History Integration — Complete. All card surfaces display balance badges
 ## Notes
 
 - CI/CD Phase 1: Added concurrency group, corrected all version comments in `test.yml`.
-- Deployment complete. Codebase is clean and pushed to `main`.
+- Released v1.0.14. Codebase is clean and pushed to `main` with tag `v1.0.14`.
 - Lighthouse audit fixes applied.
 - All verification checks passed (Lint, Type-Check, Test, Build).
 - Hotfix: Whitelisted www.spellcastersdb.com for images.
 - Performance: Added `partialize` to Zustand persist, replaced `transition-all` on critical-path components.
 - Patch History: New Zustand store (`patch-history-store.ts`), Zod schemas, PatchBadge component, PatchHistorySection for full card pages.
-- Ready for production release.
+- Deployment complete.

@@ -23,8 +23,8 @@ interface PatchHistoryState {
   isLoaded: boolean;
   /** Whether a fetch is currently in progress. */
   isLoading: boolean;
-  /** The balance_index.json version string. */
-  version: string;
+  /** The balance_index.json patch version string. */
+  patchVersion: string;
   /** Map of entity_id → PatchType from the latest balance patch. */
   entities: Record<string, PatchType>;
   /** Error message if fetch failed, otherwise null. */
@@ -46,7 +46,7 @@ interface PatchHistoryState {
 export const usePatchHistoryStore = create<PatchHistoryState>()((set, get) => ({
   isLoaded: false,
   isLoading: false,
-  version: "",
+  patchVersion: "",
   entities: {},
   error: null,
 
@@ -62,7 +62,7 @@ export const usePatchHistoryStore = create<PatchHistoryState>()((set, get) => ({
       set({
         isLoaded: true,
         isLoading: false,
-        version: data.version,
+        patchVersion: data.patch_version,
         entities: data.entities,
       });
     } catch (error) {

@@ -11,7 +11,7 @@ describe("patch-history service (Environment URL Switching)", () => {
     vi.resetAllMocks();
     fetchMock.mockResolvedValue({
       ok: true,
-      json: async () => ({ version: "1.0", entities: {} }),
+      json: async () => ({ patch_version: "1.0", patch_date: "2026-01-01", entities: {} }),
     });
     // Default to test or development if not stubbed
      vi.unstubAllEnvs();

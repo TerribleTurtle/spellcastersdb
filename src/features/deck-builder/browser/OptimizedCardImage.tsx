@@ -75,6 +75,10 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
       );
   }
 
+  // Remote images (GitHub Pages) are already WebP-optimized.
+  // Bypass Vercel's optimizer to avoid intermittent 400 errors.
+  const isRemote = imgSrc.startsWith("http");
+
   return (
     <div className={cn("relative overflow-hidden", className)}>
       <Image
@@ -86,6 +90,7 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
         quality={quality}
         className="object-cover"
         onError={handleError}
+        unoptimized={isRemote}
         {...props}
       />
     </div>

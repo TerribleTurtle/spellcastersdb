@@ -23,7 +23,8 @@ export type PatchType = "buff" | "nerf" | "rework" | "fix" | "new";
  * Used to show ⬆️/⬇️/🔄 icons on cards in the deck builder.
  */
 export interface BalanceIndex {
-  version: string;
+  patch_version: string;
+  patch_date: string;
   entities: Record<string, PatchType>;
 }
 

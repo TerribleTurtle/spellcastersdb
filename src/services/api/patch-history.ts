@@ -27,7 +27,7 @@ import type {
 // Empty Defaults (graceful fallbacks)
 // ============================================================================
 
-const EMPTY_BALANCE_INDEX: BalanceIndex = { version: "", entities: {} };
+const EMPTY_BALANCE_INDEX: BalanceIndex = { patch_version: "", patch_date: "", entities: {} };
 const EMPTY_CHANGELOG: Changelog = [];
 const EMPTY_TIMELINE: EntityTimeline = [];
 

@@ -71,6 +71,10 @@ export function GameImage({
     if (onError) onError(e);
   };
 
+  // Remote images (GitHub Pages) are already WebP-optimized.
+  // Bypass Vercel's optimizer to avoid intermittent 400 errors.
+  const isRemote = typeof imgSrc === "string" && imgSrc.startsWith("http");
+
   return (
     <Image
       key={String(src)}
@@ -79,6 +83,7 @@ export function GameImage({
       alt={alt || ""}
       className={cn(className, hasError ? "opacity-50 grayscale" : "")}
       onError={handleError}
+      unoptimized={isRemote}
     />
   );
 }

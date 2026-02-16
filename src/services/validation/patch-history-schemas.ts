@@ -18,7 +18,8 @@ export const PatchTypeSchema = z.enum(["buff", "nerf", "rework", "fix", "new"]);
 // ============================================================================
 
 export const BalanceIndexSchema = z.object({
-  version: z.string(),
+  patch_version: z.string(),
+  patch_date: z.string(),
   entities: z.record(z.string(), PatchTypeSchema),
 });
 
