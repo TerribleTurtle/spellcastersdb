@@ -23,9 +23,18 @@ export async function GET(
     return new NextResponse("Path required", { status: 400 });
   }
 
-  const localAssetsPath = process.env.LOCAL_ASSETS_PATH;
+  let localAssetsPath = process.env.LOCAL_ASSETS_PATH;
+  
+  // Fallback: Check for sibling directory (matching dev-data-source.ts behavior)
   if (!localAssetsPath) {
-    return new NextResponse("Local assets path not configured", {
+    const siblingPath = path.resolve(process.cwd(), "..", "spellcasters-community-api", "api", "v2");
+    if (fs.existsSync(siblingPath)) {
+        localAssetsPath = siblingPath;
+    }
+  }
+
+  if (!localAssetsPath) {
+    return new NextResponse("Local assets path not configured and sibling repo not found", {
       status: 500,
     });
   }

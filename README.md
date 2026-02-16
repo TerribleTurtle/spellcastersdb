@@ -15,6 +15,7 @@
 - **The Archive**: A searchable, filterable database of all Units, Spells, Titans, and Spellcasters.
 - **The Forge**: A logic-validating deck builder with premium modals for saving/editing and toast notifications for sharing.
 - **The Trinity (Team Builder)**: Build and manage teams of 3 decks with shared card pool validation and easy link sharing.
+- **Patch History**: Real-time balance updates with visual badges (Buff/Nerf/Rework) and detailed before/after stat comparisons for every entity.
 - **Live Updates**: Powered by a static JSON API that allows for rapid balance updates without full site rebuilds.
 - **Roadmap**: A live, interactive issue tracker connected to GitHub, featuring search, filtering, and "premium" UI.
 - **Accessibility**: Standardized UI components with ARIA labels and keyboard navigation support for an inclusive experience.

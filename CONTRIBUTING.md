@@ -44,6 +44,9 @@ If you are working on the Data Layer, you can point the app to a local version o
 
 1. Clone the API repo as a sibling to this repo: `../spellcasters-community-api`.
 2. The app will automatically try to find it there in `development` mode.
+   - **Game Data** (Units, Spells): Loaded via server-side file reading.
+   - **Patch History** (Badges, Timeline): Served via local API proxy.
+   - **Zero Config**: No environment variables required if using this folder structure.
 3. OR set `LOCAL_DATA_PATH` in `.env.local` to point explicitly to the `all_data.json`.
 
 ### 4. Run Development Server

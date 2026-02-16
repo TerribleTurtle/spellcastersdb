@@ -14,6 +14,8 @@ import { EntityMechanics } from "@/components/entity-card/EntityMechanics";
 import { SpellcasterAbilities } from "@/components/entity-card/SpellcasterAbilities";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 import { RankBadge } from "@/components/ui/rank-badge";
+import { PatchHistorySection } from "@/components/inspector/PatchHistorySection";
+import type { PatchEntry, TimelineEntry } from "@/types/patch-history";
 
 export type EntityItem = EntityDisplayItem;
 
@@ -23,12 +25,16 @@ interface EntityShowcaseProps {
   item: EntityItem;
   backUrl?: string; // Optional back link URL
   backLabel?: string; // Optional back link label
+  changelog?: PatchEntry[]; // Filtered changelog entries for this entity
+  timeline?: TimelineEntry[]; // Timeline snapshots for stat comparison
 }
 
 export function EntityShowcase({
   item,
   backUrl,
   backLabel = "Back",
+  changelog = [],
+  timeline = [],
 }: EntityShowcaseProps) {
   // Type Guard
   const isSpellcaster = "spellcaster_id" in item;
@@ -175,6 +181,9 @@ export function EntityShowcase({
 
           {/* Abilities (Spellcaster) */}
           <SpellcasterAbilities item={item} variant="detailed" />
+
+          {/* Patch History */}
+          <PatchHistorySection changelog={changelog} timeline={timeline} />
         </div>
       </div>
     </div>

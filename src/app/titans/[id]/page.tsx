@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 
 import { getEntityById, getTitans } from "@/services/api/api";
+import { fetchChangelog, fetchEntityTimeline } from "@/services/api/patch-history";
 import { Titan } from "@/types/api";
 
 interface TitanPageProps {
@@ -48,6 +49,13 @@ export default async function TitanPage({ params }: TitanPageProps) {
     notFound();
   }
 
+  // Fetch patch history data in parallel
+  const [changelog, timeline] = await Promise.all([
+    fetchChangelog(),
+    fetchEntityTimeline(id),
+  ]);
+  const entityChangelog = changelog.filter((e) => e.entity_id === id);
+
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "VisualArtwork",
@@ -72,6 +80,8 @@ export default async function TitanPage({ params }: TitanPageProps) {
         item={titan} 
         backUrl="/titans"
         backLabel="Back to Titans"
+        changelog={entityChangelog}
+        timeline={timeline}
       />
     </>
   );

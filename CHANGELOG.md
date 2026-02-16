@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.14] - 2026-02-15
+
+### Added
+
+- **Patch History Integration**:
+  - **Visual Badges**: Added Buff/Nerf/Rework badges to all card surfaces (Browser, Inspector, Detail Pages).
+  - **Filtering**: Browser and Inspector only show relevant patch types (buff/nerf/rework), while detail pages show full history including fixes.
+  - **State Management**: Implemented `patch-history-store` with Zod validation for robust patch data handling.
+
 ## [1.0.13] - 2026-02-15
 
 ### Fixed

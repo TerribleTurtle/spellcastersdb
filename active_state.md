@@ -2,7 +2,7 @@
 
 ## Current Focus
 
-Test Suite Audit Complete.
+Patch History Integration — Complete. All card surfaces display balance badges.
 
 ## Status
 
@@ -19,7 +19,8 @@ Test Suite Audit Complete.
 
 ## Current Focus
 
-- **CI/CD Hardening** — Phase 1 complete, Phase 2 (build + gate job) pending
+- **Patch History Integration** — Buff/nerf/rework badges on all card surfaces, inspector header. Filtered to exclude "fix"/"new" in browser context, but shown on detail pages.
+- **Filtering Logic** — Added `BROWSER_PATCH_TYPES` and `isBrowserPatchType` helper. Verified with new unit tests.
 
 ## Notes
 
@@ -29,4 +30,5 @@ Test Suite Audit Complete.
 - All verification checks passed (Lint, Type-Check, Test, Build).
 - Hotfix: Whitelisted www.spellcastersdb.com for images.
 - Performance: Added `partialize` to Zustand persist, replaced `transition-all` on critical-path components.
+- Patch History: New Zustand store (`patch-history-store.ts`), Zod schemas, PatchBadge component, PatchHistorySection for full card pages.
 - Ready for production release.

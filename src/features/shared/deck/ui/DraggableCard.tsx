@@ -2,6 +2,8 @@ import React, { useMemo, useCallback, useRef, useEffect } from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { Plus, Shield, Wand2, Swords, HelpCircle } from "lucide-react";
 import { RankBadge } from "@/components/ui/rank-badge";
+import { PatchBadge } from "@/components/ui/PatchBadge";
+import type { PatchType } from "@/types/patch-history";
 import {
   Tooltip,
   TooltipContent,
@@ -25,6 +27,7 @@ interface DraggableCardProps {
   priority?: boolean;
   isDimmed?: boolean;
   otherDeckIndices?: number[];
+  patchType?: PatchType;
 }
 
 
@@ -35,6 +38,7 @@ export const DraggableCard = React.memo(function DraggableCard({
   priority = false,
   isDimmed = false,
   otherDeckIndices,
+  patchType,
 }: DraggableCardProps) {
 
   const id = item.entity_id;
@@ -147,6 +151,13 @@ export const DraggableCard = React.memo(function DraggableCard({
         >
             <Plus className="w-3.5 h-3.5 lg:w-5 lg:h-5 2xl:w-6 2xl:h-6" strokeWidth={4} />
         </div>
+
+        {/* Patch Badge — Top Right */}
+        {patchType && (
+          <div className="absolute top-1 right-1 z-20 pointer-events-none">
+            <PatchBadge type={patchType} variant="icon" />
+          </div>
+        )}
 
         {/* Rank Badge - Overlaid on Image */}
         {(rank || isTitan) && (
