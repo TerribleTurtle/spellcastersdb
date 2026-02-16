@@ -36,19 +36,9 @@ describe('Asset Cache (Server Implementation)', () => {
         const result = await getCachedAsset("https://example.com/image.png");
 
         expect(result).toBeDefined();
-        // Check if Buffer.from was called (proof server path was taken)
-        // NOTE: If test environment has window defined (JSDOM), this test might fail if code takes browser path.
-        // We will see. Default vitest setup usually heavily implies Node unless configured.
-        // We'll trust the spy to tell us which path.
-        
-        // If JSDOM is active, window is defined.
-        // The implementation checks: typeof window !== "undefined" && typeof FileReader !== "undefined"
-        
-        if (typeof window === 'undefined') {
-             expect(bufferSpy).toHaveBeenCalled();
-        } else {
 
-        }
+        // @vitest-environment node ensures window is undefined, so Buffer path is taken
+        expect(bufferSpy).toHaveBeenCalled();
         
         expect(result?.startsWith("data:image/png;base64,")).toBe(true);
     });

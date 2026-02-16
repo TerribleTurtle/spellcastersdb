@@ -105,14 +105,8 @@ describe("Logic Hardening (Torture Tests)", () => {
 
     describe("Rule Violations", () => {
          it("should detect duplicate Titans", () => {
-             // Mock checkTitan logic via validateDeck
-             // We need a deck with 2 titans.
-             // Since we use real validation logic, we need to construct a deck that LOOKS like it has 2 titans.
-             // The logic in stats.ts calculates titanCount based on index 4.
-             // If we put a unit in slot 4, it counts as 1.
-             // If we put a Titan in slot 0... stats.ts filters s.index < TITAN_SLOT_INDEX.
-             // So if we put a Titan in slot 0, it counts as a UNIT?
-             // Let's verify this behavior.
+             // Exploratory: validates that putting a Titan in a unit slot (index 0)
+             // alongside one in the Titan slot (index 4) produces an invalid deck.
              
              const titanUnit = { 
                  entity_id: "t1", name: "Titan", category: EntityCategory.Titan, 
@@ -123,36 +117,12 @@ describe("Logic Hardening (Torture Tests)", () => {
                  id: "d_titan",
                  name: "Double Titan",
                  slots: [
-                     { index: 0, unit: titanUnit }, // Titan in Unit Slot
-                     { index: 4, unit: titanUnit }  // Titan in Titan Slot
+                     { index: 0, unit: titanUnit },
+                     { index: 4, unit: titanUnit }
                  ]
              };
              
              const { isValid, errors } = validateDeck(badDeck);
-             // Logic in rules.ts checkTitan: if stats.titanCount > 1...
-             // stats.ts: titanCount = slot[4] ? 1 : 0.
-             // So titanCount is MAX 1.
-             // But checkTitan also checks if Titans are in non-Titan slots?
-             // Maybe not.
-             // If not, this test reveals a logical gap: We can put Titans in normal slots!
-             
-             // Let's Expect it to FAIL. If it passes, we found a bug.
-             // Note: validateDeck calls calculateDeckStats.
-             // stats.ts lines 27-29: if category === Titan, do nothing?
-             // It doesn't count towards unitCount (because of filter index < 4).
-             // But it doesn't add to titanCount either (unless in slot 4).
-             // So a Titan in slot 0 is effectively "invisible" to stats?
-             // That's a bug/feature.
-             // Let's see if checkDeckSize catches it? Unit count will be 0.
-             // If we fill other slots with units, unit count = 4.
-             
-             // This test is exploratory.
-             // Expectation: Validator SHOULD catch invalid category in slot.
-             // But we don't have "Slot Type/Category Mismatch" rule in `validateDeck` (Step 241 only lists 5 checks).
-             // `checkCreaturePresence`? `checkRank1or2`?
-             
-             // If this test fails (i.e. deck IS valid), then we have a gap.
-             // I'll assert isValid is FALSE.
              expect(isValid).toBe(false);
          });
     });

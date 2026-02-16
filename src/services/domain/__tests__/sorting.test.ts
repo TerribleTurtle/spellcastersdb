@@ -41,7 +41,6 @@ describe('Sorting Logic', () => {
             const groups = groupItems(items, 'Rank');
             
             const rank1Group = groups.find(g => g.title === 'Rank I');
-             items.find(i => (i as Unit).rank === 'II'); // Spellcaster excluded as it has no rank property check or falls through
 
             expect(rank1Group).toBeDefined();
             expect(rank1Group?.items).toContain(unitRank1);

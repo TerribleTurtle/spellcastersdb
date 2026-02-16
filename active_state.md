@@ -14,8 +14,12 @@ Test Suite Audit Complete.
 
 ## Next Steps
 
-- [ ] Fix 4 critical test quality issues (false positives)
-- [ ] Add missing tests for persistence/stats layers
+- [x] Fix 4 critical test quality issues (false positives)
+- [x] Add missing tests for persistence/stats layers
+
+## Current Focus
+
+- **Deployment Prep** (Codebase is strictly verified and ready for release candidate build)
 
 ## Notes
 
@@ -23,4 +27,5 @@ Test Suite Audit Complete.
 - Lighthouse audit fixes applied.
 - All verification checks passed (Lint, Type-Check, Test, Build).
 - Hotfix: Whitelisted www.spellcastersdb.com for images.
+- Performance: Added `partialize` to Zustand persist, replaced `transition-all` on critical-path components.
 - Ready for production release.

@@ -123,7 +123,7 @@ export function DeckSlot({
       ref={setNodeRef}
       data-testid={`deck-slot-${slot.index}`}
       className={cn(
-        "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center w-full z-50",
+        "relative group aspect-3/4 rounded-lg border-2 transition-[border-color,background-color,box-shadow,transform,opacity] flex flex-col items-center justify-center w-full z-50",
         "md:w-full md:max-w-[140px]",
         // Valid drop target
         isValidTarget &&

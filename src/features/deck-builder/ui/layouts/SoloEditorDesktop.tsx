@@ -65,7 +65,7 @@ export function SoloEditorDesktop({
       {/* Left Column: Vault / Browser */}
       <section 
         aria-label="Unit Library"
-        className="flex-1 overflow-hidden relative transition-all duration-300 ease-in-out xl:col-start-1 xl:row-start-2 xl:pb-0! xl:border-r xl:border-white/10"
+        className="flex-1 overflow-hidden relative transition-[flex,width] duration-300 ease-in-out xl:col-start-1 xl:row-start-2 xl:pb-0! xl:border-r xl:border-white/10"
         style={{ paddingBottom: `${footerHeight}px` }}
       >
           {pendingSwapCard && (

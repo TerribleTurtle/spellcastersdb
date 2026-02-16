@@ -25,6 +25,20 @@ export const useDeckStore = create<DeckBuilderState>()(
       })),
       {
         name: 'spellcasters-store-v2',
+        partialize: (state) => ({
+          // User Data (must persist)
+          savedDecks: state.savedDecks,
+          savedTeams: state.savedTeams,
+          currentDeck: state.currentDeck,
+          // Team Editor State (must persist for sync/hydration)
+          teamName: state.teamName,
+          teamDecks: state.teamDecks,
+          activeTeamId: state.activeTeamId,
+          activeSlot: state.activeSlot,
+          // Session State (read by useAppHydration)
+          mode: state.mode,
+          viewSummary: state.viewSummary,
+        }),
       }
     )
   )

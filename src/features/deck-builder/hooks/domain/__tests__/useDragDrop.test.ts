@@ -56,23 +56,12 @@ describe("useDragDrop", () => {
   it("should expose handleDragCancel to clear drag state", () => {
     const { result } = renderHook(() => useDragDrop());
 
-    // This is the reproduction case: 
-    // We expect handleDragCancel to exist and clear the state.
-    // If it doesn't exist, this test will fail (or we cast to any to verify behavior if it were implemented).
-    
-    // Check if function exists (Validation of current broken state: it should be undefined currently)
-    const hasHandler = "handleDragCancel" in result.current;
-    
-    if (hasHandler) {
-       // If it exists, verify it works (Forward compatibility for when we fix it)
-       act(() => {
-         result.current.handleDragCancel();
-       });
-       expect(setActiveDragItemMock).toHaveBeenCalledWith(null);
-    } else {
-       // Ideally we want this test to Fail if the handler is missing, to prove we need to add it.
-       // So we make an assertion that it SHOULD be defined.
-       expect(result.current.handleDragCancel).toBeDefined();
-    }
+    expect(result.current.handleDragCancel).toBeDefined();
+
+    act(() => {
+      result.current.handleDragCancel();
+    });
+
+    expect(setActiveDragItemMock).toHaveBeenCalledWith(null);
   });
 });

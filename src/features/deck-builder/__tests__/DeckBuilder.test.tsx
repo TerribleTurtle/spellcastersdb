@@ -22,13 +22,6 @@ vi.mock("next/image", () => ({
     default: ({ ...props }: React.ComponentProps<'img'> & { fill?: boolean }) => <img alt="" {...props} />
 }));
 
-// Polyfill ResizeObserver
-global.ResizeObserver = class ResizeObserver {
-    observe() {}
-    unobserve() {}
-    disconnect() {}
-};
-
 // Mock next/navigation
 vi.mock("next/navigation", () => ({
     useRouter: () => ({

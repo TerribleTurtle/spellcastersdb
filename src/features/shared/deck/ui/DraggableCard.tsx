@@ -115,7 +115,7 @@ export const DraggableCard = React.memo(function DraggableCard({
       className={cn(
         "relative group cursor-pointer flex flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 select-none",
         "aspect-4/5 rounded-lg overflow-hidden border border-white/10 bg-surface-card", // More compact aspect ratio
-        "hover:border-brand-primary/50 transition-all hover:scale-105",
+        "hover:border-brand-primary/50 transition-[border-color,transform] hover:scale-105",
         // Actually, we want the bottom bar to be part of the card visuals.
         isDragging && "opacity-50",
         isDimmed && "opacity-40 grayscale",
