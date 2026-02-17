@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { BackupService, BackupData } from "../BackupService";
 import { DeckBuilderState } from "@/store/types";
 import { Deck, Team } from "@/types/deck";

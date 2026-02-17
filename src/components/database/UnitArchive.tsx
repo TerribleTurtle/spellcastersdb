@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import { LayoutGrid, List } from "lucide-react";
 
 import { useUnitSearch } from "@/features/deck-builder/hooks/domain/useUnitSearch";
 import { cn } from "@/lib/utils";
 import { UnifiedEntity } from "@/types/api";
+import { usePatchHistoryStore } from "@/store/patch-history-store";
+import { isBrowserPatchType } from "@/lib/patch-utils";
 
 import { FilterSidebar } from "./FilterSidebar";
 // Assuming we use Unit type
@@ -48,6 +50,11 @@ export function UnitArchive(props: UnitArchiveProps) {
     clearFiltersBase();
     setSearchQuery("");
   };
+
+  // Load balance index for patch badges (idempotent — fetches once)
+  const loadBalanceIndex = usePatchHistoryStore((s) => s.loadBalanceIndex);
+  const balanceEntities = usePatchHistoryStore((s) => s.entities);
+  useEffect(() => { loadBalanceIndex(); }, [loadBalanceIndex]);
 
   // derived state
   const filteredUnits = useUnitSearch(initialUnits, searchQuery, activeFilters);
@@ -114,13 +121,17 @@ export function UnitArchive(props: UnitArchiveProps) {
                 : "grid-cols-1"
             )}
           >
-            {filteredUnits.map((unit) => (
-              <UnitCard
-                key={getUniqueId(unit)}
-                unit={unit}
-                variant={viewMode === "list" ? "compact" : "default"}
-              />
-            ))}
+            {filteredUnits.map((unit) => {
+              const entityPatch = balanceEntities[unit.entity_id];
+              return (
+                <UnitCard
+                  key={getUniqueId(unit)}
+                  unit={unit}
+                  variant={viewMode === "list" ? "compact" : "default"}
+                  patchType={entityPatch && isBrowserPatchType(entityPatch) ? entityPatch : undefined}
+                />
+              );
+            })}
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-white/10 rounded-xl">

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.15] - 2026-02-17
+
+### Added
+
+- **Patch History Badges**: Wired `UnitArchive` to `usePatchHistoryStore` so database/archive pages now display buff/nerf/rework badges on unit cards.
+- **Ecosystem Links**: Added "Part of the Spellcasters Ecosystem" section to `README.md` linking Community API, The Grimoire, and Spellcasters Bot.
+
+### Fixed
+
+- **Dark Mode**: Applied `color-scheme: dark` to prevent forced browser dark mode from distorting rank badge colors.
+- **Team Drawer**: Centered drawer cards vertically and reduced excess padding in desktop view.
+- **Deck Borders**: Fixed deck row border-radius so top/bottom decks have properly curved, colored borders.
+- **Code Health**: Removed unused `vi` import in `BackupService.test.ts`. Deleted orphaned `HoverInspector.tsx`.
+
 ## [1.0.14] - 2026-02-15
 
 ### Added

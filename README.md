@@ -83,6 +83,14 @@ For detailed setup instructions, including **Local API Development**, please see
 - [**API Info**](docs/api_info.md): Specification for the JSON data consumed by this app.
 - [**Brand Guidelines**](docs/BRAND_GUIDELINES.md): Colors, fonts, and styling rules.
 
+## 🌐 Part of the Spellcasters Ecosystem
+
+- **[Spellcasters Community API](https://github.com/TerribleTurtle/spellcasters-community-api)** — The shared data source (GitHub Pages)
+- **[The Grimoire](https://github.com/TerribleTurtle/spellcasters-manager)** — Data management & patch publishing
+- **[Spellcasters Bot](https://github.com/TerribleTurtle/spellcasters-bot)** — Discord integration
+
+> All tools consume the same [Community API v2](https://terribleturtle.github.io/spellcasters-community-api/api/v2/).
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
