@@ -16,11 +16,21 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-/** Renders a date string in the viewer's local timezone (client-side only). */
+/** Renders a date string in the viewer's locale format (client-side only). */
 function LocalDate({ iso }: { iso: string }) {
   const [display, setDisplay] = useState(iso);
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  useEffect(() => { try { setDisplay(new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })); } catch { setDisplay(iso); } }, [iso]);
+  useEffect(() => {
+    try {
+      // Dates are date-only strings (e.g. "2026-02-18"), so we parse them
+      // as local dates and format with the viewer's locale — no time component.
+      const [year, month, day] = iso.split("-").map(Number);
+      const d = new Date(year, month - 1, day);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDisplay(d.toLocaleDateString(undefined, { dateStyle: "medium" }));
+    } catch {
+      setDisplay(iso);
+    }
+  }, [iso]);
   return <time dateTime={iso} suppressHydrationWarning>{display}</time>;
 }
 
