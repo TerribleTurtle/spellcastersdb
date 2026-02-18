@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Changed
+
+- **Patch History UI**: Redesigned vertical layout and separated it from the card component for cleaner inspector view.
+- **Mobile UI**: Adjusted deck badge sizes for better visibility on small screens.
+
+### Fixed
+
+- **Code Health**: Resolved `no-explicit-any` and `prefer-const` linting errors in `PatchHistorySection.tsx`.
+
 ## [1.0.15] - 2026-02-17
 
 ### Added

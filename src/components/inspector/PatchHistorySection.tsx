@@ -210,7 +210,7 @@ export function PatchHistorySection({
              const previousSnap = getPreviousSnapshot(entry.version);
              
              // Calculate diffs
-             let statChanges: { key: string; old: number; new: number; diff: number }[] = [];
+             const statChanges: { key: string; old: number; new: number; diff: number }[] = [];
              
              if (currentSnap && previousSnap) {
                  Object.keys(currentSnap).forEach(key => {
@@ -287,14 +287,17 @@ export function PatchHistorySection({
                              {/* Diffs (unchanged) */}
                              {change.diffs && change.diffs.length > 0 && (
                                 <div className="pl-4 mt-1 space-y-0.5 border-l border-white/5 ml-1">
-                                     {change.diffs.slice(0, 3).map((d: any, i) => (
+                                     {change.diffs.slice(0, 3).map((d, i) => {
+                                         const diff = d as { path?: string[]; lhs?: unknown; rhs?: unknown };
+                                         return (
                                          <div key={i} className="text-[10px] font-mono text-gray-500 flex flex-wrap gap-1">
-                                             <span className="opacity-70">{d.path ? d.path.join('.') : 'value'}:</span>
+                                             <span className="opacity-70">{diff.path ? diff.path.join('.') : 'value'}:</span>
                                              <span className="text-gray-400">
-                                                 {String(d.lhs ?? 'null')} <span className="text-gray-600">→</span> {String(d.rhs ?? 'null')}
+                                                 {String(diff.lhs ?? 'null')} <span className="text-gray-600">→</span> {String(diff.rhs ?? 'null')}
                                              </span>
                                          </div>
-                                     ))}
+                                     );
+                                     })}
                                 </div>
                              )}
                           </li>
