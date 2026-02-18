@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useCallback, useEffect } from "react";
+import React, { useMemo, useCallback } from "react";
 import { Virtuoso } from "react-virtuoso";
 import { UnitBrowserHeader } from "./UnitBrowserHeader";
 import { UnitGroupHeader } from "./UnitGroupHeader";
@@ -16,7 +16,7 @@ import { prepareVirtualizationRows } from "./utils";
 import { useUnitBrowserState, FilterState } from "@/features/deck-builder/hooks/ui/useUnitBrowserState";
 import { BrowserItem, VirtualRow, ItemUsageState } from "@/types/browser";
 import { BrowserSkeleton } from "./BrowserSkeleton";
-import { usePatchHistoryStore } from "@/store/patch-history-store";
+
 
 interface UnitBrowserProps {
   items: BrowserItem[];
@@ -45,10 +45,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
       activeFilterCount
   } = useUnitBrowserState();
 
-  // Load balance index for patch badges (idempotent — fetches once)
-  const loadBalanceIndex = usePatchHistoryStore((s) => s.loadBalanceIndex);
-  const balanceEntities = usePatchHistoryStore((s) => s.entities);
-  useEffect(() => { loadBalanceIndex(); }, [loadBalanceIndex]);
+
 
   // Responsive Columns Hook logic
   const { columns, isReady } = useResponsiveGrid(DEFAULT_BROWSER_COLUMNS);
@@ -100,7 +97,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
         onSelectItem={onSelectItem}
         onQuickAdd={onQuickAdd}
         itemStates={itemStates}
-        balanceIndex={balanceEntities}
+
       />
     </div>
   );
@@ -115,7 +112,7 @@ interface UnitBrowserListProps {
     onSelectItem: (item: BrowserItem, pos?: { x: number; y: number }) => void;
     onQuickAdd: (item: BrowserItem) => boolean | void;
     itemStates?: Map<string, ItemUsageState>;
-    balanceIndex?: Record<string, import("@/types/patch-history").PatchType>;
+
 }
 
 const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
@@ -127,7 +124,7 @@ const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
     onSelectItem,
     onQuickAdd,
     itemStates,
-    balanceIndex
+
 }: UnitBrowserListProps) {
   // Collapsible Sections State
   const [collapsedSections, setCollapsedSections] = React.useState<Set<string>>(new Set());
@@ -173,12 +170,12 @@ const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
             onQuickAdd={onQuickAdd}
             priority={index < 4}
             itemStates={itemStates}
-            balanceIndex={balanceIndex}
+
           />
         );
       }
     },
-    [columns, onSelectItem, onQuickAdd, toggleSection, itemStates, balanceIndex]
+    [columns, onSelectItem, onQuickAdd, toggleSection, itemStates]
   );
 
   return (

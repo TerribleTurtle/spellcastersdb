@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 
 import { getEntityById, getSpells } from "@/services/api/api";
-import { fetchChangelog, fetchEntityTimeline } from "@/services/api/patch-history";
+import { fetchChangelog, fetchEntityTimeline, filterChangelogForEntity } from "@/services/api/patch-history";
 import { Spell } from "@/types/api";
 
 interface SpellPageProps {
@@ -54,7 +54,7 @@ export default async function SpellPage({ params }: SpellPageProps) {
     fetchChangelog(),
     fetchEntityTimeline(id),
   ]);
-  const entityChangelog = changelog.filter((e) => e.entity_id === id);
+  const entityChangelog = filterChangelogForEntity(changelog, id);
 
   const jsonLdData = {
     "@context": "https://schema.org",
@@ -82,6 +82,7 @@ export default async function SpellPage({ params }: SpellPageProps) {
         backLabel="Back to Spells"
         changelog={entityChangelog}
         timeline={timeline}
+        showControls={true}
       />
     </>
   );

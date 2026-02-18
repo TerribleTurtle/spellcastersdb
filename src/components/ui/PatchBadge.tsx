@@ -1,29 +1,25 @@
 "use client";
 
 /**
- * PatchBadge — Visual indicator for balance changes (buff/nerf/rework/fix/new).
- *
- * Two variants:
- * - "icon" — Small icon badge for browser cards (top-right corner).
- * - "full" — Icon + label for inspector panels and detail pages.
+ * PatchBadge — Visual indicator for patch categories.
  *
  * @example
- * <PatchBadge type="buff" variant="icon" />
- * <PatchBadge type="nerf" variant="full" />
+ * <PatchBadge type="Patch" variant="icon" />
+ * <PatchBadge type="Hotfix" variant="full" />
  */
 
-import { ArrowUp, ArrowDown, RefreshCw, Wrench, Sparkles } from "lucide-react";
+import { FileDiff, Flame, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { PatchType } from "@/types/patch-history";
+import type { PatchCategory } from "@/types/patch-history";
 
 // ============================================================================
 // Configuration
 // ============================================================================
 
 const PATCH_CONFIG: Record<
-  PatchType,
+  PatchCategory,
   {
-    icon: typeof ArrowUp;
+    icon: typeof FileDiff;
     label: string;
     bg: string;
     text: string;
@@ -31,45 +27,29 @@ const PATCH_CONFIG: Record<
     glow: string;
   }
 > = {
-  buff: {
-    icon: ArrowUp,
-    label: "Buffed",
-    bg: "bg-emerald-500/20",
-    text: "text-emerald-400",
-    border: "border-emerald-500/40",
-    glow: "shadow-[0_0_6px_rgba(16,185,129,0.3)]",
-  },
-  nerf: {
-    icon: ArrowDown,
-    label: "Nerfed",
-    bg: "bg-red-500/20",
-    text: "text-red-400",
-    border: "border-red-500/40",
-    glow: "shadow-[0_0_6px_rgba(239,68,68,0.3)]",
-  },
-  rework: {
-    icon: RefreshCw,
-    label: "Reworked",
-    bg: "bg-amber-500/20",
-    text: "text-amber-400",
-    border: "border-amber-500/40",
-    glow: "shadow-[0_0_6px_rgba(245,158,11,0.3)]",
-  },
-  fix: {
-    icon: Wrench,
-    label: "Fixed",
+  Patch: {
+    icon: FileDiff,
+    label: "Patch",
     bg: "bg-sky-500/20",
     text: "text-sky-400",
     border: "border-sky-500/40",
     glow: "shadow-[0_0_6px_rgba(14,165,233,0.3)]",
   },
-  new: {
+  Hotfix: {
+    icon: Flame,
+    label: "Hotfix",
+    bg: "bg-rose-500/20",
+    text: "text-rose-400",
+    border: "border-rose-500/40",
+    glow: "shadow-[0_0_6px_rgba(244,63,94,0.3)]",
+  },
+  Content: {
     icon: Sparkles,
-    label: "New",
-    bg: "bg-violet-500/20",
-    text: "text-violet-400",
-    border: "border-violet-500/40",
-    glow: "shadow-[0_0_6px_rgba(139,92,246,0.3)]",
+    label: "Content",
+    bg: "bg-emerald-500/20",
+    text: "text-emerald-400",
+    border: "border-emerald-500/40",
+    glow: "shadow-[0_0_6px_rgba(16,185,129,0.3)]",
   },
 };
 
@@ -78,9 +58,9 @@ const PATCH_CONFIG: Record<
 // ============================================================================
 
 interface PatchBadgeProps {
-  type: PatchType;
+  type: PatchCategory;
   variant?: "icon" | "full";
-  className?: string;
+  className?: string; // Allow custom sizing/positioning
 }
 
 export function PatchBadge({ type, variant = "icon", className }: PatchBadgeProps) {

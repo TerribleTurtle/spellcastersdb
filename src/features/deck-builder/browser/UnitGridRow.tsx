@@ -1,7 +1,5 @@
 import React from "react";
 import { BrowserItem, ItemUsageState } from "@/types/browser";
-import type { PatchType } from "@/types/patch-history";
-import { isBrowserPatchType } from "@/lib/patch-utils";
 import { DraggableCard } from "@/features/shared/deck/ui/DraggableCard";
 
 interface UnitGridRowProps {
@@ -11,7 +9,6 @@ interface UnitGridRowProps {
   onQuickAdd: (item: BrowserItem) => void;
   priority?: boolean;
   itemStates?: Map<string, ItemUsageState>;
-  balanceIndex?: Record<string, PatchType>;
 }
 
 export const UnitGridRow = React.memo(function UnitGridRow({
@@ -21,7 +18,6 @@ export const UnitGridRow = React.memo(function UnitGridRow({
   onQuickAdd,
   priority = false,
   itemStates,
-  balanceIndex,
 }: UnitGridRowProps) {
   return (
     <div
@@ -41,11 +37,6 @@ export const UnitGridRow = React.memo(function UnitGridRow({
             priority={priority}
             isDimmed={state?.isActive}
             otherDeckIndices={state?.memberOfDecks}
-            patchType={
-              balanceIndex?.[item.entity_id] && isBrowserPatchType(balanceIndex[item.entity_id])
-                ? balanceIndex[item.entity_id]
-                : undefined
-            }
           />
         );
       })}

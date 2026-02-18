@@ -27,6 +27,7 @@ interface EntityShowcaseProps {
   backLabel?: string; // Optional back link label
   changelog?: PatchEntry[]; // Filtered changelog entries for this entity
   timeline?: TimelineEntry[]; // Timeline snapshots for stat comparison
+  showControls?: boolean;
 }
 
 export function EntityShowcase({
@@ -35,6 +36,7 @@ export function EntityShowcase({
   backLabel = "Back",
   changelog = [],
   timeline = [],
+  showControls = false,
 }: EntityShowcaseProps) {
   // Type Guard
   const isSpellcaster = "spellcaster_id" in item;
@@ -71,7 +73,7 @@ export function EntityShowcase({
   const magicSchool = magicSchoolRaw === "Titan" ? null : magicSchoolRaw;
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center p-4 md:p-8 bg-surface-main/30 relative">
+    <div className="min-h-screen w-full flex flex-col items-center py-6 md:py-12 px-4 md:px-8 bg-surface-main/30 relative">
       
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -89,6 +91,7 @@ export function EntityShowcase({
                 src={getCardImageUrl(item)}
                 alt={getCardAltText(item)}
                 fill
+                priority
                 className="object-cover opacity-40 blur-2xl scale-110 group-hover:scale-125 transition-transform duration-700"
               />
               
@@ -181,11 +184,15 @@ export function EntityShowcase({
 
           {/* Abilities (Spellcaster) */}
           <SpellcasterAbilities item={item} variant="detailed" />
-
-          {/* Patch History */}
-          <PatchHistorySection changelog={changelog} timeline={timeline} />
         </div>
       </div>
+
+      {/* Patch History — Separate section below the card */}
+      {(changelog.length > 0 || timeline.length > 0) && (
+        <div className="relative z-10 w-full max-w-lg mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
+          <PatchHistorySection changelog={changelog} timeline={timeline} showControls={showControls} />
+        </div>
+      )}
     </div>
   );
 }

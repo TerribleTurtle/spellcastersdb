@@ -3,29 +3,29 @@ import { render, screen } from "@testing-library/react";
 import { PatchBadge } from "@/components/ui/PatchBadge";
 
 describe("PatchBadge", () => {
-  it("renders icon variant for buff with correct title", () => {
-    render(<PatchBadge type="buff" variant="icon" />);
-    const badge = screen.getByTestId("patch-badge-buff");
+  it("renders icon variant for Patch with correct title", () => {
+    render(<PatchBadge type="Patch" variant="icon" />);
+    const badge = screen.getByTestId("patch-badge-Patch");
     expect(badge).toBeTruthy();
-    expect(badge.getAttribute("title")).toBe("Buffed");
+    expect(badge.getAttribute("title")).toBe("Patch");
   });
 
-  it("renders icon variant for nerf with correct title", () => {
-    render(<PatchBadge type="nerf" variant="icon" />);
-    const badge = screen.getByTestId("patch-badge-nerf");
+  it("renders icon variant for Hotfix with correct title", () => {
+    render(<PatchBadge type="Hotfix" variant="icon" />);
+    const badge = screen.getByTestId("patch-badge-Hotfix");
     expect(badge).toBeTruthy();
-    expect(badge.getAttribute("title")).toBe("Nerfed");
+    expect(badge.getAttribute("title")).toBe("Hotfix");
   });
 
   it("renders full variant with label text", () => {
-    render(<PatchBadge type="rework" variant="full" />);
-    const badge = screen.getByTestId("patch-badge-rework");
+    render(<PatchBadge type="Content" variant="full" />);
+    const badge = screen.getByTestId("patch-badge-Content");
     expect(badge).toBeTruthy();
-    expect(badge.textContent).toContain("Reworked");
+    expect(badge.textContent).toContain("Content");
   });
 
-  it("renders all five patch types", () => {
-    const types = ["buff", "nerf", "rework", "fix", "new"] as const;
+  it("renders all three patch categories", () => {
+    const types = ["Patch", "Hotfix", "Content"] as const;
     for (const type of types) {
       const { unmount } = render(<PatchBadge type={type} />);
       expect(screen.getByTestId(`patch-badge-${type}`)).toBeTruthy();
@@ -34,8 +34,8 @@ describe("PatchBadge", () => {
   });
 
   it("applies custom className", () => {
-    render(<PatchBadge type="buff" className="custom-class" />);
-    const badge = screen.getByTestId("patch-badge-buff");
+    render(<PatchBadge type="Patch" className="custom-class" />);
+    const badge = screen.getByTestId("patch-badge-Patch");
     expect(badge.className).toContain("custom-class");
   });
 });

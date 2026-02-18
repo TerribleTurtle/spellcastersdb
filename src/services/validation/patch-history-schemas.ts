@@ -1,6 +1,6 @@
 /**
  * Zod Schemas for Patch History API responses.
- * Validates balance_index.json, changelog.json, changelog_latest.json, and timeline/{id}.json.
+ * Validates changelog_index.json, changelog_page_N.json, timeline/{id}.json.
  *
  * @see {@link types/patch-history.d.ts} for TypeScript types.
  */
@@ -8,19 +8,20 @@
 import { z } from "zod";
 
 // ============================================================================
-// Shared
+// Core Types
 // ============================================================================
 
-export const PatchTypeSchema = z.enum(["buff", "nerf", "rework", "fix", "new"]);
+export const ChangeTypeSchema = z.enum(["add", "edit", "delete"]);
 
-// ============================================================================
-// Balance Index
-// ============================================================================
+export const PatchCategorySchema = z.enum(["Patch", "Hotfix", "Content"]);
 
-export const BalanceIndexSchema = z.object({
-  patch_version: z.string(),
-  patch_date: z.string(),
-  entities: z.record(z.string(), PatchTypeSchema),
+export const ChangeEntrySchema = z.object({
+  target_id: z.string(),
+  name: z.string(),
+  field: z.string(),
+  change_type: ChangeTypeSchema.optional(),
+  category: z.string().optional(),
+  diffs: z.array(z.unknown()).optional(),
 });
 
 // ============================================================================
@@ -28,16 +29,25 @@ export const BalanceIndexSchema = z.object({
 // ============================================================================
 
 export const PatchEntrySchema = z.object({
+  id: z.string(),
   version: z.string(),
+  type: PatchCategorySchema,
+  title: z.string(),
   date: z.string(),
-  entity_id: z.string(),
-  patch_type: PatchTypeSchema,
-  changes: z.array(z.string()),
+  tags: z.array(z.string()).optional(),
+  changes: z.array(ChangeEntrySchema),
 });
 
-export const ChangelogSchema = z.array(PatchEntrySchema);
+export const ChangelogPageSchema = z.array(PatchEntrySchema);
 
 export const ChangelogLatestSchema = PatchEntrySchema.nullable();
+
+export const ChangelogIndexSchema = z.object({
+  total_patches: z.number(),
+  page_size: z.number(),
+  total_pages: z.number(),
+  pages: z.array(z.string()),
+});
 
 // ============================================================================
 // Entity Timeline

@@ -1,14 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { LayoutGrid, List } from "lucide-react";
 
 import { useUnitSearch } from "@/features/deck-builder/hooks/domain/useUnitSearch";
 import { cn } from "@/lib/utils";
 import { UnifiedEntity } from "@/types/api";
-import { usePatchHistoryStore } from "@/store/patch-history-store";
-import { isBrowserPatchType } from "@/lib/patch-utils";
 
 import { FilterSidebar } from "./FilterSidebar";
 // Assuming we use Unit type
@@ -51,10 +49,6 @@ export function UnitArchive(props: UnitArchiveProps) {
     setSearchQuery("");
   };
 
-  // Load balance index for patch badges (idempotent — fetches once)
-  const loadBalanceIndex = usePatchHistoryStore((s) => s.loadBalanceIndex);
-  const balanceEntities = usePatchHistoryStore((s) => s.entities);
-  useEffect(() => { loadBalanceIndex(); }, [loadBalanceIndex]);
 
   // derived state
   const filteredUnits = useUnitSearch(initialUnits, searchQuery, activeFilters);
@@ -122,13 +116,11 @@ export function UnitArchive(props: UnitArchiveProps) {
             )}
           >
             {filteredUnits.map((unit) => {
-              const entityPatch = balanceEntities[unit.entity_id];
               return (
                 <UnitCard
                   key={getUniqueId(unit)}
                   unit={unit}
                   variant={viewMode === "list" ? "compact" : "default"}
-                  patchType={entityPatch && isBrowserPatchType(entityPatch) ? entityPatch : undefined}
                 />
               );
             })}

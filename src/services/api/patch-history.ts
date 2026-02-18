@@ -11,23 +11,22 @@
 
 import { CONFIG } from "@/lib/config";
 import {
-  BalanceIndexSchema,
-  ChangelogSchema,
   ChangelogLatestSchema,
+  ChangelogIndexSchema,
+  ChangelogPageSchema,
   EntityTimelineSchema,
 } from "@/services/validation/patch-history-schemas";
 import type {
-  BalanceIndex,
   Changelog,
   ChangelogLatest,
   EntityTimeline,
+  PatchEntry,
 } from "@/types/patch-history";
 
 // ============================================================================
 // Empty Defaults (graceful fallbacks)
 // ============================================================================
 
-const EMPTY_BALANCE_INDEX: BalanceIndex = { patch_version: "", patch_date: "", entities: {} };
 const EMPTY_CHANGELOG: Changelog = [];
 const EMPTY_TIMELINE: EntityTimeline = [];
 
@@ -44,10 +43,11 @@ async function fetchPatchData<T>(
   fallback: T
 ): Promise<T> {
   try {
-    // In development, proxy requests through our local API route to access filesystem
-    // In production (or if configured), use the remote API
+    // In development, proxy requests through our local API route to access filesystem.
+    // Server-side fetch requires an absolute URL, so we prepend the dev server origin.
+    // In production (or if configured), use the remote API.
     const baseUrl = process.env.NODE_ENV === "development" 
-        ? "/api/local-assets" 
+        ? `http://localhost:${process.env.PORT || 3000}/api/local-assets` 
         : CONFIG.API.BASE_URL;
 
     const url = `${baseUrl}/${endpoint}`;
@@ -83,14 +83,6 @@ async function fetchPatchData<T>(
 // ============================================================================
 
 /**
- * Fetch the balance index — most recent patch's buff/nerf classifications.
- * Used for card badges in the deck builder.
- */
-export async function fetchBalanceIndex(): Promise<BalanceIndex> {
-  return fetchPatchData("balance_index.json", BalanceIndexSchema, EMPTY_BALANCE_INDEX);
-}
-
-/**
  * Fetch the latest changelog entry.
  * Used for the "what changed" tooltip on card hover/popup.
  */
@@ -100,10 +92,30 @@ export async function fetchChangelogLatest(): Promise<ChangelogLatest> {
 
 /**
  * Fetch the full changelog — all patches, newest first.
- * Used for the full card page's patch history tab.
+ *
+ * STRATEGY:
+ * 1. Fetch `changelog_index.json` manifest.
+ * 2. Parallel fetch all page files listed in the manifest.
+ * 3. Flatten into a single list of patches.
  */
 export async function fetchChangelog(): Promise<Changelog> {
-  return fetchPatchData("changelog.json", ChangelogSchema, EMPTY_CHANGELOG);
+  // 1. Fetch Index
+  const index = await fetchPatchData("changelog_index.json", ChangelogIndexSchema, null);
+  
+  if (!index) {
+      // Fallback: try fetching legacy changelog.json directly (backward compatibility during migration)
+      return fetchPatchData("changelog.json", ChangelogPageSchema, EMPTY_CHANGELOG);
+  }
+
+  // 2. Fetch Pages
+  const pagePromises = index.pages.map(pageFile => 
+      fetchPatchData(pageFile, ChangelogPageSchema, [])
+  );
+
+  const pages = await Promise.all(pagePromises);
+
+  // 3. Flatten
+  return pages.flat();
 }
 
 /**
@@ -114,4 +126,29 @@ export async function fetchChangelog(): Promise<Changelog> {
  */
 export async function fetchEntityTimeline(entityId: string): Promise<EntityTimeline> {
   return fetchPatchData(`timeline/${entityId}.json`, EntityTimelineSchema, EMPTY_TIMELINE);
+}
+
+/**
+ * Filters the global changelog for a specific entity.
+ * 
+ * The API now returns a global list of patches (each containing changes for multiple entities).
+ * This helper filters/transforms that list into a history view for a single entity.
+ */
+export function filterChangelogForEntity(changelog: Changelog, entityId: string): Changelog {
+  return changelog.map(patch => {
+    // Check if any change targets this entity.
+    // target_id is typically "category/entity_id.json" or just "entity_id.json"
+    const relevantChanges = patch.changes.filter(change => {
+        const target = change.target_id;
+        // Match exact filename or path suffix
+        return target === `${entityId}.json` || target.endsWith(`/${entityId}.json`);
+    });
+
+    if (relevantChanges.length === 0) return null;
+
+    return {
+      ...patch,
+      changes: relevantChanges
+    };
+  }).filter((p): p is PatchEntry => p !== null);
 }

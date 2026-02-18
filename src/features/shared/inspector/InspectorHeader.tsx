@@ -7,8 +7,6 @@ import { GameImage } from "@/components/ui/GameImage";
 import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
 import { UnifiedEntity, Spellcaster, Unit, Spell, Titan } from "@/types/api";
 import { RankBadge } from "@/components/ui/rank-badge";
-import { PatchBadge } from "@/components/ui/PatchBadge";
-import { usePatchHistoryStore } from "@/store/patch-history-store";
 
 interface InspectorHeaderProps {
   item: UnifiedEntity;
@@ -44,8 +42,7 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
   const magicSchoolRaw = "magic_school" in item ? (item as Unit | Spell | Titan).magic_school : null;
   const magicSchool = magicSchoolRaw === "Titan" ? null : magicSchoolRaw;
 
-  // Patch Status (from Zustand store)
-  const patchType = usePatchHistoryStore((s) => s.getBrowserPatchType(item.entity_id));
+
 
   return (
     <div className="w-full h-[140px] relative flex items-center justify-center overflow-hidden shrink-0 bg-slate-900">
@@ -93,8 +90,7 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
       
       {/* Badges - Top Right on Mobile, Top Left on Desktop */}
       <div className="absolute top-3 right-3 md:right-auto md:left-4 flex flex-col items-end md:items-start gap-1 z-30 scale-90 origin-top-right md:origin-top-left pointer-events-none">
-        {/* Patch Badge */}
-        {patchType && <PatchBadge type={patchType} variant="full" />}
+
 
         {/* Rank / Class Badge */}
         {rank && rank !== "N/A" && (

@@ -1,20 +1,16 @@
 import { describe, it, expect } from "vitest";
-import { isBrowserPatchType, BROWSER_PATCH_TYPES } from "../../lib/patch-utils";
+import { PATCH_CATEGORY_LABELS } from "../../lib/patch-utils";
 
-describe("Patch History Filtering", () => {
-  it("includes only buff, nerf, and rework in BROWSER_PATCH_TYPES", () => {
-    expect(BROWSER_PATCH_TYPES.has("buff")).toBe(true);
-    expect(BROWSER_PATCH_TYPES.has("nerf")).toBe(true);
-    expect(BROWSER_PATCH_TYPES.has("rework")).toBe(true);
-    expect(BROWSER_PATCH_TYPES.has("fix")).toBe(false);
-    expect(BROWSER_PATCH_TYPES.has("new")).toBe(false);
+describe("Patch History Utilities", () => {
+  it("PATCH_CATEGORY_LABELS contains all three categories", () => {
+    expect(PATCH_CATEGORY_LABELS).toHaveProperty("Patch");
+    expect(PATCH_CATEGORY_LABELS).toHaveProperty("Hotfix");
+    expect(PATCH_CATEGORY_LABELS).toHaveProperty("Content");
   });
 
-  it("isBrowserPatchType returns correct boolean", () => {
-    expect(isBrowserPatchType("buff")).toBe(true);
-    expect(isBrowserPatchType("nerf")).toBe(true);
-    expect(isBrowserPatchType("rework")).toBe(true);
-    expect(isBrowserPatchType("fix")).toBe(false);
-    expect(isBrowserPatchType("new")).toBe(false);
+  it("labels are human-readable strings", () => {
+    expect(typeof PATCH_CATEGORY_LABELS.Patch).toBe("string");
+    expect(typeof PATCH_CATEGORY_LABELS.Hotfix).toBe("string");
+    expect(typeof PATCH_CATEGORY_LABELS.Content).toBe("string");
   });
 });

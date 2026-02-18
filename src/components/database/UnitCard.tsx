@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { RankBadge } from "@/components/ui/rank-badge";
-import { PatchBadge } from "@/components/ui/PatchBadge";
-import type { PatchType } from "@/types/patch-history";
 
 import { EntityImage } from "@/components/ui/EntityImage";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +10,6 @@ interface UnitCardProps {
   unit: UnifiedEntity;
   variant?: "default" | "compact";
   className?: string;
-  patchType?: PatchType;
 }
 
 // Helper to determine link and category
@@ -77,7 +74,6 @@ export function UnitCard({
   unit,
   variant = "default",
   className,
-  patchType,
 }: UnitCardProps) {
   const meta = getEntityMeta(unit);
 
@@ -137,8 +133,7 @@ export function UnitCard({
              </Badge>
         )}
 
-        {/* Patch Badge */}
-        {patchType && <PatchBadge type={patchType} variant="icon" />}
+
       </Link>
     );
   }
@@ -176,8 +171,7 @@ export function UnitCard({
               </Badge>
           )}
 
-          {/* Patch Badge */}
-          {patchType && <PatchBadge type={patchType} variant="icon" />}
+
         </div>
 
         <h2 className="text-base font-bold text-white group-hover:text-brand-accent transition-colors mb-1 truncate">

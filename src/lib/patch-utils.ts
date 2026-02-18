@@ -1,14 +1,17 @@
-import type { PatchType } from "@/types/patch-history";
+/**
+ * Patch utility helpers.
+ * 
+ * Updated for Phase 4 — old PatchType (buff/nerf/rework) removed.
+ * Now uses PatchCategory (Patch/Hotfix/Content).
+ */
+
+import type { PatchCategory } from "@/types/patch-history";
 
 /**
- * Patch types that should be displayed on browser cards and the inspector header.
- * Excludes "fix" and "new" to reduce visual noise.
+ * Map of PatchCategory to a human-readable label.
  */
-export const BROWSER_PATCH_TYPES = new Set<PatchType>(["buff", "nerf", "rework"]);
-
-/**
- * Type guard to check if a patch type is allowed in the browser/inspector context.
- */
-export function isBrowserPatchType(type: PatchType): boolean {
-  return BROWSER_PATCH_TYPES.has(type);
-}
+export const PATCH_CATEGORY_LABELS: Record<PatchCategory, string> = {
+  Patch: "Balance Patch",
+  Hotfix: "Hotfix",
+  Content: "Content Update",
+};

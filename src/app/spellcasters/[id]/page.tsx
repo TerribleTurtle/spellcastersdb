@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 
 import { getSpellcasterById, getSpellcasters } from "@/services/api/api";
-import { fetchChangelog, fetchEntityTimeline } from "@/services/api/patch-history";
+import { fetchChangelog, fetchEntityTimeline, filterChangelogForEntity } from "@/services/api/patch-history";
 
 interface SpellcasterPageProps {
   params: Promise<{ id: string }>;
@@ -65,7 +65,7 @@ export default async function SpellcasterPage({
     fetchChangelog(),
     fetchEntityTimeline(id),
   ]);
-  const entityChangelog = changelog.filter((e) => e.entity_id === id);
+  const entityChangelog = filterChangelogForEntity(changelog, id);
 
   const jsonLdData = {
     "@context": "https://schema.org",
@@ -113,6 +113,7 @@ export default async function SpellcasterPage({
         backLabel="Back to Spellcasters"
         changelog={entityChangelog}
         timeline={timeline}
+        showControls={true}
       />
     </>
   );
