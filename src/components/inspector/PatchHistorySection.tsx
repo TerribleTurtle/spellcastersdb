@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 import { LocalDate } from "@/components/ui/LocalDate";
+import { DiffLine, type DiffData } from "@/components/ui/DiffLine";
 
 // ============================================================================
 // Component
@@ -297,31 +298,9 @@ export function PatchHistorySection({
                              {/* Diffs (unchanged) */}
                              {change.diffs && change.diffs.length > 0 && (
                                 <div className="pl-4 mt-1 space-y-0.5 border-l border-white/5 ml-1">
-                                     {change.diffs.slice(0, 3).map((d, i) => {
-                                         const diff = d as { path?: string[]; lhs?: unknown; rhs?: unknown };
-                                         const isAdded = diff.lhs == null && diff.rhs != null;
-                                         const isRemoved = diff.rhs == null && diff.lhs != null;
-                                         return (
-                                         <div key={i} className="text-[10px] font-mono text-gray-500 flex flex-wrap gap-1 items-center">
-                                             <span className="text-gray-300 font-semibold">{(diff.path ? diff.path.join('.') : 'value').replace(/_/g, ' ')}:</span>
-                                             {isAdded ? (
-                                                 <span className="text-emerald-400 flex items-center gap-1">
-                                                     <span className="text-[9px] bg-emerald-500/20 border border-emerald-500/30 rounded px-1 uppercase font-bold">Added</span>
-                                                     {String(diff.rhs)}
-                                                 </span>
-                                             ) : isRemoved ? (
-                                                 <span className="text-red-400 flex items-center gap-1">
-                                                     <span className="text-[9px] bg-red-500/20 border border-red-500/30 rounded px-1 uppercase font-bold">Removed</span>
-                                                     {String(diff.lhs)}
-                                                 </span>
-                                             ) : (
-                                                 <span className="text-gray-400">
-                                                     {String(diff.lhs)} <span className="text-gray-600">→</span> {String(diff.rhs)}
-                                                 </span>
-                                             )}
-                                         </div>
-                                     );
-                                     })}
+                                     {change.diffs.slice(0, 3).map((d, i) => (
+                                          <DiffLine key={i} diff={d as DiffData} />
+                                      ))}
                                 </div>
                              )}
                           </li>

@@ -58,6 +58,7 @@ function getEntityUrl(row: FlatChangeRow): string | null {
 }
 
 import { LocalDate } from "@/components/ui/LocalDate";
+import { DiffLine, type DiffData } from "@/components/ui/DiffLine";
 
 const CHANGE_TYPE_CONFIG: Record<
   ChangeType,
@@ -194,46 +195,9 @@ function ChangeRow({
       {isExpanded && row.diffs.length > 0 && (
         <div className="px-4 pb-3 pt-0 border-t border-white/5 ml-6">
           <div className="pl-4 mt-2 space-y-1 border-l border-white/5">
-            {row.diffs.slice(0, 8).map((d, i) => {
-              const diff = d as {
-                path?: string[];
-                lhs?: unknown;
-                rhs?: unknown;
-              };
-              const isAdded = diff.lhs == null && diff.rhs != null;
-              const isRemoved = diff.rhs == null && diff.lhs != null;
-              return (
-                <div
-                  key={i}
-                  className="text-[11px] font-mono text-gray-500 flex flex-wrap gap-1 items-center"
-                >
-                  <span className="opacity-70">
-                    {diff.path ? diff.path.join(".") : "value"}:
-                  </span>
-                  {isAdded ? (
-                    <span className="text-emerald-400 flex items-center gap-1">
-                      <span className="text-[9px] bg-emerald-500/20 border border-emerald-500/30 rounded px-1 uppercase font-bold">
-                        Added
-                      </span>
-                      {String(diff.rhs)}
-                    </span>
-                  ) : isRemoved ? (
-                    <span className="text-red-400 flex items-center gap-1">
-                      <span className="text-[9px] bg-red-500/20 border border-red-500/30 rounded px-1 uppercase font-bold">
-                        Removed
-                      </span>
-                      {String(diff.lhs)}
-                    </span>
-                  ) : (
-                    <span className="text-gray-400">
-                      {String(diff.lhs)}{" "}
-                      <span className="text-gray-600">→</span>{" "}
-                      {String(diff.rhs)}
-                    </span>
-                  )}
-                </div>
-              );
-            })}
+            {row.diffs.slice(0, 8).map((d, i) => (
+                <DiffLine key={i} diff={d as DiffData} />
+             ))}
             {row.diffs.length > 8 && (
               <div className="text-[10px] text-gray-600 italic">
                 +{row.diffs.length - 8} more changes...
