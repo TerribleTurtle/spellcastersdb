@@ -17,6 +17,7 @@ export function LocalDate({ iso, showTime = false }: { iso: string; showTime?: b
       if (showTime) {
         // For full timestamps (ISO 8601 with time), standard parsing works fine
         // and converts to local time correctly.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setDisplay(
             new Date(iso).toLocaleString(undefined, {
                 dateStyle: "medium",
@@ -30,7 +31,6 @@ export function LocalDate({ iso, showTime = false }: { iso: string; showTime?: b
         const [year, month, day] = iso.split("-").map(Number);
         const d = new Date(year, month - 1, day);
         
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         setDisplay(d.toLocaleDateString(undefined, { dateStyle: "medium" }));
       }
     } catch {

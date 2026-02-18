@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Refactor
+
+- **Patch History**: Extracted `DiffLine` and `LocalDate` components for improved maintainability and consistent formatting.
+
+### Fixed
+
+- **Patch History**:
+  - Added badges for "Added" and "Removed" fields in diff views.
+  - Improved readability of field names in patch history.
+  - Fixed date formatting to respect user's local timezone.
+- **Schema**: Re-enabled `changelog` field validation in `CommonSchemaParts`.
+
 ## [1.0.16] - 2026-02-18
 
 ### Changed
