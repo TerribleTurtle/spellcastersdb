@@ -13,7 +13,8 @@ Patch History Redesign — Complete. Ready for deployment.
 - [x] TypeScript: 0 errors
 - [x] Tests: 205 pass / 1 skip
 - [x] Build: compiled successfully
+- [x] PatchHistorySection: UI framework shows even when filters hide all entries
 
 ## Next Steps
 
-- [ ] Deploy
+- [x] Deploy

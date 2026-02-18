@@ -320,7 +320,7 @@ export function PatchHistorySection({
           )}
 
         </div>
-      ) : changelog.length > 0 ? (
+      ) : (changelog.length > 0 || timeline.length > 0) ? (
           <div className="text-center py-8 text-gray-500 text-xs italic border border-dashed border-white/10 rounded-lg">
               No patches match the selected filters.
           </div>
