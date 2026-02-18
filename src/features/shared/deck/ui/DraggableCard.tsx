@@ -206,7 +206,7 @@ export const DraggableCard = React.memo(function DraggableCard({
 
       {/* Deck Usage Badges (Team Mode) */}
       {otherDeckIndices && otherDeckIndices.length > 0 && (
-          <div className="absolute bottom-9 lg:bottom-11 right-1 flex flex-col items-end gap-1 pointer-events-none z-20">
+          <div className="absolute bottom-9 lg:bottom-11 right-1 flex flex-col items-end gap-1 pointer-events-none z-20 scale-75 origin-bottom-right md:scale-100">
               {otherDeckIndices.map((deckIndex) => {
                   // Safe lookup for theme, fallback to default if index out of bounds (shouldn't happen in normal team flow)
                   const theme = DECK_THEMES[deckIndex as DeckThemeIndex];
