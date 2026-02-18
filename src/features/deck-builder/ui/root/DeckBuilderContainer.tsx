@@ -7,6 +7,8 @@ import { useDeckSync } from "@/features/deck-builder/hooks/persistence/useDeckSy
 import { useToast } from "@/hooks/useToast";
 import { PageSkeleton } from "./PageSkeleton";
 
+import { useDataHydration } from "@/features/deck-builder/hooks/persistence/useDataHydration";
+
 interface DeckBuilderContainerProps {
   units: (Unit | Spell | Titan)[];
   spellcasters: Spellcaster[];
@@ -15,6 +17,9 @@ interface DeckBuilderContainerProps {
 export function DeckBuilderContainer({ units, spellcasters }: DeckBuilderContainerProps) {
   const { showToast } = useToast();
   
+  // 1. Hydrate Stale Data (e.g. old cooldowns in storage)
+  useDataHydration({ units, spellcasters });
+
   // URL & State Sync Hook (Now self-contained)
   const { isHydrated, isProcessing } = useUrlSync({
       units,

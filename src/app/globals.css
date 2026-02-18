@@ -58,8 +58,8 @@
   --font-mono: var(--font-geist-mono);
 
   /* Layout Widths — change here to adjust site-wide */
-  --max-width-site-shell: 1440px;
-  --max-width-page-grid: 80rem; /* 1280px — grid/archive pages */
+  --max-width-site-shell: 1920px;
+  --max-width-page-grid: 100rem; /* 1600px — grid/archive pages */
 
   /* Animations */
   --animate-glow: glow 2s ease-in-out infinite alternate;
