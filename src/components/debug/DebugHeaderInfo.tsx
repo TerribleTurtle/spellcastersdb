@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { LocalDate } from "@/components/ui/LocalDate";
 import { Clock, Globe, Hash } from "lucide-react";
 
 interface DebugHeaderInfoProps {
@@ -14,22 +14,6 @@ export function DebugHeaderInfo({
   generatedAt,
   apiUrl,
 }: DebugHeaderInfoProps) {
-  const [formattedDate, setFormattedDate] = useState<string>("");
-
-  useEffect(() => {
-    try {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setFormattedDate(
-        new Date(generatedAt).toLocaleString(undefined, {
-          dateStyle: "medium",
-          timeStyle: "long",
-        })
-      );
-    } catch {
-      setFormattedDate("Invalid Date");
-    }
-  }, [generatedAt]);
-
   return (
     <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-400 font-mono">
       <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/5">
@@ -51,7 +35,7 @@ export function DebugHeaderInfo({
         <span>
           Build Date:{" "}
           <span className="text-white">
-            {formattedDate}
+            <LocalDate iso={generatedAt} showTime />
           </span>
         </span>
       </div>

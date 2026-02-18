@@ -8,7 +8,7 @@
  * @see {@link types/patch-history.d.ts} for type definitions.
  */
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { PatchBadge } from "@/components/ui/PatchBadge";
 import type { PatchEntry, TimelineEntry, PatchCategory } from "@/types/patch-history";
 import { ArrowDownAZ, ArrowUpAZ, Filter, X } from "lucide-react";
@@ -16,23 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-/** Renders a date string in the viewer's locale format (client-side only). */
-function LocalDate({ iso }: { iso: string }) {
-  const [display, setDisplay] = useState(iso);
-  useEffect(() => {
-    try {
-      // Dates are date-only strings (e.g. "2026-02-18"), so we parse them
-      // as local dates and format with the viewer's locale — no time component.
-      const [year, month, day] = iso.split("-").map(Number);
-      const d = new Date(year, month - 1, day);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setDisplay(d.toLocaleDateString(undefined, { dateStyle: "medium" }));
-    } catch {
-      setDisplay(iso);
-    }
-  }, [iso]);
-  return <time dateTime={iso} suppressHydrationWarning>{display}</time>;
-}
+import { LocalDate } from "@/components/ui/LocalDate";
 
 // ============================================================================
 // Component
@@ -84,7 +68,15 @@ export function PatchHistorySection({
     result.sort((a, b) => {
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
-      return sortDesc ? dateB - dateA : dateA - dateB;
+      const dateDiff = sortDesc ? dateB - dateA : dateA - dateB;
+      
+      if (dateDiff !== 0) return dateDiff;
+      
+      // Secondary sort by version string (numeric aware)
+      // If dates are equal, higher version should be "newer" (top)
+      return sortDesc 
+        ? b.version.localeCompare(a.version, undefined, { numeric: true }) 
+        : a.version.localeCompare(b.version, undefined, { numeric: true });
     });
 
     return result;

@@ -18,7 +18,10 @@ Change Log page added at `/changes` with full search, sort, and filter.
 
 ## Next Steps
 
-- [ ] Manual verify `/changes` page (run `npm run dev`, navigate to `/changes`)
+- [x] Manual verify `/changes` page (date display fixed)
 - [ ] Monitor Vercel deployment for build success
 - [x] Patch diff: show "Added"/"Removed" badges instead of null values
 - [x] Changelog dates: display in viewer's local timezone
+- [x] Refactored date display to shared `LocalDate` component (covered `/changes`, debug page, and patch history)
+- [x] Improve patch sorting to use Version as tie-breaker for same-day patches
+- [ ] Monitor Vercel deployment for build success

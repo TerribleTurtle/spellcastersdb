@@ -138,10 +138,18 @@ export function useChangelogSearch(patches: PatchEntry[]) {
     // 3. Sort
     result = [...result].sort((a, b) => {
       switch (sortMode) {
-        case "date-desc":
-          return new Date(b.patchDate).getTime() - new Date(a.patchDate).getTime();
-        case "date-asc":
-          return new Date(a.patchDate).getTime() - new Date(b.patchDate).getTime();
+        case "date-desc": {
+          const diff = new Date(b.patchDate).getTime() - new Date(a.patchDate).getTime();
+          if (diff !== 0) return diff;
+          // Tie-breaker: Newer version first
+          return b.version.localeCompare(a.version, undefined, { numeric: true });
+        }
+        case "date-asc": {
+          const diff = new Date(a.patchDate).getTime() - new Date(b.patchDate).getTime();
+          if (diff !== 0) return diff;
+          // Tie-breaker: Older version first
+          return a.version.localeCompare(b.version, undefined, { numeric: true });
+        }
         case "name-asc":
           return a.name.localeCompare(b.name);
         case "name-desc":

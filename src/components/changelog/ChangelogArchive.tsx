@@ -7,7 +7,7 @@
  * Reuses PatchBadge and Badge from the existing UI library.
  */
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import {
   Search,
@@ -57,28 +57,7 @@ function getEntityUrl(row: FlatChangeRow): string | null {
   return null;
 }
 
-/** Client-side local date display to avoid hydration mismatch. */
-function LocalDate({ iso }: { iso: string }) {
-  const [display, setDisplay] = useState(iso);
-  useEffect(() => {
-    try {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setDisplay(
-        new Date(iso).toLocaleString(undefined, {
-          dateStyle: "medium",
-          timeStyle: "short",
-        })
-      );
-    } catch {
-      /* keep ISO fallback */
-    }
-  }, [iso]);
-  return (
-    <time dateTime={iso} suppressHydrationWarning>
-      {display}
-    </time>
-  );
-}
+import { LocalDate } from "@/components/ui/LocalDate";
 
 const CHANGE_TYPE_CONFIG: Record<
   ChangeType,
