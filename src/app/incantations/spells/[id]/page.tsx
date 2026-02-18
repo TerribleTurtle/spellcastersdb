@@ -49,12 +49,16 @@ export default async function SpellPage({ params }: SpellPageProps) {
     notFound();
   }
 
-  // Fetch patch history data in parallel
-  const [changelog, timeline] = await Promise.all([
+  // Fetch patch history data and related entities in parallel
+  const [changelog, timeline, allSpells] = await Promise.all([
     fetchChangelog(),
     fetchEntityTimeline(id),
+    getSpells(),
   ]);
   const entityChangelog = filterChangelogForEntity(changelog, id);
+  const relatedEntities = allSpells.filter(
+    (s: Spell) => s.entity_id !== id && s.magic_school === spell.magic_school
+  );
 
   const jsonLdData = {
     "@context": "https://schema.org",
@@ -83,6 +87,12 @@ export default async function SpellPage({ params }: SpellPageProps) {
         changelog={entityChangelog}
         timeline={timeline}
         showControls={true}
+        breadcrumbs={[
+          { label: "Spells", href: "/incantations/spells" },
+          { label: spell.name },
+        ]}
+        relatedEntities={relatedEntities}
+        relatedTitle={`More ${spell.magic_school} Spells`}
       />
     </>
   );

@@ -48,12 +48,12 @@ export const UnitBrowser = React.memo(function UnitBrowser({
 
 
   // Responsive Columns Hook logic
-  const { columns, isReady } = useResponsiveGrid(DEFAULT_BROWSER_COLUMNS);
+  const { columns, isReady, containerRef } = useResponsiveGrid(DEFAULT_BROWSER_COLUMNS);
 
   // 1. Loading State (Grid not ready) overrides everything to prevent flash
   if (!isReady) {
       return (
-        <div className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
+        <div ref={containerRef} className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
              <BrowserSkeleton />
         </div>
       );
@@ -62,14 +62,14 @@ export const UnitBrowser = React.memo(function UnitBrowser({
   // 2. Empty State (No items, no search)
   if (items.length === 0 && !searchQuery) {
       return (
-        <div className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
+        <div ref={containerRef} className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
             <BrowserSkeleton />
         </div>
       );
   }
 
   return (
-    <div className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
+    <div ref={containerRef} className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
       <UnitBrowserHeader
           activeFilterCount={activeFilterCount}
           showFilters={showFilters}

@@ -153,7 +153,3 @@ export function FilterSidebar({
     </>
   );
 }
-
-// ... (imports will be handled by the user/system or manual edit, but here I replace the bottom function)
-// Actually I need to do imports separately or replacing the whole file content if I want to be clean, but `replace_file_content` is a chunk replacement.
-// I will remove the bottom function first.

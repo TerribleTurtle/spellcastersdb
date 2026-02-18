@@ -141,8 +141,8 @@ export function RankBadge({ rank, className, isTitan, mode = "icon" }: RankBadge
       className={cn(
         "font-mono font-bold tracking-wider px-2 py-0.5 border backdrop-blur-sm shadow-sm",
         finalConfig.color,
-        finalConfig.bg, // Text mode still uses bg/border utilities from config?
-        finalConfig.border, // Yes, those are tailored for boxes.
+        finalConfig.bg,
+        finalConfig.border,
         className
       )}
     >
@@ -150,3 +150,53 @@ export function RankBadge({ rank, className, isTitan, mode = "icon" }: RankBadge
     </Badge>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/* SmartRankBadge — unified conditional for rank display              */
+/* Replaces 3 duplicated conditionals in UnitCard + EntityShowcase    */
+/* ------------------------------------------------------------------ */
+
+const NUMERIC_RANKS = ["I", "II", "III", "IV", "V"];
+
+interface SmartRankBadgeProps {
+  rank: string;
+  isTitan?: boolean;
+  mode?: "icon" | "text";
+  className?: string;
+  fallbackClassName?: string;
+}
+
+/**
+ * Renders `RankBadge` for numeric ranks (I–V) and Titans.
+ * For non-numeric ranks (SPELL, ENCHANTER, etc.), renders a styled `Badge` fallback.
+ */
+export function SmartRankBadge({
+  rank,
+  isTitan = false,
+  mode = "icon",
+  className,
+  fallbackClassName = "text-[10px] font-mono font-bold text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border-brand-primary/20",
+}: SmartRankBadgeProps) {
+  const useGeometric = isTitan || NUMERIC_RANKS.includes(rank.toUpperCase());
+
+  if (useGeometric) {
+    return (
+      <RankBadge
+        rank={rank}
+        isTitan={isTitan}
+        mode={mode}
+        className={className}
+      />
+    );
+  }
+
+  return (
+    <Badge
+      variant="outline"
+      className={cn(fallbackClassName, className)}
+    >
+      {rank}
+    </Badge>
+  );
+}
+

@@ -44,7 +44,7 @@ export default async function ChangesPage() {
     <>
       <JsonLd data={jsonLdData} id="json-ld-changelog-collection" />
       <div className="min-h-screen bg-surface-main text-foreground pt-28 p-4 md:p-8">
-        <div className="max-w-[1600px] mx-auto">
+        <div className="max-w-page-grid mx-auto">
           <div className="mb-8">
             <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-brand-primary to-brand-accent mb-2">
               Change Log

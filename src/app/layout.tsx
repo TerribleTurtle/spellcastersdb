@@ -113,7 +113,7 @@ export default async function RootLayout({
         <TooltipProvider>
           <Navbar />
 
-          <div className="flex max-w-[1920px] mx-auto w-full relative">
+          <div className="flex max-w-site-shell mx-auto w-full relative">
             <DesktopSidebar />
             <MainLayoutWrapper>
               {children}

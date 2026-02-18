@@ -49,12 +49,16 @@ export default async function TitanPage({ params }: TitanPageProps) {
     notFound();
   }
 
-  // Fetch patch history data in parallel
-  const [changelog, timeline] = await Promise.all([
+  // Fetch patch history data and related entities in parallel
+  const [changelog, timeline, allTitans] = await Promise.all([
     fetchChangelog(),
     fetchEntityTimeline(id),
+    getTitans(),
   ]);
   const entityChangelog = filterChangelogForEntity(changelog, id);
+  const relatedEntities = allTitans.filter(
+    (t: Titan) => t.entity_id !== id
+  );
 
   const jsonLdData = {
     "@context": "https://schema.org",
@@ -83,6 +87,12 @@ export default async function TitanPage({ params }: TitanPageProps) {
         changelog={entityChangelog}
         timeline={timeline}
         showControls={true}
+        breadcrumbs={[
+          { label: "Titans", href: "/titans" },
+          { label: titan.name },
+        ]}
+        relatedEntities={relatedEntities}
+        relatedTitle="Other Titans"
       />
     </>
   );

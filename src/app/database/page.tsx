@@ -57,8 +57,8 @@ export default async function DatabasePage() {
   return (
     <>
     <JsonLd data={jsonLdData} id="json-ld-database-collection" />
-    <div className="min-h-screen bg-surface-main text-foreground pt-28 p-4 md:p-8">
-      <div className="max-w-[1600px] mx-auto">
+    <div className="min-h-screen bg-surface-main text-foreground pt-20 md:pt-28 p-4 md:p-8">
+      <div className="max-w-page-grid mx-auto">
         {/* The Archive UI */}
         <UnitArchive initialUnits={units} />
       </div>

@@ -60,12 +60,14 @@ export default async function SpellcasterPage({
     notFound();
   }
 
-  // Fetch patch history data in parallel
-  const [changelog, timeline] = await Promise.all([
+  // Fetch patch history data and related entities in parallel
+  const [changelog, timeline, allSpellcasters] = await Promise.all([
     fetchChangelog(),
     fetchEntityTimeline(id),
+    getSpellcasters(),
   ]);
   const entityChangelog = filterChangelogForEntity(changelog, id);
+  const relatedEntities = allSpellcasters.filter(s => s.spellcaster_id !== id);
 
   const jsonLdData = {
     "@context": "https://schema.org",
@@ -114,6 +116,12 @@ export default async function SpellcasterPage({
         changelog={entityChangelog}
         timeline={timeline}
         showControls={true}
+        breadcrumbs={[
+          { label: "Spellcasters", href: "/spellcasters" },
+          { label: spellcaster.name },
+        ]}
+        relatedEntities={relatedEntities}
+        relatedTitle="Other Spellcasters"
       />
     </>
   );

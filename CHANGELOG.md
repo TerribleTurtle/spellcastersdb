@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.18] - 2026-02-18
+
+### Changed
+
+- **Layout Consistency**: Consolidated scattered `max-width` values into Tailwind v4 theme tokens (`--max-width-site-shell`, `--max-width-page-grid`) for single-source layout management.
+  - Site shell (navbar, footer, layout): `1920px` → `1440px` via `max-w-site-shell`.
+  - Grid/archive pages (7 pages): `1600px` → `1280px` via `max-w-page-grid`.
+- **Deck Builder Grid**: Rewrote `useResponsiveGrid` to use `ResizeObserver` on the actual container element instead of `window.innerWidth`, so card columns scale correctly within the tighter site shell.
+- **Database Cards**: Increased grid density — smaller card images (`h-20`), tighter padding (`p-2`), and 5 columns at `xl` breakpoint.
+
+### Fixed
+
+- **ESLint Purity**: Replaced impure `Math.random()` shuffle in `RelatedEntities` with deterministic `spreadSample`.
+- **Code Cleanup**: Removed dead comments from `FilterSidebar.tsx`.
+
 ## [1.0.17] - 2026-02-18
 
 ### Refactor

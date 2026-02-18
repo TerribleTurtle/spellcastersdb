@@ -1,33 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import {
-  ArrowLeft,
-} from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
 import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
 import { EntityDisplayItem } from "@/components/entity-card/types";
 import { EntityStats } from "@/components/entity-card/EntityStats";
 import { EntityMechanics } from "@/components/entity-card/EntityMechanics";
-
 import { SpellcasterAbilities } from "@/components/entity-card/SpellcasterAbilities";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
-import { RankBadge } from "@/components/ui/rank-badge";
+import { SmartRankBadge } from "@/components/ui/rank-badge";
 import { PatchHistorySection } from "@/components/inspector/PatchHistorySection";
+import { Breadcrumbs } from "@/components/inspector/Breadcrumbs";
+import { RelatedEntities } from "@/components/inspector/RelatedEntities";
 import type { PatchEntry, TimelineEntry } from "@/types/patch-history";
+import type { UnifiedEntity } from "@/types/api";
 
 export type EntityItem = EntityDisplayItem;
 
-
+interface BreadcrumbItem {
+  label: string;
+  href?: string;
+}
 
 interface EntityShowcaseProps {
   item: EntityItem;
-  backUrl?: string; // Optional back link URL
-  backLabel?: string; // Optional back link label
-  changelog?: PatchEntry[]; // Filtered changelog entries for this entity
-  timeline?: TimelineEntry[]; // Timeline snapshots for stat comparison
+  backUrl?: string;
+  backLabel?: string;
+  changelog?: PatchEntry[];
+  timeline?: TimelineEntry[];
   showControls?: boolean;
+  breadcrumbs?: BreadcrumbItem[];
+  relatedEntities?: UnifiedEntity[];
+  relatedTitle?: string;
 }
 
 export function EntityShowcase({
@@ -37,8 +43,11 @@ export function EntityShowcase({
   changelog = [],
   timeline = [],
   showControls = false,
+  breadcrumbs = [],
+  relatedEntities = [],
+  relatedTitle,
 }: EntityShowcaseProps) {
-  // Type Guard
+  // Type Guards
   const isSpellcaster = "spellcaster_id" in item;
   const isUnit = !isSpellcaster;
 
@@ -57,56 +66,71 @@ export function EntityShowcase({
   } else {
     const entity = item as Unit | Spell | Titan;
     if (entity.category === "Titan") {
-      // Hide rank for Titans (user request: "we don't ever(yet) want to show rank 5")
-      // Update: User now wants TITAN with Legendary styling
       rank = "V";
       isTitan = true;
     } else if (entity.category === "Spell") {
-      rank = "N/A"; 
+      rank = "N/A";
     } else if ("rank" in entity && entity.rank) {
       rank = entity.rank;
     }
   }
 
-  // Magic School for linking if available - Hide if it's "Titan" to reduce redundancy
+  // Magic School
   const magicSchoolRaw = "magic_school" in item ? (item as Unit | Spell | Titan).magic_school : null;
   const magicSchool = magicSchoolRaw === "Titan" ? null : magicSchoolRaw;
 
+  // Tags
+  const tags = "tags" in item ? item.tags : [];
+
+  // Movement type (for units)
+  const movementType = "movement_type" in item ? (item as Unit).movement_type : null;
+
+  // Description
+  const description = "description" in item ? item.description : null;
+
   return (
-    <div className="min-h-screen w-full flex flex-col items-center py-6 md:py-12 px-4 md:px-8 bg-surface-main/30 relative">
-      
+    <div className="min-h-screen w-full bg-surface-main/30 relative">
+
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-primary/10 blur-[150px] rounded-full" />
-         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-secondary/10 blur-[150px] rounded-full" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-primary/10 blur-[150px] rounded-full" />
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-secondary/10 blur-[150px] rounded-full" />
       </div>
 
-      {/* Main Card Container */}
-      <div className="relative z-10 w-full max-w-md bg-surface-card rounded-2xl border border-white/10 shadow-2xl animate-in fade-in zoom-in duration-500">
-        
-        {/* Header / Art Area */}
-        <div className="relative w-full h-64 md:h-80 bg-slate-900 group overflow-hidden rounded-t-2xl">
-             {/* Dynamic Background Image (Blurred) */}
-             <GameImage
+      {/* Content Container */}
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 space-y-6">
+
+        {/* Breadcrumbs + Back */}
+        <div className="flex items-center gap-4 pt-16 md:pt-4">
+          {backUrl && (
+            <Link
+              href={backUrl}
+              className="p-2 bg-surface-card hover:bg-surface-hover rounded-full text-white border border-white/10 transition-colors shrink-0"
+            >
+              <ArrowLeft size={16} />
+              <span className="sr-only">{backLabel}</span>
+            </Link>
+          )}
+          {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
+        </div>
+
+        {/* ================================================================ */}
+        {/* HERO SECTION — Image + Title (Two Column on Desktop) */}
+        {/* ================================================================ */}
+        <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start">
+
+          {/* Left — Entity Image */}
+          <div className="w-full md:w-80 shrink-0">
+            <div className="relative w-full aspect-square md:aspect-[4/5] bg-surface-card border border-white/10 rounded-2xl overflow-hidden group shadow-2xl">
+              {/* Blurred Background */}
+              <GameImage
                 src={getCardImageUrl(item)}
                 alt={getCardAltText(item)}
                 fill
                 priority
-                className="object-cover opacity-40 blur-2xl scale-110 group-hover:scale-125 transition-transform duration-700"
+                className="object-cover opacity-30 blur-2xl scale-110"
               />
-              
-              {/* Back Button */}
-              {backUrl && (
-                <Link 
-                  href={backUrl}
-                  className="absolute top-4 left-4 z-30 p-2 bg-black/40 hover:bg-black/60 rounded-full text-white backdrop-blur-md border border-white/10 transition-colors"
-                >
-                  <ArrowLeft size={20} />
-                  <span className="sr-only">{backLabel}</span>
-                </Link>
-              )}
-
-              {/* Main Entity Image */}
+              {/* Main Image */}
               <div className="absolute inset-0 flex items-center justify-center p-6 z-10">
                 <GameImage
                   src={getCardImageUrl(item)}
@@ -117,84 +141,126 @@ export function EntityShowcase({
                   priority
                 />
               </div>
+              {/* Gradient */}
+              <div className="absolute inset-0 bg-linear-to-t from-surface-card via-transparent to-transparent z-20 pointer-events-none" />
 
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-linear-to-t from-surface-card via-surface-card/20 to-transparent z-20 pointer-events-none" />
-
-              {/* Badges */}
-              <div className="absolute bottom-4 left-4 right-4 flex justify-between items-end z-30">
-                 <div className="flex flex-col gap-2 items-start">
-                    {/* Rank Badge */}
-                    {rank && rank !== "N/A" && (
-                         isTitan || ["I", "II", "III", "IV", "V"].includes(rank) ? (
-                            <RankBadge 
-                                rank={rank} 
-                                isTitan={isTitan}
-                                mode="text"
-                                className="px-3 py-1 rounded text-xs font-bold font-mono shadow-lg"
-                            />
-                         ) : (
-                            <span className="bg-black/60 px-3 py-1 rounded text-xs font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md shadow-lg">
-                                {rank}
-                            </span>
-                         )
-                    )}
-                    
-                    {/* School Badge (Linkable maybe?) */}
-                    {magicSchool && (
-                        <Link href={`/schools/${magicSchool}`} className="bg-brand-secondary/80 hover:bg-brand-secondary text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors">
-                           {magicSchool}
-                        </Link>
-                    )}
-                 </div>
-
-                 {/* Category Badge */}
-                 <span className="bg-brand-primary/90 text-white px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider shadow-lg backdrop-blur-md border border-white/10">
-                    {category}
-                 </span>
+              {/* Badges overlaid on image */}
+              <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end z-30">
+                <div className="flex flex-col gap-1.5 items-start">
+                  {rank && rank !== "N/A" && (
+                    <SmartRankBadge
+                      rank={rank}
+                      isTitan={isTitan}
+                      mode="text"
+                      className="px-3 py-1 rounded text-xs font-bold font-mono shadow-lg"
+                      fallbackClassName="bg-surface-card px-3 py-1 rounded text-xs font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md shadow-lg"
+                    />
+                  )}
+                  {magicSchool && (
+                    <Link href={`/schools/${magicSchool}`} className="bg-brand-secondary/80 hover:bg-brand-secondary text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors">
+                      {magicSchool}
+                    </Link>
+                  )}
+                </div>
+                <span className="bg-brand-primary/90 text-white px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg backdrop-blur-md border border-white/10">
+                  {category}
+                </span>
               </div>
-        </div>
+            </div>
+          </div>
 
-        {/* Content Body */}
-        <div className="p-6 space-y-6 bg-surface-card rounded-b-2xl">
-           
-           {/* Title Section */}
-           <div className="text-center">
-              <h1 className="text-3xl md:text-4xl font-black tracking-tight text-white mb-2 drop-shadow-md">
+          {/* Right — Title + Overview + Quick Facts */}
+          <div className="flex-1 min-w-0 space-y-5">
+            {/* Title */}
+            <div>
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-2 drop-shadow-md">
                 {name}
               </h1>
-              {"description" in item && item.description && (
-                <p className="text-gray-400 text-sm leading-relaxed max-w-sm mx-auto">
-                  {item.description}
+              {description && (
+                <p className="text-gray-400 text-sm sm:text-base leading-relaxed max-w-xl">
+                  {description}
                 </p>
               )}
-           </div>
+            </div>
 
-           <div className="h-px w-full bg-linear-to-r from-transparent via-white/10 to-transparent" />
+            {/* Quick Facts */}
+            <div className="flex flex-wrap gap-2">
+              {movementType && (
+                <span className="bg-surface-card border border-white/10 text-gray-300 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                  {movementType}
+                </span>
+              )}
+              {"population" in item && (item as Unit).population && (
+                <span className="bg-surface-card border border-white/10 text-gray-300 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                  Pop: {(item as Unit).population}
+                </span>
+              )}
+              {"cooldown" in item && (item as Spell).cooldown && (
+                <span className="bg-surface-card border border-white/10 text-gray-300 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                  CD: {(item as Spell).cooldown}s
+                </span>
+              )}
+            </div>
 
-           {/* Stats Grid */}
-           <div className="w-full">
-            <EntityStats item={item} variant="detailed" />
-           </div>
+            {/* Tags */}
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5">
+                {tags.map((tag) => (
+                  <Link
+                    key={tag}
+                    href={`/database?search=${encodeURIComponent(tag)}`}
+                    className="bg-white/5 hover:bg-white/10 border border-white/5 hover:border-brand-primary/30 text-gray-400 hover:text-white px-2.5 py-1 rounded text-[10px] font-medium transition-all"
+                  >
+                    #{tag}
+                  </Link>
+                ))}
+              </div>
+            )}
 
-           {/* Mechanics v1.1 */}
-           <div className="w-full">
-            <EntityMechanics item={item} variant="detailed" />
-           </div>
+            {/* Stats Section — Inline on desktop */}
+            <div className="bg-surface-card border border-white/10 rounded-xl p-4 sm:p-5">
+              <h2 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">
+                Stats
+              </h2>
+              <EntityStats item={item} variant="detailed" />
+            </div>
+          </div>
+        </div>
 
-          {/* Abilities (Spellcaster) */}
-          <SpellcasterAbilities item={item} variant="detailed" />
+        {/* ================================================================ */}
+        {/* CONTENT SECTIONS */}
+        {/* ================================================================ */}
+        <div className="space-y-6">
+
+          {/* Mechanics Section */}
+          {"mechanics" in item && item.mechanics && (
+            <section className="bg-surface-card border border-white/10 rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-100">
+              <EntityMechanics item={item} variant="detailed" />
+            </section>
+          )}
+
+          {/* Abilities Section (Spellcasters) */}
+          {isSpellcaster && (
+            <section className="bg-surface-card border border-white/10 rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-200">
+              <SpellcasterAbilities item={item} variant="detailed" />
+            </section>
+          )}
+
+          {/* Related Entities */}
+          {relatedEntities.length > 0 && (
+            <section className="bg-surface-card border border-white/10 rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-300">
+              <RelatedEntities entities={relatedEntities} title={relatedTitle} />
+            </section>
+          )}
+
+          {/* Patch History */}
+          {(changelog.length > 0 || timeline.length > 0) && (
+            <section className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-400">
+              <PatchHistorySection changelog={changelog} timeline={timeline} showControls={showControls} />
+            </section>
+          )}
         </div>
       </div>
-
-      {/* Patch History — Separate section below the card */}
-      {(changelog.length > 0 || timeline.length > 0) && (
-        <div className="relative z-10 w-full max-w-lg mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200">
-          <PatchHistorySection changelog={changelog} timeline={timeline} showControls={showControls} />
-        </div>
-      )}
     </div>
   );
 }
-
-

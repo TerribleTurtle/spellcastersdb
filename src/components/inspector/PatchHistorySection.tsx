@@ -132,7 +132,7 @@ export function PatchHistorySection({
                     variant="ghost" 
                     size="sm" 
                     onClick={() => setSortDesc(!sortDesc)}
-                    className="h-7 px-2 text-gray-400 hover:text-white"
+                    className="h-9 px-2 text-gray-400 hover:text-white"
                     title={sortDesc ? "Newest First" : "Oldest First"}
                 >
                     {sortDesc ? <ArrowDownAZ size={16} /> : <ArrowUpAZ size={16} />}
@@ -142,7 +142,7 @@ export function PatchHistorySection({
                     size="sm" 
                     onClick={() => setFiltersOpen(!filtersOpen)}
                     className={cn(
-                        "h-7 px-2 gap-1.5", 
+                        "h-9 px-2 gap-1.5", 
                         (filtersOpen) && "text-brand-primary bg-brand-primary/10 border border-brand-primary/20",
                          // Highlight if non-default filters are applied
                          (selectedTypes.length !== 2 || selectedTags.length > 0) && "text-brand-accent"
@@ -243,22 +243,22 @@ export function PatchHistorySection({
              return (
                 <div
                   key={`${entry.id}-${idx}`}
-                  className="bg-black/20 border border-white/5 rounded-lg overflow-hidden"
+                  className="bg-surface-card border border-white/5 rounded-lg overflow-hidden"
                 >
                   {/* Header */}
-                  <div className="px-3 py-2 bg-white/5 border-b border-white/5 flex items-center gap-2 flex-wrap">
+                  <div className="px-3 py-2 bg-surface-card/60 border-b border-white/5 flex items-center gap-2 flex-wrap">
                      <PatchBadge type={entry.type} variant="icon" />
                      <span className="text-xs font-mono font-bold text-gray-300">v{entry.version}</span>
                      <span className="text-[10px] text-gray-500">• <LocalDate iso={entry.date} /></span>
                      {entry.tags?.map(t => (
-                        <span key={t} className="text-[9px] text-gray-600 bg-black/40 px-1.5 rounded">#{t}</span>
+                         <span key={t} className="text-[10px] text-gray-600 bg-black/40 px-1.5 rounded transition-colors hover:text-gray-400">#{t}</span>
                     ))}
                   </div>
 
                   <div className="p-3 space-y-3">
                       {/* Stat Changes (Vertical) */}
                       {statChanges.length > 0 && (
-                          <div className="space-y-1 bg-black/20 rounded p-2 border border-white/5">
+                          <div className="space-y-1 bg-surface-card rounded p-2 border border-white/5">
                               {statChanges.map(stat => (
                                   <div key={stat.key} className="flex items-center justify-between text-xs">
                                       <span className="text-gray-400 capitalize">{stat.key.replace(/_/g, " ")}</span>

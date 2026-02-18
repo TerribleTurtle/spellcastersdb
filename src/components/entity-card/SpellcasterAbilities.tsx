@@ -74,7 +74,7 @@ export function SpellcasterAbilities({ item, variant = "detailed" }: Spellcaster
               ) : (
                   <div className="flex items-center gap-2">
                      <span className={cn(
-                       "text-[9px] px-1.5 py-0.5 rounded font-bold bg-white/10 text-gray-400 group-hover:text-white transition-colors",
+                       "text-[10px] px-1.5 py-0.5 rounded font-bold bg-white/10 text-gray-400 group-hover:text-white transition-colors",
                        ab.type === 'PRIMARY' && "group-hover:bg-brand-primary",
                        ab.type === 'DEFENSE' && "group-hover:bg-brand-accent group-hover:text-brand-dark",
                        ab.type === 'ULTIMATE' && "group-hover:bg-brand-secondary"
@@ -90,7 +90,7 @@ export function SpellcasterAbilities({ item, variant = "detailed" }: Spellcaster
               {ab.cooldown && (
                 <span className={cn(
                     "rounded text-gray-500 bg-black/40",
-                    isCompact ? "text-[9px] px-1" : "text-[10px] px-1.5 py-0.5 font-mono"
+                    isCompact ? "text-[10px] px-1" : "text-[10px] px-1.5 py-0.5 font-mono"
                 )}>
                   {ab.cooldown}s
                 </span>
@@ -111,32 +111,32 @@ export function SpellcasterAbilities({ item, variant = "detailed" }: Spellcaster
              <div className={cn("grid gap-1 pt-1 border-t border-white/5", isCompact ? "mt-1.5 grid-cols-2" : "mt-2 grid-cols-2 gap-1.5")}>
                  {/* Damage */}
                  {ab.damage && (
-                   <div className={cn("flex justify-between items-center bg-black/30 rounded text-gray-500", isCompact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px] border border-white/5")}>
-                      <span className={cn("uppercase font-bold tracking-wide text-red-400", isCompact ? "text-[8px]" : "text-[9px]")}>DAMAGE</span>
+                   <div className={cn("flex justify-between items-center bg-black/30 rounded text-gray-500", isCompact ? "px-1.5 py-0.5 text-[10px]" : "px-2 py-1 text-[10px] border border-white/5")}>
+                      <span className={cn("uppercase font-bold tracking-wide text-red-400", "text-[10px]")}>DAMAGE</span>
                       <span className={cn("text-white font-mono", !isCompact && "font-bold")}>{ab.damage}</span>
                    </div>
                  )}
 
                  {/* Projectiles */}
                  {ab.projectiles && (
-                   <div className={cn("flex justify-between items-center bg-black/30 rounded text-gray-500", isCompact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px] border border-white/5")}>
-                      <span className={cn("uppercase font-bold tracking-wide", isCompact ? "text-[8px]" : "text-[9px]")}>PROJECTILES</span>
+                   <div className={cn("flex justify-between items-center bg-black/30 rounded text-gray-500", isCompact ? "px-1.5 py-0.5 text-[10px]" : "px-2 py-1 text-[10px] border border-white/5")}>
+                      <span className={cn("uppercase font-bold tracking-wide", "text-[10px]")}>PROJECTILES</span>
                       <span className={cn("text-white font-mono", !isCompact && "font-bold")}>{ab.projectiles}</span>
                    </div>
                  )}
 
                  {/* Duration */}
                  {ab.duration && (
-                   <div className={cn("flex justify-between items-center bg-black/30 rounded text-gray-500", isCompact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px] border border-white/5")}>
-                      <span className={cn("uppercase font-bold tracking-wide", isCompact ? "text-[8px]" : "text-[9px]")}>DURATION</span>
+                   <div className={cn("flex justify-between items-center bg-black/30 rounded text-gray-500", isCompact ? "px-1.5 py-0.5 text-[10px]" : "px-2 py-1 text-[10px] border border-white/5")}>
+                      <span className={cn("uppercase font-bold tracking-wide", "text-[10px]")}>DURATION</span>
                       <span className={cn("text-white font-mono", !isCompact && "font-bold")}>{ab.duration}s</span>
                    </div>
                  )}
                  
                  {/* Charges */}
                  {ab.charges && (
-                   <div className={cn("flex justify-between items-center bg-black/30 rounded text-gray-500", isCompact ? "px-1.5 py-0.5 text-[9px]" : "px-2 py-1 text-[10px] border border-white/5")}>
-                      <span className={cn("uppercase font-bold tracking-wide", isCompact ? "text-[8px]" : "text-[9px]")}>CHARGES</span>
+                   <div className={cn("flex justify-between items-center bg-black/30 rounded text-gray-500", isCompact ? "px-1.5 py-0.5 text-[10px]" : "px-2 py-1 text-[10px] border border-white/5")}>
+                      <span className={cn("uppercase font-bold tracking-wide", "text-[10px]")}>CHARGES</span>
                       <span className={cn("text-white font-mono", !isCompact && "font-bold")}>{ab.charges}</span>
                    </div>
                  )}

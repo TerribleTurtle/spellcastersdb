@@ -44,7 +44,7 @@ vi.mock("@/features/deck-builder/hooks/domain/useUnitFiltering", () => ({
 }));
 
 vi.mock("@/features/deck-builder/hooks/ui/useResponsiveGrid", () => ({
-  useResponsiveGrid: vi.fn(() => ({ columns: 2, isReady: true })) // Fixed 2 columns, ready
+  useResponsiveGrid: vi.fn(() => ({ columns: 2, isReady: true, containerRef: () => {} })) // Fixed 2 columns, ready
 }));
 
 // Mock Utils to control what is rendered regardless of inputs
@@ -154,7 +154,7 @@ describe("UnitBrowser", () => {
     });
 
     it("should render skeleton when grid is not ready", () => {
-        vi.mocked(useResponsiveGrid).mockReturnValue({ columns: 4, isReady: false });
+        vi.mocked(useResponsiveGrid).mockReturnValue({ columns: 4, isReady: false, containerRef: () => {} });
 
         render(
             <UnitBrowser 

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 
 import { getUnitById, getUnits } from "@/services/api/api";
+import { Unit } from "@/types/api";
 import { fetchChangelog, fetchEntityTimeline, filterChangelogForEntity } from "@/services/api/patch-history";
 
 interface UnitPageProps {
@@ -50,12 +51,16 @@ export default async function UnitPage({ params }: UnitPageProps) {
     notFound();
   }
 
-  // Fetch patch history data in parallel
-  const [changelog, timeline] = await Promise.all([
+  // Fetch patch history data and related entities in parallel
+  const [changelog, timeline, allUnits] = await Promise.all([
     fetchChangelog(),
     fetchEntityTimeline(id),
+    getUnits(),
   ]);
   const entityChangelog = filterChangelogForEntity(changelog, id);
+  const relatedEntities = allUnits.filter(
+    (u: Unit) => u.entity_id !== id && u.magic_school === unit.magic_school
+  );
 
   const jsonLdData = {
     "@context": "https://schema.org",
@@ -106,6 +111,12 @@ export default async function UnitPage({ params }: UnitPageProps) {
         changelog={entityChangelog}
         timeline={timeline}
         showControls={true}
+        breadcrumbs={[
+          { label: "Units", href: "/incantations/units" },
+          { label: unit.name },
+        ]}
+        relatedEntities={relatedEntities}
+        relatedTitle={`More ${unit.magic_school} Units`}
       />
     </>
   );

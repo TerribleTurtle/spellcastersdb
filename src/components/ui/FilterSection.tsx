@@ -55,7 +55,7 @@ export function FilterSection({
                   key={option}
                   onClick={() => onToggle(option)}
                   className={cn(
-                    "flex items-center justify-center p-2 rounded border text-xs font-mono font-bold transition-all",
+                    "flex items-center justify-center p-2.5 min-h-[44px] rounded border text-xs font-mono font-bold transition-all",
                     isSelected
                       ? "bg-brand-primary border-brand-primary text-white"
                       : "bg-surface-card border-white/5 text-gray-300 hover:border-brand-primary/30"

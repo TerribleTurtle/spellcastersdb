@@ -104,7 +104,7 @@ function StatBox({
       </div>
       <div className={cn(
           "uppercase tracking-widest text-gray-500",
-          variant === "compact" ? "text-[7px] md:text-[9px]" : "text-[9px] mt-0.5"
+          variant === "compact" ? "text-[10px] md:text-[10px]" : "text-[10px] mt-0.5"
       )}>
         {label}
       </div>
