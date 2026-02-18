@@ -4,10 +4,13 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.16] - 2026-02-18
+
 ### Changed
 
 - **Patch History UI**: Redesigned vertical layout and separated it from the card component for cleaner inspector view.
 - **Mobile UI**: Adjusted deck badge sizes for better visibility on small screens.
+- **Schema**: Removed `changelog` field from `CommonSchemaParts` validation (no longer used by API).
 
 ### Fixed
 

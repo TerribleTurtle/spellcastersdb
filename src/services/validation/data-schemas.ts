@@ -157,11 +157,6 @@ export const MechanicsSchema = z.object({
 const CommonSchemaParts = {
     $schema: z.string().optional(),
     last_modified: z.string().optional(),
-    changelog: z.array(z.object({
-        date: z.string(),
-        version: z.string(),
-        description: z.string()
-    })).optional(),
 };
 
 export const UnitSchema = z

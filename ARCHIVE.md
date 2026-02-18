@@ -117,3 +117,34 @@
 - [x] Update **Roadmap Metadata**: Added devNote support and implemented disclaimer rendering
 - [x] Pluralize filter categories (Spellcasters, Creatures) in Unit Browser
 - [x] Implement Rank-first (then Alphabetical) sorting in Unit Browser for better grouping
+
+## Phase 9: Code Modernization & Refactor (Completed)
+
+### Phase 9.1: Architecture Unification (The "Split Brain" Fix)
+
+- [x] **Move**: `SoloEditorLayout.tsx` to `src/features/deck-builder/ui/layouts/`
+- [x] **Move**: `TeamEditorLayout.tsx` to `src/features/deck-builder/ui/layouts/`
+- [x] **Refactor**: Update imports in `src/app` and `src/features`
+- [x] **Cleanup**: Delete `src/components/deck-builder` directory
+
+### Phase 9.2: Logic Decoupling (The "God Hook" Fix)
+
+- [x] **Extract**: `useDeckEditorNavigation` from `useDeckEditorUI` (Verified)
+- [x] **Extract**: `useDeckSelection` from `useDeckEditorUI` (Verified)
+- [x] **Refactor**: `SoloEditorLayout` to use new hooks
+- [x] **Extract**: `useScrollLock` and generic modifiers from `DragDropProvider`
+
+### Phase 9.3: Component Responsiveness (The "God Component" Fix)
+
+- [x] **Extract**: `SoloEditorDesktop` component (Verified)
+- [x] **Extract**: `SoloEditorMobile` component (Verified)
+- [x] **Refactor**: `SoloEditorLayout` to delegate to sub-layouts
+
+## Phase 10: Patch History Integration (Completed)
+
+- [x] Types, Zod schemas, API service for balance_index/changelog/timeline endpoints
+- [x] Zustand store (`patch-history-store.ts`) for client-side balance index
+- [x] `PatchBadge` component (icon + full variants)
+- [x] Badge on `DraggableCard`, `UnitCard`, `InspectorHeader`
+- [x] `PatchHistorySection` with stat comparison on all 4 card detail pages
+- [x] 5 new PatchBadge unit tests (200 total tests passing)
