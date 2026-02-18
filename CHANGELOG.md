@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.17] - 2026-02-18
+
 ### Refactor
 
 - **Patch History**: Extracted `DiffLine` and `LocalDate` components for improved maintainability and consistent formatting.
@@ -152,8 +154,6 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.1] - 2026-02-15
 
-## [1.0.1] - 2026-02-15
-
 ### Fixed
 
 - **Scroll Lock**: Fixed an issue where scrolling remained locked if a card drag was cancelled (e.g., via quick tap or system interruption).
@@ -177,7 +177,7 @@ All notable changes to this project will be documented in this file.
 - **Optimization**: CSP and LCP improvements.
 - **Refactoring**:
   - Centralized Error Constants.
-  - Simplified Redux slices.
+  - Simplified Zustand slices.
   - Moved business logic to domain services (`TeamModification`, `TeamEditor`).
   - Standardized error handling.
   - **Inspector UI**:

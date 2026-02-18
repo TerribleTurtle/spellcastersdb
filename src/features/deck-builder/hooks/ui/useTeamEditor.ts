@@ -42,9 +42,16 @@ export function useTeamEditor() {
     });
 
     useEffect(() => {
-        const checkWidth = () => setAllowMultiple(window.innerWidth >= 1280);
+        let timeoutId: ReturnType<typeof setTimeout>;
+        const checkWidth = () => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => setAllowMultiple(window.innerWidth >= 1280), 150);
+        };
         window.addEventListener('resize', checkWidth);
-        return () => window.removeEventListener('resize', checkWidth);
+        return () => {
+            clearTimeout(timeoutId);
+            window.removeEventListener('resize', checkWidth);
+        };
     }, []);
 
     // Accordion State

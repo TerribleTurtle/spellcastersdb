@@ -1,6 +1,6 @@
 # State Management Architecture
 
-**Tech Stack:** Zustand + Immer (via slices) + LocalStorage Persistence.
+**Tech Stack:** Zustand + LocalStorage Persistence.
 
 ## Overview
 
@@ -16,6 +16,10 @@ The store is constructed in `src/store/index.ts` by combining these slices:
 | **Team**        | `createTeamSlice.ts`        | Managing the "Active Team" (3 decks).                  |
 | **Persistence** | `createPersistenceSlice.ts` | Saving, loading, importing, and exporting decks/teams. |
 | **UI**          | `createUISlice.ts`          | Transient UI state (Sidebar open, filters, etc.).      |
+| **UI Store**    | `ui-store.ts`               | Secondary UI state (modals, etc).                      |
+| **Patches**     | `patch-history-store.ts`    | Caching and filtering for patch history and diffs.     |
+| **Selectors**   | `selectors.ts`              | Optimized state selectors to prevent re-renders.       |
+| **Types**       | `types.ts`                  | Type definitions for Store and Slices.                 |
 
 ## Persistence Strategy
 
@@ -47,7 +51,3 @@ const { currentDeck } = useDeckStore();
 // ✅ Good: Only re-renders when deck name changes
 const deckName = useDeckStore((state) => state.currentDeck.name);
 ```
-
-## Debugging
-
-This project uses `zustand/middleware/devtools`. You can inspect the state changes using the **Redux DevTools** browser extension.

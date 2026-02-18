@@ -27,6 +27,8 @@ export interface FlatChangeRow {
   patchType: PatchCategory;
   patchTitle: string;
   patchDate: string;
+  /** Pre-parsed timestamp for efficient sorting (avoids repeated new Date() in comparator). */
+  patchTimestamp: number;
   patchTags: string[];
   /** Change-level info */
   targetId: string;
@@ -62,6 +64,7 @@ function flattenChangelog(patches: PatchEntry[]): FlatChangeRow[] {
         patchType: patch.type,
         patchTitle: patch.title,
         patchDate: patch.date,
+        patchTimestamp: new Date(patch.date).getTime(),
         patchTags: patch.tags || [],
         targetId: change.target_id,
         name: change.name,
@@ -139,13 +142,13 @@ export function useChangelogSearch(patches: PatchEntry[]) {
     result = [...result].sort((a, b) => {
       switch (sortMode) {
         case "date-desc": {
-          const diff = new Date(b.patchDate).getTime() - new Date(a.patchDate).getTime();
+          const diff = b.patchTimestamp - a.patchTimestamp;
           if (diff !== 0) return diff;
           // Tie-breaker: Newer version first
           return b.version.localeCompare(a.version, undefined, { numeric: true });
         }
         case "date-asc": {
-          const diff = new Date(a.patchDate).getTime() - new Date(b.patchDate).getTime();
+          const diff = a.patchTimestamp - b.patchTimestamp;
           if (diff !== 0) return diff;
           // Tie-breaker: Older version first
           return a.version.localeCompare(b.version, undefined, { numeric: true });

@@ -74,7 +74,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 - `src/app`: Next.js App Router pages and API routes.
 - `src/components`: React components (`ui` for generic, `deck-builder` for domain-specific).
-- `src/lib`: Core logic, including `api.ts` (Data Layer) and `registry.ts` (In-memory database).
+- `src/features`: Feature-based modules (e.g., `deck-builder`, `team-builder`).
+- `src/services`: Core domain logic and API services (`api`, `validation`, `roadmap`).
+- `src/lib`: Shared utilities (`config.ts`, `utils.ts`).
 - `src/hooks`: Custom React hooks (state management).
 - `docs/`: detailed documentation.
 

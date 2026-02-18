@@ -68,11 +68,22 @@ export function reconstructDeck(
   units: (Unit | Spell | Titan)[],
   spellcasters: Spellcaster[]
 ): Deck {
+  // O(1) lookup maps (built once per call)
+  const unitMap = new Map(units.map(u => [u.entity_id, u]));
+  const scMap = new Map<string, Spellcaster>();
+  for (const sc of spellcasters) {
+    const primaryId = sc.spellcaster_id || sc.entity_id;
+    if (primaryId) scMap.set(primaryId, sc);
+    if (sc.entity_id && sc.entity_id !== primaryId) {
+      scMap.set(sc.entity_id, sc);
+    }
+  }
+
   const newSlots = INITIAL_SLOTS.map((s) => ({ ...s }));
 
   stored.slotIds.forEach((id, idx) => {
     if (id && idx < 5) {
-      const freshUnit = units.find((u) => u.entity_id === id);
+      const freshUnit = unitMap.get(id);
       if (freshUnit) {
         newSlots[idx] = { ...newSlots[idx], unit: freshUnit };
       }
@@ -81,7 +92,7 @@ export function reconstructDeck(
 
   // Handle potential legacy ID mapping if needed, but strict ID match is safer for now
   const freshSpellcaster = stored.spellcasterId
-    ? spellcasters.find((s) => s.spellcaster_id === stored.spellcasterId || s.entity_id === stored.spellcasterId)
+    ? scMap.get(stored.spellcasterId) ?? null
     : null;
 
   return {

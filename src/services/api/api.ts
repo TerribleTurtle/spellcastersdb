@@ -84,6 +84,12 @@ async function fetchWithFallback(
  * Uses the DataSource pattern to select the appropriate strategy based on the environment.
  * 
  * @returns The complete game data object.
+ * 
+ * @example
+ * ```ts
+ * const data = await fetchGameData();
+ * console.log(data.units.length);
+ * ```
  */
 export async function fetchGameData(): Promise<AllDataResponse> {
     return fetchWithFallback(source => source.fetch());
@@ -100,6 +106,12 @@ export async function fetchCriticalGameData(): Promise<AllDataResponse> {
 
 /**
  * Returns all Creatures and Buildings
+ * 
+ * @example
+ * ```ts
+ * const units = await getUnits();
+ * const dragons = units.filter(u => u.name.includes("Dragon"));
+ * ```
  */
 export async function getUnits(): Promise<Unit[]> {
   if (registry.isInitialized()) return registry.getAllUnits();
@@ -169,6 +181,14 @@ export async function getUpgrades(): Promise<Upgrade[]> {
  * 
  * @param entityId - The unique ID of the entity.
  * @returns The entity object or null if not found.
+ * 
+ * @example
+ * ```ts
+ * const entity = await getEntityById("fire_imp_1");
+ * if (entity && "damage" in entity) {
+ *   console.log(entity.damage);
+ * }
+ * ```
  */
 export async function getEntityById(
   entityId: string
