@@ -8,13 +8,21 @@
  * @see {@link types/patch-history.d.ts} for type definitions.
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { PatchBadge } from "@/components/ui/PatchBadge";
 import type { PatchEntry, TimelineEntry, PatchCategory } from "@/types/patch-history";
 import { ArrowDownAZ, ArrowUpAZ, Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+
+/** Renders a date string in the viewer's local timezone (client-side only). */
+function LocalDate({ iso }: { iso: string }) {
+  const [display, setDisplay] = useState(iso);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { try { setDisplay(new Date(iso).toLocaleString(undefined, { dateStyle: "medium", timeStyle: "short" })); } catch { setDisplay(iso); } }, [iso]);
+  return <time dateTime={iso} suppressHydrationWarning>{display}</time>;
+}
 
 // ============================================================================
 // Component
@@ -238,7 +246,7 @@ export function PatchHistorySection({
                   <div className="px-3 py-2 bg-white/5 border-b border-white/5 flex items-center gap-2 flex-wrap">
                      <PatchBadge type={entry.type} variant="icon" />
                      <span className="text-xs font-mono font-bold text-gray-300">v{entry.version}</span>
-                     <span className="text-[10px] text-gray-500">• {entry.date}</span>
+                     <span className="text-[10px] text-gray-500">• <LocalDate iso={entry.date} /></span>
                      {entry.tags?.map(t => (
                         <span key={t} className="text-[9px] text-gray-600 bg-black/40 px-1.5 rounded">#{t}</span>
                     ))}
@@ -289,12 +297,26 @@ export function PatchHistorySection({
                                 <div className="pl-4 mt-1 space-y-0.5 border-l border-white/5 ml-1">
                                      {change.diffs.slice(0, 3).map((d, i) => {
                                          const diff = d as { path?: string[]; lhs?: unknown; rhs?: unknown };
+                                         const isAdded = diff.lhs == null && diff.rhs != null;
+                                         const isRemoved = diff.rhs == null && diff.lhs != null;
                                          return (
-                                         <div key={i} className="text-[10px] font-mono text-gray-500 flex flex-wrap gap-1">
+                                         <div key={i} className="text-[10px] font-mono text-gray-500 flex flex-wrap gap-1 items-center">
                                              <span className="opacity-70">{diff.path ? diff.path.join('.') : 'value'}:</span>
-                                             <span className="text-gray-400">
-                                                 {String(diff.lhs ?? 'null')} <span className="text-gray-600">→</span> {String(diff.rhs ?? 'null')}
-                                             </span>
+                                             {isAdded ? (
+                                                 <span className="text-emerald-400 flex items-center gap-1">
+                                                     <span className="text-[9px] bg-emerald-500/20 border border-emerald-500/30 rounded px-1 uppercase font-bold">Added</span>
+                                                     {String(diff.rhs)}
+                                                 </span>
+                                             ) : isRemoved ? (
+                                                 <span className="text-red-400 flex items-center gap-1">
+                                                     <span className="text-[9px] bg-red-500/20 border border-red-500/30 rounded px-1 uppercase font-bold">Removed</span>
+                                                     {String(diff.lhs)}
+                                                 </span>
+                                             ) : (
+                                                 <span className="text-gray-400">
+                                                     {String(diff.lhs)} <span className="text-gray-600">→</span> {String(diff.rhs)}
+                                                 </span>
+                                             )}
                                          </div>
                                      );
                                      })}

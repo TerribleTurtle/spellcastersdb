@@ -2,19 +2,21 @@
 
 ## Current Focus
 
-Patch History Redesign — Complete. Ready for deployment.
+v1.0.16 deployed — Patch History Redesign, schema cleanup, docs sync.
 
 ## Status
 
-- [x] Patch history: vertical card layout, unchanged stat filter, default filters
-- [x] Detail page: patch section separated from entity card
-- [x] Inspector: patch history removed (clean)
-- [x] Dead code pruned (InspectorHistory, useEntityHistory)
 - [x] TypeScript: 0 errors
+- [x] ESLint: 0 errors
 - [x] Tests: 205 pass / 1 skip
-- [x] Build: compiled successfully
-- [x] PatchHistorySection: UI framework shows even when filters hide all entries
+- [x] Secrets scan: clean
+- [x] CI/CD: valid (test.yml, revalidate.yml)
+- [x] Env vars: all documented in .env.local.example
+- [x] CHANGELOG: updated to v1.0.16
+- [x] Commit `9e20809` pushed to main
 
 ## Next Steps
 
-- [x] Deploy
+- [ ] Monitor Vercel deployment for build success
+- [x] Patch diff: show "Added"/"Removed" badges instead of null values
+- [x] Changelog dates: display in viewer's local timezone
