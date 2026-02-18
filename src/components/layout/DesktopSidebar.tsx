@@ -15,7 +15,8 @@ import {
   MessageSquare,
   ChevronLeft,
   Menu,
-  Bot
+  Bot,
+  History
 } from "lucide-react";
 import { useFeedback } from "@/hooks/useFeedback";
 import { cn } from "@/lib/utils";
@@ -69,6 +70,7 @@ export function DesktopSidebar() {
   const navItems = [
     { name: "Deck Builder", href: "/", icon: Layers },
     { name: "Database", href: "/database", icon: Database },
+    { name: "History", href: "/changes", icon: History },
     { name: "Roadmap", href: "/roadmap", icon: Map },
   ];
 
