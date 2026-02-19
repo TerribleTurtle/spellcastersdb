@@ -10,7 +10,7 @@
 
 ### Brand Colors
 
-These are the primary defining colors of the UI. Defined as `@theme` tokens in `globals.css`.
+These are the primary defining colors of the UI. Defined as `@theme` tokens in `src/styles/theme-tokens.css`.
 
 - **Primary (Magic Purple):** `#9333ea` → `--color-brand-primary`
 - **Secondary (Power Pink):** `#db2777` → `--color-brand-secondary`
@@ -61,7 +61,7 @@ Semantic replacements for status indicators.
 
 ### Rarity Colors
 
-Game-specific rarity indicators (defined in `globals.css`).
+Game-specific rarity indicators (defined in `src/styles/design-tokens.css`).
 
 - **Common:** `--color-rarity-common` (#94a3b8)
 - **Rare:** `--color-rarity-rare` (#60a5fa)
@@ -75,6 +75,34 @@ Game-specific rarity indicators (defined in `globals.css`).
 - **Headings:** Geist Sans, Bold/ExtraBold. Often uppercase tracking-wider.
 - **Body:** Geist Sans, clean reading experience.
 - **Data/Code:** Geist Mono, used for stats, IDs, and technical details.
+
+## Semantic Component Tokens (New in v1.1)
+
+To ensure consistency, use these semantic tokens instead of hardcoded utility classes.
+
+### Control Dimensions
+
+| Token                 | Value     | Tailwind Utility          | Use Case               |
+| --------------------- | --------- | ------------------------- | ---------------------- |
+| `--height-control-sm` | `2rem`    | `h-(--height-control-sm)` | Small buttons/inputs   |
+| `--height-control-md` | `2.25rem` | `h-(--height-control-md)` | Default buttons/inputs |
+| `--height-control-lg` | `2.5rem`  | `h-(--height-control-lg)` | Large buttons/inputs   |
+
+### Layout & Spacing
+
+| Token               | Value              | Tailwind Utility             | Use Case            |
+| ------------------- | ------------------ | ---------------------------- | ------------------- |
+| `--radius-control`  | `var(--radius-md)` | `rounded-(--radius-control)` | All form controls   |
+| `--padding-card`    | `1.5rem`           | `p-(--padding-card)`         | Card/Dialog padding |
+| `--gap-card-header` | `0.375rem`         | `gap-(--gap-card-header)`    | Card header spacing |
+
+### Animation
+
+| Token               | Value   | Tailwind Utility               |
+| ------------------- | ------- | ------------------------------ |
+| `--duration-fast`   | `150ms` | `duration-(--duration-fast)`   |
+| `--duration-normal` | `200ms` | `duration-(--duration-normal)` |
+| `--duration-slow`   | `300ms` | `duration-(--duration-slow)`   |
 
 ## 4. UI Patterns
 
@@ -97,8 +125,19 @@ Use gradients for text and buttons.
 
 Use localized box-shadows or drop-shadows to simulate light emission from magical elements.
 
-## 5. Important Notes
+## 5. Themes
+
+Core themes override `--sp-*` CSS custom properties in `src/styles/design-tokens.css`. The ThemePicker UI and `next-themes` handle switching.
+
+| Theme | CSS Class | Primary Color | Vibe                       |
+| ----- | --------- | ------------- | -------------------------- |
+| Dark  | `.dark`   | `#9333ea`     | Default — purple on slate  |
+| Light | `.light`  | `#7c3aed`     | Inverted — violet on white |
+
+Additional fun/side themes (Arcane, Inferno, Frost, Retro, Rainbow) are defined in `src/styles/themes.css` but are not part of the core brand identity.
+
+## 6. Important Notes
 
 - **All opacity-based tokens** use `color-mix(in oklch, ...)` to match Tailwind v4's native opacity rendering.
 - **Never use hardcoded colors** like `border-white/10` or `text-slate-400`. Always use the semantic tokens above.
-- **Token definitions** live in `src/app/globals.css` under the `@theme` block.
+- **Token definitions** live in `src/styles/` — see `design-tokens.css`, `theme-tokens.css`, and `components.css`.

@@ -61,7 +61,6 @@ export function encodeTeam(
   decks: [Deck, Deck, Deck],
   name: string = ""
 ): string {
-  // TODO: Fix lx string gen (LZString compression issues?)
   // V2: Flatten everything and compress once for better efficiency
   // Format: name ~ d1_caster ~ d1_u1 ... ~ d2_caster ...
 

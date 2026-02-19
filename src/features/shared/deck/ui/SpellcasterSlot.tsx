@@ -1,17 +1,17 @@
-import { useDraggable, useDroppable, useDndContext } from "@dnd-kit/core";
-import { Sparkles, Shield, Wand2, Swords, HelpCircle } from "lucide-react";
+import { useDndContext, useDraggable, useDroppable } from "@dnd-kit/core";
+import { HelpCircle, Shield, Sparkles, Swords, Wand2 } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
 import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
-import { UnifiedEntity, Spellcaster } from "@/types/api";
-import { DragData, DropData, DraggableEntity } from "@/types/dnd";
-import { ENTITY_CATEGORY, CLASS_CONFIG } from "@/services/config/constants";
-
+import { ENTITY_CATEGORY } from "@/services/config/constants";
+import { CLASS_STYLES } from "@/services/config/rank-class-styles";
+import { Spellcaster, UnifiedEntity } from "@/types/api";
+import { DragData, DraggableEntity, DropData } from "@/types/dnd";
 
 interface SpellcasterSlotProps {
   spellcaster: Spellcaster | null;
-  onSelect?: (item: UnifiedEntity, pos?: {x:number, y:number}) => void;
+  onSelect?: (item: UnifiedEntity, pos?: { x: number; y: number }) => void;
   deckId?: string; // Context ID for Team Mode
   idSuffix?: string;
   priority?: boolean;
@@ -26,13 +26,15 @@ export function SpellcasterSlot({
 }: SpellcasterSlotProps) {
   const baseZoneId = deckId ? `spellcaster-zone-${deckId}` : "spellcaster-zone";
   const zoneId = idSuffix ? `${baseZoneId}-${idSuffix}` : baseZoneId;
-  
-  const baseDragId = deckId ? `spellcaster-slot-drag-${deckId}` : "spellcaster-slot-drag";
+
+  const baseDragId = deckId
+    ? `spellcaster-slot-drag-${deckId}`
+    : "spellcaster-slot-drag";
   const dragId = idSuffix ? `${baseDragId}-${idSuffix}` : baseDragId;
 
-  const dropData: DropData = { 
-      type: "SPELLCASTER_SLOT", 
-      deckId 
+  const dropData: DropData = {
+    type: "SPELLCASTER_SLOT",
+    deckId,
   };
 
   const { isOver, setNodeRef } = useDroppable({
@@ -40,10 +42,10 @@ export function SpellcasterSlot({
     data: dropData,
   });
 
-  const dragData: DragData = { 
-      type: "SPELLCASTER_SLOT", 
-      item: spellcaster as DraggableEntity,
-      sourceDeckId: deckId 
+  const dragData: DragData = {
+    type: "SPELLCASTER_SLOT",
+    item: spellcaster as DraggableEntity,
+    sourceDeckId: deckId,
   };
 
   const {
@@ -72,13 +74,15 @@ export function SpellcasterSlot({
   const currentDrag = active?.data.current as DragData | undefined;
 
   if (currentDrag && currentDrag.item) {
-     const item = currentDrag.item as UnifiedEntity;
-     // Must be Spellcaster type
-     if ("spellcaster_id" in item || item.category === ENTITY_CATEGORY.Spellcaster) {
-         isValidTarget = true;
-     }
+    const item = currentDrag.item as UnifiedEntity;
+    // Must be Spellcaster type
+    if (
+      "spellcaster_id" in item ||
+      item.category === ENTITY_CATEGORY.Spellcaster
+    ) {
+      isValidTarget = true;
+    }
   }
-
 
   return (
     <div
@@ -88,11 +92,17 @@ export function SpellcasterSlot({
         "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg w-full",
         "md:w-full md:max-w-[160px]",
         // Valid drop target
-        isValidTarget && !isOver && "border-amber-400 bg-amber-400/10 shadow-[0_0_20px_rgba(251,191,36,0.6),0_0_40px_rgba(251,191,36,0.3)] animate-pulse",
+        isValidTarget &&
+          !isOver &&
+          "border-slot-border-valid bg-slot-bg-valid shadow-(--sp-slot-glow-valid) animate-pulse",
         // Active hover
-        isOver && isValidTarget && "border-brand-primary bg-brand-primary/10 scale-105 shadow-brand-primary/20",
+        isOver &&
+          isValidTarget &&
+          "border-brand-primary bg-brand-primary/10 scale-105 shadow-brand-primary/20",
         // Default
-        !isValidTarget && !isOver && "border-brand-primary/30 bg-surface-card md:hover:border-brand-primary/60 md:hover:shadow-lg md:hover:shadow-brand-primary/10",
+        !isValidTarget &&
+          !isOver &&
+          "border-brand-primary/30 bg-surface-card md:hover:border-brand-primary/60 md:hover:shadow-lg md:hover:shadow-brand-primary/10",
         spellcaster && "border-brand-primary",
         isDragging && "opacity-50"
       )}
@@ -106,8 +116,8 @@ export function SpellcasterSlot({
           style={style}
           className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing touch-none"
           onClick={(e) => {
-             e.stopPropagation(); // Stop propagation to prevent accidental clicks passing through
-             if (onSelect) onSelect(spellcaster, { x: e.clientX, y: e.clientY });
+            e.stopPropagation(); // Stop propagation to prevent accidental clicks passing through
+            if (onSelect) onSelect(spellcaster, { x: e.clientX, y: e.clientY });
           }}
         />
       )}
@@ -141,21 +151,29 @@ export function SpellcasterSlot({
             />
             {/* Spellcaster Class Badge - Icon */}
             {/* Spellcaster Class Badge - Icon */}
-            <div className={cn(
-               "absolute bottom-1 left-1 flex items-center justify-center w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 shadow-sm backdrop-blur-sm z-20",
-               spellcaster.class && CLASS_CONFIG[spellcaster.class] 
-                  ? cn(CLASS_CONFIG[spellcaster.class].bg, CLASS_CONFIG[spellcaster.class].border)
+            <div
+              className={cn(
+                "absolute bottom-1 left-1 flex items-center justify-center w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 shadow-sm backdrop-blur-sm z-20",
+                spellcaster.class && CLASS_STYLES[spellcaster.class]
+                  ? cn(
+                      CLASS_STYLES[spellcaster.class].bg,
+                      CLASS_STYLES[spellcaster.class].border
+                    )
                   : "bg-surface-main border-slate-400"
-            )}>
-               {spellcaster.class === "Conqueror" ? (
-                  <Shield size={14} className="text-status-danger-text scale-110" />
-               ) : spellcaster.class === "Enchanter" ? (
-                  <Wand2 size={14} className="text-purple-400 scale-110" />
-               ) : spellcaster.class === "Duelist" ? (
-                  <Swords size={14} className="text-amber-400 scale-110" />
-               ) : (
-                  <HelpCircle size={14} className="text-text-muted scale-110" />
-               )}
+              )}
+            >
+              {spellcaster.class === "Conqueror" ? (
+                <Shield
+                  size={14}
+                  className="text-status-danger-text scale-110"
+                />
+              ) : spellcaster.class === "Enchanter" ? (
+                <Wand2 size={14} className="text-purple-400 scale-110" />
+              ) : spellcaster.class === "Duelist" ? (
+                <Swords size={14} className="text-amber-400 scale-110" />
+              ) : (
+                <HelpCircle size={14} className="text-text-muted scale-110" />
+              )}
             </div>
           </div>
           {/* Name Banner */}
@@ -164,7 +182,6 @@ export function SpellcasterSlot({
               {spellcaster.name}
             </span>
           </div>
-
         </div>
       )}
     </div>

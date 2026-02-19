@@ -60,3 +60,15 @@
 - [x] Repo Hygiene: Removed 4 cruft files, fixed .gitignore gaps (\_.log, temp\_\_), removed stale ESLint ignore, ran npm prune.
 - [x] Deployment Verification: Fixed 8 TS errors in tests, deduped CHANGELOG. 0 errors, 258 tests pass. **GO for deploy.**
 - [x] ThemePicker: Portal-based dropdown to prevent clipping by sidebar `overflow-x-hidden` in collapsed view.
+- [x] Fun themes: Rubber (One Piece pirate palette), Anti-A11y (gag — gray-on-gray, reverts to previous theme on refresh)
+- [x] Ephemeral theme guard: Rainbow + Anti-A11y revert to previous theme on refresh via `sp-prev-theme` localStorage
+- [x] Cleanup-5: Removed 41-line duplicate `.theme-rainbow` CSS, updated README + BRAND_GUIDELINES with theme docs. Build 0 errors.
+- [x] Removed Rubber (One Piece) and Anti-A11y themes from all files. Kept Rainbow ephemeral guard.
+- [x] CSS Modularization: Split 642-line `globals.css` into 6 focused modules under `src/styles/` (design-tokens, theme-tokens, shadcn, base, themes + barrel index.css). Build 0 errors, 48 tests pass.
+- [x] Cleanup-5: Final Audit pass. Removed 3 stale TODOs, confirmed 0 console.logs, verified Type-Check (0 errors), Lint (0 errors), Build (Success).
+- [x] **RELEASE CANDIDATE READY** (v1.0.19 verified)
+- [x] **Docs Audit (v1.0.19):** Identified 12 issues (5 drift, 4 missing, 3 style). All remediated. Type-check 0 errors.
+- [x] **UI Centralization:** Introduced Semantic Component Tokens (`src/styles/components.css`). Refactored Button, Input, Card, Dialog. Updated Brand Guidelines. Build passed.
+- [x] **Design Playground (Phase 3):** Created `/design-system` route with Theme Builder (8 color pickers, save/delete/export/import), Token Catalog, Component Catalog. Custom themes persist in localStorage and inject `--sp-*` CSS vars via `ThemeProvider`. Global `ThemePicker` shows custom themes. 275 tests pass, 0 errors.
+- [x] **Scaffolding (Phase 4):** Installed `tsx`. Created `scripts/new-component.ts` and `scripts/new-route.ts` generators. Added `npm run new:component/new:route/script:validate`. Updated `CONTRIBUTING.md`. 248 tests pass, 0 errors.
+- [x] **Final Audit (Cleanup-5):** Verified Phase 3 & 4. Scanned for debug logs (clean). Updated `README.md` with new features and scripts. `npm run preflight` passes. **RELEASE CANDIDATE READY.**

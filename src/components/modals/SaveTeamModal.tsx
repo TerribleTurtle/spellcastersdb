@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { Save, X, AlertTriangle } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { useDeckStore } from "@/store/index";
+import { createPortal } from "react-dom";
+
+import { AlertTriangle, Save, X } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { cn } from "@/lib/utils";
+import { useDeckStore } from "@/store/index";
 
 interface SaveTeamModalProps {
   teamName: string;
@@ -13,15 +16,19 @@ interface SaveTeamModalProps {
   onSave: (newName: string) => void;
 }
 
-import { createPortal } from "react-dom";
-
-export function SaveTeamModal({ teamName, isOpen, onClose, onSave, onOverwrite }: SaveTeamModalProps & { onOverwrite?: (name: string) => void }) {
+export function SaveTeamModal({
+  teamName,
+  isOpen,
+  onClose,
+  onSave,
+  onOverwrite,
+}: SaveTeamModalProps & { onOverwrite?: (name: string) => void }) {
   const modalRef = useFocusTrap(isOpen, onClose);
   const [name, setName] = useState(teamName || "");
   const [error, setError] = useState<string | null>(null);
   const [showOverwrite, setShowOverwrite] = useState(false);
-  
-  const savedTeams = useDeckStore(state => state.savedTeams);
+
+  const savedTeams = useDeckStore((state) => state.savedTeams);
 
   const handleSaveAttempt = () => {
     const trimmedName = name.trim();
@@ -31,16 +38,18 @@ export function SaveTeamModal({ teamName, isOpen, onClose, onSave, onOverwrite }
     }
 
     // Simple duplicate check
-    const isDuplicate = savedTeams.some(t => t.name.toLowerCase() === trimmedName.toLowerCase());
-    
+    const isDuplicate = savedTeams.some(
+      (t) => t.name.toLowerCase() === trimmedName.toLowerCase()
+    );
+
     if (isDuplicate) {
-       if (onOverwrite) {
-           setError(`A team named "${trimmedName}" already exists.`);
-           setShowOverwrite(true);
-       } else {
-           setError("A team with this name already exists.");
-       }
-       return;
+      if (onOverwrite) {
+        setError(`A team named "${trimmedName}" already exists.`);
+        setShowOverwrite(true);
+      } else {
+        setError("A team with this name already exists.");
+      }
+      return;
     }
 
     onSave(trimmedName);
@@ -48,17 +57,17 @@ export function SaveTeamModal({ teamName, isOpen, onClose, onSave, onOverwrite }
   };
 
   const handleOverwrite = () => {
-      if (onOverwrite) {
-          onOverwrite(name.trim());
-          onClose();
-      }
+    if (onOverwrite) {
+      onOverwrite(name.trim());
+      onClose();
+    }
   };
 
   if (!isOpen) return null;
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div 
+      <div
         ref={modalRef}
         role="dialog"
         aria-modal="true"
@@ -68,11 +77,14 @@ export function SaveTeamModal({ teamName, isOpen, onClose, onSave, onOverwrite }
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border-default bg-surface-card">
-          <h3 id="save-team-title" className="text-lg font-bold text-text-primary flex items-center gap-2">
+          <h3
+            id="save-team-title"
+            className="text-lg font-bold text-text-primary flex items-center gap-2"
+          >
             <Save size={20} className="text-brand-primary" />
             {showOverwrite ? "Overwrite Team?" : "Save Team Copy"}
           </h3>
-          <Button 
+          <Button
             variant="ghost"
             size="icon"
             onClick={onClose}
@@ -94,11 +106,14 @@ export function SaveTeamModal({ teamName, isOpen, onClose, onSave, onOverwrite }
               onChange={(e) => {
                 setName(e.target.value);
                 if (error) {
-                    setError(null);
-                    setShowOverwrite(false); 
+                  setError(null);
+                  setShowOverwrite(false);
                 }
               }}
-              onKeyDown={(e) => e.key === "Enter" && (showOverwrite ? handleOverwrite() : handleSaveAttempt())}
+              onKeyDown={(e) =>
+                e.key === "Enter" &&
+                (showOverwrite ? handleOverwrite() : handleSaveAttempt())
+              }
               className={cn(
                 "bg-surface-inset border-border-default text-text-primary placeholder-gray-600 focus-visible:ring-brand-primary/50",
                 error && "border-red-500/50 focus-visible:ring-red-500/50"
@@ -113,42 +128,42 @@ export function SaveTeamModal({ teamName, isOpen, onClose, onSave, onOverwrite }
               </div>
             )}
           </div>
-          
+
           <div className="text-sm text-text-muted bg-surface-card p-3 rounded-lg border border-border-subtle">
-             {showOverwrite
-                ? <>This will <strong>overwrite</strong> the existing team data for <strong>{name}</strong>.</>
-                : <>This will create a new copy of <strong>{teamName || "this team"}</strong> in your Library.</>
-             }
+            {showOverwrite ? (
+              <>
+                This will <strong>overwrite</strong> the existing team data for{" "}
+                <strong>{name}</strong>.
+              </>
+            ) : (
+              <>
+                This will create a new copy of{" "}
+                <strong>{teamName || "this team"}</strong> in your Library.
+              </>
+            )}
           </div>
         </div>
 
         {/* Footer */}
         <div className="p-4 border-t border-border-default bg-surface-card flex items-center justify-end gap-3">
-          <Button
-            variant="ghost"
-            onClick={onClose}
-          >
+          <Button variant="ghost" onClick={onClose}>
             Cancel
           </Button>
 
           {showOverwrite ? (
-              <Button
-                onClick={handleOverwrite}
-                className="bg-red-500 hover:bg-red-600 text-text-primary"
-              >
-                <AlertTriangle size={16} className="mr-2" />
-                Overwrite
-              </Button>
+            <Button
+              onClick={handleOverwrite}
+              className="bg-action-danger hover:bg-action-danger-hover text-text-primary"
+            >
+              <AlertTriangle size={16} className="mr-2" />
+              Overwrite
+            </Button>
           ) : (
-              <Button
-                onClick={handleSaveAttempt}
-                disabled={!name.trim()}
-              >
-                <Save size={16} className="mr-2" />
-                Save Copy
-              </Button>
+            <Button onClick={handleSaveAttempt} disabled={!name.trim()}>
+              <Save size={16} className="mr-2" />
+              Save Copy
+            </Button>
           )}
-
         </div>
       </div>
     </div>,

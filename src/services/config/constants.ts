@@ -1,7 +1,6 @@
 // ============================================================================
 // Entity Categories
 // ============================================================================
-
 import { EntityCategory } from "@/types/enums";
 
 export { EntityCategory };
@@ -25,87 +24,49 @@ export const SCHOOLS = [
   "Titan",
 ] as const;
 
-export type School = typeof SCHOOLS[number];
+export type School = (typeof SCHOOLS)[number];
 
 export const RANKS = ["I", "II", "III", "IV", "V"] as const;
-export type Rank = typeof RANKS[number];
+export type Rank = (typeof RANKS)[number];
 
-export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: string; border: string; borderBg: string; fill: string; stroke: string }> = {
+export const RANK_CONFIG: Record<Rank, { label: string }> = {
   I: {
     label: "I",
-    color: "text-text-primary",
-    bg: "bg-surface-raised",
-    border: "border-slate-400",
-    borderBg: "bg-surface-hover",
-    fill: "fill-slate-600",
-    stroke: "stroke-slate-400",
   },
   II: {
     label: "II",
-    color: "text-text-primary",
-    bg: "bg-emerald-700",
-    border: "border-emerald-500",
-    borderBg: "bg-emerald-500",
-    fill: "fill-emerald-700",
-    stroke: "stroke-emerald-500",
   },
   III: {
     label: "III",
-    color: "text-text-primary",
-    bg: "bg-blue-700",
-    border: "border-blue-500",
-    borderBg: "bg-blue-500",
-    fill: "fill-blue-700",
-    stroke: "stroke-blue-500",
   },
   IV: {
     label: "IV",
-    color: "text-text-primary",
-    bg: "bg-purple-700",
-    border: "border-purple-500",
-    borderBg: "bg-purple-500",
-    fill: "fill-purple-700",
-    stroke: "stroke-purple-500",
   },
   V: {
     label: "V", // Will be overridden for Titans in component if needed, or we can treat V as Titan rank generically
-    color: "text-text-primary",
-    bg: "bg-amber-800",
-    border: "border-amber-600",
-    borderBg: "bg-amber-600",
-    fill: "fill-amber-800",
-    stroke: "stroke-amber-600",
   },
 };
 
-export const SPELLCASTER_CLASSES = ["Duelist", "Conqueror", "Enchanter"] as const;
-export type SpellcasterClass = typeof SPELLCASTER_CLASSES[number];
+export const SPELLCASTER_CLASSES = [
+  "Duelist",
+  "Conqueror",
+  "Enchanter",
+] as const;
+export type SpellcasterClass = (typeof SPELLCASTER_CLASSES)[number];
 
-export const CLASS_CONFIG: Record<string, { label: string; bg: string; border: string; iconColor: string }> = {
+export const CLASS_CONFIG: Record<string, { label: string }> = {
   Conqueror: {
     label: "Conqueror",
-    bg: "bg-surface-main",
-    border: "border-slate-600",
-    iconColor: "text-status-danger-text"
   },
   Duelist: {
     label: "Duelist",
-    bg: "bg-surface-main",
-    border: "border-slate-600",
-    iconColor: "text-amber-400"
   },
   Enchanter: {
     label: "Enchanter",
-    bg: "bg-surface-main",
-    border: "border-slate-600",
-    iconColor: "text-purple-400"
   },
   Unknown: {
     label: "?",
-    bg: "bg-surface-main",
-    border: "border-slate-400",
-    iconColor: "text-text-muted"
-  }
+  },
 };
 
 // ============================================================================
@@ -130,7 +91,13 @@ export const CATEGORY_PRIORITY: Record<string, number> = {
   Titan: 5,
 };
 
-export const BROWSER_CATEGORY_ORDER = ["Spellcaster", "Creature", "Building", "Spell", "Titan"];
+export const BROWSER_CATEGORY_ORDER = [
+  "Spellcaster",
+  "Creature",
+  "Building",
+  "Spell",
+  "Titan",
+];
 
 export const GROUP_MODES = ["All", "Rank", "Magic School"] as const;
 

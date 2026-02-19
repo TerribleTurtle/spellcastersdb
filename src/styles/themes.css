@@ -1,0 +1,184 @@
+/* ═══════════════════════════════════════════════════════
+   FUN THEMES
+   ═══════════════════════════════════════════════════════ */
+
+/* 🔮 Arcane — Neon magenta/cyan on deep purple void */
+.theme-arcane {
+  color-scheme: dark;
+  --sp-brand-primary: #ff00ff;
+  --sp-brand-secondary: #00ffff;
+  --sp-brand-accent: #ff6ec7;
+  --sp-brand-dark: #1a0033;
+  --sp-surface-main: #1a0033;
+  --sp-surface-card: color-mix(in oklch, #ff00ff 5%, transparent);
+  --sp-surface-hover: color-mix(in oklch, #ff00ff 10%, transparent);
+  --sp-surface-highlight: rgba(255, 0, 255, 0.2);
+  --sp-surface-deck: #0d001a;
+  --sp-surface-raised: color-mix(in oklch, #ff00ff 8%, transparent);
+  --sp-surface-dim: color-mix(in oklch, black 20%, transparent);
+  --sp-surface-inset: color-mix(in oklch, black 40%, transparent);
+  --sp-surface-overlay: color-mix(in oklch, black 80%, transparent);
+  --sp-surface-overlay-heavy: color-mix(in oklch, black 90%, transparent);
+  --sp-surface-scrim: color-mix(in oklch, black 60%, transparent);
+  --sp-border-subtle: color-mix(in oklch, #ff00ff 8%, transparent);
+  --sp-border-default: color-mix(in oklch, #ff00ff 15%, transparent);
+  --sp-border-strong: color-mix(in oklch, #ff00ff 25%, transparent);
+  --sp-text-primary: #f0e0ff;
+  --sp-text-secondary: #d4a0ff;
+  --sp-text-muted: #a060d0;
+  --sp-text-dimmed: #7040a0;
+  --sp-text-faint: #503070;
+  --sp-scrollbar-track: rgba(255, 0, 255, 0.03);
+  --sp-scrollbar-thumb: rgba(255, 0, 255, 0.2);
+  --sp-scrollbar-thumb-hover: rgba(255, 0, 255, 0.35);
+  background: radial-gradient(
+    circle at top center,
+    rgba(255, 0, 255, 0.15),
+    #1a0033
+  );
+}
+
+/* 🔥 Inferno — Red/orange on charred dark */
+.theme-inferno {
+  color-scheme: dark;
+  --sp-brand-primary: #ef4444;
+  --sp-brand-secondary: #f97316;
+  --sp-brand-accent: #fbbf24;
+  --sp-brand-dark: #1c0a00;
+  --sp-surface-main: #1c0a00;
+  --sp-surface-card: color-mix(in oklch, #ef4444 5%, transparent);
+  --sp-surface-hover: color-mix(in oklch, #ef4444 10%, transparent);
+  --sp-surface-highlight: rgba(239, 68, 68, 0.2);
+  --sp-surface-deck: #0f0500;
+  --sp-surface-raised: color-mix(in oklch, #ef4444 8%, transparent);
+  --sp-surface-dim: color-mix(in oklch, black 20%, transparent);
+  --sp-surface-inset: color-mix(in oklch, black 40%, transparent);
+  --sp-surface-overlay: color-mix(in oklch, black 80%, transparent);
+  --sp-surface-overlay-heavy: color-mix(in oklch, black 90%, transparent);
+  --sp-surface-scrim: color-mix(in oklch, black 60%, transparent);
+  --sp-border-subtle: color-mix(in oklch, #ef4444 8%, transparent);
+  --sp-border-default: color-mix(in oklch, #ef4444 15%, transparent);
+  --sp-border-strong: color-mix(in oklch, #ef4444 25%, transparent);
+  --sp-text-primary: #fff0e0;
+  --sp-text-secondary: #ffc4a0;
+  --sp-text-muted: #d08060;
+  --sp-text-dimmed: #a05030;
+  --sp-text-faint: #703020;
+  --sp-scrollbar-track: rgba(239, 68, 68, 0.03);
+  --sp-scrollbar-thumb: rgba(239, 68, 68, 0.2);
+  --sp-scrollbar-thumb-hover: rgba(239, 68, 68, 0.35);
+  background: radial-gradient(
+    circle at top center,
+    rgba(239, 68, 68, 0.15),
+    #1c0a00
+  );
+}
+
+/* 🧊 Frost — Ice blue/silver on dark navy */
+.theme-frost {
+  color-scheme: dark;
+  --sp-brand-primary: #67e8f9;
+  --sp-brand-secondary: #a5f3fc;
+  --sp-brand-accent: #f59e0b; /* Amber 500 — warm contrast against ice blue */
+  --sp-brand-dark: #0c1929;
+  --sp-surface-main: #0c1929;
+  --sp-surface-card: color-mix(in oklch, #67e8f9 5%, transparent);
+  --sp-surface-hover: color-mix(in oklch, #67e8f9 10%, transparent);
+  --sp-surface-highlight: rgba(103, 232, 249, 0.2);
+  --sp-surface-deck: #060e18;
+  --sp-surface-raised: color-mix(in oklch, #67e8f9 8%, transparent);
+  --sp-surface-dim: color-mix(in oklch, black 20%, transparent);
+  --sp-surface-inset: color-mix(in oklch, black 40%, transparent);
+  --sp-surface-overlay: color-mix(in oklch, black 80%, transparent);
+  --sp-surface-overlay-heavy: color-mix(in oklch, black 90%, transparent);
+  --sp-surface-scrim: color-mix(in oklch, black 60%, transparent);
+  --sp-border-subtle: color-mix(in oklch, #67e8f9 8%, transparent);
+  --sp-border-default: color-mix(in oklch, #67e8f9 15%, transparent);
+  --sp-border-strong: color-mix(in oklch, #67e8f9 25%, transparent);
+  --sp-text-primary: #e0f7ff;
+  --sp-text-secondary: #a0d8f0;
+  --sp-text-muted: #70a8c0;
+  --sp-text-dimmed: #507890;
+  --sp-text-faint: #305060;
+  --sp-scrollbar-track: rgba(103, 232, 249, 0.03);
+  --sp-scrollbar-thumb: rgba(103, 232, 249, 0.2);
+  --sp-scrollbar-thumb-hover: rgba(103, 232, 249, 0.35);
+  background: radial-gradient(
+    circle at top center,
+    rgba(103, 232, 249, 0.1),
+    #0c1929
+  );
+}
+
+/* 👾 Retro — Green-on-black terminal */
+.theme-retro {
+  color-scheme: dark;
+  --sp-brand-primary: #00ff41;
+  --sp-brand-secondary: #00cc33;
+  --sp-brand-accent: #fbbf24; /* Amber 400 — warm contrast against terminal green */
+  --sp-brand-dark: #000000;
+  --sp-surface-main: #000000;
+  --sp-surface-card: color-mix(in oklch, #00ff41 3%, transparent);
+  --sp-surface-hover: color-mix(in oklch, #00ff41 6%, transparent);
+  --sp-surface-highlight: rgba(0, 255, 65, 0.15);
+  --sp-surface-deck: #000000;
+  --sp-surface-raised: color-mix(in oklch, #00ff41 4%, transparent);
+  --sp-surface-dim: color-mix(in oklch, black 20%, transparent);
+  --sp-surface-inset: color-mix(in oklch, black 40%, transparent);
+  --sp-surface-overlay: color-mix(in oklch, black 85%, transparent);
+  --sp-surface-overlay-heavy: color-mix(in oklch, black 90%, transparent);
+  --sp-surface-scrim: color-mix(in oklch, black 60%, transparent);
+  --sp-border-subtle: color-mix(in oklch, #00ff41 5%, transparent);
+  --sp-border-default: color-mix(in oklch, #00ff41 10%, transparent);
+  --sp-border-strong: color-mix(in oklch, #00ff41 20%, transparent);
+  --sp-text-primary: #00ff41;
+  --sp-text-secondary: #00cc33;
+  --sp-text-muted: #009922;
+  --sp-text-dimmed: #006618;
+  --sp-text-faint: #003d0e;
+  --sp-scrollbar-track: rgba(0, 255, 65, 0.03);
+  --sp-scrollbar-thumb: rgba(0, 255, 65, 0.15);
+  --sp-scrollbar-thumb-hover: rgba(0, 255, 65, 0.3);
+  background: #000000;
+  font-family: var(--font-geist-mono), monospace !important;
+}
+
+
+/* ==========================================
+   🌈 Rainbow Theme (Konami Code Easter Egg)
+   ========================================== */
+.theme-rainbow {
+  color-scheme: dark;
+  --sp-brand-primary: #a855f7;
+  --sp-brand-secondary: #ec4899;
+  --sp-brand-accent: #facc15;
+  --sp-brand-dark: #0f172a;
+  --sp-surface-main: #0f172a;
+  --sp-surface-card: rgba(168, 85, 247, 0.06);
+  --sp-surface-raised: rgba(236, 72, 153, 0.08);
+  --sp-surface-dim: rgba(15, 23, 42, 0.95);
+  --sp-surface-hover: rgba(168, 85, 247, 0.12);
+  --sp-surface-overlay: rgba(0, 0, 0, 0.7);
+  --sp-surface-scrim: rgba(0, 0, 0, 0.6);
+  --sp-border-subtle: rgba(168, 85, 247, 0.1);
+  --sp-border-default: rgba(168, 85, 247, 0.2);
+  --sp-border-strong: rgba(168, 85, 247, 0.35);
+  --sp-text-primary: #f0e6ff;
+  --sp-text-secondary: #d8b4fe;
+  --sp-text-muted: #a78bfa;
+  --sp-text-dimmed: #7c3aed;
+  --sp-text-faint: #4c1d95;
+  --sp-scrollbar-track: rgba(168, 85, 247, 0.03);
+  --sp-scrollbar-thumb: rgba(168, 85, 247, 0.15);
+  --sp-scrollbar-thumb-hover: rgba(168, 85, 247, 0.3);
+  animation: rainbow-cycle 4s linear infinite;
+}
+
+@keyframes rainbow-cycle {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}

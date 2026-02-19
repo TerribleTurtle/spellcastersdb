@@ -1,14 +1,20 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useCallback, useEffect } from "react";
+
 import { useTheme } from "next-themes";
 
 const KONAMI_CODE = [
-  "ArrowUp", "ArrowUp",
-  "ArrowDown", "ArrowDown",
-  "ArrowLeft", "ArrowRight",
-  "ArrowLeft", "ArrowRight",
-  "b", "a",
+  "ArrowUp",
+  "ArrowUp",
+  "ArrowDown",
+  "ArrowDown",
+  "ArrowLeft",
+  "ArrowRight",
+  "ArrowLeft",
+  "ArrowRight",
+  "b",
+  "a",
 ];
 
 /**
@@ -28,10 +34,12 @@ export function useKonamiCode() {
           position++;
           if (position === KONAMI_CODE.length) {
             position = 0;
-            // Toggle: if already rainbow, go back to dark
+            // Toggle: if already rainbow, restore previous theme
             if (theme === "theme-rainbow") {
-              setTheme("dark");
+              const prev = localStorage.getItem("sp-prev-theme") || "dark";
+              setTheme(prev);
             } else {
+              localStorage.setItem("sp-prev-theme", theme ?? "dark");
               setTheme("theme-rainbow");
             }
           }

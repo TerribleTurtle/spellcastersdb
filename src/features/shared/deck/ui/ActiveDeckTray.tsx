@@ -1,19 +1,22 @@
-import { AlertCircle, CheckCircle2 } from "lucide-react";
 import { useDroppable } from "@dnd-kit/core";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { UnifiedEntity, Spellcaster } from "@/types/api";
+import { Spellcaster, UnifiedEntity } from "@/types/api";
 import { DeckSlot } from "@/types/deck";
+import { DropData } from "@/types/dnd";
 
 import { DeckSlot as Slot } from "./DeckSlot";
 import { SpellcasterSlot } from "./SpellcasterSlot";
-import { DropData } from "@/types/dnd";
-
 
 interface ActiveDeckTrayProps {
   slots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
   spellcaster: Spellcaster | null;
-  onSelect?: (item: UnifiedEntity | undefined, pos?: {x:number, y:number}, slotIndex?: number) => void;
+  onSelect?: (
+    item: UnifiedEntity | undefined,
+    pos?: { x: number; y: number },
+    slotIndex?: number
+  ) => void;
   validation?: {
     isValid: boolean;
     errors: string[];
@@ -34,26 +37,27 @@ export function ActiveDeckTray({
   isSwapMode = false,
   prioritySpellcaster = false,
 }: ActiveDeckTrayProps) {
-  
   // Background Droppable
-  const dropId = idSuffix ? `deck-background-${deckId}-${idSuffix}` : `deck-background-${deckId}`;
-  
+  const dropId = idSuffix
+    ? `deck-background-${deckId}-${idSuffix}`
+    : `deck-background-${deckId}`;
+
   const dropData: DropData = {
-      type: "DECK_BACKGROUND",
-      deckId
+    type: "DECK_BACKGROUND",
+    deckId,
   };
 
   const { setNodeRef } = useDroppable({
-      id: dropId,
-      data: dropData,
-      disabled: !deckId // Only active if we have a deck ID
+    id: dropId,
+    data: dropData,
+    disabled: !deckId, // Only active if we have a deck ID
   });
 
   return (
-    <div 
-        ref={setNodeRef}
-        id={idSuffix ? `active-deck-${idSuffix}` : undefined}
-        className="h-auto min-h-[140px] xl:min-h-0 bg-transparent border-t border-brand-primary/20 flex flex-col pb-2 xl:pb-0 xl:justify-center relative"
+    <div
+      ref={setNodeRef}
+      id={idSuffix ? `active-deck-${idSuffix}` : undefined}
+      className="h-auto min-h-[140px] xl:min-h-0 bg-transparent border-t border-brand-primary/20 flex flex-col pb-2 xl:pb-0 xl:justify-center relative"
     >
       <div className="grow flex items-center justify-between gap-0.5 px-2 py-1 xl:grid xl:grid-cols-6 xl:gap-2 xl:pl-4 xl:pr-4 xl:py-3 xl:items-center xl:content-center xl:grow-0">
         {/* Spellcaster Area - Fixed Width on Desktop */}
@@ -72,28 +76,31 @@ export function ActiveDeckTray({
 
         {/* Unit Slots 1-4 - Equal Distribution */}
         {slots.slice(0, 4).map((slot) => (
-            <div 
-                key={slot.index} 
-                className={cn(
-                    "flex-1 min-w-0 flex justify-center xl:col-span-1 xl:w-full transition-all duration-300",
-                    isSwapMode && "scale-105 z-10"
-                )}
+          <div
+            key={slot.index}
+            className={cn(
+              "flex-1 min-w-0 flex justify-center xl:col-span-1 xl:w-full transition-all duration-300",
+              isSwapMode && "scale-105 z-10"
+            )}
+          >
+            <div
+              className={cn(
+                "w-full h-full rounded-lg transition-all",
+                isSwapMode &&
+                  "ring-2 ring-slot-swap-ring ring-offset-2 ring-offset-surface-main animate-pulse cursor-pointer shadow-[0_0_15px_rgba(var(--sp-brand-primary),0.5)]"
+              )}
             >
-              <div className={cn(
-                  "w-full h-full rounded-lg transition-all",
-                  isSwapMode && "ring-2 ring-brand-primary ring-offset-2 ring-offset-gray-900 animate-pulse cursor-pointer shadow-[0_0_15px_rgba(59,130,246,0.5)]"
-              )}>
-                  <Slot
+              <Slot
                 slot={slot}
                 allSlots={slots}
                 onSelect={(item, pos) => {
-                    onSelect?.(item, pos, slot.index);
+                  onSelect?.(item, pos, slot.index);
                 }}
                 deckId={deckId}
                 idSuffix={idSuffix}
               />
-              </div>
             </div>
+          </div>
         ))}
 
         {/* Separator */}
@@ -142,5 +149,3 @@ export function ActiveDeckTray({
     </div>
   );
 }
-
-

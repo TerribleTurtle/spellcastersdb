@@ -1,0 +1,133 @@
+/* ═══════════════════════════════════════════════════════
+   THEME TOKENS
+   @theme inline bridge: maps --sp-* vars → Tailwind --color-* utilities
+   ═══════════════════════════════════════════════════════ */
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Brand Palette */
+  --color-brand-primary: var(--sp-brand-primary);
+  --color-brand-secondary: var(--sp-brand-secondary);
+  --color-brand-accent: var(--sp-brand-accent);
+  --color-brand-dark: var(--sp-brand-dark);
+
+  /* Semantic Surfaces */
+  --color-surface-main: var(--sp-surface-main);
+  --color-surface-card: var(--sp-surface-card);
+  --color-surface-hover: var(--sp-surface-hover);
+  --color-surface-highlight: var(--sp-surface-highlight);
+  --color-surface-deck: var(--sp-surface-deck);
+  --color-surface-raised: var(--sp-surface-raised);
+  --color-surface-dim: var(--sp-surface-dim);
+  --color-surface-inset: var(--sp-surface-inset);
+  --color-surface-overlay: var(--sp-surface-overlay);
+  --color-surface-overlay-heavy: var(--sp-surface-overlay-heavy);
+  --color-surface-scrim: var(--sp-surface-scrim);
+
+  /* Semantic Borders */
+  --color-border-subtle: var(--sp-border-subtle);
+  --color-border-default: var(--sp-border-default);
+  --color-border-strong: var(--sp-border-strong);
+
+  /* Semantic Text */
+  --color-text-primary: var(--sp-text-primary);
+  --color-text-secondary: var(--sp-text-secondary);
+  --color-text-muted: var(--sp-text-muted);
+  --color-text-dimmed: var(--sp-text-dimmed);
+  --color-text-faint: var(--sp-text-faint);
+
+  /* Status Colors */
+  --color-status-success: var(--sp-status-success);
+  --color-status-success-text: var(--sp-status-success-text);
+  --color-status-success-muted: var(--sp-status-success-muted);
+  --color-status-success-border: var(--sp-status-success-border);
+
+  --color-status-danger: var(--sp-status-danger);
+  --color-status-danger-text: var(--sp-status-danger-text);
+  --color-status-danger-muted: var(--sp-status-danger-muted);
+  --color-status-danger-border: var(--sp-status-danger-border);
+
+  --color-status-info: var(--sp-status-info);
+  --color-status-info-text: var(--sp-status-info-text);
+  --color-status-info-muted: var(--sp-status-info-muted);
+  --color-status-info-border: var(--sp-status-info-border);
+
+  --color-status-warning: var(--sp-status-warning);
+  --color-status-warning-text: var(--sp-status-warning-text);
+  --color-status-warning-muted: var(--sp-status-warning-muted);
+  --color-status-warning-border: var(--sp-status-warning-border);
+
+  /* ShadcnUI Implementation Variables (Mapped to our vars) */
+  --radius: 0.5rem;
+  --color-background: var(--sp-surface-main);
+  --color-foreground: var(--sp-text-primary); /* was #ededed */
+
+  --color-card: var(--sp-surface-card);
+  --color-card-foreground: var(--sp-text-primary);
+
+  --color-popover: var(--sp-surface-main);
+  --color-popover-foreground: var(--sp-text-primary);
+
+  --color-primary: var(--sp-brand-primary);
+  --color-primary-foreground: #ffffff;
+
+  --color-secondary: var(--sp-surface-hover);
+  --color-secondary-foreground: var(--sp-text-primary);
+
+  --color-muted: var(--sp-surface-hover); /* was 10% white */
+  --color-muted-foreground: var(--sp-text-muted);
+
+  --color-accent: var(--sp-brand-accent);
+  --color-accent-foreground: #0f172a;
+
+  --color-destructive: var(--sp-status-danger);
+  --color-destructive-foreground: #ffffff;
+
+  --color-border: var(--sp-border-default);
+  --color-input: var(--sp-border-default);
+  --color-ring: var(--sp-brand-primary);
+
+  /* Rarity Colors */
+  --color-rarity-common: var(--sp-rarity-common);
+  --color-rarity-rare: var(--sp-rarity-rare);
+  --color-rarity-epic: var(--sp-rarity-epic);
+  --color-rarity-legendary: var(--sp-rarity-legendary);
+
+  /* Slot / Drawer Tokens */
+  --color-slot-bg-valid: var(--sp-slot-bg-valid);
+  --color-slot-border-valid: var(--sp-slot-border-valid);
+  --color-slot-glow-valid: var(--sp-slot-glow-valid);
+  --color-slot-bg-invalid: var(--sp-slot-bg-invalid);
+  --color-slot-border-invalid: var(--sp-slot-border-invalid);
+  --color-slot-titan-dot: var(--sp-slot-titan-dot);
+  --color-slot-swap-ring: var(--sp-slot-swap-ring);
+
+  /* Action Tokens */
+  --color-action-danger: var(--sp-action-danger);
+  --color-action-danger-hover: var(--sp-action-danger-hover);
+
+  /* Fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /* Layout Widths */
+  --max-width-site-shell: 1920px;
+  --max-width-page-grid: 100rem;
+
+  /* Animations */
+  --animate-glow: glow 2s ease-in-out infinite alternate;
+
+  @keyframes glow {
+    from {
+      box-shadow:
+        0 0 10px var(--sp-brand-primary),
+        0 0 20px var(--sp-brand-primary);
+    }
+    to {
+      box-shadow:
+        0 0 20px var(--sp-brand-secondary),
+        0 0 30px var(--sp-brand-secondary);
+    }
+  }
+}

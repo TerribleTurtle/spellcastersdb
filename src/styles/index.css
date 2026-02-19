@@ -1,0 +1,24 @@
+/* ═══════════════════════════════════════════════════════
+   SpellcastersDB — CSS Entry Point
+   Import order matters for cascade specificity.
+   ═══════════════════════════════════════════════════════ */
+
+/* 1. Tailwind base reset + utility layer */
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* 2. Design tokens — :root and .light custom properties */
+@import "./design-tokens.css";
+
+/* 3. Theme tokens — @theme inline bridge (SP → Tailwind) */
+@import "./theme-tokens.css";
+
+/* 4. Semantic Component Tokens & ShadcnUI */
+@import "./components.css";
+@import "./shadcn.css";
+
+/* 5. Base — Body, scrollbar, animations, utilities, a11y */
+@import "./base.css";
+
+/* 6. Fun themes — Arcane, Inferno, Frost, Retro, Rainbow */
+@import "./themes.css";

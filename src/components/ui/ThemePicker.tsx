@@ -1,13 +1,17 @@
 "use client";
 
-import { Moon, Sun, Flame, Snowflake, Skull, Palette } from "lucide-react";
-import { useTheme } from "next-themes";
 import * as React from "react";
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
+
+import { useTheme } from "next-themes";
+
+import { Flame, Moon, Palette, Skull, Snowflake, Sun } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
 import { cn } from "@/lib/utils";
+import { CustomThemeService } from "@/services/persistence/custom-themes";
 
 const VISIBLE_THEMES = [
   { value: "dark", label: "Dark", icon: Moon },
@@ -25,19 +29,30 @@ export interface ThemePickerProps {
   children?: React.ReactNode;
 }
 
-export function ThemePicker({ className, side = "bottom", align = "end", children }: ThemePickerProps) {
+export function ThemePicker({
+  className,
+  side = "bottom",
+  align = "end",
+  children,
+}: ThemePickerProps) {
   const { setTheme, theme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null);
+  const [dropdownPos, setDropdownPos] = useState<{
+    top: number;
+    left: number;
+  } | null>(null);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const menuRef = React.useRef<HTMLDivElement>(null);
 
   // Konami code listener (activates Rainbow)
   useKonamiCode();
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- mount guard pattern
   useEffect(() => setMounted(true), []);
+
+  // Derive custom themes list (refreshes each render when dropdown opens)
+  const customThemes = mounted ? CustomThemeService.getAll() : [];
 
   // Calculate fixed position from button rect
   const updatePosition = useCallback(() => {
@@ -64,7 +79,8 @@ export function ThemePicker({ className, side = "bottom", align = "end", childre
       if (
         buttonRef.current?.contains(target) ||
         menuRef.current?.contains(target)
-      ) return;
+      )
+        return;
       setIsOpen(false);
     };
     document.addEventListener("mousedown", handleClick);
@@ -89,42 +105,76 @@ export function ThemePicker({ className, side = "bottom", align = "end", childre
   const CurrentIcon = currentTheme?.icon ?? Moon;
   const isRainbow = theme === "theme-rainbow";
 
-  const dropdown = isOpen && dropdownPos && createPortal(
-    <div
-      ref={menuRef}
-      className="fixed z-200 min-w-[140px] rounded-lg border border-border-default bg-surface-main shadow-lg overflow-hidden animate-in fade-in duration-150"
-      style={{
-        top: side === "bottom" ? dropdownPos.top : undefined,
-        bottom: side === "top" ? `${window.innerHeight - dropdownPos.top}px` : undefined,
-        left: align === "start" ? dropdownPos.left : undefined,
-        right: align === "end" ? `${window.innerWidth - dropdownPos.left}px` : undefined,
-      }}
-    >
-      {VISIBLE_THEMES.map(({ value, label, icon: Icon }) => (
-        <button
-          key={value}
-          onClick={() => {
-            setTheme(value);
-            setIsOpen(false);
-          }}
-          className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors ${
-            theme === value
-              ? "text-brand-primary bg-surface-hover"
-              : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
-          }`}
-        >
-          <Icon className="h-4 w-4 shrink-0" />
-          {label}
-        </button>
-      ))}
-      {isRainbow && (
-        <div className="px-3 py-1.5 text-xs text-brand-accent border-t border-border-subtle text-center">
-          🌈 Rainbow Mode!
-        </div>
-      )}
-    </div>,
-    document.body
-  );
+  const dropdown =
+    isOpen &&
+    dropdownPos &&
+    createPortal(
+      <div
+        ref={menuRef}
+        className="fixed z-200 min-w-[140px] rounded-lg border border-border-default bg-surface-main shadow-lg overflow-hidden animate-in fade-in duration-150"
+        style={{
+          top: side === "bottom" ? dropdownPos.top : undefined,
+          bottom:
+            side === "top"
+              ? `${window.innerHeight - dropdownPos.top}px`
+              : undefined,
+          left: align === "start" ? dropdownPos.left : undefined,
+          right:
+            align === "end"
+              ? `${window.innerWidth - dropdownPos.left}px`
+              : undefined,
+        }}
+      >
+        {VISIBLE_THEMES.map(({ value, label, icon: Icon }) => (
+          <button
+            key={value}
+            onClick={() => {
+              setTheme(value);
+            }}
+            className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors ${
+              theme === value
+                ? "text-brand-primary bg-surface-hover"
+                : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
+            }`}
+          >
+            <Icon className="h-4 w-4 shrink-0" />
+            {label}
+          </button>
+        ))}
+
+        {customThemes.length > 0 && (
+          <>
+            <div className="px-3 py-1.5 text-xs text-text-muted border-t border-border-default mt-1 opacity-50">
+              Custom
+            </div>
+            {customThemes.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => setTheme(t.id)}
+                className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors ${
+                  theme === t.id
+                    ? "text-brand-primary bg-surface-hover"
+                    : "text-text-secondary hover:text-text-primary hover:bg-surface-hover"
+                }`}
+              >
+                <div
+                  className="w-4 h-4 rounded-full shrink-0 border border-border-subtle"
+                  style={{ backgroundColor: t.colors["brand-primary"] }}
+                />
+                <span className="truncate">{t.name}</span>
+              </button>
+            ))}
+          </>
+        )}
+
+        {isRainbow && (
+          <div className="px-3 py-1.5 text-xs text-brand-accent border-t border-border-subtle text-center">
+            🌈 Rainbow Mode!
+          </div>
+        )}
+      </div>,
+      document.body
+    );
 
   return (
     <>
@@ -137,11 +187,15 @@ export function ThemePicker({ className, side = "bottom", align = "end", childre
         title="Change theme"
         aria-label="Change theme"
       >
-        <CurrentIcon className={cn(`h-[1.1rem] w-[1.1rem] ${isRainbow ? "animate-spin" : ""}`, children && "mr-3")} />
+        <CurrentIcon
+          className={cn(
+            `h-[1.1rem] w-[1.1rem] ${isRainbow ? "animate-spin" : ""}`,
+            children && "mr-3"
+          )}
+        />
         {children}
       </Button>
       {dropdown}
     </>
   );
 }
-

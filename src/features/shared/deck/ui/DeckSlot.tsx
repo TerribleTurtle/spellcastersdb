@@ -4,7 +4,10 @@ import { Shield } from "lucide-react";
 import { GameImage } from "@/components/ui/GameImage";
 import { RankBadge } from "@/components/ui/rank-badge";
 import { cn } from "@/lib/utils";
-import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
+import {
+  getCardAltText,
+  getCardImageUrl,
+} from "@/services/assets/asset-helpers";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
 import { Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
 import { type DeckSlot, SlotType } from "@/types/deck";
@@ -13,7 +16,10 @@ import { DragData, DraggableEntity, DropData } from "@/types/dnd";
 interface DeckSlotProps {
   slot: DeckSlot;
   allSlots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
-  onSelect?: (item: UnifiedEntity | undefined, pos?: { x: number; y: number }) => void;
+  onSelect?: (
+    item: UnifiedEntity | undefined,
+    pos?: { x: number; y: number }
+  ) => void;
   deckId?: string; // Context ID for Team Mode
   idSuffix?: string; // To prevent ID collisions (e.g. mobile vs desktop)
 }
@@ -45,8 +51,6 @@ export function DeckSlot({
     id: droppableId,
     data: dropData,
   });
-
-
 
   const dragData: DragData = {
     type: "DECK_SLOT",
@@ -128,13 +132,15 @@ export function DeckSlot({
         // Valid drop target
         isValidTarget &&
           !isOver &&
-          "border-amber-400 bg-amber-400/10 shadow-[0_0_20px_rgba(251,191,36,0.6),0_0_40px_rgba(251,191,36,0.3)] animate-pulse",
+          "border-slot-border-valid bg-slot-bg-valid shadow-(--sp-slot-glow-valid) animate-pulse",
         // Active hover
         isOver &&
           isValidTarget &&
           "border-brand-primary bg-brand-primary/10 scale-105",
         // Invalid Hover
-        isOver && !isValidTarget && "border-red-500/50 bg-status-danger-muted",
+        isOver &&
+          !isValidTarget &&
+          "border-slot-border-invalid bg-slot-bg-invalid",
         // Default
         !isValidTarget &&
           !isOver &&

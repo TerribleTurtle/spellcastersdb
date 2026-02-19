@@ -1,15 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { MoreHorizontal, Layers, Link as LinkIcon, Trash2, Edit2, Download } from "lucide-react";
-import { 
-  DropdownMenu, 
-  DropdownMenuTrigger, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuSeparator 
-} from "@/components/ui/dropdown-menu";
 import { createPortal } from "react-dom";
+
+import {
+  Download,
+  Edit2,
+  Layers,
+  Link as LinkIcon,
+  MoreHorizontal,
+  Trash2,
+} from "lucide-react";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/useToast";
 
 export function ItemMenu({
@@ -48,8 +57,8 @@ export function ItemMenu({
             <MoreHorizontal size={18} />
           </button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent 
-          align="end" 
+        <DropdownMenuContent
+          align="end"
           className="w-56 z-[9999] bg-surface-main border border-border-default shadow-xl p-1 text-text-secondary"
         >
           {onDuplicate && (
@@ -60,12 +69,12 @@ export function ItemMenu({
           )}
 
           {onCopyLink && (
-            <DropdownMenuItem 
-                onClick={() => {
-                    onCopyLink();
-                    showToast("Link copied to clipboard");
-                }} 
-                className="cursor-pointer"
+            <DropdownMenuItem
+              onClick={() => {
+                onCopyLink();
+                showToast("Link copied to clipboard");
+              }}
+              className="cursor-pointer"
             >
               <LinkIcon size={14} className="mr-2" />
               <span>{shareLabel}</span>
@@ -88,7 +97,7 @@ export function ItemMenu({
 
           <DropdownMenuSeparator />
 
-          <DropdownMenuItem 
+          <DropdownMenuItem
             onClick={() => setShowDeleteConfirm(true)}
             className="text-status-danger-text focus:text-status-danger-text focus:bg-status-danger-muted cursor-pointer"
           >
@@ -159,7 +168,7 @@ function DeleteConfirmationModal({
 
           <button
             onClick={onConfirm}
-            className="w-full py-2.5 rounded bg-red-500 text-text-primary hover:bg-red-600 font-bold shadow-lg shadow-red-500/20 transition-all flex items-center justify-center gap-2"
+            className="w-full py-2.5 rounded bg-action-danger text-text-primary hover:bg-action-danger-hover font-bold shadow-lg shadow-action-danger/20 transition-all flex items-center justify-center gap-2"
           >
             <Trash2 size={16} />
             Delete

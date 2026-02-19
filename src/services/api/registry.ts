@@ -1,12 +1,12 @@
 import {
+  AllDataResponse,
+  Consumable,
   Spell,
   Spellcaster,
   Titan,
-  Unit,
   UnifiedEntity,
-  AllDataResponse,
-  Consumable,
-  Upgrade
+  Unit,
+  Upgrade,
 } from "@/types/api";
 
 /**
@@ -61,13 +61,13 @@ export class EntityRegistry {
       const id = sc.spellcaster_id || sc.entity_id;
       this.spellcasters.set(id, sc);
       this.unified.set(id, sc);
-      
+
       // Also register by entity_id if different, to ensure V2 lookups work
       if (sc.entity_id && sc.entity_id !== id) {
-          this.unified.set(sc.entity_id, sc);
+        this.unified.set(sc.entity_id, sc);
       }
     });
-    
+
     data.consumables.forEach((c) => {
       this.consumables.set(c.entity_id, c);
       this.unified.set(c.entity_id, c);
@@ -79,9 +79,13 @@ export class EntityRegistry {
     });
 
     this.initialized = true;
-
   }
 
+  /**
+   * Retrieves any entity by its ID from the unified map.
+   * @param id - The entity_id to look up.
+   * @returns The entity if found, otherwise undefined.
+   */
   public get(id: string): UnifiedEntity | undefined {
     return this.unified.get(id);
   }
@@ -101,7 +105,7 @@ export class EntityRegistry {
   public getSpell(id: string): Spell | undefined {
     return this.spells.get(id);
   }
-  
+
   /**
    * Retrieves a Titan by its ID.
    * @returns The Titan object if found, otherwise undefined.
@@ -118,39 +122,49 @@ export class EntityRegistry {
     return this.spellcasters.get(id);
   }
 
+  /** Returns `true` if the registry has been populated with data. */
   public isInitialized(): boolean {
     return this.initialized;
   }
 
-  // Bulk Getters
+  // ---- Bulk Getters ----
+
+  /** Returns all Units as an array. */
   public getAllUnits(): Unit[] {
     return Array.from(this.units.values());
   }
 
+  /** Returns all Spells as an array. */
   public getAllSpells(): Spell[] {
     return Array.from(this.spells.values());
   }
 
+  /** Returns all Titans as an array. */
   public getAllTitans(): Titan[] {
     return Array.from(this.titans.values());
   }
 
+  /** Returns all Spellcasters as an array. */
   public getAllSpellcasters(): Spellcaster[] {
     return Array.from(this.spellcasters.values());
   }
 
+  /** Returns all Consumables as an array. */
   public getAllConsumables(): Consumable[] {
     return Array.from(this.consumables.values());
   }
 
+  /** Returns all Upgrades as an array. */
   public getAllUpgrades(): Upgrade[] {
     return Array.from(this.upgrades.values());
   }
 
+  /** Alias for `clear()`. Resets the registry to an empty, uninitialized state. */
   public reset() {
     this.clear();
   }
 
+  /** Clears all internal maps and marks the registry as uninitialized. */
   public clear() {
     this.units.clear();
     this.spells.clear();

@@ -1,0 +1,54 @@
+/* ═══════════════════════════════════════════════════════
+   SEMANTIC COMPONENT TOKENS
+   Centralized control for UI dimensions, padding, shadows
+   ═══════════════════════════════════════════════════════ */
+
+@theme inline {
+  /* 
+    Dimensions (Controls)
+    Usage: h-(--height-control-md), w-(--height-control-sm)
+  */
+  --height-control-sm: 2rem;   /* h-8 */
+  --height-control-md: 2.25rem; /* h-9 */
+  --height-control-lg: 2.5rem;  /* h-10 */
+
+  /* 
+    Shape
+    Default radius for buttons, inputs, dialogs
+  */
+  --radius-control: var(--radius-md);
+
+  /* 
+    Typography
+    Usage: text-(--text-control-sm)
+  */
+  --text-control-sm: var(--text-xs);
+  --text-control-md: var(--text-sm);
+  
+  /* 
+    Component Spacing
+    Usage: p-(--padding-card), gap-(--gap-dialog)
+  */
+  --padding-card: 1.5rem; /* p-6 */
+  --padding-card-header: 1.5rem; /* p-6 */
+  --gap-card-header: 0.375rem; /* space-y-1.5 */
+  
+  --padding-dialog: 1.5rem; /* p-6 */
+  --gap-dialog: 1rem; /* gap-4 */
+
+  /* 
+    Shadows / Elevation
+    Usage: shadow-(--shadow-popover)
+  */
+  --shadow-card: var(--shadow);
+  --shadow-popover: var(--shadow-lg);
+  --shadow-toast: var(--shadow-lg);
+  
+  /* 
+    Animations
+    Usage: duration-(--duration-normal)
+  */
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+}

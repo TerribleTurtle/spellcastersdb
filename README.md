@@ -19,6 +19,8 @@
 - **Live Updates**: Powered by a static JSON API that allows for rapid balance updates without full site rebuilds.
 - **Roadmap**: A live, interactive issue tracker connected to GitHub, featuring search and filtering.
 - **Accessibility (WCAG 2.1 AA)**: Skip navigation, focus-trapped modals, ARIA labels/states on all interactive controls, and `prefers-reduced-motion` support.
+- **Theming**: 6 custom themes (Dark, Light, Arcane, Inferno, Frost, Retro) plus a secret Rainbow mode (Konami Code).
+- **Design System**: A dedicated `/design-system` route for previewing tokens, components, and building custom themes with live preview and export/import capabilities.
 - **SEO Optimized**: Fully crawlable with dynamic sitemaps, structured data (JSON-LD), and semantic HTML for maximum discoverability.
 - **Debug Suite**: Internal analytics tools for tracking data integrity, balance statistics, and keyword frequency.
 
@@ -34,7 +36,7 @@
   - **Read-Through Caching**: Optimizes data fetching.
   - **Virtualization**: `react-virtuoso` for large lists.
   - **Zod Validation**: Ensures data integrity at runtime.
-  - **Comprehensive Testing**: 258 unit and integration tests (Vitest) covering core logic, validation, and data integrity.
+  - **Comprehensive Testing**: 275 unit and integration tests (Vitest) covering core logic, validation, and data integrity.
   - **Revalidation API**: On-demand cache invalidation via `/api/revalidate` (using `Authorization` header) with `revalidateTag` for robust content updates.
     - **CI/CD**: The "Daily Revalidation" workflow requires `REVALIDATION_SECRET` and optionally `APP_URL` (defaults to `https://www.spellcastersdb.com`) in GitHub Secrets.
   - **State Persistence**: Optimized `zustand/persist` with `partialize` to serialize only critical user data, excluding transient UI state for consistent high performance.
@@ -67,18 +69,22 @@ For detailed setup instructions, including **Local API Development**, please see
 
 ## Available Scripts
 
-| Command              | Description                           |
-| :------------------- | :------------------------------------ |
-| `npm run dev`        | Starts the development server         |
-| `npm run build`      | Builds the application for production |
-| `npm run start`      | Starts the production server          |
-| `npm run test`       | Runs the test suite (Vitest)          |
-| `npm run test:watch` | Runs tests in watch mode              |
-| `npm run lint`       | Runs ESLint                           |
-| `npm run type-check` | Runs TypeScript compiler check        |
-| `npm run check-data` | Verifies API data fetching logic      |
+| Command                   | Description                           |
+| :------------------------ | :------------------------------------ |
+| `npm run dev`             | Starts the development server         |
+| `npm run build`           | Builds the application for production |
+| `npm run start`           | Starts the production server          |
+| `npm run test`            | Runs the test suite (Vitest)          |
+| `npm run test:watch`      | Runs tests in watch mode              |
+| `npm run lint`            | Runs ESLint                           |
+| `npm run type-check`      | Runs TypeScript compiler check        |
+| `npm run check-data`      | Verifies API data fetching logic      |
+| `npm run preflight`       | Runs Type-Check, Lint, and Tests      |
+| `npm run new:component`   | Scaffolds a new React component       |
+| `npm run new:route`       | Scaffolds a new App Router page       |
+| `npm run script:validate` | Validates production data integrity   |
 
-     ## Documentation
+## Documentation
 
 - [**Active State**](active_state.md): The current development focus and daily progress log.
 - [**API Info**](docs/api_info.md): Specification for the JSON data consumed by this app.

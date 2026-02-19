@@ -1,6 +1,6 @@
+import { Layers, Save } from "lucide-react";
 
-
-import { Save, Layers } from 'lucide-react';
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 export interface ConfirmationModalProps {
   name: string;
@@ -9,8 +9,6 @@ export interface ConfirmationModalProps {
   onCopy: () => void;
   onCancel: () => void;
 }
-
-import { useFocusTrap } from '@/hooks/useFocusTrap';
 
 export function ConfirmationModal({
   name,
@@ -23,10 +21,10 @@ export function ConfirmationModal({
   const isUpdate = type === "UPDATE";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div 
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-(--padding-dialog) animate-in fade-in duration-(--duration-normal)">
+      <div
         ref={modalRef}
-        className="bg-surface-card border border-border-default rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-4"
+        className="bg-surface-card border border-border-default rounded-lg shadow-2xl max-w-sm w-full p-(--padding-dialog) space-y-4"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
@@ -42,12 +40,16 @@ export function ConfirmationModal({
             {isUpdate ? (
               <>
                 To deck{" "}
-                <span className="text-text-primary font-bold">&quot;{name}&quot;</span>
+                <span className="text-text-primary font-bold">
+                  &quot;{name}&quot;
+                </span>
               </>
             ) : (
               <>
                 A deck named{" "}
-                <span className="text-text-primary font-bold">&quot;{name}&quot;</span>{" "}
+                <span className="text-text-primary font-bold">
+                  &quot;{name}&quot;
+                </span>{" "}
                 already exists.
               </>
             )}
