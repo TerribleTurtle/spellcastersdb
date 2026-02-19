@@ -171,6 +171,7 @@
   --sp-scrollbar-track: rgba(168, 85, 247, 0.03);
   --sp-scrollbar-thumb: rgba(168, 85, 247, 0.15);
   --sp-scrollbar-thumb-hover: rgba(168, 85, 247, 0.3);
+  will-change: filter;
   animation: rainbow-cycle 4s linear infinite;
 }
 
@@ -182,3 +183,14 @@
     filter: hue-rotate(360deg);
   }
 }
+
+/* Override reduced-motion for this intentional easter egg.
+   The user explicitly activated rainbow via Konami code. */
+@media (prefers-reduced-motion: reduce) {
+  .theme-rainbow {
+    animation: rainbow-cycle 4s linear infinite !important;
+    animation-duration: 4s !important;
+    animation-iteration-count: infinite !important;
+  }
+}
+

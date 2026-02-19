@@ -1,5 +1,5 @@
 # Project Status
 
-- **Current Focus**: Deployment — lint fix complete, ready to push
+- **Current Focus**: Konami code rainbow theme bugfix
 - **Mode**: Verification
-- **Recent Changes**: Fixed `mappers.ts` `no-explicit-any` violations, added `format:check` to preflight pipeline
+- **Recent Changes**: Rewrote `useKonamiCode.ts` (stale closure + position reset), added `prefers-reduced-motion` override for rainbow in `themes.css`
