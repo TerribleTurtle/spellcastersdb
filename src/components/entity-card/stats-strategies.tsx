@@ -183,13 +183,13 @@ export const STAT_STRATEGIES: Record<EntityCategory, StatDefinition[]> = {
   Unit: [
     STATS.health,
     STATS.dps,
-    STATS.damage,
-    STATS.attack_speed,
+    // STATS.damage, // HIDDEN_STATS_V2
+    // STATS.attack_speed, // HIDDEN_STATS_V2
     STATS.range,
     STATS.movement_speed,
     STATS.movement_type,
     STATS.population,
-    STATS.charges,
+    // STATS.charges, // HIDDEN_STATS_V2
     STATS.recharge_time, 
   ],
   Titan: [

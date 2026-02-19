@@ -26,3 +26,4 @@ UI Redesign — Layout consistency complete (v1.0.18 candidate)
 - [x] Patch history: word-level diff highlighting
 - [x] Deployment: v1.0.19 pushed to main
 - [x] Bonus damage display: added BonusDamageList mechanic component (% Max HP, % Current HP, flat)
+- [x] Unit Stats: Globally hidden Damage, Attack Speed, and Charges (feature flag style via comments)
