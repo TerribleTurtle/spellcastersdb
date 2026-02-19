@@ -24,3 +24,5 @@ UI Redesign — Layout consistency complete (v1.0.18 candidate)
 - [ ] Visual QA on deployed site (mobile + desktop)
 - [x] Patch history: ability name resolution + scanability improvements
 - [x] Patch history: word-level diff highlighting
+- [x] Deployment: v1.0.19 pushed to main
+- [x] Bonus damage display: added BonusDamageList mechanic component (% Max HP, % Current HP, flat)

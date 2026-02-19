@@ -13,6 +13,7 @@ import { AuraList } from "./mechanics/AuraList";
 import { SpawnerList } from "./mechanics/SpawnerList";
 import { FeaturesList } from "./mechanics/FeaturesList";
 import { InitialAttackDisplay } from "./mechanics/InitialAttackDisplay";
+import { BonusDamageList } from "./mechanics/BonusDamageList";
 import { WaveMechanic } from "./mechanics/WaveMechanic";
 
 // Loose type for display purposes
@@ -40,6 +41,7 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
     (mechanics.spawner?.length ?? 0) > 0 ||
     (mechanics.features?.length ?? 0) > 0 ||
     !!mechanics.initial_attack ||
+    (mechanics.bonus_damage?.length ?? 0) > 0 ||
     (mechanics.waves || mechanics.interval);
 
   if (!hasMechanics) return null;
@@ -155,6 +157,12 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
         initialAttack={mechanics.initial_attack} 
         isCompact={isCompact} 
         showDescriptions={shouldShowDescription}
+      />
+
+      {/* Bonus Damage */}
+      <BonusDamageList 
+        bonusDamage={mechanics.bonus_damage} 
+        isCompact={isCompact} 
       />
 
       {/* Waves / Interval */}

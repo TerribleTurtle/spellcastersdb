@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
   - **Word-Level Diffs**: Text changes now highlight removed words in red/strikethrough and added words in green for easier scanning.
   - **Clean Path Formatting**: Simplified diff paths (e.g., "Passive[0] › Description") without requiring external API calls.
   - **Formatting**: Improved spacing and text contrast for better readability.
+  - **Bonus Damage**: Added display support for `bonus_damage` mechanics (including `% Max HP` and `% Current HP`) in Entity Inspector.
 
 ## [1.0.18] - 2026-02-18
 
