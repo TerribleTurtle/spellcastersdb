@@ -13,8 +13,8 @@ import { PatchBadge } from "@/components/ui/PatchBadge";
 import type { PatchEntry, TimelineEntry, PatchCategory } from "@/types/patch-history";
 import { ArrowDownAZ, ArrowUpAZ, Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { formatChangeField } from "@/lib/format-change-field";
 
 import { LocalDate } from "@/components/ui/LocalDate";
 import { DiffLine, type DiffData } from "@/components/ui/DiffLine";
@@ -282,29 +282,35 @@ export function PatchHistorySection({
 
                       {/* Changelog Text */}
                       <ul className="space-y-2">
-                        {entry.changes.map((change, cIdx) => (
-                          <li key={cIdx} className="text-xs text-gray-400">
-                             <div className="flex items-start gap-2">
-                                <span className="text-gray-600 mt-1">•</span> 
-                                <div>
-                                    <span className="font-medium text-gray-300 mr-2">{change.name}</span>
-                                    {change.field !== 'entity' && (
-                                        <Badge variant="outline" className="text-[9px] h-4 px-1 py-0 border-white/10 text-gray-500 uppercase tracking-wide font-normal">
-                                            {change.field.replace(/_/g, ' ')}
-                                        </Badge>
-                                    )}
-                                </div>
-                             </div>
-                             {/* Diffs (unchanged) */}
-                             {change.diffs && change.diffs.length > 0 && (
-                                <div className="pl-4 mt-1 space-y-0.5 border-l border-white/5 ml-1">
-                                     {change.diffs.slice(0, 3).map((d, i) => (
-                                          <DiffLine key={i} diff={d as DiffData} />
-                                      ))}
-                                </div>
-                             )}
-                          </li>
-                        ))}
+                        {entry.changes.map((change, cIdx) => {
+                          const fieldLabel = formatChangeField(change.field);
+                          return (
+                            <li key={cIdx} className="text-xs text-gray-400">
+                               <div className="flex items-start gap-2">
+                                  <span className="text-gray-600 mt-0.5 text-[10px]">▸</span>
+                                  <div className="flex-1 min-w-0">
+                                      {fieldLabel ? (
+                                        <span className="font-semibold text-brand-accent">
+                                          {fieldLabel}
+                                        </span>
+                                      ) : (
+                                        <span className="font-medium text-gray-300">
+                                          {change.name}
+                                        </span>
+                                      )}
+                                  </div>
+                               </div>
+                               {/* Diffs */}
+                               {change.diffs && change.diffs.length > 0 && (
+                                  <div className="pl-4 mt-1 space-y-0.5 border-l-2 border-white/5 ml-1">
+                                       {change.diffs.slice(0, 3).map((d, i) => (
+                                            <DiffLine key={i} diff={d as DiffData} />
+                                        ))}
+                                  </div>
+                               )}
+                            </li>
+                          );
+                        })}
                       </ul>
                   </div>
                 </div>

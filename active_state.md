@@ -22,3 +22,5 @@ UI Redesign — Layout consistency complete (v1.0.18 candidate)
 
 - [ ] Monitor Vercel deployment for build success
 - [ ] Visual QA on deployed site (mobile + desktop)
+- [x] Patch history: ability name resolution + scanability improvements
+- [x] Patch history: word-level diff highlighting

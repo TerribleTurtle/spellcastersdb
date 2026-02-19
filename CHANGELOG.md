@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+## [1.0.19] - 2026-02-18
+
+### Added
+
+- **Patch History**:
+  - **Word-Level Diffs**: Text changes now highlight removed words in red/strikethrough and added words in green for easier scanning.
+  - **Clean Path Formatting**: Simplified diff paths (e.g., "Passive[0] › Description") without requiring external API calls.
+  - **Formatting**: Improved spacing and text contrast for better readability.
+
 ## [1.0.18] - 2026-02-18
 
 ### Changed
