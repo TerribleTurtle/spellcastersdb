@@ -52,18 +52,57 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     {
-      url: `${baseUrl}/debug`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.1,
-    },
-    {
       url: `${baseUrl}/changes`,
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.7,
     },
+    {
+      url: `${baseUrl}/incantations/units`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/incantations/spells`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/database`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
+      url: `${baseUrl}/consumables`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/roadmap`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.5,
+    },
+    {
+      url: `${baseUrl}/discord-bot`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.4,
+    },
   ];
+
+  // 2b. Type Category Routes
+  const typeCategories = ["spells", "buildings", "creatures", "titans", "spellcasters", "consumables"];
+  const typeCategoryRoutes: MetadataRoute.Sitemap = typeCategories.map((cat) => ({
+    url: `${baseUrl}/types/${cat}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.6,
+  }));
 
   // 3. Map Units
   const unitRoutes: MetadataRoute.Sitemap = units.map((unit) => ({
@@ -141,6 +180,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     ...staticRoutes,
+    ...typeCategoryRoutes,
     ...spellcasterRoutes,
     ...unitRoutes,
     ...spellRoutes,

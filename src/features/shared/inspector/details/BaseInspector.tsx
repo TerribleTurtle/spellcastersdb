@@ -23,7 +23,7 @@ export function BaseInspector({
         {onClose && (
           <button
             onClick={onClose}
-            className="hidden md:block absolute top-3 right-3 z-50 p-2 bg-black/80 hover:bg-brand-primary text-white rounded-full backdrop-blur-md border border-white/20 shadow-lg transition-all hover:scale-110"
+            className="hidden md:block absolute top-3 right-3 z-50 p-2 bg-surface-overlay hover:bg-brand-primary text-brand-dark rounded-full backdrop-blur-md border border-border-strong shadow-lg transition-all hover:scale-110"
           >
             <X size={18} />
           </button>
@@ -35,7 +35,7 @@ export function BaseInspector({
           {children}
         </div>
 
-        <div className="p-4 border-t border-white/10 bg-surface-main/95 backdrop-blur z-40 mt-auto shadow-[0_-5px_15px_rgba(0,0,0,0.3)]">
+        <div className="p-4 border-t border-border-default bg-surface-main/95 backdrop-blur z-40 mt-auto shadow-[0_-5px_15px_rgba(0,0,0,0.3)]">
            <InspectorControls item={item} onClose={onClose || onBack} />
         </div>
     </div>

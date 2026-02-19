@@ -48,7 +48,7 @@ export function FeedbackButton({
     return (
       <button
         onClick={openFeedback}
-        className={`text-slate-400 hover:text-brand-accent hover:bg-white/5 p-2 rounded-md transition-colors flex items-center justify-center ${className}`}
+        className={`text-text-muted hover:text-brand-accent hover:bg-surface-card p-2 rounded-md transition-colors flex items-center justify-center ${className}`}
         aria-label="Give Feedback"
         title="Give Feedback"
       >
@@ -60,7 +60,7 @@ export function FeedbackButton({
   return (
     <button
       onClick={openFeedback}
-      className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 font-medium ${className}`}
+      className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 text-text-primary px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all hover:-translate-y-1 font-medium ${className}`}
       aria-label="Give Feedback"
     >
       <MessageSquare size={20} />

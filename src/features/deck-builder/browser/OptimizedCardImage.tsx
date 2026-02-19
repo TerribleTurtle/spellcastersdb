@@ -66,7 +66,7 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
   if (hasError) {
       return (
           <div 
-            className={cn(className, "bg-gray-800 flex items-center justify-center text-white/20")}
+            className={cn(className, "bg-surface-raised flex items-center justify-center text-text-primary/20")}
             role="img"
             aria-label="No image available"
           >

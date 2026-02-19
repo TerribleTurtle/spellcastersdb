@@ -12,6 +12,8 @@ import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
 import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
 import { Toaster } from "@/components/ui/Toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { ThemeColorMeta } from "@/components/providers/ThemeColorMeta";
 
 import "./globals.css";
 
@@ -28,8 +30,6 @@ const geistMono = Geist_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#0f172a",
-  colorScheme: "dark",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     default: "Spellcasters Chronicles Database | SpellcastersDB",
   },
   description:
-    "The definitive community hub for Spellcasters Chronicles. Browse units, build decks, and analyze the meta with the most up-to-date data.",
+    "A community database for Spellcasters Chronicles. Browse units, build decks, and view game data.",
   keywords: [
     "Spellcasters Chronicles",
     "Deck Builder",
@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "SpellcastersDB",
-    description: "The definitive community hub for Spellcasters Chronicles.",
+    description: "A community database for Spellcasters Chronicles.",
     url: "https://spellcastersdb.com",
     siteName: "SpellcastersDB",
     locale: "en_US",
@@ -76,7 +76,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "SpellcastersDB",
-    description: "The definitive community hub for Spellcasters Chronicles.",
+    description: "A community database for Spellcasters Chronicles.",
     creator: "@TerribleTurtle",
   },
   robots: {
@@ -89,6 +89,9 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
+  },
+  alternates: {
+    canonical: "./",
   },
 };
 
@@ -106,10 +109,17 @@ export default async function RootLayout({
   await ensureDataLoaded();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen pt-16`}
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:z-100 focus:top-2 focus:left-2 focus:px-4 focus:py-2 focus:bg-brand-primary focus:text-brand-dark focus:rounded-lg focus:font-bold focus:shadow-lg"
+        >
+          Skip to main content
+        </a>
+        <ThemeProvider>
         <TooltipProvider>
           <Navbar />
 
@@ -138,7 +148,9 @@ export default async function RootLayout({
           <Analytics />
           <SpeedInsights />
           <Toaster />
+          <ThemeColorMeta />
         </TooltipProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

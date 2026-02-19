@@ -45,7 +45,7 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
 
 
   return (
-    <div className="w-full h-[140px] relative flex items-center justify-center overflow-hidden shrink-0 bg-slate-900">
+    <div className="w-full h-[140px] relative flex items-center justify-center overflow-hidden shrink-0 bg-surface-main">
       {/* Blurred Background */}
       <GameImage
         src={getCardImageUrl(item)}
@@ -60,7 +60,7 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
           onClick={onBack}
           variant="ghost"
           size="icon"
-          className="md:hidden absolute top-3 left-3 z-50 rounded-full text-white backdrop-blur-md border border-white/10 shadow-lg bg-black/60 hover:bg-black/80 hover:text-white"
+          className="md:hidden absolute top-3 left-3 z-50 rounded-full text-text-primary backdrop-blur-md border border-border-default shadow-lg bg-surface-scrim hover:bg-surface-overlay hover:text-text-primary"
           aria-label="Go back"
         >
           <ArrowLeft size={18} />
@@ -83,7 +83,7 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
 
       {/* Name Overlay */}
       <div className="absolute bottom-2 left-4 right-4 z-30 pointer-events-none text-center">
-        <h2 className="text-lg md:text-3xl font-black text-white uppercase tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] truncate">
+        <h2 className="text-lg md:text-3xl font-black text-text-primary uppercase tracking-wider drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] truncate">
           {name}
         </h2>
       </div>
@@ -99,10 +99,10 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
                     rank={rank} 
                     isTitan={rank === "V" && item.category === "Titan"} 
                     mode="text"
-                    className="bg-black/80 px-2 py-0.5 rounded text-[10px] font-bold font-mono shadow-md backdrop-blur-md"
+                    className="bg-surface-overlay px-2 py-0.5 rounded text-[10px] font-bold font-mono shadow-md backdrop-blur-md"
                 />
              ) : (
-                <span className="bg-black/80 px-2 py-0.5 rounded text-[10px] font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md">
+                <span className="bg-surface-overlay px-2 py-0.5 rounded text-[10px] font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md">
                     {rank}
                 </span>
              )
@@ -110,13 +110,13 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
         
         {/* Magic School Badge */}
         {magicSchool && (
-          <span className="bg-brand-secondary/90 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-white border border-brand-secondary/30 backdrop-blur-md shadow-sm">
+          <span className="bg-brand-secondary/90 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-text-primary border border-brand-secondary/30 backdrop-blur-md shadow-sm">
             {magicSchool}
           </span>
         )}
         
         {/* Category Badge */}
-        <span className="bg-brand-primary/90 text-white px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg backdrop-blur-md">
+        <span className="bg-brand-primary/90 text-text-primary px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg backdrop-blur-md">
           {category}
         </span>
       </div>

@@ -79,16 +79,16 @@ export function TeamForgeList({
           <div className="space-y-1">
               {savedTeams.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-12 text-center animate-in fade-in duration-300">
-                  <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center mb-4 border border-white/10">
-                    <Ghost size={32} className="text-gray-500 opacity-50" />
+                  <div className="w-16 h-16 rounded-full bg-surface-card flex items-center justify-center mb-4 border border-border-default">
+                    <Ghost size={32} className="text-text-dimmed opacity-50" />
                   </div>
-                  <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-1">
+                  <h3 className="text-sm font-bold text-text-primary uppercase tracking-wider mb-1">
                     No Saved Teams
                   </h3>
-                  <p className="text-xs text-gray-500 max-w-[200px] mb-4">
+                  <p className="text-xs text-text-dimmed max-w-[200px] mb-4">
                     Your team roster is empty. Start building your dream team now.
                   </p>
-                  <p className="text-[10px] text-gray-700 uppercase tracking-widest font-bold">
+                  <p className="text-[10px] text-text-faint uppercase tracking-widest font-bold">
                      Locally Saved
                   </p>
                 </div>

@@ -23,8 +23,8 @@ export async function GET(request: NextRequest) {
     // 2. Revalidate Sitemap (Static route, not data-driven in the same way)
     revalidatePath('/sitemap.xml');
 
-    const duration = Date.now() - startTime;
-    console.log(`[Revalidation] Success in ${duration}ms. Tag: 'game-data', Path: '/sitemap.xml'`);
+
+
 
     return NextResponse.json({ 
       revalidated: true, 

@@ -37,7 +37,7 @@ export function RelatedEntities({ entities, title = "Related" }: RelatedEntities
 
   return (
     <div className="space-y-3">
-      <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest">
+      <h3 className="text-xs font-bold text-text-dimmed uppercase tracking-widest">
         {title}
       </h3>
       <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
@@ -45,10 +45,10 @@ export function RelatedEntities({ entities, title = "Related" }: RelatedEntities
           <Link
             key={entity.entity_id}
             href={getEntityLink(entity)}
-            className="group flex flex-col items-center gap-2 p-2 rounded-lg border border-white/5 bg-surface-card hover:bg-surface-hover hover:border-brand-accent/30 transition-all"
+            className="group flex flex-col items-center gap-2 p-2 rounded-lg border border-border-subtle bg-surface-card hover:bg-surface-hover hover:border-brand-accent/30 transition-all"
           >
             <EntityImage entity={entity} className="w-14 h-14 rounded-lg" />
-            <span className="text-[10px] font-bold text-gray-400 group-hover:text-white transition-colors truncate w-full text-center">
+            <span className="text-[10px] font-bold text-text-muted group-hover:text-text-primary transition-colors truncate w-full text-center">
               {entity.name}
             </span>
           </Link>

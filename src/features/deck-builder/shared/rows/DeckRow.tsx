@@ -100,7 +100,7 @@ export function DeckRow({
         "group flex items-center p-1.5 rounded cursor-grab active:cursor-grabbing touch-manipulation select-none border transition-all relative overflow-visible",
         isActive
           ? "bg-brand-primary/10 border-brand-primary/50"
-          : "bg-surface-card border-white/5 hover:border-white/20 hover:bg-white/5",
+          : "bg-surface-card border-border-subtle hover:border-border-strong hover:bg-surface-card",
         isDragging &&
           "scale-105 shadow-xl shadow-brand-primary/20 z-50 border-brand-primary cursor-grabbing",
         selectionMode && isSelected && "bg-brand-primary/20 border-brand-primary",
@@ -109,7 +109,7 @@ export function DeckRow({
       onClick={selectionMode ? onToggleSelect : undefined}
     >
       <div 
-        className="p-1 text-gray-600 hover:text-gray-400 -ml-1 mr-1 transition-colors cursor-grab active:cursor-grabbing touch-none outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded"
+        className="p-1 text-text-faint hover:text-text-muted -ml-1 mr-1 transition-colors cursor-grab active:cursor-grabbing touch-none outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded"
         role="button"
         tabIndex={0}
         aria-label="Drag to reorder deck"
@@ -127,7 +127,7 @@ export function DeckRow({
                 "w-4 h-4 rounded border flex items-center justify-center transition-colors",
                 isSelected 
                     ? "bg-brand-primary border-brand-primary text-black" 
-                    : "border-white/20 group-hover:border-white/50"
+                    : "border-border-strong group-hover:border-border-subtle0"
                 )}
                 role="checkbox"
                 aria-checked={isSelected}
@@ -147,7 +147,7 @@ export function DeckRow({
           <div
             className={cn(
               "font-bold truncate text-sm",
-              isActive ? "text-brand-primary" : "text-gray-200"
+              isActive ? "text-brand-primary" : "text-text-secondary"
             )}
           >
             {isEditing ? (
@@ -158,13 +158,13 @@ export function DeckRow({
                 onBlur={handleRename}
                 onKeyDown={handleKeyDown}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-black/40 border border-brand-primary/50 rounded px-1 min-w-0 text-sm font-bold text-white focus:outline-none focus:ring-1 focus:ring-brand-primary"
+                className="bg-surface-inset border border-brand-primary/50 rounded px-1 min-w-0 text-sm font-bold text-text-primary focus:outline-none focus:ring-1 focus:ring-brand-primary"
               />
             ) : (
               <div
                 className={cn(
                   "font-bold truncate text-sm flex items-center gap-2",
-                  isActive ? "text-brand-primary" : "text-gray-200"
+                  isActive ? "text-brand-primary" : "text-text-secondary"
                 )}
                 title={deck.name}
               >
@@ -183,17 +183,17 @@ export function DeckRow({
         <div className="flex items-center gap-2">
           {/* Avatar with Badge */}
           <div className="relative shrink-0">
-            <div className="w-9 h-9 rounded-full overflow-hidden border border-white/20 bg-black shadow-sm">
+            <div className="w-9 h-9 rounded-full overflow-hidden border border-border-strong bg-black shadow-sm">
               {deck.spellcaster ? (
                 <GameImage
                   src={getCardImageUrl(deck.spellcaster)}
-                  alt=""
+                  alt={deck.spellcaster.name}
                   fill
                   className="object-cover"
                   draggable={false}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-700 font-bold text-xs">
+                <div className="w-full h-full flex items-center justify-center text-text-faint font-bold text-xs">
                   ?
                 </div>
               )}
@@ -201,7 +201,7 @@ export function DeckRow({
             <div
               className={cn(
                 "absolute -bottom-1 -right-1 w-3 h-3 rounded-full border border-surface-card flex items-center justify-center",
-                isValid ? "bg-green-500 text-white" : "bg-red-500 text-white"
+                isValid ? "bg-status-success text-brand-dark" : "bg-status-danger text-text-primary"
               )}
               title={isValid ? "Valid Deck" : errors[0]}
             >
@@ -223,12 +223,12 @@ export function DeckRow({
             {deck.slots.slice(0, 4).map((s, i) => (
               <div
                 key={i}
-                className="w-9 h-9 rounded-md bg-black/50 border border-white/10 overflow-hidden shrink-0 relative"
+                className="w-9 h-9 rounded-md bg-surface-inset border border-border-default overflow-hidden shrink-0 relative"
               >
                 {s.unit && (
                   <GameImage
                     src={getCardImageUrl(s.unit)}
-                    alt=""
+                    alt={s.unit.name}
                     fill
                     className="object-cover opacity-80"
                     draggable={false}
@@ -241,7 +241,7 @@ export function DeckRow({
               {deck.slots[4].unit && (
                 <GameImage
                   src={getCardImageUrl(deck.slots[4].unit)}
-                  alt=""
+                  alt={deck.slots[4].unit.name}
                   fill
                   className="object-cover opacity-80"
                   draggable={false}
@@ -264,7 +264,7 @@ export function DeckRow({
                   size="sm"
                   className={cn(
                       "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-sm transition-colors text-xs font-bold uppercase tracking-wider h-8",
-                      "bg-transparent border-gray-500 text-gray-400 hover:text-white hover:border-white hover:bg-white/5"
+                      "bg-transparent border-gray-500 text-text-muted hover:text-text-primary hover:border-white hover:bg-surface-card"
                   )}
                   onClick={(e) => {
                       e.stopPropagation();
@@ -282,7 +282,7 @@ export function DeckRow({
                   size="sm"
                   className={cn(
                       "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-sm transition-colors text-xs font-bold uppercase tracking-wider h-8",
-                      "bg-brand-primary text-white hover:bg-brand-primary/80 border-0"
+                      "bg-brand-primary text-brand-dark hover:bg-brand-primary/80 border-0"
                   )}
                   onClick={(e) => {
                       e.stopPropagation();

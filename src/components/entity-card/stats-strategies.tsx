@@ -47,7 +47,7 @@ export const STATS: Record<string, StatDefinition> = {
     label: "Health",
     getValue: (item) => (hasProperty(item, "health") ? (item.health as number) : undefined),
     icon: Heart,
-    colorClass: "text-green-500",
+    colorClass: "text-status-success",
   },
   passive_health_regen: {
     id: "passive_health_regen",
@@ -70,7 +70,7 @@ export const STATS: Record<string, StatDefinition> = {
     label: "Damage",
     getValue: (item) => getDamageDisplay(item),
     icon: Swords,
-    colorClass: "text-red-400",
+    colorClass: "text-status-danger-text",
     condition: (item) => hasProperty(item, "damage") && !!item.damage,
   },
   dps: {
@@ -91,7 +91,7 @@ export const STATS: Record<string, StatDefinition> = {
         return "0s";
     },
     icon: Zap,
-    colorClass: "text-yellow-400",
+    colorClass: "text-status-warning-text",
     condition: (item) => hasProperty(item, "attack_interval") || hasProperty(item, "attack_speed"),
   },
   range: {
@@ -99,7 +99,7 @@ export const STATS: Record<string, StatDefinition> = {
     label: "Range",
     getValue: (item) => (hasProperty(item, "range") ? (item.range as number) : undefined),
     icon: Users,
-    colorClass: "text-blue-400",
+    colorClass: "text-status-info-text",
     condition: (item) => hasProperty(item, "range") && !!item.range,
   },
   movement_speed: {
@@ -124,7 +124,7 @@ export const STATS: Record<string, StatDefinition> = {
     label: "Heal",
     getValue: (item) => (isSpell(item) ? item.heal_amount : undefined),
     icon: Heart,
-    colorClass: "text-green-500",
+    colorClass: "text-status-success",
     condition: (item) => isSpell(item) && !!item.heal_amount,
   },
   duration: {
@@ -132,7 +132,7 @@ export const STATS: Record<string, StatDefinition> = {
     label: "Duration",
     getValue: (item) => (isSpell(item) ? `${item.duration}s` : undefined),
     icon: Clock,
-    colorClass: "text-yellow-400",
+    colorClass: "text-status-warning-text",
     condition: (item) => isSpell(item) && !!item.duration,
   },
   radius: {
@@ -140,7 +140,7 @@ export const STATS: Record<string, StatDefinition> = {
     label: "Radius",
     getValue: (item) => (isSpell(item) ? item.radius : undefined),
     icon: Users,
-    colorClass: "text-blue-400",
+    colorClass: "text-status-info-text",
     condition: (item) => isSpell(item) && !!item.radius,
   },
   population: {
@@ -156,7 +156,7 @@ export const STATS: Record<string, StatDefinition> = {
     label: "Charges",
     getValue: (item) => (hasProperty(item, "charges") ? (item.charges as number) : undefined),
     icon: Zap,
-    colorClass: "text-yellow-400",
+    colorClass: "text-status-warning-text",
     condition: (item) => hasProperty(item, "charges") && !!item.charges,
   },
   recharge_time: {

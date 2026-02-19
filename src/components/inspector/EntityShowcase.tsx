@@ -105,7 +105,7 @@ export function EntityShowcase({
           {backUrl && (
             <Link
               href={backUrl}
-              className="p-2 bg-surface-card hover:bg-surface-hover rounded-full text-white border border-white/10 transition-colors shrink-0"
+              className="p-2 bg-surface-card hover:bg-surface-hover rounded-full text-text-primary border border-border-default transition-colors shrink-0"
             >
               <ArrowLeft size={16} />
               <span className="sr-only">{backLabel}</span>
@@ -121,7 +121,7 @@ export function EntityShowcase({
 
           {/* Left — Entity Image */}
           <div className="w-full md:w-80 shrink-0">
-            <div className="relative w-full aspect-square md:aspect-[4/5] bg-surface-card border border-white/10 rounded-2xl overflow-hidden group shadow-2xl">
+            <div className="relative w-full aspect-square md:aspect-[4/5] bg-surface-card border border-border-default rounded-2xl overflow-hidden group shadow-2xl">
               {/* Blurred Background */}
               <GameImage
                 src={getCardImageUrl(item)}
@@ -157,12 +157,12 @@ export function EntityShowcase({
                     />
                   )}
                   {magicSchool && (
-                    <Link href={`/schools/${magicSchool}`} className="bg-brand-secondary/80 hover:bg-brand-secondary text-white px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors">
+                    <Link href={`/schools/${magicSchool}`} className="bg-brand-secondary/80 hover:bg-brand-secondary text-text-primary px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors">
                       {magicSchool}
                     </Link>
                   )}
                 </div>
-                <span className="bg-brand-primary/90 text-white px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg backdrop-blur-md border border-white/10">
+                <span className="bg-brand-primary/90 text-text-primary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg backdrop-blur-md border border-border-default">
                   {category}
                 </span>
               </div>
@@ -173,11 +173,11 @@ export function EntityShowcase({
           <div className="flex-1 min-w-0 space-y-5">
             {/* Title */}
             <div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-white mb-2 drop-shadow-md">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-text-primary mb-2 drop-shadow-md">
                 {name}
               </h1>
               {description && (
-                <p className="text-gray-400 text-sm sm:text-base leading-relaxed max-w-xl">
+                <p className="text-text-muted text-sm sm:text-base leading-relaxed max-w-xl">
                   {description}
                 </p>
               )}
@@ -186,17 +186,17 @@ export function EntityShowcase({
             {/* Quick Facts */}
             <div className="flex flex-wrap gap-2">
               {movementType && (
-                <span className="bg-surface-card border border-white/10 text-gray-300 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                <span className="bg-surface-card border border-border-default text-text-secondary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
                   {movementType}
                 </span>
               )}
               {"population" in item && (item as Unit).population && (
-                <span className="bg-surface-card border border-white/10 text-gray-300 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                <span className="bg-surface-card border border-border-default text-text-secondary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
                   Pop: {(item as Unit).population}
                 </span>
               )}
               {"cooldown" in item && (item as Spell).cooldown && (
-                <span className="bg-surface-card border border-white/10 text-gray-300 px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                <span className="bg-surface-card border border-border-default text-text-secondary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
                   CD: {(item as Spell).cooldown}s
                 </span>
               )}
@@ -209,7 +209,7 @@ export function EntityShowcase({
                   <Link
                     key={tag}
                     href={`/database?search=${encodeURIComponent(tag)}`}
-                    className="bg-white/5 hover:bg-white/10 border border-white/5 hover:border-brand-primary/30 text-gray-400 hover:text-white px-2.5 py-1 rounded text-[10px] font-medium transition-all"
+                    className="bg-surface-card hover:bg-surface-hover border border-border-subtle hover:border-brand-primary/30 text-text-muted hover:text-text-primary px-2.5 py-1 rounded text-[10px] font-medium transition-all"
                   >
                     #{tag}
                   </Link>
@@ -218,8 +218,8 @@ export function EntityShowcase({
             )}
 
             {/* Stats Section — Inline on desktop */}
-            <div className="bg-surface-card border border-white/10 rounded-xl p-4 sm:p-5">
-              <h2 className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-3">
+            <div className="bg-surface-card border border-border-default rounded-xl p-4 sm:p-5">
+              <h2 className="text-xs font-bold text-text-dimmed uppercase tracking-widest mb-3">
                 Stats
               </h2>
               <EntityStats item={item} variant="detailed" />
@@ -234,21 +234,21 @@ export function EntityShowcase({
 
           {/* Mechanics Section */}
           {"mechanics" in item && item.mechanics && (
-            <section className="bg-surface-card border border-white/10 rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-100">
+            <section className="bg-surface-card border border-border-default rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-100">
               <EntityMechanics item={item} variant="detailed" />
             </section>
           )}
 
           {/* Abilities Section (Spellcasters) */}
           {isSpellcaster && (
-            <section className="bg-surface-card border border-white/10 rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-200">
+            <section className="bg-surface-card border border-border-default rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-200">
               <SpellcasterAbilities item={item} variant="detailed" />
             </section>
           )}
 
           {/* Related Entities */}
           {relatedEntities.length > 0 && (
-            <section className="bg-surface-card border border-white/10 rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-300">
+            <section className="bg-surface-card border border-border-default rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-300">
               <RelatedEntities entities={relatedEntities} title={relatedTitle} />
             </section>
           )}

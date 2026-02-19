@@ -62,8 +62,6 @@ export default async function SpellPage({ params }: SpellPageProps) {
 
   const jsonLdData = {
     "@context": "https://schema.org",
-    "@type": "VisualArtwork",
-    "name": spell.name,
     "description": spell.description,
     "genre": "Strategic Card Game",
     "isFamilyFriendly": true,

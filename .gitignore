@@ -55,6 +55,11 @@ Thumbs.db
 .vscode/
 
 
+# log files
+*.log
+
 # temporary artifacts
 lint_output.txt
+temp_output.txt
+scripts/temp_*
 test-results/

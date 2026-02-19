@@ -25,14 +25,14 @@ export function DamageModifierList({ modifiers, isCompact }: DamageModifierListP
             className={cn(
               "flex items-center gap-1.5 rounded",
               isCompact
-                ? (isBonus ? "bg-green-500/10 border border-green-500/20 p-1" : "bg-red-500/10 border border-red-500/20 p-1")
-                : (isBonus ? "bg-green-500/10 border border-green-500/20 p-3 gap-3 hover:bg-green-500/20" : "bg-red-500/10 border border-red-500/20 p-3 gap-3 hover:bg-red-500/20") + " transition-colors"
+                ? (isBonus ? "bg-status-success-muted border border-status-success-border p-1" : "bg-status-danger-muted border border-status-danger-border p-1")
+                : (isBonus ? "bg-status-success-muted border border-status-success-border p-3 gap-3 hover:bg-status-success-border" : "bg-status-danger-muted border border-status-danger-border p-3 gap-3 hover:bg-status-danger-border") + " transition-colors"
             )}
           >
-            <Sword size={isCompact ? 13 : 16} className={cn("shrink-0", isBonus ? "text-green-400" : "text-red-400")} />
+            <Sword size={isCompact ? 13 : 16} className={cn("shrink-0", isBonus ? "text-status-success-text" : "text-status-danger-text")} />
             <div className="flex flex-col">
               <span className={cn("font-bold leading-tight", isCompact ? "text-xs" : "text-sm", isBonus ? "text-green-200" : "text-red-200")}>
-                {(mod.multiplier > 1 ? "+" : "") + ((mod.multiplier - 1) * 100).toFixed(1).replace(/\.0$/, "")}% Damage vs <span className="text-white">
+                {(mod.multiplier > 1 ? "+" : "") + ((mod.multiplier - 1) * 100).toFixed(1).replace(/\.0$/, "")}% Damage vs <span className="text-text-primary">
                   {(() => {
                     // Handle V2 target_types (plural) or Legacy target_type (singular or array)
                     const targets = mod.target_types || mod.target_type;

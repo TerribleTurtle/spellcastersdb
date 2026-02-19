@@ -67,7 +67,7 @@ export function DebugFeatures({
   return (
     <div className="space-y-6">
       {/* Navigation */}
-      <div className="flex flex-wrap gap-2 border-b border-white/10 pb-4">
+      <div className="flex flex-wrap gap-2 border-b border-border-default pb-4">
         <TabButton
           id="integrity"
           label="Data Integrity"
@@ -144,10 +144,10 @@ function IntegrityTab({ entities }: { entities: UnifiedEntity[] }) {
 
   return (
     <div className="grid gap-6">
-      <Card className="bg-surface-card border-white/10">
+      <Card className="bg-surface-card border-border-default">
         <CardHeader>
           <CardTitle className="text-xl flex items-center gap-2">
-            <AlertTriangle className="text-yellow-500" /> Integrity Report
+            <AlertTriangle className="text-status-warning" /> Integrity Report
           </CardTitle>
           <CardDescription>
             Scanned {entities.length} entities for common data issues.
@@ -175,7 +175,7 @@ function IntegrityTab({ entities }: { entities: UnifiedEntity[] }) {
           {issues.duplicates.length === 0 &&
             issues.missingName.length === 0 &&
             issues.missingDescription.length === 0 && (
-              <div className="text-green-400 flex items-center gap-2 p-4 bg-green-500/10 rounded-lg border border-green-500/20">
+              <div className="text-status-success-text flex items-center gap-2 p-4 bg-status-success-muted rounded-lg border border-status-success-border">
                 <span>✅</span> All explicit integrity checks passed!
               </div>
             )}
@@ -221,7 +221,7 @@ function KeywordsTab({ entities }: { entities: UnifiedEntity[] }) {
   }, [entities]);
 
   return (
-    <Card className="bg-surface-card border-white/10">
+    <Card className="bg-surface-card border-border-default">
       <CardHeader>
         <CardTitle>Keyword Frequency</CardTitle>
         <CardDescription>
@@ -235,9 +235,9 @@ function KeywordsTab({ entities }: { entities: UnifiedEntity[] }) {
             .map(([word, count]) => (
               <div
                 key={word}
-                className="bg-black/20 p-3 rounded-lg flex justify-between items-center border border-white/5"
+                className="bg-surface-dim p-3 rounded-lg flex justify-between items-center border border-border-subtle"
               >
-                <span className="font-medium text-gray-300">{word}</span>
+                <span className="font-medium text-text-secondary">{word}</span>
                 <span className="text-xl font-bold text-brand-primary">
                   {count}
                 </span>
@@ -283,13 +283,13 @@ function BalanceTab({ units, titans }: { units: Unit[]; titans: Titan[] }) {
             title="Glass Cannons (DMG/HP)" 
             items={stats.glassCannons} 
             metricFn={u => `${u.damage} / ${u.health}`} 
-            icon={<Sword className="text-red-400" />}
+            icon={<Sword className="text-status-danger-text" />}
         />
         <RankingList 
             title="Meat Shields (Max HP)" 
             items={stats.tanks} 
             metricFn={u => `${u.health} HP`} 
-            icon={<Shield className="text-blue-400" />}
+            icon={<Shield className="text-status-info-text" />}
         />
         <RankingList 
             title="Top Hitters (Raw DMG)" 
@@ -317,7 +317,7 @@ function SearchTab({ entities }: { entities: UnifiedEntity[] }) {
     }, [query, entities]);
 
     return (
-        <Card className="bg-surface-card border-white/10">
+        <Card className="bg-surface-card border-border-default">
             <CardHeader>
                 <CardTitle>Search Playground</CardTitle>
                 <CardDescription>Test search behavior against {entities.length} entities.</CardDescription>
@@ -325,10 +325,10 @@ function SearchTab({ entities }: { entities: UnifiedEntity[] }) {
             <CardContent>
                 <div className="flex gap-2 mb-6">
                     <div className="relative flex-1">
-                        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
                         <Input 
                             placeholder="Type to search..." 
-                            className="pl-10 bg-black/20 border-white/10 text-white"
+                            className="pl-10 bg-surface-dim border-border-default text-text-primary"
                             value={query}
                             onChange={e => setQuery(e.target.value)}
                         />
@@ -337,15 +337,15 @@ function SearchTab({ entities }: { entities: UnifiedEntity[] }) {
 
                 <div className="space-y-2">
                     {query && results.length === 0 && (
-                        <div className="text-center py-8 text-gray-500">No matches found.</div>
+                        <div className="text-center py-8 text-text-dimmed">No matches found.</div>
                     )}
                     {results.map(e => (
-                        <div key={e.entity_id} className="p-3 rounded bg-black/20 border border-white/5 flex justify-between items-center group hover:bg-white/5 transition-colors">
+                        <div key={e.entity_id} className="p-3 rounded bg-surface-dim border border-border-subtle flex justify-between items-center group hover:bg-surface-card transition-colors">
                             <div>
                     {e.name}
-                                <div className="text-xs text-gray-500 font-mono">{e.category} • {e.entity_id}</div>
+                                <div className="text-xs text-text-dimmed font-mono">{e.category} • {e.entity_id}</div>
                             </div>
-                            <Badge variant="outline" className="text-xs border-white/10 text-gray-400 group-hover:text-white transition-colors">
+                            <Badge variant="outline" className="text-xs border-border-default text-text-muted group-hover:text-text-primary transition-colors">
                                 {("magic_school" in e ? e.magic_school : undefined) || "Neutral"}
                             </Badge>
                         </div>
@@ -376,8 +376,8 @@ function TabButton({
       onClick={() => onClick(id)}
       className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-all ${
         active
-          ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/20"
-          : "bg-surface-highlight hover:bg-white/10 text-gray-400 hover:text-white"
+          ? "bg-brand-primary text-brand-dark shadow-lg shadow-brand-primary/20"
+          : "bg-surface-highlight hover:bg-surface-hover text-text-muted hover:text-text-primary"
       }`}
     >
       {icon}
@@ -399,9 +399,9 @@ function IntegrityItem({
 }) {
   if (count === 0) return null;
 
-  const color = variant === "destructive" ? "text-red-400" : "text-yellow-400";
-  const bg = variant === "destructive" ? "bg-red-500/10" : "bg-yellow-500/10";
-  const border = variant === "destructive" ? "border-red-500/20" : "border-yellow-500/20";
+  const color = variant === "destructive" ? "text-status-danger-text" : "text-status-warning-text";
+  const bg = variant === "destructive" ? "bg-status-danger-muted" : "bg-status-warning-muted";
+  const border = variant === "destructive" ? "border-status-danger-border" : "border-status-warning-border";
 
   return (
     <div className={`p-4 rounded-lg border ${bg} ${border}`}>
@@ -410,7 +410,7 @@ function IntegrityItem({
         {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
         <Badge variant={variant as any}>{count}</Badge>
       </div>
-      <div className="text-xs font-mono text-gray-400 max-h-32 overflow-auto">
+      <div className="text-xs font-mono text-text-muted max-h-32 overflow-auto">
         {items.join(", ")}
       </div>
     </div>
@@ -421,9 +421,9 @@ function RankingList({ title, items, metricFn, icon }: { title: string, items: (
     if (items.length === 0) return null;
 
     return (
-        <Card className="bg-surface-card border-white/10">
+        <Card className="bg-surface-card border-border-default">
             <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-gray-400 flex items-center gap-2">
+                <CardTitle className="text-sm font-medium text-text-muted flex items-center gap-2">
                     {icon} {title}
                 </CardTitle>
             </CardHeader>
@@ -431,8 +431,8 @@ function RankingList({ title, items, metricFn, icon }: { title: string, items: (
                 {items.map((item, i) => (
                     <div key={item.entity_id} className="flex justify-between items-center text-sm">
                         <div className="flex items-center gap-3">
-                            <span className="font-mono text-gray-600 w-4">{i + 1}</span>
-                            <span className="font-medium text-gray-200">{item.name}</span>
+                            <span className="font-mono text-text-faint w-4">{i + 1}</span>
+                            <span className="font-medium text-text-secondary">{item.name}</span>
                         </div>
                         <span className="font-mono text-brand-secondary">{metricFn(item)}</span>
                     </div>

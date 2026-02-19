@@ -12,7 +12,7 @@ export function InspectorPanel({ className }: InspectorPanelProps) {
   const { inspectedCard } = useDeckStore();
 
   return (
-    <div className={cn("w-full bg-gray-950/50 flex flex-col relative", className)}>
+    <div className={cn("w-full bg-surface-deck/50 flex flex-col relative", className)}>
        {/* Scrollable Content Area */}
        <div className="flex-1 min-h-0 flex flex-col overflow-y-auto custom-scrollbar">
           <CardInspector 

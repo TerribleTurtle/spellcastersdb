@@ -18,7 +18,7 @@ export default async function ConsumablesIndexPage() {
         </h1>
 
         {consumables.length === 0 ? (
-          <p className="text-gray-400">
+          <p className="text-text-muted">
             No consumables found. Check the data source.
           </p>
         ) : (
@@ -27,14 +27,14 @@ export default async function ConsumablesIndexPage() {
               <Link
                 key={item.entity_id}
                 href={`/consumables/${item.entity_id}`}
-                className="block group bg-surface-card border border-white/10 rounded-xl p-6 transition-all hover:bg-surface-hover hover:border-brand-secondary/50 hover:-translate-y-1"
+                className="block group bg-surface-card border border-border-default rounded-xl p-6 transition-all hover:bg-surface-hover hover:border-brand-secondary/50 hover:-translate-y-1"
               >
                 <div className="mb-4 flex justify-center">
                   <div className="w-16 h-16 rounded-full bg-brand-secondary/20 flex items-center justify-center text-3xl">
                     🧪
                   </div>
                 </div>
-                <h2 className="text-xl font-bold text-center text-white group-hover:text-brand-secondary transition-colors mb-2">
+                <h2 className="text-xl font-bold text-center text-text-primary group-hover:text-brand-secondary transition-colors mb-2">
                   {item.name}
                 </h2>
                 <div className="flex justify-center gap-2 mb-4">
@@ -42,7 +42,7 @@ export default async function ConsumablesIndexPage() {
                     className={`text-xs px-2 py-1 rounded font-bold uppercase
                         ${
                           item.rarity === "Common"
-                            ? "bg-gray-700 text-gray-300"
+                            ? "bg-surface-hover text-text-secondary"
                             : item.rarity === "Rare"
                               ? "bg-blue-900/50 text-blue-300"
                               : item.rarity === "Epic"
@@ -54,7 +54,7 @@ export default async function ConsumablesIndexPage() {
                     {item.rarity}
                   </span>
                 </div>
-                <p className="text-sm text-gray-400 text-center line-clamp-3">
+                <p className="text-sm text-text-muted text-center line-clamp-3">
                   {item.description}
                 </p>
               </Link>

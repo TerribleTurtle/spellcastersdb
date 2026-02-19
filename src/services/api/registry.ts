@@ -151,7 +151,7 @@ export class EntityRegistry {
     this.clear();
   }
 
-  private clear() {
+  public clear() {
     this.units.clear();
     this.spells.clear();
     this.titans.clear();

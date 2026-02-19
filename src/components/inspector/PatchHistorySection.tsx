@@ -119,10 +119,10 @@ export function PatchHistorySection({
       {/* Section Header */}
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2 flex-1">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-gray-400 whitespace-nowrap">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-text-muted whitespace-nowrap">
             Patch History
             </h3>
-            <div className="flex-1 h-px bg-white/10" />
+            <div className="flex-1 h-px bg-surface-hover" />
         </div>
         
         {/* Controls */}
@@ -132,7 +132,7 @@ export function PatchHistorySection({
                     variant="ghost" 
                     size="sm" 
                     onClick={() => setSortDesc(!sortDesc)}
-                    className="h-9 px-2 text-gray-400 hover:text-white"
+                    className="h-9 px-2 text-text-muted hover:text-text-primary"
                     title={sortDesc ? "Newest First" : "Oldest First"}
                 >
                     {sortDesc ? <ArrowDownAZ size={16} /> : <ArrowUpAZ size={16} />}
@@ -159,7 +159,7 @@ export function PatchHistorySection({
 
       {/* Filters Panel */}
       {showControls && filtersOpen && (
-          <div className="bg-black/40 border border-white/10 rounded-lg p-3 space-y-3 animate-in slide-in-from-top-2">
+          <div className="bg-surface-inset border border-border-default rounded-lg p-3 space-y-3 animate-in slide-in-from-top-2">
               {/* Types */}
               <div className="flex flex-wrap gap-2">
                   {(["Patch", "Hotfix", "Content"] as PatchCategory[]).map(type => (
@@ -169,8 +169,8 @@ export function PatchHistorySection({
                         className={cn(
                             "px-2 py-1 rounded text-[10px] font-bold uppercase border transition-all",
                             selectedTypes.includes(type) 
-                                ? "bg-white/10 border-white/40 text-white shadow-sm" 
-                                : "bg-transparent border-white/5 text-gray-500 hover:border-white/20"
+                                ? "bg-surface-hover border-border-strong text-text-primary shadow-sm" 
+                                : "bg-transparent border-border-subtle text-text-dimmed hover:border-border-strong"
                         )}
                       >
                           {type}
@@ -180,7 +180,7 @@ export function PatchHistorySection({
 
               {/* Tags */}
               {allTags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 pt-2 border-t border-white/5">
+                  <div className="flex flex-wrap gap-2 pt-2 border-t border-border-subtle">
                       {allTags.map(tag => (
                           <button
                             key={tag}
@@ -189,7 +189,7 @@ export function PatchHistorySection({
                                 "px-2 py-0.5 rounded-full text-[10px] border transition-all",
                                 selectedTags.includes(tag) 
                                     ? "bg-brand-primary/20 border-brand-primary/50 text-brand-primary" 
-                                    : "bg-transparent border-white/5 text-gray-500 hover:border-white/20"
+                                    : "bg-transparent border-border-subtle text-text-dimmed hover:border-border-strong"
                             )}
                           >
                               #{tag}
@@ -203,7 +203,7 @@ export function PatchHistorySection({
                   <div className="flex justify-end pt-1">
                       <button 
                         onClick={() => { setSelectedTypes(["Patch", "Content"]); setSelectedTags([]); }}
-                        className="text-[10px] text-gray-500 hover:text-white flex items-center gap-1"
+                        className="text-[10px] text-text-dimmed hover:text-text-primary flex items-center gap-1"
                       >
                           <X size={10} /> Reset Filters
                       </button>
@@ -243,31 +243,31 @@ export function PatchHistorySection({
              return (
                 <div
                   key={`${entry.id}-${idx}`}
-                  className="bg-surface-card border border-white/5 rounded-lg overflow-hidden"
+                  className="bg-surface-card border border-border-subtle rounded-lg overflow-hidden"
                 >
                   {/* Header */}
-                  <div className="px-3 py-2 bg-surface-card/60 border-b border-white/5 flex items-center gap-2 flex-wrap">
+                  <div className="px-3 py-2 bg-surface-card/60 border-b border-border-subtle flex items-center gap-2 flex-wrap">
                      <PatchBadge type={entry.type} variant="icon" />
-                     <span className="text-xs font-mono font-bold text-gray-300">v{entry.version}</span>
-                     <span className="text-[10px] text-gray-500">• <LocalDate iso={entry.date} /></span>
+                     <span className="text-xs font-mono font-bold text-text-secondary">v{entry.version}</span>
+                     <span className="text-[10px] text-text-dimmed">• <LocalDate iso={entry.date} /></span>
                      {entry.tags?.map(t => (
-                         <span key={t} className="text-[10px] text-gray-600 bg-black/40 px-1.5 rounded transition-colors hover:text-gray-400">#{t}</span>
+                         <span key={t} className="text-[10px] text-text-faint bg-surface-inset px-1.5 rounded transition-colors hover:text-text-muted">#{t}</span>
                     ))}
                   </div>
 
                   <div className="p-3 space-y-3">
                       {/* Stat Changes (Vertical) */}
                       {statChanges.length > 0 && (
-                          <div className="space-y-1 bg-surface-card rounded p-2 border border-white/5">
+                          <div className="space-y-1 bg-surface-card rounded p-2 border border-border-subtle">
                               {statChanges.map(stat => (
                                   <div key={stat.key} className="flex items-center justify-between text-xs">
-                                      <span className="text-gray-400 capitalize">{stat.key.replace(/_/g, " ")}</span>
+                                      <span className="text-text-muted capitalize">{stat.key.replace(/_/g, " ")}</span>
                                       <div className="flex items-center gap-2 font-mono">
-                                          <span className="text-gray-600">{stat.old}</span>
-                                          <span className="text-gray-600 text-[10px]">→</span>
+                                          <span className="text-text-faint">{stat.old}</span>
+                                          <span className="text-text-faint text-[10px]">→</span>
                                           <span className={cn(
                                               "font-bold",
-                                              stat.diff > 0 ? "text-emerald-400" : "text-red-400"
+                                              stat.diff > 0 ? "text-emerald-400" : "text-status-danger-text"
                                           )}>
                                               {stat.new}
                                               <span className="ml-1 opacity-70 text-[10px]">
@@ -285,16 +285,16 @@ export function PatchHistorySection({
                         {entry.changes.map((change, cIdx) => {
                           const fieldLabel = formatChangeField(change.field);
                           return (
-                            <li key={cIdx} className="text-xs text-gray-400">
+                            <li key={cIdx} className="text-xs text-text-muted">
                                <div className="flex items-start gap-2">
-                                  <span className="text-gray-600 mt-0.5 text-[10px]">▸</span>
+                                  <span className="text-text-faint mt-0.5 text-[10px]">▸</span>
                                   <div className="flex-1 min-w-0">
                                       {fieldLabel ? (
                                         <span className="font-semibold text-brand-accent">
                                           {fieldLabel}
                                         </span>
                                       ) : (
-                                        <span className="font-medium text-gray-300">
+                                        <span className="font-medium text-text-secondary">
                                           {change.name}
                                         </span>
                                       )}
@@ -302,7 +302,7 @@ export function PatchHistorySection({
                                </div>
                                {/* Diffs */}
                                {change.diffs && change.diffs.length > 0 && (
-                                  <div className="pl-4 mt-1 space-y-0.5 border-l-2 border-white/5 ml-1">
+                                  <div className="pl-4 mt-1 space-y-0.5 border-l-2 border-border-subtle ml-1">
                                        {change.diffs.slice(0, 3).map((d, i) => (
                                             <DiffLine key={i} diff={d as DiffData} />
                                         ))}
@@ -321,7 +321,7 @@ export function PatchHistorySection({
           {hiddenCount > 0 && (
               <Button 
                 variant="ghost" 
-                className="w-full text-xs text-gray-500 hover:text-white border border-dashed border-white/10 hover:border-white/20"
+                className="w-full text-xs text-text-dimmed hover:text-text-primary border border-dashed border-border-default hover:border-border-strong"
                 onClick={() => setShowAllHistory(true)}
               >
                   Show {hiddenCount} older updates...
@@ -330,7 +330,7 @@ export function PatchHistorySection({
 
         </div>
       ) : (changelog.length > 0 || timeline.length > 0) ? (
-          <div className="text-center py-8 text-gray-500 text-xs italic border border-dashed border-white/10 rounded-lg">
+          <div className="text-center py-8 text-text-dimmed text-xs italic border border-dashed border-border-default rounded-lg">
               No patches match the selected filters.
           </div>
       ) : null}

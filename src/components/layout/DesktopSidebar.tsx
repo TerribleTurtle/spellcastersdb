@@ -2,26 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { 
   Github, 
-  Map, 
-  Database, 
-  BookOpen, 
-  HelpCircle, 
-  Info,
-  Layers,
   ExternalLink,
   MessageSquare,
   ChevronLeft,
   Menu,
-  Bot,
-  History
 } from "lucide-react";
+import { PRIMARY_NAV, SECONDARY_NAV, isActivePath } from "@/lib/nav-links";
 import { useFeedback } from "@/hooks/useFeedback";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/ui-store";
 import { Button } from "@/components/ui/button";
+import { ThemePicker } from "@/components/ui/ThemePicker";
 
 export function DesktopSidebar() {
   const pathname = usePathname();
@@ -31,11 +25,20 @@ export function DesktopSidebar() {
   
   // Mounted check for hydration safety
   const [mounted, setMounted] = useState(false);
+  const resizeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
+
+  const applyResize = useCallback(() => {
+    if (window.innerWidth < 1536) { // 2XL Breakpoint
+      setSidebarOpen(false);
+    } else {
+      setSidebarOpen(true);
+    }
+  }, [setSidebarOpen]);
 
   useEffect(() => {
       // Logic to sync sidebar with window size
@@ -43,52 +46,36 @@ export function DesktopSidebar() {
 
       const handleResize = () => {
           if (hasManuallyToggled) return; // Respect user preference
-          
-          if (window.innerWidth < 1536) { // 2XL Breakpoint
-              setSidebarOpen(false);
-          } else {
-              setSidebarOpen(true);
-          }
+          if (resizeTimer.current) clearTimeout(resizeTimer.current);
+          resizeTimer.current = setTimeout(applyResize, 150);
       };
 
       // Run once on mount if no manual toggle
       if (!hasManuallyToggled) {
-          handleResize();
+          applyResize();
       }
 
       window.addEventListener("resize", handleResize);
-      return () => window.removeEventListener("resize", handleResize);
-  }, [mounted, hasManuallyToggled, setSidebarOpen]);
+      return () => {
+        window.removeEventListener("resize", handleResize);
+        if (resizeTimer.current) clearTimeout(resizeTimer.current);
+      };
+  }, [mounted, hasManuallyToggled, applyResize]);
 
   // Prevent hydration mismatch by rendering a placeholder or default until mounted
   // For sidebar, we can just render default (open) or closed, but might flicker. 
   // Ideally, valid "w-64" or "w-16" is applied immediately.
   
-  const isActive = (path: string) =>
-    pathname === path || (path !== "/" && pathname?.startsWith(path));
-
-  const navItems = [
-    { name: "Deck Builder", href: "/", icon: Layers },
-    { name: "Database", href: "/database", icon: Database },
-    { name: "History", href: "/changes", icon: History },
-    { name: "Roadmap", href: "/roadmap", icon: Map },
-  ];
-
-  const secondaryItems = [
-    { name: "Guide", href: "/guide", icon: BookOpen },
-    { name: "FAQ", href: "/faq", icon: HelpCircle },
-    { name: "Bot", href: "/discord-bot", icon: Bot },
-    { name: "About", href: "/about", icon: Info },
-  ];
+  const isActive = (path: string) => isActivePath(path, pathname);
   
   if (!mounted) return (
-      <aside className="hidden md:flex flex-col w-16 2xl:w-64 border-r border-white/10 sticky top-16 h-[calc(100vh-4rem)] bg-surface-main z-30" />
+      <aside className="hidden md:flex flex-col w-16 2xl:w-64 border-r border-border-default sticky top-16 h-[calc(100vh-4rem)] bg-surface-main z-30" />
   );
 
   return (
     <aside 
         className={cn(
-            "hidden md:flex flex-col border-r border-white/10 sticky top-16 h-[calc(100vh-4rem)] bg-surface-main z-30 transition-[width] duration-300 ease-in-out overflow-y-auto overflow-x-hidden",
+            "hidden md:flex flex-col border-r border-border-default sticky top-16 h-[calc(100vh-4rem)] bg-surface-main z-30 transition-[width] duration-300 ease-in-out overflow-y-auto overflow-x-hidden",
             isSidebarOpen ? "w-64" : "w-16"
         )}
     >
@@ -100,7 +87,7 @@ export function DesktopSidebar() {
                 variant="ghost" 
                 size="icon"
                 onClick={toggleSidebar}
-                className="text-slate-400 hover:bg-white/5 hover:text-white transition-colors mb-2"
+                className="text-text-muted hover:bg-surface-card hover:text-text-primary transition-colors mb-2"
                 title="Expand Menu"
                 aria-label="Expand sidebar"
             >
@@ -111,15 +98,15 @@ export function DesktopSidebar() {
         {/* Primary Navigation */}
         <div className="flex flex-col gap-1 w-full">
           {isSidebarOpen && (
-              <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider px-3 mb-2 flex justify-between items-center">
+              <h3 className="text-xs font-bold text-text-dimmed uppercase tracking-wider px-3 mb-2 flex justify-between items-center">
                 Menu
-                <Button variant="ghost" size="icon" onClick={toggleSidebar} className="h-6 w-6 hover:text-white transition-colors" title="Collapse Menu" aria-label="Collapse sidebar">
+                <Button variant="ghost" size="icon" onClick={toggleSidebar} className="h-6 w-6 hover:text-text-primary transition-colors" title="Collapse Menu" aria-label="Collapse sidebar">
                     <ChevronLeft size={14} />
                 </Button>
               </h3>
           )}
           
-          {navItems.map((item) => {
+          {PRIMARY_NAV.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
             
@@ -131,14 +118,14 @@ export function DesktopSidebar() {
                   "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all group relative",
                   active 
                     ? "bg-brand-primary/10 text-brand-primary" 
-                    : "text-slate-400 hover:bg-white/5 hover:text-white",
+                    : "text-text-muted hover:bg-surface-card hover:text-text-primary",
                   !isSidebarOpen && "justify-center px-2"
                 )}
                 title={!isSidebarOpen ? item.name : undefined}
               >
                 <Icon size={18} className={cn(
                     "transition-colors shrink-0",
-                    active ? "text-brand-primary" : "text-slate-500 group-hover:text-white"
+                    active ? "text-brand-primary" : "text-text-dimmed group-hover:text-text-primary"
                 )} />
                 {isSidebarOpen && <span className="whitespace-nowrap">{item.name}</span>}
               </Link>
@@ -149,11 +136,11 @@ export function DesktopSidebar() {
         {/* Secondary Navigation */}
         <div className="flex flex-col gap-1 w-full">
           {isSidebarOpen && (
-            <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider px-3 mb-2">
+            <h3 className="text-xs font-bold text-text-dimmed uppercase tracking-wider px-3 mb-2">
                 Resources
             </h3>
           )}
-          {secondaryItems.map((item) => {
+          {SECONDARY_NAV.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
 
@@ -165,14 +152,14 @@ export function DesktopSidebar() {
                   "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all group relative",
                   active 
                     ? "bg-brand-primary/10 text-brand-primary" 
-                    : "text-slate-400 hover:bg-white/5 hover:text-white",
+                    : "text-text-muted hover:bg-surface-card hover:text-text-primary",
                    !isSidebarOpen && "justify-center px-2"
                 )}
                 title={!isSidebarOpen ? item.name : undefined}
               >
                 <Icon size={18} className={cn(
                     "transition-colors shrink-0",
-                    active ? "text-brand-primary" : "text-slate-500 group-hover:text-white"
+                    active ? "text-brand-primary" : "text-text-dimmed group-hover:text-text-primary"
                 )} />
                 {isSidebarOpen && <span className="whitespace-nowrap">{item.name}</span>}
               </Link>
@@ -184,29 +171,44 @@ export function DesktopSidebar() {
           variant="ghost"
           onClick={openFeedback}
           className={cn(
-              "flex items-center gap-3 px-3 py-2 h-auto rounded-lg text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all group w-full justify-start",
+              "flex items-center gap-3 px-3 py-2 h-auto rounded-lg text-sm font-medium text-text-muted hover:bg-surface-card hover:text-text-primary transition-all group w-full justify-start",
               !isSidebarOpen && "justify-center px-2"
           )}
           title={!isSidebarOpen ? "Feedback" : undefined}
           aria-label="Submit feedback"
         >
-          <MessageSquare size={18} className="text-slate-500 group-hover:text-white transition-colors shrink-0" />
+          <MessageSquare size={18} className="text-text-dimmed group-hover:text-text-primary transition-colors shrink-0" />
           {isSidebarOpen && "Feedback"}
         </Button>
         
+        {/* Theme Picker */}
+        <div className={cn("mt-auto w-full", !isSidebarOpen && "flex justify-center")}>
+            <ThemePicker 
+                side="top" 
+                align="start" 
+                className={cn(
+                    "flex items-center px-3 py-2 rounded-lg text-sm font-medium text-text-muted hover:bg-surface-card hover:text-text-primary transition-all group w-full justify-start",
+                    !isSidebarOpen && "justify-center px-2 h-10 w-10 p-0"
+                )} 
+            >
+                {isSidebarOpen && "Theme"}
+            </ThemePicker>
+        </div>
+
         {/* External Links */}
-        <div className={cn("mt-auto pt-4 border-t border-white/10 w-full", !isSidebarOpen && "flex justify-center")}>
+        <div className={cn("pt-2 border-t border-border-default w-full", !isSidebarOpen && "flex justify-center")}>
              <a
                 href="https://github.com/TerribleTurtle/spellcasters-community-api"
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(
-                    "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:bg-white/5 hover:text-white transition-all group",
+                    "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-text-muted hover:bg-surface-card hover:text-text-primary transition-all group",
                     !isSidebarOpen && "justify-center px-2"
                 )}
                 title={!isSidebarOpen ? "Contribute (GitHub)" : undefined}
+                aria-label="Contribute on GitHub"
               >
-                <Github size={18} className="text-slate-500 group-hover:text-white shrink-0" />
+                <Github size={18} className="text-text-dimmed group-hover:text-text-primary shrink-0" />
                 {isSidebarOpen && (
                     <>
                         Contribute

@@ -2,7 +2,7 @@
 
 <div align="center">
 
-**A modern, high-performance community database and deck builder for Spellcasters Chronicles.**
+**A community database and deck builder for Spellcasters Chronicles.**
 
 [Live Site](https://spellcastersdb.com) • [Contributing](CONTRIBUTING.md) • [Documentation](docs/)
 
@@ -10,15 +10,16 @@
 
 ## Project Overview
 
-**SpellcastersDB** is a Next.js application designed to serve as the definitive community resource for the game _Spellcasters Chronicles_. It features:
+**SpellcastersDB** is a Next.js application designed to serve as a community resource for the game _Spellcasters Chronicles_. It features:
 
 - **The Archive**: A searchable, filterable database of all Units, Spells, Titans, and Spellcasters.
-- **The Forge**: A logic-validating deck builder with premium modals for saving/editing and toast notifications for sharing.
+- **The Forge**: A logic-validating deck builder with modals for saving/editing and toast notifications for sharing.
 - **The Trinity (Team Builder)**: Build and manage teams of 3 decks with shared card pool validation and easy link sharing.
 - **Patch History**: Real-time balance updates with visual badges (Buff/Nerf/Rework) and detailed before/after stat comparisons for every entity.
 - **Live Updates**: Powered by a static JSON API that allows for rapid balance updates without full site rebuilds.
-- **Roadmap**: A live, interactive issue tracker connected to GitHub, featuring search, filtering, and "premium" UI.
-- **Accessibility**: Standardized UI components with ARIA labels and keyboard navigation support for an inclusive experience.
+- **Roadmap**: A live, interactive issue tracker connected to GitHub, featuring search and filtering.
+- **Accessibility (WCAG 2.1 AA)**: Skip navigation, focus-trapped modals, ARIA labels/states on all interactive controls, and `prefers-reduced-motion` support.
+- **SEO Optimized**: Fully crawlable with dynamic sitemaps, structured data (JSON-LD), and semantic HTML for maximum discoverability.
 - **Debug Suite**: Internal analytics tools for tracking data integrity, balance statistics, and keyword frequency.
 
 ## Architecture at a Glance
@@ -33,7 +34,7 @@
   - **Read-Through Caching**: Optimizes data fetching.
   - **Virtualization**: `react-virtuoso` for large lists.
   - **Zod Validation**: Ensures data integrity at runtime.
-  - **Comprehensive Testing**: 205+ unit and integration tests (Vitest) covering core logic, validation, and data integrity.
+  - **Comprehensive Testing**: 258 unit and integration tests (Vitest) covering core logic, validation, and data integrity.
   - **Revalidation API**: On-demand cache invalidation via `/api/revalidate` (using `Authorization` header) with `revalidateTag` for robust content updates.
     - **CI/CD**: The "Daily Revalidation" workflow requires `REVALIDATION_SECRET` and optionally `APP_URL` (defaults to `https://www.spellcastersdb.com`) in GitHub Secrets.
   - **State Persistence**: Optimized `zustand/persist` with `partialize` to serialize only critical user data, excluding transient UI state for consistent high performance.

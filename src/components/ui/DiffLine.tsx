@@ -116,8 +116,8 @@ export function DiffLine({ diff }: DiffLineProps) {
   const label = formatDiffPath(diff.path || []);
 
   return (
-    <div className="text-[11px] font-mono text-gray-500 flex flex-wrap gap-1.5 items-baseline leading-relaxed py-0.5">
-      <span className="text-gray-300 font-semibold shrink-0">
+    <div className="text-[11px] font-mono text-text-dimmed flex flex-wrap gap-1.5 items-baseline leading-relaxed py-0.5">
+      <span className="text-text-secondary font-semibold shrink-0">
         {label}:
       </span>
 
@@ -129,21 +129,21 @@ export function DiffLine({ diff }: DiffLineProps) {
           {formatValue(diff.rhs)}
         </span>
       ) : isRemoved ? (
-        <span className="text-red-400 flex items-center gap-1">
-          <span className="text-[9px] bg-red-500/20 border border-red-500/30 rounded px-1 uppercase font-bold">
+        <span className="text-status-danger-text flex items-center gap-1">
+          <span className="text-[9px] bg-status-danger-border border border-red-500/30 rounded px-1 uppercase font-bold">
             Removed
           </span>
           {formatValue(diff.lhs)}
         </span>
       ) : isTextChange ? (
-        <span className="text-gray-400 inline">
+        <span className="text-text-muted inline">
           {wordDiff(diff.lhs as string, diff.rhs as string).map((seg, i) =>
             seg.type === "same" ? (
-              <span key={i} className="text-gray-300">{seg.text}</span>
+              <span key={i} className="text-text-secondary">{seg.text}</span>
             ) : seg.type === "removed" ? (
               <span
                 key={i}
-                className="text-red-400 bg-red-500/15 rounded-sm px-0.5 line-through decoration-red-400/60"
+                className="text-status-danger-text bg-red-500/15 rounded-sm px-0.5 line-through decoration-red-400/60"
               >
                 {seg.text}
               </span>
@@ -158,9 +158,9 @@ export function DiffLine({ diff }: DiffLineProps) {
           )}
         </span>
       ) : (
-        <span className="text-gray-400">
+        <span className="text-text-muted">
           {formatValue(diff.lhs)}{" "}
-          <span className="text-gray-600">→</span>{" "}
+          <span className="text-text-faint">→</span>{" "}
           {formatValue(diff.rhs)}
         </span>
       )}

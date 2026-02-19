@@ -23,10 +23,10 @@ export function ConfirmationModal({
   const isUpdate = type === "UPDATE";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div 
         ref={modalRef}
-        className="bg-surface-card border border-white/10 rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-4"
+        className="bg-surface-card border border-border-default rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-4"
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
@@ -35,19 +35,19 @@ export function ConfirmationModal({
           <div className="w-12 h-12 rounded-full bg-amber-500/20 text-amber-500 mx-auto flex items-center justify-center mb-2">
             <Save size={24} />
           </div>
-          <h3 id="modal-title" className="text-lg font-bold text-white">
+          <h3 id="modal-title" className="text-lg font-bold text-text-primary">
             {isUpdate ? "Save Changes?" : "Deck Already Exists"}
           </h3>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-text-muted">
             {isUpdate ? (
               <>
                 To deck{" "}
-                <span className="text-white font-bold">&quot;{name}&quot;</span>
+                <span className="text-text-primary font-bold">&quot;{name}&quot;</span>
               </>
             ) : (
               <>
                 A deck named{" "}
-                <span className="text-white font-bold">&quot;{name}&quot;</span>{" "}
+                <span className="text-text-primary font-bold">&quot;{name}&quot;</span>{" "}
                 already exists.
               </>
             )}
@@ -57,7 +57,7 @@ export function ConfirmationModal({
         <div className="grid grid-cols-1 gap-2 pt-2">
           <button
             onClick={onOverwrite}
-            className="w-full py-2.5 rounded bg-brand-primary text-white hover:bg-brand-primary/80 font-bold shadow-lg shadow-brand-primary/20 transition-all flex items-center justify-center gap-2"
+            className="w-full py-2.5 rounded bg-brand-primary text-brand-dark hover:bg-brand-primary/80 font-bold shadow-lg shadow-brand-primary/20 transition-all flex items-center justify-center gap-2"
           >
             <Save size={16} />
             {isUpdate ? "Overwrite Existing" : "Overwrite"}
@@ -65,7 +65,7 @@ export function ConfirmationModal({
 
           <button
             onClick={onCopy}
-            className="w-full py-2.5 rounded bg-surface-main border border-white/10 text-gray-300 hover:text-white hover:bg-white/5 font-bold transition-all flex items-center justify-center gap-2"
+            className="w-full py-2.5 rounded bg-surface-main border border-border-default text-text-secondary hover:text-text-primary hover:bg-surface-card font-bold transition-all flex items-center justify-center gap-2"
           >
             <Layers size={16} />
             {isUpdate ? "Save as New Copy" : "Save as Copy"}
@@ -73,7 +73,7 @@ export function ConfirmationModal({
 
           <button
             onClick={onCancel}
-            className="w-full py-2.5 rounded text-gray-400 hover:text-white hover:bg-white/5 font-bold transition-all text-xs uppercase tracking-wider mt-1"
+            className="w-full py-2.5 rounded text-text-muted hover:text-text-primary hover:bg-surface-card font-bold transition-all text-xs uppercase tracking-wider mt-1"
           >
             Cancel
           </button>

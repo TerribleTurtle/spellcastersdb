@@ -27,15 +27,16 @@ export function FilterSection({
     <div className="space-y-3">
       <button
         onClick={() => setIsExpanded(!isExpanded)}
+        aria-expanded={isExpanded}
         className="flex items-center justify-between w-full text-left group"
       >
-        <h3 className="text-xs font-bold text-gray-200 uppercase tracking-widest group-hover:text-white transition-colors">
+        <h3 className="text-xs font-bold text-text-secondary uppercase tracking-widest group-hover:text-text-primary transition-colors">
           {title}
         </h3>
         {isExpanded ? (
-          <ChevronUp size={14} className="text-gray-500" />
+          <ChevronUp size={14} className="text-text-dimmed" />
         ) : (
-          <ChevronDown size={14} className="text-gray-500" />
+          <ChevronDown size={14} className="text-text-dimmed" />
         )}
       </button>
 
@@ -54,11 +55,12 @@ export function FilterSection({
                 <button
                   key={option}
                   onClick={() => onToggle(option)}
+                  aria-pressed={isSelected}
                   className={cn(
                     "flex items-center justify-center p-2.5 min-h-[44px] rounded border text-xs font-mono font-bold transition-all",
                     isSelected
-                      ? "bg-brand-primary border-brand-primary text-white"
-                      : "bg-surface-card border-white/5 text-gray-300 hover:border-brand-primary/30"
+                      ? "bg-brand-primary border-brand-primary text-text-primary"
+                      : "bg-surface-card border-border-subtle text-text-secondary hover:border-brand-primary/30"
                   )}
                 >
                   {option}
@@ -71,7 +73,7 @@ export function FilterSection({
                 key={option}
                 role="checkbox"
                 aria-checked={isSelected}
-                className="flex items-center gap-3 p-2 rounded hover:bg-white/5 cursor-pointer group transition-colors w-full text-left focus:outline-none focus:bg-white/5"
+                className="flex items-center gap-3 p-2 rounded hover:bg-surface-card cursor-pointer group transition-colors w-full text-left focus:outline-none focus:bg-surface-card"
                 onClick={(e) => {
                   e.preventDefault();
                   onToggle(option);
@@ -91,14 +93,14 @@ export function FilterSection({
                       : "border-gray-600 group-hover:border-gray-400"
                   )}
                 >
-                  {isSelected && <Check size={10} className="text-white" />}
+                  {isSelected && <Check size={10} className="text-text-primary" />}
                 </div>
                 <span
                   className={cn(
                     "text-sm",
                     isSelected
-                      ? "text-white"
-                      : "text-gray-300 group-hover:text-gray-100"
+                      ? "text-text-primary"
+                      : "text-text-secondary group-hover:text-text-primary"
                   )}
                 >
                   {option}

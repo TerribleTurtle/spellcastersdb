@@ -83,7 +83,7 @@ export function UnitCard({
       <Link
         href={meta.href}
         className={cn(
-          "group flex items-center gap-3 p-2.5 rounded-lg border border-white/5 bg-surface-card md:hover:bg-surface-hover md:hover:border-brand-accent/30 transition-all",
+          "group flex items-center gap-3 p-2.5 rounded-lg border border-border-subtle bg-surface-card md:hover:bg-surface-hover md:hover:border-brand-accent/30 transition-all",
           className
         )}
       >
@@ -91,15 +91,15 @@ export function UnitCard({
         <EntityImage entity={unit} className="w-12 h-12 shrink-0" />
 
         <div className="flex flex-col flex-1 min-w-0">
-          <h3 className="text-sm font-bold text-white group-hover:text-brand-accent transition-colors truncate">
+          <h3 className="text-sm font-bold text-text-primary group-hover:text-brand-accent transition-colors truncate">
             {unit.name}
           </h3>
           <div className="flex items-center gap-2 text-[10px] uppercase tracking-wider">
             <span className="text-brand-primary font-semibold">
               {meta.school}
             </span>
-            <span className="text-gray-600">•</span>
-            <span className="text-gray-500">{meta.category}</span>
+            <span className="text-text-faint">•</span>
+            <span className="text-text-dimmed">{meta.category}</span>
           </div>
         </div>
 
@@ -107,12 +107,12 @@ export function UnitCard({
         {"health" in unit && "damage" in unit && (
           <div className="hidden sm:flex items-center gap-3 text-xs font-mono shrink-0">
             <div className="text-center">
-              <div className="text-gray-600 text-[9px]">HP</div>
-              <div className="text-white font-bold">{unit.health}</div>
+              <div className="text-text-faint text-[9px]">HP</div>
+              <div className="text-text-primary font-bold">{unit.health}</div>
             </div>
             <div className="text-center">
-              <div className="text-gray-600 text-[9px]">DMG</div>
-              <div className="text-white font-bold">{unit.damage}</div>
+              <div className="text-text-faint text-[9px]">DMG</div>
+              <div className="text-text-primary font-bold">{unit.damage}</div>
             </div>
           </div>
         )}
@@ -135,7 +135,7 @@ export function UnitCard({
     <Link
       href={meta.href}
       className={cn(
-        "block group bg-surface-card border border-white/10 rounded-lg overflow-hidden transition-all md:hover:bg-surface-hover md:hover:border-brand-accent/50 md:hover:-translate-y-1 active:scale-95 md:active:scale-100",
+        "block group bg-surface-card border border-border-default rounded-lg overflow-hidden transition-all md:hover:bg-surface-hover md:hover:border-brand-accent/50 md:hover:-translate-y-1 active:scale-95 md:active:scale-100",
         className
       )}
     >
@@ -145,7 +145,7 @@ export function UnitCard({
       <div className="p-2">
         {/* Header with Rank */}
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[10px] font-mono text-gray-500 uppercase tracking-wide">
+          <span className="text-[10px] font-mono text-text-dimmed uppercase tracking-wide">
             {meta.category}
           </span>
           <SmartRankBadge
@@ -155,16 +155,16 @@ export function UnitCard({
           />
         </div>
 
-        <h2 className="text-base font-bold text-white group-hover:text-brand-accent transition-colors mb-1 truncate">
+        <h2 className="text-base font-bold text-text-primary group-hover:text-brand-accent transition-colors mb-1 truncate">
           {unit.name}
         </h2>
 
         {/* School + View CTA */}
-        <div className="flex items-center justify-between pt-2 border-t border-white/5">
+        <div className="flex items-center justify-between pt-2 border-t border-border-subtle">
           <p className="text-[10px] text-brand-primary uppercase tracking-wider font-semibold">
             {meta.school}
           </p>
-          <span className="flex items-center gap-1 text-[10px] text-gray-600 group-hover:text-brand-accent transition-colors">
+          <span className="flex items-center gap-1 text-[10px] text-text-faint group-hover:text-brand-accent transition-colors">
             <span className="hidden group-hover:inline">View</span>
             <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
           </span>

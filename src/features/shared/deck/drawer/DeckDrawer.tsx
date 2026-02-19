@@ -153,7 +153,7 @@ export const DeckDrawer = memo(function DeckDrawer({
   const containerClasses = cn(
     "bg-[var(--color-surface-deck)] border-t border-brand-primary/20 shadow-2xl transition-all duration-300 ease-in-out flex flex-col pointer-events-auto relative overflow-hidden",
     variant === "fixed" && "fixed bottom-0 left-0 right-0 z-40 pb-[max(16px,env(safe-area-inset-bottom))]",
-    variant === "static" && "w-full border-x border-b border-white/5 first:border-t",
+    variant === "static" && "w-full border-x border-b border-border-subtle first:border-t",
     isExpanded ? "h-auto" : "h-[48px]", // consistent small height for collapsed
     // Order of precedence: activeTheme.border -> activeBorderClassName -> default brand
     forceActive && (activeTheme?.border || activeBorderClassName || "border-brand-primary shadow-[0_-4px_15px_rgba(var(--color-brand-primary),0.1)]"),
@@ -197,7 +197,7 @@ export const DeckDrawer = memo(function DeckDrawer({
             "h-14 w-full flex items-center justify-between px-4 shrink-0 transition-colors cursor-pointer select-none relative z-40",
             forceActive 
                 ? (activeTheme?.header || "bg-brand-primary/20") 
-                : "bg-white/5 hover:bg-white/10",
+                : "bg-surface-card hover:bg-surface-hover",
              // isOver && "bg-brand-primary/20" // Handled by overlay above now
         )}
         onClick={(e) => {
@@ -228,7 +228,7 @@ export const DeckDrawer = memo(function DeckDrawer({
         <div className="flex items-center gap-3 max-w-[50%]">
             <div className={cn(
                 "w-3 h-3 rounded-full shrink-0", 
-                forceActive ? (activeTheme?.dot || "bg-brand-primary") : "bg-gray-500"
+                forceActive ? (activeTheme?.dot || "bg-brand-primary") : "bg-surface-raised"
             )} />
             
             <DeckNameInput 
@@ -250,8 +250,8 @@ export const DeckDrawer = memo(function DeckDrawer({
                     className={cn(
                         "w-8 h-8 flex items-center justify-center rounded-full transition-colors",
                          isSaved 
-                            ? "bg-green-500/10 text-green-500" 
-                            : "bg-surface-card hover:bg-brand-primary hover:text-white text-gray-400"
+                            ? "bg-status-success-muted text-status-success" 
+                            : "bg-surface-card hover:bg-brand-primary hover:text-text-primary text-text-muted"
                     )}
                     title={isSaved ? "Saved" : "Save Deck"}
                 >
@@ -263,7 +263,7 @@ export const DeckDrawer = memo(function DeckDrawer({
         {/* Center: Chevron/Count - HIDDEN ON DESKTOP */}
         <button 
             type="button"
-            className="xl:hidden flex items-center justify-center text-gray-400 hover:text-white rounded p-1 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+            className="xl:hidden flex items-center justify-center text-text-muted hover:text-text-primary rounded p-1 focus:outline-none focus:ring-2 focus:ring-brand-primary"
             onClick={(e) => { e.stopPropagation(); toggle(); }}
             aria-expanded={isExpanded}
             aria-controls="drawer-content"
@@ -279,7 +279,7 @@ export const DeckDrawer = memo(function DeckDrawer({
              {variant !== "static" && (
                  <button 
                     type="button"
-                    className="flex items-center gap-2 text-gray-400 hover:text-white rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                    className="flex items-center gap-2 text-text-muted hover:text-text-primary rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-brand-primary"
                     onClick={(e) => { e.stopPropagation(); toggle(); }}
                     aria-label={isExpanded ? "Collapse deck drawer" : "Expand deck drawer"}
                 >
@@ -307,11 +307,11 @@ export const DeckDrawer = memo(function DeckDrawer({
                 <div className="flex items-center gap-1">
                      {/* Validation Dots (Collapsed) */}
                      <div className="flex gap-1">
-                         <div className={cn("w-2 h-2 rounded-full", deck.spellcaster ? "bg-brand-accent" : "bg-gray-700")} />
+                         <div className={cn("w-2 h-2 rounded-full", deck.spellcaster ? "bg-brand-accent" : "bg-surface-hover")} />
                          {deck.slots.slice(0, 4).map(s => (
-                             <div key={s.index} className={cn("w-2 h-2 rounded-full", s.unit ? "bg-brand-primary" : "bg-gray-700")} />
+                             <div key={s.index} className={cn("w-2 h-2 rounded-full", s.unit ? "bg-brand-primary" : "bg-surface-hover")} />
                          ))}
-                         <div className={cn("w-2 h-2 rounded-full", deck.slots[4]?.unit ? "bg-orange-500" : "bg-gray-700")} />
+                         <div className={cn("w-2 h-2 rounded-full", deck.slots[4]?.unit ? "bg-orange-500" : "bg-surface-hover")} />
                      </div>
                 </div>
             )}

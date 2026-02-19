@@ -46,7 +46,7 @@ export function DeckSlot({
     data: dropData,
   });
 
-  // Debug Mount removed
+
 
   const dragData: DragData = {
     type: "DECK_SLOT",
@@ -134,11 +134,11 @@ export function DeckSlot({
           isValidTarget &&
           "border-brand-primary bg-brand-primary/10 scale-105",
         // Invalid Hover
-        isOver && !isValidTarget && "border-red-500/50 bg-red-500/10",
+        isOver && !isValidTarget && "border-red-500/50 bg-status-danger-muted",
         // Default
         !isValidTarget &&
           !isOver &&
-          "border-white/10 bg-surface-card md:hover:border-brand-primary/40 md:hover:shadow-lg md:hover:shadow-brand-primary/10",
+          "border-border-default bg-surface-card md:hover:border-brand-primary/40 md:hover:shadow-lg md:hover:shadow-brand-primary/10",
         isTitanSlot &&
           !isValidTarget &&
           !isOver &&
@@ -166,7 +166,7 @@ export function DeckSlot({
 
       {/* Label for Empty Slot */}
       {!slot.unit && (
-        <div className="text-center opacity-70 group-hover:opacity-100 transition-opacity text-gray-200">
+        <div className="text-center opacity-70 group-hover:opacity-100 transition-opacity text-text-secondary">
           <div className="mb-2 flex justify-center">
             {isTitanSlot ? (
               <Shield size={24} />
@@ -189,7 +189,7 @@ export function DeckSlot({
           )}
         >
           {/* Image Area */}
-          <div className="relative flex-1 bg-slate-800 overflow-hidden">
+          <div className="relative flex-1 bg-surface-raised overflow-hidden">
             <GameImage
               src={getCardImageUrl(slot.unit)}
               alt={getCardAltText(slot.unit)}
@@ -215,8 +215,8 @@ export function DeckSlot({
             )}
           </div>
           {/* Name Banner */}
-          <div className="min-h-[24px] bg-surface-main/95 border-t border-white/10 flex items-center justify-center px-1 py-0.5 z-10 shrink-0">
-            <span className="text-[10px] font-bold text-gray-200 text-center leading-tight line-clamp-2 wrap-break-word w-full">
+          <div className="min-h-[24px] bg-surface-main/95 border-t border-border-default flex items-center justify-center px-1 py-0.5 z-10 shrink-0">
+            <span className="text-[10px] font-bold text-text-secondary text-center leading-tight line-clamp-2 wrap-break-word w-full">
               {slot.unit.name}
             </span>
           </div>

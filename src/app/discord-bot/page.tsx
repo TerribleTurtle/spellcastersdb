@@ -1,88 +1,128 @@
-"use client";
+import Link from "next/link";
+import { Search, Link as LinkIcon, Bot, Server, Zap } from "lucide-react";
+import { PageShell } from "@/components/layout/PageShell";
 
-import { Search, Link as LinkIcon, Bot } from "lucide-react";
+export const metadata = {
+  title: "Discord Bot - SpellcastersDB",
+  description:
+    "Add the SpellcastersDB bot to your server. Search cards, build decks, and access game data directly quickly.",
+};
 
 export default function DiscordBotPage() {
   return (
-    <div className="min-h-screen pt-20 pb-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-      <div className="text-center mb-16 space-y-4">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-sm font-medium mb-4">
+    <PageShell
+      title="Spellcasters Community Bot"
+      subtitle="Enhance your Discord server with the utility tool for SpellcastersDB."
+      maxWidth="7xl"
+    >
+      <div className="flex justify-center mb-12 -mt-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-sm font-medium">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-primary opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-primary"></span>
           </span>
           Coming Soon
         </div>
-        
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-linear-to-r from-brand-primary to-brand-secondary">
-          Spellcasters Community Bot
-        </h1>
-        
-        <p className="text-xl text-slate-400 max-w-2xl mx-auto">
-          Enhance your Discord server with the ultimate utility tool for SpellcastersDB.
+      </div>
+
+      <div className="grid md:grid-cols-2 gap-12 mb-16 items-center">
+        {/* Features Left */}
+        <div className="space-y-6">
+          <div className="bg-surface-card border border-border-default p-6 rounded-xl hover:border-brand-primary/30 transition-colors">
+            <div className="h-10 w-10 rounded-lg bg-brand-primary/20 flex items-center justify-center text-brand-primary mb-4">
+              <Search size={20} />
+            </div>
+            <h3 className="text-xl font-bold text-text-primary mb-2">
+              Instant Card Search
+            </h3>
+            <p className="text-text-muted">
+              Search for any unit, spell, or item directly in Discord. Get detailed stats, abilities, and images instantly.
+            </p>
+          </div>
+
+          <div className="bg-surface-card border border-border-default p-6 rounded-xl hover:border-brand-primary/30 transition-colors">
+            <div className="h-10 w-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center text-brand-secondary mb-4">
+              <LinkIcon size={20} />
+            </div>
+            <h3 className="text-xl font-bold text-text-primary mb-2">
+              Deck Link Previews
+            </h3>
+            <p className="text-text-muted">
+              Share deck links and get beautiful, automatic previews with the spellcaster, mana curve, and key units.
+            </p>
+          </div>
+          
+           <div className="bg-surface-card border border-border-default p-6 rounded-xl hover:border-brand-primary/30 transition-colors">
+            <div className="h-10 w-10 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 mb-4">
+              <Zap size={20} />
+            </div>
+            <h3 className="text-xl font-bold text-text-primary mb-2">
+              Meta Updates
+            </h3>
+            <p className="text-text-muted">
+              Subscribe to patch notes. Get notified when new balance changes drop.
+            </p>
+          </div>
+        </div>
+
+        {/* Preview Right */}
+        <div className="relative">
+            <div className="absolute inset-0 bg-brand-primary/10 blur-3xl rounded-full opacity-20" />
+            <div className="relative bg-surface-raised border border-border-default rounded-xl p-8 shadow-2xl">
+                <div className="flex items-start gap-4 mb-6">
+                    <div className="h-10 w-10 rounded-full bg-brand-primary flex items-center justify-center text-text-primary shrink-0">
+                        <Bot size={24} />
+                    </div>
+                    <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                            <span className="font-bold text-text-primary">SpellcastersBot</span>
+                            <span className="px-1.5 py-0.5 rounded text-[10px] bg-[#5865F2] text-text-primary font-medium">BOT</span>
+                        </div>
+                        <p className="text-xs text-text-muted">Today at 4:20 PM</p>
+                    </div>
+                </div>
+                
+                <div className="ml-14 bg-[#2f3136] rounded-l-md border-l-4 border-brand-primary p-4 max-w-sm">
+                    <div className="font-bold text-brand-primary mb-1">Fire Imp</div>
+                    <p className="text-sm text-text-secondary mb-3">Unit • Rank I • Inferno</p>
+                    <div className="grid grid-cols-2 gap-2 text-xs text-text-muted mb-3">
+                        <div>Health: <span className="text-text-primary">120</span></div>
+                        <div>Damage: <span className="text-text-primary">15</span></div>
+                        <div>Range: <span className="text-text-primary">3.5</span></div>
+                        <div>Speed: <span className="text-text-primary">Fast</span></div>
+                    </div>
+                    <div className="text-xs text-text-muted italic">
+                        &quot;Small, fast, and annoying. Explodes on death.&quot;
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <div className="text-center py-12 border-t border-border-default">
+        <h2 className="text-3xl font-bold text-text-primary mb-6">
+          Ready to invite?
+        </h2>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+           <button 
+             disabled 
+             className="px-8 py-4 bg-surface-hover text-text-muted font-bold rounded-xl cursor-not-allowed opacity-50 flex items-center gap-2"
+            >
+                <Server size={20} />
+                Add to Server
+            </button>
+            <Link
+                href="/"
+                className="px-8 py-4 bg-surface-card hover:bg-surface-hover border border-border-default text-text-primary font-bold rounded-xl transition-colors"
+            >
+                Back to Home
+            </Link>
+        </div>
+        <p className="mt-4 text-sm text-text-dimmed">
+            Coming soon to a server near you.
         </p>
       </div>
-
-      <div className="grid md:grid-cols-2 gap-8 mb-16">
-        {/* Feature 1: Deck Embeds */}
-        <div className="relative group overflow-hidden rounded-2xl bg-surface-raised border border-white/5 hover:border-brand-primary/30 transition-all p-8">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <LinkIcon size={120} />
-          </div>
-          <div className="relative z-10">
-            <div className="h-12 w-12 rounded-lg bg-brand-primary/20 flex items-center justify-center text-brand-primary mb-6">
-              <LinkIcon size={24} />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-3">Rich Deck Embeds</h3>
-            <p className="text-slate-400 leading-relaxed">
-              Share your strategies with style. Simply paste a SpellcastersDB deck link in your chat, and the bot will automatically convert it into a beautiful, readable embed showcasing your units and spells. No more messy long URLs.
-            </p>
-          </div>
-        </div>
-
-        {/* Feature 2: Smart Search */}
-        <div className="relative group overflow-hidden rounded-2xl bg-surface-raised border border-white/5 hover:border-brand-primary/30 transition-all p-8">
-          <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Search size={120} />
-          </div>
-          <div className="relative z-10">
-            <div className="h-12 w-12 rounded-lg bg-brand-secondary/20 flex items-center justify-center text-brand-secondary mb-6">
-              <Search size={24} />
-            </div>
-            <h3 className="text-2xl font-bold text-white mb-3">Instant Lookups</h3>
-            <p className="text-slate-400 leading-relaxed">
-              Need stats fast? Use <code className="bg-black/30 px-2 py-0.5 rounded text-brand-accent">/search</code> to instantly find detailed information about any unit, spell, or item. Featuring smart fuzzy matching to find what you need, even if you make a typo.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="rounded-2xl bg-linear-to-br from-surface-raised to-surface-main border border-white/5 p-8 md:p-12 text-center relative overflow-hidden">
-        {/* Background decorative elements */}
-        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-primary/5 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-brand-secondary/5 rounded-full blur-3xl"></div>
-        </div>
-
-        <div className="relative z-10 max-w-2xl mx-auto">
-          <div className="mx-auto h-16 w-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 backdrop-blur-sm border border-white/10">
-            <Bot size={32} className="text-white" />
-          </div>
-          
-          <h2 className="text-3xl font-bold text-white mb-4">Get Ready to Summon</h2>
-          <p className="text-slate-400 mb-8">
-            The Spellcasters Community Bot is being actively developed by the community, for the community. It&apos;s open-source and built to be efficient, reliable, and easy to use.
-          </p>
-          
-          <button 
-            disabled
-            className="px-8 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-400 cursor-not-allowed font-medium flex items-center justify-center gap-2 mx-auto"
-          >
-            <Bot size={18} />
-            Invite Link Coming Soon
-          </button>
-        </div>
-      </div>
-    </div>
+    </PageShell>
   );
 }

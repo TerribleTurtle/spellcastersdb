@@ -53,7 +53,7 @@ export const UnitBrowser = React.memo(function UnitBrowser({
   // 1. Loading State (Grid not ready) overrides everything to prevent flash
   if (!isReady) {
       return (
-        <div ref={containerRef} className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
+        <div ref={containerRef} className="flex flex-col h-full bg-surface-main border-r border-border-default relative">
              <BrowserSkeleton />
         </div>
       );
@@ -62,14 +62,14 @@ export const UnitBrowser = React.memo(function UnitBrowser({
   // 2. Empty State (No items, no search)
   if (items.length === 0 && !searchQuery) {
       return (
-        <div ref={containerRef} className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
+        <div ref={containerRef} className="flex flex-col h-full bg-surface-main border-r border-border-default relative">
             <BrowserSkeleton />
         </div>
       );
   }
 
   return (
-    <div ref={containerRef} className="flex flex-col h-full bg-surface-main border-r border-white/10 relative">
+    <div ref={containerRef} className="flex flex-col h-full bg-surface-main border-r border-border-default relative">
       <UnitBrowserHeader
           activeFilterCount={activeFilterCount}
           showFilters={showFilters}
@@ -179,9 +179,9 @@ const MemoizedUnitBrowserList = React.memo(function UnitBrowserList({
   );
 
   return (
-      <div className="flex-1 bg-black/20 overflow-hidden">
+      <div className="flex-1 bg-surface-dim overflow-hidden">
         {!virtualData || virtualData.length === 0 ? (
-          <div className="text-center text-gray-500 py-10 mt-10">
+          <div className="text-center text-text-dimmed py-10 mt-10">
             No results found.
           </div>
         ) : (

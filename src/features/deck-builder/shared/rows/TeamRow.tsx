@@ -108,19 +108,19 @@ export function TeamRow({
         "group flex items-center p-1.5 rounded cursor-grab active:cursor-grabbing touch-manipulation select-none border transition-all relative overflow-visible focus:outline-none focus:ring-1 focus:ring-brand-primary",
         isDragging
           ? "scale-105 shadow-xl shadow-brand-primary/20 z-50 border-brand-primary cursor-grabbing"
-          : "bg-surface-card border-white/5 hover:border-white/20 hover:bg-white/5",
+          : "bg-surface-card border-border-subtle hover:border-border-strong hover:bg-surface-card",
         selectionMode && isSelected && "bg-brand-primary/20 border-brand-primary"
       )}
     >
       <div 
-        className="p-1 text-gray-600 hover:text-gray-400 -ml-1 mr-1 transition-colors cursor-grab active:cursor-grabbing touch-none"
+        className="p-1 text-text-faint hover:text-text-muted -ml-1 mr-1 transition-colors cursor-grab active:cursor-grabbing touch-none"
       >
         {selectionMode ? (
             <div className={cn(
                 "w-4 h-4 rounded border flex items-center justify-center transition-colors",
                 isSelected 
                     ? "bg-brand-primary border-brand-primary text-black" 
-                    : "border-white/20 group-hover:border-white/50"
+                    : "border-border-strong group-hover:border-border-subtle0"
             )}>
                 {isSelected && <Check size={10} strokeWidth={4} />}
             </div>
@@ -132,7 +132,7 @@ export function TeamRow({
       {/* Content Container */}
       <div className="flex-1 grid grid-rows-[auto_1fr] gap-1 min-w-0">
         {/* Top Row: Name */}
-        <div className="font-bold text-gray-200 text-sm truncate">
+        <div className="font-bold text-text-secondary text-sm truncate">
           {isEditing ? (
             <input
               ref={inputRef}
@@ -141,7 +141,7 @@ export function TeamRow({
               onBlur={handleRename}
               onKeyDown={handleKeyDown}
               onClick={(e) => e.stopPropagation()}
-              className="bg-black/40 border border-brand-primary/50 rounded px-1 min-w-0 text-sm font-bold text-white focus:outline-none focus:ring-1 focus:ring-brand-primary w-full"
+              className="bg-surface-inset border border-brand-primary/50 rounded px-1 min-w-0 text-sm font-bold text-text-primary focus:outline-none focus:ring-1 focus:ring-brand-primary w-full"
               aria-label="Edit team name"
             />
           ) : (
@@ -165,11 +165,11 @@ export function TeamRow({
                 d.spellcaster && (
                   <div
                     key={i}
-                    className="w-9 h-9 rounded-md border border-white/10 bg-black/50 overflow-hidden shrink-0 relative"
+                    className="w-9 h-9 rounded-md border border-border-default bg-surface-inset overflow-hidden shrink-0 relative"
                   >
                     <GameImage
                       src={getCardImageUrl(d.spellcaster)}
-                      alt=""
+                      alt={d.spellcaster.name}
                       fill
                       className="object-cover"
                       draggable={false}
@@ -191,7 +191,7 @@ export function TeamRow({
                         e.stopPropagation();
                         onPutAway();
                     }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent border border-gray-500 text-gray-400 rounded-full shadow-sm hover:text-white hover:border-white hover:bg-white/5 transition-colors text-xs font-bold uppercase tracking-wider"
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent border border-text-muted text-text-muted rounded-full shadow-sm hover:text-text-primary hover:border-text-primary hover:bg-surface-card transition-colors text-xs font-bold uppercase tracking-wider"
                     title="Put Away Team"
                 >
                     <span className="hidden sm:inline">Put Away</span>
@@ -203,7 +203,7 @@ export function TeamRow({
                 e.stopPropagation();
                 onLoad();
               }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-primary text-white rounded-full shadow-sm hover:bg-brand-primary/80 transition-colors text-xs font-bold uppercase tracking-wider"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-primary text-brand-dark rounded-full shadow-sm hover:bg-brand-primary/80 transition-colors text-xs font-bold uppercase tracking-wider"
               title="Load Team"
             >
               <ArrowRight size={14} />

@@ -20,13 +20,13 @@ export function TeamActionButtons({
   onEditDeck,
 }: TeamActionButtonsProps) {
   return (
-    <div className="p-4 border-t border-white/10 flex justify-center bg-surface-main shrink-0 gap-4">
+    <div className="p-4 border-t border-border-default flex justify-center bg-surface-main shrink-0 gap-4">
       {onBack && (
         <button
           onClick={onBack}
           className={cn(
             "px-4 md:px-8 py-3 font-black uppercase tracking-widest rounded-lg shadow-lg transition-all flex items-center gap-2 text-xs md:text-sm",
-            "bg-surface-card text-gray-300 hover:bg-white/10 hover:text-white border border-white/10"
+            "bg-surface-card text-text-secondary hover:bg-surface-hover hover:text-text-primary border border-border-default"
           )}
         >
           {isReadOnly ? "Close" : "Return to Forge"}
@@ -37,7 +37,7 @@ export function TeamActionButtons({
       {existingId ? (
         <button
           onClick={() => onEditDeck(0)}
-          className="px-6 md:px-10 py-3 bg-brand-primary text-white font-black uppercase tracking-widest rounded-lg shadow-lg hover:bg-brand-primary/90 hover:scale-105 transition-all flex items-center gap-2 text-xs md:text-sm"
+          className="px-6 md:px-10 py-3 bg-brand-primary text-brand-dark font-black uppercase tracking-widest rounded-lg shadow-lg hover:bg-brand-primary/90 hover:scale-105 transition-all flex items-center gap-2 text-xs md:text-sm"
         >
           <Edit size={16} />
           Open Team
@@ -48,7 +48,7 @@ export function TeamActionButtons({
           {onSave && (
             <button
               onClick={onSave}
-              className="px-6 md:px-8 py-3 bg-brand-primary text-white font-black uppercase tracking-widest rounded-lg shadow-lg hover:bg-brand-primary/90 hover:scale-105 transition-all flex items-center gap-2 text-xs md:text-sm"
+              className="px-6 md:px-8 py-3 bg-brand-primary text-brand-dark font-black uppercase tracking-widest rounded-lg shadow-lg hover:bg-brand-primary/90 hover:scale-105 transition-all flex items-center gap-2 text-xs md:text-sm"
             >
               <Save size={16} />
               Save
@@ -60,8 +60,8 @@ export function TeamActionButtons({
             className={cn(
               "px-6 md:px-10 py-3 font-black uppercase tracking-widest rounded-lg shadow-lg transition-all flex items-center gap-2 text-xs md:text-sm",
               isReadOnly
-                ? "bg-surface-card text-gray-300 border border-white/10 hover:bg-white/10 hover:text-white"
-                : "bg-brand-primary text-white hover:bg-brand-primary/90 hover:scale-105"
+                ? "bg-surface-card text-text-secondary border border-border-default hover:bg-surface-hover hover:text-text-primary"
+                : "bg-brand-primary text-brand-dark hover:bg-brand-primary/90 hover:scale-105"
             )}
           >
             <Edit size={16} />

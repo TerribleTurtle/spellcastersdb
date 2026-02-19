@@ -70,7 +70,7 @@ export function DeckNameInput({
                 onBlur={handleSave}
                 onKeyDown={handleKeyDown}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-black/40 border-brand-primary/50 text-sm font-bold text-white uppercase w-full h-8"
+                className="bg-surface-inset border-brand-primary/50 text-sm font-bold text-text-primary uppercase w-full h-8"
                 aria-label="Edit deck name"
              />
         );
@@ -83,14 +83,14 @@ export function DeckNameInput({
         >
             <span className={cn(
                 "text-sm font-bold uppercase tracking-wider truncate", 
-                forceActive ? "text-white" : "text-gray-400"
+                forceActive ? "text-text-primary" : "text-text-muted"
             )}>
                 {name || "Untitled"}
             </span>
             {onRename && (
                 <button
                     onClick={handleNameClick}
-                    className="flex items-center justify-center text-gray-400 hover:text-white transition-colors shrink-0 focus:outline-none focus:ring-2 focus:ring-brand-primary rounded-sm"
+                    className="flex items-center justify-center text-text-muted hover:text-text-primary transition-colors shrink-0 focus:outline-none focus:ring-2 focus:ring-brand-primary rounded-sm"
                     aria-label="Rename deck"
                     type="button"
                 >

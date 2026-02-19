@@ -107,16 +107,16 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
     <div className="h-full flex flex-col relative bg-surface-main overflow-hidden xl:grid xl:grid-cols-[1fr_640px] xl:grid-rows-[auto_1fr]">
       
       {/* Shared Header (Desktop Only) */}
-      <div id="deck-editor-header" className="hidden xl:flex h-14 border-b border-white/10 items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
+      <div id="deck-editor-header" className="hidden xl:flex h-14 border-b border-border-default items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
           {/* Deck Name Input */}
           <div className="relative group flex items-center gap-1.5 shrink mr-2 min-w-0 max-w-[200px] md:max-w-[300px] lg:max-w-[400px]">
                <input 
                   value={currentDeck?.name || ""}
                   onChange={(e) => setDeckName(e.target.value)}
-                  className="w-full bg-transparent border-b-2 border-transparent hover:border-white/20 focus:border-brand-primary transition-all text-lg md:text-xl font-black text-white uppercase tracking-wider focus:outline-none py-0.5 truncate placeholder:text-gray-600"
+                  className="w-full bg-transparent border-b-2 border-transparent hover:border-border-strong focus:border-brand-primary transition-all text-lg md:text-xl font-black text-text-primary uppercase tracking-wider focus:outline-none py-0.5 truncate placeholder:text-text-faint"
                   placeholder="UNTITLED DECK"
                />
-               <Edit2 size={12} className="text-gray-500 shrink-0 group-hover:text-white transition-colors" />
+               <Edit2 size={12} className="text-text-dimmed shrink-0 group-hover:text-text-primary transition-colors" />
           </div>
 
           {/* Actions */}
@@ -130,14 +130,14 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
               />
 
               {/* Mode Switcher */}
-              <div className="flex items-center bg-black/20 p-1 rounded-lg border border-white/5 mr-2">
+              <div className="flex items-center bg-surface-dim p-1 rounded-lg border border-border-subtle mr-2">
                   <button
                       onClick={() => setMode("SOLO")}
                       className={cn(
                           "px-3 py-1 text-xs font-bold uppercase rounded transition-all",
                           mode === "SOLO" 
-                              ? "bg-brand-primary text-white shadow-sm" 
-                              : "text-gray-400 hover:text-gray-300"
+                              ? "bg-brand-primary text-brand-dark shadow-sm" 
+                              : "text-text-muted hover:text-text-secondary"
                       )}
                   >
                       Solo
@@ -147,8 +147,8 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
                       className={cn(
                           "px-3 py-1 text-xs font-bold uppercase rounded transition-all",
                           mode === "TEAM" 
-                              ? "bg-brand-primary text-white shadow-sm" 
-                              : "text-gray-400 hover:text-gray-300"
+                              ? "bg-brand-primary text-brand-dark shadow-sm" 
+                              : "text-text-muted hover:text-text-secondary"
                       )}
                   >
                       Team
@@ -163,9 +163,9 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
                   className={cn(
                       "flex items-center gap-2 p-2 md:px-3 md:py-1.5 rounded-lg transition-all border",
                       isEmptyDeck && !isSaved
-                        ? "opacity-50 cursor-not-allowed bg-gray-800 border-white/5 text-gray-500"
+                        ? "opacity-50 cursor-not-allowed bg-surface-raised border-border-subtle text-text-dimmed"
                         : isSaved 
-                            ? "bg-green-500/10 text-green-400 border-green-500/50 hover:bg-green-500/20"
+                            ? "bg-status-success-muted text-status-success-text border-green-500/50 hover:bg-status-success-border"
                             : "bg-brand-primary/10 text-brand-primary border-brand-primary/50 hover:bg-brand-primary/20 hover:border-brand-primary"
                   )}
                   title={isEmptyDeck ? "Deck is empty" : isSaved ? "Deck Saved" : isExistingDeck ? "Update Existing Deck" : "Save to Library"}
@@ -186,7 +186,7 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
               {isExistingDeck && (
                   <button
                       onClick={handleSaveCopy}
-                      className="flex items-center gap-2 p-2 md:px-3 md:py-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors border border-white/20"
+                      className="flex items-center gap-2 p-2 md:px-3 md:py-1.5 text-text-muted hover:text-text-primary hover:bg-surface-hover rounded-lg transition-colors border border-border-strong"
                       title="Save as Copy"
                   >
                       <Copy size={18} className="md:w-3.5 md:h-3.5" />
@@ -199,7 +199,7 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
               {/* Share */}
               <button 
                    onClick={handleShare}
-                   className="p-2 text-gray-400 hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors"
+                   className="p-2 text-text-muted hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors"
                    title="Share"
               >
                    <Share2 size={18} />
@@ -208,7 +208,7 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
               {/* Clear */}
               <button 
                    onClick={handleClear}
-                   className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors"
+                   className="p-2 text-text-muted hover:text-status-danger-text hover:bg-status-danger-muted rounded transition-colors"
                    title="Clear Deck"
               >
                   <Eraser size={18} />
@@ -257,11 +257,11 @@ export function SoloEditorLayout({ units, spellcasters }: SoloEditorLayoutProps)
       {/* Solo Overview Overlay */}
       {viewSummary && (
         <div
-          className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-200"
+          className="absolute inset-0 z-50 bg-surface-overlay backdrop-blur-sm flex items-center justify-center p-4 md:p-8 animate-in fade-in duration-200"
           onClick={closeSummary}
         >
           <div
-            className="w-full max-w-6xl h-auto max-h-[90vh] bg-surface-main rounded-xl border border-white/10 shadow-2xl overflow-hidden relative flex flex-col shrink-0"
+            className="w-full max-w-6xl h-auto max-h-[90vh] bg-surface-main rounded-xl border border-border-default shadow-2xl overflow-hidden relative flex flex-col shrink-0"
             onClick={(e) => e.stopPropagation()}
             style={{ height: 'auto' }}
           >

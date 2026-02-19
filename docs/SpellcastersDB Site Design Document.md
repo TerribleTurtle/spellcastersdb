@@ -2,7 +2,7 @@
 
 ## **1\. Executive Summary**
 
-**SpellcastersDB.com** is the definitive community hub for _Spellcasters Chronicles_. It combines a high-performance unit database with a strict-logic deck builder and a curated community meta-tracker. The site is designed to be mobile-first, SEO-optimized, and highly shareable via custom social media embeds.
+**SpellcastersDB.com** is a community hub for _Spellcasters Chronicles_. It combines a unit database with a strict-logic deck builder. The site is designed to be mobile-first, SEO-optimized, and highly shareable via custom social media embeds.
 
 ## **2\. Core Modules**
 
@@ -32,14 +32,14 @@ The Forge is a utility that enforces game-legal loadouts to prevent "impossible"
   - **Slot 5 (Titan):** Strictly reserved for cards in the **Titan** category.
 - **Deck Analytics:** Real-time calculation of average charge_time, total cost_population, and damage type balance.
 
-### **2.3 The Stratosphere (Community & Top Decks)**
+### **2.3 Community & Top Decks (Planned)**
 
-A manually curated section to guide players on the current competitive landscape.
+A section to guide players on builds.
 
-- **Weekly Meta Update:** A dedicated page featuring 3–5 "Top Tier" decks.
-- **Tactical Breakdown:** Each top deck includes a "How to Play" section and synergy notes for the selected Hero.
+- **Weekly Update:** A dedicated page featuring shared decks.
+- **Tactical Breakdown:** Each deck includes notes.
 - **One-Click Import:** A "Load in Forge" button that uses the deck's lz-string to instantly populate the builder for user modification.
-- **Archetype Tagging:** Decks are labeled by playstyle (e.g., "Siege Rush," "Astral Control," "Poison Stall").
+- **Archetype Tagging:** Decks are labeled by playstyle.
 
 ## **3\. Technical Architecture**
 

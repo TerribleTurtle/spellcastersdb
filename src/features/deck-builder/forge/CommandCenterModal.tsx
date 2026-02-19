@@ -47,13 +47,13 @@ export function CommandCenterModal() {
 
   return createPortal(
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-in fade-in duration-200 overflow-hidden"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-overlay-heavy backdrop-blur-sm animate-in fade-in duration-200 overflow-hidden"
       style={{ zIndex: 200 }} 
       onClick={closeCommandCenter}
     >
       <div 
         ref={modalRef}
-        className="w-full max-w-5xl h-[90vh] bg-gray-900 border border-white/10 rounded-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col" 
+        className="w-full max-w-5xl h-[90vh] bg-surface-main border border-border-default rounded-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col" 
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -95,10 +95,10 @@ export function CommandCenterModal() {
         </div>
 
         {/* Footer with Close Button (Mobile Friendly) */}
-        <div className="p-4 border-t border-white/10 bg-gray-950/50 shrink-0 md:hidden">
+        <div className="p-4 border-t border-border-default bg-surface-deck/50 shrink-0 md:hidden">
             <button
                 onClick={closeCommandCenter}
-                className="w-full py-3 bg-white/10 hover:bg-white/20 text-white font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
+                className="w-full py-3 bg-surface-hover hover:bg-surface-hover text-text-primary font-bold uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2"
             >
                 <X size={20} />
                 Close Library

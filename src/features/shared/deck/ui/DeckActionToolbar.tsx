@@ -32,7 +32,7 @@ export function DeckActionToolbar({
           onClick={onImport}
           variant="ghost"
           data-testid="toolbar-import-btn"
-          className="h-auto flex items-center gap-1.5 px-3 py-1.5 bg-surface-card border border-white/10 hover:bg-white/5 text-gray-300 hover:text-white rounded text-xs font-bold uppercase tracking-wider transition-all focus-visible:ring-2 focus-visible:ring-brand-primary"
+          className="h-auto flex items-center gap-1.5 px-3 py-1.5 bg-surface-card border border-border-default hover:bg-surface-card text-text-secondary hover:text-text-primary rounded text-xs font-bold uppercase tracking-wider transition-all focus-visible:ring-2 focus-visible:ring-brand-primary"
           title="Import Deck"
           aria-label="Import Deck"
         >
@@ -57,8 +57,8 @@ export function DeckActionToolbar({
           className={cn(
             "h-auto flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-bold uppercase tracking-wider transition-all focus-visible:ring-2 focus-visible:ring-brand-primary",
             isSaved
-              ? "bg-green-500/10 text-green-400 cursor-default hover:bg-green-500/20"
-              : "bg-brand-primary text-white hover:bg-brand-primary/90 shadow-brand-primary/20 shadow-lg"
+              ? "bg-status-success-muted text-status-success-text cursor-default hover:bg-status-success-border"
+              : "bg-brand-primary text-brand-dark hover:bg-brand-primary/90 shadow-brand-primary/20 shadow-lg"
           )}
           title={isSaved ? "Deck Saved" : "Save Deck"}
           aria-label={isSaved ? "Deck Saved" : "Save Deck"}
@@ -74,7 +74,7 @@ export function DeckActionToolbar({
           variant="ghost"
           size="icon"
           onClick={onShare}
-          className="text-gray-400 hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors focus-visible:ring-2 focus-visible:ring-brand-accent h-9 w-9"
+          className="text-text-muted hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors focus-visible:ring-2 focus-visible:ring-brand-accent h-9 w-9"
           title="Share"
           aria-label="Share"
         >
@@ -89,7 +89,7 @@ export function DeckActionToolbar({
           size="icon"
           onClick={onClear}
           data-testid="toolbar-clear-btn"
-          className="text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors focus-visible:ring-2 focus-visible:ring-red-500 h-9 w-9"
+          className="text-text-muted hover:text-status-danger-text hover:bg-status-danger-muted rounded transition-colors focus-visible:ring-2 focus-visible:ring-red-500 h-9 w-9"
           title="Clear Deck"
           aria-label="Clear Deck"
         >
@@ -103,7 +103,7 @@ export function DeckActionToolbar({
           variant="ghost"
           size="icon"
           onClick={onExportToSolo}
-          className="text-gray-400 hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors focus-visible:ring-2 focus-visible:ring-brand-accent h-9 w-9"
+          className="text-text-muted hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors focus-visible:ring-2 focus-visible:ring-brand-accent h-9 w-9"
           title="Save Copy to Solo Library"
           aria-label="Save Copy to Solo Library"
         >

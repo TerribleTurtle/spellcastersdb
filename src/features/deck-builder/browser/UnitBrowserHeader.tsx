@@ -43,8 +43,8 @@ export function UnitBrowserHeader({
   };
 
   return (
-    <div className="h-12 border-b border-white/10 z-10 bg-surface-main/95 backdrop-blur shadow-sm shrink-0">
-        <div className="flex items-center justify-between px-4 h-full gap-2 max-w-[1920px] mx-auto">
+    <div className="relative h-12 border-b border-border-default z-40 bg-surface-main/95 backdrop-blur shadow-sm shrink-0">
+        <div className="flex items-center justify-between px-4 h-full gap-2 max-w-site-shell mx-auto">
       
       {/* Left Side: Tabs or Search Input */}
       <div className="flex-1 flex items-center overflow-hidden h-full">
@@ -62,11 +62,11 @@ export function UnitBrowserHeader({
                             handleClearSearch();
                         }
                     }}
-                    className="w-full bg-transparent border-none text-sm text-white placeholder-gray-500 focus:outline-none"
+                    className="w-full bg-transparent border-none text-sm text-text-primary placeholder-gray-500 focus:outline-none"
                 />
              </div>
         ) : (
-             <div className="flex gap-4 text-xs font-bold text-gray-400 h-full items-center">
+             <div className="flex gap-4 text-xs font-bold text-text-muted h-full items-center">
                 {GROUP_MODES.map((mode) => (
                 <button
                     key={mode}
@@ -75,7 +75,7 @@ export function UnitBrowserHeader({
                     "h-full border-b-2 transition-colors uppercase tracking-wider flex items-center px-1",
                     groupMode === mode
                         ? "text-brand-accent border-brand-accent"
-                        : "border-transparent hover:text-gray-300 hover:border-white/10"
+                        : "border-transparent hover:text-text-secondary hover:border-border-default"
                     )}
                 >
                     {mode}
@@ -93,7 +93,7 @@ export function UnitBrowserHeader({
                 variant="ghost"
                 size="icon"
                 onClick={handleClearSearch}
-                className="text-gray-400 hover:text-white rounded-lg hover:bg-white/10"
+                className="text-text-muted hover:text-text-primary rounded-lg hover:bg-surface-hover"
                 title="Close Search"
                 aria-label="Clear search"
              >
@@ -106,7 +106,7 @@ export function UnitBrowserHeader({
                 onClick={() => setIsSearchExpanded(true)}
                 className={cn(
                     "rounded-lg",
-                    searchQuery ? "text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20" : "text-gray-400 hover:text-white hover:bg-white/5"
+                    searchQuery ? "text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20" : "text-text-muted hover:text-text-primary hover:bg-surface-card"
                 )}
                 title="Search"
                 aria-label="Search cards"
@@ -114,6 +114,9 @@ export function UnitBrowserHeader({
                  <Search size={18} />
              </Button>
          )}
+
+         {/* Theme Picker - Moved to Sidebar/Navbar */}
+         {/* <ThemePicker className="text-text-muted hover:text-text-primary hover:bg-surface-card rounded-lg" /> */}
 
          {/* Filter Toggle */}
         <Button
@@ -124,7 +127,7 @@ export function UnitBrowserHeader({
             "relative rounded-lg",
             activeFilterCount > 0
               ? "text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20"
-              : "text-gray-400 hover:text-white hover:bg-white/5"
+              : "text-text-muted hover:text-text-primary hover:bg-surface-card"
           )}
           title="Filters"
           aria-label={showFilters ? "Close filters" : "Filter cards"}

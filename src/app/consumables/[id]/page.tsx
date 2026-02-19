@@ -71,7 +71,7 @@ export default async function ConsumablePage({ params }: ConsumablePageProps) {
           <h1 className="text-5xl font-bold mt-2 mb-4 bg-clip-text text-transparent bg-gradient-to-r from-brand-accent to-green-400">
             {item.name}
           </h1>
-          <p className="text-xl text-gray-300 leading-relaxed">
+          <p className="text-xl text-text-secondary leading-relaxed">
             {item.description}
           </p>
         </div>
@@ -81,31 +81,31 @@ export default async function ConsumablePage({ params }: ConsumablePageProps) {
           <h3 className="text-xl font-bold mb-4 text-brand-accent">Effects</h3>
           <div className="grid grid-cols-2 gap-4">
             {item.effect_type && (
-              <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">
+              <div className="p-4 bg-surface-dim rounded-xl border border-border-subtle">
+                <p className="text-text-muted text-sm uppercase tracking-widest text-[10px]">
                   Type
                 </p>
-                <p className="text-lg font-mono capitalize text-white">
+                <p className="text-lg font-mono capitalize text-text-primary">
                   {item.effect_type.replace("_", " ")}
                 </p>
               </div>
             )}
             {item.effect_value && (
-              <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">
+              <div className="p-4 bg-surface-dim rounded-xl border border-border-subtle">
+                <p className="text-text-muted text-sm uppercase tracking-widest text-[10px]">
                   Value
                 </p>
-                <p className="text-2xl font-bold text-green-400">
+                <p className="text-2xl font-bold text-status-success-text">
                   {item.effect_value}
                 </p>
               </div>
             )}
             {item.duration && (
-              <div className="p-4 bg-black/20 rounded-xl border border-white/5">
-                <p className="text-gray-400 text-sm uppercase tracking-widest text-[10px]">
+              <div className="p-4 bg-surface-dim rounded-xl border border-border-subtle">
+                <p className="text-text-muted text-sm uppercase tracking-widest text-[10px]">
                   Duration
                 </p>
-                <p className="text-2xl font-bold text-yellow-400">
+                <p className="text-2xl font-bold text-status-warning-text">
                   {item.duration}s
                 </p>
               </div>

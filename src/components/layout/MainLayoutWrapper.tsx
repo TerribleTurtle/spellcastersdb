@@ -12,6 +12,7 @@ export function MainLayoutWrapper({ children }: MainLayoutWrapperProps) {
 
   return (
     <main 
+      id="main-content"
       className={cn(
         "grow w-full px-0 flex flex-col transition-[padding] duration-300 ease-in-out"
       )}

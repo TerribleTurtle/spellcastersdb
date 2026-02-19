@@ -123,7 +123,8 @@ export interface PersistenceState extends PersistenceActions {
  * UI State for the application.
  * Manages view modes, filters, and transient drag/drop state.
  */
-export interface UIState {
+// 1. View Mode & Data Viewing State
+export interface ViewModeState {
   mode: DeckBuilderMode;
   viewSummary: boolean;
   isReadOnly: boolean;
@@ -140,22 +141,28 @@ export interface UIState {
   setViewSummary: (view: boolean) => void;
   setIsReadOnly: (isReadOnly: boolean) => void;
   
-  // New Actions
   setViewingTeam: (data: Deck[] | null, id?: string | null, name?: string) => void;
   setViewingDeck: (data: Deck | null, id?: string | null) => void;
   setPendingImport: (deck: Deck | null) => void;
   resolvePendingImport: (strategy: "OVERWRITE" | "SAVE_AND_OVERWRITE" | "CANCEL") => void;
-  pendingSwapCard: UnifiedEntity | null;
-  setPendingSwapCard: (card: UnifiedEntity | null) => void;
 
   // Import State
   isImporting: boolean;
   setIsImporting: (isImporting: boolean) => void;
+}
 
+// 2. Drag & Drop State
+export interface DragState {
   // Global Drag State
   activeDragItem: UnifiedEntity | null;
   setActiveDragItem: (item: UnifiedEntity | null) => void;
 
+  pendingSwapCard: UnifiedEntity | null;
+  setPendingSwapCard: (card: UnifiedEntity | null) => void;
+}
+
+// 3. Inspector State
+export interface InspectorState {
   // Inspector State
   inspectorOpen: boolean;
   inspectedCard: UnifiedEntity | null;
@@ -169,12 +176,17 @@ export interface UIState {
   setHoveredItem: (item: UnifiedEntity | null) => void;
   isInspectorHovered: boolean;
   setIsInspectorHovered: (isHovered: boolean) => void;
+}
 
-  // Command Center State
+// 4. Command Center State
+export interface CommandCenterState {
   commandCenterOpen: boolean;
   openCommandCenter: () => void;
   closeCommandCenter: () => void;
+}
 
+// 5. Browser Filter State
+export interface BrowserFilterState {
   // Global Browser State (Filters)
   browserFilters: {
     schools: string[];
@@ -191,6 +203,13 @@ export interface UIState {
   toggleBrowserFilter: (type: "schools" | "ranks" | "categories" | "classes", value: string) => void;
   clearBrowserFilters: () => void;
 }
+
+/**
+ * UI State for the application.
+ * Manages view modes, filters, and transient drag/drop state.
+ * Composed of focused sub-interfaces.
+ */
+export type UIState = ViewModeState & DragState & InspectorState & CommandCenterState & BrowserFilterState;
 
 // Combined State
 export type DeckBuilderState = SoloState & TeamState & PersistenceState & UIState;

@@ -83,7 +83,7 @@ export default async function SchoolPage({ params }: SchoolPageProps) {
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-brand-primary to-brand-secondary mb-2">
             {decodedSchool} School
           </h1>
-          <p className="text-gray-400">
+          <p className="text-text-muted">
             All units practicing {decodedSchool} magic.
           </p>
         </div>

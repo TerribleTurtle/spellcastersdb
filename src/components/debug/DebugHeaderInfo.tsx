@@ -15,26 +15,26 @@ export function DebugHeaderInfo({
   apiUrl,
 }: DebugHeaderInfoProps) {
   return (
-    <div className="flex flex-wrap gap-4 mt-4 text-sm text-gray-400 font-mono">
-      <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/5">
+    <div className="flex flex-wrap gap-4 mt-4 text-sm text-text-muted font-mono">
+      <div className="flex items-center gap-2 bg-surface-dim px-3 py-1.5 rounded-full border border-border-subtle">
         <Hash size={14} className="text-brand-primary" />
         <span>
-          Schema: <span className="text-white font-bold">{buildVersion}</span>
+          Schema: <span className="text-text-primary font-bold">{buildVersion}</span>
         </span>
       </div>
 
-      <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/5">
-        <Globe size={14} className="text-blue-400" />
+      <div className="flex items-center gap-2 bg-surface-dim px-3 py-1.5 rounded-full border border-border-subtle">
+        <Globe size={14} className="text-status-info-text" />
         <span className="break-all" title={apiUrl}>
-          Source: <span className="text-white font-bold">{apiUrl}</span>
+          Source: <span className="text-text-primary font-bold">{apiUrl}</span>
         </span>
       </div>
 
-      <div className="flex items-center gap-2 bg-black/20 px-3 py-1.5 rounded-full border border-white/5">
-        <Clock size={14} className="text-yellow-400" />
+      <div className="flex items-center gap-2 bg-surface-dim px-3 py-1.5 rounded-full border border-border-subtle">
+        <Clock size={14} className="text-status-warning-text" />
         <span>
           Build Date:{" "}
-          <span className="text-white">
+          <span className="text-text-primary">
             <LocalDate iso={generatedAt} showTime />
           </span>
         </span>

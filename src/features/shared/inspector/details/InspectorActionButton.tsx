@@ -20,8 +20,8 @@ export function InspectorActionButton({
             className={cn(
                 "rounded transition-all duration-200 border",
                 isSelected
-                    ? "bg-white/10 border-white/5 text-gray-500 cursor-not-allowed"
-                    : "bg-white/5 hover:bg-brand-secondary/50 border-white/10 hover:border-brand-secondary text-white",
+                    ? "bg-surface-hover border-border-subtle text-text-dimmed cursor-not-allowed"
+                    : "bg-surface-card hover:bg-brand-secondary/50 border-border-default hover:border-brand-secondary text-text-primary",
                 className
             )}
             {...props}

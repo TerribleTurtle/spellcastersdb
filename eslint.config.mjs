@@ -14,7 +14,6 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     "*.js",
     "tools/**",
-    "e2e_backup_20260214/**",
     "scripts/**",
   ]),
 ]);

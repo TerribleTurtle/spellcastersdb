@@ -18,8 +18,8 @@ export function SpellInspector({ item, onBack, onClose }: SpellInspectorProps) {
       <EntityMechanics item={item} variant="compact" />
       
       {item.description && (
-        <div className="bg-black/20 p-3 rounded-lg border border-white/5 mt-auto">
-          <p className="text-xs text-gray-300 italic leading-relaxed text-center">
+        <div className="bg-surface-dim p-3 rounded-lg border border-border-subtle mt-auto">
+          <p className="text-xs text-text-secondary italic leading-relaxed text-center">
             &quot;{item.description}&quot;
           </p>
         </div>

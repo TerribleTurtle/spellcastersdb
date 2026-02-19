@@ -52,7 +52,7 @@ export function CardInspectorModal() {
     >
         {/* Backdrop - lighter and clickable */}
         <div 
-            className="absolute inset-0 bg-black/40 backdrop-blur-[1px] md:bg-transparent md:backdrop-blur-none animate-in fade-in duration-200 pointer-events-auto"
+            className="absolute inset-0 bg-surface-inset backdrop-blur-[1px] md:bg-transparent md:backdrop-blur-none animate-in fade-in duration-200 pointer-events-auto"
             onClick={closeInspector}
         />
         <style dangerouslySetInnerHTML={{__html: `
@@ -71,7 +71,7 @@ export function CardInspectorModal() {
             aria-modal="true"
             role="dialog"
             className={cn(
-                "relative h-[85vh] w-full bg-gray-950 border-t border-white/10 shadow-2xl overflow-y-auto custom-scrollbar flex flex-col focus:outline-none pointer-events-auto rounded-t-xl",
+                "relative h-[85vh] w-full bg-surface-deck border-t border-border-default shadow-2xl overflow-y-auto custom-scrollbar flex flex-col focus:outline-none pointer-events-auto rounded-t-xl",
                 "pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]",
                 "animate-in slide-in-from-bottom duration-300 ease-out"
             )}

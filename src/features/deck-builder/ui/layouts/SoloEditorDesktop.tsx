@@ -65,7 +65,7 @@ export function SoloEditorDesktop({
       {/* Left Column: Vault / Browser */}
       <section 
         aria-label="Unit Library"
-        className="flex-1 overflow-hidden relative transition-[flex,width] duration-300 ease-in-out xl:col-start-1 xl:row-start-2 xl:pb-0! xl:border-r xl:border-white/10"
+        className="flex-1 overflow-hidden relative transition-[flex,width] duration-300 ease-in-out xl:col-start-1 xl:row-start-2 xl:pb-0! xl:border-r xl:border-border-default"
         style={{ paddingBottom: `${footerHeight}px` }}
       >
           {pendingSwapCard && (
@@ -92,7 +92,7 @@ export function SoloEditorDesktop({
           
           {/* Inspector fills remaining space but shrink wraps if possible */}
           <div className="flex-initial shrink min-h-0 max-h-full flex flex-col">
-             <InspectorPanel className="h-auto max-h-full border border-white/10 rounded-xl shadow-lg overflow-hidden" />
+             <InspectorPanel className="h-auto max-h-full border border-border-default rounded-xl shadow-lg overflow-hidden" />
           </div>
 
           {/* Drawer fixed at bottom of column */}
@@ -110,7 +110,7 @@ export function SoloEditorDesktop({
                 onLibraryOpen={onOpenLibrary}
                 onShare={onShare}
                 hideGlobalActions={true}
-                className="w-full border border-white/10 rounded-xl shadow-lg overflow-hidden"
+                className="w-full border border-border-default rounded-xl shadow-lg overflow-hidden"
                 idSuffix="desktop"
                 forceActive={true}
             />

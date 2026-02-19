@@ -115,7 +115,7 @@ export const DraggableCard = React.memo(function DraggableCard({
       tabIndex={0}
       className={cn(
         "relative group cursor-pointer flex flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 select-none",
-        "aspect-4/5 rounded-lg overflow-hidden border border-white/10 bg-surface-card", // More compact aspect ratio
+        "aspect-4/5 rounded-lg overflow-hidden border border-border-default bg-surface-card", // More compact aspect ratio
         "hover:border-brand-primary/50 transition-[border-color,transform] hover:scale-105",
         // Actually, we want the bottom bar to be part of the card visuals.
         isDragging && "opacity-50",
@@ -129,7 +129,7 @@ export const DraggableCard = React.memo(function DraggableCard({
 }
     >
       {/* Image Area - Touch action allowed to enable scrolling */}
-      <div className="relative flex-1 overflow-hidden bg-gray-800 pointer-events-none">
+      <div className="relative flex-1 overflow-hidden bg-surface-raised pointer-events-none">
         <OptimizedCardImage
           src={getCardImageUrl(item)}
           alt={getCardAltText(item)}
@@ -139,7 +139,7 @@ export const DraggableCard = React.memo(function DraggableCard({
         
         {/* Quick Add Badge - Top Left */}
         <div 
-            className="absolute top-1 left-1 bg-black/80 p-1 rounded text-brand-accent shadow-md border border-white/10 hover:bg-brand-primary hover:text-white transition-colors z-20 pointer-events-auto"
+            className="absolute top-1 left-1 bg-surface-overlay p-1 rounded text-brand-accent shadow-md border border-border-default hover:bg-brand-primary hover:text-text-primary transition-colors z-20 pointer-events-auto"
             onClick={handleQuickAdd}
             onPointerDown={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
@@ -173,23 +173,23 @@ export const DraggableCard = React.memo(function DraggableCard({
                      // Apply colors from config manually or use inline styles if needed, but here we can map
                      spellcasterClass && CLASS_CONFIG[spellcasterClass] 
                         ? cn(CLASS_CONFIG[spellcasterClass].bg, CLASS_CONFIG[spellcasterClass].border)
-                        : "bg-slate-900 border-slate-400"
+                        : "bg-surface-main border-slate-400"
                   )}
                   onClick={(e) => e.stopPropagation()}
                   onPointerDown={(e) => e.stopPropagation()}
                 >
                   {spellcasterClass === "Conqueror" ? (
-                    <Shield size={14} className="text-red-400 scale-110" />
+                    <Shield size={14} className="text-status-danger-text scale-110" />
                   ) : spellcasterClass === "Enchanter" ? (
                     <Wand2 size={14} className="text-purple-400 scale-110" />
                   ) : spellcasterClass === "Duelist" ? (
                     <Swords size={14} className="text-amber-400 scale-110" />
                   ) : (
-                    <HelpCircle size={14} className="text-gray-400 scale-110" />
+                    <HelpCircle size={14} className="text-text-muted scale-110" />
                   )}
                 </div>
              </TooltipTrigger>
-             <TooltipContent side="bottom" className="z-50 bg-black/90 border-brand-primary/30 text-brand-primary font-bold uppercase tracking-wider text-xs">
+             <TooltipContent side="bottom" className="z-50 bg-surface-overlay-heavy border-brand-primary/30 text-brand-primary font-bold uppercase tracking-wider text-xs">
                <p>{spellcasterClass}</p>
              </TooltipContent>
            </Tooltip>
@@ -223,10 +223,10 @@ export const DraggableCard = React.memo(function DraggableCard({
 
       {/* Name Banner / Quick Add Button - Integrated */}
       <div 
-        className="absolute bottom-0 inset-x-0 min-h-[32px] lg:min-h-[40px] bg-black/90 border-t border-white/10 flex items-center justify-center px-1 py-1 z-10 transition-colors pointer-events-none"
+        className="absolute bottom-0 inset-x-0 min-h-[32px] lg:min-h-[40px] bg-surface-overlay-heavy border-t border-border-default flex items-center justify-center px-1 py-1 z-10 transition-colors pointer-events-none"
       >
         <div className="w-full flex justify-center px-1">
-          <span className="text-[10px] lg:text-xs 2xl:text-sm font-bold text-gray-200 text-center leading-tight line-clamp-2 uppercase tracking-tight wrap-break-word">
+          <span className="text-[10px] lg:text-xs 2xl:text-sm font-bold text-text-secondary text-center leading-tight line-clamp-2 uppercase tracking-tight wrap-break-word">
             {item.name}
           </span>
         </div>

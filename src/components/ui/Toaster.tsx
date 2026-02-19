@@ -5,27 +5,27 @@ import { useToastStore, ToastType } from "@/hooks/useToast";
 import { cn } from "@/lib/utils";
 
 const icons = {
-  success: <CheckCircle className="w-5 h-5 text-green-400" />,
-  error: <AlertCircle className="w-5 h-5 text-red-400" />,
-  destructive: <AlertCircle className="w-5 h-5 text-red-400" />,
-  info: <Info className="w-5 h-5 text-blue-400" />,
-  default: <Info className="w-5 h-5 text-gray-400" />,
-  warning: <AlertTriangle className="w-5 h-5 text-yellow-400" />,
+  success: <CheckCircle className="w-5 h-5 text-status-success-text" />,
+  error: <AlertCircle className="w-5 h-5 text-status-danger-text" />,
+  destructive: <AlertCircle className="w-5 h-5 text-status-danger-text" />,
+  info: <Info className="w-5 h-5 text-status-info-text" />,
+  default: <Info className="w-5 h-5 text-text-muted" />,
+  warning: <AlertTriangle className="w-5 h-5 text-status-warning-text" />,
 };
 
 const styles: Record<ToastType, string> = {
-  success: "bg-gray-900 border-green-500/20 text-green-100",
-  error: "bg-gray-900 border-red-500/20 text-red-100",
-  destructive: "bg-red-950 border-red-500/50 text-red-100",
-  info: "bg-gray-900 border-blue-500/20 text-blue-100",
-  default: "bg-gray-900 border-white/10 text-gray-100",
+  success: "bg-surface-main border-status-success-border text-status-success-text",
+  error: "bg-surface-main border-status-danger-border text-status-danger-text",
+  destructive: "bg-status-danger-muted border-status-danger-border text-status-danger-text",
+  info: "bg-surface-main border-status-info-border text-status-info-text",
+  default: "bg-surface-main border-border-default text-text-primary",
 };
 
 export function Toaster() {
   const { toasts, dismissToast } = useToastStore();
 
   return (
-    <div className="fixed top-16 right-4 left-4 md:left-auto md:top-4 md:right-4 z-[10000] flex flex-col gap-2 max-w-[420px] pointer-events-none">
+    <div className="fixed top-16 right-4 left-4 md:left-auto md:top-4 md:right-4 z-10000 flex flex-col gap-2 max-w-[420px] pointer-events-none">
       {toasts.map((toast) => (
         <div
           key={toast.id}
@@ -43,7 +43,7 @@ export function Toaster() {
           </div>
           <button
             onClick={() => dismissToast(toast.id)}
-            className="shrink-0 text-white/50 hover:text-white transition-colors"
+            className="shrink-0 text-text-primary/50 hover:text-text-primary transition-colors"
           >
             <X className="w-4 h-4" />
           </button>

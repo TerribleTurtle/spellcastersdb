@@ -31,8 +31,8 @@ export function TeamShareButton() {
             className={cn(
                 "p-2 rounded-full transition-colors flex items-center gap-2",
                 copied 
-                    ? "bg-green-500/10 text-green-400 hover:bg-green-500/20" 
-                    : "text-slate-400 hover:bg-white/5 hover:text-brand-accent"
+                    ? "bg-status-success-muted text-status-success-text hover:bg-status-success-border" 
+                    : "text-text-muted hover:bg-surface-card hover:text-brand-accent"
             )}
             title="Share Team Link"
         >

@@ -69,20 +69,20 @@ export function UnitArchive(props: UnitArchiveProps) {
       <div className="flex-1 w-full">
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <div className="text-sm text-gray-400">
+          <div className="text-sm text-text-muted">
             Showing{" "}
-            <strong className="text-white">{filteredUnits.length}</strong>{" "}
+            <strong className="text-text-primary">{filteredUnits.length}</strong>{" "}
             results
           </div>
 
-          <div className="flex items-center gap-2 bg-surface-card border border-white/5 p-1 rounded-lg">
+          <div className="flex items-center gap-2 bg-surface-card border border-border-subtle p-1 rounded-lg">
             <button
               onClick={() => setViewMode("grid")}
               className={cn(
                 "p-1.5 rounded transition-colors",
                 viewMode === "grid"
-                  ? "bg-white/10 text-white shadow-sm"
-                  : "text-gray-500 hover:text-gray-300"
+                  ? "bg-surface-hover text-text-primary shadow-sm"
+                  : "text-text-dimmed hover:text-text-secondary"
               )}
               title="Grid View"
               aria-label="Switch to Grid View"
@@ -94,8 +94,8 @@ export function UnitArchive(props: UnitArchiveProps) {
               className={cn(
                 "p-1.5 rounded transition-colors",
                 viewMode === "list"
-                  ? "bg-white/10 text-white shadow-sm"
-                  : "text-gray-500 hover:text-gray-300"
+                  ? "bg-surface-hover text-text-primary shadow-sm"
+                  : "text-text-dimmed hover:text-text-secondary"
               )}
               title="List View"
               aria-label="Switch to List View"
@@ -126,11 +126,11 @@ export function UnitArchive(props: UnitArchiveProps) {
             })}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-white/10 rounded-xl">
-            <p className="text-lg font-bold text-gray-400 mb-2">
+          <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-border-default rounded-xl">
+            <p className="text-lg font-bold text-text-muted mb-2">
               No units found
             </p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-text-faint">
               Try adjusting your search or filters.
             </p>
             <button

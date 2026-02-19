@@ -34,7 +34,7 @@ export async function generateDeckMetadata(
     return {
         title: "Deck Builder & Loadout Editor - SpellcastersDB",
         description:
-        "Create, optimize, and share your Spellcasters Chronicles decks. The ultimate card strategy tool for custom builds and loadouts.",
+        "Build and share your Spellcasters Chronicles decks.",
         keywords: [
         "Spellcasters Chronicles",
         "Deck Builder",
@@ -50,7 +50,7 @@ export async function generateDeckMetadata(
         openGraph: {
         title: "Deck Builder & Loadout Editor - SpellcastersDB",
         description:
-            "Create, optimize, and share your Spellcasters Chronicles decks. The ultimate card strategy tool for custom builds and loadouts.",
+            "Build and share your Spellcasters Chronicles decks.",
         type: "website",
         images: ["/og-forge.png"],
         },
@@ -58,7 +58,7 @@ export async function generateDeckMetadata(
         card: "summary_large_image",
         title: "Deck Builder & Loadout Editor - SpellcastersDB",
         description:
-            "Create, optimize, and share your Spellcasters Chronicles decks. The ultimate card strategy tool for custom builds and loadouts.",
+            "Build and share your Spellcasters Chronicles decks.",
         },
     };
 }

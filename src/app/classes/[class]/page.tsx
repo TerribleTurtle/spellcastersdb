@@ -65,7 +65,7 @@ export default async function ClassPage({ params }: ClassPageProps) {
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-brand-accent to-brand-primary mb-2">
             {decodedClass}
           </h1>
-          <p className="text-gray-400">
+          <p className="text-text-muted">
             All {decodedClass} class spellcasters.
           </p>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, SyntheticEvent } from "react";
 
 import Image, { ImageProps } from "next/image";
 
@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 interface GameImageProps extends Omit<ImageProps, "onError"> {
   // Optional: Add specific props if needed, e.g. disableFallback
   fallbackSrc?: string;
-  onError?: (e: React.SyntheticEvent<HTMLImageElement, Event>) => void;
+  onError?: (e: SyntheticEvent<HTMLImageElement, Event>) => void;
 }
 
 export function GameImage({
@@ -34,7 +34,7 @@ export function GameImage({
     setRetryCount(0);
   }
 
-  const handleError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     // If we've already failed or it's not a string src we can manipulate, just fail
     if (typeof imgSrc !== "string") {
       setHasError(true);
@@ -49,17 +49,13 @@ export function GameImage({
     if (retryCount === 0) {
       if (imgSrc.endsWith(".png")) {
         const newSrc = imgSrc.replace(/\.png$/, ".webp");
-        console.warn(
-          `[GameImage] Failed to load ${imgSrc}, retrying with ${newSrc}`
-        );
+        // Silent retry
         setImgSrc(newSrc);
         setRetryCount(1);
         return;
       } else if (imgSrc.endsWith(".webp")) {
         const newSrc = imgSrc.replace(/\.webp$/, ".png");
-        console.warn(
-          `[GameImage] Failed to load ${imgSrc}, retrying with ${newSrc}`
-        );
+        // Silent retry
         setImgSrc(newSrc);
         setRetryCount(1);
         return;

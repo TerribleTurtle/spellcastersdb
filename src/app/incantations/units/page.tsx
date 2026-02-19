@@ -31,7 +31,7 @@ export default async function UnitsIndexPage() {
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-brand-accent to-brand-primary mb-2">
             The Archive
           </h1>
-          <p className="text-gray-400">
+          <p className="text-text-muted">
             Search and filter the complete unit database.
           </p>
         </div>

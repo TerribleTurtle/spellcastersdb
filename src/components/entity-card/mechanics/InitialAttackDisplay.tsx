@@ -28,7 +28,7 @@ export function InitialAttackDisplay({ initialAttack, isCompact, showDescription
       <div className="flex flex-col">
         <span className={cn("text-orange-200 font-bold leading-tight", isCompact ? "text-xs" : "text-sm")}>
           +{initialAttack.damage_flat} Initial Dmg vs{" "}
-          <span className="text-white">
+          <span className="text-text-primary">
             {initialAttack.target_types.map(formatTargetName).join(", ")}
           </span>
         </span>

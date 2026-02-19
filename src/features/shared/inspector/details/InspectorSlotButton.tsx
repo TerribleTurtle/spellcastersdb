@@ -22,8 +22,8 @@ export function InspectorSlotButton({
             className={cn(
                 "py-2 text-xs rounded transition-colors flex flex-col items-center justify-center",
                 isOccupiedBySelf
-                    ? "bg-white/10 border-white/5 text-gray-500 cursor-not-allowed"
-                    : "bg-white/5 hover:bg-brand-secondary/50 border border-white/10 hover:border-brand-secondary text-white"
+                    ? "bg-surface-hover border-border-subtle text-text-dimmed cursor-not-allowed"
+                    : "bg-surface-card hover:bg-brand-secondary/50 border border-border-default hover:border-brand-secondary text-text-primary"
             )}
         >
             <span>Slot {index + 1}</span>

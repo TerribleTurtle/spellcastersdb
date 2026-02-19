@@ -35,8 +35,8 @@ export function BetaBanner() {
   return (
     <>
       <div className="animate-in fade-in slide-in-from-top-2 duration-500">
-        <div className="flex items-center gap-2 bg-linear-to-r from-yellow-900/40 to-orange-900/40 backdrop-blur-md rounded-full border border-yellow-500/20 px-3 py-1.5 shadow-sm hover:bg-yellow-900/60 transition-colors">
-          <AlertTriangle className="text-yellow-400 shrink-0" size={14} />
+        <div className="flex items-center gap-2 bg-linear-to-r from-yellow-900/40 to-orange-900/40 backdrop-blur-md rounded-full border border-status-warning-border px-3 py-1.5 shadow-sm hover:bg-yellow-900/60 transition-colors">
+          <AlertTriangle className="text-status-warning-text shrink-0" size={14} />
           <span className="text-xs font-bold text-yellow-100 whitespace-nowrap hidden sm:inline">
             Beta Data: Not Final
           </span>
@@ -45,7 +45,7 @@ export function BetaBanner() {
           </span>
           <button
             onClick={handleDismiss}
-            className="text-yellow-400/80 hover:text-yellow-100 transition-colors ml-1 p-2 -mr-2 rounded-full hover:bg-white/5"
+            className="text-status-warning-text/80 hover:text-yellow-100 transition-colors ml-1 p-2 -mr-2 rounded-full hover:bg-surface-card"
             aria-label="Dismiss banner"
           >
             <X size={14} />

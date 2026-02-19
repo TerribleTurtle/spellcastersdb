@@ -30,11 +30,11 @@ export function EntityImage({ entity, className, alt }: EntityImageProps) {
     return (
       <div
         className={cn(
-          "flex items-center justify-center bg-white/5 border border-white/10 rounded-lg",
+          "flex items-center justify-center bg-surface-card border border-border-default rounded-lg",
           className
         )}
       >
-        <ImageOff className="w-1/3 h-1/3 text-white/20" />
+        <ImageOff className="w-1/3 h-1/3 text-text-primary/20" />
       </div>
     );
   }
@@ -64,7 +64,7 @@ export function EntityImage({ entity, className, alt }: EntityImageProps) {
       />
 
       {/* Loading Skeleton */}
-      {!loaded && <div className="absolute inset-0 bg-white/5 animate-pulse" />}
+      {!loaded && <div className="absolute inset-0 bg-surface-card animate-pulse" />}
     </div>
   );
 }

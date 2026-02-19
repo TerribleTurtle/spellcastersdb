@@ -139,7 +139,7 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
       
       hideGlobalActions={hideGlobalActions}
       className={cn(
-          activeSlot === index ? "border-b border-brand-primary" : "border-b border-white/5",
+          activeSlot === index ? "border-b border-brand-primary" : "border-b border-border-subtle",
           "border-t shadow-lg pointer-events-auto first:rounded-t-xl last:rounded-b-xl",
           // Removed theme?.drawer from here to prevent overriding background opacity
       )}

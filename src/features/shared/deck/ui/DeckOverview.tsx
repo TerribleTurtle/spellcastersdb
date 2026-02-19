@@ -28,7 +28,7 @@ export function DeckOverview({ deck, className, size = "sm", onInspect, onStopIn
 
       {/* Separator - Horizontal on Mobile, Vertical on Desktop */}
       <div className={cn(
-        "bg-white/10 mx-2",
+        "bg-surface-hover mx-2",
         "w-16 h-px md:w-px md:h-16", // Default sizes
         size === "lg" && "hidden md:block md:h-32" 
       )} />
@@ -52,7 +52,7 @@ export function DeckOverview({ deck, className, size = "sm", onInspect, onStopIn
 
       {/* Separator */}
       <div className={cn(
-        "bg-white/10 mx-2",
+        "bg-surface-hover mx-2",
          "w-16 h-px md:w-px md:h-16",
         size === "lg" && "hidden md:block md:h-32"
       )} />
@@ -88,19 +88,19 @@ function VisualSlot({ item, type, isEmpty, label, size, onInspect, onStopInspect
     return (
       <div
         className={cn(
-          "rounded-lg border-2 border-dashed border-white/10 bg-white/5 flex flex-col items-center justify-center gap-2 transition-all",
+          "rounded-lg border-2 border-dashed border-border-default bg-surface-card flex flex-col items-center justify-center gap-2 transition-all",
           type === "spellcaster"
-        ? (isLarge ? "w-16 h-24 md:w-32 md:h-48 rounded-xl shadow-lg border-2 border-brand-primary" : "w-16 h-22 rounded-lg border border-white/20")
-        : (isLarge ? "w-12 h-18 md:w-20 md:h-32 rounded-lg shadow-md border border-white/20" : "w-12 h-18 rounded border border-white/10")
+        ? (isLarge ? "w-16 h-24 md:w-32 md:h-48 rounded-xl shadow-lg border-2 border-brand-primary" : "w-16 h-22 rounded-lg border border-border-strong")
+        : (isLarge ? "w-12 h-18 md:w-20 md:h-32 rounded-lg shadow-md border border-border-strong" : "w-12 h-18 rounded border border-border-default")
         )}
       >
         {type === "spellcaster" && (
-          <p className="text-[9px] uppercase font-bold text-gray-600 text-center px-1">
+          <p className="text-[9px] uppercase font-bold text-text-faint text-center px-1">
             Choose Spellcaster
           </p>
         )}
         {label && (
-          <span className="text-[9px] font-bold text-gray-700 uppercase tracking-widest">
+          <span className="text-[9px] font-bold text-text-faint uppercase tracking-widest">
             {label}
           </span>
         )}
@@ -112,7 +112,7 @@ function VisualSlot({ item, type, isEmpty, label, size, onInspect, onStopInspect
     <div className="bg-transparent group">
       <div
         className={cn(
-          "relative rounded-lg overflow-hidden border border-white/10 bg-gray-900 group shadow-lg transition-transform duration-300",
+          "relative rounded-lg overflow-hidden border border-border-default bg-surface-main group shadow-lg transition-transform duration-300",
           isLarge && "hover:scale-105 hover:z-10 hover:shadow-brand-primary/20",
           type === "spellcaster"
             ? (isLarge ? "w-24 h-36 md:w-32 md:h-48 border-brand-primary ring-2 ring-brand-primary/20" : "w-16 h-22 md:w-20 md:h-28 border-brand-primary shadow-brand-primary/20")
@@ -143,19 +143,19 @@ function VisualSlot({ item, type, isEmpty, label, size, onInspect, onStopInspect
 
         {/* Badges */}
         {item.category === "Titan" && (
-          <div className="absolute top-1 left-1 bg-black/60 px-1 py-0.5 rounded text-[8px] font-mono text-brand-accent backdrop-blur-sm">
+          <div className="absolute top-1 left-1 bg-surface-scrim px-1 py-0.5 rounded text-[8px] font-mono text-brand-accent backdrop-blur-sm">
             TITAN
           </div>
         )}
         {"rank" in item && item.rank && (
-          <div className="absolute top-1 left-1 bg-black/60 px-1 py-0.5 rounded text-[8px] font-mono text-brand-accent backdrop-blur-sm">
+          <div className="absolute top-1 left-1 bg-surface-scrim px-1 py-0.5 rounded text-[8px] font-mono text-brand-accent backdrop-blur-sm">
             {item.rank}
           </div>
         )}
 
         {/* Name */}
-        <div className="absolute bottom-0 inset-x-0 bg-surface-main/90 border-t border-white/10 py-1 px-0.5">
-          <p className="text-[9px] font-bold text-center text-gray-200 truncate leading-tight">
+        <div className="absolute bottom-0 inset-x-0 bg-surface-main/90 border-t border-border-default py-1 px-0.5">
+          <p className="text-[9px] font-bold text-center text-text-secondary truncate leading-tight">
             {item.name}
           </p>
         </div>

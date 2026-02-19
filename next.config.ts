@@ -4,14 +4,31 @@ const nextConfig: NextConfig = {
   allowedDevOrigins: ["localhost:3000", "192.168.2.202:3000", "192.168.2.202"],
   async redirects() {
     return [
+      /*
+      // PREVIOUSLY: Redirected deck-builder to home. 
+      // NOW: We want /deck-builder to be the app, and / to be the landing.
+      // We also need to catch legacy shared links on /?d=
+      */
       {
-        source: "/deck-builder",
-        destination: "/",
+        source: '/',
+        has: [
+          {
+            type: 'query',
+            key: 'd',
+          },
+        ],
+        destination: '/deck-builder',
         permanent: true,
       },
       {
-        source: "/deck_builder",
-        destination: "/",
+        source: '/',
+        has: [
+          {
+            type: 'query',
+            key: 'team',
+          },
+        ],
+        destination: '/deck-builder',
         permanent: true,
       },
       {
@@ -48,6 +65,14 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      // Temporary: bust cached 301 from old /deck-builder -> / redirect.
+      // Safe to remove after ~2 weeks post-deploy.
+      {
+        source: '/deck-builder',
+        headers: [
+          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+        ],
+      },
       {
         source: "/:path*",
         headers: [

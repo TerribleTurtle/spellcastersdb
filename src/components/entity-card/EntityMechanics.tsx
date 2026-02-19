@@ -52,23 +52,23 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
   return (
     <div className={cn("space-y-2", !isCompact && "pt-2")}>
       {!isCompact && (
-        <h3 className="text-xs font-bold text-gray-500 uppercase tracking-widest px-1">
+        <h3 className="text-xs font-bold text-text-dimmed uppercase tracking-widest px-1">
           Mechanics
         </h3>
       )}
 
       {/* Pierce Mechanic */}
       {mechanics.pierce && (
-        <div className={cn("flex items-center gap-1.5 rounded bg-blue-500/10 border border-blue-500/20 p-2 text-blue-200")}>
-            <ArrowRight size={isCompact ? 13 : 16} className="text-blue-400 shrink-0" />
+        <div className={cn("flex items-center gap-1.5 rounded bg-status-info-muted border border-status-info-border p-2 text-status-info-text")}>
+            <ArrowRight size={isCompact ? 13 : 16} className="text-status-info-text shrink-0" />
             <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm")}>Target Pierce</span>
         </div>
       )}
 
       {/* Stealth Mechanic */}
       {mechanics.stealth && (
-        <div className={cn("flex items-center gap-1.5 rounded bg-zinc-700/50 border border-zinc-600 p-2 text-zinc-300")}>
-            <Eye size={isCompact ? 13 : 16} className="text-zinc-400 shrink-0" />
+        <div className={cn("flex items-center gap-1.5 rounded bg-surface-dim border border-border-default p-2 text-text-secondary")}>
+            <Eye size={isCompact ? 13 : 16} className="text-text-muted shrink-0" />
             <div className="flex flex-col">
                 <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm")}>Stealth</span>
                 {shouldShowDescription && (
@@ -83,8 +83,8 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
 
       {/* Cleave Mechanic */}
       {mechanics.cleave && (
-        <div className={cn("flex items-center gap-1.5 rounded bg-red-900/20 border border-red-500/30 p-2 text-red-200")}>
-            <Sword size={isCompact ? 13 : 16} className="text-red-400/80 shrink-0 rotate-90" />
+        <div className={cn("flex items-center gap-1.5 rounded bg-status-danger-muted border border-status-danger-border p-2 text-status-danger-text")}>
+            <Sword size={isCompact ? 13 : 16} className="text-status-danger-text/80 shrink-0 rotate-90" />
             <div className="flex flex-col">
                 <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm")}>Cleave</span>
                 {shouldShowDescription && typeof mechanics.cleave === 'object' && (
@@ -138,14 +138,14 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
           className={cn(
             "flex items-center gap-1.5 rounded",
             isCompact 
-                ? "bg-green-500/10 border border-green-500/20 p-1" 
-                : "bg-green-500/10 border border-green-500/20 p-3 gap-3 transition-colors hover:bg-green-500/20"
+                ? "bg-status-success-muted border border-status-success-border p-1" 
+                : "bg-status-success-muted border border-status-success-border p-3 gap-3 transition-colors hover:bg-status-success-border"
           )}
         >
-          <Shield size={isCompact ? 13 : 16} className="text-green-400 shrink-0" />
+          <Shield size={isCompact ? 13 : 16} className="text-status-success-text shrink-0" />
           <div className="flex flex-col">
-            <span className={cn("text-green-200 font-bold leading-tight", isCompact ? "text-xs md:text-sm" : "text-sm")}>
-              {((1 - mod.multiplier) * 100).toFixed(1).replace(/\.0$/, "")}% Resistance vs <span className="text-white">{formatTargetName(mod.source_type)}</span>
+            <span className={cn("text-status-success-text font-bold leading-tight", isCompact ? "text-xs md:text-sm" : "text-sm")}>
+              {((1 - mod.multiplier) * 100).toFixed(1).replace(/\.0$/, "")}% Resistance vs <span className="text-text-primary">{formatTargetName(mod.source_type)}</span>
             </span>
             {mod.condition && (
                 <span className={cn("text-green-300/50 italic leading-none", isCompact ? "text-[9px] md:text-[10px]" : "text-xs")}>

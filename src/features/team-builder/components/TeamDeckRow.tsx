@@ -36,14 +36,14 @@ export const TeamDeckRow = memo(function TeamDeckRow({
   const { isValid, errors } = validateDeck(deck);
 
   return (
-    <div className="bg-surface-card border border-white/10 rounded-xl overflow-hidden hover:border-brand-primary/30 transition-all group">
+    <div className="bg-surface-card border border-border-default rounded-xl overflow-hidden hover:border-brand-primary/30 transition-all group">
       <div className="flex flex-col lg:flex-row h-full">
         {/* Header / Info Column */}
         <button
           type="button"
           className={cn(
-            "w-full lg:w-64 bg-black/20 border-b lg:border-b-0 lg:border-r border-white/5 p-2 md:p-3 flex flex-col justify-between relative overflow-hidden text-left",
-            !isReadOnly && "cursor-pointer hover:bg-white/5 transition-colors"
+            "w-full lg:w-64 bg-surface-dim border-b lg:border-b-0 lg:border-r border-border-subtle p-2 md:p-3 flex flex-col justify-between relative overflow-hidden text-left",
+            !isReadOnly && "cursor-pointer hover:bg-surface-card transition-colors"
           )}
           onClick={!isReadOnly ? onEdit : undefined}
           disabled={isReadOnly}
@@ -52,7 +52,7 @@ export const TeamDeckRow = memo(function TeamDeckRow({
             <div className="absolute inset-0 z-0 opacity-20 pointer-events-none">
               <GameImage
                 src={getCardImageUrl(deck.spellcaster)}
-                alt=""
+                alt={deck.spellcaster.name}
                 fill
                 className="object-cover object-top"
               />
@@ -70,8 +70,8 @@ export const TeamDeckRow = memo(function TeamDeckRow({
                 className={cn(
                   "flex items-center justify-center w-5 h-5 rounded-full border-2",
                   isValid
-                    ? "bg-green-500 text-white border-green-400"
-                    : "bg-red-500 text-white border-red-400"
+                    ? "bg-green-500 text-text-primary border-green-400"
+                    : "bg-red-500 text-text-primary border-red-400"
                 )}
                 title={isValid ? "Deck Valid" : errors.join("\n")}
                 aria-label={isValid ? "Deck Valid" : "Deck Invalid"}
@@ -83,7 +83,7 @@ export const TeamDeckRow = memo(function TeamDeckRow({
                 )}
               </div>
             </div>
-            <h3 className="text-lg font-black text-white uppercase tracking-wider truncate max-w-[calc(100vw-6rem)] lg:max-w-full">
+            <h3 className="text-lg font-black text-text-primary uppercase tracking-wider truncate max-w-[calc(100vw-6rem)] lg:max-w-full">
               Slot {index + 1}
             </h3>
             <p className="text-brand-accent text-xs font-bold uppercase tracking-widest mt-1">
@@ -94,7 +94,7 @@ export const TeamDeckRow = memo(function TeamDeckRow({
           {!isReadOnly && (
             <div className="mt-4 flex gap-2 relative z-10">
               <div
-                className="w-full py-2 rounded bg-brand-primary text-white text-xs font-bold uppercase tracking-wider hover:bg-brand-primary/80 transition-colors text-center"
+                className="w-full py-2 rounded bg-brand-primary text-brand-dark text-xs font-bold uppercase tracking-wider hover:bg-brand-primary/80 transition-colors text-center"
               >
                 Edit
               </div>

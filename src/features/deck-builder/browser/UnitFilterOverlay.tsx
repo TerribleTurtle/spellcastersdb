@@ -19,14 +19,14 @@ export function UnitFilterOverlay({
   const onClear = useDeckStore((state) => state.clearBrowserFilters);
 
   return (
-    <div className="absolute top-32 left-0 right-0 z-20 bg-surface-main border-b border-white/10 shadow-2xl animate-in slide-in-from-top-2 p-4 space-y-6">
+    <div className="absolute top-32 left-0 right-0 z-20 bg-surface-main border-b border-border-default shadow-2xl animate-in slide-in-from-top-2 p-4 space-y-6">
       <div className="flex justify-between items-center mb-2">
-        <h3 className="text-xs font-bold text-white uppercase">
+        <h3 className="text-xs font-bold text-text-primary uppercase">
           Active Filters
         </h3>
         <button
           onClick={onClose}
-          className="text-gray-500 hover:text-white"
+          className="text-text-dimmed hover:text-text-primary"
         >
           <X size={16} />
         </button>
@@ -62,16 +62,16 @@ export function UnitFilterOverlay({
         </div>
       </div>
 
-      <div className="flex justify-end pt-4 border-t border-white/5">
+      <div className="flex justify-end pt-4 border-t border-border-subtle">
         <button
           onClick={onClear}
-          className="text-xs text-red-400 hover:text-red-300 mr-4"
+          className="text-xs text-status-danger-text hover:text-red-300 mr-4"
         >
           Clear All
         </button>
         <button
           onClick={onClose}
-          className="bg-brand-primary text-white px-6 py-2 rounded text-xs font-bold uppercase tracking-wider hover:bg-brand-primary/80"
+          className="bg-brand-primary text-brand-dark px-6 py-2 rounded text-xs font-bold uppercase tracking-wider hover:bg-brand-primary/80"
         >
           Done
         </button>

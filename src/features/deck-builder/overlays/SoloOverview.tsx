@@ -101,9 +101,9 @@ export function SoloOverview({
     <>
       <div className="flex flex-col bg-surface-main h-auto rounded-xl w-full">
         {/* Header */}
-        <div className="flex flex-col items-center justify-center p-2 bg-surface-main z-10 gap-1 shrink-0 border-b border-white/5 w-full relative">
+        <div className="flex flex-col items-center justify-center p-2 bg-surface-main z-10 gap-1 shrink-0 border-b border-border-subtle w-full relative">
           <div className="flex items-center gap-2 group text-center w-full px-4 justify-center">
-              <h1 className="text-lg md:text-3xl font-black text-white uppercase tracking-wider line-clamp-2 w-full text-center">
+              <h1 className="text-lg md:text-3xl font-black text-text-primary uppercase tracking-wider line-clamp-2 w-full text-center">
                 {deck.name || "Untitled Deck"}
               </h1>
           </div>
@@ -114,7 +114,7 @@ export function SoloOverview({
               <button
                 onClick={() => onCreateTeam(deck)}
                 data-testid="create-team-btn"
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-accent text-white hover:bg-brand-accent/90 transition-all text-[10px] font-bold uppercase tracking-wider shadow-lg"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-accent text-text-primary hover:bg-brand-accent/90 transition-all text-[10px] font-bold uppercase tracking-wider shadow-lg"
               >
                 <Users size={12} />
                 Create Team
@@ -124,10 +124,10 @@ export function SoloOverview({
         </div>
 
         {/* Main Content - Centered Visual Display */}
-        <div className="overflow-y-auto p-1 md:p-8 flex flex-col items-center bg-black/20 shrink-0">
+        <div className="overflow-y-auto p-1 md:p-8 flex flex-col items-center bg-surface-dim shrink-0">
           <div className="flex flex-col items-center gap-2 max-w-5xl w-full">
             {/* Horizontal Deck Layout */}
-            <div className="w-full bg-surface-card border border-white/10 rounded-xl p-2 md:p-10 shadow-2xl relative overflow-hidden group">
+            <div className="w-full bg-surface-card border border-border-default rounded-xl p-2 md:p-10 shadow-2xl relative overflow-hidden group">
               {/* Share Button - Absolute Top Right */}
                <button
                   onClick={handleShare}
@@ -135,8 +135,8 @@ export function SoloOverview({
                   className={cn(
                       "absolute top-2 right-2 z-20 p-2 rounded-full border transition-all shadow-lg",
                        copied
-                      ? "bg-green-500 text-white border-green-500"
-                      : "bg-black/40 border-white/10 text-white hover:bg-brand-primary hover:border-brand-primary"
+                      ? "bg-status-success text-brand-dark border-status-success-border"
+                      : "bg-surface-inset border-border-default text-text-primary hover:bg-brand-primary hover:border-brand-primary hover:text-brand-dark"
                   )}
                   title="Share Deck"
                >
@@ -148,8 +148,8 @@ export function SoloOverview({
                 className={cn(
                   "absolute top-2 left-2 z-20 flex items-center justify-center w-8 h-8 rounded-full border-2 shadow-lg backdrop-blur-sm",
                   isValid
-                    ? "bg-green-500 text-white border-green-400"
-                    : "bg-red-500 text-white border-red-400"
+                    ? "bg-status-success text-brand-dark border-status-success-border"
+                    : "bg-status-danger text-text-primary border-status-danger-border"
                 )}
                 title={isValid ? "Deck Valid" : errors.join("\n")}
                 aria-label={isValid ? "Deck Valid" : "Deck Invalid"}
@@ -165,7 +165,7 @@ export function SoloOverview({
                 <div className="absolute inset-0 opacity-10 pointer-events-none">
                   <GameImage
                     src={getCardImageUrl(deck.spellcaster)}
-                    alt=""
+                    alt={deck.spellcaster.name}
                     fill
                     className="object-cover"
                   />
@@ -186,11 +186,11 @@ export function SoloOverview({
         </div>
 
         {/* Footer Action */}
-        <div className="p-4 border-t border-white/10 flex justify-center bg-surface-main shrink-0 gap-3">
+        <div className="p-4 border-t border-border-default flex justify-center bg-surface-main shrink-0 gap-3">
           {onBack && (
             <button
               onClick={onBack}
-              className="px-6 py-3 border border-white/10 text-gray-400 font-bold uppercase tracking-widest rounded-lg hover:text-white hover:bg-white/5 transition-all text-sm"
+              className="px-6 py-3 border border-border-default text-text-muted font-bold uppercase tracking-widest rounded-lg hover:text-text-primary hover:bg-surface-card transition-all text-sm"
             >
               Close
             </button>
@@ -200,7 +200,7 @@ export function SoloOverview({
           {existingId ? (
             <button
               onClick={handleEditSafe}
-              className="px-6 md:px-8 py-3 bg-brand-primary text-white font-black uppercase tracking-widest rounded-lg shadow-lg hover:bg-brand-primary/90 hover:scale-105 transition-all flex items-center gap-2 text-xs md:text-sm"
+              className="px-6 md:px-8 py-3 bg-brand-primary text-brand-dark font-black uppercase tracking-widest rounded-lg shadow-lg hover:bg-brand-primary/90 hover:scale-105 transition-all flex items-center gap-2 text-xs md:text-sm"
             >
               <Edit size={16} />
               Open from Collection
@@ -212,7 +212,7 @@ export function SoloOverview({
                 <button
                   onClick={handleSaveClick}
                   data-testid="save-deck-btn"
-                  className="px-6 md:px-8 py-3 bg-brand-primary text-white font-black uppercase tracking-widest rounded-lg shadow-lg hover:bg-brand-primary/90 hover:scale-105 transition-all flex items-center gap-2 text-xs md:text-sm"
+                  className="px-6 md:px-8 py-3 bg-brand-primary text-brand-dark font-black uppercase tracking-widest rounded-lg shadow-lg hover:bg-brand-primary/90 hover:scale-105 transition-all flex items-center gap-2 text-xs md:text-sm"
                 >
                   <Users size={16} />
                   Save
@@ -225,8 +225,8 @@ export function SoloOverview({
                 className={cn(
                   "px-6 md:px-10 py-3 font-black uppercase tracking-widest rounded-lg shadow-lg transition-all flex items-center gap-2 text-xs md:text-sm",
                   isReadOnly
-                    ? "bg-surface-card text-gray-300 border border-white/10 hover:bg-white/10 hover:text-white"
-                    : "bg-brand-primary text-white hover:bg-brand-primary/90 hover:scale-105"
+                    ? "bg-surface-card text-text-secondary border border-border-default hover:bg-surface-hover hover:text-text-primary"
+                    : "bg-brand-primary text-brand-dark hover:bg-brand-primary/90 hover:scale-105"
                 )}
               >
                 <Edit size={16} />

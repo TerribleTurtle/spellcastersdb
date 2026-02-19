@@ -18,11 +18,11 @@ export function CommandCenterSidebar({
   onDeselectAll,
 }: CommandCenterSidebarProps) {
   return (
-    <div className="md:col-span-3 p-6 space-y-6 border-r border-white/10 overflow-y-auto bg-gray-900/50">
+    <div className="md:col-span-3 p-6 space-y-6 border-r border-border-default overflow-y-auto bg-surface-main/50">
       {/* Mode Switcher - Hide when importing */}
       {!isImporting && !selectionMode && (
-        <div className="p-4 bg-white/5 rounded-lg border border-white/5 flex flex-col gap-3">
-          <span className="text-xs font-bold uppercase tracking-widest text-gray-400">
+        <div className="p-4 bg-surface-card rounded-lg border border-border-subtle flex flex-col gap-3">
+          <span className="text-xs font-bold uppercase tracking-widest text-text-muted">
             Builder Mode
           </span>
 
@@ -33,8 +33,8 @@ export function CommandCenterSidebar({
               className={cn(
                 "flex items-center justify-between py-3 px-4 text-xs font-bold uppercase rounded border transition-all",
                 mode === "SOLO"
-                  ? "bg-brand-primary text-white border-brand-primary shadow-sm"
-                  : "bg-black/40 text-gray-400 border-white/10 hover:text-white hover:border-white/30"
+                  ? "bg-brand-primary text-brand-dark border-brand-primary shadow-sm"
+                  : "bg-surface-inset text-text-muted border-border-default hover:text-text-primary hover:border-border-strong"
               )}
             >
               <span>Solo Deck</span>
@@ -48,8 +48,8 @@ export function CommandCenterSidebar({
               className={cn(
                 "flex items-center justify-between py-3 px-4 text-xs font-bold uppercase rounded border transition-all",
                 mode === "TEAM"
-                  ? "bg-brand-primary text-white border-brand-primary shadow-sm"
-                  : "bg-black/40 text-gray-400 border-white/10 hover:text-white hover:border-white/30"
+                  ? "bg-brand-primary text-brand-dark border-brand-primary shadow-sm"
+                  : "bg-surface-inset text-text-muted border-border-default hover:text-text-primary hover:border-border-strong"
               )}
             >
               <span>Team Roster</span>
@@ -69,20 +69,20 @@ export function CommandCenterSidebar({
           </span>
           <button
             onClick={onSelectAll}
-            className="w-full py-2 text-xs font-bold text-white bg-white/5 hover:bg-white/10 rounded transition-colors"
+            className="w-full py-2 text-xs font-bold text-text-primary bg-surface-card hover:bg-surface-hover rounded transition-colors"
           >
             Select All
           </button>
           <button
             onClick={onDeselectAll}
-            className="w-full py-2 text-xs font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded transition-colors"
+            className="w-full py-2 text-xs font-bold text-text-muted hover:text-text-primary hover:bg-surface-card rounded transition-colors"
           >
             Deselect All
           </button>
         </div>
       )}
 
-      <div className="pt-4 text-[10px] text-gray-400 text-center leading-relaxed border-t border-white/5 mt-auto">
+      <div className="pt-4 text-[10px] text-text-muted text-center leading-relaxed border-t border-border-subtle mt-auto">
         {selectionMode ? (
           <p>Select items to delete them in bulk.</p>
         ) : (

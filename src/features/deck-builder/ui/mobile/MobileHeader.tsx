@@ -18,7 +18,7 @@ interface MobileHeaderProps {
 export function MobileHeader({ mode, onSetMode, onShare, onClear, onOpenLibrary }: MobileHeaderProps) {
 
   return (
-    <header data-testid="mobile-header" className="h-14 flex items-center justify-between px-4 bg-surface-main/95 backdrop-blur-sm border-b border-white/10 shrink-0 sticky top-0 z-50">
+    <header data-testid="mobile-header" className="h-14 flex items-center justify-between px-4 bg-surface-main/95 backdrop-blur-sm border-b border-border-default shrink-0 sticky top-0 z-50">
       {/* Left: Library */}
       <LibraryButton
           onClick={onOpenLibrary}
@@ -26,14 +26,14 @@ export function MobileHeader({ mode, onSetMode, onShare, onClear, onOpenLibrary 
       />
 
       {/* Center: Mode Switcher */}
-      <div className="flex bg-black/30 p-1 rounded-lg border border-white/5">
+      <div className="flex bg-surface-dim p-1 rounded-lg border border-border-subtle">
         <button
           onClick={() => onSetMode("SOLO")}
           className={cn(
             "px-4 py-1.5 text-xs font-bold uppercase rounded transition-all",
             mode === "SOLO" 
-              ? "bg-brand-primary text-white shadow-sm" 
-              : "text-gray-400 hover:text-gray-300"
+              ? "bg-brand-primary text-brand-dark shadow-sm" 
+              : "text-text-muted hover:text-text-secondary"
           )}
         >
           Solo
@@ -43,8 +43,8 @@ export function MobileHeader({ mode, onSetMode, onShare, onClear, onOpenLibrary 
           className={cn(
             "px-4 py-1.5 text-xs font-bold uppercase rounded transition-all",
             mode === "TEAM" 
-              ? "bg-brand-primary text-white shadow-sm" 
-              : "text-gray-400 hover:text-gray-300"
+              ? "bg-brand-primary text-brand-dark shadow-sm" 
+              : "text-text-muted hover:text-text-secondary"
           )}
         >
           Team
@@ -57,7 +57,7 @@ export function MobileHeader({ mode, onSetMode, onShare, onClear, onOpenLibrary 
            variant="ghost"
            size="icon"
            onClick={onShare}
-           className="text-gray-400 hover:text-white rounded-full hover:bg-white/10"
+           className="text-text-muted hover:text-text-primary rounded-full hover:bg-surface-hover"
            title="Share"
            aria-label="Share deck"
         >
@@ -67,7 +67,7 @@ export function MobileHeader({ mode, onSetMode, onShare, onClear, onOpenLibrary 
            variant="ghost"
            size="icon"
            onClick={onClear}
-           className="-mr-1 text-gray-400 hover:text-white rounded-full hover:bg-white/10"
+           className="-mr-1 text-text-muted hover:text-text-primary rounded-full hover:bg-surface-hover"
            title="New Deck"
            aria-label="Create a new deck"
         >

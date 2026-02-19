@@ -55,8 +55,8 @@ export function TeamOverview({
       {/* TeamHeader removed - Unified into Global Navbar */}
       {/* UPDATE: Added Back for Mobile Context in Overlay */}
      
-      <div className="shrink-0 p-4 pb-2 text-center border-b border-white/5 relative">
-             <h2 className="text-xl md:text-3xl font-black text-white uppercase tracking-wider line-clamp-2 max-w-xs md:max-w-xl mx-auto">
+      <div className="shrink-0 p-4 pb-2 text-center border-b border-border-subtle relative">
+             <h2 className="text-xl md:text-3xl font-black text-text-primary uppercase tracking-wider line-clamp-2 max-w-xs md:max-w-xl mx-auto">
                 {teamName || "Untitled Team"}
              </h2>
 
@@ -66,8 +66,8 @@ export function TeamOverview({
                 className={cn(
                     "absolute top-1/2 -translate-y-1/2 right-4 z-20 p-2 rounded-full border transition-all shadow-lg",
                      copied
-                    ? "bg-green-500 text-white border-green-500"
-                    : "bg-surface-card border-white/10 text-white hover:bg-brand-primary hover:border-brand-primary"
+                    ? "bg-green-500 text-text-primary border-green-500"
+                    : "bg-surface-card border-border-default text-text-primary hover:bg-brand-primary hover:border-brand-primary"
                 )}
                 title="Share Team"
              >
@@ -76,7 +76,7 @@ export function TeamOverview({
       </div>
 
       {/* Main Content - Scrollable List of Horizontal Decks */}
-      <div className="overflow-y-auto p-2 md:p-4 space-y-2 bg-black/20 shrink-0">
+      <div className="overflow-y-auto p-2 md:p-4 space-y-2 bg-surface-dim shrink-0">
         <div className="max-w-5xl mx-auto w-full space-y-2">
           {decks.map((deck, index) => (
             <TeamDeckRow

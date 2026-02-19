@@ -130,7 +130,7 @@ export function SpellcasterSlot({
           )}
         >
           {/* Image Area */}
-          <div className="relative flex-1 bg-slate-800 overflow-hidden">
+          <div className="relative flex-1 bg-surface-raised overflow-hidden">
             <GameImage
               src={getCardImageUrl(spellcaster)}
               alt={spellcaster.name || "Spellcaster Image"}
@@ -145,22 +145,22 @@ export function SpellcasterSlot({
                "absolute bottom-1 left-1 flex items-center justify-center w-5 h-5 lg:w-7 lg:h-7 rounded-full border-2 shadow-sm backdrop-blur-sm z-20",
                spellcaster.class && CLASS_CONFIG[spellcaster.class] 
                   ? cn(CLASS_CONFIG[spellcaster.class].bg, CLASS_CONFIG[spellcaster.class].border)
-                  : "bg-slate-900 border-slate-400"
+                  : "bg-surface-main border-slate-400"
             )}>
                {spellcaster.class === "Conqueror" ? (
-                  <Shield size={14} className="text-red-400 scale-110" />
+                  <Shield size={14} className="text-status-danger-text scale-110" />
                ) : spellcaster.class === "Enchanter" ? (
                   <Wand2 size={14} className="text-purple-400 scale-110" />
                ) : spellcaster.class === "Duelist" ? (
                   <Swords size={14} className="text-amber-400 scale-110" />
                ) : (
-                  <HelpCircle size={14} className="text-gray-400 scale-110" />
+                  <HelpCircle size={14} className="text-text-muted scale-110" />
                )}
             </div>
           </div>
           {/* Name Banner */}
           <div className="min-h-[28px] bg-brand-primary/20 backdrop-blur-sm border-t border-brand-primary/30 flex items-center justify-center px-1 py-0.5 z-10 shrink-0">
-            <span className="text-[11px] font-bold text-white text-center leading-tight line-clamp-2 wrap-break-word w-full shadow-black drop-shadow-md">
+            <span className="text-[11px] font-bold text-text-primary text-center leading-tight line-clamp-2 wrap-break-word w-full shadow-black drop-shadow-md">
               {spellcaster.name}
             </span>
           </div>

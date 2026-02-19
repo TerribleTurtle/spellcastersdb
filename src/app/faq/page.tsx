@@ -1,6 +1,7 @@
 import Link from "next/link";
-
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ChevronDown } from "lucide-react";
+import { PageShell } from "@/components/layout/PageShell";
+import { JsonLd } from "@/components/common/JsonLd";
 
 export const metadata = {
   title: "FAQ",
@@ -9,8 +10,14 @@ export const metadata = {
   keywords: ["Spellcasters Chronicles", "FAQ", "Questions", "Help", "Guide"],
 };
 
+interface FAQItem {
+  question: string;
+  answer: React.ReactNode;
+  schemaAnswer?: string;
+}
+
 export default function FAQPage() {
-  const faqs = [
+  const faqs: FAQItem[] = [
     {
       question: "What is SpellcastersDB?",
       answer:
@@ -40,6 +47,7 @@ export default function FAQPage() {
           the game evolves.
         </>
       ),
+      schemaAnswer: "All game data comes from the Spellcasters Community API, which is maintained by community members. The website automatically fetches the latest data from the API, so information stays current as the game evolves."
     },
     {
       question: "Can I contribute to the project?",
@@ -59,6 +67,7 @@ export default function FAQPage() {
           documentation. All contributions are welcome!
         </>
       ),
+      schemaAnswer: "Yes! You can contribute to the Community API repository by submitting corrections, adding missing data, or improving documentation. All contributions are welcome!"
     },
     {
       question: "How do I report incorrect data?",
@@ -78,83 +87,92 @@ export default function FAQPage() {
           information.
         </>
       ),
+      schemaAnswer: "If you find incorrect or outdated information, please report it on the GitHub Issues page. Include as much detail as possible about the error and the correct information."
     },
     {
       question: "How do I use the deck builder?",
       answer:
-        "The deck builder is currently under development. Once complete, you'll be able to select a spellcaster and add incantations to create valid decks that follow the game's rules. Decks will be shareable via URL.",
+        "The Deck Builder is now live! you can select a spellcaster and add incantations to create valid decks that follow the game's rules. Decks will be shareable via URL. Access it from the home page or sidebar.",
     },
     {
       question: "Can I filter cards by type or faction?",
       answer:
-        "Yes! The Archive page includes powerful search and filter options. You can filter cards by type (creature, spell, building, titan), rank, faction, and more. Use the search bar to find specific cards by name.",
+        "Yes! The Archive page includes search and filter options. You can filter cards by type (creature, spell, building, titan), rank, faction, and more. Use the search bar to find specific cards by name.",
     },
     {
       question: "Is the website mobile-friendly?",
       answer:
-        "Absolutely! SpellcastersDB is designed to work seamlessly on all devices, from desktop computers to smartphones. The interface adapts to your screen size for the best experience.",
+        "Yes. SpellcastersDB is designed to work on all devices, from desktop computers to smartphones. The interface adapts to your screen size.",
     },
     {
       question: "Will there be more features in the future?",
       answer:
-        "Yes! Planned features include a fully functional deck builder with validation, deck sharing via URLs, and potentially tier lists and meta analysis. Check back regularly for updates!",
+        "Yes! Future updates may include more advanced deck analysis tools. Check back regularly for updates!",
     },
   ];
 
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.schemaAnswer || (typeof faq.answer === 'string' ? faq.answer : "")
+      }
+    }))
+  };
+
   return (
-    <div className="min-h-screen bg-surface-main text-foreground pt-28 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-linear-to-r from-brand-primary to-brand-secondary">
-          Frequently Asked Questions
-        </h1>
-
-        <div className="space-y-4 mb-8">
-          {faqs.map((faq, index) => (
-            <details
-              key={index}
-              className="bg-surface-card border border-white/10 rounded-lg overflow-hidden group"
-            >
-              <summary className="px-6 py-4 cursor-pointer font-semibold text-slate-200 hover:text-brand-accent transition-colors list-none flex items-center justify-between">
-                <span>{faq.question}</span>
-                <span className="text-brand-primary group-open:rotate-180 transition-transform">
-                  ▼
-                </span>
-              </summary>
-              <div className="px-6 pb-4 text-slate-300 leading-relaxed border-t border-white/10 pt-4">
-                {faq.answer}
-              </div>
-            </details>
-          ))}
-        </div>
-
-        {/* Additional Help */}
-        <div className="bg-surface-card border border-white/10 rounded-lg p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-3 text-brand-accent">
-            Still have questions?
-          </h2>
-          <p className="text-slate-300 mb-4">
-            If you have a question that isn&apos;t answered here, feel free to
-            reach out through the Community API GitHub repository or check the{" "}
-            <Link
-              href="/about"
-              className="text-brand-primary hover:text-brand-accent transition-colors"
-            >
-              About page
-            </Link>{" "}
-            for more information.
-          </p>
-        </div>
-
-        {/* Back to Archive */}
-        <div className="text-center">
-          <Link
-            href="/"
-            className="inline-block px-6 py-3 bg-linear-to-r from-brand-primary to-brand-secondary text-white font-semibold rounded-lg hover:opacity-90 transition-opacity"
+    <PageShell title="Frequently Asked Questions" maxWidth="4xl">
+      <JsonLd data={faqSchema} id="json-ld-faq" />
+      <div className="space-y-4 mb-8">
+        {faqs.map((faq, index) => (
+          <details
+            key={index}
+            className="bg-surface-card border border-border-default rounded-lg overflow-hidden group hover:border-border-strong transition-colors"
           >
-            Back to Archive
-          </Link>
-        </div>
+            <summary className="px-6 py-4 cursor-pointer font-semibold text-text-secondary hover:text-brand-accent transition-colors list-none flex items-center justify-between">
+              <span>{faq.question}</span>
+              <span className="text-brand-primary group-open:rotate-180 transition-transform">
+                <ChevronDown size={20} />
+              </span>
+            </summary>
+            <div className="px-6 pb-4 text-text-secondary leading-relaxed border-t border-border-default pt-4">
+              {faq.answer}
+            </div>
+          </details>
+        ))}
       </div>
-    </div>
+
+      {/* Additional Help */}
+      <div className="bg-surface-card border border-border-default rounded-lg p-6 mb-8 hover:border-border-strong transition-colors">
+        <h2 className="text-xl font-semibold mb-3 text-brand-accent">
+          Still have questions?
+        </h2>
+        <p className="text-text-secondary mb-4">
+          If you have a question that isn&apos;t answered here, feel free to
+          reach out through the Community API GitHub repository or check the{" "}
+          <Link
+            href="/about"
+            className="text-brand-primary hover:text-brand-accent transition-colors"
+          >
+            About page
+          </Link>{" "}
+          for more information.
+        </p>
+      </div>
+
+      {/* Back to Home */}
+      <div className="text-center">
+        <Link
+          href="/"
+          className="inline-block px-6 py-3 bg-linear-to-r from-brand-primary to-brand-secondary text-text-primary font-semibold rounded-lg hover:opacity-90 transition-opacity"
+        >
+          Back to Home
+        </Link>
+      </div>
+    </PageShell>
   );
 }

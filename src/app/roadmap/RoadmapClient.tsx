@@ -18,8 +18,8 @@ const FilterButton = ({ type, label, icon: Icon, colorClass, count, activeFilter
     onClick={() => onFilterChange(type)}
     className={`relative flex flex-col items-center p-4 rounded-xl border transition-all duration-200 w-full
       ${activeFilter === type 
-        ? `bg-white/10 border-brand-accent/50 shadow-lg shadow-brand-accent/10 ${colorClass}` 
-        : "bg-white/5 border-white/10 hover:bg-white/10 hover:border-white/20 text-slate-400"
+        ? `bg-surface-hover border-brand-accent/50 shadow-lg shadow-brand-accent/10 ${colorClass}` 
+        : "bg-surface-card border-border-default hover:bg-surface-hover hover:border-border-strong text-text-muted"
       }
     `}
   >
@@ -86,29 +86,23 @@ export default function RoadmapClient({ initialIssues, isLive }: RoadmapClientPr
     <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8 relative z-10">
       
       {/* Header Area */}
-      <div className="mb-12 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-6 backdrop-blur-sm">
-          <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-green-500 shadow-[0_0_8px_#22c55e]' : 'bg-orange-500 shadow-[0_0_8px_#f97316]'}`} />
-          <span className="text-xs font-medium text-slate-300">
+      {/* Header Area Removed - handled by PageShell */}
+      <div className="mb-8 text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-card border border-border-default backdrop-blur-sm">
+          <span className={`w-2 h-2 rounded-full ${isLive ? 'bg-status-success shadow-[0_0_8px_theme(--color-status-success)]' : 'bg-orange-500 shadow-[0_0_8px_#f97316]'}`} />
+          <span className="text-xs font-medium text-text-secondary">
             {isLive ? "Live from GitHub" : "Cached / Offline Mode"}
           </span>
         </div>
-
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl mb-4 bg-clip-text text-transparent bg-linear-to-r from-white to-slate-400">
-          Development Roadmap
-        </h1>
-        <p className="mx-auto max-w-2xl text-lg text-slate-400 leading-relaxed">
-          Transparency is key. Vote on issues by adding reactions on GitHub.
-        </p>
       </div>
 
       {/* Interactive Stats / Filters */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         <FilterButton type="all" label="All Issues" icon={CheckCircle2} colorClass="text-brand-accent" count={counts.all} activeFilter={filter} onFilterChange={setFilter} />
-        <FilterButton type="bug" label="Bugs" icon={Bug} colorClass="text-red-400" count={counts.bug} activeFilter={filter} onFilterChange={setFilter} />
+        <FilterButton type="bug" label="Bugs" icon={Bug} colorClass="text-status-danger-text" count={counts.bug} activeFilter={filter} onFilterChange={setFilter} />
         <FilterButton type="feature" label="Features" icon={Lightbulb} colorClass="text-purple-400" count={counts.feature} activeFilter={filter} onFilterChange={setFilter} />
-        <FilterButton type="investigation" label="Research" icon={Search} colorClass="text-yellow-400" count={counts.investigation} activeFilter={filter} onFilterChange={setFilter} />
-        <FilterButton type="mobile" label="Mobile" icon={ArrowDownUp} colorClass="text-blue-400" count={counts.mobile} activeFilter={filter} onFilterChange={setFilter} />
+        <FilterButton type="investigation" label="Research" icon={Search} colorClass="text-status-warning-text" count={counts.investigation} activeFilter={filter} onFilterChange={setFilter} />
+        <FilterButton type="mobile" label="Mobile" icon={ArrowDownUp} colorClass="text-status-info-text" count={counts.mobile} activeFilter={filter} onFilterChange={setFilter} />
       </div>
 
       {/* Search & Sort Controls */}
@@ -116,30 +110,30 @@ export default function RoadmapClient({ initialIssues, isLive }: RoadmapClientPr
         {/* Search */}
         <div className="relative w-full sm:w-72">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-slate-500" />
+                <Search className="h-4 w-4 text-text-dimmed" />
             </div>
             <input
                 type="text"
                 placeholder="Search issues..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="block w-full pl-10 pr-3 py-2 border border-white/10 rounded-lg leading-5 bg-white/5 text-slate-300 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-brand-accent focus:border-brand-accent sm:text-sm transition-colors"
+                className="block w-full pl-10 pr-3 py-2 border border-border-default rounded-lg leading-5 bg-surface-card text-text-secondary placeholder-text-dimmed focus:outline-none focus:ring-1 focus:ring-brand-accent focus:border-brand-accent sm:text-sm transition-colors"
             />
         </div>
 
         {/* Sort Toggle */}
-        <div className="flex items-center gap-3 bg-white/5 rounded-lg p-1 border border-white/10">
-            <span className="text-xs font-medium text-slate-500 pl-3 uppercase tracking-wider">Sort By</span>
+        <div className="flex items-center gap-3 bg-surface-card rounded-lg p-1 border border-border-default">
+            <span className="text-xs font-medium text-text-dimmed pl-3 uppercase tracking-wider">Sort By</span>
             <div className="flex">
                 <button
                     onClick={() => setSort("newest")}
-                    className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${sort === "newest" ? "bg-slate-700 text-white shadow-sm" : "text-slate-400 hover:text-white"}`}
+                    className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${sort === "newest" ? "bg-surface-hover text-text-primary shadow-sm" : "text-text-muted hover:text-text-primary"}`}
                 >
                     Newest
                 </button>
                 <button
                     onClick={() => setSort("oldest")}
-                    className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${sort === "oldest" ? "bg-slate-700 text-white shadow-sm" : "text-slate-400 hover:text-white"}`}
+                    className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${sort === "oldest" ? "bg-surface-hover text-text-primary shadow-sm" : "text-text-muted hover:text-text-primary"}`}
                 >
                     Oldest
                 </button>
@@ -156,12 +150,12 @@ export default function RoadmapClient({ initialIssues, isLive }: RoadmapClientPr
 
       {/* Empty State */}
       {filteredIssues.length === 0 && (
-        <div className="text-center py-24 bg-white/5 rounded-2xl border border-white/10 border-dashed">
-          <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Info className="w-8 h-8 text-slate-400" />
+        <div className="text-center py-24 bg-surface-card rounded-2xl border border-border-default border-dashed">
+          <div className="w-16 h-16 bg-surface-card rounded-full flex items-center justify-center mx-auto mb-6">
+            <Info className="w-8 h-8 text-text-muted" />
           </div>
-          <h3 className="text-xl font-bold text-white mb-2">No Issues Found</h3>
-          <p className="text-slate-400 max-w-sm mx-auto">
+          <h3 className="text-xl font-bold text-text-primary mb-2">No Issues Found</h3>
+          <p className="text-text-muted max-w-sm mx-auto">
             {search ? `No results match "${search}"` : "Try adjusting your filters."}
           </p>
           <button 

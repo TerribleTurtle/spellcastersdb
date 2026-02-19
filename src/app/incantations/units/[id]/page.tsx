@@ -43,6 +43,8 @@ export async function generateMetadata({
 }
 
 // 3. The UI Component
+import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
+
 export default async function UnitPage({ params }: UnitPageProps) {
   const { id } = await params;
   const unit = await getUnitById(id);
@@ -62,14 +64,9 @@ export default async function UnitPage({ params }: UnitPageProps) {
     (u: Unit) => u.entity_id !== id && u.magic_school === unit.magic_school
   );
 
+  // Schema for Unit (Product/Character)
   const jsonLdData = {
     "@context": "https://schema.org",
-    "@type": "VisualArtwork",
-    "name": unit.name,
-    "description": unit.description,
-    "genre": "Strategic Card Game",
-    "isFamilyFriendly": true,
-    "keywords": unit.tags.join(", "),
     "thumbnailUrl": `https://spellcastersdb.com/api/og?unitId=${unit.entity_id}`,
     "mainEntity": {
       "@type": "GameCharacter",

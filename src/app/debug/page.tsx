@@ -11,9 +11,15 @@ import {
   Zap,
 } from "lucide-react";
 
+import type { Metadata } from "next";
 import { fetchGameData } from "@/services/api/api";
 import { DebugHeaderInfo } from "@/components/debug/DebugHeaderInfo";
 import { DebugFeatures } from "@/components/debug/DebugFeatures";
+
+export const metadata: Metadata = {
+  title: "Debug",
+  robots: { index: false, follow: false },
+};
 
 export default async function DebugPage() {
   let data;
@@ -29,12 +35,12 @@ export default async function DebugPage() {
     return (
       <div className="min-h-screen bg-surface-main text-foreground p-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-8 text-red-400">❌ API Error</h1>
-          <div className="bg-surface-card rounded-xl p-6 border border-red-500/20">
+          <h1 className="text-4xl font-bold mb-8 text-status-danger-text">❌ API Error</h1>
+          <div className="bg-surface-card rounded-xl p-6 border border-status-danger-border">
             <p className="text-xl mb-4 text-red-200">
               Failed to fetch game data
             </p>
-            <pre className="bg-black/30 p-4 rounded-lg overflow-auto text-red-300 font-mono text-sm">
+            <pre className="bg-surface-dim p-4 rounded-lg overflow-auto text-red-300 font-mono text-sm">
               {error instanceof Error ? error.message : String(error)}
             </pre>
           </div>
@@ -86,7 +92,7 @@ export default async function DebugPage() {
   return (
     <div className="min-h-screen bg-surface-main text-foreground p-8">
       <div className="max-w-6xl mx-auto">
-        <header className="mb-8 border-b border-white/10 pb-6">
+        <header className="mb-8 border-b border-border-default pb-6">
           <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-linear-to-r from-brand-primary to-brand-secondary flex items-center gap-3">
             <Activity className="text-brand-primary" size={32} />
             System Status & Data
@@ -105,8 +111,8 @@ export default async function DebugPage() {
             label="Grand Total"
             value={grandTotal}
             icon={<Database size={18} />}
-            color="text-white"
-            bg="bg-white/10"
+            color="text-text-primary"
+            bg="bg-surface-hover"
           />
           <SummaryCard
             label="Spellcasters"
@@ -133,8 +139,8 @@ export default async function DebugPage() {
             label="Titans"
             value={data.titans.length}
             icon={<Crown size={18} />}
-            color="text-yellow-400"
-            bg="bg-yellow-500/20"
+            color="text-status-warning-text"
+            bg="bg-status-warning-border"
           />
           <SummaryCard
             label="Consumables"
@@ -224,7 +230,7 @@ export default async function DebugPage() {
 
         {/* Advanced Tools */}
         <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 text-white flex items-center gap-2">
+            <h2 className="text-2xl font-bold mb-6 text-text-primary flex items-center gap-2">
                 <Database className="text-brand-accent" />
                 Advanced Tools
             </h2>
@@ -248,19 +254,19 @@ export default async function DebugPage() {
             {data.units.slice(0, 3).map((unit) => (
               <div
                 key={unit.entity_id}
-                className="bg-black/40 rounded-lg p-4 border border-white/5 flex flex-col md:flex-row gap-4 items-start md:items-center justify-between group hover:border-white/10 transition-colors"
+                className="bg-surface-inset rounded-lg p-4 border border-border-subtle flex flex-col md:flex-row gap-4 items-start md:items-center justify-between group hover:border-border-default transition-colors"
               >
                 <div>
-                  <h3 className="text-lg font-bold text-white group-hover:text-brand-accent transition-colors">
+                  <h3 className="text-lg font-bold text-text-primary group-hover:text-brand-accent transition-colors">
                     {unit.name}
                   </h3>
-                  <p className="text-gray-500 text-xs font-mono uppercase tracking-wider mt-1">
+                  <p className="text-text-dimmed text-xs font-mono uppercase tracking-wider mt-1">
                     {unit.category} • {unit.magic_school} • Rank{" "}
                     {unit.rank || "-"}
                   </p>
                 </div>
                 <div className="text-right hidden md:block">
-                  <div className="text-xs text-gray-600 font-mono">
+                  <div className="text-xs text-text-faint font-mono">
                     ID: {unit.entity_id}
                   </div>
                 </div>
@@ -289,17 +295,17 @@ function SummaryCard({
   bg: string;
 }) {
   return (
-    <div className="bg-surface-card border border-white/5 rounded-xl p-4 flex items-center gap-4 hover:border-white/10 transition-all">
+    <div className="bg-surface-card border border-border-subtle rounded-xl p-4 flex items-center gap-4 hover:border-border-default transition-all">
       <div
         className={`w-10 h-10 rounded-lg flex items-center justify-center ${bg} ${color}`}
       >
         {icon}
       </div>
       <div>
-        <div className="text-2xl font-bold text-white leading-none">
+        <div className="text-2xl font-bold text-text-primary leading-none">
           {value}
         </div>
-        <div className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mt-1">
+        <div className="text-[10px] font-bold uppercase tracking-wider text-text-dimmed mt-1">
           {label}
         </div>
       </div>
@@ -317,9 +323,9 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-surface-card border border-white/5 rounded-xl p-6">
-      <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2 border-b border-white/5 pb-4">
-        <span className="text-gray-400">{icon}</span>
+    <div className="bg-surface-card border border-border-subtle rounded-xl p-6">
+      <h3 className="text-lg font-bold text-text-primary mb-6 flex items-center gap-2 border-b border-border-subtle pb-4">
+        <span className="text-text-muted">{icon}</span>
         {title}
       </h3>
       {children}
@@ -343,14 +349,14 @@ function BarRow({
   return (
     <div className="relative group">
       <div className="flex justify-between items-end mb-1 text-xs">
-        <span className="font-bold text-gray-300 uppercase tracking-wide">
+        <span className="font-bold text-text-secondary uppercase tracking-wide">
           {label}
         </span>
-        <span className="font-mono text-gray-400">
-          {value} <span className="text-gray-600">({percentage}%)</span>
+        <span className="font-mono text-text-muted">
+          {value} <span className="text-text-faint">({percentage}%)</span>
         </span>
       </div>
-      <div className="h-2 w-full bg-black/40 rounded-full overflow-hidden">
+      <div className="h-2 w-full bg-surface-inset rounded-full overflow-hidden">
         <div
           className={`h-full ${color} opacity-80 group-hover:opacity-100 transition-all`}
           style={{ width: `${percentage}%` }}

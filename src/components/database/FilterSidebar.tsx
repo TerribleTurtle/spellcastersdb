@@ -57,7 +57,8 @@ export function FilterSidebar({
       <div className="md:hidden mb-4">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full flex items-center justify-between p-3 bg-surface-card border border-white/10 rounded-lg text-white font-bold"
+          aria-expanded={isOpen}
+          className="w-full flex items-center justify-between p-3 bg-surface-card border border-border-default rounded-lg text-text-primary font-bold"
         >
           <div className="flex items-center gap-2">
             <SlidersHorizontal size={18} className="text-brand-accent" />
@@ -78,10 +79,11 @@ export function FilterSidebar({
         )}
       >
         <div className="flex justify-between items-center md:hidden mb-6">
-          <h2 className="text-xl font-bold text-white">Filters</h2>
+          <h2 className="text-xl font-bold text-text-primary">Filters</h2>
           <button
             onClick={() => setIsOpen(false)}
-            className="text-gray-400 hover:text-white"
+            aria-label="Close filters"
+            className="text-text-muted hover:text-text-primary"
           >
             <X size={24} />
           </button>
@@ -91,15 +93,16 @@ export function FilterSidebar({
           {/* Search Input */}
           <div className="relative">
             <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-dimmed"
               size={16}
             />
             <input
               type="text"
               placeholder="Search cards..."
+              aria-label="Search cards"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-surface-card border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-primary/50 transition-colors"
+              className="w-full bg-surface-card border border-border-default rounded-lg pl-10 pr-4 py-2 text-sm text-text-primary placeholder-gray-500 focus:outline-none focus:border-brand-primary/50 transition-colors"
             />
           </div>
 

@@ -19,7 +19,7 @@ export function DragOverlayContainer() {
 
   return (
     <DragOverlay zIndex={100} dropAnimation={null} modifiers={[centerUnderCursor]}>
-      <div className="w-[110px] aspect-3/4 rounded-lg border-2 border-brand-secondary/50 bg-slate-800 flex flex-col overflow-hidden shadow-2xl relative cursor-grabbing pointer-events-none">
+      <div className="w-[110px] aspect-3/4 rounded-lg border-2 border-brand-secondary/50 bg-surface-raised flex flex-col overflow-hidden shadow-2xl relative cursor-grabbing pointer-events-none">
          {/* Image Area */}
         <div className="relative flex-1 overflow-hidden">
           <GameImage
@@ -35,29 +35,29 @@ export function DragOverlayContainer() {
                       rank={(activeDragItem as Unit).rank || ((activeDragItem.category === ENTITY_CATEGORY.Titan) ? "V" : "")} 
                       isTitan={activeDragItem.category === ENTITY_CATEGORY.Titan}
                       mode="icon"
-                      className="scale-90 lg:scale-100 origin-bottom-left bg-black/60 backdrop-blur-sm shadow-md"
+                      className="scale-90 lg:scale-100 origin-bottom-left bg-surface-scrim backdrop-blur-sm shadow-md"
                   />
               </div>
           )}
           
           {/* Spellcaster Class Icon */}
           {activeDragItem.category === ENTITY_CATEGORY.Spellcaster && (
-             <div className="absolute bottom-1 left-1 flex items-center justify-center w-6 h-6 lg:w-7 lg:h-7 rounded-full border-2 border-slate-400 bg-slate-900 shadow-sm backdrop-blur-sm z-20">
+             <div className="absolute bottom-1 left-1 flex items-center justify-center w-6 h-6 lg:w-7 lg:h-7 rounded-full border-2 border-slate-400 bg-surface-main shadow-sm backdrop-blur-sm z-20">
                 {(activeDragItem as Spellcaster).class === "Conqueror" ? (
-                    <Shield size={14} className="text-red-400 scale-110" />
+                    <Shield size={14} className="text-status-danger-text scale-110" />
                   ) : (activeDragItem as Spellcaster).class === "Enchanter" ? (
                     <Wand2 size={14} className="text-purple-400 scale-110" />
                   ) : (activeDragItem as Spellcaster).class === "Duelist" ? (
                     <Swords size={14} className="text-amber-400 scale-110" />
                   ) : (
-                    <HelpCircle size={14} className="text-gray-400 scale-110" />
+                    <HelpCircle size={14} className="text-text-muted scale-110" />
                   )}
              </div>
           )}
         </div>
         {/* Name Banner */}
-        <div className="min-h-[24px] bg-surface-main/95 border-t border-white/10 flex items-center justify-center px-1 py-0.5 shrink-0">
-           <span className="text-[10px] font-bold text-gray-200 text-center leading-tight line-clamp-2">
+        <div className="min-h-[24px] bg-surface-main/95 border-t border-border-default flex items-center justify-center px-1 py-0.5 shrink-0">
+           <span className="text-[10px] font-bold text-text-secondary text-center leading-tight line-clamp-2">
              {activeDragItem.name}
            </span>
         </div>

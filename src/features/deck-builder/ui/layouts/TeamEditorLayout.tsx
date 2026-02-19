@@ -50,7 +50,7 @@ export function TeamEditorLayout({
       openCommandCenter: state.openCommandCenter,
   })));
   
-  // Debug wrapper
+  
   const openInspector = (item: UnifiedEntity, pos?: { x: number; y: number }) => {
       originalOpenInspector(item, pos);
   };
@@ -176,7 +176,7 @@ export function TeamEditorLayout({
       </div>
 
       {/* Desktop Header (Hidden on Mobile) */}
-      <div className="hidden xl:flex h-14 border-b border-white/10 items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
+      <div className="hidden xl:flex h-14 border-b border-border-default items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
         <div className="flex items-center gap-2">
            {/* Team Name Input */}
            <div className="relative group flex items-center gap-2 shrink mr-2 min-w-0 max-w-[150px] md:max-w-none">
@@ -184,15 +184,14 @@ export function TeamEditorLayout({
                  value={teamName || ""}
                  onChange={(e) => setTeamName(e.target.value)}
                  style={{ width: `${Math.max((teamName || "").length, 14) + 4}ch` }}
-                 className="bg-transparent border-b-2 border-transparent hover:border-white/20 focus:border-brand-primary transition-all text-xl md:text-2xl font-black text-white uppercase tracking-wider focus:outline-none py-1 truncate min-w-[50px] w-full"
+                 className="bg-transparent border-b-2 border-transparent hover:border-border-strong focus:border-brand-primary transition-all text-xl md:text-2xl font-black text-text-primary uppercase tracking-wider focus:outline-none py-1 truncate min-w-[50px] w-full"
                  placeholder="UNTITLED TEAM"
               />
-               <Edit2 size={14} className="text-gray-500 shrink-0" />
+               <Edit2 size={14} className="text-text-dimmed shrink-0" />
            </div>
        </div>
         
         <div className="flex items-center gap-1 md:gap-2 shrink-0">
-            {/* Library */}
             {/* Library */}
             <LibraryButton
                 onClick={() => openCommandCenter()}
@@ -200,14 +199,14 @@ export function TeamEditorLayout({
             />
 
             {/* Mode Switcher */}
-            <div className="flex items-center bg-black/20 p-1 rounded-lg border border-white/5 mr-2">
+            <div className="flex items-center bg-surface-dim p-1 rounded-lg border border-border-subtle mr-2">
                 <button
                     onClick={() => setMode("SOLO")}
                     className={cn(
                         "px-3 py-1 text-xs font-bold uppercase rounded transition-all",
                         mode === "SOLO" 
-                            ? "bg-brand-primary text-white shadow-sm" 
-                            : "text-gray-500 hover:text-gray-300"
+                            ? "bg-brand-primary text-brand-dark shadow-sm" 
+                            : "text-text-dimmed hover:text-text-secondary"
                     )}
                 >
                     Solo
@@ -217,8 +216,8 @@ export function TeamEditorLayout({
                     className={cn(
                         "px-3 py-1 text-xs font-bold uppercase rounded transition-all",
                         mode === "TEAM" 
-                            ? "bg-brand-primary text-white shadow-sm" 
-                            : "text-gray-500 hover:text-gray-300"
+                            ? "bg-brand-primary text-brand-dark shadow-sm" 
+                            : "text-text-dimmed hover:text-text-secondary"
                     )}
                 >
                     Team
@@ -231,7 +230,7 @@ export function TeamEditorLayout({
                 className={cn(
                     "flex items-center gap-2 p-2 md:px-3 md:py-1.5 rounded-lg transition-all border",
                     !!activeTeamId && isTeamSaved
-                        ? "bg-green-500/10 text-green-400 border-green-500/50 hover:bg-green-500/20"
+                        ? "bg-status-success-muted text-status-success-text border-status-success-border hover:bg-status-success-border"
                         : "bg-brand-primary/10 text-brand-primary border-brand-primary/50 hover:border-brand-primary hover:bg-brand-primary/20"
                 )}
                 title={!!activeTeamId && isTeamSaved ? "Team Saved" : isExistingTeam ? "Update Team" : "Save Team"}
@@ -257,7 +256,7 @@ export function TeamEditorLayout({
                           saveTeamAsCopy();
                           showToast("Team copied successfully", "success");
                       }}
-                      className="flex items-center gap-2 p-2 md:px-3 md:py-1.5 text-gray-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors border border-white/20"
+                      className="flex items-center gap-2 p-2 md:px-3 md:py-1.5 text-text-muted hover:text-text-primary hover:bg-surface-hover rounded-lg transition-colors border border-border-strong"
                       title="Save as Copy"
                   >
                       <Copy size={18} className="md:w-3.5 md:h-3.5" />
@@ -270,7 +269,7 @@ export function TeamEditorLayout({
              {/* Share Team */}
              <button 
                   onClick={handleTeamShare}
-                  className="p-2 text-gray-400 hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors"
+                  className="p-2 text-text-muted hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors"
                   title="Share Team"
              >
                  <Share2 size={18} />
@@ -279,17 +278,17 @@ export function TeamEditorLayout({
              {/* New Team Button (Clear) */}
              <button 
                    onClick={handleTeamClear}
-                   className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors"
+                   className="p-2 text-text-muted hover:text-text-primary hover:bg-surface-hover rounded transition-colors"
                    title="New Team"
               >
                   <PlusCircle size={18} />
               </button>
 
              {/* Collapse/Expand All (Desktop) - Moved to far right */}
-             <div className="w-px h-6 bg-white/10 mx-2" />
+             <div className="w-px h-6 bg-surface-hover mx-2" />
              <button 
                 onClick={areAllCollapsed ? expandAll : collapseAll}
-                className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors"
+                className="p-2 text-text-muted hover:text-text-primary hover:bg-surface-hover rounded transition-colors"
                 title={areAllCollapsed ? "Expand All" : "Collapse All"}
             >
                 {areAllCollapsed ? <ChevronsDown size={18} /> : <ChevronUp size={18} />}
@@ -300,7 +299,7 @@ export function TeamEditorLayout({
       {/* Main Content: Vault */}
       <section 
         aria-label="Unit Library"
-        className="flex-1 overflow-hidden relative transition-[padding] duration-300 ease-in-out xl:col-start-1 xl:row-start-2 xl:pb-0! xl:border-r xl:border-white/10"
+        className="flex-1 overflow-hidden relative transition-[padding] duration-300 ease-in-out xl:col-start-1 xl:row-start-2 xl:pb-0! xl:border-r xl:border-border-default"
         style={{ paddingBottom: `${footerHeight}px` }}
       >
         {pendingSwapCard && (
@@ -328,11 +327,11 @@ export function TeamEditorLayout({
           
            {/* Inspector fills remaining space but shrink wraps */}
            <div className="flex-initial shrink min-h-0 max-h-full flex flex-col">
-                <InspectorPanel className="h-auto max-h-full border border-white/10 rounded-xl shadow-lg overflow-hidden" />
+                <InspectorPanel className="h-auto max-h-full border border-border-default rounded-xl shadow-lg overflow-hidden" />
            </div>
 
            {/* Stacked Decks Container - Boxed at bottom of column */}
-           <div className="shrink-0 flex flex-col border border-white/10 rounded-xl shadow-lg overflow-hidden bg-surface-main/50">
+           <div className="shrink-0 flex flex-col border border-border-default rounded-xl shadow-lg overflow-hidden bg-surface-main/50">
                {teamDecks?.map((_, idx) => (
                   <TeamDeckEditorRow
                     key={idx}
@@ -393,7 +392,7 @@ export function TeamEditorLayout({
           title={`Clear Slot ${slotToClear !== null ? slotToClear + 1 : ''}?`}
           description={
             <>
-                You have unsaved changes in this Team. Clearing <span className="text-white font-bold">{teamDecks && slotToClear !== null ? teamDecks[slotToClear].name : "this deck"}</span> will impact the team.
+                You have unsaved changes in this Team. Clearing <span className="text-text-primary font-bold">{teamDecks && slotToClear !== null ? teamDecks[slotToClear].name : "this deck"}</span> will impact the team.
                 <br/>
                 Do you want to return to Save the Team before clearing this slot?
             </>

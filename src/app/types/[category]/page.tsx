@@ -55,7 +55,7 @@ export default async function TypePage({ params }: TypePageProps) {
           <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-linear-to-r from-brand-secondary to-brand-accent mb-2">
             {capitalize(category)}
           </h1>
-          <p className="text-gray-400">Browse all {category}.</p>
+          <p className="text-text-muted">Browse all {category}.</p>
         </div>
 
         <UnitArchive

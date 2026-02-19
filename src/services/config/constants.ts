@@ -33,16 +33,16 @@ export type Rank = typeof RANKS[number];
 export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: string; border: string; borderBg: string; fill: string; stroke: string }> = {
   I: {
     label: "I",
-    color: "text-white",
-    bg: "bg-slate-600",
+    color: "text-text-primary",
+    bg: "bg-surface-raised",
     border: "border-slate-400",
-    borderBg: "bg-slate-400",
+    borderBg: "bg-surface-hover",
     fill: "fill-slate-600",
     stroke: "stroke-slate-400",
   },
   II: {
     label: "II",
-    color: "text-white",
+    color: "text-text-primary",
     bg: "bg-emerald-700",
     border: "border-emerald-500",
     borderBg: "bg-emerald-500",
@@ -51,7 +51,7 @@ export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: strin
   },
   III: {
     label: "III",
-    color: "text-white",
+    color: "text-text-primary",
     bg: "bg-blue-700",
     border: "border-blue-500",
     borderBg: "bg-blue-500",
@@ -60,7 +60,7 @@ export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: strin
   },
   IV: {
     label: "IV",
-    color: "text-white",
+    color: "text-text-primary",
     bg: "bg-purple-700",
     border: "border-purple-500",
     borderBg: "bg-purple-500",
@@ -69,7 +69,7 @@ export const RANK_CONFIG: Record<Rank, { label: string; color: string; bg: strin
   },
   V: {
     label: "V", // Will be overridden for Titans in component if needed, or we can treat V as Titan rank generically
-    color: "text-white",
+    color: "text-text-primary",
     bg: "bg-amber-800",
     border: "border-amber-600",
     borderBg: "bg-amber-600",
@@ -84,27 +84,27 @@ export type SpellcasterClass = typeof SPELLCASTER_CLASSES[number];
 export const CLASS_CONFIG: Record<string, { label: string; bg: string; border: string; iconColor: string }> = {
   Conqueror: {
     label: "Conqueror",
-    bg: "bg-slate-900",
+    bg: "bg-surface-main",
     border: "border-slate-600",
-    iconColor: "text-red-400"
+    iconColor: "text-status-danger-text"
   },
   Duelist: {
     label: "Duelist",
-    bg: "bg-slate-900",
+    bg: "bg-surface-main",
     border: "border-slate-600",
     iconColor: "text-amber-400"
   },
   Enchanter: {
     label: "Enchanter",
-    bg: "bg-slate-900",
+    bg: "bg-surface-main",
     border: "border-slate-600",
     iconColor: "text-purple-400"
   },
   Unknown: {
     label: "?",
-    bg: "bg-slate-900",
+    bg: "bg-surface-main",
     border: "border-slate-400",
-    iconColor: "text-gray-400"
+    iconColor: "text-text-muted"
   }
 };
 

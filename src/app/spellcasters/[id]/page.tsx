@@ -29,7 +29,7 @@ export async function generateMetadata({
     return { title: "Spellcaster Not Found" };
   }
 
-  const description = `Complete stats, ability breakdown, and deck building guide for ${spellcaster.name} in Spellcasters Chronicles. Master the ${spellcaster.abilities.primary.name} and dominate the arena.`;
+  const description = `Complete stats and ability breakdown for ${spellcaster.name} in Spellcasters Chronicles. Learn about the ${spellcaster.abilities.primary.name} and view compatible decks.`;
 
   return {
     title: `${spellcaster.name} Builds, Decks & Stats | SpellcastersDB`,
@@ -50,9 +50,9 @@ export async function generateMetadata({
 }
 
 // 3. The UI Component
-export default async function SpellcasterPage({
-  params,
-}: SpellcasterPageProps) {
+import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
+
+export default async function SpellcasterPage({ params }: SpellcasterPageProps) {
   const { id } = await params;
   const spellcaster = await getSpellcasterById(id);
 
@@ -71,44 +71,23 @@ export default async function SpellcasterPage({
 
   const jsonLdData = {
     "@context": "https://schema.org",
-    "@type": "VisualArtwork",
+    "@type": "Person",
     "name": spellcaster.name,
-    "description": `${spellcaster.name} is a ${spellcaster.class} class spellcaster in Spellcasters Chronicles. Abilities include ${spellcaster.abilities.primary.name} and ${spellcaster.abilities.ultimate.name}.`,
-    "genre": "Strategic Card Game",
-    "character": {
-      "@type": "GameCharacter",
-      "name": spellcaster.name,
-      "playabilityMode": "SinglePlayer",
-      "description": spellcaster.abilities.primary.description,
-    },
-    "thumbnailUrl": `https://spellcastersdb.com/api/og?spellcasterId=${spellcaster.spellcaster_id}`,
-    "breadcrumb": {
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://spellcastersdb.com"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Spellcasters",
-          "item": "https://spellcastersdb.com/spellcasters"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": spellcaster.name
-        }
-      ]
-    }
+    "description": spellcaster.abilities.primary.description,
+    "url": `https://spellcastersdb.com/spellcasters/${spellcaster.spellcaster_id}`,
+    "image": `https://spellcastersdb.com/api/og?spellcasterId=${spellcaster.spellcaster_id}`
   };
+
+  const breadcrumbs = [
+    { name: "Home", url: "/" },
+    { name: "Spellcasters", url: "/spellcasters" },
+    { name: spellcaster.name, url: `/spellcasters/${spellcaster.spellcaster_id}` }
+  ];
 
   return (
     <>
       <JsonLd data={jsonLdData} id={`json-ld-spellcaster-${spellcaster.spellcaster_id}`} />
+      <BreadcrumbsLd items={breadcrumbs} />
       <EntityShowcase 
         item={spellcaster} 
         backUrl="/spellcasters"

@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 
 ## [Unreleased]
 
+### Added
+
+- **New Home Page:** Dedicated landing page at `/` with patch notes and quick links.
+- **Deck Builder Route:** Moved to `/deck-builder` with legacy redirect support (`/?d=*`).
+- **PageShell:** Unified layout wrapper for consistent typography and spacing.
+- **Navigation:** Visible desktop links in Navbar; "Home" link in Sidebar.
+- **Polish:** Hover states for cards, standardized colors, updated FAQ content.
+
+### Changed
+
+- **Refactor:** All content pages (`about`, `faq`, `guide`, `changes`, `roadmap`, `discord-bot`) now use `PageShell`.
+- **Config:** Added temporary `no-cache` header for `/deck-builder` to fix redirect caching.
+
 ## [1.0.19] - 2026-02-18
 
 ### Added

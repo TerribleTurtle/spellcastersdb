@@ -1,22 +1,27 @@
 import type { Metadata } from "next";
 import { roadmapService } from "@/services/roadmap-service";
 import RoadmapClient from "./RoadmapClient";
+import { PageShell } from "@/components/layout/PageShell";
 
 export const metadata: Metadata = {
-  title: "Roadmap | SpellcastersDB",
-  description: "Track the development progress of SpellcastersDB. View active issues, bugs, and feature requests directly from GitHub.",
+  title: "Roadmap",
+  description:
+    "View the development roadmap for SpellcastersDB. Vote on features and track bugs.",
 };
 
-// Revalidate every 60 seconds (ISR)
+// Revalidate every minute (60 seconds)
 export const revalidate = 60;
 
 export default async function RoadmapPage() {
   const { issues, isLive } = await roadmapService.getIssues();
 
   return (
-    <div className="min-h-screen bg-surface-main text-foreground pt-28 p-4 md:p-8 overflow-x-hidden w-full">
-      {/* Client Component handles the UI and State */}
+    <PageShell
+      title="Development Roadmap"
+      subtitle="Transparency is key. Vote on issues by adding reactions on GitHub."
+      maxWidth="page-grid"
+    >
       <RoadmapClient initialIssues={issues} isLive={isLive} />
-    </div>
+    </PageShell>
   );
 }

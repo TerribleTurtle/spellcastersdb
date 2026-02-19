@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useDeckStore } from "@/store/index";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 interface SaveDeckModalProps {
   deck: Deck;
@@ -16,6 +17,7 @@ interface SaveDeckModalProps {
 import { createPortal } from "react-dom";
 
 export function SaveDeckModal({ deck, isOpen, onClose, onSave, onOverwrite }: SaveDeckModalProps & { onOverwrite?: (name: string) => void }) {
+  const modalRef = useFocusTrap(isOpen, onClose);
   const [name, setName] = useState(deck.name || "");
   const [error, setError] = useState<string | null>(null);
   const [showOverwrite, setShowOverwrite] = useState(false);
@@ -54,14 +56,18 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave, onOverwrite }: Sa
   if (!isOpen) return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-4 animate-in fade-in duration-200">
       <div 
-        className="w-full max-w-md bg-surface-card border border-white/10 rounded-xl shadow-2xl flex flex-col overflow-hidden"
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="save-deck-title"
+        className="w-full max-w-md bg-surface-card border border-border-default rounded-xl shadow-2xl flex flex-col overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+        <div className="flex items-center justify-between p-4 border-b border-border-default bg-surface-card">
+          <h3 id="save-deck-title" className="text-lg font-bold text-text-primary flex items-center gap-2">
             <Save size={20} className="text-brand-primary" />
             {showOverwrite ? "Overwrite Deck?" : "Save Copy to Library"}
           </h3>
@@ -69,7 +75,7 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave, onOverwrite }: Sa
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="text-gray-400 hover:text-white"
+            className="text-text-muted hover:text-text-primary"
           >
             <X size={20} />
           </Button>
@@ -78,7 +84,7 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave, onOverwrite }: Sa
         {/* Content */}
         <div className="p-6 space-y-4">
           <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-400 uppercase tracking-wider">
+            <label className="text-xs font-bold text-text-muted uppercase tracking-wider">
               Deck Name
             </label>
             <Input
@@ -93,21 +99,21 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave, onOverwrite }: Sa
               }}
               onKeyDown={(e) => e.key === "Enter" && (showOverwrite ? handleOverwrite() : handleSaveAttempt())}
               className={cn(
-                "bg-black/40 border-white/10 text-white placeholder-gray-600 focus-visible:ring-brand-primary/50",
+                "bg-surface-inset border-border-default text-text-primary placeholder-gray-600 focus-visible:ring-brand-primary/50",
                 error && "border-red-500/50 focus-visible:ring-red-500/50"
               )}
               placeholder="Enter deck name..."
               autoFocus
             />
             {error && (
-              <div className="flex items-center gap-2 text-red-400 text-sm mt-2 animate-in slide-in-from-top-1">
+              <div className="flex items-center gap-2 text-status-danger-text text-sm mt-2 animate-in slide-in-from-top-1">
                 <AlertTriangle size={14} />
                 <span>{error}</span>
               </div>
             )}
           </div>
           
-          <div className="text-sm text-gray-400 bg-white/5 p-3 rounded-lg border border-white/5">
+          <div className="text-sm text-text-muted bg-surface-card p-3 rounded-lg border border-border-subtle">
              {showOverwrite 
                 ? <>This will <strong>overwrite</strong> the existing deck data for <strong>{name}</strong>.</>
                 : <>This will create a new copy of <strong>{deck.name || "this deck"}</strong> in your Solo Library.</>
@@ -116,7 +122,7 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave, onOverwrite }: Sa
         </div>
 
         {/* Footer */}
-        <div className="p-4 border-t border-white/10 bg-white/5 flex items-center justify-end gap-3">
+        <div className="p-4 border-t border-border-default bg-surface-card flex items-center justify-end gap-3">
           <Button
             variant="ghost"
             onClick={onClose}
@@ -127,7 +133,7 @@ export function SaveDeckModal({ deck, isOpen, onClose, onSave, onOverwrite }: Sa
           {showOverwrite ? (
               <Button
                 onClick={handleOverwrite}
-                className="bg-red-500 hover:bg-red-600 text-white"
+                className="bg-red-500 hover:bg-red-600 text-text-primary"
               >
                 <AlertTriangle size={16} className="mr-2" />
                 Overwrite

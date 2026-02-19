@@ -40,6 +40,8 @@ export async function generateMetadata({
   };
 }
 
+import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
+
 export default async function TitanPage({ params }: TitanPageProps) {
   const { id } = await params;
   const entity = await getEntityById(id);
@@ -62,12 +64,6 @@ export default async function TitanPage({ params }: TitanPageProps) {
 
   const jsonLdData = {
     "@context": "https://schema.org",
-    "@type": "VisualArtwork",
-    "name": titan.name,
-    "description": titan.description,
-    "genre": "Strategic Card Game",
-    "isFamilyFriendly": true,
-    "keywords": titan.tags.join(", "),
     "thumbnailUrl": `https://spellcastersdb.com/api/og/titan?id=${titan.entity_id}`,
     "mainEntity": {
       "@type": "Thing",

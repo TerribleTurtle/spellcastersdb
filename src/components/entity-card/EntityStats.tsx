@@ -46,11 +46,11 @@ export function EntityStats({ item, variant = "detailed" }: EntityStatsProps) {
       {/* Spellcaster Difficulty (Special Case) */}
       {isSpellcaster && (
          <div className={cn(
-             "bg-surface-main border border-white/5 rounded flex flex-col items-center justify-center text-center",
+             "bg-surface-main border border-border-subtle rounded flex flex-col items-center justify-center text-center",
              variant === "compact" ? "p-1.5 col-span-2" : "p-3 col-span-3 bg-surface-main/50"
          )}>
             <div className={cn(
-                "uppercase tracking-widest text-gray-500",
+                "uppercase tracking-widest text-text-dimmed",
                 variant === "compact" ? "text-[10px] md:text-xs mb-1" : "text-[10px] mb-2"
             )}>
               Difficulty
@@ -64,7 +64,7 @@ export function EntityStats({ item, variant = "detailed" }: EntityStatsProps) {
                       variant === "compact" ? "h-2 w-2" : "h-2.5 w-2.5 ring-2 ring-offset-2 ring-offset-surface-card",
                       ((item as Spellcaster).difficulty || 1) >= star
                         ? variant === "compact" ? "bg-brand-primary" : "bg-brand-primary ring-brand-primary/30"
-                        : variant === "compact" ? "bg-white/10" : "bg-surface-main ring-white/10"
+                        : variant === "compact" ? "bg-surface-hover" : "bg-surface-main ring-white/10"
                   )}
                 />
               ))}
@@ -88,8 +88,8 @@ function StatBox({
 }) {
   return (
     <div className={cn(
-        "bg-surface-main border border-white/5 rounded flex flex-col items-center justify-center text-center transition-colors group",
-        variant === "compact" ? "p-1 min-h-[50px]" : "p-3 hover:border-white/10 bg-surface-main/50"
+        "bg-surface-main border border-border-subtle rounded flex flex-col items-center justify-center text-center transition-colors group",
+        variant === "compact" ? "p-1 min-h-[50px]" : "p-3 hover:border-border-default bg-surface-main/50"
     )}>
       <div className={cn(
           variant === "compact" ? "scale-75 opacity-60 -mb-1" : "mb-1 opacity-60 scale-90 group-hover:scale-100 group-hover:opacity-100 transition-all duration-300"
@@ -97,13 +97,13 @@ function StatBox({
           {icon}
       </div>
       <div className={cn(
-          "font-bold font-mono text-white leading-tight",
+          "font-bold font-mono text-text-primary leading-tight",
           variant === "compact" ? "text-xs md:text-sm" : "text-base md:text-lg"
       )}>
         {value ?? "-"}
       </div>
       <div className={cn(
-          "uppercase tracking-widest text-gray-500",
+          "uppercase tracking-widest text-text-dimmed",
           variant === "compact" ? "text-[10px] md:text-[10px]" : "text-[10px] mt-0.5"
       )}>
         {label}

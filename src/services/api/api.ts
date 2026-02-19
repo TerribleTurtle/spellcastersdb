@@ -11,22 +11,17 @@ import {
   Incantation
 } from "@/types/api";
 
-
-
 import { registry } from "./registry";
 import { DataFetchError } from "./api-client";
-
+import { GameDataSource } from "./GameDataSource";
+import { LocalDataSource } from "./LocalDataSource";
+import { RemoteDataSource } from "./RemoteDataSource";
 
 export { DataFetchError };
 
 // ============================================================================
 // Fetch Logic
 // ============================================================================
-
-
-import { GameDataSource } from "./GameDataSource";
-import { LocalDataSource } from "./LocalDataSource";
-import { RemoteDataSource } from "./RemoteDataSource";
 
 /**
  * Explicitly initializes the data registry.
@@ -88,7 +83,7 @@ async function fetchWithFallback(
  * @example
  * ```ts
  * const data = await fetchGameData();
- * console.log(data.units.length);
+ * 
  * ```
  */
 export async function fetchGameData(): Promise<AllDataResponse> {
@@ -105,6 +100,18 @@ export async function fetchCriticalGameData(): Promise<AllDataResponse> {
 
 
 /**
+ * Generic helper to fetch data from registry if initialized, or fallback to fetchGameData.
+ */
+async function getFromRegistry<T>(
+    registryGetter: () => T[],
+    dataFallback: (data: AllDataResponse) => T[]
+): Promise<T[]> {
+  if (registry.isInitialized()) return registryGetter();
+  const data = await fetchGameData();
+  return dataFallback(data);
+}
+
+/**
  * Returns all Creatures and Buildings
  * 
  * @example
@@ -114,27 +121,30 @@ export async function fetchCriticalGameData(): Promise<AllDataResponse> {
  * ```
  */
 export async function getUnits(): Promise<Unit[]> {
-  if (registry.isInitialized()) return registry.getAllUnits();
-  const data = await fetchGameData(); 
-  return data.units;
+  return getFromRegistry(
+    () => registry.getAllUnits(),
+    (data) => data.units
+  );
 }
 
 /**
  * Returns all Spells
  */
 export async function getSpells(): Promise<Spell[]> {
-  if (registry.isInitialized()) return registry.getAllSpells();
-  const data = await fetchGameData();
-  return data.spells;
+  return getFromRegistry(
+    () => registry.getAllSpells(),
+    (data) => data.spells
+  );
 }
 
 /**
  * Returns all Titans
  */
 export async function getTitans(): Promise<Titan[]> {
-  if (registry.isInitialized()) return registry.getAllTitans();
-  const data = await fetchGameData();
-  return data.titans;
+  return getFromRegistry(
+    () => registry.getAllTitans(),
+    (data) => data.titans
+  );
 }
 
 /**
@@ -152,27 +162,30 @@ export async function getIncantations(): Promise<Incantation[]> {
  * Returns all spellcasters (formerly Heroes)
  */
 export async function getSpellcasters(): Promise<Spellcaster[]> {
-  if (registry.isInitialized()) return registry.getAllSpellcasters();
-  const data = await fetchGameData();
-  return data.spellcasters;
+  return getFromRegistry(
+    () => registry.getAllSpellcasters(),
+    (data) => data.spellcasters
+  );
 }
 
 /**
  * Returns all consumables
  */
 export async function getConsumables(): Promise<Consumable[]> {
-  if (registry.isInitialized()) return registry.getAllConsumables();
-  const data = await fetchGameData();
-  return data.consumables;
+  return getFromRegistry(
+    () => registry.getAllConsumables(),
+    (data) => data.consumables
+  );
 }
 
 /**
  * Returns all upgrades
  */
 export async function getUpgrades(): Promise<Upgrade[]> {
-  if (registry.isInitialized()) return registry.getAllUpgrades();
-  const data = await fetchGameData();
-  return data.upgrades;
+  return getFromRegistry(
+    () => registry.getAllUpgrades(),
+    (data) => data.upgrades
+  );
 }
 
 /**
@@ -186,17 +199,15 @@ export async function getUpgrades(): Promise<Upgrade[]> {
  * ```ts
  * const entity = await getEntityById("fire_imp_1");
  * if (entity && "damage" in entity) {
- *   console.log(entity.damage);
+ *   
  * }
  * ```
  */
 export async function getEntityById(
   entityId: string
 ): Promise<Unit | Spell | Titan | null> {
-  // Ensure registry is initialized
+  // Ensure registry is initialized (lazy-load if needed)
   if (!registry.isInitialized()) {
-    // Fail fast or warn in strict mode? For now, lazy load but warn.
-    console.warn("getEntityById called before data initialization");
     await ensureDataLoaded();
   }
   
@@ -236,10 +247,7 @@ export async function getAllEntities(): Promise<UnifiedEntity[]> {
           ...registry.getAllTitans(),
           ...registry.getAllSpellcasters(),
           ...registry.getAllConsumables(),
-          // Upgrades included? Original code didn't include them in getAllEntities but did in mapped list?
-          // Original code: ...data.consumables, ]; (End of list)
-          // Wait, original code had: units, spells, titans, spellcasters, consumables. Upgrades were MISSING in original getAllEntities.
-          // I will replicate original behavior exactly to avoid side effects.
+          // Note: Upgrades intentionally excluded from unified entity list.
       ];
   }
   const data = await fetchGameData();

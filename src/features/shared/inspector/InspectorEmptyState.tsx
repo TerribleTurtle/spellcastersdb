@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export function InspectorEmptyState() {
   return (
-    <div className="h-full flex flex-col items-center justify-center text-gray-500 bg-surface-main/30 relative overflow-hidden">
+    <div className="h-full flex flex-col items-center justify-center text-text-dimmed bg-surface-main/30 relative overflow-hidden">
       {/* Decorative Background Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-brand-primary/20 blur-[100px] rounded-full pointer-events-none" />
 
@@ -22,13 +22,13 @@ export function InspectorEmptyState() {
           <span className="text-transparent bg-clip-text bg-linear-to-r from-brand-primary to-brand-secondary">
             SPELLCASTERS
           </span>
-          <span className="text-white">DB</span>
+          <span className="text-text-primary">DB</span>
         </h1>
 
         <div className="h-px w-16 bg-linear-to-r from-transparent via-white/20 to-transparent my-4" />
 
-        <h2 className="text-lg font-bold text-gray-200">Ready to Forge?</h2>
-        <p className="text-sm text-gray-400 mt-2 max-w-[200px]">
+        <h2 className="text-lg font-bold text-text-secondary">Ready to Forge?</h2>
+        <p className="text-sm text-text-muted mt-2 max-w-[200px]">
           Select a Unit or Spellcaster from the vault to inspect details.
         </p>
       </div>

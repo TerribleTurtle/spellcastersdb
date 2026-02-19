@@ -17,9 +17,9 @@ export function CommandCenterLibrary({
   onToggleSelection,
 }: CommandCenterLibraryProps) {
   return (
-    <div className="md:col-span-9 flex flex-col bg-black/20 overflow-hidden">
-      <div className="p-4 border-b border-white/5 bg-white/5">
-        <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400">
+    <div className="md:col-span-9 flex flex-col bg-surface-dim overflow-hidden">
+      <div className="p-4 border-b border-border-subtle bg-surface-card">
+        <h3 className="text-xs font-bold uppercase tracking-widest text-text-muted">
           {mode === "TEAM" && !isImporting ? "Saved Teams" : "Saved Decks"}
         </h3>
       </div>

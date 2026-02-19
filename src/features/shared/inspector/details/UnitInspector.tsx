@@ -18,8 +18,8 @@ export function UnitInspector({ item, onBack, onClose }: UnitInspectorProps) {
       <EntityMechanics item={item} variant="compact" />
       
       {item.description && (
-        <div className="bg-black/20 p-3 rounded-lg border border-white/5 mt-auto">
-          <p className="text-xs md:text-base text-gray-300 italic leading-relaxed text-center">
+        <div className="bg-surface-dim p-3 rounded-lg border border-border-subtle mt-auto">
+          <p className="text-xs md:text-base text-text-secondary italic leading-relaxed text-center">
             &quot;{item.description}&quot;
           </p>
         </div>

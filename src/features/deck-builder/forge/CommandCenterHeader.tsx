@@ -27,10 +27,10 @@ export function CommandCenterHeader({
   onClose,
 }: CommandCenterHeaderProps) {
   return (
-    <div className="flex items-center justify-between p-4 border-b border-white/10 bg-gray-950/50 shrink-0">
+    <div className="flex items-center justify-between p-4 border-b border-border-default bg-surface-deck/50 shrink-0">
       <div className="flex items-center gap-3">
         <SettingsIcon mode={mode} isImporting={isImporting} />
-        <h2 id="modal-title" className="text-lg font-bold uppercase tracking-wider text-white">
+        <h2 id="modal-title" className="text-lg font-bold uppercase tracking-wider text-text-primary">
           {isImporting ? "Import Deck" : "Deck Library"}
         </h2>
 
@@ -47,11 +47,11 @@ export function CommandCenterHeader({
       <div className="flex items-center gap-3">
         {/* Backup / Restore / Clear Actions (Only visible when NOT importing single deck) */}
         {!isImporting && !selectionMode && (
-          <div className="flex items-center gap-1 mr-2 border-r border-white/10 pr-2">
+          <div className="flex items-center gap-1 mr-2 border-r border-border-default pr-2">
             <button
               onClick={onExport}
               data-testid="export-data-btn"
-              className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors"
+              className="p-2 text-text-muted hover:text-text-primary hover:bg-surface-hover rounded transition-colors"
               title="Export Backup"
             >
               <Download size={18} />
@@ -59,7 +59,7 @@ export function CommandCenterHeader({
             <button
               onClick={onImportClick}
               data-testid="import-data-btn"
-              className="p-2 text-gray-400 hover:text-white hover:bg-white/10 rounded transition-colors"
+              className="p-2 text-text-muted hover:text-text-primary hover:bg-surface-hover rounded transition-colors"
               title="Import Backup"
             >
               <Upload size={18} />
@@ -67,7 +67,7 @@ export function CommandCenterHeader({
             <button
               onClick={onClearDataClick}
               data-testid="clear-data-btn"
-              className="p-2 text-red-400/70 hover:text-red-400 hover:bg-red-500/10 rounded transition-colors ml-1"
+              className="p-2 text-status-danger-text/70 hover:text-status-danger-text hover:bg-status-danger-muted rounded transition-colors ml-1"
               title="Delete All Data"
             >
               <Trash2 size={18} />
@@ -80,7 +80,7 @@ export function CommandCenterHeader({
           <div className="flex items-center gap-1 mr-2 animate-in fade-in slide-in-from-right-4 duration-200">
             <button
               onClick={onMassDelete}
-              className="flex items-center gap-2 px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/50 rounded transition-colors"
+              className="flex items-center gap-2 px-3 py-1.5 bg-status-danger-muted hover:bg-status-danger-border text-status-danger-text border border-red-500/50 rounded transition-colors"
             >
               <Trash2 size={16} />
               <span className="text-xs font-bold uppercase">Delete ({selectedCount})</span>
@@ -96,7 +96,7 @@ export function CommandCenterHeader({
               "p-2 rounded transition-colors mr-2",
               selectionMode
                 ? "text-brand-primary bg-brand-primary/10 ring-1 ring-brand-primary/50"
-                : "text-gray-400 hover:text-white hover:bg-white/10"
+                : "text-text-muted hover:text-text-primary hover:bg-surface-hover"
             )}
             title={selectionMode ? "Cancel Selection" : "Select Items"}
           >
@@ -106,7 +106,7 @@ export function CommandCenterHeader({
 
         <button
           onClick={onClose}
-          className="p-3 -mr-2 text-gray-400 hover:text-white hover:bg-white/10 rounded-full transition-colors"
+          className="p-3 -mr-2 text-text-muted hover:text-text-primary hover:bg-surface-hover rounded-full transition-colors"
         >
           <X size={20} />
         </button>

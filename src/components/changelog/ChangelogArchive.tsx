@@ -79,7 +79,7 @@ const CHANGE_TYPE_CONFIG: Record<
   delete: {
     label: "Removed",
     bg: "bg-red-500/15",
-    text: "text-red-400",
+    text: "text-status-danger-text",
     border: "border-red-500/30",
   },
 };
@@ -110,8 +110,8 @@ function ChangeRow({
   return (
     <div
       className={cn(
-        "bg-surface-card border border-white/5 rounded-lg transition-all hover:border-white/10",
-        isExpanded && "border-white/15 bg-surface-hover"
+        "bg-surface-card border border-border-subtle rounded-lg transition-all hover:border-border-default",
+        isExpanded && "border-border-default bg-surface-hover"
       )}
     >
       {/* Main Row */}
@@ -120,7 +120,7 @@ function ChangeRow({
         className="w-full text-left px-3 py-2.5 flex items-center gap-3 group"
       >
         {/* Expand Icon */}
-        <span className="text-gray-600 shrink-0">
+        <span className="text-text-faint shrink-0">
           {row.diffs.length > 0 ? (
             isExpanded ? (
               <ChevronDown size={14} />
@@ -136,12 +136,12 @@ function ChangeRow({
         <PatchBadge type={row.patchType} variant="icon" className="shrink-0" />
 
         {/* Version */}
-        <span className="text-[11px] font-mono text-gray-500 w-12 shrink-0">
+        <span className="text-[11px] font-mono text-text-dimmed w-12 shrink-0">
           v{row.version}
         </span>
 
         {/* Entity Name */}
-        <span className="font-medium text-sm text-gray-200 group-hover:text-white transition-colors truncate min-w-0 flex-1">
+        <span className="font-medium text-sm text-text-secondary group-hover:text-text-primary transition-colors truncate min-w-0 flex-1">
           {row.name}
         </span>
 
@@ -149,7 +149,7 @@ function ChangeRow({
         {row.field !== "entity" && (
           <Badge
             variant="outline"
-            className="text-[9px] h-4 px-1.5 py-0 border-white/10 text-gray-500 uppercase tracking-wide font-normal shrink-0 hidden sm:inline-flex"
+            className="text-[9px] h-4 px-1.5 py-0 border-border-default text-text-dimmed uppercase tracking-wide font-normal shrink-0 hidden sm:inline-flex"
           >
             {row.field.replace(/_/g, " ")}
           </Badge>
@@ -168,12 +168,12 @@ function ChangeRow({
         </span>
 
         {/* Category */}
-        <span className="text-[10px] text-gray-600 uppercase tracking-wider w-16 shrink-0 hidden md:block text-right">
+        <span className="text-[10px] text-text-faint uppercase tracking-wider w-16 shrink-0 hidden md:block text-right">
           {row.category}
         </span>
 
         {/* Date */}
-        <span className="text-[10px] text-gray-600 shrink-0 hidden lg:flex items-center gap-1 w-36 justify-end">
+        <span className="text-[10px] text-text-faint shrink-0 hidden lg:flex items-center gap-1 w-36 justify-end">
           <Clock size={10} />
           <LocalDate iso={row.patchDate} />
         </span>
@@ -183,7 +183,7 @@ function ChangeRow({
           <Link
             href={entityUrl}
             onClick={(e) => e.stopPropagation()}
-            className="text-gray-600 hover:text-brand-primary transition-colors shrink-0"
+            className="text-text-faint hover:text-brand-primary transition-colors shrink-0"
             title={`View ${row.name}`}
           >
             <ExternalLink size={12} />
@@ -193,13 +193,13 @@ function ChangeRow({
 
       {/* Expanded Diff Detail */}
       {isExpanded && row.diffs.length > 0 && (
-        <div className="px-4 pb-3 pt-0 border-t border-white/5 ml-6">
-          <div className="pl-4 mt-2 space-y-1 border-l border-white/5">
+        <div className="px-4 pb-3 pt-0 border-t border-border-subtle ml-6">
+          <div className="pl-4 mt-2 space-y-1 border-l border-border-subtle">
             {row.diffs.slice(0, 8).map((d, i) => (
                 <DiffLine key={i} diff={d as DiffData} />
              ))}
             {row.diffs.length > 8 && (
-              <div className="text-[10px] text-gray-600 italic">
+              <div className="text-[10px] text-text-faint italic">
                 +{row.diffs.length - 8} more changes...
               </div>
             )}
@@ -260,20 +260,22 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
         {/* Search */}
         <div className="relative flex-1 w-full">
           <Search
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-text-dimmed"
             size={16}
           />
           <input
             type="text"
             placeholder="Search changes... (name, field, version, category)"
+            aria-label="Search changes"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-surface-card border border-white/10 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-primary/50 transition-colors"
+            className="w-full bg-surface-card border border-border-default rounded-lg pl-10 pr-4 py-2.5 text-sm text-text-primary placeholder-gray-500 focus:outline-none focus:border-brand-primary/50 transition-colors"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+              aria-label="Clear search"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-text-dimmed hover:text-text-primary"
             >
               <X size={14} />
             </button>
@@ -285,7 +287,8 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
           <select
             value={sortMode}
             onChange={(e) => setSortMode(e.target.value as SortMode)}
-            className="bg-surface-card border border-white/10 rounded-lg px-3 py-2.5 text-xs text-gray-300 focus:outline-none focus:border-brand-primary/50 appearance-none cursor-pointer"
+            aria-label="Sort order"
+            className="bg-surface-card border border-border-default rounded-lg px-3 py-2.5 text-xs text-text-secondary focus:outline-none focus:border-brand-primary/50 appearance-none cursor-pointer"
           >
             {SORT_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -301,7 +304,7 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
               "flex items-center gap-1.5 px-3 py-2.5 rounded-lg border text-xs font-bold transition-all",
               filtersOpen || hasActiveFilters
                 ? "bg-brand-primary/10 border-brand-primary/30 text-brand-primary"
-                : "bg-surface-card border-white/10 text-gray-400 hover:text-white hover:border-white/20"
+                : "bg-surface-card border-border-default text-text-muted hover:text-text-primary hover:border-border-strong"
             )}
           >
             <SlidersHorizontal size={14} />
@@ -315,10 +318,10 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
 
       {/* ── Filter Panel ── */}
       {filtersOpen && (
-        <div className="bg-black/30 border border-white/10 rounded-xl p-4 space-y-4 animate-in slide-in-from-top-2">
+        <div className="bg-surface-dim border border-border-default rounded-xl p-4 space-y-4 animate-in slide-in-from-top-2">
           {/* Patch Type */}
           <div>
-            <h4 className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-2">
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-text-dimmed mb-2">
               Patch Type
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -330,8 +333,8 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
                     className={cn(
                       "flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase border transition-all",
                       filters.patchTypes.includes(type)
-                        ? "bg-white/10 border-white/40 text-white shadow-sm"
-                        : "bg-transparent border-white/5 text-gray-500 hover:border-white/20"
+                        ? "bg-surface-hover border-border-strong text-text-primary shadow-sm"
+                        : "bg-transparent border-border-subtle text-text-dimmed hover:border-border-strong"
                     )}
                   >
                     <PatchBadge
@@ -348,7 +351,7 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
 
           {/* Change Type */}
           <div>
-            <h4 className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-2">
+            <h4 className="text-[10px] font-bold uppercase tracking-wider text-text-dimmed mb-2">
               Change Type
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -362,7 +365,7 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
                       "px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase border transition-all",
                       filters.changeTypes.includes(type)
                         ? cn(config.bg, config.text, config.border)
-                        : "bg-transparent border-white/5 text-gray-500 hover:border-white/20"
+                        : "bg-transparent border-border-subtle text-text-dimmed hover:border-border-strong"
                     )}
                   >
                     {config.label}
@@ -375,7 +378,7 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
           {/* Category */}
           {allCategories.length > 0 && (
             <div>
-              <h4 className="text-[10px] font-bold uppercase tracking-wider text-gray-500 mb-2">
+              <h4 className="text-[10px] font-bold uppercase tracking-wider text-text-dimmed mb-2">
                 Category
               </h4>
               <div className="flex flex-wrap gap-2">
@@ -386,8 +389,8 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
                     className={cn(
                       "px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase border transition-all",
                       filters.categories.includes(cat)
-                        ? "bg-white/10 border-white/40 text-white shadow-sm"
-                        : "bg-transparent border-white/5 text-gray-500 hover:border-white/20"
+                        ? "bg-surface-hover border-border-strong text-text-primary shadow-sm"
+                        : "bg-transparent border-border-subtle text-text-dimmed hover:border-border-strong"
                     )}
                   >
                     {cat}
@@ -399,10 +402,10 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
 
           {/* Clear */}
           {hasActiveFilters && (
-            <div className="flex justify-end pt-1 border-t border-white/5">
+            <div className="flex justify-end pt-1 border-t border-border-subtle">
               <button
                 onClick={clearAll}
-                className="text-[10px] text-gray-500 hover:text-white flex items-center gap-1"
+                className="text-[10px] text-text-dimmed hover:text-text-primary flex items-center gap-1"
               >
                 <X size={10} /> Reset all
               </button>
@@ -413,14 +416,14 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
 
       {/* ── Result Count ── */}
       <div className="flex items-center justify-between text-sm">
-        <div className="text-gray-400">
+        <div className="text-text-muted">
           Showing{" "}
-          <strong className="text-white">
+          <strong className="text-text-primary">
             {Math.min(visibleCount, results.length)}
           </strong>{" "}
-          of <strong className="text-white">{results.length}</strong> changes
+          of <strong className="text-text-primary">{results.length}</strong> changes
           {results.length !== totalCount && (
-            <span className="text-gray-600">
+            <span className="text-text-faint">
               {" "}
               (filtered from {totalCount})
             </span>
@@ -452,7 +455,7 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
           {visibleCount < results.length && (
             <button
               onClick={() => setVisibleCount((prev) => prev + PAGE_SIZE)}
-              className="w-full py-3 text-xs text-gray-500 hover:text-white border border-dashed border-white/10 hover:border-white/20 rounded-lg transition-colors"
+              className="w-full py-3 text-xs text-text-dimmed hover:text-text-primary border border-dashed border-border-default hover:border-border-strong rounded-lg transition-colors"
             >
               Load {Math.min(PAGE_SIZE, results.length - visibleCount)} more...
               ({results.length - visibleCount} remaining)
@@ -460,11 +463,11 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
           )}
         </div>
       ) : (
-        <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-white/10 rounded-xl">
-          <p className="text-lg font-bold text-gray-400 mb-2">
+        <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-border-default rounded-xl">
+          <p className="text-lg font-bold text-text-muted mb-2">
             No changes found
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-text-faint">
             Try adjusting your search or filters.
           </p>
           <button

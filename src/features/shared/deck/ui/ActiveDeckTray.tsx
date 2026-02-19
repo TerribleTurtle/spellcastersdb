@@ -68,7 +68,7 @@ export function ActiveDeckTray({
         </div>
 
         {/* Separator */}
-        <div className="w-px h-24 bg-white/10 mx-2 self-center hidden" />
+        <div className="w-px h-24 bg-surface-hover mx-2 self-center hidden" />
 
         {/* Unit Slots 1-4 - Equal Distribution */}
         {slots.slice(0, 4).map((slot) => (
@@ -97,7 +97,7 @@ export function ActiveDeckTray({
         ))}
 
         {/* Separator */}
-        <div className="w-px h-24 bg-white/10 mx-2 self-center hidden" />
+        <div className="w-px h-24 bg-surface-hover mx-2 self-center hidden" />
 
         {/* Titan Area - Fixed Width on Desktop */}
         <div className="relative flex items-center flex-1 min-w-0 max-w-[17%] xl:max-w-none xl:w-full justify-center">
@@ -117,8 +117,8 @@ export function ActiveDeckTray({
                 // Mobile AND XL: Top-Right Corner Overlay
                 "-top-2 -right-2 px-1.5 py-0.5 xl:top-0 xl:right-0 xl:p-1 xl:px-2",
                 validation.isValid
-                  ? "bg-green-500/10 border-green-500/20 text-green-400"
-                  : "bg-red-500/10 border-red-500/20 text-red-400"
+                  ? "bg-status-success-muted border-status-success-border text-status-success-text"
+                  : "bg-status-danger-muted border-status-danger-border text-status-danger-text"
               )}
               title={
                 validation.isValid ? "Deck Valid" : validation.errors.join("\n")

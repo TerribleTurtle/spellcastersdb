@@ -54,7 +54,7 @@ export function BonusDamageList({ bonusDamage, isCompact }: BonusDamageListProps
             <span className={cn("text-amber-200 font-bold leading-tight", isCompact ? "text-xs" : "text-sm")}>
               {formatBonusValue(bd)} Bonus Dmg
               {targetLabel && (
-                <> vs <span className="text-white">{targetLabel}</span></>
+                <> vs <span className="text-text-primary">{targetLabel}</span></>
               )}
             </span>
           </div>
