@@ -1,21 +1,25 @@
 "use client";
 
 import Link from "next/link";
+
 import { ArrowLeft } from "lucide-react";
 
-import { GameImage } from "@/components/ui/GameImage";
-import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
-import { EntityDisplayItem } from "@/components/entity-card/types";
-import { EntityStats } from "@/components/entity-card/EntityStats";
 import { EntityMechanics } from "@/components/entity-card/EntityMechanics";
+import { EntityStats } from "@/components/entity-card/EntityStats";
 import { SpellcasterAbilities } from "@/components/entity-card/SpellcasterAbilities";
-import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
-import { SmartRankBadge } from "@/components/ui/rank-badge";
-import { PatchHistorySection } from "@/components/inspector/PatchHistorySection";
+import { EntityDisplayItem } from "@/components/entity-card/types";
 import { Breadcrumbs } from "@/components/inspector/Breadcrumbs";
+import { PatchHistorySection } from "@/components/inspector/PatchHistorySection";
 import { RelatedEntities } from "@/components/inspector/RelatedEntities";
-import type { PatchEntry, TimelineEntry } from "@/types/patch-history";
+import { GameImage } from "@/components/ui/GameImage";
+import { SmartRankBadge } from "@/components/ui/rank-badge";
+import {
+  getCardAltText,
+  getCardImageUrl,
+} from "@/services/assets/asset-helpers";
+import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 import type { UnifiedEntity } from "@/types/api";
+import type { PatchEntry, TimelineEntry } from "@/types/patch-history";
 
 export type EntityItem = EntityDisplayItem;
 
@@ -76,21 +80,22 @@ export function EntityShowcase({
   }
 
   // Magic School
-  const magicSchoolRaw = "magic_school" in item ? (item as Unit | Spell | Titan).magic_school : null;
+  const magicSchoolRaw =
+    "magic_school" in item ? (item as Unit | Spell | Titan).magic_school : null;
   const magicSchool = magicSchoolRaw === "Titan" ? null : magicSchoolRaw;
 
   // Tags
   const tags = "tags" in item ? item.tags : [];
 
   // Movement type (for units)
-  const movementType = "movement_type" in item ? (item as Unit).movement_type : null;
+  const movementType =
+    "movement_type" in item ? (item as Unit).movement_type : null;
 
   // Description
   const description = "description" in item ? item.description : null;
 
   return (
     <div className="min-h-screen w-full bg-surface-main/30 relative">
-
       {/* Background Ambience */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-primary/10 blur-[150px] rounded-full" />
@@ -99,7 +104,6 @@ export function EntityShowcase({
 
       {/* Content Container */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 space-y-6">
-
         {/* Breadcrumbs + Back */}
         <div className="flex items-center gap-4 pt-16 md:pt-4">
           {backUrl && (
@@ -118,7 +122,6 @@ export function EntityShowcase({
         {/* HERO SECTION — Image + Title (Two Column on Desktop) */}
         {/* ================================================================ */}
         <div className="flex flex-col md:flex-row gap-6 md:gap-10 items-start">
-
           {/* Left — Entity Image */}
           <div className="w-full md:w-80 shrink-0">
             <div className="relative w-full aspect-square md:aspect-[4/5] bg-surface-card border border-border-default rounded-2xl overflow-hidden group shadow-2xl">
@@ -157,7 +160,10 @@ export function EntityShowcase({
                     />
                   )}
                   {magicSchool && (
-                    <Link href={`/schools/${magicSchool}`} className="bg-brand-secondary/80 hover:bg-brand-secondary text-text-primary px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors">
+                    <Link
+                      href={`/schools/${magicSchool}`}
+                      className="bg-brand-secondary/80 hover:bg-brand-secondary text-text-primary px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors"
+                    >
                       {magicSchool}
                     </Link>
                   )}
@@ -190,16 +196,20 @@ export function EntityShowcase({
                   {movementType}
                 </span>
               )}
-              {"population" in item && (item as Unit).population && (
-                <span className="bg-surface-card border border-border-default text-text-secondary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
-                  Pop: {(item as Unit).population}
-                </span>
-              )}
-              {"cooldown" in item && (item as Spell).cooldown && (
-                <span className="bg-surface-card border border-border-default text-text-secondary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
-                  CD: {(item as Spell).cooldown}s
-                </span>
-              )}
+              {"population" in item &&
+                (item as Unit).population != null &&
+                (item as Unit).population > 0 && (
+                  <span className="bg-surface-card border border-border-default text-text-secondary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                    Pop: {(item as Unit).population}
+                  </span>
+                )}
+              {"cooldown" in item &&
+                (item as Spell).cooldown != null &&
+                (item as Spell).cooldown > 0 && (
+                  <span className="bg-surface-card border border-border-default text-text-secondary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                    CD: {(item as Spell).cooldown}s
+                  </span>
+                )}
             </div>
 
             {/* Tags */}
@@ -231,7 +241,6 @@ export function EntityShowcase({
         {/* CONTENT SECTIONS */}
         {/* ================================================================ */}
         <div className="space-y-6">
-
           {/* Mechanics Section */}
           {"mechanics" in item && item.mechanics && (
             <section className="bg-surface-card border border-border-default rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-100">
@@ -249,14 +258,21 @@ export function EntityShowcase({
           {/* Related Entities */}
           {relatedEntities.length > 0 && (
             <section className="bg-surface-card border border-border-default rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-300">
-              <RelatedEntities entities={relatedEntities} title={relatedTitle} />
+              <RelatedEntities
+                entities={relatedEntities}
+                title={relatedTitle}
+              />
             </section>
           )}
 
           {/* Patch History */}
           {(changelog.length > 0 || timeline.length > 0) && (
             <section className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-400">
-              <PatchHistorySection changelog={changelog} timeline={timeline} showControls={showControls} />
+              <PatchHistorySection
+                changelog={changelog}
+                timeline={timeline}
+                showControls={showControls}
+              />
             </section>
           )}
         </div>
