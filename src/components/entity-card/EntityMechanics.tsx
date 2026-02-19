@@ -98,7 +98,37 @@ export function EntityMechanics({ item, variant = "detailed", showDescriptions }
 
        {/* Damage Modifiers */}
        <DamageModifierList 
-        modifiers={mechanics.damage_modifiers /* as DamageModifier[] */} 
+        modifiers={(() => {
+            const modifiers = mechanics.damage_modifiers || [];
+            
+            // Create a map of targets to values from Bonus Damage to detect duplicates
+            // Key: target_type, Value: Set of values (e.g. 1.3)
+            const bonusMap = new Map<string, Set<number>>();
+            
+            mechanics.bonus_damage?.forEach(bd => {
+                const add = (t: string) => {
+                    if (!bonusMap.has(t)) bonusMap.set(t, new Set());
+                    bonusMap.get(t)?.add(bd.value);
+                };
+                
+                if (bd.target_types) bd.target_types.forEach(t => add(t));
+                if (bd.target_type) add(bd.target_type);
+            });
+
+            // Filter out modifiers that are exact duplicates of bonus damage (same target + same value)
+            return modifiers.filter(mod => {
+                 const targets = mod.target_types || (mod.target_type ? (Array.isArray(mod.target_type) ? mod.target_type : [mod.target_type]) : []);
+                 
+                 // If EVERY target of this modifier has a matching value in bonus damage, we consider it a duplicate/legacy field
+                 const allTargetsDuplicated = targets.every(t => {
+                     const bonusValues = bonusMap.get(t);
+                     // Check if this modifier's multiplier matches a bonus value (approximate float equality)
+                     return bonusValues && Array.from(bonusValues).some(v => Math.abs(v - mod.multiplier) < 0.001);
+                 });
+
+                 return !allTargetsDuplicated;
+            });
+        })()} 
         isCompact={isCompact} 
       />
 
