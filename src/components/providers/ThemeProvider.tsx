@@ -6,6 +6,33 @@ import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 
 import { CustomThemeService } from "@/services/persistence/custom-themes";
 
+/**
+ * All built-in theme class values that next-themes must know about
+ * so it can remove stale classes when switching themes.
+ */
+const BUILT_IN_THEMES = [
+  "dark",
+  "light",
+  "system",
+  "theme-arcane",
+  "theme-inferno",
+  "theme-frost",
+  "theme-retro",
+  "theme-rainbow",
+] as const;
+
+/** Build the full themes list: built-in + any custom themes from localStorage. */
+function useThemesList(): string[] {
+  const [themes, setThemes] = React.useState<string[]>([...BUILT_IN_THEMES]);
+
+  React.useEffect(() => {
+    const customIds = CustomThemeService.getAll().map((t) => t.id);
+    setThemes([...BUILT_IN_THEMES, ...customIds]);
+  }, []);
+
+  return themes;
+}
+
 /** On refresh, reverts Rainbow theme to the previous theme. */
 function EphemeralThemeGuard({ children }: { children: React.ReactNode }) {
   const { theme, setTheme } = useTheme();
@@ -43,25 +70,10 @@ function CustomThemeApplicator() {
       }
     }
 
-    // specific cleanup for custom vars if switching away
-    // We only remove vars starting with --sp- IF they were added by us?
-    // Actually, built-in themes set these vars via CLASS.
-    // If we leave inline styles, they might override classes (specificity: inline > class).
-    // So we MUST clear them when switching away from custom.
+    // Clean up inline custom theme vars when switching away from custom themes.
+    // Built-in themes set these vars via CSS classes, but inline styles have
+    // higher specificity and would override them if left behind.
     const styles = root.style;
-    // Basic cleanup of known keys
-    // We can just iterate the keys we know we set, or clear all --sp-* (risky if others use it?)
-    // But mostly safe for this app.
-    // Let's rely on the list of keys from the Service helper for a "dummy" theme to know what to clear
-    // OR just clear everything that starts with --sp-?
-    // No, cleaner to know the keys.
-    // Let's just create a dummy object to get keys.
-
-    // Better: We saved them.
-    // Let's just remove the ones we set in `toCssVariables`.
-    // Since `toCssVariables` returns a defined set of keys, we can just generic clear them.
-    // But we don't have a theme instance to get keys from if we are in "not custom" mode.
-    // We can use a static list of keys.
     const keysToRemove = [
       "--sp-brand-primary",
       "--sp-brand-secondary",
@@ -99,13 +111,15 @@ function CustomThemeApplicator() {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const themes = useThemesList();
+
   return (
     <NextThemesProvider
       attribute="class"
       defaultTheme="dark"
       enableSystem
       disableTransitionOnChange
-      // REMOVED 'themes' prop to allow dynamic custom-* themes
+      themes={themes}
     >
       <EphemeralThemeGuard>
         <CustomThemeApplicator />

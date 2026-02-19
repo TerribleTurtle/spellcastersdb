@@ -1,5 +1,6 @@
 import { useEphemeralState } from "@/hooks/useEphemeralState";
 import { copyToClipboard } from "@/lib/clipboard";
+import { monitoring } from "@/services/monitoring";
 import { encodeDeck, encodeTeam } from "@/services/utils/encoding";
 import { Deck } from "@/types/deck";
 
@@ -16,12 +17,12 @@ export function useDeckSharing({
   isTeamMode,
   teamDecks,
   teamName,
-  activeSlot
+  activeSlot,
 }: UseDeckSharingProps) {
   const { isActive: copied, trigger: triggerCopied } = useEphemeralState(2000);
 
   const handleShare = async () => {
-    let url = window.location.href; 
+    let url = window.location.href;
 
     if (!isTeamMode) {
       // Solo Mode
@@ -30,14 +31,11 @@ export function useDeckSharing({
     } else if (teamDecks) {
       // Team Mode
       const currentTeamDecks = [...teamDecks] as [Deck, Deck, Deck];
-      if (typeof activeSlot === 'number' && activeSlot >= 0 && activeSlot < 3) {
-          currentTeamDecks[activeSlot] = deck;
+      if (typeof activeSlot === "number" && activeSlot >= 0 && activeSlot < 3) {
+        currentTeamDecks[activeSlot] = deck;
       }
 
-      const hash = encodeTeam(
-        currentTeamDecks,
-        teamName || "Untitled Team"
-      );
+      const hash = encodeTeam(currentTeamDecks, teamName || "Untitled Team");
       url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
     }
 
@@ -45,14 +43,13 @@ export function useDeckSharing({
     if (success) {
       triggerCopied();
     } else {
-      console.error("Failed to copy URL");
+      monitoring.captureMessage("Failed to copy URL", "error");
       alert("Failed to copy URL. Please copy manually from address bar.");
     }
   };
 
   return {
     handleShare,
-    copied
+    copied,
   };
 }
-

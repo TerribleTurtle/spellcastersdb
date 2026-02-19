@@ -63,3 +63,7 @@ lint_output.txt
 temp_output.txt
 scripts/temp_*
 test-results/
+circulars.txt
+circulars_utf8.txt
+deps-report.txt
+.tssservice.tslLoader.ts

@@ -4,6 +4,8 @@ import fs from "fs";
 import mime from "mime";
 import path from "path";
 
+import { monitoring } from "@/services/monitoring";
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ path: string[] }> }
@@ -24,19 +26,28 @@ export async function GET(
   }
 
   let localAssetsPath = process.env.LOCAL_ASSETS_PATH;
-  
+
   // Fallback: Check for sibling directory (matching dev-data-source.ts behavior)
   if (!localAssetsPath) {
-    const siblingPath = path.resolve(process.cwd(), "..", "spellcasters-community-api", "api", "v2");
+    const siblingPath = path.resolve(
+      process.cwd(),
+      "..",
+      "spellcasters-community-api",
+      "api",
+      "v2"
+    );
     if (fs.existsSync(siblingPath)) {
-        localAssetsPath = siblingPath;
+      localAssetsPath = siblingPath;
     }
   }
 
   if (!localAssetsPath) {
-    return new NextResponse("Local assets path not configured and sibling repo not found", {
-      status: 500,
-    });
+    return new NextResponse(
+      "Local assets path not configured and sibling repo not found",
+      {
+        status: 500,
+      }
+    );
   }
 
   // Security: Prevent Directory Traversal
@@ -50,14 +61,14 @@ export async function GET(
   // Defense-in-depth: Verify resolved path determines to be underneath localAssetsPath
   const resolvedPath = path.resolve(fullPath);
   const resolvedRoot = path.resolve(localAssetsPath);
-  
+
   if (!resolvedPath.startsWith(resolvedRoot)) {
-     return new NextResponse("Invalid path traversal", { status: 403 });
+    return new NextResponse("Invalid path traversal", { status: 403 });
   }
 
   // Verify file exists
   if (!fs.existsSync(fullPath)) {
-    console.error(`Asset not found: ${fullPath}`);
+    monitoring.captureMessage(`Asset not found: ${fullPath}`, "error");
     return new NextResponse("Asset not found", { status: 404 });
   }
 
@@ -72,7 +83,10 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Error reading asset:", error);
+    monitoring.captureException(error, {
+      operation: "readAsset",
+      path: fullPath,
+    });
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

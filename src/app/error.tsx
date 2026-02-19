@@ -6,6 +6,8 @@ import Link from "next/link";
 
 import { AlertTriangle, RefreshCcw } from "lucide-react";
 
+import { monitoring } from "@/services/monitoring";
+
 export default function Error({
   error,
   reset,
@@ -15,7 +17,10 @@ export default function Error({
 }) {
   useEffect(() => {
     // Log the error to an error reporting service
-    console.error(error);
+    monitoring.captureException(error, {
+      operation: "rootError",
+      digest: error.digest,
+    });
   }, [error]);
 
   return (

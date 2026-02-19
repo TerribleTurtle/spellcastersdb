@@ -1,3 +1,4 @@
+import { monitoring } from "@/services/monitoring";
 import { DeckBuilderMode } from "@/store/types";
 
 const STORAGE_KEY_APP_STATE = "spellcasters_app_state_v2";
@@ -19,17 +20,23 @@ export const StateService = {
     try {
       localStorage.setItem(STORAGE_KEY_APP_STATE, JSON.stringify(state));
     } catch (e) {
-      console.error("Failed to save app state", e);
+      monitoring.captureException(e, {
+        message: "Failed to save app state",
+        context: "state-service.ts:save",
+      });
     }
   },
 
-  hydrate(defaultMode: DeckBuilderMode, defaultViewSummary: boolean): HydratedState {
+  hydrate(
+    defaultMode: DeckBuilderMode,
+    defaultViewSummary: boolean
+  ): HydratedState {
     let lastHash = null;
     let hydratedMode = defaultMode;
     let hydratedViewSummary = defaultViewSummary;
 
     if (typeof window === "undefined") {
-        return { hydratedMode, hydratedViewSummary, lastHash };
+      return { hydratedMode, hydratedViewSummary, lastHash };
     }
 
     const rawState = localStorage.getItem(STORAGE_KEY_APP_STATE);
@@ -44,7 +51,10 @@ export const StateService = {
         }
         if (s.lastTeamHash) lastHash = s.lastTeamHash;
       } catch (e) {
-        console.error("Failed to hydrate app state", e);
+        monitoring.captureException(e, {
+          message: "Failed to hydrate app state",
+          context: "state-service.ts:hydrate",
+        });
       }
     }
 

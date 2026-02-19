@@ -1,7 +1,14 @@
 import { useMemo } from "react";
+
 import Fuse from "fuse.js";
-import { UnifiedEntity } from "@/types/api";
+
 import { useDebounce } from "@/hooks/useDebounce";
+import {
+  CATEGORY_PRIORITY,
+  RANK_PRIORITY,
+  getSearchableAttributes,
+} from "@/services/rules/search-rules";
+import { UnifiedEntity } from "@/types/api";
 
 interface FilterState {
   schools: string[];
@@ -9,8 +16,6 @@ interface FilterState {
   categories: string[];
   classes: string[];
 }
-
-import { CATEGORY_PRIORITY, RANK_PRIORITY, getSearchableAttributes } from "@/services/rules/search-rules";
 
 export function useUnitSearch(
   units: UnifiedEntity[],

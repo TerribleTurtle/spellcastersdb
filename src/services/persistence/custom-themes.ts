@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { monitoring } from "@/services/monitoring";
+
 // Base schema for a custom theme
 export const CustomThemeSchema = z.object({
   id: z.string(),
@@ -37,7 +39,7 @@ export const CustomThemeService = {
       const validThemes = z.array(CustomThemeSchema).safeParse(parsed);
       return validThemes.success ? validThemes.data : [];
     } catch (e) {
-      console.error("Failed to load custom themes", e);
+      monitoring.captureException(e, { operation: "loadCustomThemes" });
       return [];
     }
   },

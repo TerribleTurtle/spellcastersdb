@@ -1,39 +1,44 @@
 "use client";
 
+import { useCallback, useEffect, useRef, useState } from "react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { 
-  Github, 
-  ExternalLink,
-  MessageSquare,
+
+import {
   ChevronLeft,
+  ExternalLink,
+  Github,
   Menu,
+  MessageSquare,
 } from "lucide-react";
-import { PRIMARY_NAV, SECONDARY_NAV, isActivePath } from "@/lib/nav-links";
+
+import { ThemePicker } from "@/components/ui/ThemePicker";
+import { Button } from "@/components/ui/button";
 import { useFeedback } from "@/hooks/useFeedback";
+import { PRIMARY_NAV, SECONDARY_NAV, isActivePath } from "@/lib/nav-links";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/ui-store";
-import { Button } from "@/components/ui/button";
-import { ThemePicker } from "@/components/ui/ThemePicker";
 
 export function DesktopSidebar() {
   const pathname = usePathname();
   const { openFeedback } = useFeedback();
-  
-  const { isSidebarOpen, toggleSidebar, setSidebarOpen, hasManuallyToggled } = useUIStore();
-  
+
+  const { isSidebarOpen, toggleSidebar, setSidebarOpen, hasManuallyToggled } =
+    useUIStore();
+
   // Mounted check for hydration safety
   const [mounted, setMounted] = useState(false);
   const resizeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  
+
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
   const applyResize = useCallback(() => {
-    if (window.innerWidth < 1536) { // 2XL Breakpoint
+    if (window.innerWidth < 1536) {
+      // 2XL Breakpoint
       setSidebarOpen(false);
     } else {
       setSidebarOpen(true);
@@ -41,93 +46,116 @@ export function DesktopSidebar() {
   }, [setSidebarOpen]);
 
   useEffect(() => {
-      // Logic to sync sidebar with window size
-      if (!mounted) return;
+    // Logic to sync sidebar with window size
+    if (!mounted) return;
 
-      const handleResize = () => {
-          if (hasManuallyToggled) return; // Respect user preference
-          if (resizeTimer.current) clearTimeout(resizeTimer.current);
-          resizeTimer.current = setTimeout(applyResize, 150);
-      };
+    const handleResize = () => {
+      if (hasManuallyToggled) return; // Respect user preference
+      if (resizeTimer.current) clearTimeout(resizeTimer.current);
+      resizeTimer.current = setTimeout(applyResize, 150);
+    };
 
-      // Run once on mount if no manual toggle
-      if (!hasManuallyToggled) {
-          applyResize();
-      }
+    // Run once on mount if no manual toggle
+    if (!hasManuallyToggled) {
+      applyResize();
+    }
 
-      window.addEventListener("resize", handleResize);
-      return () => {
-        window.removeEventListener("resize", handleResize);
-        if (resizeTimer.current) clearTimeout(resizeTimer.current);
-      };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (resizeTimer.current) clearTimeout(resizeTimer.current);
+    };
   }, [mounted, hasManuallyToggled, applyResize]);
 
   // Prevent hydration mismatch by rendering a placeholder or default until mounted
-  // For sidebar, we can just render default (open) or closed, but might flicker. 
+  // For sidebar, we can just render default (open) or closed, but might flicker.
   // Ideally, valid "w-64" or "w-16" is applied immediately.
-  
+
   const isActive = (path: string) => isActivePath(path, pathname);
-  
-  if (!mounted) return (
+
+  if (!mounted)
+    return (
       <aside className="hidden md:flex flex-col w-16 2xl:w-64 border-r border-border-default sticky top-16 h-[calc(100vh-4rem)] bg-surface-main z-30" />
-  );
+    );
 
   return (
-    <aside 
-        className={cn(
-            "hidden md:flex flex-col border-r border-border-default sticky top-16 h-[calc(100vh-4rem)] bg-surface-main z-30 transition-[width] duration-300 ease-in-out overflow-y-auto overflow-x-hidden",
-            isSidebarOpen ? "w-64" : "w-16"
-        )}
+    <aside
+      data-testid="desktop-sidebar"
+      className={cn(
+        "hidden md:flex flex-col border-r border-border-default sticky top-16 h-[calc(100vh-4rem)] bg-surface-main z-30 transition-[width] duration-300 ease-in-out overflow-y-auto overflow-x-hidden",
+        isSidebarOpen ? "w-64" : "w-16"
+      )}
     >
-      <div className={cn("flex flex-col gap-6 p-4", !isSidebarOpen && "px-2 items-center")}>
-        
+      <div
+        className={cn(
+          "flex flex-col gap-6 p-4",
+          !isSidebarOpen && "px-2 items-center"
+        )}
+      >
         {/* Toggle Button (Sidebar Header) */}
         {!isSidebarOpen && (
-            <Button 
-                variant="ghost" 
-                size="icon"
-                onClick={toggleSidebar}
-                className="text-text-muted hover:bg-surface-card hover:text-text-primary transition-colors mb-2"
-                title="Expand Menu"
-                aria-label="Expand sidebar"
-            >
-                <Menu size={20} />
-            </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            data-testid="sidebar-expand-btn"
+            className="text-text-muted hover:bg-surface-card hover:text-text-primary transition-colors mb-2"
+            title="Expand Menu"
+            aria-label="Expand sidebar"
+          >
+            <Menu size={20} />
+          </Button>
         )}
 
         {/* Primary Navigation */}
         <div className="flex flex-col gap-1 w-full">
           {isSidebarOpen && (
-              <h3 className="text-xs font-bold text-text-dimmed uppercase tracking-wider px-3 mb-2 flex justify-between items-center">
-                Menu
-                <Button variant="ghost" size="icon" onClick={toggleSidebar} className="h-6 w-6 hover:text-text-primary transition-colors" title="Collapse Menu" aria-label="Collapse sidebar">
-                    <ChevronLeft size={14} />
-                </Button>
-              </h3>
+            <h3 className="text-xs font-bold text-text-dimmed uppercase tracking-wider px-3 mb-2 flex justify-between items-center">
+              Menu
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleSidebar}
+                data-testid="sidebar-collapse-btn"
+                className="h-6 w-6 hover:text-text-primary transition-colors"
+                title="Collapse Menu"
+                aria-label="Collapse sidebar"
+              >
+                <ChevronLeft size={14} />
+              </Button>
+            </h3>
           )}
-          
+
           {PRIMARY_NAV.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.href);
-            
+
             return (
               <Link
                 key={item.href}
                 href={item.href}
+                data-testid={`sidebar-link-${item.name.toLowerCase()}`}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all group relative",
-                  active 
-                    ? "bg-brand-primary/10 text-brand-primary" 
+                  active
+                    ? "bg-brand-primary/10 text-brand-primary"
                     : "text-text-muted hover:bg-surface-card hover:text-text-primary",
                   !isSidebarOpen && "justify-center px-2"
                 )}
                 title={!isSidebarOpen ? item.name : undefined}
               >
-                <Icon size={18} className={cn(
+                <Icon
+                  size={18}
+                  className={cn(
                     "transition-colors shrink-0",
-                    active ? "text-brand-primary" : "text-text-dimmed group-hover:text-text-primary"
-                )} />
-                {isSidebarOpen && <span className="whitespace-nowrap">{item.name}</span>}
+                    active
+                      ? "text-brand-primary"
+                      : "text-text-dimmed group-hover:text-text-primary"
+                  )}
+                />
+                {isSidebarOpen && (
+                  <span className="whitespace-nowrap">{item.name}</span>
+                )}
               </Link>
             );
           })}
@@ -137,7 +165,7 @@ export function DesktopSidebar() {
         <div className="flex flex-col gap-1 w-full">
           {isSidebarOpen && (
             <h3 className="text-xs font-bold text-text-dimmed uppercase tracking-wider px-3 mb-2">
-                Resources
+              Resources
             </h3>
           )}
           {SECONDARY_NAV.map((item) => {
@@ -148,20 +176,28 @@ export function DesktopSidebar() {
               <Link
                 key={item.href}
                 href={item.href}
+                data-testid={`sidebar-link-${item.name.toLowerCase().replace(/\s+/g, "-")}`}
                 className={cn(
                   "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all group relative",
-                  active 
-                    ? "bg-brand-primary/10 text-brand-primary" 
+                  active
+                    ? "bg-brand-primary/10 text-brand-primary"
                     : "text-text-muted hover:bg-surface-card hover:text-text-primary",
-                   !isSidebarOpen && "justify-center px-2"
+                  !isSidebarOpen && "justify-center px-2"
                 )}
                 title={!isSidebarOpen ? item.name : undefined}
               >
-                <Icon size={18} className={cn(
+                <Icon
+                  size={18}
+                  className={cn(
                     "transition-colors shrink-0",
-                    active ? "text-brand-primary" : "text-text-dimmed group-hover:text-text-primary"
-                )} />
-                {isSidebarOpen && <span className="whitespace-nowrap">{item.name}</span>}
+                    active
+                      ? "text-brand-primary"
+                      : "text-text-dimmed group-hover:text-text-primary"
+                  )}
+                />
+                {isSidebarOpen && (
+                  <span className="whitespace-nowrap">{item.name}</span>
+                )}
               </Link>
             );
           })}
@@ -170,54 +206,71 @@ export function DesktopSidebar() {
         <Button
           variant="ghost"
           onClick={openFeedback}
+          data-testid="sidebar-feedback-btn"
           className={cn(
-              "flex items-center gap-3 px-3 py-2 h-auto rounded-lg text-sm font-medium text-text-muted hover:bg-surface-card hover:text-text-primary transition-all group w-full justify-start",
-              !isSidebarOpen && "justify-center px-2"
+            "flex items-center gap-3 px-3 py-2 h-auto rounded-lg text-sm font-medium text-text-muted hover:bg-surface-card hover:text-text-primary transition-all group w-full justify-start",
+            !isSidebarOpen && "justify-center px-2"
           )}
           title={!isSidebarOpen ? "Feedback" : undefined}
           aria-label="Submit feedback"
         >
-          <MessageSquare size={18} className="text-text-dimmed group-hover:text-text-primary transition-colors shrink-0" />
+          <MessageSquare
+            size={18}
+            className="text-text-dimmed group-hover:text-text-primary transition-colors shrink-0"
+          />
           {isSidebarOpen && "Feedback"}
         </Button>
-        
+
         {/* Theme Picker */}
-        <div className={cn("mt-auto w-full", !isSidebarOpen && "flex justify-center")}>
-            <ThemePicker 
-                side="top" 
-                align="start" 
-                className={cn(
-                    "flex items-center px-3 py-2 rounded-lg text-sm font-medium text-text-muted hover:bg-surface-card hover:text-text-primary transition-all group w-full justify-start",
-                    !isSidebarOpen && "justify-center px-2 h-10 w-10 p-0"
-                )} 
-            >
-                {isSidebarOpen && "Theme"}
-            </ThemePicker>
+        <div
+          className={cn(
+            "mt-auto w-full",
+            !isSidebarOpen && "flex justify-center"
+          )}
+        >
+          <ThemePicker
+            side="top"
+            align="start"
+            data-testid="sidebar-theme-picker"
+            className={cn(
+              "flex items-center px-3 py-2 rounded-lg text-sm font-medium text-text-muted hover:bg-surface-card hover:text-text-primary transition-all group w-full justify-start",
+              !isSidebarOpen && "justify-center px-2 h-10 w-10 p-0"
+            )}
+          >
+            {isSidebarOpen && "Theme"}
+          </ThemePicker>
         </div>
 
         {/* External Links */}
-        <div className={cn("pt-2 border-t border-border-default w-full", !isSidebarOpen && "flex justify-center")}>
-             <a
-                href="https://github.com/TerribleTurtle/spellcasters-community-api"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                    "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-text-muted hover:bg-surface-card hover:text-text-primary transition-all group",
-                    !isSidebarOpen && "justify-center px-2"
-                )}
-                title={!isSidebarOpen ? "Contribute (GitHub)" : undefined}
-                aria-label="Contribute on GitHub"
-              >
-                <Github size={18} className="text-text-dimmed group-hover:text-text-primary shrink-0" />
-                {isSidebarOpen && (
-                    <>
-                        Contribute
-                        <ExternalLink size={12} className="ml-auto opacity-50" />
-                    </>
-                )}
-              </a>
+        <div
+          className={cn(
+            "pt-2 border-t border-border-default w-full",
+            !isSidebarOpen && "flex justify-center"
+          )}
+        >
+          <a
+            href="https://github.com/TerribleTurtle/spellcasters-community-api"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-text-muted hover:bg-surface-card hover:text-text-primary transition-all group",
+              !isSidebarOpen && "justify-center px-2"
+            )}
+            title={!isSidebarOpen ? "Contribute (GitHub)" : undefined}
+            aria-label="Contribute on GitHub"
+          >
+            <Github
+              size={18}
+              className="text-text-dimmed group-hover:text-text-primary shrink-0"
+            />
+            {isSidebarOpen && (
+              <>
+                Contribute
+                <ExternalLink size={12} className="ml-auto opacity-50" />
+              </>
+            )}
+          </a>
         </div>
-
       </div>
     </aside>
   );

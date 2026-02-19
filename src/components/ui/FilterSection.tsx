@@ -24,10 +24,14 @@ export function FilterSection({
   const [isExpanded, setIsExpanded] = useState(true);
 
   return (
-    <div className="space-y-3">
+    <div
+      className="space-y-3"
+      data-testid={`filter-section-${title.toLowerCase().replace(/\s+/g, "-")}`}
+    >
       <button
         onClick={() => setIsExpanded(!isExpanded)}
         aria-expanded={isExpanded}
+        data-testid={`filter-section-toggle-${title.toLowerCase().replace(/\s+/g, "-")}`}
         className="flex items-center justify-between w-full text-left group"
       >
         <h3 className="text-xs font-bold text-text-secondary uppercase tracking-widest group-hover:text-text-primary transition-colors">
@@ -49,6 +53,7 @@ export function FilterSection({
         >
           {options.map((option) => {
             const isSelected = selected.includes(option);
+            const optionTestId = `filter-option-${title.toLowerCase().replace(/\s+/g, "-")}-${option.toLowerCase().replace(/\s+/g, "-")}`;
 
             if (isGrid) {
               return (
@@ -56,6 +61,7 @@ export function FilterSection({
                   key={option}
                   onClick={() => onToggle(option)}
                   aria-pressed={isSelected}
+                  data-testid={optionTestId}
                   className={cn(
                     "flex items-center justify-center p-2.5 min-h-[44px] rounded border text-xs font-mono font-bold transition-all",
                     isSelected
@@ -73,16 +79,17 @@ export function FilterSection({
                 key={option}
                 role="checkbox"
                 aria-checked={isSelected}
+                data-testid={optionTestId}
                 className="flex items-center gap-3 p-2 rounded hover:bg-surface-card cursor-pointer group transition-colors w-full text-left focus:outline-none focus:bg-surface-card"
                 onClick={(e) => {
                   e.preventDefault();
                   onToggle(option);
                 }}
                 onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        onToggle(option);
-                    }
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    onToggle(option);
+                  }
                 }}
               >
                 <div
@@ -93,7 +100,9 @@ export function FilterSection({
                       : "border-gray-600 group-hover:border-gray-400"
                   )}
                 >
-                  {isSelected && <Check size={10} className="text-text-primary" />}
+                  {isSelected && (
+                    <Check size={10} className="text-text-primary" />
+                  )}
                 </div>
                 <span
                   className={cn(

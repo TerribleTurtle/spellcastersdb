@@ -1,6 +1,8 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 
+import { monitoring } from "@/services/monitoring";
+
 /**
  * Rate Limiter instance using Upstash Redis.
  * Only initialized if environment variables are present.
@@ -19,7 +21,8 @@ if (
     prefix: "@upstash/ratelimit",
   });
 } else {
-  console.warn(
-    "Rate limiting disabled: UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN not found."
+  monitoring.captureMessage(
+    "Rate limiting disabled: UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN not found.",
+    "warning"
   );
 }

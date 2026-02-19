@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react';
-import { useDeckStore } from '@/store/index';
-import { Unit, Spell, Titan, Spellcaster } from '@/types/api';
-import { serializeDeck, reconstructDeck } from '@/services/api/persistence';
-import { Deck } from '@/types/deck';
+import { useEffect, useRef } from "react";
+
+import { reconstructDeck, serializeDeck } from "@/services/api/persistence";
+import { monitoring } from "@/services/monitoring";
+import { useDeckStore } from "@/store/index";
+import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
+import { Deck } from "@/types/deck";
 
 interface UseDataHydrationProps {
   units: (Unit | Spell | Titan)[];
@@ -16,7 +18,10 @@ interface UseDataHydrationProps {
  * Uses existing `serializeDeck` (snapshot -> IDs) and `reconstructDeck` (IDs + Fresh Data -> Deck)
  * utilities to seamlessly refresh data without losing user customizations.
  */
-export function useDataHydration({ units, spellcasters }: UseDataHydrationProps) {
+export function useDataHydration({
+  units,
+  spellcasters,
+}: UseDataHydrationProps) {
   const hasHydrated = useRef(false);
 
   useEffect(() => {
@@ -37,7 +42,10 @@ export function useDataHydration({ units, spellcasters }: UseDataHydrationProps)
           name: deck.name || fresh.name,
         };
       } catch (e) {
-        console.error('[Hydration] Failed for deck:', deck.name, e);
+        monitoring.captureException(e, {
+          operation: "deckHydration",
+          deckName: deck.name,
+        });
         return deck; // Fallback to stale data rather than crashing
       }
     };
@@ -50,7 +58,9 @@ export function useDataHydration({ units, spellcasters }: UseDataHydrationProps)
       const savedTeams = state.savedTeams ?? [];
 
       const freshSavedDecks = savedDecks.map(hydrateDeck);
-      const freshCurrentDeck = currentDeck ? hydrateDeck(currentDeck) : currentDeck;
+      const freshCurrentDeck = currentDeck
+        ? hydrateDeck(currentDeck)
+        : currentDeck;
       const freshTeamDecks = teamDecks.map(hydrateDeck) as [Deck, Deck, Deck];
       const freshSavedTeams = savedTeams.map((team) => ({
         ...team,
@@ -66,7 +76,7 @@ export function useDataHydration({ units, spellcasters }: UseDataHydrationProps)
 
       hasHydrated.current = true;
     } catch (e) {
-      console.error('💧 [Hydration] Batch hydration failed:', e);
+      monitoring.captureException(e, { operation: "batchHydration" });
     }
   }, [units, spellcasters]);
 }

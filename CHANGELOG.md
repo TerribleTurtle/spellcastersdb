@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.21] - 2026-02-19
+
+### Fixed
+
+- **Observability**: Replaced 13 instances of raw `console.warn` with `monitoring.captureMessage` across API services (`patch-history`, `mappers`, `asset-cache`, `ratelimit`) and utility modules.
+- **E2E Support**: Added `data-testid` attributes to:
+  - `PageShell` (root container)
+  - Home Page Hero Cards (Deck Builder, Database, Guide)
+  - Footer Links (Steam, Discord, GitHub, Legal)
+- **Code Health**: Enforced strict "no console log" policy in production code (verified Clean).
+
 ## [1.0.20] - 2026-02-19
 
 ### Added

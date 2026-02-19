@@ -8,11 +8,11 @@
  *
  * @see {@link docs/api_info.md} for endpoint documentation.
  */
-
 import { CONFIG } from "@/lib/config";
+import { monitoring } from "@/services/monitoring";
 import {
-  ChangelogLatestSchema,
   ChangelogIndexSchema,
+  ChangelogLatestSchema,
   ChangelogPageSchema,
   EntityTimelineSchema,
 } from "@/services/validation/patch-history-schemas";
@@ -39,15 +39,22 @@ const EMPTY_TIMELINE: EntityTimeline = [];
  */
 async function fetchPatchData<T>(
   endpoint: string,
-  schema: { safeParse: (data: unknown) => { success: boolean; data?: T; error?: unknown } },
+  schema: {
+    safeParse: (data: unknown) => {
+      success: boolean;
+      data?: T;
+      error?: unknown;
+    };
+  },
   fallback: T
 ): Promise<T> {
   try {
     // In development, proxy requests through our local API route to access filesystem.
     // Server-side fetch requires an absolute URL, so we prepend the dev server origin.
     // In production (or if configured), use the remote API.
-    const baseUrl = process.env.NODE_ENV === "development" 
-        ? `http://localhost:${process.env.PORT || 3000}/api/local-assets` 
+    const baseUrl =
+      process.env.NODE_ENV === "development"
+        ? `http://localhost:${process.env.PORT || 3000}/api/local-assets`
         : CONFIG.API.BASE_URL;
 
     const url = `${baseUrl}/${endpoint}`;
@@ -58,7 +65,11 @@ async function fetchPatchData<T>(
     if (!response.ok) {
       // 404 is expected when no patch data exists yet
       if (response.status !== 404) {
-        console.warn(`[PatchHistory] ${endpoint}: ${response.status} ${response.statusText}`);
+        monitoring.captureMessage(
+          `PatchHistory fetch returned ${response.status}`,
+          "warning",
+          { endpoint, status: response.status, statusText: response.statusText }
+        );
       }
       return fallback;
     }
@@ -67,13 +78,20 @@ async function fetchPatchData<T>(
     const result = schema.safeParse(raw);
 
     if (!result.success) {
-      console.warn(`[PatchHistory] ${endpoint}: Zod validation failed`, result.error);
+      monitoring.captureMessage(
+        "PatchHistory Zod validation failed",
+        "warning",
+        { endpoint, error: result.error }
+      );
       return fallback;
     }
 
     return result.data as T;
   } catch (error) {
-    console.warn(`[PatchHistory] ${endpoint}: fetch failed`, error);
+    monitoring.captureMessage("PatchHistory fetch failed", "warning", {
+      endpoint,
+      error,
+    });
     return fallback;
   }
 }
@@ -100,16 +118,24 @@ export async function fetchChangelogLatest(): Promise<ChangelogLatest> {
  */
 export async function fetchChangelog(): Promise<Changelog> {
   // 1. Fetch Index
-  const index = await fetchPatchData("changelog_index.json", ChangelogIndexSchema, null);
-  
+  const index = await fetchPatchData(
+    "changelog_index.json",
+    ChangelogIndexSchema,
+    null
+  );
+
   if (!index) {
-      // Fallback: try fetching legacy changelog.json directly (backward compatibility during migration)
-      return fetchPatchData("changelog.json", ChangelogPageSchema, EMPTY_CHANGELOG);
+    // Fallback: try fetching legacy changelog.json directly (backward compatibility during migration)
+    return fetchPatchData(
+      "changelog.json",
+      ChangelogPageSchema,
+      EMPTY_CHANGELOG
+    );
   }
 
   // 2. Fetch Pages
-  const pagePromises = index.pages.map(pageFile => 
-      fetchPatchData(pageFile, ChangelogPageSchema, [])
+  const pagePromises = index.pages.map((pageFile) =>
+    fetchPatchData(pageFile, ChangelogPageSchema, [])
   );
 
   const pages = await Promise.all(pagePromises);
@@ -124,31 +150,44 @@ export async function fetchChangelog(): Promise<Changelog> {
  *
  * @param entityId - The entity_id to fetch timeline for (e.g. "fire_imp_1").
  */
-export async function fetchEntityTimeline(entityId: string): Promise<EntityTimeline> {
-  return fetchPatchData(`timeline/${entityId}.json`, EntityTimelineSchema, EMPTY_TIMELINE);
+export async function fetchEntityTimeline(
+  entityId: string
+): Promise<EntityTimeline> {
+  return fetchPatchData(
+    `timeline/${entityId}.json`,
+    EntityTimelineSchema,
+    EMPTY_TIMELINE
+  );
 }
 
 /**
  * Filters the global changelog for a specific entity.
- * 
+ *
  * The API now returns a global list of patches (each containing changes for multiple entities).
  * This helper filters/transforms that list into a history view for a single entity.
  */
-export function filterChangelogForEntity(changelog: Changelog, entityId: string): Changelog {
-  return changelog.map(patch => {
-    // Check if any change targets this entity.
-    // target_id is typically "category/entity_id.json" or just "entity_id.json"
-    const relevantChanges = patch.changes.filter(change => {
+export function filterChangelogForEntity(
+  changelog: Changelog,
+  entityId: string
+): Changelog {
+  return changelog
+    .map((patch) => {
+      // Check if any change targets this entity.
+      // target_id is typically "category/entity_id.json" or just "entity_id.json"
+      const relevantChanges = patch.changes.filter((change) => {
         const target = change.target_id;
         // Match exact filename or path suffix
-        return target === `${entityId}.json` || target.endsWith(`/${entityId}.json`);
-    });
+        return (
+          target === `${entityId}.json` || target.endsWith(`/${entityId}.json`)
+        );
+      });
 
-    if (relevantChanges.length === 0) return null;
+      if (relevantChanges.length === 0) return null;
 
-    return {
-      ...patch,
-      changes: relevantChanges
-    };
-  }).filter((p): p is PatchEntry => p !== null);
+      return {
+        ...patch,
+        changes: relevantChanges,
+      };
+    })
+    .filter((p): p is PatchEntry => p !== null);
 }

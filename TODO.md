@@ -10,3 +10,4 @@
 - [ ] **Public Profile**: Shareable user profile with favorite decks
 - [ ] **Deck Ratings**: Community voting system
 - [ ] **Patch History Data Pipeline**: Deploy balance_index, changelog, timeline JSON endpoints
+- [ ] **TanStack Query**: Adopt `@tanstack/react-query` for client-side server state when User Accounts / Cloud Decks ship (low risk, incremental — see ROI report). Pairs with Zustand (client state) without conflict.

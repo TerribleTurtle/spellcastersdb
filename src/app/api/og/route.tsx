@@ -1,12 +1,15 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { NextRequest } from "next/server";
 
+import { promises as fs } from "fs";
+import path from "path";
+
 import { fetchGameData } from "@/services/api/api";
-import { ratelimit } from '@/services/infrastructure/ratelimit';
+import { ratelimit } from "@/services/infrastructure/ratelimit";
+import { monitoring } from "@/services/monitoring";
+
 import { renderDeckImage } from "./render-deck";
-import { renderTeamImage } from "./render-team";
 import { renderEntityImage } from "./render-entity";
+import { renderTeamImage } from "./render-team";
 
 export const runtime = "nodejs";
 
@@ -27,7 +30,7 @@ export async function GET(request: NextRequest) {
     const { searchParams, origin } = new URL(request.url);
     const deckHash = searchParams.get("deck") || searchParams.get("d");
     const teamHash = searchParams.get("team");
-    
+
     // Entity IDs
     const spellcasterId = searchParams.get("spellcasterId");
     const unitId = searchParams.get("unitId");
@@ -48,23 +51,39 @@ export async function GET(request: NextRequest) {
 
     // --- TEAM MODE ---
     if (teamHash) {
-      return renderTeamImage(teamHash, data, fontData as unknown as ArrayBuffer, origin);
+      return renderTeamImage(
+        teamHash,
+        data,
+        fontData as unknown as ArrayBuffer,
+        origin
+      );
     }
 
     // --- ENTITY MODE ---
     const targetEntityId = spellcasterId || unitId || itemId || genericId;
     if (targetEntityId) {
-        return renderEntityImage(targetEntityId, data, fontData as unknown as ArrayBuffer);
+      return renderEntityImage(
+        targetEntityId,
+        data,
+        fontData as unknown as ArrayBuffer
+      );
     }
 
     // --- DECK MODE ---
     if (!deckHash) {
-      return new Response("Missing deck, team, or entity parameter", { status: 400 });
+      return new Response("Missing deck, team, or entity parameter", {
+        status: 400,
+      });
     }
 
-    return renderDeckImage(deckHash, data, fontData as unknown as ArrayBuffer, origin);
+    return renderDeckImage(
+      deckHash,
+      data,
+      fontData as unknown as ArrayBuffer,
+      origin
+    );
   } catch (e: unknown) {
-    console.error("OG Error:", e);
+    monitoring.captureException(e, { operation: "ogGeneration" });
 
     return new Response("Internal Server Error", { status: 500 });
   }

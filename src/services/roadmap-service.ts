@@ -1,7 +1,9 @@
-import { RoadmapIssue } from "@/types/roadmap";
 import { FALLBACK_ISSUES } from "@/data/roadmap-fallback";
+import { monitoring } from "@/services/monitoring";
+import { RoadmapIssue } from "@/types/roadmap";
 
-const GITHUB_API_URL = "https://api.github.com/repos/TerribleTurtle/spellcastersdb/issues?state=open";
+const GITHUB_API_URL =
+  "https://api.github.com/repos/TerribleTurtle/spellcastersdb/issues?state=open";
 
 // Local interfaces for GitHub API response
 interface GitHubLabel {
@@ -34,8 +36,6 @@ export const roadmapService = {
         headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
       }
 
-
-      
       const res = await fetch(GITHUB_API_URL, {
         headers,
         next: { revalidate: 60 }, // Cache for 60 seconds (ISR)
@@ -43,9 +43,17 @@ export const roadmapService = {
 
       if (!res.ok) {
         if (res.status === 403 || res.status === 429) {
-          console.warn(`[RoadmapService] Rate limit hit (${res.status}). Using fallback data.`);
+          monitoring.captureMessage(
+            `[RoadmapService] Rate limit hit (${res.status}). Using fallback data.`,
+            "warning",
+            { context: "roadmap-service.ts:getIssues", status: res.status }
+          );
         } else {
-          console.error(`[RoadmapService] GitHub API Error: ${res.status} ${res.statusText}`);
+          monitoring.captureMessage(
+            `[RoadmapService] GitHub API Error: ${res.status} ${res.statusText}`,
+            "error",
+            { context: "roadmap-service.ts:getIssues", status: res.status }
+          );
         }
         return { issues: FALLBACK_ISSUES, isLive: false };
       }
@@ -71,12 +79,14 @@ export const roadmapService = {
       }));
 
       // Filter out Pull Requests (GitHub "issues" endpoint includes PRs)
-      const cleanIssues = issues.filter(i => !i.html_url.includes("/pull/"));
+      const cleanIssues = issues.filter((i) => !i.html_url.includes("/pull/"));
 
       return { issues: cleanIssues, isLive: true };
-
     } catch (error) {
-      console.error("[RoadmapService] Network/Fetch Error:", error);
+      monitoring.captureException(error, {
+        message: "[RoadmapService] Network/Fetch Error",
+        context: "roadmap-service.ts:getIssues",
+      });
       return { issues: FALLBACK_ISSUES, isLive: false };
     }
   },

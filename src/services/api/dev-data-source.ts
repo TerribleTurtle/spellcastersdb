@@ -1,6 +1,8 @@
 import { CONFIG } from "@/lib/config";
-import { RawData, mapRawDataToAllData } from "./mappers";
+import { monitoring } from "@/services/monitoring";
 import { AllDataResponse } from "@/types/api";
+
+import { RawData, mapRawDataToAllData } from "./mappers";
 
 /**
  * Fetches game data from the local filesystem.
@@ -13,7 +15,6 @@ import { AllDataResponse } from "@/types/api";
  * without complex configuration.
  */
 
-
 export async function fetchLocalData(): Promise<AllDataResponse | undefined> {
   if (process.env.NODE_ENV !== "development") return undefined;
 
@@ -25,18 +26,24 @@ export async function fetchLocalData(): Promise<AllDataResponse | undefined> {
     // Prioritize explicit env, fallback to sibling directory
     const localPath =
       CONFIG.DEV.LOCAL_DATA_PATH ||
-      path.resolve(process.cwd(), "..", "spellcasters-community-api", "api", "v2", "all_data.json");
-    
-
+      path.resolve(
+        process.cwd(),
+        "..",
+        "spellcasters-community-api",
+        "api",
+        "v2",
+        "all_data.json"
+      );
 
     const fileContent = await fs.readFile(localPath, "utf-8");
     const rawData = JSON.parse(fileContent) as RawData;
 
     const data = mapRawDataToAllData(rawData);
     return { ...data, _source: "Local Filesystem" };
-
   } catch (e) {
-    console.warn("⚠️ Could not load local data:", e);
+    monitoring.captureMessage("Could not load local data", "warning", {
+      error: e,
+    });
     return undefined;
   }
 }

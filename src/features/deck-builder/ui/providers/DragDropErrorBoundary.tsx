@@ -1,7 +1,10 @@
 "use client";
 
 import { Component, ErrorInfo, ReactNode } from "react";
+
 import { AlertTriangle, RefreshCw } from "lucide-react";
+
+import { monitoring } from "@/services/monitoring";
 
 interface Props {
   children: ReactNode;
@@ -23,12 +26,15 @@ export class DragDropErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("DragDrop Error:", error, errorInfo);
+    monitoring.captureException(error, {
+      operation: "DragDropErrorBoundary",
+      componentStack: errorInfo?.componentStack,
+    });
   }
 
   private handleRetry = () => {
     this.setState({ hasError: false, error: null });
-    // Ideally we might want to reset the drag state here too, 
+    // Ideally we might want to reset the drag state here too,
     // but a re-render of children often fixes transient dnd state issues.
   };
 
@@ -43,7 +49,8 @@ export class DragDropErrorBoundary extends Component<Props, State> {
             Interaction Error
           </h2>
           <p className="text-text-muted max-w-md mb-6 text-sm">
-            Something went wrong with the drag and drop interface. This is usually temporary.
+            Something went wrong with the drag and drop interface. This is
+            usually temporary.
           </p>
           <button
             onClick={this.handleRetry}

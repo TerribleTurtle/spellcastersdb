@@ -30,6 +30,7 @@ export function DeckBuilderShell({
   return (
     <>
       <div
+        data-testid="deck-builder-shell"
         className={cn(
           "h-full flex flex-col relative bg-surface-main overflow-hidden",
           "xl:grid xl:grid-cols-[1fr_640px] xl:grid-rows-[auto_1fr]",
@@ -38,24 +39,40 @@ export function DeckBuilderShell({
       >
         {/* Mobile Header (XL Hidden) */}
         {mobileHeader && (
-          <div className="xl:hidden shrink-0">{mobileHeader}</div>
+          <div
+            className="xl:hidden shrink-0"
+            data-testid="deck-builder-mobile-header"
+          >
+            {mobileHeader}
+          </div>
         )}
 
         {/* Desktop Header (Hidden on Mobile, spans 2 cols) */}
         {desktopHeader && (
-          <div className="hidden xl:flex h-14 border-b border-border-default items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2">
+          <div
+            className="hidden xl:flex h-14 border-b border-border-default items-center justify-between px-4 shrink-0 bg-surface-main z-20 xl:col-span-2"
+            data-testid="deck-builder-desktop-header"
+          >
             {desktopHeader}
           </div>
         )}
 
         {/* Main Content: Browser / Vault (Left Col) */}
-        {browser}
+        <div data-testid="deck-builder-browser-area" className="contents">
+          {browser}
+        </div>
 
         {/* Right Panel: Inspector + Drawer (Right Col) */}
-        {rightPanel}
+        <div data-testid="deck-builder-right-panel" className="contents">
+          {rightPanel}
+        </div>
 
         {/* Mobile Footer (Fixed Bottom) */}
-        {mobileFooter}
+        {mobileFooter && (
+          <div data-testid="deck-builder-mobile-footer" className="contents">
+            {mobileFooter}
+          </div>
+        )}
       </div>
 
       {children}

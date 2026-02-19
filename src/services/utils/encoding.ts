@@ -1,5 +1,6 @@
 import LZString from "lz-string";
 
+import { monitoring } from "@/services/monitoring";
 import { Deck } from "@/types/deck";
 
 const DELIMITER = "\u001F"; // ASCII Unit Separator for intra-deck
@@ -48,7 +49,10 @@ export function decodeDeck(hash: string): DecodedDeckData | null {
       name: parts[6] || undefined,
     };
   } catch (e) {
-    console.error("Failed to decode deck", e);
+    monitoring.captureException(e, {
+      message: "Failed to decode deck",
+      context: "encoding.ts:decodeDeck",
+    });
     return null;
   }
 }
@@ -117,9 +121,10 @@ export function decodeTeam(hash: string): {
       const packed = LZString.decompressFromEncodedURIComponent(payload);
 
       if (!packed) {
-        console.error(
+        monitoring.captureMessage(
           "decodeTeam: Decompression returned null/empty for payload",
-          payload.substring(0, 20) + "..."
+          "error",
+          { payloadStart: payload.substring(0, 20) + "..." }
         );
         return { name: "", decks: [null, null, null] };
       }
@@ -148,7 +153,10 @@ export function decodeTeam(hash: string): {
 
       return { name: teamName, decks: results };
     } catch (e) {
-      console.error("decodeTeam: Exception during V2 decoding", e);
+      monitoring.captureException(e, {
+        message: "decodeTeam: Exception during V2 decoding",
+        context: "encoding.ts:decodeTeam:v2",
+      });
       return { name: "", decks: [null, null, null] };
     }
   }
@@ -161,7 +169,10 @@ export function decodeTeam(hash: string): {
     while (results.length < 3) results.push(null);
     return { name: "", decks: results.slice(0, 3) };
   } catch (e) {
-    console.error("decodeTeam: Exception during legacy decoding", e);
+    monitoring.captureException(e, {
+      message: "decodeTeam: Exception during legacy decoding",
+      context: "encoding.ts:decodeTeam:legacy",
+    });
     return { name: "", decks: [null, null, null] };
   }
 }

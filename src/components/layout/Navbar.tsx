@@ -5,15 +5,18 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { ExternalLink, Menu, MessageSquare, X } from "lucide-react";
 
-import { ExternalLink, Menu, X, MessageSquare } from "lucide-react";
-import { PRIMARY_NAV, SECONDARY_NAV, EXTERNAL_LINKS, isActivePath } from "@/lib/nav-links";
-
-import { useFeedback } from "@/hooks/useFeedback";
-
-import { useFocusTrap } from "@/hooks/useFocusTrap";
-import { Button } from "@/components/ui/button";
 import { ThemePicker } from "@/components/ui/ThemePicker";
+import { Button } from "@/components/ui/button";
+import { useFeedback } from "@/hooks/useFeedback";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
+import {
+  EXTERNAL_LINKS,
+  PRIMARY_NAV,
+  SECONDARY_NAV,
+  isActivePath,
+} from "@/lib/nav-links";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -28,20 +31,27 @@ export default function Navbar() {
   const allLinks = [...PRIMARY_NAV, ...SECONDARY_NAV, ...EXTERNAL_LINKS];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border-default bg-surface-main/80 backdrop-blur-md">
+    <nav
+      className="fixed top-0 left-0 right-0 z-50 border-b border-border-default bg-surface-main/80 backdrop-blur-md"
+      data-testid="navbar"
+    >
       <div className="relative mx-auto max-w-site-shell px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo / Deck Context */}
           <div className="shrink-0 flex items-center gap-6">
-            <Link href="/" className="flex flex-col group">
-                <>
+            <Link
+              href="/"
+              className="flex flex-col group"
+              data-testid="navbar-logo"
+            >
+              <>
                 <span className="text-xl font-bold tracking-wider text-transparent bg-clip-text bg-linear-to-r from-brand-primary to-brand-secondary">
-                    SPELLCASTERS<span className="text-text-primary">DB</span>
+                  SPELLCASTERS<span className="text-text-primary">DB</span>
                 </span>
                 <span className="text-[10px] text-text-muted tracking-wide hidden sm:block">
-                    Unofficial community database
+                  Unofficial community database
                 </span>
-                </>
+              </>
             </Link>
           </div>
 
@@ -51,6 +61,7 @@ export default function Navbar() {
               <Link
                 key={link.name}
                 href={link.href}
+                data-testid={`navbar-link-${link.name.toLowerCase()}`}
                 className={`text-sm font-medium transition-colors ${
                   isActive(link.href)
                     ? "text-brand-primary"
@@ -69,6 +80,7 @@ export default function Navbar() {
               size="icon"
               onClick={toggleMenu}
               aria-expanded={isOpen}
+              data-testid="navbar-mobile-toggle"
               className="text-text-muted hover:text-brand-accent"
             >
               <span className="sr-only">Open main menu</span>
@@ -79,16 +91,21 @@ export default function Navbar() {
 
         {/* Menu Drawer (Mobile & Desktop Overlay) */}
         {isOpen && (
-          <div className="absolute top-16 right-0 w-full md:w-64 bg-surface-main/95 backdrop-blur-xl border-l border-b border-border-default shadow-2xl h-[calc(100vh-4rem)] md:h-auto md:rounded-bl-xl overflow-y-auto">
+          <div
+            className="absolute top-16 right-0 w-full md:w-64 bg-surface-main/95 backdrop-blur-xl border-l border-b border-border-default shadow-2xl h-[calc(100vh-4rem)] md:h-auto md:rounded-bl-xl overflow-y-auto"
+            data-testid="navbar-mobile-drawer"
+          >
             <div className="flex flex-col p-4 space-y-1">
               {/* Show all links in the drawer for easy access */}
               {allLinks.map((link) => {
+                const testId = `navbar-drawer-link-${link.name.toLowerCase().replace(/\s+/g, "-")}`;
                 if (link.internal) {
                   return (
                     <Link
                       key={link.name}
                       href={link.href}
                       onClick={() => setIsOpen(false)}
+                      data-testid={testId}
                       className={`block rounded-md px-3 py-2 text-base font-medium transition-colors ${
                         isActive(link.href)
                           ? "bg-surface-card text-brand-primary"
@@ -107,6 +124,7 @@ export default function Navbar() {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
+                    data-testid={testId}
                     className="flex items-center gap-2 rounded-md px-3 py-2 text-base font-medium text-text-secondary hover:bg-surface-card hover:text-brand-accent transition-colors"
                   >
                     {Icon && <Icon size={18} />}
@@ -115,23 +133,28 @@ export default function Navbar() {
                   </a>
                 );
               })}
-              
+
               <Button
                 variant="ghost"
                 onClick={() => {
                   setIsOpen(false);
                   feedback.openFeedback();
                 }}
+                data-testid="navbar-drawer-feedback"
                 className="justify-start px-3 py-2 text-base font-medium text-text-secondary hover:bg-surface-card hover:text-brand-accent w-full"
               >
                 <MessageSquare size={18} className="mr-2" />
                 Feedback
               </Button>
-              
+
               <div className="px-3 py-2">
-                  <ThemePicker side="bottom" align="end" className="w-full justify-between px-0 hover:bg-transparent text-base font-medium text-text-secondary">
-                    <span>Theme</span>
-                  </ThemePicker>
+                <ThemePicker
+                  side="bottom"
+                  align="end"
+                  className="w-full justify-between px-0 hover:bg-transparent text-base font-medium text-text-secondary"
+                >
+                  <span>Theme</span>
+                </ThemePicker>
               </div>
             </div>
           </div>
@@ -140,4 +163,3 @@ export default function Navbar() {
     </nav>
   );
 }
-

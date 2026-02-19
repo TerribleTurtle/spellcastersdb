@@ -1,7 +1,10 @@
 "use client";
 
 import { Component, ErrorInfo, ReactNode } from "react";
+
 import { AlertTriangle, RefreshCw } from "lucide-react";
+
+import { monitoring } from "@/services/monitoring";
 
 interface Props {
   children: ReactNode;
@@ -24,7 +27,10 @@ export class FeatureErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+    monitoring.captureException(error, {
+      operation: "FeatureErrorBoundary",
+      componentStack: errorInfo?.componentStack,
+    });
   }
 
   private handleReset = () => {
@@ -44,7 +50,9 @@ export class FeatureErrorBoundary extends Component<Props, State> {
             <AlertTriangle size={24} />
           </div>
           <div className="text-center space-y-1">
-            <h3 className="text-lg font-bold text-text-primary">Something went wrong</h3>
+            <h3 className="text-lg font-bold text-text-primary">
+              Something went wrong
+            </h3>
             <p className="text-sm text-text-muted">
               {this.state.error?.message || "An unexpected error occurred."}
             </p>

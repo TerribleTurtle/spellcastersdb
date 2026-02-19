@@ -1,18 +1,18 @@
+import { useEffect, useRef, useState } from "react";
+
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, ArrowRight, Check } from "lucide-react";
+import { ArrowRight, Check, GripVertical } from "lucide-react";
 
-import { Team, Deck } from "@/types/deck";
-import { cn } from "@/lib/utils";
-import { useState, useRef, useEffect } from "react";
-import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { GameImage } from "@/components/ui/GameImage";
-import { encodeTeam } from "@/services/utils/encoding";
-import { copyToClipboard } from "@/lib/clipboard";
-
-// Re-using ItemMenu from ForgeControls 
+// Re-using ItemMenu from ForgeControls
 
 import { ItemMenu } from "@/features/shared/deck/ui/ItemMenu";
+import { copyToClipboard } from "@/lib/clipboard";
+import { cn } from "@/lib/utils";
+import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { encodeTeam } from "@/services/utils/encoding";
+import { Deck, Team } from "@/types/deck";
 
 interface TeamRowProps {
   team: Team;
@@ -39,7 +39,7 @@ export function TeamRow({
   selectionMode = false,
   isSelected = false,
   onToggleSelect,
-  isActive = false
+  isActive = false,
 }: TeamRowProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(team.name || "");
@@ -87,19 +87,20 @@ export function TeamRow({
     <div
       ref={setNodeRef}
       style={style}
+      data-testid={`team-row-${team.id}`}
       onClick={selectionMode ? onToggleSelect : undefined}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
-            // Prevent default only if we aren't in the input or a button
-            // And only if not in selection mode or explicitly selecting
-            if (e.target === e.currentTarget) {
-                e.preventDefault();
-                if (selectionMode && onToggleSelect) {
-                    onToggleSelect();
-                } else {
-                    // onLoad(); // Don't auto load on enter anymore for the row itself
-                }
+          // Prevent default only if we aren't in the input or a button
+          // And only if not in selection mode or explicitly selecting
+          if (e.target === e.currentTarget) {
+            e.preventDefault();
+            if (selectionMode && onToggleSelect) {
+              onToggleSelect();
+            } else {
+              // onLoad(); // Don't auto load on enter anymore for the row itself
             }
+          }
         }
       }}
       {...attributes}
@@ -109,23 +110,28 @@ export function TeamRow({
         isDragging
           ? "scale-105 shadow-xl shadow-brand-primary/20 z-50 border-brand-primary cursor-grabbing"
           : "bg-surface-card border-border-subtle hover:border-border-strong hover:bg-surface-card",
-        selectionMode && isSelected && "bg-brand-primary/20 border-brand-primary"
+        selectionMode &&
+          isSelected &&
+          "bg-brand-primary/20 border-brand-primary"
       )}
     >
-      <div 
+      <div
         className="p-1 text-text-faint hover:text-text-muted -ml-1 mr-1 transition-colors cursor-grab active:cursor-grabbing touch-none"
+        data-testid={`team-drag-handle-${team.id}`}
       >
         {selectionMode ? (
-            <div className={cn(
-                "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                isSelected 
-                    ? "bg-brand-primary border-brand-primary text-black" 
-                    : "border-border-strong group-hover:border-border-subtle0"
-            )}>
-                {isSelected && <Check size={10} strokeWidth={4} />}
-            </div>
+          <div
+            className={cn(
+              "w-4 h-4 rounded border flex items-center justify-center transition-colors",
+              isSelected
+                ? "bg-brand-primary border-brand-primary text-black"
+                : "border-border-strong group-hover:border-border-subtle0"
+            )}
+          >
+            {isSelected && <Check size={10} strokeWidth={4} />}
+          </div>
         ) : (
-            <GripVertical size={14} />
+          <GripVertical size={14} />
         )}
       </div>
 
@@ -141,17 +147,22 @@ export function TeamRow({
               onBlur={handleRename}
               onKeyDown={handleKeyDown}
               onClick={(e) => e.stopPropagation()}
+              data-testid={`team-name-input-${team.id}`}
               className="bg-surface-inset border border-brand-primary/50 rounded px-1 min-w-0 text-sm font-bold text-text-primary focus:outline-none focus:ring-1 focus:ring-brand-primary w-full"
               aria-label="Edit team name"
             />
           ) : (
-            <span title={team.name} className="flex items-center gap-2">
-                <span className="truncate">{team.name}</span>
-                {isActive && (
-                    <span className="text-[10px] uppercase font-bold bg-brand-primary/20 text-brand-primary px-1.5 py-0.5 rounded border border-brand-primary/30">
-                        Active
-                    </span>
-                )}
+            <span
+              title={team.name}
+              className="flex items-center gap-2"
+              data-testid={`team-name-${team.id}`}
+            >
+              <span className="truncate">{team.name}</span>
+              {isActive && (
+                <span className="text-[10px] uppercase font-bold bg-brand-primary/20 text-brand-primary px-1.5 py-0.5 rounded border border-brand-primary/30">
+                  Active
+                </span>
+              )}
             </span>
           )}
         </div>
@@ -183,54 +194,62 @@ export function TeamRow({
 
           {/* Actions - Hide in selection mode */}
           {!selectionMode && (
-          <div className="flex items-center gap-2 shrink-0 relative z-10">
-            {isActive && onPutAway ? (
+            <div className="flex items-center gap-2 shrink-0 relative z-10">
+              {isActive && onPutAway ? (
                 <button
-                    onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        onPutAway();
-                    }}
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent border border-text-muted text-text-muted rounded-full shadow-sm hover:text-text-primary hover:border-text-primary hover:bg-surface-card transition-colors text-xs font-bold uppercase tracking-wider"
-                    title="Put Away Team"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onPutAway();
+                  }}
+                  data-testid={`team-put-away-btn-${team.id}`}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent border border-text-muted text-text-muted rounded-full shadow-sm hover:text-text-primary hover:border-text-primary hover:bg-surface-card transition-colors text-xs font-bold uppercase tracking-wider"
+                  title="Put Away Team"
                 >
-                    <span className="hidden sm:inline">Put Away</span>
+                  <span className="hidden sm:inline">Put Away</span>
                 </button>
-            ) : (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onLoad();
-              }}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-primary text-brand-dark rounded-full shadow-sm hover:bg-brand-primary/80 transition-colors text-xs font-bold uppercase tracking-wider"
-              title="Load Team"
-            >
-              <ArrowRight size={14} />
-              <span className="hidden sm:inline">Load</span>
-            </button>
-            )}
-            <ItemMenu
-              onDuplicate={onDuplicate}
-              onDelete={onDelete}
-              type="TEAM"
-              onRename={onRename ? () => {
-                setEditName(team.name || "");
-                setIsEditing(true);
-              } : undefined}
-              onCopyLink={async () => {
-                const hash = encodeTeam(team.decks, team.name);
-                const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
-                await copyToClipboard(url);
-              }}
-              onExport={() => {
+              ) : (
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onLoad();
+                  }}
+                  data-testid={`team-load-btn-${team.id}`}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-primary text-brand-dark rounded-full shadow-sm hover:bg-brand-primary/80 transition-colors text-xs font-bold uppercase tracking-wider"
+                  title="Load Team"
+                >
+                  <ArrowRight size={14} />
+                  <span className="hidden sm:inline">Load</span>
+                </button>
+              )}
+              <ItemMenu
+                onDuplicate={onDuplicate}
+                onDelete={onDelete}
+                type="TEAM"
+                onRename={
+                  onRename
+                    ? () => {
+                        setEditName(team.name || "");
+                        setIsEditing(true);
+                      }
+                    : undefined
+                }
+                onCopyLink={async () => {
+                  const hash = encodeTeam(team.decks, team.name);
+                  const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
+                  await copyToClipboard(url);
+                }}
+                onExport={() => {
                   const exportData = {
-                      name: team.name || "Untitled Team",
-                      decks: team.decks,
-                      exportedAt: new Date().toISOString(),
-                      version: "1.0"
+                    name: team.name || "Untitled Team",
+                    decks: team.decks,
+                    exportedAt: new Date().toISOString(),
+                    version: "1.0",
                   };
-                  const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json" });
+                  const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+                    type: "application/json",
+                  });
                   const url = URL.createObjectURL(blob);
                   const link = document.createElement("a");
                   link.href = url;
@@ -239,9 +258,9 @@ export function TeamRow({
                   link.click();
                   document.body.removeChild(link);
                   URL.revokeObjectURL(url);
-              }}
-            />
-          </div>
+                }}
+              />
+            </div>
           )}
         </div>
       </div>

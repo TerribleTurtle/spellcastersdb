@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { LayoutGrid, List } from "lucide-react";
 
-import { useUnitSearch } from "@/features/deck-builder/hooks/domain/useUnitSearch";
+import { useUnitSearch } from "@/hooks/useUnitSearch";
 import { cn } from "@/lib/utils";
 import { UnifiedEntity } from "@/types/api";
 
@@ -16,7 +16,8 @@ import { useViewMode } from "./hooks/useViewMode";
 
 // Helper to safely get unique ID
 function getUniqueId(entity: UnifiedEntity): string {
-  if (entity.category === "Spellcaster") return entity.spellcaster_id || entity.entity_id;
+  if (entity.category === "Spellcaster")
+    return entity.spellcaster_id || entity.entity_id;
   if (entity.category === "Consumable") return entity.entity_id;
   return entity.entity_id;
 }
@@ -49,12 +50,14 @@ export function UnitArchive(props: UnitArchiveProps) {
     setSearchQuery("");
   };
 
-
   // derived state
   const filteredUnits = useUnitSearch(initialUnits, searchQuery, activeFilters);
 
   return (
-    <div className="flex flex-col md:flex-row gap-8 items-start min-h-[80vh]">
+    <div
+      className="flex flex-col md:flex-row gap-8 items-start min-h-[80vh]"
+      data-testid="unit-archive"
+    >
       {/* Sidebar (Desktop: Sticky, Mobile: Toggle) */}
       <FilterSidebar
         searchQuery={searchQuery}
@@ -69,15 +72,18 @@ export function UnitArchive(props: UnitArchiveProps) {
       <div className="flex-1 w-full">
         {/* Toolbar */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-          <div className="text-sm text-text-muted">
+          <div className="text-sm text-text-muted" data-testid="results-count">
             Showing{" "}
-            <strong className="text-text-primary">{filteredUnits.length}</strong>{" "}
+            <strong className="text-text-primary">
+              {filteredUnits.length}
+            </strong>{" "}
             results
           </div>
 
           <div className="flex items-center gap-2 bg-surface-card border border-border-subtle p-1 rounded-lg">
             <button
               onClick={() => setViewMode("grid")}
+              data-testid="view-toggle-grid"
               className={cn(
                 "p-1.5 rounded transition-colors",
                 viewMode === "grid"
@@ -91,6 +97,7 @@ export function UnitArchive(props: UnitArchiveProps) {
             </button>
             <button
               onClick={() => setViewMode("list")}
+              data-testid="view-toggle-list"
               className={cn(
                 "p-1.5 rounded transition-colors",
                 viewMode === "list"
@@ -108,6 +115,7 @@ export function UnitArchive(props: UnitArchiveProps) {
         {/* Results Grid */}
         {filteredUnits.length > 0 ? (
           <div
+            data-testid="unit-list"
             className={cn(
               "grid gap-4",
               viewMode === "grid"
@@ -116,17 +124,26 @@ export function UnitArchive(props: UnitArchiveProps) {
             )}
           >
             {filteredUnits.map((unit) => {
+              const unitId = getUniqueId(unit);
               return (
-                <UnitCard
-                  key={getUniqueId(unit)}
-                  unit={unit}
-                  variant={viewMode === "list" ? "compact" : "default"}
-                />
+                <div
+                  key={unitId}
+                  data-testid={`unit-card-${unitId}`}
+                  className="h-full"
+                >
+                  <UnitCard
+                    unit={unit}
+                    variant={viewMode === "list" ? "compact" : "default"}
+                  />
+                </div>
               );
             })}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-border-default rounded-xl">
+          <div
+            className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-border-default rounded-xl"
+            data-testid="no-results"
+          >
             <p className="text-lg font-bold text-text-muted mb-2">
               No units found
             </p>
@@ -135,6 +152,7 @@ export function UnitArchive(props: UnitArchiveProps) {
             </p>
             <button
               onClick={clearFilters}
+              data-testid="clear-filters-empty-state"
               className="mt-4 text-brand-primary hover:underline text-sm"
             >
               Clear all filters

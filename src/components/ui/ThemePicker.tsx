@@ -124,6 +124,7 @@ export function ThemePicker({
               ? `${window.innerWidth - dropdownPos.left}px`
               : undefined,
         }}
+        data-testid="theme-picker-menu"
       >
         {VISIBLE_THEMES.map(({ value, label, icon: Icon }) => (
           <button
@@ -131,6 +132,7 @@ export function ThemePicker({
             onClick={() => {
               setTheme(value);
             }}
+            data-testid={`theme-option-${value}`}
             className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors ${
               theme === value
                 ? "text-brand-primary bg-surface-hover"
@@ -151,6 +153,7 @@ export function ThemePicker({
               <button
                 key={t.id}
                 onClick={() => setTheme(t.id)}
+                data-testid={`theme-option-custom-${t.id}`}
                 className={`w-full flex items-center gap-2.5 px-3 py-2 text-sm transition-colors ${
                   theme === t.id
                     ? "text-brand-primary bg-surface-hover"
@@ -186,6 +189,7 @@ export function ThemePicker({
         className={className}
         title="Change theme"
         aria-label="Change theme"
+        data-testid="theme-picker-trigger"
       >
         <CurrentIcon
           className={cn(

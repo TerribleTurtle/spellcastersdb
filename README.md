@@ -42,9 +42,12 @@
   - **Revalidation API**: On-demand cache invalidation via `/api/revalidate` (using `Authorization` header) with `revalidateTag` for robust content updates.
     - **CI/CD**: The "Daily Revalidation" workflow requires `REVALIDATION_SECRET` and optionally `APP_URL` (defaults to `https://www.spellcastersdb.com`) in GitHub Secrets.
   - **State Persistence**: Optimized `zustand/persist` with `partialize` to serialize only critical user data, excluding transient UI state for consistent high performance.
-
   - **Image Optimization**: Configured with a 1-year cache TTL, AVIF support, and constrained device sizes to minimize bandwidth. Critical images use `priority` loading for LCP.
   - **Browser Support**: Targets modern browsers (Chrome 100+, Safari 15+, Firefox 100+) for smaller bundles and better performance.
+- **Infrastructure Hardening**:
+  - **Architecture Enforcement**: `dependency-cruiser` validates import boundaries (`components/ui` ↛ `features`, `features` ↛ `app`) on every preflight run.
+  - **Observability**: A `MonitoringService` (`src/services/monitoring/`) abstracts error reporting. Default `ConsoleAdapter` outputs structured logs; swap in a Sentry/Axiom adapter with zero app-code changes.
+  - **E2E Readiness**: Standardized `data-testid` attributes on all shell, database, and deck builder components. See [E2E Conventions](docs/E2E_CONVENTIONS.md) for naming rules.
 
 ## Getting Started
 
@@ -71,26 +74,29 @@ For detailed setup instructions, including **Local API Development**, please see
 
 ## Available Scripts
 
-| Command                   | Description                           |
-| :------------------------ | :------------------------------------ |
-| `npm run dev`             | Starts the development server         |
-| `npm run build`           | Builds the application for production |
-| `npm run start`           | Starts the production server          |
-| `npm run test`            | Runs the test suite (Vitest)          |
-| `npm run test:watch`      | Runs tests in watch mode              |
-| `npm run lint`            | Runs ESLint                           |
-| `npm run type-check`      | Runs TypeScript compiler check        |
-| `npm run check-data`      | Verifies API data fetching logic      |
-| `npm run preflight`       | Runs Type-Check, Lint, and Tests      |
-| `npm run new:component`   | Scaffolds a new React component       |
-| `npm run new:route`       | Scaffolds a new App Router page       |
-| `npm run script:validate` | Validates production data integrity   |
+| Command                   | Description                                              |
+| :------------------------ | :------------------------------------------------------- |
+| `npm run dev`             | Starts the development server                            |
+| `npm run build`           | Builds the application for production                    |
+| `npm run start`           | Starts the production server                             |
+| `npm run test`            | Runs the test suite (Vitest)                             |
+| `npm run test:watch`      | Runs tests in watch mode                                 |
+| `npm run lint`            | Runs ESLint                                              |
+| `npm run type-check`      | Runs TypeScript compiler check                           |
+| `npm run check-data`      | Verifies API data fetching logic                         |
+| `npm run preflight`       | Runs Type-Check, Format, Lint, Tests, and Dep Validation |
+| `npm run format:check`    | Checks formatting matches Prettier rules                 |
+| `npm run deps:validate`   | Validates import boundary rules                          |
+| `npm run new:component`   | Scaffolds a new React component                          |
+| `npm run new:route`       | Scaffolds a new App Router page                          |
+| `npm run script:validate` | Validates production data integrity                      |
 
 ## Documentation
 
 - [**Active State**](active_state.md): The current development focus and daily progress log.
 - [**API Info**](docs/api_info.md): Specification for the JSON data consumed by this app.
 - [**Brand Guidelines**](docs/BRAND_GUIDELINES.md): Colors, fonts, and styling rules.
+- [**E2E Conventions**](docs/E2E_CONVENTIONS.md): `data-testid` naming rules and viewport strategy.
 
 ## 🌐 Part of the Spellcasters Ecosystem
 

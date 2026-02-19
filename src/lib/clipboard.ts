@@ -1,3 +1,5 @@
+import { monitoring } from "@/services/monitoring";
+
 /**
  * Copies text to the clipboard with fallback for non-secure contexts (e.g. mobile local IP dev).
  */
@@ -8,7 +10,11 @@ export async function copyToClipboard(text: string): Promise<boolean> {
       await navigator.clipboard.writeText(text);
       return true;
     } catch (err) {
-      console.warn("navigator.clipboard failed, trying fallback", err);
+      monitoring.captureMessage(
+        "navigator.clipboard failed, trying fallback",
+        "warning",
+        { error: err }
+      );
     }
   }
 
@@ -31,7 +37,7 @@ export async function copyToClipboard(text: string): Promise<boolean> {
 
     return successful;
   } catch (err) {
-    console.error("Fallback clipboard copy failed", err);
+    monitoring.captureException(err, { operation: "clipboardFallback" });
     return false;
   }
 }

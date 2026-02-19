@@ -12,7 +12,10 @@ export default function Footer() {
   }
 
   return (
-    <footer className="border-t border-border-default bg-surface-main/50 py-12 backdrop-blur-sm">
+    <footer
+      className="border-t border-border-default bg-surface-main/50 py-12 backdrop-blur-sm"
+      data-testid="footer"
+    >
       <div className="mx-auto max-w-site-shell px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           {/* Left: Branding & Disclaimer */}
@@ -37,6 +40,7 @@ export default function Footer() {
                 href="https://store.steampowered.com/app/2458470/Spellcasters_Chronicles/"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-testid="footer-link-steam"
                 className="text-sm text-text-muted hover:text-brand-accent transition-colors"
               >
                 Steam
@@ -45,6 +49,7 @@ export default function Footer() {
                 href="https://discord.com/invite/spellcasters-chronicles-1425209254847058003"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-testid="footer-link-discord"
                 className="text-sm text-text-muted hover:text-brand-accent transition-colors"
               >
                 Game Dev Discord
@@ -53,6 +58,7 @@ export default function Footer() {
                 href="https://github.com/TerribleTurtle/spellcasters-community-api"
                 target="_blank"
                 rel="noopener noreferrer"
+                data-testid="footer-link-github"
                 className="text-sm text-text-muted hover:text-brand-accent transition-colors"
               >
                 Community API
@@ -60,12 +66,14 @@ export default function Footer() {
               <div className="w-full md:w-auto hidden md:block border-r border-border-subtle h-4 mx-2" />
               <Link
                 href="/privacy"
+                data-testid="footer-link-privacy"
                 className="text-sm text-text-muted hover:text-brand-accent transition-colors"
               >
                 Privacy
               </Link>
               <Link
                 href="/terms"
+                data-testid="footer-link-terms"
                 className="text-sm text-text-muted hover:text-brand-accent transition-colors"
               >
                 Terms

@@ -31,6 +31,7 @@ export function PageShell({
 
   return (
     <div
+      data-testid="page-shell"
       className={cn(
         "py-8 md:py-12 px-4 md:px-8 mx-auto w-full",
         maxWidthClass,
