@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
   const pathname = usePathname();
@@ -17,7 +17,10 @@ export default function Footer() {
         <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
           {/* Left: Branding & Disclaimer */}
           <div className="flex flex-col items-center gap-2 md:items-start text-center md:text-left">
-            <Link href="/" className="text-lg font-bold tracking-wider text-text-secondary hover:text-text-primary transition-colors">
+            <Link
+              href="/"
+              className="text-lg font-bold tracking-wider text-text-secondary hover:text-text-primary transition-colors"
+            >
               SPELLCASTERS<span className="text-brand-primary">DB</span>
             </Link>
             <p className="text-sm text-text-muted max-w-md">
@@ -29,7 +32,7 @@ export default function Footer() {
 
           {/* Right: Links */}
           <div className="flex flex-col items-center gap-4 md:items-end">
-            <div className="flex gap-6">
+            <div className="flex gap-6 flex-wrap justify-center md:justify-end">
               <a
                 href="https://store.steampowered.com/app/2458470/Spellcasters_Chronicles/"
                 target="_blank"
@@ -54,6 +57,19 @@ export default function Footer() {
               >
                 Community API
               </a>
+              <div className="w-full md:w-auto hidden md:block border-r border-border-subtle h-4 mx-2" />
+              <Link
+                href="/privacy"
+                className="text-sm text-text-muted hover:text-brand-accent transition-colors"
+              >
+                Privacy
+              </Link>
+              <Link
+                href="/terms"
+                className="text-sm text-text-muted hover:text-brand-accent transition-colors"
+              >
+                Terms
+              </Link>
             </div>
             <div className="text-xs text-text-faint">
               Built by{" "}

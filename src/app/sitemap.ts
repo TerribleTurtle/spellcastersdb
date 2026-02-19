@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+
 import { fetchGameData } from "@/services/api/api";
 
 export const revalidate = 3600; // Revalidate sitemap every hour
@@ -93,16 +94,37 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "monthly",
       priority: 0.4,
     },
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/terms`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
   ];
 
   // 2b. Type Category Routes
-  const typeCategories = ["spells", "buildings", "creatures", "titans", "spellcasters", "consumables"];
-  const typeCategoryRoutes: MetadataRoute.Sitemap = typeCategories.map((cat) => ({
-    url: `${baseUrl}/types/${cat}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: 0.6,
-  }));
+  const typeCategories = [
+    "spells",
+    "buildings",
+    "creatures",
+    "titans",
+    "spellcasters",
+    "consumables",
+  ];
+  const typeCategoryRoutes: MetadataRoute.Sitemap = typeCategories.map(
+    (cat) => ({
+      url: `${baseUrl}/types/${cat}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.6,
+    })
+  );
 
   // 3. Map Units
   const unitRoutes: MetadataRoute.Sitemap = units.map((unit) => ({

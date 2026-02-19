@@ -36,4 +36,41 @@ describe("PageShell", () => {
     // Note: class-variance-authority or tailwind classes might be merged, so we check if the element has the class
     expect(container.firstChild).toHaveClass("max-w-page-grid");
   });
+
+  it("renders breadcrumbs when provided", () => {
+    render(
+      <PageShell
+        title="Test Page"
+        breadcrumbs={[
+          { label: "Parent", href: "/parent" },
+          { label: "Current", href: "/current" },
+        ]}
+      >
+        <div>Content</div>
+      </PageShell>
+    );
+
+    expect(screen.getByText("Parent")).toBeTruthy();
+    expect(screen.getByText("Current")).toBeTruthy();
+
+    // Parent should be a link
+    const parentLink = screen.getByText("Parent").closest("a");
+    expect(parentLink).toHaveAttribute("href", "/parent");
+
+    // Current (last item) should NOT be a link (visual only, logic in PageShell)
+    // Actually, our PageShell logic removes href from the last item passed to Breadcrumbs
+    const currentLink = screen.getByText("Current").closest("a");
+    expect(currentLink).toBeNull();
+  });
+
+  it("does not render breadcrumbs when not provided", () => {
+    render(
+      <PageShell title="Test Page">
+        <div>Content</div>
+      </PageShell>
+    );
+
+    const nav = screen.queryByLabelText("Breadcrumb");
+    expect(nav).toBeNull();
+  });
 });

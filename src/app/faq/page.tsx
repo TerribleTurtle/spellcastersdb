@@ -1,7 +1,9 @@
 import Link from "next/link";
-import { ExternalLink, ChevronDown } from "lucide-react";
-import { PageShell } from "@/components/layout/PageShell";
+
+import { ChevronDown, ExternalLink } from "lucide-react";
+
 import { JsonLd } from "@/components/common/JsonLd";
+import { PageShell } from "@/components/layout/PageShell";
 
 export const metadata = {
   title: "FAQ",
@@ -47,7 +49,8 @@ export default function FAQPage() {
           the game evolves.
         </>
       ),
-      schemaAnswer: "All game data comes from the Spellcasters Community API, which is maintained by community members. The website automatically fetches the latest data from the API, so information stays current as the game evolves."
+      schemaAnswer:
+        "All game data comes from the Spellcasters Community API, which is maintained by community members. The website automatically fetches the latest data from the API, so information stays current as the game evolves.",
     },
     {
       question: "Can I contribute to the project?",
@@ -67,7 +70,8 @@ export default function FAQPage() {
           documentation. All contributions are welcome!
         </>
       ),
-      schemaAnswer: "Yes! You can contribute to the Community API repository by submitting corrections, adding missing data, or improving documentation. All contributions are welcome!"
+      schemaAnswer:
+        "Yes! You can contribute to the Community API repository by submitting corrections, adding missing data, or improving documentation. All contributions are welcome!",
     },
     {
       question: "How do I report incorrect data?",
@@ -87,7 +91,8 @@ export default function FAQPage() {
           information.
         </>
       ),
-      schemaAnswer: "If you find incorrect or outdated information, please report it on the GitHub Issues page. Include as much detail as possible about the error and the correct information."
+      schemaAnswer:
+        "If you find incorrect or outdated information, please report it on the GitHub Issues page. Include as much detail as possible about the error and the correct information.",
     },
     {
       question: "How do I use the deck builder?",
@@ -114,18 +119,24 @@ export default function FAQPage() {
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": faqs.map(faq => ({
+    mainEntity: faqs.map((faq) => ({
       "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
+      name: faq.question,
+      acceptedAnswer: {
         "@type": "Answer",
-        "text": faq.schemaAnswer || (typeof faq.answer === 'string' ? faq.answer : "")
-      }
-    }))
+        text:
+          faq.schemaAnswer ||
+          (typeof faq.answer === "string" ? faq.answer : ""),
+      },
+    })),
   };
 
   return (
-    <PageShell title="Frequently Asked Questions" maxWidth="4xl">
+    <PageShell
+      title="Frequently Asked Questions"
+      maxWidth="4xl"
+      breadcrumbs={[{ label: "FAQ", href: "/faq" }]}
+    >
       <JsonLd data={faqSchema} id="json-ld-faq" />
       <div className="space-y-4 mb-8">
         {faqs.map((faq, index) => (

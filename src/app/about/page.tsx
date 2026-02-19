@@ -1,5 +1,7 @@
 import Link from "next/link";
+
 import { ExternalLink, Github } from "lucide-react";
+
 import { PageShell } from "@/components/layout/PageShell";
 
 export const metadata = {
@@ -17,7 +19,11 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <PageShell title="About SpellcastersDB" maxWidth="4xl">
+    <PageShell
+      title="About SpellcastersDB"
+      maxWidth="4xl"
+      breadcrumbs={[{ label: "About", href: "/about" }]}
+    >
       <div className="space-y-8">
         {/* Mission */}
         <section className="bg-surface-card border border-border-default rounded-lg p-6 hover:border-border-strong transition-colors">
@@ -25,11 +31,10 @@ export default function AboutPage() {
             Our Mission
           </h2>
           <p className="text-text-secondary leading-relaxed">
-            SpellcastersDB is a community-driven platform dedicated to
-            providing accurate information about{" "}
-            <strong>Spellcasters Chronicles</strong>. Our goal is to help
-            players discover units, build decks, and browse the
-            game data.
+            SpellcastersDB is a community-driven platform dedicated to providing
+            accurate information about <strong>Spellcasters Chronicles</strong>.
+            Our goal is to help players discover units, build decks, and browse
+            the game data.
           </p>
         </section>
 
@@ -50,8 +55,8 @@ export default function AboutPage() {
               <ExternalLink size={14} />
             </a>
             , a community-maintained repository that aggregates game
-            information. The API is updated regularly to reflect the latest
-            game balance changes and new content.
+            information. The API is updated regularly to reflect the latest game
+            balance changes and new content.
           </p>
           <p className="text-muted-foreground text-sm">
             <strong>Note:</strong> This is an unofficial, fan-made project and
@@ -66,8 +71,8 @@ export default function AboutPage() {
             Technology
           </h2>
           <p className="text-text-secondary leading-relaxed mb-4">
-            SpellcastersDB is built with modern web technologies to ensure
-            fast load times and a responsive layout:
+            SpellcastersDB is built with modern web technologies to ensure fast
+            load times and a responsive layout:
           </p>
           <ul className="list-disc list-inside text-text-secondary space-y-2">
             <li>
@@ -92,8 +97,8 @@ export default function AboutPage() {
             Get Involved
           </h2>
           <p className="text-text-secondary leading-relaxed mb-4">
-            This project is open source and community-driven. You can
-            contribute in several ways:
+            This project is open source and community-driven. You can contribute
+            in several ways:
           </p>
           <div className="space-y-3">
             <a
@@ -123,14 +128,14 @@ export default function AboutPage() {
           </h2>
           <p className="text-text-secondary leading-relaxed">
             Created and maintained by{" "}
-            <strong className="text-brand-primary">TerribleTurtles</strong>{" "}
-            and the Spellcasters Chronicles community.
+            <strong className="text-brand-primary">TerribleTurtles</strong> and
+            the Spellcasters Chronicles community.
             <br />
             <br />
             Special mention to{" "}
-            <strong className="text-brand-primary">Anonymous Joker</strong>{" "}
-            for their extensive help with data. Special thanks to all
-            contributors who help keep the data accurate and up-to-date.
+            <strong className="text-brand-primary">Anonymous Joker</strong> for
+            their extensive help with data. Special thanks to all contributors
+            who help keep the data accurate and up-to-date.
           </p>
         </section>
 

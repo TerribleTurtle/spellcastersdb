@@ -1,7 +1,7 @@
 import { ChangelogArchive } from "@/components/changelog/ChangelogArchive";
-import { fetchChangelog } from "@/services/api/patch-history";
 import { JsonLd } from "@/components/common/JsonLd";
 import { PageShell } from "@/components/layout/PageShell";
+import { fetchChangelog } from "@/services/api/patch-history";
 
 export const metadata = {
   title: "Change Log",
@@ -33,6 +33,7 @@ export default async function ChangesPage() {
         title="Change Log"
         subtitle="Search and filter every balance change, hotfix, and content update in Spellcasters Chronicles history."
         maxWidth="page-grid"
+        breadcrumbs={[{ label: "Change Log", href: "/changes" }]}
       >
         <ChangelogArchive patches={patches} />
       </PageShell>

@@ -1,0 +1,131 @@
+import { PageShell } from "@/components/layout/PageShell";
+
+export const metadata = {
+  title: "Privacy Policy",
+  description:
+    "Privacy Policy for SpellcastersDB. We prioritize your privacy with minimal data collection and no tracking cookies.",
+};
+
+export default function PrivacyPage() {
+  return (
+    <PageShell
+      title="Privacy Policy"
+      maxWidth="4xl"
+      breadcrumbs={[{ label: "Privacy Policy", href: "/privacy" }]}
+    >
+      <div className="space-y-8 text-text-secondary leading-relaxed">
+        {/* Last Updated */}
+        <div className="bg-surface-card border border-border-default rounded-lg p-6">
+          <p className="text-sm text-text-muted mb-4 uppercase tracking-widest font-mono">
+            Last Updated: February 2026
+          </p>
+          <p className="text-lg">
+            SpellcastersDB (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;)
+            respects your privacy. This Privacy Policy explains how we collect,
+            use, and protect your information when you use our website.
+          </p>
+          <p className="mt-4 font-semibold text-brand-primary">
+            TL;DR: We don&apos;t create user accounts, we don&apos;t sell your
+            data, and your decks are stored locally on your device.
+          </p>
+        </div>
+
+        {/* Data Collection */}
+        <section className="bg-surface-card border border-border-default rounded-lg p-6 hover:border-border-strong transition-colors">
+          <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
+            Data Collection & Storage
+          </h2>
+
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-bold text-text-primary mb-2 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-brand-secondary"></span>
+                Local Storage
+              </h3>
+              <p className="mb-2">
+                This website uses your browser&apos;s{" "}
+                <strong>Local Storage</strong> to save your preferences. This
+                allows you to revisit the site and keep your data without
+                logging in.
+              </p>
+              <ul className="list-disc list-inside mt-2 space-y-1 ml-4 text-text-muted">
+                <li>Created decks and drafts</li>
+                <li>Theme settings (Light/Dark mode)</li>
+                <li>Filter preferences in the database</li>
+              </ul>
+              <p className="mt-3 text-sm text-text-dimmed italic">
+                This data never leaves your device unless you explicitly share a
+                deck via URL or export string.
+              </p>
+            </div>
+
+            <div className="border-t border-border-subtle pt-6">
+              <h3 className="text-lg font-bold text-text-primary mb-2 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-brand-primary"></span>
+                Analytics
+              </h3>
+              <p className="mb-2">
+                We use <strong>Vercel Analytics</strong> to understand website
+                traffic and improve performance. It collects anonymous data such
+                as:
+              </p>
+              <ul className="list-disc list-inside mt-2 space-y-1 ml-4 text-text-muted">
+                <li>Page views and load times</li>
+                <li>Device type (Desktop/Mobile)</li>
+                <li>Country of origin</li>
+              </ul>
+              <p className="mt-3 text-sm text-text-dimmed italic">
+                This data is aggregated and does not identify you personally.
+                Vercel Analytics is privacy-friendly and does not use cookies.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Third Party Links */}
+        <section className="bg-surface-card border border-border-default rounded-lg p-6 hover:border-border-strong transition-colors">
+          <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
+            Third-Party Links
+          </h2>
+          <p className="mb-4">
+            Our website contains links to third-party websites for game
+            resources and community interaction. These include:
+          </p>
+          <ul className="list-disc list-inside mt-2 space-y-1 ml-4 text-text-muted">
+            <li>Steam (Valve Corporation)</li>
+            <li>Discord</li>
+            <li>GitHub</li>
+          </ul>
+          <p className="mt-4 text-sm">
+            We are not responsible for the privacy practices of these external
+            sites. We encourage you to review their respective privacy policies.
+          </p>
+        </section>
+
+        {/* Contact */}
+        <section className="bg-surface-card border border-border-default rounded-lg p-6 hover:border-border-strong transition-colors">
+          <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
+            Contact & Updates
+          </h2>
+          <p className="mb-4">
+            We may update this Privacy Policy from time to time. Any changes
+            will be posted on this page with an updated &quot;Last Updated&quot;
+            date.
+          </p>
+          <p>
+            If you have questions about this policy, please reach out via our{" "}
+            <a
+              href="https://github.com/TerribleTurtle/spellcasters-community-api/issues"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-brand-primary hover:text-brand-accent underline transition-colors"
+            >
+              GitHub Repository
+            </a>
+            .
+          </p>
+        </section>
+      </div>
+    </PageShell>
+  );
+}

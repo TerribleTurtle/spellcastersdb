@@ -72,3 +72,5 @@
 - [x] **Design Playground (Phase 3):** Created `/design-system` route with Theme Builder (8 color pickers, save/delete/export/import), Token Catalog, Component Catalog. Custom themes persist in localStorage and inject `--sp-*` CSS vars via `ThemeProvider`. Global `ThemePicker` shows custom themes. 275 tests pass, 0 errors.
 - [x] **Scaffolding (Phase 4):** Installed `tsx`. Created `scripts/new-component.ts` and `scripts/new-route.ts` generators. Added `npm run new:component/new:route/script:validate`. Updated `CONTRIBUTING.md`. 248 tests pass, 0 errors.
 - [x] **Final Audit (Cleanup-5):** Verified Phase 3 & 4. Scanned for debug logs (clean). Updated `README.md` with new features and scripts. `npm run preflight` passes. **RELEASE CANDIDATE READY.**
+- [x] **Deckbuilder Refactor:** Modularized layout by creating shared `DeckBuilderShell` for unified grid structure across Solo and Team modes. 0 visual changes, 0 type errors.
+- [x] **Breadcrumbs & Legal (Phase 1-3):** Implemented Breadcrumbs via `PageShell` on 8 static pages. Created `/privacy` and `/terms` with sterile tone. Wired into Footer/Sitemap. 5 tests pass, 0 errors.

@@ -1,6 +1,7 @@
-import { UnitArchive } from "@/components/database/UnitArchive";
-import { getAllEntities } from "@/services/api/api";
 import { JsonLd } from "@/components/common/JsonLd";
+import { UnitArchive } from "@/components/database/UnitArchive";
+import { PageShell } from "@/components/layout/PageShell";
+import { getAllEntities } from "@/services/api/api";
 
 export const metadata = {
   title: "Card Database & Builds | Spellcasters Chronicles",
@@ -36,33 +37,38 @@ export default async function DatabasePage() {
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Card Database",
-    "description": "Search the complete card database including creatures, spells, and titans.",
-    "hasPart": units.map((u) => {
-        let url = `https://spellcastersdb.com/database`; // Default
-        if (u.category === "Spellcaster") url = `https://spellcastersdb.com/spellcasters/${u.spellcaster_id}`;
-        else if (u.category === "Titan") url = `https://spellcastersdb.com/titans/${u.entity_id}`;
-        else if (u.category === "Spell") url = `https://spellcastersdb.com/incantations/spells/${u.entity_id}`;
-        else if (u.category === "Creature" || u.category === "Building") url = `https://spellcastersdb.com/incantations/units/${u.entity_id}`;
-        // Consumables? upgrades?
-        
-        return {
-            "@type": "Thing",
-            "name": u.name,
-            "url": url,
-        };
+    name: "Card Database",
+    description:
+      "Search the complete card database including creatures, spells, and titans.",
+    hasPart: units.map((u) => {
+      let url = `https://spellcastersdb.com/database`; // Default
+      if (u.category === "Spellcaster")
+        url = `https://spellcastersdb.com/spellcasters/${u.spellcaster_id}`;
+      else if (u.category === "Titan")
+        url = `https://spellcastersdb.com/titans/${u.entity_id}`;
+      else if (u.category === "Spell")
+        url = `https://spellcastersdb.com/incantations/spells/${u.entity_id}`;
+      else if (u.category === "Creature" || u.category === "Building")
+        url = `https://spellcastersdb.com/incantations/units/${u.entity_id}`;
+
+      return {
+        "@type": "Thing",
+        name: u.name,
+        url: url,
+      };
     }),
   };
 
   return (
     <>
-    <JsonLd data={jsonLdData} id="json-ld-database-collection" />
-    <div className="min-h-screen bg-surface-main text-foreground pt-20 md:pt-28 p-4 md:p-8">
-      <div className="max-w-page-grid mx-auto">
-        {/* The Archive UI */}
+      <JsonLd data={jsonLdData} id="json-ld-database-collection" />
+      <PageShell
+        title="Card Database & Builds"
+        maxWidth="page-grid"
+        breadcrumbs={[{ label: "Database", href: "/database" }]}
+      >
         <UnitArchive initialUnits={units} />
-      </div>
-    </div>
+      </PageShell>
     </>
   );
 }

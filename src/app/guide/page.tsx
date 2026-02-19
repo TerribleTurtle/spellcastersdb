@@ -1,4 +1,5 @@
 import Link from "next/link";
+
 import { PageShell } from "@/components/layout/PageShell";
 
 export const metadata = {
@@ -17,7 +18,11 @@ export const metadata = {
 
 export default function GuidePage() {
   return (
-    <PageShell title="Spellcasters Chronicles Guide" maxWidth="4xl">
+    <PageShell
+      title="Spellcasters Chronicles Guide"
+      maxWidth="4xl"
+      breadcrumbs={[{ label: "Guide", href: "/guide" }]}
+    >
       <div className="space-y-8">
         {/* Game Overview */}
         <section className="bg-surface-card border border-border-default rounded-lg p-6 hover:border-border-strong transition-colors">
@@ -25,11 +30,10 @@ export default function GuidePage() {
             What is Spellcasters Chronicles?
           </h2>
           <p className="text-text-secondary leading-relaxed">
-            Spellcasters Chronicles is a strategic card-based game where
-            players build decks and battle using units, spells, and
-            spellcasters. Each match requires careful planning, resource
-            management, and tactical decision-making to outmaneuver your
-            opponent.
+            Spellcasters Chronicles is a strategic card-based game where players
+            build decks and battle using units, spells, and spellcasters. Each
+            match requires careful planning, resource management, and tactical
+            decision-making to outmaneuver your opponent.
           </p>
         </section>
 
@@ -132,13 +136,13 @@ export default function GuidePage() {
             Spellcasters
           </h2>
           <p className="text-text-secondary leading-relaxed mb-4">
-            Every deck is led by a Spellcaster, which defines your playstyle
-            and provides unique abilities. Spellcasters have:
+            Every deck is led by a Spellcaster, which defines your playstyle and
+            provides unique abilities. Spellcasters have:
           </p>
           <ul className="list-disc list-inside text-text-secondary space-y-2">
             <li>
-              <strong>Faction Affinity:</strong> Spellcasters belong to
-              specific factions and may synergize with certain incantations
+              <strong>Faction Affinity:</strong> Spellcasters belong to specific
+              factions and may synergize with certain incantations
             </li>
             <li>
               <strong>Special Abilities:</strong> Unique powers that can be
@@ -157,13 +161,11 @@ export default function GuidePage() {
           </p>
           <div className="space-y-3">
             <div>
-              <h3 className="font-semibold text-brand-primary mb-1">
-                Charges
-              </h3>
+              <h3 className="font-semibold text-brand-primary mb-1">Charges</h3>
               <p className="text-text-secondary text-sm">
-                Incantations have initial charges and charge times. Higher
-                rank incantations have fewer initial charges and longer
-                recharge periods.
+                Incantations have initial charges and charge times. Higher rank
+                incantations have fewer initial charges and longer recharge
+                periods.
               </p>
             </div>
             <div>
@@ -184,8 +186,8 @@ export default function GuidePage() {
             Deck Building Basics
           </h2>
           <p className="text-text-secondary leading-relaxed mb-4">
-            Building a strong deck requires understanding the game&apos;s
-            rules and synergies:
+            Building a strong deck requires understanding the game&apos;s rules
+            and synergies:
           </p>
           <ul className="list-disc list-inside text-text-secondary space-y-2">
             <li>
@@ -196,8 +198,8 @@ export default function GuidePage() {
               rules may vary)
             </li>
             <li>
-              <strong className="text-brand-accent">Required:</strong> At
-              least one <strong>Rank I or II Creature</strong>
+              <strong className="text-brand-accent">Required:</strong> At least
+              one <strong>Rank I or II Creature</strong>
             </li>
             <li>Decks must include at least 1 Creature</li>
             <li>

@@ -22,6 +22,8 @@
 - **Theming**: 6 custom themes (Dark, Light, Arcane, Inferno, Frost, Retro) plus a secret Rainbow mode (Konami Code).
 - **Design System**: A dedicated `/design-system` route for previewing tokens, components, and building custom themes with live preview and export/import capabilities.
 - **SEO Optimized**: Fully crawlable with dynamic sitemaps, structured data (JSON-LD), and semantic HTML for maximum discoverability.
+- **Legal Compliance**: Dedicated `/privacy` and `/terms` pages with transparent data practices.
+- **Navigation**: Integrated Breadcrumbs via `PageShell` for improved user wayfinding and SEO structure.
 - **Debug Suite**: Internal analytics tools for tracking data integrity, balance statistics, and keyword frequency.
 
 ## Architecture at a Glance

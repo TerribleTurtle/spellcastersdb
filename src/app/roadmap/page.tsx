@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
-import { roadmapService } from "@/services/roadmap-service";
-import RoadmapClient from "./RoadmapClient";
+
 import { PageShell } from "@/components/layout/PageShell";
+import { roadmapService } from "@/services/roadmap-service";
+
+import RoadmapClient from "./RoadmapClient";
 
 export const metadata: Metadata = {
   title: "Roadmap",
@@ -20,6 +22,7 @@ export default async function RoadmapPage() {
       title="Development Roadmap"
       subtitle="Transparency is key. Vote on issues by adding reactions on GitHub."
       maxWidth="page-grid"
+      breadcrumbs={[{ label: "Roadmap", href: "/roadmap" }]}
     >
       <RoadmapClient initialIssues={issues} isLive={isLive} />
     </PageShell>
