@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 const VISIBLE_THEMES = [
   { value: "dark", label: "Dark", icon: Moon },
-  { value: "light", label: "Light", icon: Sun },
+  { value: "light", label: "Why?", icon: Sun },
   { value: "theme-arcane", label: "Arcane", icon: Skull },
   { value: "theme-inferno", label: "Inferno", icon: Flame },
   { value: "theme-frost", label: "Frost", icon: Snowflake },
