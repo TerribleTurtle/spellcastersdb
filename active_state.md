@@ -59,3 +59,4 @@
 - [x] Verification: 258 Tests passed, 0 Lint errors, 0 Type errors in modified files.
 - [x] Repo Hygiene: Removed 4 cruft files, fixed .gitignore gaps (\_.log, temp\_\_), removed stale ESLint ignore, ran npm prune.
 - [x] Deployment Verification: Fixed 8 TS errors in tests, deduped CHANGELOG. 0 errors, 258 tests pass. **GO for deploy.**
+- [x] ThemePicker: Portal-based dropdown to prevent clipping by sidebar `overflow-x-hidden` in collapsed view.
