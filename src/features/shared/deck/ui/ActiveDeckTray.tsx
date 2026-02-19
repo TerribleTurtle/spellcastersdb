@@ -57,7 +57,7 @@ export function ActiveDeckTray({
     <div
       ref={setNodeRef}
       id={idSuffix ? `active-deck-${idSuffix}` : undefined}
-      className="h-auto min-h-[140px] xl:min-h-0 bg-transparent border-t border-brand-primary/20 flex flex-col pb-2 xl:pb-0 xl:justify-center relative"
+      className="h-auto min-h-[100px] xl:min-h-0 bg-transparent border-t border-brand-primary/20 flex flex-col pb-0 xl:pb-0 xl:justify-center relative"
     >
       <div className="grow flex items-center justify-between gap-0.5 px-2 py-1 xl:grid xl:grid-cols-6 xl:gap-2 xl:pl-4 xl:pr-4 xl:py-3 xl:items-center xl:content-center xl:grow-0">
         {/* Spellcaster Area - Fixed Width on Desktop */}

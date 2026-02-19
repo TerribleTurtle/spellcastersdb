@@ -1,8 +1,9 @@
 import Link from "next/link";
+
 import { ArrowRight } from "lucide-react";
-import { SmartRankBadge } from "@/components/ui/rank-badge";
 
 import { EntityImage } from "@/components/ui/EntityImage";
+import { SmartRankBadge } from "@/components/ui/rank-badge";
 import { cn } from "@/lib/utils";
 import { UnifiedEntity } from "@/types/api";
 
@@ -35,7 +36,7 @@ function getEntityMeta(entity: UnifiedEntity) {
     return {
       href: `/titans/${entity.entity_id}`,
       category: "Titan",
-      rank: "V", 
+      rank: "V",
       school: entity.magic_school,
       isTitan: true,
     };
@@ -52,13 +53,16 @@ function getEntityMeta(entity: UnifiedEntity) {
   }
 
   // Upgrade
-  if (entity.category === "Upgrade" || (!("magic_school" in entity) && "cost" in entity)) {
-     return {
-         href: `/upgrades/${entity.entity_id}`,
-         category: "Upgrade",
-         rank: "UPGRADE",
-         school: "Technology",
-     };
+  if (
+    entity.category === "Upgrade" ||
+    (!("magic_school" in entity) && "cost" in entity)
+  ) {
+    return {
+      href: `/upgrades/${entity.entity_id}`,
+      category: "Upgrade",
+      rank: "UPGRADE",
+      school: "Technology",
+    };
   }
 
   // Unit or Spell
@@ -76,7 +80,6 @@ export function UnitCard({
   className,
 }: UnitCardProps) {
   const meta = getEntityMeta(unit);
-
 
   if (variant === "compact") {
     return (
@@ -124,8 +127,6 @@ export function UnitCard({
           className="w-7 h-7 flex items-center justify-center p-0 rounded text-[10px] shrink-0"
           fallbackClassName="w-7 h-7 flex items-center justify-center p-0 rounded bg-brand-dark border-brand-primary/20 text-[10px] font-mono font-bold text-brand-primary shrink-0"
         />
-
-
       </Link>
     );
   }
@@ -140,7 +141,7 @@ export function UnitCard({
       )}
     >
       {/* Card Image */}
-      <EntityImage entity={unit} className="w-full h-20" />
+      <EntityImage entity={unit} className="w-full h-28" />
 
       <div className="p-2">
         {/* Header with Rank */}
@@ -151,7 +152,7 @@ export function UnitCard({
           <SmartRankBadge
             rank={meta.rank}
             isTitan={meta.isTitan}
-            className="text-[10px] px-2 py-0.5 rounded"
+            className="w-8 h-8 text-xs"
           />
         </div>
 
@@ -166,7 +167,10 @@ export function UnitCard({
           </p>
           <span className="flex items-center gap-1 text-[10px] text-text-faint group-hover:text-brand-accent transition-colors">
             <span className="hidden group-hover:inline">View</span>
-            <ArrowRight size={12} className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200" />
+            <ArrowRight
+              size={12}
+              className="opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all duration-200"
+            />
           </span>
         </div>
       </div>

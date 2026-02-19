@@ -1,6 +1,7 @@
 import React from "react";
-import { BrowserItem, ItemUsageState } from "@/types/browser";
+
 import { DraggableCard } from "@/features/shared/deck/ui/DraggableCard";
+import { BrowserItem, ItemUsageState } from "@/types/browser";
 
 interface UnitGridRowProps {
   items: BrowserItem[];
@@ -21,7 +22,7 @@ export const UnitGridRow = React.memo(function UnitGridRow({
 }: UnitGridRowProps) {
   return (
     <div
-      className="px-4 py-1 grid gap-2 max-w-[1920px] mx-auto"
+      className="px-2 lg:px-4 py-1 grid gap-2 max-w-[1920px] mx-auto"
       style={{
         gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
       }}

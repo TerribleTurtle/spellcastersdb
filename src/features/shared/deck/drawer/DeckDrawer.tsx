@@ -171,7 +171,7 @@ export const DeckDrawer = memo(function DeckDrawer({
       "fixed bottom-0 left-0 right-0 z-40 pb-[max(16px,env(safe-area-inset-bottom))]",
     variant === "static" &&
       "w-full border-x border-b border-border-subtle first:border-t",
-    isExpanded ? "h-auto" : "h-[48px]", // consistent small height for collapsed
+    isExpanded ? "h-auto" : "h-[40px] xl:h-[48px]", // consistent small height for collapsed
     // Order of precedence: activeTheme.border -> activeBorderClassName -> default brand
     forceActive &&
       (activeTheme?.border ||
@@ -220,7 +220,7 @@ export const DeckDrawer = memo(function DeckDrawer({
         ref={setNodeRef} // Make header droppable
         data-testid="deck-drawer-header"
         className={cn(
-          "h-14 w-full flex items-center justify-between px-4 shrink-0 transition-colors cursor-pointer select-none relative z-40",
+          "h-10 xl:h-14 w-full flex items-center justify-between px-3 xl:px-4 shrink-0 transition-colors cursor-pointer select-none relative z-40",
           forceActive
             ? activeTheme?.header || "bg-brand-primary/20"
             : "bg-surface-card hover:bg-surface-hover"
@@ -290,10 +290,10 @@ export const DeckDrawer = memo(function DeckDrawer({
           )}
         </div>
 
-        {/* Center: Chevron/Count - HIDDEN ON DESKTOP */}
+        {/* Center: Chevron/Count - HIDDEN ON DESKTOP, absolutely centered */}
         <button
           type="button"
-          className="xl:hidden flex items-center justify-center text-text-muted hover:text-text-primary rounded p-1 focus:outline-none focus:ring-2 focus:ring-brand-primary"
+          className="xl:hidden absolute left-1/2 -translate-x-1/2 flex items-center justify-center text-text-muted hover:text-text-primary rounded p-1 focus:outline-none focus:ring-2 focus:ring-brand-primary z-41"
           onClick={(e) => {
             e.stopPropagation();
             toggle();

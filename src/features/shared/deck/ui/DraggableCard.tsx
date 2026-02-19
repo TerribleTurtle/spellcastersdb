@@ -124,7 +124,7 @@ export const DraggableCard = React.memo(function DraggableCard({
       tabIndex={0}
       className={cn(
         "relative group cursor-pointer flex flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 focus-visible:ring-offset-gray-900 select-none",
-        "aspect-4/5 rounded-lg overflow-hidden border border-border-default bg-surface-card", // More compact aspect ratio
+        "aspect-3/4 rounded-lg overflow-hidden border border-border-default bg-surface-card",
         "hover:border-brand-primary/50 transition-[border-color,transform] hover:scale-105",
         // Actually, we want the bottom bar to be part of the card visuals.
         isDragging && "opacity-50",
@@ -147,7 +147,7 @@ export const DraggableCard = React.memo(function DraggableCard({
 
         {/* Quick Add Badge - Top Left */}
         <div
-          className="absolute top-1 left-1 bg-surface-overlay p-1 rounded text-brand-accent shadow-md border border-border-default hover:bg-brand-primary hover:text-text-primary transition-colors z-20 pointer-events-auto"
+          className="absolute top-1 left-1 bg-surface-overlay p-1.5 lg:p-1 rounded text-brand-accent shadow-md border border-border-default hover:bg-brand-primary hover:text-text-primary transition-colors z-20 pointer-events-auto"
           onClick={handleQuickAdd}
           onPointerDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
@@ -155,8 +155,8 @@ export const DraggableCard = React.memo(function DraggableCard({
           aria-label="Quick Add"
         >
           <Plus
-            className="w-3.5 h-3.5 lg:w-5 lg:h-5 2xl:w-6 2xl:h-6"
-            strokeWidth={4}
+            className="w-5 h-5 lg:w-5 lg:h-5 2xl:w-6 2xl:h-6"
+            strokeWidth={3}
           />
         </div>
 

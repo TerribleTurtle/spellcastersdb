@@ -163,7 +163,7 @@ export function RankBadge({
         </svg>
         <span
           className={cn(
-            "absolute inset-0 flex items-center justify-center z-10 text-[10px] sm:text-[10px] font-bold font-mono pointer-events-none select-none",
+            "absolute inset-0 flex items-center justify-center z-10 text-[9px] sm:text-xs font-bold font-mono pointer-events-none select-none",
             // Adjust font size scaling via container query or just assume context?
             // The previous impl used text-[10px].
             // Center text perfectly.
