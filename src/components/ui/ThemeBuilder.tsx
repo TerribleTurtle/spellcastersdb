@@ -45,20 +45,19 @@ export function ThemeBuilder() {
     }
   }, [isClient]);
 
-  // Sync editing theme to live preview
+  // Sync editing theme to live preview (throttled to 1 DOM write per frame)
   useEffect(() => {
     if (!editingTheme) return;
 
-    // Apply draft styles directly
-    const root = document.documentElement;
-    const vars = CustomThemeService.toCssVariables(editingTheme);
-    Object.entries(vars).forEach(([key, value]) => {
-      root.style.setProperty(key, value);
+    const rafId = requestAnimationFrame(() => {
+      const root = document.documentElement;
+      const vars = CustomThemeService.toCssVariables(editingTheme);
+      Object.entries(vars).forEach(([key, value]) => {
+        root.style.setProperty(key, value);
+      });
     });
 
-    // Cleanup when unmounting or switching off editing?
-    // Actually if we switch to a saved theme, ThemeProvider takes over.
-    // If we are editing, we want live preview.
+    return () => cancelAnimationFrame(rafId);
   }, [editingTheme]);
 
   // Initialize editing if current theme is custom

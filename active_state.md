@@ -1,5 +1,5 @@
 # Project Status
 
-- **Current Focus**: Konami code rainbow theme bugfix
-- **Mode**: Verification
-- **Recent Changes**: Rewrote `useKonamiCode.ts` (stale closure + position reset), added `prefers-reduced-motion` override for rainbow in `themes.css`
+- **Current Focus**: Color picker performance fix (complete)
+- **Mode**: Done
+- **Recent Changes**: Throttled CSS-variable application in `ThemeBuilder.tsx` via `requestAnimationFrame` to fix laggy color pickers on the Design System page
