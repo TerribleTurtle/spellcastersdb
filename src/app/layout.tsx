@@ -50,11 +50,11 @@ export const metadata: Metadata = {
     "Game Data",
     "Wiki",
   ],
-  applicationName: "SpellcastersDB",
+  applicationName: "Spellcasters DB",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "SpellcastersDB",
+    title: "Spellcasters DB",
   },
   authors: [{ name: "TerribleTurtle" }],
   creator: "TerribleTurtle",
