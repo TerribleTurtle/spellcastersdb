@@ -24,7 +24,7 @@ export function LibraryButton({
       {...props}
     >
       <Library size={14} />
-      {!collapsed && <span>Library</span>}
+      <span>Library</span>
     </button>
   );
 }

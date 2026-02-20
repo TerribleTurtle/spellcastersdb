@@ -18,7 +18,7 @@
 - **Patch History**: Real-time balance updates with visual badges (Buff/Nerf/Rework) and detailed before/after stat comparisons for every entity.
 - **Live Updates**: Powered by a static JSON API that allows for rapid balance updates without full site rebuilds.
 - **Roadmap**: A live, interactive issue tracker connected to GitHub, featuring search and filtering.
-- **Accessibility (WCAG 2.1 AA)**: Skip navigation, focus-trapped modals, ARIA labels/states on all interactive controls, and `prefers-reduced-motion` support.
+- **Accessibility-Minded**: Built with WCAG 2.1 AA guidelines in mind including skip navigation, focus-trapped modals, ARIA labels/states on interactive controls, and `prefers-reduced-motion` support (verified via automated auditing).
 - **PWA**: Installable as a native-like app on mobile and desktop. Service worker provides offline caching for pages, API data, and card images.
 - **Theming**: 7 custom themes (Dark, Light, Arcane, Inferno, Frost, Retro, GlitchWitch) plus a secret Rainbow mode (Konami Code).
 - **Design System**: A dedicated `/design-system` route for previewing tokens, components, and building custom themes with live preview and export/import capabilities.

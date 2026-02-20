@@ -1,5 +1,8 @@
 import { StateCreator } from "zustand";
 
+import { INITIAL_DECK } from "@/services/api/persistence";
+import { cloneDeck } from "@/services/utils/deck-utils";
+
 import { DeckBuilderState, UIState } from "./types";
 
 export const createUISlice: StateCreator<DeckBuilderState, [], [], UIState> = (
@@ -20,7 +23,16 @@ export const createUISlice: StateCreator<DeckBuilderState, [], [], UIState> = (
   isImporting: false,
   pendingSwapCard: null,
 
-  setMode: (mode) => set({ mode }),
+  setMode: (mode) =>
+    set({
+      mode,
+      ...(mode === "SOLO"
+        ? {
+            activeSlot: null,
+            currentDeck: { ...cloneDeck(INITIAL_DECK), name: "New Deck" },
+          }
+        : {}),
+    }),
   setViewSummary: (viewSummary) => set({ viewSummary }),
   setIsReadOnly: (isReadOnly) => set({ isReadOnly }),
 
