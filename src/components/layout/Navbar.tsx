@@ -36,9 +36,16 @@ export default function Navbar() {
   useEffect(() => {
     if (!isOpen) return;
 
-    const isOutside = (target: Node) =>
-      !drawerRef.current?.contains(target) &&
-      !toggleRef.current?.contains(target);
+    const isOutside = (target: Node) => {
+      // Allow clicks on portals (Theme Picker)
+      if ((target as Element).closest?.('[data-testid="theme-picker-menu"]'))
+        return false;
+
+      return (
+        !drawerRef.current?.contains(target) &&
+        !toggleRef.current?.contains(target)
+      );
+    };
 
     const onClick = (e: MouseEvent) => {
       if (!isOutside(e.target as Node)) return;

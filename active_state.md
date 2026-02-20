@@ -1,5 +1,8 @@
 # Project Status
 
-- **Current Focus**: GlitchWitch theme added
-- **Mode**: Ready to deploy
-- **Recent Changes**: Added "GlitchWitch" built-in theme (pink/green/purple on near-black) across `themes.css`, `ThemePicker.tsx`, `ThemeProvider.tsx`, and `ThemeColorMeta.tsx`. Uses FlaskConical icon. TypeScript compiles clean.
+- **Current Focus**: Monitoring PWA Post-Deployment
+- **Mode**: Verification (v1.0.23 Released)
+- **Recent Changes**: Implemented full PWA support via `@serwist/next` (Phases 1-4).
+  - Deployed `manifest.ts`, `sw.ts`, and `<OfflineIndicator />`.
+  - Service worker successfully caching GitHub API (`StaleWhileRevalidate`) and images (`CacheFirst`).
+  - Preflight checks passed. Deployed to Vercel.

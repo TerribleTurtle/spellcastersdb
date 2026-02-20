@@ -1,5 +1,8 @@
 import type { NextConfig } from "next";
 
+import withSerwistInit from "@serwist/next";
+import { spawnSync } from "node:child_process";
+
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["localhost:3000", "192.168.2.202:3000", "192.168.2.202"],
   async redirects() {
@@ -10,25 +13,25 @@ const nextConfig: NextConfig = {
       // We also need to catch legacy shared links on /?d=
       */
       {
-        source: '/',
+        source: "/",
         has: [
           {
-            type: 'query',
-            key: 'd',
+            type: "query",
+            key: "d",
           },
         ],
-        destination: '/deck-builder',
+        destination: "/deck-builder",
         permanent: true,
       },
       {
-        source: '/',
+        source: "/",
         has: [
           {
-            type: 'query',
-            key: 'team',
+            type: "query",
+            key: "team",
           },
         ],
-        destination: '/deck-builder',
+        destination: "/deck-builder",
         permanent: true,
       },
       {
@@ -68,9 +71,12 @@ const nextConfig: NextConfig = {
       // Temporary: bust cached 301 from old /deck-builder -> / redirect.
       // Safe to remove after ~2 weeks post-deploy.
       {
-        source: '/deck-builder',
+        source: "/deck-builder",
         headers: [
-          { key: 'Cache-Control', value: 'no-cache, no-store, must-revalidate' },
+          {
+            key: "Cache-Control",
+            value: "no-cache, no-store, must-revalidate",
+          },
         ],
       },
       {
@@ -96,7 +102,7 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'none'",
-              `script-src 'self' 'unsafe-inline' ${process.env.NODE_ENV === 'development' ? "'unsafe-eval'" : ""} https://va.vercel-scripts.com https://tally.so`,
+              `script-src 'self' 'unsafe-inline' ${process.env.NODE_ENV === "development" ? "'unsafe-eval'" : ""} https://va.vercel-scripts.com https://tally.so`,
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' blob: data: https://terribleturtle.github.io https://www.spellcastersdb.com",
               "font-src 'self'",
@@ -104,10 +110,16 @@ const nextConfig: NextConfig = {
               "base-uri 'self'",
               "form-action 'self'",
               "frame-ancestors 'none'",
-              "connect-src 'self' https://terribleturtle.github.io https://vitals.vercel-insights.com",
+              "connect-src 'self' https://terribleturtle.github.io https://vitals.vercel-insights.com https://tally.so",
               "frame-src 'self' https://tally.so",
-              process.env.NODE_ENV === 'development' ? "" : "upgrade-insecure-requests",
-            ].filter(Boolean).join("; "),
+              "worker-src 'self'",
+              "manifest-src 'self'",
+              process.env.NODE_ENV === "development"
+                ? ""
+                : "upgrade-insecure-requests",
+            ]
+              .filter(Boolean)
+              .join("; "),
           },
           {
             key: "Strict-Transport-Security",
@@ -118,26 +130,40 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
-    formats: ['image/avif', 'image/webp'],
+    formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 31536000,
     qualities: [45, 75],
     deviceSizes: [640, 828, 1200, 1920],
     imageSizes: [96, 128, 256, 384],
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'terribleturtle.github.io',
-        pathname: '/spellcasters-community-api/**',
+        protocol: "https",
+        hostname: "terribleturtle.github.io",
+        pathname: "/spellcasters-community-api/**",
       },
       {
-        protocol: 'https',
-        hostname: 'www.spellcastersdb.com',
+        protocol: "https",
+        hostname: "www.spellcastersdb.com",
       },
     ],
   },
   env: {
-    NEXT_PUBLIC_PREFERRED_ASSET_FORMAT: process.env.NEXT_PUBLIC_PREFERRED_ASSET_FORMAT,
+    NEXT_PUBLIC_PREFERRED_ASSET_FORMAT:
+      process.env.NEXT_PUBLIC_PREFERRED_ASSET_FORMAT,
   },
+  turbopack: {},
 };
 
-export default nextConfig;
+const revision =
+  spawnSync("git", ["rev-parse", "HEAD"], {
+    encoding: "utf-8",
+  }).stdout?.trim() ?? crypto.randomUUID();
+
+const withSerwist = withSerwistInit({
+  swSrc: "src/app/sw.ts",
+  swDest: "public/sw.js",
+  additionalPrecacheEntries: [{ url: "/~offline", revision }],
+  disable: process.env.NODE_ENV === "development",
+});
+
+export default withSerwist(nextConfig);

@@ -2,7 +2,8 @@
 
 import { X } from "lucide-react";
 
-import { InspectorItem } from "../CardInspector";
+import { EntityDisplayItem as InspectorItem } from "@/components/entity-card/types";
+
 import { InspectorControls } from "../InspectorControls";
 import { InspectorHeader } from "../InspectorHeader";
 
