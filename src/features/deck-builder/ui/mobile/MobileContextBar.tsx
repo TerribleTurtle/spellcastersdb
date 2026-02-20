@@ -70,7 +70,11 @@ export function MobileContextBar({
       className="h-12 px-2 flex items-center gap-2 border-b border-border-default bg-surface-main shrink-0"
     >
       {/* Library Button */}
-      <LibraryButton onClick={onOpenLibrary} className="shrink-0 p-1.5!" />
+      <LibraryButton
+        onClick={onOpenLibrary}
+        collapsed
+        className="shrink-0 p-1.5!"
+      />
 
       {/* Mode Toggle — single button, tap to cycle */}
       <button

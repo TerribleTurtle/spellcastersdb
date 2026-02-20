@@ -140,6 +140,12 @@ export async function getUnits(): Promise<Unit[]> {
 
 /**
  * Returns all Spells
+ *
+ * @example
+ * ```ts
+ * const spells = await getSpells();
+ * const fireSpells = spells.filter(s => s.magic_school === "Fire");
+ * ```
  */
 export async function getSpells(): Promise<Spell[]> {
   return getFromRegistry(
@@ -150,6 +156,12 @@ export async function getSpells(): Promise<Spell[]> {
 
 /**
  * Returns all Titans
+ *
+ * @example
+ * ```ts
+ * const titans = await getTitans();
+ * const activeTitan = titans[0];
+ * ```
  */
 export async function getTitans(): Promise<Titan[]> {
   return getFromRegistry(
@@ -160,6 +172,12 @@ export async function getTitans(): Promise<Titan[]> {
 
 /**
  * Returns Units + Spells aggregated (for Deck Builder)
+ *
+ * @example
+ * ```ts
+ * const incantations = await getIncantations();
+ * const deckCards = incantations.filter(i => deckCardIds.includes(i.entity_id));
+ * ```
  */
 export async function getIncantations(): Promise<Incantation[]> {
   if (registry.isInitialized()) {
@@ -171,6 +189,12 @@ export async function getIncantations(): Promise<Incantation[]> {
 
 /**
  * Returns all spellcasters (formerly Heroes)
+ *
+ * @example
+ * ```ts
+ * const spellcasters = await getSpellcasters();
+ * const darkSpellcaster = spellcasters.find(s => s.name === "Nadia");
+ * ```
  */
 export async function getSpellcasters(): Promise<Spellcaster[]> {
   return getFromRegistry(
@@ -181,6 +205,12 @@ export async function getSpellcasters(): Promise<Spellcaster[]> {
 
 /**
  * Returns all consumables
+ *
+ * @example
+ * ```ts
+ * const consumables = await getConsumables();
+ * const potions = consumables.filter(c => c.type === "Potion");
+ * ```
  */
 export async function getConsumables(): Promise<Consumable[]> {
   return getFromRegistry(
@@ -191,6 +221,12 @@ export async function getConsumables(): Promise<Consumable[]> {
 
 /**
  * Returns all upgrades
+ *
+ * @example
+ * ```ts
+ * const upgrades = await getUpgrades();
+ * const unitUpgrades = upgrades.filter(u => u.target_type === "Unit");
+ * ```
  */
 export async function getUpgrades(): Promise<Upgrade[]> {
   return getFromRegistry(
@@ -249,6 +285,12 @@ export async function getSpellcasterById(
 
 /**
  * Returns a unified list of all searchable entities
+ *
+ * @example
+ * ```ts
+ * const entities = await getAllEntities();
+ * const searchResults = entities.filter(e => e.name.toLowerCase().includes(query));
+ * ```
  */
 export async function getAllEntities(): Promise<UnifiedEntity[]> {
   if (registry.isInitialized()) {

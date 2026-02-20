@@ -25,7 +25,7 @@ test.describe("Team Builder DND", () => {
       timeout: 10000,
     });
     const firstCard = page.locator('[data-testid^="browser-item-"]').first();
-    await page.waitForTimeout(1000);
+    await expect(firstCard).toBeVisible();
 
     // Target a slot inside the team drawer, expanding if collapsed
     const targetSlot = teamDrawer.getByTestId("deck-slot-0").first();
@@ -37,7 +37,7 @@ test.describe("Team Builder DND", () => {
     if (!tgt || tgt.height === 0) {
       const header = teamDrawer.getByTestId("deck-drawer-header");
       await header.click();
-      await page.waitForTimeout(500);
+      await expect(targetSlot).toBeVisible();
       tgt = await targetSlot.boundingBox();
     }
 
@@ -45,20 +45,21 @@ test.describe("Team Builder DND", () => {
     if (src && tgt) {
       await page.mouse.move(src.x + src.width / 2, src.y + src.height / 2);
       await page.mouse.down();
+      // dnd-kit PointerSensor activation delay
       await page.waitForTimeout(100);
       await page.mouse.move(
         src.x + src.width / 2 + 10,
         src.y + src.height / 2 + 10,
         { steps: 5 }
       );
+      // dnd-kit PointerSensor activation delay
       await page.waitForTimeout(100);
       await page.mouse.move(tgt.x + tgt.width / 2, tgt.y + tgt.height / 2, {
         steps: 10,
       });
+      // dnd-kit PointerSensor activation delay
       await page.waitForTimeout(100);
       await page.mouse.up();
     }
-
-    await page.waitForTimeout(500);
   });
 });

@@ -189,7 +189,7 @@ export function SoloEditorMobile({
       />
 
       {/* 3. Main Browser Area (Scrollable internally via Virtuoso) */}
-      <main className="flex-1 overflow-hidden relative min-h-0 bg-surface-main">
+      <div className="flex-1 overflow-hidden relative min-h-0 bg-surface-main">
         {pendingSwapCard && (
           <div className="sticky top-4 z-30 px-4 w-full">
             <SwapModeBanner
@@ -212,7 +212,7 @@ export function SoloEditorMobile({
             itemStates={itemStates}
           />
         </div>
-      </main>
+      </div>
 
       {/* 4. Bottom Dock (Fixed) */}
       <MobileDeckDock

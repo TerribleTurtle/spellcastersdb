@@ -78,6 +78,11 @@ function addUnit(deck: Deck, entity: Unit | Spell): DeckOperationResult<Deck> {
 export const DeckRules = {
   /**
    * Assigns a Spellcaster to the deck and updates the deck name if needed.
+   *
+   * @example
+   * ```ts
+   * const newDeck = DeckRules.setSpellcaster(emptyDeck, ishtarSpellcaster);
+   * ```
    */
   setSpellcaster(deck: Deck, spellcaster: Spellcaster): Deck {
     const isDefaultName = !deck.name || deck.name === "New Deck";
@@ -88,6 +93,14 @@ export const DeckRules = {
     };
   },
 
+  /**
+   * Removes the spellcaster from the deck.
+   *
+   * @example
+   * ```ts
+   * const noHeroDeck = DeckRules.removeSpellcaster(currentDeck);
+   * ```
+   */
   removeSpellcaster(deck: Deck): Deck {
     return { ...deck, spellcaster: null };
   },
@@ -95,6 +108,13 @@ export const DeckRules = {
   /**
    * Sets a card (Unit, Spell, or Titan) to a specific slot index.
    * Enforces singleton rule for units and checks slot compatibility.
+   *
+   * @example
+   * ```ts
+   * const targetSlot = 0;
+   * const result = DeckRules.setSlot(deck, targetSlot, fireDragonUnit);
+   * if (result.success) setDeck(result.data);
+   * ```
    */
   setSlot(
     deck: Deck,
@@ -152,6 +172,11 @@ export const DeckRules = {
 
   /**
    * Clears the unit/content from a specific slot.
+   *
+   * @example
+   * ```ts
+   * const deckWithoutTitan = DeckRules.clearSlot(deck, TITAN_SLOT_INDEX);
+   * ```
    */
   clearSlot(deck: Deck, index: SlotIndex): Deck {
     const newDeck = cloneDeck(deck);
@@ -161,6 +186,13 @@ export const DeckRules = {
 
   /**
    * Swaps the contents of two slots, validating that both slots can accept each other's content.
+   *
+   * @example
+   * ```ts
+   * const slotA = 0;
+   * const slotB = 1;
+   * const result = DeckRules.swapSlots(deck, slotA, slotB);
+   * ```
    */
   swapSlots(
     deck: Deck,
@@ -222,6 +254,13 @@ export const DeckRules = {
    * - Spellcasters set the deck hero.
    * - Titans find the Titan slot.
    * - Units/Spells find the first empty slot.
+   *
+   * @example
+   * ```ts
+   * const result = DeckRules.quickAdd(deck, anyCardFromLibrary);
+   * if (result.success) setDeck(result.data);
+   * else showToast(result.error);
+   * ```
    */
   quickAdd(
     deck: Deck,

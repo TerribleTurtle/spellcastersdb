@@ -70,6 +70,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
   - Run `npm test` to execute Vitest unit tests.
   - Run `npm run test:coverage` to see a coverage report.
   - Run `npm run preflight` to run type-check + lint + tests in one go.
+  - Run `npm run lighthouse` to verify accessibility, SEO, best practices, and PWA criteria. Performance limits are enforced as warnings due to local dev server latency.
 - **Scaffolding**:
   - Run `npm run new:component <Name>` to generate a new component + test file.
     - Example: `npm run new:component StatBlock` → creates `src/components/ui/StatBlock.tsx` + `__tests__/StatBlock.test.tsx`

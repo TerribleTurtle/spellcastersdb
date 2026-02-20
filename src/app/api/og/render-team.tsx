@@ -22,7 +22,8 @@ export async function renderTeamImage(
 
   // Cache Control
   const headers = {
-    "Cache-Control": "public, max-age=2592000, immutable",
+    "Cache-Control":
+      "public, max-age=86400, stale-while-revalidate=43200, immutable",
     "Content-Type": "image/png",
   };
 

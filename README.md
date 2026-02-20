@@ -43,7 +43,8 @@
   - **Revalidation API**: On-demand cache invalidation via `/api/revalidate` (using `Authorization` header) with `revalidateTag` for robust content updates.
     - **CI/CD**: The "Daily Revalidation" workflow requires `REVALIDATION_SECRET` and optionally `APP_URL` (defaults to `https://www.spellcastersdb.com`) in GitHub Secrets.
   - **State Persistence**: Optimized `zustand/persist` with `partialize` to serialize only critical user data, excluding transient UI state for consistent high performance.
-  - **Image Optimization**: Configured with a 1-year cache TTL, AVIF support, and constrained device sizes to minimize bandwidth. Critical images use `priority` loading for LCP.
+  - **Asset Caching & CDN Optimization**: Open Graph generation edges and standard images use `Cache-Control` configured for `stale-while-revalidate` alongside `NEXT_PUBLIC_PREFERRED_ASSET_FORMAT` for robust background updating without freezing user interaction.
+  - **Bundle Profiling**: Includes `@next/bundle-analyzer` to maintain lightweight chunks. Use `npm run analyze` to inspect footprints.
   - **Browser Support**: Targets modern browsers (Chrome 100+, Safari 15+, Firefox 100+) for smaller bundles and better performance.
 - **Infrastructure Hardening**:
   - **Architecture Enforcement**: `dependency-cruiser` validates import boundaries (`components/ui` ↛ `features`, `features` ↛ `app`) on every preflight run.
@@ -82,6 +83,7 @@ For detailed setup instructions, including **Local API Development**, please see
 | `npm run build`           | Builds the application for production                    |
 | `npm run start`           | Starts the production server                             |
 | `npm run test`            | Runs the test suite (Vitest)                             |
+| `npm run test:coverage`   | Runs tests with coverage report                          |
 | `npm run test:watch`      | Runs tests in watch mode                                 |
 | `npm run lint`            | Runs ESLint                                              |
 | `npm run type-check`      | Runs TypeScript compiler check                           |
@@ -94,6 +96,8 @@ For detailed setup instructions, including **Local API Development**, please see
 | `npm run script:validate` | Validates production data integrity                      |
 | `npm run test:e2e`        | Runs the E2E test suite (Playwright)                     |
 | `npm run test:e2e:ui`     | Opens the Playwright UI for interactive debugging        |
+| `npm run lighthouse`      | Runs Lighthouse CI checks                                |
+| `npm run analyze`         | Generates a webpack bundle size analysis via cross-env   |
 
 ## Documentation
 

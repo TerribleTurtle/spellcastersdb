@@ -143,8 +143,8 @@
   font-family: var(--font-geist-mono), monospace !important;
 }
 
-
 /* 🧙‍♀️ GlitchWitch — Pink/green/purple on near-black */
+/* @a11y-ignore: FUN THEME. DO NOT CHANGE THESE COLORS FOR ACCESSIBILITY CONTRAST. */
 .theme-glitchwitch {
   color-scheme: dark;
   --sp-brand-primary: #e984b3;
@@ -229,4 +229,3 @@
     animation-iteration-count: infinite !important;
   }
 }
-
