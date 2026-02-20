@@ -2,12 +2,15 @@
 
 -## Current Focus
 
-- **Deploy Ready** - All pre-deploy blockers resolved. Lint clean (0 errors), type-check clean, 291 unit tests pass. E2E team-builder flake fixed (welcome modal dismissal). Ready for commit + push + deploy.
+- **Deploy Gate: CONDITIONAL GO** - Preflight verified: lint 0 errors/2 warnings, type-check clean, 291 unit tests pass, secrets scan clean, CHANGELOG/README/env current, CI/CD pipelines valid. **20 uncommitted files** (Sentry integration + docs cleanup) must be committed + pushed to trigger Vercel deploy.
 
-* **Mode**: Deploy Gate (GO)
+* **Mode**: Deploy Gate (CONDITIONAL GO)
 
 ## Recent Changes
 
+- (02/20) **Sentry Remediation & Stabilization** - Executed `@loop` target phase to fix Sentry audit findings. Added Sentry ingest domains to `next.config.ts` Content-Security-Policy `connect-src`. Created Next.js `global-error.tsx` boundary. Wired `SentryAdapter` into the central `MonitoringService`. Disabled SDK internal telemetry on client and server payloads.
+- (02/20) **Sentry Integration (Phase 1)** - Integrated Sentry with strict data privacy and quota controls (v8 SDK). Configured `tracesSampleRate: 0.01`, fully disabled Session Replay, stripped all PII (IPs, emails, tokens) via `beforeSend`, and suppressed noise (hydration errors). Updated `next.config.ts` and `src/instrumentation.ts` for Next.js App Router hooks.
+- (02/20) **CTO Scorecard Assessment** - Executed the `@assess` workflow. Analyzed the UX, Architecture, Security, and DevOps pillars. Generated `CTO_SCORECARD.md` artifact with an "Enterprise" maturity rating, identifying strengths in CI/CD and modularity, and gaps in Cloud State and Telemetry integration.
 - (02/20) **Deck Builder UX Enhancement** - Added localized 'x' remove buttons to cards directly within `DeckSlot` and `SpellcasterSlot`, resolving UX friction for rapid deck modifications on mobile and desktop.
 - (02/20) **Deck Builder Welcome Modal** - Implemented a first-time user experience modal (`DeckBuilderWelcomeModal.tsx`) for the Deck Builder that walks users through the core deck-building loop (Library -> Deck -> Save) and highlights Team Mode features. Added a manual "Tutorial" trigger to the Library Header. Added state persistence via `hasSeenDeckBuilderWelcome` in Zustand.
 - (02/20) **Lead PM Feature Strategy** - Conducted a Gap Analysis for missing "Table Stakes" features (User Accounts, Cloud Decks, Empty States, Admin Panel) and generated `docs/FEATURE_GAP_ANALYSIS.md`. This prioritized the backlog for competitive parity.
