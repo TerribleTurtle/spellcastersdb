@@ -1,11 +1,13 @@
 import { useDndContext, useDraggable, useDroppable } from "@dnd-kit/core";
-import { HelpCircle, Shield, Sparkles, Swords, Wand2 } from "lucide-react";
+import { HelpCircle, Shield, Sparkles, Swords, Wand2, X } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 
 import { GameImage } from "@/components/ui/GameImage";
 import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
 import { CLASS_STYLES } from "@/services/config/rank-class-styles";
+import { useDeckStore } from "@/store/index";
 import { Spellcaster, UnifiedEntity } from "@/types/api";
 import { DragData, DraggableEntity, DropData } from "@/types/dnd";
 
@@ -31,6 +33,36 @@ export function SpellcasterSlot({
     ? `spellcaster-slot-drag-${deckId}`
     : "spellcaster-slot-drag";
   const dragId = idSuffix ? `${baseDragId}-${idSuffix}` : baseDragId;
+
+  const {
+    mode,
+    isReadOnly,
+    removeSpellcaster,
+    removeTeamSpellcaster,
+    teamDecks,
+  } = useDeckStore(
+    useShallow((state) => ({
+      mode: state.mode,
+      isReadOnly: state.isReadOnly,
+      removeSpellcaster: state.removeSpellcaster,
+      removeTeamSpellcaster: state.removeTeamSpellcaster,
+      teamDecks: state.teamDecks,
+    }))
+  );
+
+  const handleRemove = (e: React.MouseEvent | React.PointerEvent) => {
+    e.stopPropagation();
+    if (isReadOnly) return;
+
+    if (mode === "TEAM" && deckId) {
+      const deckIndex = teamDecks.findIndex((d) => d.id === deckId);
+      if (deckIndex !== -1) {
+        removeTeamSpellcaster(deckIndex);
+      }
+    } else {
+      removeSpellcaster();
+    }
+  };
 
   const dropData: DropData = {
     type: "SPELLCASTER_SLOT",
@@ -107,6 +139,22 @@ export function SpellcasterSlot({
         isDragging && "opacity-50"
       )}
     >
+      {/* Remove Button */}
+      {spellcaster && !isReadOnly && !isDragging && (
+        <button
+          type="button"
+          className="absolute -top-1.5 -right-1.5 z-60 p-1 md:p-1 bg-surface-main hover:bg-status-danger hover:text-white rounded-full text-text-muted transition-colors shadow-md ring-1 ring-border-default/50 hover:ring-status-danger cursor-pointer pointer-events-auto"
+          onPointerDown={handleRemove}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          title="Remove Spellcaster"
+          data-testid="remove-spellcaster"
+        >
+          <X size={12} className="w-3 h-3 md:w-3.5 md:h-3.5" />
+        </button>
+      )}
+
       {/* Draggable Wrapper */}
       {spellcaster && (
         <div

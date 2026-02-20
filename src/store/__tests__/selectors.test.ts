@@ -108,6 +108,10 @@ const createMockState = (
   setBrowserFilters: () => {},
   toggleBrowserFilter: () => {},
   clearBrowserFilters: () => {},
+
+  hasSeenDeckBuilderWelcome: false,
+  setHasSeenDeckBuilderWelcome: () => {},
+
   inspectorOpen: false,
   inspectedCard: null,
   inspectorPosition: null, // Fixed

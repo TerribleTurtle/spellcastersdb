@@ -229,6 +229,12 @@ export interface BrowserFilterState {
   clearBrowserFilters: () => void;
 }
 
+// 6. Welcome Modal State
+export interface WelcomeModalState {
+  hasSeenDeckBuilderWelcome: boolean;
+  setHasSeenDeckBuilderWelcome: (seen: boolean) => void;
+}
+
 /**
  * UI State for the application.
  * Manages view modes, filters, and transient drag/drop state.
@@ -238,7 +244,8 @@ export type UIState = ViewModeState &
   DragState &
   InspectorState &
   CommandCenterState &
-  BrowserFilterState;
+  BrowserFilterState &
+  WelcomeModalState;
 
 // Combined State
 export type DeckBuilderState = SoloState &

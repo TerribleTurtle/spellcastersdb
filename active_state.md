@@ -2,12 +2,16 @@
 
 -## Current Focus
 
-- **Verification (Test Suite Hardened)** - Removed strict hardcoded waits (fixing E2E flakiness) and closed coverage gaps in UI hooks/metadata services. Ready for feature work.
+- **Deploy Ready** - All pre-deploy blockers resolved. Lint clean (0 errors), type-check clean, 291 unit tests pass. E2E team-builder flake fixed (welcome modal dismissal). Ready for commit + push + deploy.
 
-* **Mode**: Verification (Accessibility Audit Resolved)
+* **Mode**: Deploy Gate (GO)
 
 ## Recent Changes
 
+- (02/20) **Deck Builder UX Enhancement** - Added localized 'x' remove buttons to cards directly within `DeckSlot` and `SpellcasterSlot`, resolving UX friction for rapid deck modifications on mobile and desktop.
+- (02/20) **Deck Builder Welcome Modal** - Implemented a first-time user experience modal (`DeckBuilderWelcomeModal.tsx`) for the Deck Builder that walks users through the core deck-building loop (Library -> Deck -> Save) and highlights Team Mode features. Added a manual "Tutorial" trigger to the Library Header. Added state persistence via `hasSeenDeckBuilderWelcome` in Zustand.
+- (02/20) **Lead PM Feature Strategy** - Conducted a Gap Analysis for missing "Table Stakes" features (User Accounts, Cloud Decks, Empty States, Admin Panel) and generated `docs/FEATURE_GAP_ANALYSIS.md`. This prioritized the backlog for competitive parity.
+- (02/20) **CI/CD Security & Performance Audit** - Executed pipeline architect workflow. Generated `pipeline_health_report.md` detailing Next.js build caching optimizations and job parallelization fan-in strategies for `test.yml`. No critical security vulnerabilities found.
 - (02/20) **PWA & Searchability Fix** - Updated `manifest.ts` and `layout.tsx` settings so that installed OS PWA can be searched via "Spellcasters". Maintained mobile `standalone` display.
 - (02/20) **UI Enhancements** - Removed responsive text-hiding classes from the `LibraryButton` so the word "Library" always displays next to the icon.
 - (02/20) **Deck Sync Fix** - Decoupled `currentDeck` and cleared `activeSlot` when switching to SOLO mode to prevent modifications from implicitly syncing back to the team builder slots via `useDeckSync`.

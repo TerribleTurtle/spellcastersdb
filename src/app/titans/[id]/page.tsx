@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getEntityById, getTitans } from "@/services/api/api";
