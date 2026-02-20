@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.24] - 2026-02-19
+
+### Changed
+
+- **Dependencies**: Upgraded safe dependencies (`shadcn`, `lucide-react`, `tailwindcss`, etc.) to their latest minor/patch versions.
+- **Typings**: Aligned `@types/node` definition to match the current Node v22.20 runtime.
+
+### Security
+
+- **Vulnerabilities**: Ran `npm audit fix` to resolve a known security advisory related to the `hono` package.
+
 ## [1.0.23] - 2026-02-19
 
 ### Added

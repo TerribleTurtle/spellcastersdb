@@ -12,7 +12,6 @@ import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
 import Navbar from "@/components/layout/Navbar";
 import { ThemeColorMeta } from "@/components/providers/ThemeColorMeta";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
-import { OfflineIndicator } from "@/components/pwa/OfflineIndicator";
 import { Toaster } from "@/components/ui/Toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ensureDataLoaded } from "@/services/api/api";
@@ -159,7 +158,6 @@ export default async function RootLayout({
             <Analytics />
             <SpeedInsights />
             <Toaster />
-            <OfflineIndicator />
             <ThemeColorMeta />
           </TooltipProvider>
         </ThemeProvider>

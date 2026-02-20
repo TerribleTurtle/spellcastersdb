@@ -30,16 +30,15 @@ const serwist = new Serwist({
       }),
     },
   ],
-  fallbacks: {
-    entries: [
-      {
-        url: "/~offline",
-        matcher({ request }) {
-          return request.destination === "document";
-        },
-      },
-    ],
-  },
+});
+
+serwist.setCatchHandler(async ({ request }) => {
+  // If a document request fails (e.g., full page navigation while offline),
+  // redirect them to the offline fallback page to prevent Next.js hydration crashes.
+  if (request.destination === "document") {
+    return Response.redirect("/~offline", 302);
+  }
+  return Response.error();
 });
 
 serwist.addEventListeners();
