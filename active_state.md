@@ -2,7 +2,7 @@
 
 -## Current Focus
 
-- **Deploy Gate: CONDITIONAL GO** - Preflight verified: lint 0 errors/2 warnings, type-check clean, 291 unit tests pass, secrets scan clean, CHANGELOG/README/env current, CI/CD pipelines valid. **20 uncommitted files** (Sentry integration + docs cleanup) must be committed + pushed to trigger Vercel deploy.
+- **Deployed** — Commit `c95c0bc` pushed to `origin/main`. Sentry integration + docs cleanup. Vercel auto-deploys from main. CI pipeline running.
 
 * **Mode**: Deploy Gate (CONDITIONAL GO)
 
