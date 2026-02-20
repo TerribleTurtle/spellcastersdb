@@ -44,18 +44,18 @@ export function OfflineIndicator() {
   if (isOnline && !showBackOnline) return null;
 
   return (
-    <div className="fixed bottom-safe left-0 right-0 z-5000 flex justify-center pointer-events-none pb-4 md:pb-6 px-4">
+    <div className="flex items-center" data-testid="offline-indicator">
       {isOnline && showBackOnline && (
-        <div className="bg-status-success-muted border border-status-success-border text-status-success-text px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-medium animate-in slide-in-from-bottom shrink-0">
-          <Wifi className="w-4 h-4" />
+        <div className="bg-status-success-muted border border-status-success-border text-status-success-text px-2 py-0.5 rounded-sm shadow-sm flex items-center gap-1.5 text-xs font-medium animate-in fade-in slide-in-from-left-2 shrink-0">
+          <Wifi className="w-3.5 h-3.5" />
           <span>Back online</span>
         </div>
       )}
 
       {!isOnline && (
-        <div className="bg-status-warning-muted border border-status-warning-border text-status-warning-text px-4 py-2 rounded-full shadow-lg flex items-center gap-2 text-sm font-medium animate-in slide-in-from-bottom shrink-0">
-          <WifiOff className="w-4 h-4 animate-pulse" />
-          <span>You are currently offline</span>
+        <div className="bg-status-warning-muted border border-status-warning-border text-status-warning-text px-2 py-0.5 rounded-sm shadow-sm flex items-center gap-1.5 text-xs font-medium animate-in fade-in slide-in-from-left-2 shrink-0">
+          <WifiOff className="w-3.5 h-3.5 animate-pulse" />
+          <span>Offline mode</span>
         </div>
       )}
     </div>

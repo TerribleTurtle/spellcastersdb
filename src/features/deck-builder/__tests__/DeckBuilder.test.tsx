@@ -27,6 +27,7 @@ vi.mock("@/hooks/useToast", () => ({
 // Mock next/image
 vi.mock("next/image", () => ({
   default: ({ ...props }: React.ComponentProps<"img"> & { fill?: boolean }) => (
+    // eslint-disable-next-line @next/next/no-img-element
     <img alt="" {...props} />
   ),
 }));

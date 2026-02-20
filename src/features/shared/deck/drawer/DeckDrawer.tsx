@@ -350,7 +350,11 @@ export const DeckDrawer = memo(function DeckDrawer({
         </div>
 
         {/* Mobile: Conditional Render */}
-        <div className="xl:hidden" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="xl:hidden"
+          role="presentation"
+          onClick={(e) => e.stopPropagation()}
+        >
           {isExpanded ? (
             <ActionToolbar
               {...{

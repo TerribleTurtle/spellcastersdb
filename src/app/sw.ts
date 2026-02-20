@@ -1,6 +1,11 @@
 import { defaultCache } from "@serwist/next/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
-import { CacheFirst, Serwist, StaleWhileRevalidate } from "serwist";
+import {
+  CacheFirst,
+  NetworkFirst,
+  Serwist,
+  StaleWhileRevalidate,
+} from "serwist";
 
 declare global {
   interface WorkerGlobalScope extends SerwistGlobalConfig {
@@ -27,6 +32,21 @@ const serwist = new Serwist({
         /^https:\/\/terribleturtle\.github\.io\/.*\.(png|jpg|webp|avif)$/,
       handler: new CacheFirst({
         cacheName: "sc-card-images",
+      }),
+    },
+    // Next.js App Router RSC/Flight payloads — NetworkFirst
+    // These are required for client-side navigation (Link) to work while offline.
+    {
+      matcher({ request, url }) {
+        // Match ?_rsc= queries or requests with the RSC header
+        return (
+          request.destination === "" &&
+          (url.searchParams.has("_rsc") || request.headers.has("RSC"))
+        );
+      },
+      handler: new NetworkFirst({
+        cacheName: "sc-rsc-payloads",
+        networkTimeoutSeconds: 3,
       }),
     },
   ],

@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 
 import { ExternalLink, Menu, MessageSquare, X } from "lucide-react";
 
+import { OfflineIndicator } from "@/components/pwa/OfflineIndicator";
 import { ThemePicker } from "@/components/ui/ThemePicker";
 import { Button } from "@/components/ui/button";
 import { useFeedback } from "@/hooks/useFeedback";
@@ -82,6 +83,9 @@ export default function Navbar() {
                 </span>
               </>
             </Link>
+            <div className="hidden sm:block">
+              <OfflineIndicator />
+            </div>
           </div>
 
           {/* Desktop Right Side (External + Menu) */}

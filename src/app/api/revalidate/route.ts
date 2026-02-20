@@ -1,6 +1,8 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
+import { timingSafeEqual } from "crypto";
+
 import { monitoring } from "@/services/monitoring";
 
 export async function GET(request: NextRequest) {
@@ -10,7 +12,10 @@ export async function GET(request: NextRequest) {
     ? authHeader.substring(7)
     : request.nextUrl.searchParams.get("secret"); // Fallback for backward compatibility during rollout
 
-  if (secret !== process.env.REVALIDATION_SECRET) {
+  const bufferA = Buffer.from(secret || "");
+  const bufferB = Buffer.from(process.env.REVALIDATION_SECRET || "");
+
+  if (bufferA.length !== bufferB.length || !timingSafeEqual(bufferA, bufferB)) {
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
 

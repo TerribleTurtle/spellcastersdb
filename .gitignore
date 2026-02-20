@@ -71,3 +71,4 @@ circulars.txt
 circulars_utf8.txt
 deps-report.txt
 .tssservice.tslLoader.ts
+.lighthouseci/

@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
+import createBundleAnalyzer from "@next/bundle-analyzer";
 import withSerwistInit from "@serwist/next";
 import { spawnSync } from "node:child_process";
+
+const withBundleAnalyzer = createBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
 
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["localhost:3000", "192.168.2.202:3000", "192.168.2.202"],
@@ -76,6 +81,15 @@ const nextConfig: NextConfig = {
           {
             key: "Cache-Control",
             value: "no-cache, no-store, must-revalidate",
+          },
+        ],
+      },
+      {
+        source: "/api/og/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, stale-while-revalidate=43200",
           },
         ],
       },
@@ -166,4 +180,4 @@ const withSerwist = withSerwistInit({
   disable: process.env.NODE_ENV === "development",
 });
 
-export default withSerwist(nextConfig);
+export default withBundleAnalyzer(withSerwist(nextConfig));
