@@ -1,17 +1,16 @@
 "use client";
 
-import {
-  AlertCircle,
-  CheckCircle2,
-} from "lucide-react";
+import { memo } from "react";
+
+import { AlertCircle, CheckCircle2 } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
-import { Deck } from "@/types/deck";
-import { validateDeck } from "@/services/validation/deck-validation";
+import { DeckOverview } from "@/features/shared/deck/ui/DeckOverview";
 import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
-import { DeckOverview } from "@/features/shared/deck/ui/DeckOverview";
+import { validateDeck } from "@/services/validation/deck-validation";
 import { UnifiedEntity } from "@/types/api";
+import { Deck } from "@/types/deck";
 
 interface TeamDeckRowProps {
   index: number;
@@ -22,7 +21,6 @@ interface TeamDeckRowProps {
   onStopInspect?: () => void;
 }
 
-import { memo } from "react";
 // ... imports
 
 export const TeamDeckRow = memo(function TeamDeckRow({
@@ -43,7 +41,8 @@ export const TeamDeckRow = memo(function TeamDeckRow({
           type="button"
           className={cn(
             "w-full lg:w-64 bg-surface-dim border-b lg:border-b-0 lg:border-r border-border-subtle p-2 md:p-3 flex flex-col justify-between relative overflow-hidden text-left",
-            !isReadOnly && "cursor-pointer hover:bg-surface-card transition-colors"
+            !isReadOnly &&
+              "cursor-pointer hover:bg-surface-card transition-colors"
           )}
           onClick={!isReadOnly ? onEdit : undefined}
           disabled={isReadOnly}
@@ -93,9 +92,7 @@ export const TeamDeckRow = memo(function TeamDeckRow({
 
           {!isReadOnly && (
             <div className="mt-4 flex gap-2 relative z-10">
-              <div
-                className="w-full py-2 rounded bg-brand-primary text-brand-dark text-xs font-bold uppercase tracking-wider hover:bg-brand-primary/80 transition-colors text-center"
-              >
+              <div className="w-full py-2 rounded bg-brand-primary text-brand-dark text-xs font-bold uppercase tracking-wider hover:bg-brand-primary/80 transition-colors text-center">
                 Edit
               </div>
             </div>
@@ -104,11 +101,11 @@ export const TeamDeckRow = memo(function TeamDeckRow({
 
         {/* Deck Visuals - Horizontal Tray */}
         <div className="flex-1 p-2 lg:p-4 overflow-x-auto">
-             <DeckOverview 
-                deck={deck} 
-                onInspect={onInspect}
-                onStopInspect={onStopInspect}
-             />
+          <DeckOverview
+            deck={deck}
+            onInspect={onInspect}
+            onStopInspect={onStopInspect}
+          />
         </div>
       </div>
     </div>

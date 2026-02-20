@@ -1,12 +1,13 @@
 import { Deck, DeckStats } from "@/types/deck";
-import { calculateDeckStats } from "./stats";
-import { 
-    checkDeckSize, 
-    checkTitan, 
-    checkSpellcaster, 
-    checkRank1or2, 
-    checkCreaturePresence 
+
+import {
+  checkCreaturePresence,
+  checkDeckSize,
+  checkRank1or2,
+  checkSpellcaster,
+  checkTitan,
 } from "./rules";
+import { calculateDeckStats } from "./stats";
 
 export interface ValidationResult {
   isValid: boolean;
@@ -16,11 +17,11 @@ export interface ValidationResult {
 
 export function validateDeck(deck: Deck): ValidationResult {
   if (!deck || !Array.isArray(deck.slots)) {
-      return {
-          isValid: false,
-          errors: ["Invalid Deck Structure"],
-          stats: calculateDeckStats(deck || {} as Deck)
-      };
+    return {
+      isValid: false,
+      errors: ["Invalid Deck Structure"],
+      stats: calculateDeckStats(deck || ({} as Deck)),
+    };
   }
 
   const stats = calculateDeckStats(deck);
@@ -28,15 +29,15 @@ export function validateDeck(deck: Deck): ValidationResult {
 
   // Run Rules
   const checks = [
-      checkDeckSize(stats),
-      checkTitan(stats),
-      checkSpellcaster(stats),
-      checkRank1or2(stats),
-      checkCreaturePresence(deck, stats)
+    checkDeckSize(stats),
+    checkTitan(stats),
+    checkSpellcaster(stats),
+    checkRank1or2(stats),
+    checkCreaturePresence(deck, stats),
   ];
 
-  checks.forEach(error => {
-      if (error) errors.push(error);
+  checks.forEach((error) => {
+    if (error) errors.push(error);
   });
 
   stats.isValid = errors.length === 0;

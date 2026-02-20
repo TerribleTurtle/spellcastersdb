@@ -1,4 +1,10 @@
-export type AssetFolder = "heroes" | "consumables" | "spells" | "titans" | "upgrades" | "units";
+export type AssetFolder =
+  | "heroes"
+  | "consumables"
+  | "spells"
+  | "titans"
+  | "upgrades"
+  | "units";
 
 export const ASSET_STRATEGY: Record<string, AssetFolder> = {
   Spellcaster: "heroes",
@@ -19,7 +25,7 @@ export function getAssetFolder(entity: {
 }): AssetFolder {
   if ("spellcaster_id" in entity) return "heroes";
   if ("consumable_id" in entity) return "consumables";
-  
+
   if (entity.category && entity.category in ASSET_STRATEGY) {
     return ASSET_STRATEGY[entity.category];
   }

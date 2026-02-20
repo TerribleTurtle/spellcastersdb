@@ -1,10 +1,9 @@
 /**
  * Patch utility helpers.
- * 
+ *
  * Updated for Phase 4 — old PatchType (buff/nerf/rework) removed.
  * Now uses PatchCategory (Patch/Hotfix/Content).
  */
-
 import type { PatchCategory } from "@/types/patch-history";
 
 /**

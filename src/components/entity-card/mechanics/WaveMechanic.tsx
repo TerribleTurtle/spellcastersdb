@@ -1,7 +1,7 @@
 "use client";
 
-
 import { Activity } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 interface WaveMechanicProps {
@@ -10,7 +10,11 @@ interface WaveMechanicProps {
   isCompact?: boolean;
 }
 
-export function WaveMechanic({ waves, interval, isCompact }: WaveMechanicProps) {
+export function WaveMechanic({
+  waves,
+  interval,
+  isCompact,
+}: WaveMechanicProps) {
   if (!waves && !interval) return null;
 
   return (
@@ -24,11 +28,21 @@ export function WaveMechanic({ waves, interval, isCompact }: WaveMechanicProps) 
     >
       <Activity size={isCompact ? 13 : 16} className="text-sky-400 shrink-0" />
       <div className="flex flex-col">
-        <span className={cn("text-sky-200 font-bold leading-tight", isCompact ? "text-xs" : "text-sm")}>
+        <span
+          className={cn(
+            "text-sky-200 font-bold leading-tight",
+            isCompact ? "text-xs" : "text-sm"
+          )}
+        >
           {waves ? `${waves} Waves` : "Periodic Effect"}
         </span>
         {interval && (
-          <span className={cn("text-sky-300/70", isCompact ? "text-[10px] leading-tight" : "text-xs")}>
+          <span
+            className={cn(
+              "text-sky-300/70",
+              isCompact ? "text-[10px] leading-tight" : "text-xs"
+            )}
+          >
             Interval: {interval}s
           </span>
         )}

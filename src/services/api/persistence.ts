@@ -1,26 +1,28 @@
-import { Deck, DeckSlot, SlotType } from "@/types/deck";
-import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
-
 // --- Constants ---
-
 // Helper to prevent accidental mutation of constants
 import { v4 as uuidv4 } from "uuid";
 
+import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
+import { Deck, DeckSlot, SlotType } from "@/types/deck";
+
 function deepFreeze<T>(obj: T): T {
-  if (obj && typeof obj === 'object' && !Object.isFrozen(obj)) {
+  if (obj && typeof obj === "object" && !Object.isFrozen(obj)) {
     Object.freeze(obj);
-    Object.keys(obj).forEach(key => deepFreeze((obj as Record<string, unknown>)[key]));
+    Object.keys(obj).forEach((key) =>
+      deepFreeze((obj as Record<string, unknown>)[key])
+    );
   }
   return obj;
 }
 
-export const INITIAL_SLOTS: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot] = deepFreeze([
-  { index: 0, unit: null, allowedTypes: [SlotType.Unit] },
-  { index: 1, unit: null, allowedTypes: [SlotType.Unit] },
-  { index: 2, unit: null, allowedTypes: [SlotType.Unit] },
-  { index: 3, unit: null, allowedTypes: [SlotType.Unit] },
-  { index: 4, unit: null, allowedTypes: [SlotType.Titan] },
-]);
+export const INITIAL_SLOTS: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot] =
+  deepFreeze([
+    { index: 0, unit: null, allowedTypes: [SlotType.Unit] },
+    { index: 1, unit: null, allowedTypes: [SlotType.Unit] },
+    { index: 2, unit: null, allowedTypes: [SlotType.Unit] },
+    { index: 3, unit: null, allowedTypes: [SlotType.Unit] },
+    { index: 4, unit: null, allowedTypes: [SlotType.Titan] },
+  ]);
 
 export const INITIAL_DECK: Deck = deepFreeze({
   spellcaster: null,
@@ -69,7 +71,7 @@ export function reconstructDeck(
   spellcasters: Spellcaster[]
 ): Deck {
   // O(1) lookup maps (built once per call)
-  const unitMap = new Map(units.map(u => [u.entity_id, u]));
+  const unitMap = new Map(units.map((u) => [u.entity_id, u]));
   const scMap = new Map<string, Spellcaster>();
   for (const sc of spellcasters) {
     const primaryId = sc.spellcaster_id || sc.entity_id;
@@ -92,7 +94,7 @@ export function reconstructDeck(
 
   // Handle potential legacy ID mapping if needed, but strict ID match is safer for now
   const freshSpellcaster = stored.spellcasterId
-    ? scMap.get(stored.spellcasterId) ?? null
+    ? (scMap.get(stored.spellcasterId) ?? null)
     : null;
 
   return {
@@ -106,11 +108,11 @@ export function reconstructDeck(
 // Helper: Efficient Equality Check (avoids JSON.stringify)
 export function areDecksEqual(deckA: Deck, deckB: Deck): boolean {
   if (deckA === deckB) return true;
-  
+
   // 1. Compare Core Props
   if (deckA.id !== deckB.id) return false;
   if (deckA.name !== deckB.name) return false;
-  
+
   // 2. Compare Spellcaster ID
   const scA = deckA.spellcaster?.spellcaster_id || null;
   const scB = deckB.spellcaster?.spellcaster_id || null;

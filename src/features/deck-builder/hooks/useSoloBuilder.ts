@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback } from "react";
+
 import { useShallow } from "zustand/react/shallow";
-import { Deck } from "@/types/deck";
+
 import { useDeckStore } from "@/store/index";
-import { selectIsEmpty, selectHasChanges } from "@/store/selectors";
+import { selectHasChanges, selectIsEmpty } from "@/store/selectors";
+import { Deck } from "@/types/deck";
 
 export function useSoloBuilder() {
   const store = useDeckStore(

@@ -1,37 +1,47 @@
 "use client";
 
-import { Deck } from "@/types/deck";
-import { v4 as uuidv4 } from "uuid";
-import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
-import { useDeckStore } from "@/store/index";
 import dynamic from "next/dynamic";
 
-import { DragDropProvider } from "../providers/DragDropProvider";
-// import { SoloBuilderView } from "@/features/deck-builder/components/SoloBuilderView";
-// import { TeamBuilderView } from "@/features/team-builder/TeamBuilderView";
-import { DragDropErrorBoundary } from "../providers/DragDropErrorBoundary";
-// import { CardInspectorModal } from "@/features/shared/inspector/CardInspectorModal";
-// import { CommandCenterModal } from "@/features/deck-builder/forge/CommandCenterModal";
-import { useDeckHotkeys } from "@/features/deck-builder/hooks/ui/useDeckHotkeys";
-import { PageSkeleton } from "./PageSkeleton";
+import { v4 as uuidv4 } from "uuid";
 
 // Lazy Load Heavy Components
 import { SoloBuilderView } from "@/features/deck-builder/components/SoloBuilderView";
+// import { CardInspectorModal } from "@/features/shared/inspector/CardInspectorModal";
+// import { CommandCenterModal } from "@/features/deck-builder/forge/CommandCenterModal";
+import { useDeckHotkeys } from "@/features/deck-builder/hooks/ui/useDeckHotkeys";
+import { useDeckStore } from "@/store/index";
+import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
+import { Deck } from "@/types/deck";
+
+// import { SoloBuilderView } from "@/features/deck-builder/components/SoloBuilderView";
+// import { TeamBuilderView } from "@/features/team-builder/TeamBuilderView";
+import { DragDropErrorBoundary } from "../providers/DragDropErrorBoundary";
+import { DragDropProvider } from "../providers/DragDropProvider";
+import { PageSkeleton } from "./PageSkeleton";
 
 const TeamBuilderView = dynamic(
-  () => import("@/features/team-builder/TeamBuilderView").then(mod => mod.TeamBuilderView),
+  () =>
+    import("@/features/team-builder/TeamBuilderView").then(
+      (mod) => mod.TeamBuilderView
+    ),
   {
-    loading: () => <PageSkeleton />
+    loading: () => <PageSkeleton />,
   }
 );
 
 const CardInspectorModal = dynamic(
-  () => import("@/features/shared/inspector/CardInspectorModal").then(mod => mod.CardInspectorModal),
-  { ssr: false } 
+  () =>
+    import("@/features/shared/inspector/CardInspectorModal").then(
+      (mod) => mod.CardInspectorModal
+    ),
+  { ssr: false }
 );
 
 const CommandCenterModal = dynamic(
-  () => import("@/features/deck-builder/forge/CommandCenterModal").then(mod => mod.CommandCenterModal),
+  () =>
+    import("@/features/deck-builder/forge/CommandCenterModal").then(
+      (mod) => mod.CommandCenterModal
+    ),
   { ssr: false }
 );
 
@@ -40,23 +50,16 @@ export interface DeckBuilderViewProps {
   spellcasters: Spellcaster[];
 }
 
-export function DeckBuilderView({
-  units,
-  spellcasters,
-}: DeckBuilderViewProps) {
-  const { 
-      mode, 
-      importSoloDeckToTeam,
-      activeSlot,
-      commandCenterOpen
-  } = useDeckStore();
-  
+export function DeckBuilderView({ units, spellcasters }: DeckBuilderViewProps) {
+  const { mode, importSoloDeckToTeam, activeSlot, commandCenterOpen } =
+    useDeckStore();
+
   const isTeamMode = mode === "TEAM";
 
   const handleImportSolo = (deck: Deck) => {
-      if (activeSlot !== null) {
-          importSoloDeckToTeam(activeSlot, deck, uuidv4());
-      }
+    if (activeSlot !== null) {
+      importSoloDeckToTeam(activeSlot, deck, uuidv4());
+    }
   };
 
   useDeckHotkeys();
@@ -75,7 +78,7 @@ export function DeckBuilderView({
             <SoloBuilderView
               units={units}
               spellcasters={spellcasters}
-              onImportSolo={handleImportSolo} 
+              onImportSolo={handleImportSolo}
             />
           )}
 

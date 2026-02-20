@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { GameImage } from "@/components/ui/GameImage";
+import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { UnifiedEntity } from "@/types/api";
 import { Deck } from "@/types/deck";
@@ -14,48 +14,63 @@ interface DeckOverviewProps {
   onStopInspect?: () => void;
 }
 
-export function DeckOverview({ deck, className, size = "sm", onInspect, onStopInspect }: DeckOverviewProps) {
+export function DeckOverview({
+  deck,
+  className,
+  size = "sm",
+  onInspect,
+  onStopInspect,
+}: DeckOverviewProps) {
   return (
-    <div className={cn("flex flex-col md:flex-row items-center gap-2 md:gap-4", className)}>
+    <div
+      className={cn(
+        "flex flex-col md:flex-row items-center gap-2 md:gap-4",
+        className
+      )}
+    >
       {/* Spellcaster */}
-      <VisualSlot 
-        item={deck.spellcaster} 
-        type="spellcaster" 
-        size={size} 
+      <VisualSlot
+        item={deck.spellcaster}
+        type="spellcaster"
+        size={size}
         onInspect={onInspect}
         onStopInspect={onStopInspect}
       />
 
       {/* Separator - Horizontal on Mobile, Vertical on Desktop */}
-      <div className={cn(
-        "bg-surface-hover mx-2",
-        "w-16 h-px md:w-px md:h-16", // Default sizes
-        size === "lg" && "hidden md:block md:h-32" 
-      )} />
+      <div
+        className={cn(
+          "bg-surface-hover mx-2",
+          "w-16 h-px md:w-px md:h-16", // Default sizes
+          size === "lg" && "hidden md:block md:h-32"
+        )}
+      />
 
-       {/* Units Container - Grid on Mobile, Row on Desktop */}
-       <div className="grid grid-cols-2 gap-2 md:flex md:gap-4">
-          {/* Units 0-3 */}
-          {deck.slots.slice(0, 4).map((s) => (
-            <VisualSlot
-              key={s.index}
-              item={s.unit}
-              type="unit"
-              isEmpty={!s.unit}
-              label={`Incant. ${s.index + 1}`}
-              size={size}
-              onInspect={onInspect}
-              onStopInspect={onStopInspect}
-            />
-          ))}
+      {/* Units Container - Grid on Mobile, Row on Desktop */}
+      <div className="grid grid-cols-2 gap-2 md:flex md:gap-4">
+        {/* Units 0-3 */}
+        {deck.slots.slice(0, 4).map((s) => (
+          <VisualSlot
+            key={s.index}
+            item={s.unit}
+            type="unit"
+            isEmpty={!s.unit}
+            label={`Incant. ${s.index + 1}`}
+            size={size}
+            onInspect={onInspect}
+            onStopInspect={onStopInspect}
+          />
+        ))}
       </div>
 
       {/* Separator */}
-      <div className={cn(
-        "bg-surface-hover mx-2",
-         "w-16 h-px md:w-px md:h-16",
-        size === "lg" && "hidden md:block md:h-32"
-      )} />
+      <div
+        className={cn(
+          "bg-surface-hover mx-2",
+          "w-16 h-px md:w-px md:h-16",
+          size === "lg" && "hidden md:block md:h-32"
+        )}
+      />
 
       {/* Titan */}
       <VisualSlot
@@ -81,7 +96,15 @@ interface VisualSlotProps {
   onStopInspect?: () => void;
 }
 
-function VisualSlot({ item, type, isEmpty, label, size, onInspect, onStopInspect }: VisualSlotProps) {
+function VisualSlot({
+  item,
+  type,
+  isEmpty,
+  label,
+  size,
+  onInspect,
+  onStopInspect,
+}: VisualSlotProps) {
   const isLarge = size === "lg";
 
   if (isEmpty || !item) {
@@ -90,8 +113,12 @@ function VisualSlot({ item, type, isEmpty, label, size, onInspect, onStopInspect
         className={cn(
           "rounded-lg border-2 border-dashed border-border-default bg-surface-card flex flex-col items-center justify-center gap-2 transition-all",
           type === "spellcaster"
-        ? (isLarge ? "w-16 h-24 md:w-32 md:h-48 rounded-xl shadow-lg border-2 border-brand-primary" : "w-16 h-22 rounded-lg border border-border-strong")
-        : (isLarge ? "w-12 h-18 md:w-20 md:h-32 rounded-lg shadow-md border border-border-strong" : "w-12 h-18 rounded border border-border-default")
+            ? isLarge
+              ? "w-16 h-24 md:w-32 md:h-48 rounded-xl shadow-lg border-2 border-brand-primary"
+              : "w-16 h-22 rounded-lg border border-border-strong"
+            : isLarge
+              ? "w-12 h-18 md:w-20 md:h-32 rounded-lg shadow-md border border-border-strong"
+              : "w-12 h-18 rounded border border-border-default"
         )}
       >
         {type === "spellcaster" && (
@@ -115,23 +142,27 @@ function VisualSlot({ item, type, isEmpty, label, size, onInspect, onStopInspect
           "relative rounded-lg overflow-hidden border border-border-default bg-surface-main group shadow-lg transition-transform duration-300",
           isLarge && "hover:scale-105 hover:z-10 hover:shadow-brand-primary/20",
           type === "spellcaster"
-            ? (isLarge ? "w-24 h-36 md:w-32 md:h-48 border-brand-primary ring-2 ring-brand-primary/20" : "w-16 h-22 md:w-20 md:h-28 border-brand-primary shadow-brand-primary/20")
-            : (isLarge ? "w-16 h-24 md:w-20 md:h-32" : "w-12 h-18 md:w-16 md:h-24")
+            ? isLarge
+              ? "w-24 h-36 md:w-32 md:h-48 border-brand-primary ring-2 ring-brand-primary/20"
+              : "w-16 h-22 md:w-20 md:h-28 border-brand-primary shadow-brand-primary/20"
+            : isLarge
+              ? "w-16 h-24 md:w-20 md:h-32"
+              : "w-12 h-18 md:w-16 md:h-24"
         )}
         onMouseEnter={(e) => {
-            if (onInspect && item) {
-                const rect = e.currentTarget.getBoundingClientRect();
-                onInspect(item, { x: rect.right + 10, y: rect.top });
-            }
+          if (onInspect && item) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            onInspect(item, { x: rect.right + 10, y: rect.top });
+          }
         }}
         onMouseLeave={() => {
-            if (onStopInspect) onStopInspect();
+          if (onStopInspect) onStopInspect();
         }}
         onClick={(e) => {
-            if (onInspect && item) {
-                const rect = e.currentTarget.getBoundingClientRect();
-                onInspect(item, { x: rect.right + 10, y: rect.top });
-            }
+          if (onInspect && item) {
+            const rect = e.currentTarget.getBoundingClientRect();
+            onInspect(item, { x: rect.right + 10, y: rect.top });
+          }
         }}
       >
         <GameImage

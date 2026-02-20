@@ -1,4 +1,4 @@
-import { Unit, Spell, Titan, Spellcaster } from "@/types/api";
+import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 import { EntityCategory } from "@/types/enums";
 
 export const DeckFactory = {
@@ -49,11 +49,11 @@ export const DeckFactory = {
     tags: [],
     health: 1000,
     abilities: {
-        passive: [{ name: "Passive", description: "Desc" }],
-        primary: { name: "Primary", description: "Desc" },
-        defense: { name: "Defense", description: "Desc" },
-        ultimate: { name: "Ultimate", description: "Desc" }
+      passive: [{ name: "Passive", description: "Desc" }],
+      primary: { name: "Primary", description: "Desc" },
+      defense: { name: "Defense", description: "Desc" },
+      ultimate: { name: "Ultimate", description: "Desc" },
     },
-    ...overrides
-  })
+    ...overrides,
+  }),
 };

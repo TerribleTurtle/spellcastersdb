@@ -1,7 +1,8 @@
 "use client";
 
-import { LocalDate } from "@/components/ui/LocalDate";
 import { Clock, Globe, Hash } from "lucide-react";
+
+import { LocalDate } from "@/components/ui/LocalDate";
 
 interface DebugHeaderInfoProps {
   buildVersion: string;
@@ -19,7 +20,8 @@ export function DebugHeaderInfo({
       <div className="flex items-center gap-2 bg-surface-dim px-3 py-1.5 rounded-full border border-border-subtle">
         <Hash size={14} className="text-brand-primary" />
         <span>
-          Schema: <span className="text-text-primary font-bold">{buildVersion}</span>
+          Schema:{" "}
+          <span className="text-text-primary font-bold">{buildVersion}</span>
         </span>
       </div>
 

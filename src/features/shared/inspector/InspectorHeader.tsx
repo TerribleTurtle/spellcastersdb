@@ -1,12 +1,15 @@
 "use client";
 
 import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { GameImage } from "@/components/ui/GameImage";
 
-import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
-import { UnifiedEntity, Spellcaster, Unit, Spell, Titan } from "@/types/api";
+import { GameImage } from "@/components/ui/GameImage";
+import { Button } from "@/components/ui/button";
 import { RankBadge } from "@/components/ui/rank-badge";
+import {
+  getCardAltText,
+  getCardImageUrl,
+} from "@/services/assets/asset-helpers";
+import { Spell, Spellcaster, Titan, UnifiedEntity, Unit } from "@/types/api";
 
 interface InspectorHeaderProps {
   item: UnifiedEntity;
@@ -39,10 +42,9 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
   }
 
   // Magic School
-  const magicSchoolRaw = "magic_school" in item ? (item as Unit | Spell | Titan).magic_school : null;
+  const magicSchoolRaw =
+    "magic_school" in item ? (item as Unit | Spell | Titan).magic_school : null;
   const magicSchool = magicSchoolRaw === "Titan" ? null : magicSchoolRaw;
-
-
 
   return (
     <div className="w-full h-[140px] relative flex items-center justify-center overflow-hidden shrink-0 bg-surface-main">
@@ -53,7 +55,7 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
         fill
         className="object-cover opacity-20 blur-xl scale-125"
       />
-      
+
       {/* Back Button (Mobile Only) */}
       {onBack && (
         <Button
@@ -66,7 +68,7 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
           <ArrowLeft size={18} />
         </Button>
       )}
-      
+
       {/* Main Image (Contained) */}
       <div className="absolute inset-0 flex items-center justify-center p-2 z-10">
         <GameImage
@@ -87,34 +89,32 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
           {name}
         </h2>
       </div>
-      
+
       {/* Badges - Top Right on Mobile, Top Left on Desktop */}
       <div className="absolute top-3 right-3 md:right-auto md:left-4 flex flex-col items-end md:items-start gap-1 z-30 scale-90 origin-top-right md:origin-top-left pointer-events-none">
-
-
         {/* Rank / Class Badge */}
-        {rank && rank !== "N/A" && (
-             (rank === "V" || ["I", "II", "III", "IV"].includes(rank)) ? (
-                <RankBadge 
-                    rank={rank} 
-                    isTitan={rank === "V" && item.category === "Titan"} 
-                    mode="text"
-                    className="bg-surface-overlay px-2 py-0.5 rounded text-[10px] font-bold font-mono shadow-md backdrop-blur-md"
-                />
-             ) : (
-                <span className="bg-surface-overlay px-2 py-0.5 rounded text-[10px] font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md">
-                    {rank}
-                </span>
-             )
-        )}
-        
+        {rank &&
+          rank !== "N/A" &&
+          (rank === "V" || ["I", "II", "III", "IV"].includes(rank) ? (
+            <RankBadge
+              rank={rank}
+              isTitan={rank === "V" && item.category === "Titan"}
+              mode="text"
+              className="bg-surface-overlay px-2 py-0.5 rounded text-[10px] font-bold font-mono shadow-md backdrop-blur-md"
+            />
+          ) : (
+            <span className="bg-surface-overlay px-2 py-0.5 rounded text-[10px] font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md">
+              {rank}
+            </span>
+          ))}
+
         {/* Magic School Badge */}
         {magicSchool && (
           <span className="bg-brand-secondary/90 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider text-text-primary border border-brand-secondary/30 backdrop-blur-md shadow-sm">
             {magicSchool}
           </span>
         )}
-        
+
         {/* Category Badge */}
         <span className="bg-brand-primary/90 text-text-primary px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-lg backdrop-blur-md">
           {category}
@@ -123,4 +123,3 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
     </div>
   );
 }
-

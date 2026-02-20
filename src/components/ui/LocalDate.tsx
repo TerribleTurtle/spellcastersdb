@@ -2,14 +2,20 @@
 
 import { useEffect, useState } from "react";
 
-/** 
- * Renders a date string in the viewer's locale format (client-side only). 
- * 
+/**
+ * Renders a date string in the viewer's locale format (client-side only).
+ *
  * Handles date-only strings (e.g. "2026-02-18") by parsing them as local dates
- * (year, month, day) to prevent `new Date(iso)` from interpreting them as UTC 
+ * (year, month, day) to prevent `new Date(iso)` from interpreting them as UTC
  * midnight effectively shifting the date back one day in Western timezones.
  */
-export function LocalDate({ iso, showTime = false }: { iso: string; showTime?: boolean }) {
+export function LocalDate({
+  iso,
+  showTime = false,
+}: {
+  iso: string;
+  showTime?: boolean;
+}) {
   const [display, setDisplay] = useState(iso);
 
   useEffect(() => {
@@ -19,10 +25,10 @@ export function LocalDate({ iso, showTime = false }: { iso: string; showTime?: b
         // and converts to local time correctly.
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setDisplay(
-            new Date(iso).toLocaleString(undefined, {
-                dateStyle: "medium",
-                timeStyle: "long",
-            })
+          new Date(iso).toLocaleString(undefined, {
+            dateStyle: "medium",
+            timeStyle: "long",
+          })
         );
       } else {
         // Dates are date-only strings (e.g. "2026-02-18"), so we parse them
@@ -30,7 +36,7 @@ export function LocalDate({ iso, showTime = false }: { iso: string; showTime?: b
         // This prevents the "UTC midnight" shift problem.
         const [year, month, day] = iso.split("-").map(Number);
         const d = new Date(year, month - 1, day);
-        
+
         setDisplay(d.toLocaleDateString(undefined, { dateStyle: "medium" }));
       }
     } catch {
@@ -38,5 +44,9 @@ export function LocalDate({ iso, showTime = false }: { iso: string; showTime?: b
     }
   }, [iso, showTime]);
 
-  return <time dateTime={iso} suppressHydrationWarning>{display}</time>;
+  return (
+    <time dateTime={iso} suppressHydrationWarning>
+      {display}
+    </time>
+  );
 }

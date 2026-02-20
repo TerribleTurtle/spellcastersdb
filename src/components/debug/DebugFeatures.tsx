@@ -1,16 +1,18 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
+
 import {
   AlertTriangle,
   BarChart3,
-  Search,
-  Sword,
-  Shield,
-  Search as SearchIcon,
   Info,
+  Search,
+  Search as SearchIcon,
+  Shield,
+  Sword,
 } from "lucide-react";
 
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -19,16 +21,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-
 import {
+  Consumable,
+  Spell,
+  Spellcaster,
+  Titan,
   UnifiedEntity,
   Unit,
-  Spell,
-  Titan,
-  Spellcaster,
-  Consumable,
-  Upgrade
+  Upgrade,
 } from "@/types/api";
 
 interface DebugFeaturesProps {
@@ -134,7 +134,10 @@ function IntegrityTab({ entities }: { entities: UnifiedEntity[] }) {
       }
 
       // Check Description
-      if ("description" in e && (!e.description || e.description.trim() === "")) {
+      if (
+        "description" in e &&
+        (!e.description || e.description.trim() === "")
+      ) {
         missingDescription.push(e);
       }
     });
@@ -169,7 +172,9 @@ function IntegrityTab({ entities }: { entities: UnifiedEntity[] }) {
           <IntegrityItem
             label="Missing Descriptions"
             count={issues.missingDescription.length}
-            items={issues.missingDescription.map((e) => `${e.name} (${e.entity_id})`)}
+            items={issues.missingDescription.map(
+              (e) => `${e.name} (${e.entity_id})`
+            )}
             variant="warning"
           />
           {issues.duplicates.length === 0 &&
@@ -256,9 +261,11 @@ function BalanceTab({ units, titans }: { units: Unit[]; titans: Titan[] }) {
     // Glass Cannons: High DMG / HP ratio
     // Tanks: High HP / DMG ratio
     // We'll normalize by cost/rank if possible, but let's just do raw ratios for now.
-    
+
     // Filter out buildings or 0 damage things if needed
-    const fighters = combatants.filter(u => (u.damage || 0) > 0 && u.health > 0);
+    const fighters = combatants.filter(
+      (u) => (u.damage || 0) > 0 && u.health > 0
+    );
 
     const sortedByDmgToHp = [...fighters].sort((a, b) => {
       const ratioA = (a.damage || 0) / a.health;
@@ -267,7 +274,9 @@ function BalanceTab({ units, titans }: { units: Unit[]; titans: Titan[] }) {
     });
 
     const sortedByHp = [...fighters].sort((a, b) => b.health - a.health);
-    const sortedByDmg = [...fighters].sort((a, b) => (b.damage || 0) - (a.damage || 0));
+    const sortedByDmg = [...fighters].sort(
+      (a, b) => (b.damage || 0) - (a.damage || 0)
+    );
 
     return {
       glassCannons: sortedByDmgToHp.slice(0, 5),
@@ -279,23 +288,23 @@ function BalanceTab({ units, titans }: { units: Unit[]; titans: Titan[] }) {
   return (
     <div className="space-y-6">
       <div className="grid md:grid-cols-3 gap-4">
-        <RankingList 
-            title="Glass Cannons (DMG/HP)" 
-            items={stats.glassCannons} 
-            metricFn={u => `${u.damage} / ${u.health}`} 
-            icon={<Sword className="text-status-danger-text" />}
+        <RankingList
+          title="Glass Cannons (DMG/HP)"
+          items={stats.glassCannons}
+          metricFn={(u) => `${u.damage} / ${u.health}`}
+          icon={<Sword className="text-status-danger-text" />}
         />
-        <RankingList 
-            title="Meat Shields (Max HP)" 
-            items={stats.tanks} 
-            metricFn={u => `${u.health} HP`} 
-            icon={<Shield className="text-status-info-text" />}
+        <RankingList
+          title="Meat Shields (Max HP)"
+          items={stats.tanks}
+          metricFn={(u) => `${u.health} HP`}
+          icon={<Shield className="text-status-info-text" />}
         />
-        <RankingList 
-            title="Top Hitters (Raw DMG)" 
-            items={stats.topDmg} 
-            metricFn={u => `${u.damage} DMG`} 
-            icon={<Sword className="text-orange-400" />}
+        <RankingList
+          title="Top Hitters (Raw DMG)"
+          items={stats.topDmg}
+          metricFn={(u) => `${u.damage} DMG`}
+          icon={<Sword className="text-orange-400" />}
         />
       </div>
     </div>
@@ -303,57 +312,76 @@ function BalanceTab({ units, titans }: { units: Unit[]; titans: Titan[] }) {
 }
 
 function SearchTab({ entities }: { entities: UnifiedEntity[] }) {
-    const [query, setQuery] = useState("");
-    
-    // Simple client-side filtering for playground
-    const results = useMemo(() => {
-        if (!query) return [];
-        const q = query.toLowerCase();
-        return entities.filter(e => 
-            e.name.toLowerCase().includes(q) || 
-            ("description" in e && e.description.toLowerCase().includes(q)) ||
-            ("tags" in e && e.tags?.some(t => t.toLowerCase().includes(q)))
-        ).slice(0, 20); // Limit
-    }, [query, entities]);
+  const [query, setQuery] = useState("");
 
-    return (
-        <Card className="bg-surface-card border-border-default">
-            <CardHeader>
-                <CardTitle>Search Playground</CardTitle>
-                <CardDescription>Test search behavior against {entities.length} entities.</CardDescription>
-            </CardHeader>
-            <CardContent>
-                <div className="flex gap-2 mb-6">
-                    <div className="relative flex-1">
-                        <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" size={18} />
-                        <Input 
-                            placeholder="Type to search..." 
-                            className="pl-10 bg-surface-dim border-border-default text-text-primary"
-                            value={query}
-                            onChange={e => setQuery(e.target.value)}
-                        />
-                    </div>
-                </div>
+  // Simple client-side filtering for playground
+  const results = useMemo(() => {
+    if (!query) return [];
+    const q = query.toLowerCase();
+    return entities
+      .filter(
+        (e) =>
+          e.name.toLowerCase().includes(q) ||
+          ("description" in e && e.description.toLowerCase().includes(q)) ||
+          ("tags" in e && e.tags?.some((t) => t.toLowerCase().includes(q)))
+      )
+      .slice(0, 20); // Limit
+  }, [query, entities]);
 
-                <div className="space-y-2">
-                    {query && results.length === 0 && (
-                        <div className="text-center py-8 text-text-dimmed">No matches found.</div>
-                    )}
-                    {results.map(e => (
-                        <div key={e.entity_id} className="p-3 rounded bg-surface-dim border border-border-subtle flex justify-between items-center group hover:bg-surface-card transition-colors">
-                            <div>
-                    {e.name}
-                                <div className="text-xs text-text-dimmed font-mono">{e.category} • {e.entity_id}</div>
-                            </div>
-                            <Badge variant="outline" className="text-xs border-border-default text-text-muted group-hover:text-text-primary transition-colors">
-                                {("magic_school" in e ? e.magic_school : undefined) || "Neutral"}
-                            </Badge>
-                        </div>
-                    ))}
+  return (
+    <Card className="bg-surface-card border-border-default">
+      <CardHeader>
+        <CardTitle>Search Playground</CardTitle>
+        <CardDescription>
+          Test search behavior against {entities.length} entities.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex gap-2 mb-6">
+          <div className="relative flex-1">
+            <SearchIcon
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"
+              size={18}
+            />
+            <Input
+              placeholder="Type to search..."
+              className="pl-10 bg-surface-dim border-border-default text-text-primary"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="space-y-2">
+          {query && results.length === 0 && (
+            <div className="text-center py-8 text-text-dimmed">
+              No matches found.
+            </div>
+          )}
+          {results.map((e) => (
+            <div
+              key={e.entity_id}
+              className="p-3 rounded bg-surface-dim border border-border-subtle flex justify-between items-center group hover:bg-surface-card transition-colors"
+            >
+              <div>
+                {e.name}
+                <div className="text-xs text-text-dimmed font-mono">
+                  {e.category} • {e.entity_id}
                 </div>
-            </CardContent>
-        </Card>
-    )
+              </div>
+              <Badge
+                variant="outline"
+                className="text-xs border-border-default text-text-muted group-hover:text-text-primary transition-colors"
+              >
+                {("magic_school" in e ? e.magic_school : undefined) ||
+                  "Neutral"}
+              </Badge>
+            </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
 }
 
 // --- Helpers ---
@@ -399,9 +427,18 @@ function IntegrityItem({
 }) {
   if (count === 0) return null;
 
-  const color = variant === "destructive" ? "text-status-danger-text" : "text-status-warning-text";
-  const bg = variant === "destructive" ? "bg-status-danger-muted" : "bg-status-warning-muted";
-  const border = variant === "destructive" ? "border-status-danger-border" : "border-status-warning-border";
+  const color =
+    variant === "destructive"
+      ? "text-status-danger-text"
+      : "text-status-warning-text";
+  const bg =
+    variant === "destructive"
+      ? "bg-status-danger-muted"
+      : "bg-status-warning-muted";
+  const border =
+    variant === "destructive"
+      ? "border-status-danger-border"
+      : "border-status-warning-border";
 
   return (
     <div className={`p-4 rounded-lg border ${bg} ${border}`}>
@@ -417,27 +454,44 @@ function IntegrityItem({
   );
 }
 
-function RankingList({ title, items, metricFn, icon }: { title: string, items: (Unit|Titan)[], metricFn: (u: Unit|Titan) => string, icon: React.ReactNode }) {
-    if (items.length === 0) return null;
+function RankingList({
+  title,
+  items,
+  metricFn,
+  icon,
+}: {
+  title: string;
+  items: (Unit | Titan)[];
+  metricFn: (u: Unit | Titan) => string;
+  icon: React.ReactNode;
+}) {
+  if (items.length === 0) return null;
 
-    return (
-        <Card className="bg-surface-card border-border-default">
-            <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-text-muted flex items-center gap-2">
-                    {icon} {title}
-                </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-                {items.map((item, i) => (
-                    <div key={item.entity_id} className="flex justify-between items-center text-sm">
-                        <div className="flex items-center gap-3">
-                            <span className="font-mono text-text-faint w-4">{i + 1}</span>
-                            <span className="font-medium text-text-secondary">{item.name}</span>
-                        </div>
-                        <span className="font-mono text-brand-secondary">{metricFn(item)}</span>
-                    </div>
-                ))}
-            </CardContent>
-        </Card>
-    )
+  return (
+    <Card className="bg-surface-card border-border-default">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-sm font-medium text-text-muted flex items-center gap-2">
+          {icon} {title}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        {items.map((item, i) => (
+          <div
+            key={item.entity_id}
+            className="flex justify-between items-center text-sm"
+          >
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-text-faint w-4">{i + 1}</span>
+              <span className="font-medium text-text-secondary">
+                {item.name}
+              </span>
+            </div>
+            <span className="font-mono text-brand-secondary">
+              {metricFn(item)}
+            </span>
+          </div>
+        ))}
+      </CardContent>
+    </Card>
+  );
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
+
 import { DECK_EDITOR_TABS, DeckEditorTab } from "../../constants";
 
 export function useDeckEditorNavigation() {
@@ -22,6 +23,6 @@ export function useDeckEditorNavigation() {
     viewSummary,
     backToBrowser,
     openSummary,
-    closeSummary
+    closeSummary,
   };
 }

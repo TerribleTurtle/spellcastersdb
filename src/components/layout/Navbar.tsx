@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -22,6 +22,8 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const feedback = useFeedback();
   const pathname = usePathname();
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
   useFocusTrap(isOpen, () => setIsOpen(false));
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -30,13 +32,33 @@ export default function Navbar() {
 
   const allLinks = [...PRIMARY_NAV, ...SECONDARY_NAV, ...EXTERNAL_LINKS];
 
+  // Close drawer on click outside & block page interaction
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const isOutside = (target: Node) =>
+      !drawerRef.current?.contains(target) &&
+      !toggleRef.current?.contains(target);
+
+    const onClick = (e: MouseEvent) => {
+      if (!isOutside(e.target as Node)) return;
+      e.stopPropagation();
+      e.preventDefault();
+      setIsOpen(false);
+    };
+
+    // Use click (not pointerdown) so the handler is still alive when the event fires
+    document.addEventListener("click", onClick, true);
+    return () => document.removeEventListener("click", onClick, true);
+  }, [isOpen]);
+
   return (
     <nav
       className="fixed top-0 left-0 right-0 z-50 border-b border-border-default bg-surface-main/80 backdrop-blur-md"
       data-testid="navbar"
     >
       <div className="relative mx-auto max-w-site-shell px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-12 md:h-16 items-center justify-between">
           {/* Logo / Deck Context */}
           <div className="shrink-0 flex items-center gap-6">
             <Link
@@ -76,6 +98,7 @@ export default function Navbar() {
           {/* Mobile menu button */}
           <div className="-mr-2 flex items-center gap-2 md:hidden relative z-50">
             <Button
+              ref={toggleRef}
               variant="ghost"
               size="icon"
               onClick={toggleMenu}
@@ -92,7 +115,8 @@ export default function Navbar() {
         {/* Menu Drawer (Mobile & Desktop Overlay) */}
         {isOpen && (
           <div
-            className="absolute top-16 right-0 w-full md:w-64 bg-surface-main/95 backdrop-blur-xl border-l border-b border-border-default shadow-2xl h-[calc(100vh-4rem)] md:h-auto md:rounded-bl-xl overflow-y-auto"
+            ref={drawerRef}
+            className="absolute top-12 right-0 w-64 z-50 bg-surface-main/95 backdrop-blur-xl border-l border-b border-border-default shadow-2xl h-[calc(100vh-3rem)] md:h-auto md:rounded-bl-xl overflow-y-auto"
             data-testid="navbar-mobile-drawer"
           >
             <div className="flex flex-col p-4 space-y-1">
@@ -129,7 +153,7 @@ export default function Navbar() {
                   >
                     {Icon && <Icon size={18} />}
                     {link.name}
-                    <ExternalLink size={14} className="opacity-50 ml-auto" />
+                    <ExternalLink size={14} className="opacity-50" />
                   </a>
                 );
               })}
@@ -149,9 +173,9 @@ export default function Navbar() {
 
               <div className="px-3 py-2">
                 <ThemePicker
-                  side="bottom"
+                  side="top"
                   align="end"
-                  className="w-full justify-between px-0 hover:bg-transparent text-base font-medium text-text-secondary"
+                  className="w-full justify-start px-0 hover:bg-transparent text-base font-medium text-text-secondary"
                 >
                   <span>Theme</span>
                 </ThemePicker>

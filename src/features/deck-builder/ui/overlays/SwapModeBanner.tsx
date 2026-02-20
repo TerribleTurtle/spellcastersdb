@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+
 import { UnifiedEntity } from "@/types/api";
 
 interface SwapModeBannerProps {
@@ -16,7 +17,8 @@ export function SwapModeBanner({ pendingCard, onCancel }: SwapModeBannerProps) {
           Swap Mode Active
         </span>
         <span className="text-sm font-medium leading-tight">
-          Replace slot with <span className="text-amber-300 font-bold">{pendingCard.name}</span>
+          Replace slot with{" "}
+          <span className="text-amber-300 font-bold">{pendingCard.name}</span>
         </span>
       </div>
       <button

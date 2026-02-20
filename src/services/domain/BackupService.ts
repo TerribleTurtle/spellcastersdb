@@ -1,5 +1,5 @@
-import { Deck, Team } from "@/types/deck";
 import { DeckBuilderState } from "@/store/types";
+import { Deck, Team } from "@/types/deck";
 
 export interface BackupData {
   version: number;
@@ -26,10 +26,15 @@ export class BackupService {
   /**
    * Triggers a browser download of the backup data.
    */
-  public static downloadBackup(data: BackupData, filename: string = "spellcasters-backup.json"): void {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+  public static downloadBackup(
+    data: BackupData,
+    filename: string = "spellcasters-backup.json"
+  ): void {
+    const blob = new Blob([JSON.stringify(data, null, 2)], {
+      type: "application/json",
+    });
     const url = URL.createObjectURL(blob);
-    
+
     const link = document.createElement("a");
     link.href = url;
     link.download = filename;
@@ -44,12 +49,12 @@ export class BackupService {
    */
   public static validateBackup(data: unknown): data is BackupData {
     if (!data || typeof data !== "object") return false;
-    
+
     // Basic structural check
     const backup = data as Partial<BackupData>;
     if (!Array.isArray(backup.decks)) return false;
     if (!Array.isArray(backup.teams)) return false;
-    
+
     // We could add deeper validation here, but this covers the basics
     return true;
   }
@@ -60,14 +65,14 @@ export class BackupService {
   public static async parseBackupFile(file: File): Promise<BackupData> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      
+
       reader.onload = (e) => {
         try {
           const result = e.target?.result;
           if (typeof result !== "string") {
             throw new Error("Failed to read file");
           }
-          
+
           const parsed = JSON.parse(result);
           if (this.validateBackup(parsed)) {
             resolve(parsed);
@@ -78,7 +83,7 @@ export class BackupService {
           reject(err);
         }
       };
-      
+
       reader.onerror = () => reject(new Error("Error reading file"));
       reader.readAsText(file);
     });

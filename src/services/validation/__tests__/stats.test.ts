@@ -1,12 +1,17 @@
-import { describe, it, expect } from "vitest";
-import { calculateDeckStats } from "../stats";
+import { describe, expect, it } from "vitest";
+
+import { Spellcaster, Titan, Unit } from "@/types/api";
 import { Deck, DeckSlot, SlotType } from "@/types/deck";
-import { Unit, Spellcaster, Titan } from "@/types/api";
 import { EntityCategory } from "@/types/enums";
+
+import { calculateDeckStats } from "../stats";
 
 // --- Mock Factories ---
 
-const mockSlot = (index: number, unit: Unit | Titan | null = null): DeckSlot => ({
+const mockSlot = (
+  index: number,
+  unit: Unit | Titan | null = null
+): DeckSlot => ({
   index,
   unit,
   allowedTypes: index === 4 ? [SlotType.Titan] : [SlotType.Unit],
@@ -18,48 +23,51 @@ const emptyDeck = (): Deck => ({
   name: "",
 });
 
-const mockUnit = (overrides: Partial<Unit> = {}): Unit => ({
-  entity_id: "u1",
-  name: "Test Creature",
-  category: EntityCategory.Creature,
-  rank: "III",
-  description: "desc",
-  magic_school: "Wild",
-  tags: [],
-  health: 100,
-  damage: 10,
-  movement_speed: 10,
-  ...overrides,
-} as Unit);
+const mockUnit = (overrides: Partial<Unit> = {}): Unit =>
+  ({
+    entity_id: "u1",
+    name: "Test Creature",
+    category: EntityCategory.Creature,
+    rank: "III",
+    description: "desc",
+    magic_school: "Wild",
+    tags: [],
+    health: 100,
+    damage: 10,
+    movement_speed: 10,
+    ...overrides,
+  }) as Unit;
 
-const mockTitan = (): Titan => ({
-  entity_id: "t1",
-  name: "Test Titan",
-  category: EntityCategory.Titan,
-  rank: "V",
-  description: "titan",
-  magic_school: "Titan",
-  tags: [],
-  health: 1000,
-  damage: 100,
-  movement_speed: 5,
-} as Titan);
+const mockTitan = (): Titan =>
+  ({
+    entity_id: "t1",
+    name: "Test Titan",
+    category: EntityCategory.Titan,
+    rank: "V",
+    description: "titan",
+    magic_school: "Titan",
+    tags: [],
+    health: 1000,
+    damage: 100,
+    movement_speed: 5,
+  }) as Titan;
 
-const mockSpellcaster = (): Spellcaster => ({
-  entity_id: "sc1",
-  spellcaster_id: "sc1",
-  name: "Test Caster",
-  category: EntityCategory.Spellcaster,
-  class: "Enchanter",
-  tags: [],
-  health: 100,
-  abilities: {
-    passive: [],
-    primary: { name: "P", description: "D" },
-    defense: { name: "D", description: "D" },
-    ultimate: { name: "U", description: "D" },
-  },
-} as Spellcaster);
+const mockSpellcaster = (): Spellcaster =>
+  ({
+    entity_id: "sc1",
+    spellcaster_id: "sc1",
+    name: "Test Caster",
+    category: EntityCategory.Spellcaster,
+    class: "Enchanter",
+    tags: [],
+    health: 100,
+    abilities: {
+      passive: [],
+      primary: { name: "P", description: "D" },
+      defense: { name: "D", description: "D" },
+      ultimate: { name: "U", description: "D" },
+    },
+  }) as Spellcaster;
 
 // --- Tests ---
 
@@ -92,7 +100,10 @@ describe("calculateDeckStats", () => {
 
   it("should count Rank I creatures correctly", () => {
     const deck = emptyDeck();
-    deck.slots[0].unit = mockUnit({ rank: "I", category: EntityCategory.Creature });
+    deck.slots[0].unit = mockUnit({
+      rank: "I",
+      category: EntityCategory.Creature,
+    });
 
     const stats = calculateDeckStats(deck);
 
@@ -102,7 +113,10 @@ describe("calculateDeckStats", () => {
 
   it("should count Rank I buildings but NOT as creatures", () => {
     const deck = emptyDeck();
-    deck.slots[0].unit = mockUnit({ rank: "I", category: EntityCategory.Building });
+    deck.slots[0].unit = mockUnit({
+      rank: "I",
+      category: EntityCategory.Building,
+    });
 
     const stats = calculateDeckStats(deck);
 
@@ -112,10 +126,22 @@ describe("calculateDeckStats", () => {
 
   it("should break down category counts correctly", () => {
     const deck = emptyDeck();
-    deck.slots[0].unit = mockUnit({ entity_id: "c1", category: EntityCategory.Creature });
-    deck.slots[1].unit = mockUnit({ entity_id: "c2", category: EntityCategory.Creature });
-    deck.slots[2].unit = mockUnit({ entity_id: "b1", category: EntityCategory.Building });
-    deck.slots[3].unit = mockUnit({ entity_id: "s1", category: EntityCategory.Spell } as unknown as Partial<Unit>);
+    deck.slots[0].unit = mockUnit({
+      entity_id: "c1",
+      category: EntityCategory.Creature,
+    });
+    deck.slots[1].unit = mockUnit({
+      entity_id: "c2",
+      category: EntityCategory.Creature,
+    });
+    deck.slots[2].unit = mockUnit({
+      entity_id: "b1",
+      category: EntityCategory.Building,
+    });
+    deck.slots[3].unit = mockUnit({
+      entity_id: "s1",
+      category: EntityCategory.Spell,
+    } as unknown as Partial<Unit>);
 
     const stats = calculateDeckStats(deck);
 

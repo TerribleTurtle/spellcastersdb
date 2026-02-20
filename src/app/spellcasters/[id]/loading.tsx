@@ -2,7 +2,6 @@ export default function Loading() {
   return (
     <div className="min-h-screen w-full bg-surface-main/30 relative">
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10 space-y-6">
-
         {/* Breadcrumb Skeleton */}
         <div className="flex items-center gap-4 pt-16 md:pt-4">
           <div className="w-8 h-8 rounded-full bg-surface-card animate-pulse" />
@@ -47,7 +46,10 @@ export default function Loading() {
 
         {/* Content Sections Skeleton */}
         {[...Array(2)].map((_, i) => (
-          <div key={i} className="bg-surface-card border border-border-default rounded-xl p-5 space-y-3">
+          <div
+            key={i}
+            className="bg-surface-card border border-border-default rounded-xl p-5 space-y-3"
+          >
             <div className="h-3 w-24 bg-surface-card rounded animate-pulse" />
             <div className="h-4 w-full bg-surface-card rounded animate-pulse" />
             <div className="h-4 w-3/4 bg-surface-card rounded animate-pulse" />

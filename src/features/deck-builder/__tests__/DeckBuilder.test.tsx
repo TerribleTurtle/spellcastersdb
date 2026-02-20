@@ -26,7 +26,6 @@ vi.mock("@/hooks/useToast", () => ({
 
 // Mock next/image
 vi.mock("next/image", () => ({
-   
   default: ({ ...props }: React.ComponentProps<"img"> & { fill?: boolean }) => (
     <img alt="" {...props} />
   ),

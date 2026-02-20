@@ -1,14 +1,14 @@
-
 import { useState } from "react";
-import { GroupMode } from "@/services/config/constants";
+
 import { useDebounce } from "@/hooks/useDebounce";
+import { GroupMode } from "@/services/config/constants";
 import { useDeckStore } from "@/store/index";
 
 export interface FilterState {
-    schools: string[];
-    ranks: string[];
-    categories: string[];
-    classes: string[];
+  schools: string[];
+  ranks: string[];
+  categories: string[];
+  classes: string[];
 }
 
 export function useUnitBrowserState() {
@@ -29,16 +29,16 @@ export function useUnitBrowserState() {
     activeFilters.classes.length;
 
   return {
-      searchQuery,
-      setSearchQuery,
-      debouncedSearchQuery,
-      groupMode,
-      setGroupMode,
-      showFilters,
-      setShowFilters,
-      activeFilters,
-      toggleFilter,
-      clearFilters,
-      activeFilterCount
+    searchQuery,
+    setSearchQuery,
+    debouncedSearchQuery,
+    groupMode,
+    setGroupMode,
+    showFilters,
+    setShowFilters,
+    activeFilters,
+    toggleFilter,
+    clearFilters,
+    activeFilterCount,
   };
 }

@@ -30,15 +30,11 @@ export function getCardImageUrl(
   }
 
   const preferredFormat =
-    options?.forceFormat ||
-    CONFIG.FEATURES.PREFERRED_ASSET_FORMAT;
+    options?.forceFormat || CONFIG.FEATURES.PREFERRED_ASSET_FORMAT;
 
   // Check for local asset override
   // If forceRemote is true, SKIP this block
-  if (
-    !options?.forceRemote &&
-    CONFIG.FEATURES.USE_LOCAL_ASSETS
-  ) {
+  if (!options?.forceRemote && CONFIG.FEATURES.USE_LOCAL_ASSETS) {
     return `/api/local-assets/${folder}/${id}.${preferredFormat}`;
   }
 
@@ -46,17 +42,15 @@ export function getCardImageUrl(
   return `${assetBase}/${folder}/${id}.${preferredFormat}`;
 }
 
-export function getCardAltText(
-  entity: {
-    name?: string;
-    category?: string;
-    class?: string;
-    rank?: string;
-    magic_school?: string;
-    // We use a loose type here to avoid circular deps or complex discriminated unions in helpers
-    // but in practice it receives UnifiedEntity
-  }
-): string {
+export function getCardAltText(entity: {
+  name?: string;
+  category?: string;
+  class?: string;
+  rank?: string;
+  magic_school?: string;
+  // We use a loose type here to avoid circular deps or complex discriminated unions in helpers
+  // but in practice it receives UnifiedEntity
+}): string {
   const name = entity.name || "Card Image";
 
   // 1. Spellcaster

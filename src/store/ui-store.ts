@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface SidebarState {
   isSidebarOpen: boolean;
@@ -13,26 +13,28 @@ export const useUIStore = create<SidebarState>()(
     (set) => ({
       isSidebarOpen: true, // Default
       hasManuallyToggled: false,
-      
-      toggleSidebar: () => set((state) => ({ 
+
+      toggleSidebar: () =>
+        set((state) => ({
           isSidebarOpen: !state.isSidebarOpen,
-          hasManuallyToggled: true 
-      })),
-      
-      setSidebarOpen: (open) => set((state) => {
+          hasManuallyToggled: true,
+        })),
+
+      setSidebarOpen: (open) =>
+        set((state) => {
           // If we are setting it to what it already is, do nothing
           if (state.isSidebarOpen === open) return state;
           return { isSidebarOpen: open };
-      }),
+        }),
     }),
     {
-      name: 'ui-storage',
+      name: "ui-storage",
       // Only persist manual preference? Or strictly auto?
-      // For now, let's PERSIST it so user preference sticks, 
+      // For now, let's PERSIST it so user preference sticks,
       // but we might override on first load if screen is small.
-      partialize: (state) => ({ 
-          isSidebarOpen: state.isSidebarOpen,
-          hasManuallyToggled: state.hasManuallyToggled 
+      partialize: (state) => ({
+        isSidebarOpen: state.isSidebarOpen,
+        hasManuallyToggled: state.hasManuallyToggled,
       }),
     }
   )

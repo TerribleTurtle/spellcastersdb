@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 type AccordionState = boolean[];
 
-export function useAccordionState(count: number, initialOpenIndex: number = 0, allowMultiple: boolean = false) {
+export function useAccordionState(
+  count: number,
+  initialOpenIndex: number = 0,
+  allowMultiple: boolean = false
+) {
   const [expandedState, setExpandedState] = useState<AccordionState>(() => {
     const arr = new Array(count).fill(false);
     if (initialOpenIndex >= 0 && initialOpenIndex < count) {
@@ -14,17 +18,17 @@ export function useAccordionState(count: number, initialOpenIndex: number = 0, a
   const toggle = (index: number, isOpen: boolean) => {
     if (isOpen) {
       if (allowMultiple) {
-         // Opening one just opens it
-         setExpandedState((prev) => {
-            const newState = [...prev];
-            newState[index] = true;
-            return newState;
-         });
+        // Opening one just opens it
+        setExpandedState((prev) => {
+          const newState = [...prev];
+          newState[index] = true;
+          return newState;
+        });
       } else {
-         // Opening one closes others (Accordion behavior)
-         const newState = new Array(count).fill(false);
-         newState[index] = true;
-         setExpandedState(newState);
+        // Opening one closes others (Accordion behavior)
+        const newState = new Array(count).fill(false);
+        newState[index] = true;
+        setExpandedState(newState);
       }
     } else {
       // Closing one just closes it
@@ -38,7 +42,7 @@ export function useAccordionState(count: number, initialOpenIndex: number = 0, a
 
   const collapseAll = () => setExpandedState(new Array(count).fill(false));
   const expandAll = () => setExpandedState(new Array(count).fill(true));
-  
+
   const areAllCollapsed = expandedState.every((s) => !s);
 
   return {
@@ -47,6 +51,6 @@ export function useAccordionState(count: number, initialOpenIndex: number = 0, a
     toggle,
     collapseAll,
     expandAll,
-    areAllCollapsed
+    areAllCollapsed,
   };
 }

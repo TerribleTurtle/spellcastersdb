@@ -1,5 +1,10 @@
 import { Spell, Spellcaster, Titan, Unit } from "./api";
-
+/**
+ * Distinguishes between standard Unit slots and the restricted Titan slot.
+ * - `TITAN`: Only for Titan-class entities. Max 1 per deck.
+ * - `UNIT`: Standard slots for Units and Spells.
+ */
+import { SlotType } from "./enums";
 
 export type SlotIndex = number;
 
@@ -11,13 +16,6 @@ export interface ValidationStatus {
   errors: string[];
 }
 
-/**
- * Distinguishes between standard Unit slots and the restricted Titan slot.
- * - `TITAN`: Only for Titan-class entities. Max 1 per deck.
- * - `UNIT`: Standard slots for Units and Spells.
- */
-import { SlotType } from "./enums";
-
 export { SlotType };
 
 export interface DeckSlot {
@@ -28,7 +26,7 @@ export interface DeckSlot {
   /** Allowable entity types for this specific slot */
   allowedTypes: SlotType[];
   /** If true, this slot cannot be modified by the user */
-  isLocked?: boolean; 
+  isLocked?: boolean;
 }
 
 /**
@@ -40,9 +38,9 @@ export interface Deck {
   /** Fixed tuple of 5 slots */
   slots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
   /** Unique ID (UUID) if the deck is persisted */
-  id?: string; 
+  id?: string;
   /** User-defined name */
-  name?: string; 
+  name?: string;
 }
 
 /**
@@ -70,7 +68,11 @@ export interface DeckOperationResult<T> {
 }
 
 // Helper for fixed length arrays
-type Tuple<T, N extends number, R extends unknown[] = []> = R['length'] extends N ? R : Tuple<T, N, [T, ...R]>;
+type Tuple<
+  T,
+  N extends number,
+  R extends unknown[] = [],
+> = R["length"] extends N ? R : Tuple<T, N, [T, ...R]>;
 
 /**
  * Represents a Team of 3 Decks.

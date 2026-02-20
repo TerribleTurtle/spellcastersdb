@@ -1,8 +1,10 @@
-import { describe, it, expect } from "vitest";
-import { filterBrowserItems, FilterState } from "../filtering";
+import { describe, expect, it } from "vitest";
+
+import { Spell, Spellcaster, Unit } from "@/types/api";
 import { BrowserItem } from "@/types/browser";
-import { Unit, Spell, Spellcaster } from "@/types/api";
 import { EntityCategory } from "@/types/enums";
+
+import { FilterState, filterBrowserItems } from "../filtering";
 
 // Mocks
 const mockUnit: Unit = {
@@ -15,7 +17,7 @@ const mockUnit: Unit = {
   tags: ["fire", "damage"],
   health: 100,
   movement_type: "Ground",
-  movement_speed: 10
+  movement_speed: 10,
 };
 
 const mockSpell: Spell = {
@@ -37,11 +39,11 @@ const mockSpellcaster: Spellcaster = {
   tags: ["magic"],
   health: 200,
   abilities: {
-      passive: [],
-      primary: { name: "test", description: "test" },
-      defense: { name: "test", description: "test" },
-      ultimate: { name: "test", description: "test" }
-  }
+    passive: [],
+    primary: { name: "test", description: "test" },
+    defense: { name: "test", description: "test" },
+    ultimate: { name: "test", description: "test" },
+  },
 };
 
 const mockItems: BrowserItem[] = [mockUnit, mockSpell, mockSpellcaster];
@@ -62,7 +64,9 @@ describe("filterBrowserItems", () => {
   it("should filter by search query (name)", () => {
     const result = filterBrowserItems(mockItems, "Fire", defaultFilters);
     expect(result).toHaveLength(2); // Fire Warrior, Fireball
-    expect(result.map(i => i.name)).toEqual(expect.arrayContaining(["Fire Warrior", "Fireball"]));
+    expect(result.map((i) => i.name)).toEqual(
+      expect.arrayContaining(["Fire Warrior", "Fireball"])
+    );
   });
 
   it("should filter by category", () => {
@@ -101,7 +105,7 @@ describe("filterBrowserItems", () => {
   });
 
   it("should return empty array if no matches", () => {
-     const result = filterBrowserItems(mockItems, "NonExistent", defaultFilters);
-     expect(result).toHaveLength(0);
+    const result = filterBrowserItems(mockItems, "NonExistent", defaultFilters);
+    expect(result).toHaveLength(0);
   });
 });

@@ -1,44 +1,48 @@
 "use client";
 
-import { useDeckBuilder } from "./useDeckBuilder";
 import { Deck } from "@/types/deck";
-import { useDeckPersistence, SavedListTab } from "../persistence/useDeckPersistence";
+
+import {
+  SavedListTab,
+  useDeckPersistence,
+} from "../persistence/useDeckPersistence";
 import { useDeckSharing } from "../persistence/useDeckSharing";
+import { useDeckBuilder } from "./useDeckBuilder";
 
 export type { SavedListTab }; // Re-export for components
 
 interface UseForgeLogicProps {
-    onClear: () => void;
-    onImportSolo?: (deck: Deck) => void;
+  onClear: () => void;
+  onImportSolo?: (deck: Deck) => void;
 }
 
 export function useForgeLogic({ onClear, onImportSolo }: UseForgeLogicProps) {
   const {
-      // Solo Actions
-      currentDeck: deck,
-      setDeckName: onRename,
+    // Solo Actions
+    currentDeck: deck,
+    setDeckName: onRename,
 
-      teamName,
-      setTeamName: onRenameTeam,
-      teamDecks,
-      activeSlot,
-      
-      // UI Slice
-      mode,
-      setMode,
+    teamName,
+    setTeamName: onRenameTeam,
+    teamDecks,
+    activeSlot,
+
+    // UI Slice
+    mode,
+    setMode,
   } = useDeckBuilder();
 
   const isTeamMode = mode === "TEAM";
 
   // --- Composition ---
   const persistence = useDeckPersistence({ onClear, onImportSolo });
-  
+
   const sharing = useDeckSharing({
-      deck,
-      isTeamMode,
-      teamDecks: teamDecks || undefined, // undefined if null
-      teamName,
-      activeSlot
+    deck,
+    isTeamMode,
+    teamDecks: teamDecks || undefined, // undefined if null
+    teamName,
+    activeSlot,
   });
 
   return {
@@ -50,7 +54,7 @@ export function useForgeLogic({ onClear, onImportSolo }: UseForgeLogicProps) {
     teamName,
     onRename,
     onRenameTeam,
-    
+
     // Composed Hooks
     ...persistence,
     ...sharing,

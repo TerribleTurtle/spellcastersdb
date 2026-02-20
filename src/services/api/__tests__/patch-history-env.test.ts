@@ -1,6 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { fetchChangelog } from "../patch-history";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
 import { CONFIG } from "@/lib/config";
+
+import { fetchChangelog } from "../patch-history";
 
 // Mock fetch global
 const fetchMock = vi.fn();

@@ -1,27 +1,32 @@
 "use client";
 
 import React from "react";
-import { BrowserItem, ItemUsageState } from "@/types/browser";
-import { Deck, DeckSlot } from "@/types/deck";
 
-import { UnifiedEntity } from "@/types/api"; // Added Mode import
+import { useShallow } from "zustand/react/shallow";
+
+// Added Mode import
 import { UnitBrowser } from "@/features/deck-builder/browser/UnitBrowser";
-import { SwapModeBanner } from "@/features/deck-builder/ui/overlays/SwapModeBanner";
-import { MobileHeader } from "@/features/deck-builder/ui/mobile/MobileHeader";
 import { MobileContextBar } from "@/features/deck-builder/ui/mobile/MobileContextBar";
 import { MobileDeckDock } from "@/features/deck-builder/ui/mobile/MobileDeckDock";
+import { SwapModeBanner } from "@/features/deck-builder/ui/overlays/SwapModeBanner";
 import { useDeckValidation } from "@/features/shared/hooks/useDeckValidation";
+import { useToast } from "@/hooks/useToast";
 import { cn } from "@/lib/utils";
 import { useDeckStore } from "@/store/index";
 import { selectIsExistingDeck } from "@/store/selectors";
-import { useShallow } from "zustand/react/shallow";
-import { useToast } from "@/hooks/useToast";
+import { UnifiedEntity } from "@/types/api";
+import { BrowserItem, ItemUsageState } from "@/types/browser";
+import { Deck, DeckSlot } from "@/types/deck";
 
 // ...
 interface SoloEditorMobileProps {
   currentDeck: Deck;
   browserItems: BrowserItem[];
-  onSelectItem: (item: UnifiedEntity | undefined, pos?: { x: number; y: number }, slotIndex?: number) => void;
+  onSelectItem: (
+    item: UnifiedEntity | undefined,
+    pos?: { x: number; y: number },
+    slotIndex?: number
+  ) => void;
   onQuickAdd: (item: BrowserItem) => boolean | void;
   onDeckNameChange: (name: string) => void;
   isSaved: boolean;
@@ -29,9 +34,9 @@ interface SoloEditorMobileProps {
   onClear: () => void;
   onShare: () => void;
   onOpenLibrary: () => void;
-  isDrawerOpen?: boolean; 
-  onToggleDrawer?: (open: boolean) => void; 
-  footerHeight?: number; 
+  isDrawerOpen?: boolean;
+  onToggleDrawer?: (open: boolean) => void;
+  footerHeight?: number;
   pendingSwapCard: UnifiedEntity | null;
   onCancelSwap: () => void;
 }
@@ -48,29 +53,33 @@ export function SoloEditorMobile({
   onShare,
   onOpenLibrary,
   pendingSwapCard,
-  onCancelSwap
+  onCancelSwap,
 }: SoloEditorMobileProps) {
   const isSwapMode = !!pendingSwapCard;
   const validation = useDeckValidation(currentDeck);
-  
+
   // Store hooks for Mode switching
-  const { mode, setMode } = useDeckStore(useShallow(state => ({
-     mode: state.mode,
-     setMode: state.setMode,
-  })));
+  const { mode, setMode } = useDeckStore(
+    useShallow((state) => ({
+      mode: state.mode,
+      setMode: state.setMode,
+    }))
+  );
   const isExistingDeck = useDeckStore(selectIsExistingDeck);
-  
-  const isEmptyDeck = !currentDeck.spellcaster && currentDeck.slots.every((s: DeckSlot) => !s.unit);
+
+  const isEmptyDeck =
+    !currentDeck.spellcaster &&
+    currentDeck.slots.every((s: DeckSlot) => !s.unit);
 
   // Modal State
   // const [showSaveCopyModal, setShowSaveCopyModal] = React.useState(false);
   const { showToast } = useToast();
 
   const handleMobileQuickAdd = (item: BrowserItem) => {
-      const success = onQuickAdd(item);
-      if (success === true) {
-          showToast("Card Added", "success");
-      }
+    const success = onQuickAdd(item);
+    if (success === true) {
+      showToast("Card Added", "success");
+    }
   };
 
   // const handleSaveCopyClick = () => {
@@ -124,20 +133,20 @@ export function SoloEditorMobile({
              // It does NOT switch to the new deck.
         }
       */
-      
-      // Okay, so if I want to name it custom:
-      // I can't easily with the current `saveAsCopy`.
-      // I should probably just let it save as copy, then warn user? 
-      // User says "needs a modal popup".
-      
-      // I will implement the modal. When they save:
-      // I will call a NEW action `saveAsCopyWithName(name)` if I can, or:
-      // I'll just skip the store update for now and focus on UI, 
-      // but to make it WORK I really should update the store.
-      
-      // Update the store to accept a name. 
-      
-      /*
+
+  // Okay, so if I want to name it custom:
+  // I can't easily with the current `saveAsCopy`.
+  // I should probably just let it save as copy, then warn user?
+  // User says "needs a modal popup".
+
+  // I will implement the modal. When they save:
+  // I will call a NEW action `saveAsCopyWithName(name)` if I can, or:
+  // I'll just skip the store update for now and focus on UI,
+  // but to make it WORK I really should update the store.
+
+  // Update the store to accept a name.
+
+  /*
       saveAsCopy(newName); 
       setShowSaveCopyModal(false);
       showToast("Deck copied successfully", "success");
@@ -145,73 +154,75 @@ export function SoloEditorMobile({
   // };
 
   const itemStates = React.useMemo(() => {
-      const states = new Map<string, ItemUsageState>();
-      
-      const markActive = (id: string) => {
-          states.set(id, { isActive: true, memberOfDecks: [] });
-      };
+    const states = new Map<string, ItemUsageState>();
 
-      if (currentDeck.spellcaster) markActive(currentDeck.spellcaster.entity_id);
-      currentDeck.slots.forEach((s) => {
-        if (s.unit) markActive(s.unit.entity_id);
-      });
-      return states;
+    const markActive = (id: string) => {
+      states.set(id, { isActive: true, memberOfDecks: [] });
+    };
+
+    if (currentDeck.spellcaster) markActive(currentDeck.spellcaster.entity_id);
+    currentDeck.slots.forEach((s) => {
+      if (s.unit) markActive(s.unit.entity_id);
+    });
+    return states;
   }, [currentDeck]);
 
   return (
-    <div id="active-deck-mobile" className="flex flex-col h-[calc(100dvh-4rem)] xl:hidden bg-surface-main overflow-hidden">
-       
-       {/* 1. Top Navigation Bar */}
-       <MobileHeader 
-          mode={mode}
-          onSetMode={setMode}
-          onShare={onShare}
-          onClear={onClear}
-          onOpenLibrary={onOpenLibrary}
-       />
+    <div
+      id="active-deck-mobile"
+      className="flex flex-col h-[calc(100dvh-4rem)] xl:hidden bg-surface-main overflow-hidden"
+    >
+      {/* Merged Header Bar */}
+      <MobileContextBar
+        deckName={currentDeck.name || ""}
+        onRename={onDeckNameChange}
+        isSaved={isSaved}
+        isExistingDeck={isExistingDeck}
+        onSave={onSave}
+        onSaveCopy={undefined}
+        isEmptyDeck={isEmptyDeck}
+        mode={mode}
+        onSetMode={setMode}
+        onOpenLibrary={onOpenLibrary}
+        onShare={onShare}
+        onClear={onClear}
+      />
 
-       {/* 2. Context Bar (Deck Name & Save) */}
-       <MobileContextBar 
-          deckName={currentDeck.name || ""}
-          onRename={onDeckNameChange}
-          isSaved={isSaved}
-          isExistingDeck={isExistingDeck}
-          onSave={onSave}
-          onSaveCopy={undefined /* isExistingDeck ? handleSaveCopyClick : undefined */}
-          isEmptyDeck={isEmptyDeck}
-       />
-
-       {/* 3. Main Browser Area (Scrollable internally via Virtuoso) */}
-       <main className="flex-1 overflow-hidden relative min-h-0 bg-surface-main">
-          {pendingSwapCard && (
-            <div className="sticky top-4 z-30 px-4 w-full">
-               <SwapModeBanner 
-                  pendingCard={pendingSwapCard}
-                  onCancel={onCancelSwap}
-               />
-            </div>
-          )}
-          
-          <div className={cn("w-full h-full", isSwapMode && "opacity-30 grayscale pointer-events-none")}>
-              <UnitBrowser
-                items={browserItems}
-                onSelectItem={onSelectItem}
-                onQuickAdd={handleMobileQuickAdd}
-                itemStates={itemStates}
-              />
+      {/* 3. Main Browser Area (Scrollable internally via Virtuoso) */}
+      <main className="flex-1 overflow-hidden relative min-h-0 bg-surface-main">
+        {pendingSwapCard && (
+          <div className="sticky top-4 z-30 px-4 w-full">
+            <SwapModeBanner
+              pendingCard={pendingSwapCard}
+              onCancel={onCancelSwap}
+            />
           </div>
-       </main>
+        )}
 
+        <div
+          className={cn(
+            "w-full h-full",
+            isSwapMode && "opacity-30 grayscale pointer-events-none"
+          )}
+        >
+          <UnitBrowser
+            items={browserItems}
+            onSelectItem={onSelectItem}
+            onQuickAdd={handleMobileQuickAdd}
+            itemStates={itemStates}
+          />
+        </div>
+      </main>
 
-       {/* 4. Bottom Dock (Fixed) */}
-       <MobileDeckDock 
-          slots={currentDeck.slots}
-          spellcaster={currentDeck.spellcaster}
-          validation={validation}
-          onSelect={onSelectItem}
-          deckId={currentDeck.id}
-          isSwapMode={isSwapMode}
-       />
+      {/* 4. Bottom Dock (Fixed) */}
+      <MobileDeckDock
+        slots={currentDeck.slots}
+        spellcaster={currentDeck.spellcaster}
+        validation={validation}
+        onSelect={onSelectItem}
+        deckId={currentDeck.id}
+        isSwapMode={isSwapMode}
+      />
     </div>
   );
 }

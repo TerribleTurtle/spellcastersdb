@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { useDeckBuilder } from "../domain/useDeckBuilder";
-import { Deck } from "@/types/deck";
+
 import { v4 as uuidv4 } from "uuid";
+
 import { useEphemeralState } from "@/hooks/useEphemeralState";
+import { Deck } from "@/types/deck";
+
+import { useDeckBuilder } from "../domain/useDeckBuilder";
 
 export type SavedListTab = "TEAMS" | "SOLO";
 
@@ -11,7 +14,10 @@ interface UseDeckPersistenceProps {
   onImportSolo?: (deck: Deck) => void;
 }
 
-export function useDeckPersistence({ onClear, onImportSolo }: UseDeckPersistenceProps) {
+export function useDeckPersistence({
+  onClear,
+  onImportSolo,
+}: UseDeckPersistenceProps) {
   const {
     // Solo State & Actions
     currentDeck: deck,
@@ -20,13 +26,13 @@ export function useDeckPersistence({ onClear, onImportSolo }: UseDeckPersistence
     saveAsCopy,
     loadDeck,
     hasChanges,
-    
+
     // Team State & Actions
     loadTeam,
     saveTeam,
     activeTeamId,
     clearTeam,
-    
+
     // UI Slice
     mode,
   } = useDeckBuilder();
@@ -36,8 +42,9 @@ export function useDeckPersistence({ onClear, onImportSolo }: UseDeckPersistence
 
   // --- Local State ---
   const [savedListTab, setSavedListTab] = useState<SavedListTab>("TEAMS");
-  const { isActive: justSaved, trigger: triggerSaved } = useEphemeralState(2000);
-  
+  const { isActive: justSaved, trigger: triggerSaved } =
+    useEphemeralState(2000);
+
   const [confirmSave, setConfirmSave] = useState<{
     name: string;
     existingId: string;
@@ -64,13 +71,13 @@ export function useDeckPersistence({ onClear, onImportSolo }: UseDeckPersistence
         : activeTeamId
           ? "Update Team"
           : "Save Team"
-        : isDeckClean
-          ? "Close Deck"
-          : isNewClean
-          ? "Save Deck" 
+      : isDeckClean
+        ? "Close Deck"
+        : isNewClean
+          ? "Save Deck"
           : deck.id
-          ? "Update Deck"
-          : "Save Deck";
+            ? "Update Deck"
+            : "Save Deck";
 
   // --- Handlers ---
 
@@ -101,10 +108,10 @@ export function useDeckPersistence({ onClear, onImportSolo }: UseDeckPersistence
   const handleSave = (onSuccess?: () => void) => {
     // 1. Close/Clear if clean
     if (isTeamClean) {
-        if (clearTeam) clearTeam();
-        else onClear();
-        onSuccess?.();
-        return;
+      if (clearTeam) clearTeam();
+      else onClear();
+      onSuccess?.();
+      return;
     }
 
     if (isDeckClean || isNewClean) {
@@ -196,8 +203,8 @@ export function useDeckPersistence({ onClear, onImportSolo }: UseDeckPersistence
     handleSafeLoadTeam,
     handleSafeLoadDeck,
     handleSafeImportSolo,
-    
+
     // Passthrough
-    activeTeamId
+    activeTeamId,
   };
 }

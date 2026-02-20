@@ -1,7 +1,10 @@
-import { Deck, SlotType } from "@/types/deck";
 import { Spellcaster } from "@/types/api";
+import { Deck, SlotType } from "@/types/deck";
 
-export const createNewDeck = (name: string = "New Deck", spellcaster?: Spellcaster): Deck => {
+export const createNewDeck = (
+  name: string = "New Deck",
+  spellcaster?: Spellcaster
+): Deck => {
   return {
     spellcaster: spellcaster || null,
     slots: [

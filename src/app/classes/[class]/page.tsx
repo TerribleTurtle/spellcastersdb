@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
-import { UnitArchive } from "@/components/database/UnitArchive";
 import { JsonLd } from "@/components/common/JsonLd";
+import { UnitArchive } from "@/components/database/UnitArchive";
 import { getAllEntities } from "@/services/api/api";
 import { Spellcaster } from "@/types/api";
 
@@ -38,7 +38,8 @@ export default async function ClassPage({ params }: ClassPageProps) {
 
   // Filter for JSON-LD (Only Spellcasters have classes)
   const classEntities = allEntities.filter(
-    (e) => e.category === "Spellcaster" && (e as Spellcaster).class === decodedClass
+    (e) =>
+      e.category === "Spellcaster" && (e as Spellcaster).class === decodedClass
   );
 
   const jsonLd = {

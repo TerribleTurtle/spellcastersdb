@@ -1,6 +1,6 @@
+import { AlertTriangle, ArrowLeft, Trash2 } from "lucide-react";
 
-import { AlertTriangle, Trash2, ArrowLeft } from 'lucide-react';
-import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 export interface UnsavedChangesModalProps {
   isOpen: boolean;
@@ -15,7 +15,7 @@ export function UnsavedChangesModal({
   onDiscard,
   onCancel,
   title = "Unsaved Changes",
-  description = "You have unsaved changes. Do you want to save them before clearing?"
+  description = "You have unsaved changes. Do you want to save them before clearing?",
 }: UnsavedChangesModalProps) {
   const modalRef = useFocusTrap(isOpen, onCancel);
 
@@ -23,7 +23,7 @@ export function UnsavedChangesModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div 
+      <div
         ref={modalRef}
         className="bg-surface-card border border-border-default rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-4"
         role="dialog"
@@ -34,12 +34,13 @@ export function UnsavedChangesModal({
           <div className="w-12 h-12 rounded-full bg-status-warning-border text-status-warning mx-auto flex items-center justify-center mb-2">
             <AlertTriangle size={24} />
           </div>
-          <h3 id="unsaved-modal-title" className="text-lg font-bold text-text-primary">
+          <h3
+            id="unsaved-modal-title"
+            className="text-lg font-bold text-text-primary"
+          >
             {title}
           </h3>
-          <p className="text-sm text-text-muted">
-            {description}
-          </p>
+          <p className="text-sm text-text-muted">{description}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-2 pt-2">
@@ -54,8 +55,8 @@ export function UnsavedChangesModal({
 
           {/* Clear Anyway (Destructive) */}
           <button
-             onClick={onDiscard}
-             className="w-full py-2.5 rounded bg-status-danger-muted text-status-danger hover:bg-status-danger-border border border-status-danger-border font-bold transition-all flex items-center justify-center gap-2"
+            onClick={onDiscard}
+            className="w-full py-2.5 rounded bg-status-danger-muted text-status-danger hover:bg-status-danger-border border border-status-danger-border font-bold transition-all flex items-center justify-center gap-2"
           >
             <Trash2 size={16} />
             Clear Anyway

@@ -1,18 +1,16 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+
 import { useDeckBuilder } from "@/features/deck-builder/hooks/domain/useDeckBuilder";
 import { useDeckStore } from "@/store/index";
+
 import { SoloOverview } from "./SoloOverview";
 
 export function SoloInspectOverlay() {
   const router = useRouter();
   const deckBuilder = useDeckBuilder();
-  const {
-    viewingDeckData,
-    setViewingDeck,
-    viewingDeckId,
-  } = useDeckStore();
+  const { viewingDeckData, setViewingDeck, viewingDeckId } = useDeckStore();
 
   if (!viewingDeckData) return null;
 
@@ -24,7 +22,7 @@ export function SoloInspectOverlay() {
       <div
         className="w-full max-w-6xl h-auto max-h-[90vh] bg-surface-main rounded-xl border border-border-default shadow-2xl overflow-hidden relative flex flex-col shrink-0"
         onClick={(e) => e.stopPropagation()}
-        style={{ height: 'auto' }}
+        style={{ height: "auto" }}
       >
         <SoloOverview
           deck={viewingDeckData}

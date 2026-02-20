@@ -8,7 +8,6 @@
  * - Added words in green
  * - Unchanged words in gray
  */
-
 import { formatDiffPath } from "@/lib/format-change-field";
 
 // ============================================================================
@@ -27,7 +26,11 @@ function wordDiff(oldStr: string, newStr: string): DiffSegment[] {
 
   // Find common prefix
   let pre = 0;
-  while (pre < oldWords.length && pre < newWords.length && oldWords[pre] === newWords[pre]) {
+  while (
+    pre < oldWords.length &&
+    pre < newWords.length &&
+    oldWords[pre] === newWords[pre]
+  ) {
     pre++;
   }
 
@@ -58,7 +61,10 @@ function wordDiff(oldStr: string, newStr: string): DiffSegment[] {
   }
 
   if (suf > 0) {
-    segments.push({ text: oldWords.slice(oldWords.length - suf).join(""), type: "same" });
+    segments.push({
+      text: oldWords.slice(oldWords.length - suf).join(""),
+      type: "same",
+    });
   }
 
   return segments;
@@ -92,7 +98,12 @@ function isStringish(val: unknown): val is string {
 
 /** True if both values are ISO timestamps — skip word diff, use formatted dates. */
 function areBothTimestamps(a: unknown, b: unknown): boolean {
-  return isStringish(a) && isStringish(b) && ISO_DATETIME_RE.test(a) && ISO_DATETIME_RE.test(b);
+  return (
+    isStringish(a) &&
+    isStringish(b) &&
+    ISO_DATETIME_RE.test(a) &&
+    ISO_DATETIME_RE.test(b)
+  );
 }
 
 // ============================================================================
@@ -112,7 +123,12 @@ interface DiffLineProps {
 export function DiffLine({ diff }: DiffLineProps) {
   const isAdded = diff.lhs == null && diff.rhs != null;
   const isRemoved = diff.rhs == null && diff.lhs != null;
-  const isTextChange = !isAdded && !isRemoved && isStringish(diff.lhs) && isStringish(diff.rhs) && !areBothTimestamps(diff.lhs, diff.rhs);
+  const isTextChange =
+    !isAdded &&
+    !isRemoved &&
+    isStringish(diff.lhs) &&
+    isStringish(diff.rhs) &&
+    !areBothTimestamps(diff.lhs, diff.rhs);
   const label = formatDiffPath(diff.path || []);
 
   return (
@@ -139,7 +155,9 @@ export function DiffLine({ diff }: DiffLineProps) {
         <span className="text-text-muted inline">
           {wordDiff(diff.lhs as string, diff.rhs as string).map((seg, i) =>
             seg.type === "same" ? (
-              <span key={i} className="text-text-secondary">{seg.text}</span>
+              <span key={i} className="text-text-secondary">
+                {seg.text}
+              </span>
             ) : seg.type === "removed" ? (
               <span
                 key={i}
@@ -159,8 +177,7 @@ export function DiffLine({ diff }: DiffLineProps) {
         </span>
       ) : (
         <span className="text-text-muted">
-          {formatValue(diff.lhs)}{" "}
-          <span className="text-text-faint">→</span>{" "}
+          {formatValue(diff.lhs)} <span className="text-text-faint">→</span>{" "}
           {formatValue(diff.rhs)}
         </span>
       )}

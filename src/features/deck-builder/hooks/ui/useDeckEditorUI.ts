@@ -1,12 +1,14 @@
 import { useCallback, useMemo } from "react";
-import { Spellcaster, Unit, Spell, Titan } from "@/types/api";
+
 import { useDeckBuilder } from "@/features/deck-builder/hooks/domain/useDeckBuilder";
 import { useToast } from "@/hooks/useToast";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
-import { EntityCategory } from "@/types/enums";
-import { useDeckEditorNavigation } from "./useDeckEditorNavigation";
-import { useDeckSelection, SelectableItem } from "./useDeckSelection";
 import { useDeckStore } from "@/store/index";
+import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
+import { EntityCategory } from "@/types/enums";
+
+import { useDeckEditorNavigation } from "./useDeckEditorNavigation";
+import { SelectableItem, useDeckSelection } from "./useDeckSelection";
 
 export type { SelectableItem };
 
@@ -15,9 +17,9 @@ export function useDeckEditorUI(
   spellcasters: Spellcaster[]
 ) {
   const { mode, quickAdd, setSlot, setTeamSlot, activeSlot } = useDeckBuilder();
-  const pendingSwapCard = useDeckStore(state => state.pendingSwapCard);
-  const setPendingSwapCard = useDeckStore(state => state.setPendingSwapCard);
-  
+  const pendingSwapCard = useDeckStore((state) => state.pendingSwapCard);
+  const setPendingSwapCard = useDeckStore((state) => state.setPendingSwapCard);
+
   const { toasts, showToast } = useToast();
 
   // Navigation Logic
@@ -27,15 +29,15 @@ export function useDeckEditorUI(
     viewSummary,
     backToBrowser,
     openSummary,
-    closeSummary
+    closeSummary,
   } = useDeckEditorNavigation();
 
   // Selection Logic
   const {
     selectedItem,
     // setSelectedItem, // No longer exposed/needed directly, or aliased
-    handleSelectItem: baseHandleSelectItem, 
-    closeInspector
+    handleSelectItem: baseHandleSelectItem,
+    closeInspector,
   } = useDeckSelection(setActiveMobileTab);
 
   // --- Handlers ---
@@ -47,13 +49,14 @@ export function useDeckEditorUI(
         // Corrective Action #18: Swap Workflow
         // If Deck Full, trigger Swap Mode
         if (message.includes("Full") || message.includes("Limit Reached")) {
-            setPendingSwapCard(item);
-            showToast("Deck Full. Select a slot to replace.", "info");
-            return false;
+          setPendingSwapCard(item);
+          showToast("Deck Full. Select a slot to replace.", "info");
+          return false;
         }
 
         // Generic Error
-        const isError = message.includes("Cannot") || message.includes("Already");
+        const isError =
+          message.includes("Cannot") || message.includes("Already");
         showToast(message, isError ? "destructive" : "default");
         return false;
       }
@@ -61,32 +64,53 @@ export function useDeckEditorUI(
     },
     [quickAdd, showToast, setPendingSwapCard]
   );
-  
-  const handleSelectItem = useCallback((item: SelectableItem | undefined, pos?: { x: number; y: number }, slotIndex?: number) => {
+
+  const handleSelectItem = useCallback(
+    (
+      item: SelectableItem | undefined,
+      pos?: { x: number; y: number },
+      slotIndex?: number
+    ) => {
       // Corrective Action #18: Swap Workflow Execution
       if (pendingSwapCard && slotIndex !== undefined && slotIndex >= 0) {
-           // Perform Swap
-           if (mode === "TEAM") {
-                if (activeSlot !== null) {
-                    setTeamSlot(activeSlot, slotIndex, pendingSwapCard as Unit | Spell | Titan);
-                }
-           } else {
-                setSlot(slotIndex, pendingSwapCard as Unit | Spell | Titan); 
-           }
-           
-           
-           setPendingSwapCard(null);
-           const targetName = item ? item.name : "Empty Slot";
-           showToast(`Swapped ${pendingSwapCard.name} with ${targetName}`, "success");
-           return;
-      }
-      
-      // Standard Behavior: Open Inspector
-      if (item) {
-          baseHandleSelectItem(item);
+        // Perform Swap
+        if (mode === "TEAM") {
+          if (activeSlot !== null) {
+            setTeamSlot(
+              activeSlot,
+              slotIndex,
+              pendingSwapCard as Unit | Spell | Titan
+            );
+          }
+        } else {
+          setSlot(slotIndex, pendingSwapCard as Unit | Spell | Titan);
+        }
+
+        setPendingSwapCard(null);
+        const targetName = item ? item.name : "Empty Slot";
+        showToast(
+          `Swapped ${pendingSwapCard.name} with ${targetName}`,
+          "success"
+        );
+        return;
       }
 
-  }, [pendingSwapCard, mode, activeSlot, setTeamSlot, setSlot, setPendingSwapCard, showToast, baseHandleSelectItem]);
+      // Standard Behavior: Open Inspector
+      if (item) {
+        baseHandleSelectItem(item);
+      }
+    },
+    [
+      pendingSwapCard,
+      mode,
+      activeSlot,
+      setTeamSlot,
+      setSlot,
+      setPendingSwapCard,
+      showToast,
+      baseHandleSelectItem,
+    ]
+  );
 
   // --- Computed ---
 
@@ -94,7 +118,10 @@ export function useDeckEditorUI(
 
   const browserItems = useMemo(
     () => [
-      ...spellcasters.map((h) => ({ ...h, category: ENTITY_CATEGORY.Spellcaster as EntityCategory.Spellcaster })),
+      ...spellcasters.map((h) => ({
+        ...h,
+        category: ENTITY_CATEGORY.Spellcaster as EntityCategory.Spellcaster,
+      })),
       ...units,
     ],
     [spellcasters, units]
@@ -107,7 +134,7 @@ export function useDeckEditorUI(
     lastQuickAdd,
     viewSummary,
     browserItems,
-    
+
     // Actions
     setActiveMobileTab,
     // setSelectedItem,

@@ -4,7 +4,6 @@
  *
  * @see {@link types/patch-history.d.ts} for TypeScript types.
  */
-
 import { z } from "zod";
 
 // ============================================================================

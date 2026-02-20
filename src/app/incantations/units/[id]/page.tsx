@@ -1,11 +1,17 @@
 import { Metadata } from "next";
-import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
-import { JsonLd } from "@/components/common/JsonLd";
 
+// 3. The UI Component
+import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
+import { JsonLd } from "@/components/common/JsonLd";
+import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getUnitById, getUnits } from "@/services/api/api";
+import {
+  fetchChangelog,
+  fetchEntityTimeline,
+  filterChangelogForEntity,
+} from "@/services/api/patch-history";
 import { Unit } from "@/types/api";
-import { fetchChangelog, fetchEntityTimeline, filterChangelogForEntity } from "@/services/api/patch-history";
 
 interface UnitPageProps {
   params: Promise<{ id: string }>;
@@ -42,9 +48,6 @@ export async function generateMetadata({
   };
 }
 
-// 3. The UI Component
-import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
-
 export default async function UnitPage({ params }: UnitPageProps) {
   const { id } = await params;
   const unit = await getUnitById(id);
@@ -67,42 +70,45 @@ export default async function UnitPage({ params }: UnitPageProps) {
   // Schema for Unit (Product/Character)
   const jsonLdData = {
     "@context": "https://schema.org",
-    "thumbnailUrl": `https://spellcastersdb.com/api/og?unitId=${unit.entity_id}`,
-    "mainEntity": {
+    thumbnailUrl: `https://spellcastersdb.com/api/og?unitId=${unit.entity_id}`,
+    mainEntity: {
       "@type": "GameCharacter",
-      "name": unit.name,
-      "description": unit.description,
-      "category": unit.category,
+      name: unit.name,
+      description: unit.description,
+      category: unit.category,
     },
-    "breadcrumb": {
+    breadcrumb: {
       "@type": "BreadcrumbList",
-      "itemListElement": [
+      itemListElement: [
         {
           "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://spellcastersdb.com"
+          position: 1,
+          name: "Home",
+          item: "https://spellcastersdb.com",
         },
         {
           "@type": "ListItem",
-          "position": 2,
-          "name": "Units",
-          "item": "https://spellcastersdb.com/incantations/units"
+          position: 2,
+          name: "Units",
+          item: "https://spellcastersdb.com/incantations/units",
         },
         {
           "@type": "ListItem",
-          "position": 3,
-          "name": unit.name
-        }
-      ]
-    }
+          position: 3,
+          name: unit.name,
+        },
+      ],
+    },
   };
 
   return (
     <>
-      <JsonLd data={jsonLdData as Record<string, unknown>} id={`json-ld-unit-${unit.entity_id}`} />
-      <EntityShowcase 
-        item={unit} 
+      <JsonLd
+        data={jsonLdData as Record<string, unknown>}
+        id={`json-ld-unit-${unit.entity_id}`}
+      />
+      <EntityShowcase
+        item={unit}
         backUrl="/incantations/units"
         backLabel="Back to Units"
         changelog={entityChangelog}

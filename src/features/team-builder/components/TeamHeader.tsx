@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
+
 import { Check, Link as LinkIcon } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { copyToClipboard } from "@/lib/clipboard";
+import { cn } from "@/lib/utils";
 import { Deck } from "@/types/deck";
 
 interface TeamHeaderProps {

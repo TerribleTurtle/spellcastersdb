@@ -2,25 +2,24 @@ import { Suspense } from "react";
 
 import { Metadata } from "next";
 
+import { JsonLd } from "@/components/common/JsonLd";
 import { FeatureErrorBoundary } from "@/components/error/FeatureErrorBoundary";
 import { DeckBuilderContainer } from "@/features/deck-builder/ui/root/DeckBuilderContainer";
+import { PageSkeleton } from "@/features/deck-builder/ui/root/PageSkeleton";
 import { fetchCriticalGameData } from "@/services/api/api";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { generateDeckMetadata } from "@/services/metadata/metadata-service";
 
 type Props = {
   params: Promise<{ id: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-import { generateDeckMetadata } from "@/services/metadata/metadata-service";
-
 export async function generateMetadata({
   searchParams,
 }: Props): Promise<Metadata> {
   return generateDeckMetadata(searchParams);
 }
-
-import { PageSkeleton } from "@/features/deck-builder/ui/root/PageSkeleton";
 
 /**
  * Generate preload URLs for the first N card images to improve LCP.
@@ -36,8 +35,6 @@ function getPreloadImageUrls(
   });
 }
 
-import { JsonLd } from "@/components/common/JsonLd";
-
 export default async function DeckBuilderPage() {
   // We fetch CRITICAL data only to pass to the client for instant search & hydration
   // Consumables/Upgrades are skipped for initial load
@@ -50,15 +47,16 @@ export default async function DeckBuilderPage() {
   const webAppSchema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "SpellcastersDB Deck Builder",
-    "applicationCategory": "GameApplication",
-    "operatingSystem": "All",
-    "offers": {
+    name: "SpellcastersDB Deck Builder",
+    applicationCategory: "GameApplication",
+    operatingSystem: "All",
+    offers: {
       "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD"
+      price: "0",
+      priceCurrency: "USD",
     },
-    "description": "A deck building tool for Spellcasters Chronicles. Create, save, and share your card strategies."
+    description:
+      "A deck building tool for Spellcasters Chronicles. Create, save, and share your card strategies.",
   };
 
   return (

@@ -1,13 +1,12 @@
 import { notFound } from "next/navigation";
 
-import { UnitArchive } from "@/components/database/UnitArchive";
 import { JsonLd } from "@/components/common/JsonLd";
+import { UnitArchive } from "@/components/database/UnitArchive";
 import { getAllEntities } from "@/services/api/api";
-import { Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
 import { SCHOOLS } from "@/services/config/constants";
+import { Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
 
 // Local SCHOOLS definition removed
-
 
 export async function generateStaticParams() {
   return SCHOOLS.map((school) => ({
@@ -57,7 +56,7 @@ export default async function SchoolPage({ params }: SchoolPageProps) {
         // We know it's not a spellcaster because we filtered by magic_school
         const safeEntity = entity as Unit | Spell | Titan;
         const id = safeEntity.entity_id;
-        
+
         let url = `https://spellcastersdb.com/incantations/units/${id}`;
         if (entity.category === "Spell") {
           url = `https://spellcastersdb.com/incantations/spells/${id}`;

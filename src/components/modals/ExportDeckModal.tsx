@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { Deck } from "@/types/deck";
-import { Save, X, AlertTriangle, Share2 } from "lucide-react";
+
+import { AlertTriangle, Save, Share2, X } from "lucide-react";
+
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { cn } from "@/lib/utils";
 import { useDeckStore } from "@/store/index";
-import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { Deck } from "@/types/deck";
 
 interface ExportDeckModalProps {
   deck: Deck;
@@ -12,12 +14,19 @@ interface ExportDeckModalProps {
   onExport: (newName: string) => void;
 }
 
-export function ExportDeckModal({ deck, isOpen, onClose, onExport }: ExportDeckModalProps) {
+export function ExportDeckModal({
+  deck,
+  isOpen,
+  onClose,
+  onExport,
+}: ExportDeckModalProps) {
   const modalRef = useFocusTrap(isOpen, onClose);
   const [name, setName] = useState(deck.name || "");
   const [error, setError] = useState<string | null>(null);
-  
-  const checkDeckNameAvailable = useDeckStore(state => state.checkDeckNameAvailable);
+
+  const checkDeckNameAvailable = useDeckStore(
+    (state) => state.checkDeckNameAvailable
+  );
 
   const handleExport = () => {
     const trimmedName = name.trim();
@@ -40,7 +49,7 @@ export function ExportDeckModal({ deck, isOpen, onClose, onExport }: ExportDeckM
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div 
+      <div
         ref={modalRef}
         role="dialog"
         aria-modal="true"
@@ -50,11 +59,14 @@ export function ExportDeckModal({ deck, isOpen, onClose, onExport }: ExportDeckM
       >
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-border-default bg-surface-card">
-          <h3 id="export-deck-title" className="text-lg font-bold text-text-primary flex items-center gap-2">
+          <h3
+            id="export-deck-title"
+            className="text-lg font-bold text-text-primary flex items-center gap-2"
+          >
             <Share2 size={20} className="text-brand-primary" />
             Save to Solo Library
           </h3>
-          <button 
+          <button
             onClick={onClose}
             aria-label="Close"
             className="text-text-muted hover:text-text-primary transition-colors"
@@ -79,8 +91,8 @@ export function ExportDeckModal({ deck, isOpen, onClose, onExport }: ExportDeckM
               onKeyDown={(e) => e.key === "Enter" && handleExport()}
               className={cn(
                 "w-full bg-surface-inset border rounded-lg px-4 py-3 text-text-primary placeholder-gray-600 focus:outline-none focus:ring-2 transition-all",
-                error 
-                  ? "border-red-500/50 focus:ring-red-500/50" 
+                error
+                  ? "border-red-500/50 focus:ring-red-500/50"
                   : "border-border-default focus:ring-brand-primary/50 focus:border-brand-primary/50"
               )}
               placeholder="Enter deck name..."
@@ -93,9 +105,10 @@ export function ExportDeckModal({ deck, isOpen, onClose, onExport }: ExportDeckM
               </div>
             )}
           </div>
-          
+
           <div className="text-sm text-text-muted bg-surface-card p-3 rounded-lg border border-border-subtle">
-             This will create a copy of the selected team deck in your <strong>Solo Library</strong>.
+            This will create a copy of the selected team deck in your{" "}
+            <strong>Solo Library</strong>.
           </div>
         </div>
 

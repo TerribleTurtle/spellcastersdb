@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+
 import { useDeckStore } from "@/store/index";
 
 interface UseImportLogicProps {
@@ -9,11 +10,8 @@ interface UseImportLogicProps {
 }
 
 export function useImportLogic({ isEmpty, hasChanges }: UseImportLogicProps) {
-  const {
-    pendingImport,
-    setPendingImport,
-    resolvePendingImport,
-  } = useDeckStore();
+  const { pendingImport, setPendingImport, resolvePendingImport } =
+    useDeckStore();
 
   // Auto-resolve if no conflicts (empty deck or no changes)
   useEffect(() => {

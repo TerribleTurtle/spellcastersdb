@@ -23,16 +23,16 @@ export default function Loading() {
               {/* Stats Rows */}
               <div className="space-y-3 mt-auto">
                 <div className="flex items-center gap-3">
-                   <Skeleton className="h-3 w-16 bg-surface-hover rounded" />
-                   <Skeleton className="h-3 w-32 bg-surface-hover rounded" />
+                  <Skeleton className="h-3 w-16 bg-surface-hover rounded" />
+                  <Skeleton className="h-3 w-32 bg-surface-hover rounded" />
                 </div>
                 <div className="flex items-center gap-3">
-                   <Skeleton className="h-3 w-16 bg-surface-hover rounded" />
-                   <Skeleton className="h-3 w-24 bg-surface-hover rounded" />
+                  <Skeleton className="h-3 w-16 bg-surface-hover rounded" />
+                  <Skeleton className="h-3 w-24 bg-surface-hover rounded" />
                 </div>
                 <div className="flex items-center gap-3">
-                   <Skeleton className="h-3 w-16 bg-surface-hover rounded" />
-                   <Skeleton className="h-3 w-28 bg-surface-hover rounded" />
+                  <Skeleton className="h-3 w-16 bg-surface-hover rounded" />
+                  <Skeleton className="h-3 w-28 bg-surface-hover rounded" />
                 </div>
               </div>
             </div>

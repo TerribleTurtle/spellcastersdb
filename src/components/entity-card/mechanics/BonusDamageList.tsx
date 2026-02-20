@@ -1,10 +1,10 @@
 "use client";
 
-
 import { Flame } from "lucide-react";
-import { BonusDamage } from "@/types/api";
+
 import { cn } from "@/lib/utils";
 import { formatTargetName } from "@/services/utils/formatting";
+import { BonusDamage } from "@/types/api";
 
 interface BonusDamageListProps {
   bonusDamage?: BonusDamage[];
@@ -33,7 +33,10 @@ function formatBonusTargets(bd: BonusDamage): string | null {
   return targets.map(formatTargetName).join(", ");
 }
 
-export function BonusDamageList({ bonusDamage, isCompact }: BonusDamageListProps) {
+export function BonusDamageList({
+  bonusDamage,
+  isCompact,
+}: BonusDamageListProps) {
   if (!bonusDamage || bonusDamage.length === 0) return null;
 
   return (
@@ -50,11 +53,22 @@ export function BonusDamageList({ bonusDamage, isCompact }: BonusDamageListProps
                 : "bg-amber-500/10 border border-amber-500/20 p-3 gap-3 transition-colors hover:bg-amber-500/20"
             )}
           >
-            <Flame size={isCompact ? 13 : 16} className="text-amber-400 shrink-0" />
-            <span className={cn("text-amber-200 font-bold leading-tight", isCompact ? "text-xs" : "text-sm")}>
+            <Flame
+              size={isCompact ? 13 : 16}
+              className="text-amber-400 shrink-0"
+            />
+            <span
+              className={cn(
+                "text-amber-200 font-bold leading-tight",
+                isCompact ? "text-xs" : "text-sm"
+              )}
+            >
               {formatBonusValue(bd)} Bonus Dmg
               {targetLabel && (
-                <> vs <span className="text-text-primary">{targetLabel}</span></>
+                <>
+                  {" "}
+                  vs <span className="text-text-primary">{targetLabel}</span>
+                </>
               )}
             </span>
           </div>

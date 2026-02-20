@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { formatDiffPath, formatChangeField } from "../format-change-field";
+import { formatChangeField, formatDiffPath } from "../format-change-field";
 
 describe("formatDiffPath", () => {
   it("strips abilities prefix and formats passive with index", () => {
@@ -34,7 +34,9 @@ describe("formatDiffPath", () => {
 
 describe("formatChangeField", () => {
   it("formats delimited field strings", () => {
-    expect(formatChangeField("Abilities > Passive > 0 > Description")).toBe("Passive[0] › Description");
+    expect(formatChangeField("Abilities > Passive > 0 > Description")).toBe(
+      "Passive[0] › Description"
+    );
   });
 
   it("returns empty for entity field", () => {

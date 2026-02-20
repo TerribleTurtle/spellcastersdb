@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import {
   Activity,
   Crown,
@@ -11,10 +13,9 @@ import {
   Zap,
 } from "lucide-react";
 
-import type { Metadata } from "next";
-import { fetchGameData } from "@/services/api/api";
-import { DebugHeaderInfo } from "@/components/debug/DebugHeaderInfo";
 import { DebugFeatures } from "@/components/debug/DebugFeatures";
+import { DebugHeaderInfo } from "@/components/debug/DebugHeaderInfo";
+import { fetchGameData } from "@/services/api/api";
 
 export const metadata: Metadata = {
   title: "Debug",
@@ -35,7 +36,9 @@ export default async function DebugPage() {
     return (
       <div className="min-h-screen bg-surface-main text-foreground p-8">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-8 text-status-danger-text">❌ API Error</h1>
+          <h1 className="text-4xl font-bold mb-8 text-status-danger-text">
+            ❌ API Error
+          </h1>
           <div className="bg-surface-card rounded-xl p-6 border border-status-danger-border">
             <p className="text-xl mb-4 text-red-200">
               Failed to fetch game data
@@ -84,7 +87,10 @@ export default async function DebugPage() {
   );
 
   // 3. Spellcaster Classes
-  const classes = countBy(data.spellcasters, (spellcaster) => spellcaster.class);
+  const classes = countBy(
+    data.spellcasters,
+    (spellcaster) => spellcaster.class
+  );
 
   // 4. Unit Categories (Existing)
   const categories = countBy(data.units, (unit) => unit.category);
@@ -97,11 +103,15 @@ export default async function DebugPage() {
             <Activity className="text-brand-primary" size={32} />
             System Status & Data
           </h1>
-          
-          <DebugHeaderInfo 
+
+          <DebugHeaderInfo
             buildVersion={data.build_info.version}
             generatedAt={data.build_info.generated_at}
-            apiUrl={data._source || process.env.NEXT_PUBLIC_API_URL || "Local / Unknown"}
+            apiUrl={
+              data._source ||
+              process.env.NEXT_PUBLIC_API_URL ||
+              "Local / Unknown"
+            }
           />
         </header>
 
@@ -230,18 +240,18 @@ export default async function DebugPage() {
 
         {/* Advanced Tools */}
         <div className="mb-12">
-            <h2 className="text-2xl font-bold mb-6 text-text-primary flex items-center gap-2">
-                <Database className="text-brand-accent" />
-                Advanced Tools
-            </h2>
-            <DebugFeatures
-                units={data.units}
-                spells={data.spells}
-                titans={data.titans}
-                spellcasters={data.spellcasters}
-                consumables={data.consumables}
-                upgrades={data.upgrades}
-            />
+          <h2 className="text-2xl font-bold mb-6 text-text-primary flex items-center gap-2">
+            <Database className="text-brand-accent" />
+            Advanced Tools
+          </h2>
+          <DebugFeatures
+            units={data.units}
+            spells={data.spells}
+            titans={data.titans}
+            spellcasters={data.spellcasters}
+            consumables={data.consumables}
+            upgrades={data.upgrades}
+          />
         </div>
 
         {/* Sample Data */}

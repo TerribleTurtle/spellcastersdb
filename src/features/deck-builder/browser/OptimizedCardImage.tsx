@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, memo } from "react";
+import { memo, useState } from "react";
+
 import Image, { ImageProps } from "next/image";
+
 import { cn } from "@/lib/utils";
 import { getCardAltText } from "@/services/assets/asset-helpers";
 import { UnifiedEntity } from "@/types/api";
@@ -31,7 +33,7 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
   const [imgSrc, setImgSrc] = useState<string>(src);
   const [hasError, setHasError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
-  
+
   // Track previous src to trigger reset during render
   const [prevSrc, setPrevSrc] = useState(src);
   if (src !== prevSrc) {
@@ -43,8 +45,8 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
 
   const handleError = () => {
     if (!imgSrc) {
-        setHasError(true);
-        return;
+      setHasError(true);
+      return;
     }
 
     // Toggle Extension Fallback
@@ -64,15 +66,18 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
   };
 
   if (hasError) {
-      return (
-          <div 
-            className={cn(className, "bg-surface-raised flex items-center justify-center text-text-primary/20")}
-            role="img"
-            aria-label="No image available"
-          >
-              <span className="text-[10px]">No Image</span>
-          </div>
-      );
+    return (
+      <div
+        className={cn(
+          className,
+          "bg-surface-raised flex items-center justify-center text-text-primary/20"
+        )}
+        role="img"
+        aria-label="No image available"
+      >
+        <span className="text-[10px]">No Image</span>
+      </div>
+    );
   }
 
   // Remote images (GitHub Pages) are already WebP-optimized.

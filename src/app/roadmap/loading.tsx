@@ -10,23 +10,23 @@ export default function Loading() {
       {/* Grid Skeleton */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[...Array(6)].map((_, i) => (
-          <div 
-            key={i} 
+          <div
+            key={i}
             className="h-64 rounded-2xl bg-surface-card border border-border-default p-6 flex flex-col animate-pulse"
           >
             <div className="h-6 w-3/4 bg-surface-raised rounded mb-4" />
             <div className="h-4 w-1/2 bg-surface-raised rounded" />
-            
+
             <div className="grow" />
-            
+
             <div className="flex gap-2 mb-6">
-                <div className="h-6 w-16 bg-surface-raised rounded-full" />
-                <div className="h-6 w-20 bg-surface-raised rounded-full" />
+              <div className="h-6 w-16 bg-surface-raised rounded-full" />
+              <div className="h-6 w-20 bg-surface-raised rounded-full" />
             </div>
 
             <div className="border-t border-border-default pt-4 flex justify-between">
-                <div className="h-4 w-24 bg-surface-raised rounded" />
-                <div className="h-4 w-12 bg-surface-raised rounded" />
+              <div className="h-4 w-24 bg-surface-raised rounded" />
+              <div className="h-4 w-12 bg-surface-raised rounded" />
             </div>
           </div>
         ))}

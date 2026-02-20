@@ -1,23 +1,29 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
 
 // Hoist mock state so it can be accessed inside vi.mock factory
 const mocks = vi.hoisted(() => ({
   useLocalAssets: false,
   preferredFormat: "png",
-  forceRemote: false
+  forceRemote: false,
 }));
 
 vi.mock("@/lib/config", () => ({
   CONFIG: {
     API: {
-      BASE_URL: "https://terribleturtle.github.io/spellcasters-community-api/api/v2"
+      BASE_URL:
+        "https://terribleturtle.github.io/spellcasters-community-api/api/v2",
     },
     FEATURES: {
-      get USE_LOCAL_ASSETS() { return mocks.useLocalAssets; },
-      get PREFERRED_ASSET_FORMAT() { return mocks.preferredFormat; }
-    }
-  }
+      get USE_LOCAL_ASSETS() {
+        return mocks.useLocalAssets;
+      },
+      get PREFERRED_ASSET_FORMAT() {
+        return mocks.preferredFormat;
+      },
+    },
+  },
 }));
 
 describe("getCardImageUrl", () => {
@@ -28,47 +34,87 @@ describe("getCardImageUrl", () => {
   });
 
   it("should return remote URL for a unit by default", () => {
-    const unit = { entity_id: "unit_123", category: "Creature", name: "Test Unit" };
+    const unit = {
+      entity_id: "unit_123",
+      category: "Creature",
+      name: "Test Unit",
+    };
     const url = getCardImageUrl(unit);
-    expect(url).toBe("https://terribleturtle.github.io/spellcasters-community-api/assets/units/unit_123.png");
+    expect(url).toBe(
+      "https://terribleturtle.github.io/spellcasters-community-api/assets/units/unit_123.png"
+    );
   });
 
   it("should return remote URL for a spell", () => {
-    const spell = { entity_id: "spell_456", category: "Spell", name: "Test Spell" };
+    const spell = {
+      entity_id: "spell_456",
+      category: "Spell",
+      name: "Test Spell",
+    };
     const url = getCardImageUrl(spell);
-    expect(url).toBe("https://terribleturtle.github.io/spellcasters-community-api/assets/spells/spell_456.png");
+    expect(url).toBe(
+      "https://terribleturtle.github.io/spellcasters-community-api/assets/spells/spell_456.png"
+    );
   });
 
   it("should return remote URL for a spellcaster", () => {
-    const spellcaster = { spellcaster_id: "hero_789", category: "Spellcaster", name: "Test Spellcaster" };
+    const spellcaster = {
+      spellcaster_id: "hero_789",
+      category: "Spellcaster",
+      name: "Test Spellcaster",
+    };
     const url = getCardImageUrl(spellcaster);
-    expect(url).toBe("https://terribleturtle.github.io/spellcasters-community-api/assets/heroes/hero_789.png");
+    expect(url).toBe(
+      "https://terribleturtle.github.io/spellcasters-community-api/assets/heroes/hero_789.png"
+    );
   });
 
   it("should return remote URL for a consumable", () => {
-    const item = { consumable_id: "item_000", category: "Consumable", name: "Test Item" };
+    const item = {
+      consumable_id: "item_000",
+      category: "Consumable",
+      name: "Test Item",
+    };
     const url = getCardImageUrl(item);
-    expect(url).toBe("https://terribleturtle.github.io/spellcasters-community-api/assets/consumables/item_000.png");
+    expect(url).toBe(
+      "https://terribleturtle.github.io/spellcasters-community-api/assets/consumables/item_000.png"
+    );
   });
 
   it("should prefer webp if forced via options", () => {
-    const unit = { entity_id: "unit_123", category: "Creature", name: "Test Unit" };
+    const unit = {
+      entity_id: "unit_123",
+      category: "Creature",
+      name: "Test Unit",
+    };
     const url = getCardImageUrl(unit, { forceFormat: "webp" });
-    expect(url).toBe("https://terribleturtle.github.io/spellcasters-community-api/assets/units/unit_123.webp");
+    expect(url).toBe(
+      "https://terribleturtle.github.io/spellcasters-community-api/assets/units/unit_123.webp"
+    );
   });
 
   it("should return local URL if USE_LOCAL_ASSETS is true", () => {
     mocks.useLocalAssets = true;
-    const unit = { entity_id: "unit_123", category: "Creature", name: "Test Unit" };
+    const unit = {
+      entity_id: "unit_123",
+      category: "Creature",
+      name: "Test Unit",
+    };
     const url = getCardImageUrl(unit);
     expect(url).toBe("/api/local-assets/units/unit_123.png");
   });
 
   it("should ignore local assets setting if forceRemote is true", () => {
     mocks.useLocalAssets = true;
-    const unit = { entity_id: "unit_123", category: "Creature", name: "Test Unit" };
+    const unit = {
+      entity_id: "unit_123",
+      category: "Creature",
+      name: "Test Unit",
+    };
     const url = getCardImageUrl(unit, { forceRemote: true });
-    expect(url).toBe("https://terribleturtle.github.io/spellcasters-community-api/assets/units/unit_123.png");
+    expect(url).toBe(
+      "https://terribleturtle.github.io/spellcasters-community-api/assets/units/unit_123.png"
+    );
   });
 
   it("should return placeholder if no ID is present", () => {

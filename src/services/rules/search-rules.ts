@@ -23,15 +23,17 @@ export const RANK_PRIORITY: Record<string, number> = {
 };
 
 export interface SearchableAttributes {
-    category: string;
-    school: string;
-    rank: string;
-    class: string;
-    tags: string[];
+  category: string;
+  school: string;
+  rank: string;
+  class: string;
+  tags: string[];
 }
 
 // Helper to extract filterable attributes safely
-export function getSearchableAttributes(entity: UnifiedEntity): SearchableAttributes {
+export function getSearchableAttributes(
+  entity: UnifiedEntity
+): SearchableAttributes {
   // Spellcaster
   if (entity.category === "Spellcaster") {
     return {

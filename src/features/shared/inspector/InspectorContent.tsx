@@ -1,10 +1,11 @@
 import { EntityDisplayItem } from "@/components/entity-card/types";
-import { UnitInspector } from "./details/UnitInspector";
-import { SpellInspector } from "./details/SpellInspector";
-import { TitanInspector } from "./details/TitanInspector";
-import { SpellcasterInspector } from "./details/SpellcasterInspector";
 import { isSpellcaster, isTitan } from "@/services/validation/guards";
-import { Unit, Spell, Titan, Spellcaster } from "@/types/api";
+import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
+
+import { SpellInspector } from "./details/SpellInspector";
+import { SpellcasterInspector } from "./details/SpellcasterInspector";
+import { TitanInspector } from "./details/TitanInspector";
+import { UnitInspector } from "./details/UnitInspector";
 
 interface InspectorContentProps {
   item: EntityDisplayItem;
@@ -12,23 +13,43 @@ interface InspectorContentProps {
   onClose?: () => void;
 }
 
-export function InspectorContent({ item, onBack, onClose }: InspectorContentProps) {
+export function InspectorContent({
+  item,
+  onBack,
+  onClose,
+}: InspectorContentProps) {
   // Dispatch to specialized inspector
   if (isSpellcaster(item)) {
-    return <SpellcasterInspector item={item as Spellcaster} onBack={onBack} onClose={onClose} />;
+    return (
+      <SpellcasterInspector
+        item={item as Spellcaster}
+        onBack={onBack}
+        onClose={onClose}
+      />
+    );
   }
 
   if (isTitan(item)) {
-    return <TitanInspector item={item as Titan} onBack={onBack} onClose={onClose} />;
+    return (
+      <TitanInspector item={item as Titan} onBack={onBack} onClose={onClose} />
+    );
   }
 
   // Check category for Spell vs Unit
   const category = "category" in item ? item.category : "";
 
   if (category === "Spell") {
-    return <SpellInspector item={item as Spell} onBack={onBack} onClose={onClose} />;
+    return (
+      <SpellInspector item={item as Spell} onBack={onBack} onClose={onClose} />
+    );
   }
 
   // Default to Unit Inspector
-  return <UnitInspector item={item as unknown as Unit} onBack={onBack} onClose={onClose} />;
+  return (
+    <UnitInspector
+      item={item as unknown as Unit}
+      onBack={onBack}
+      onClose={onClose}
+    />
+  );
 }

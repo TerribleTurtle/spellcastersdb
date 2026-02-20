@@ -1,10 +1,16 @@
 import { Metadata } from "next";
-import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
-import { JsonLd } from "@/components/common/JsonLd";
 
+// 3. The UI Component
+import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
+import { JsonLd } from "@/components/common/JsonLd";
+import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getSpellcasterById, getSpellcasters } from "@/services/api/api";
-import { fetchChangelog, fetchEntityTimeline, filterChangelogForEntity } from "@/services/api/patch-history";
+import {
+  fetchChangelog,
+  fetchEntityTimeline,
+  filterChangelogForEntity,
+} from "@/services/api/patch-history";
 
 interface SpellcasterPageProps {
   params: Promise<{ id: string }>;
@@ -49,10 +55,9 @@ export async function generateMetadata({
   };
 }
 
-// 3. The UI Component
-import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
-
-export default async function SpellcasterPage({ params }: SpellcasterPageProps) {
+export default async function SpellcasterPage({
+  params,
+}: SpellcasterPageProps) {
   const { id } = await params;
   const spellcaster = await getSpellcasterById(id);
 
@@ -67,29 +72,37 @@ export default async function SpellcasterPage({ params }: SpellcasterPageProps) 
     getSpellcasters(),
   ]);
   const entityChangelog = filterChangelogForEntity(changelog, id);
-  const relatedEntities = allSpellcasters.filter(s => s.spellcaster_id !== id);
+  const relatedEntities = allSpellcasters.filter(
+    (s) => s.spellcaster_id !== id
+  );
 
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "Person",
-    "name": spellcaster.name,
-    "description": spellcaster.abilities.primary.description,
-    "url": `https://spellcastersdb.com/spellcasters/${spellcaster.spellcaster_id}`,
-    "image": `https://spellcastersdb.com/api/og?spellcasterId=${spellcaster.spellcaster_id}`
+    name: spellcaster.name,
+    description: spellcaster.abilities.primary.description,
+    url: `https://spellcastersdb.com/spellcasters/${spellcaster.spellcaster_id}`,
+    image: `https://spellcastersdb.com/api/og?spellcasterId=${spellcaster.spellcaster_id}`,
   };
 
   const breadcrumbs = [
     { name: "Home", url: "/" },
     { name: "Spellcasters", url: "/spellcasters" },
-    { name: spellcaster.name, url: `/spellcasters/${spellcaster.spellcaster_id}` }
+    {
+      name: spellcaster.name,
+      url: `/spellcasters/${spellcaster.spellcaster_id}`,
+    },
   ];
 
   return (
     <>
-      <JsonLd data={jsonLdData} id={`json-ld-spellcaster-${spellcaster.spellcaster_id}`} />
+      <JsonLd
+        data={jsonLdData}
+        id={`json-ld-spellcaster-${spellcaster.spellcaster_id}`}
+      />
       <BreadcrumbsLd items={breadcrumbs} />
-      <EntityShowcase 
-        item={spellcaster} 
+      <EntityShowcase
+        item={spellcaster}
         backUrl="/spellcasters"
         backLabel="Back to Spellcasters"
         changelog={entityChangelog}

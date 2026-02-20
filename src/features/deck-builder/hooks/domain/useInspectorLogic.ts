@@ -1,11 +1,18 @@
 "use client";
 
 import { useShallow } from "zustand/react/shallow";
-import { useDeckStore } from "@/store/index";
-import { UnifiedEntity, Spellcaster, Unit, Spell, Titan } from "@/types/api";
-import { isSpellcaster as isSpellcasterGuard, isTitan } from "@/services/validation/guards";
+
+import {
+  getSlotStatus,
+  getTitanStatus,
+} from "@/features/shared/inspector/utils";
 import { TITAN_SLOT_INDEX } from "@/services/config/constants";
-import { getSlotStatus, getTitanStatus } from "@/features/shared/inspector/utils";
+import {
+  isSpellcaster as isSpellcasterGuard,
+  isTitan,
+} from "@/services/validation/guards";
+import { useDeckStore } from "@/store/index";
+import { Spell, Spellcaster, Titan, UnifiedEntity, Unit } from "@/types/api";
 import { SlotIndex } from "@/types/deck";
 
 interface UseInspectorLogicProps {
@@ -37,12 +44,12 @@ export function useInspectorLogic({ item }: UseInspectorLogicProps) {
 
   const handleSelectTitan = () => {
     if (isTitan(item)) {
-       setSlot(TITAN_SLOT_INDEX, item as Titan);
+      setSlot(TITAN_SLOT_INDEX, item as Titan);
     }
   };
 
   const handleSelectSlot = (idx: SlotIndex) => {
-      setSlot(idx, item as Unit | Spell | Titan);
+    setSlot(idx, item as Unit | Spell | Titan);
   };
 
   // For units, check specific slots
@@ -60,6 +67,6 @@ export function useInspectorLogic({ item }: UseInspectorLogicProps) {
     handleSelectSpellcaster,
     handleSelectTitan,
     handleSelectSlot,
-    getStatus
+    getStatus,
   };
 }

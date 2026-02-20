@@ -1,12 +1,11 @@
 import { StateCreator } from "zustand";
+
 import { DeckBuilderState, UIState } from "./types";
 
-export const createUISlice: StateCreator<
-  DeckBuilderState,
-  [],
-  [],
-  UIState
-> = (set, get) => ({
+export const createUISlice: StateCreator<DeckBuilderState, [], [], UIState> = (
+  set,
+  get
+) => ({
   mode: "SOLO",
   viewSummary: false,
   isReadOnly: false,
@@ -25,40 +24,40 @@ export const createUISlice: StateCreator<
   setViewSummary: (viewSummary) => set({ viewSummary }),
   setIsReadOnly: (isReadOnly) => set({ isReadOnly }),
 
-  setViewingTeam: (data, id = null, name = "") => 
-    set({ 
-        viewingTeamData: data, 
-        viewingTeamId: id, 
-        viewingTeamName: name,
-        // When viewing a team, we likely want to be in TEAM mode and View Summary
-        ...(data ? { mode: "TEAM", viewSummary: true, isReadOnly: true } : {})
+  setViewingTeam: (data, id = null, name = "") =>
+    set({
+      viewingTeamData: data,
+      viewingTeamId: id,
+      viewingTeamName: name,
+      // When viewing a team, we likely want to be in TEAM mode and View Summary
+      ...(data ? { mode: "TEAM", viewSummary: true, isReadOnly: true } : {}),
     }),
 
-  setViewingDeck: (data, id = null) => 
-    set({ 
-        viewingDeckData: data, 
-        viewingDeckId: id,
-        // When viewing a deck, we likely want to be in SOLO mode
-         ...(data ? { mode: "SOLO", isReadOnly: true } : {})
+  setViewingDeck: (data, id = null) =>
+    set({
+      viewingDeckData: data,
+      viewingDeckId: id,
+      // When viewing a deck, we likely want to be in SOLO mode
+      ...(data ? { mode: "SOLO", isReadOnly: true } : {}),
     }),
 
   setPendingImport: (pendingImport) => set({ pendingImport }),
   setIsImporting: (isImporting) => set({ isImporting }),
 
   resolvePendingImport: (strategy) => {
-      const { pendingImport, setDeck, saveDeck, currentDeck } = get();
-      
-      if (!pendingImport) return;
+    const { pendingImport, setDeck, saveDeck, currentDeck } = get();
 
-      if (strategy === "SAVE_AND_OVERWRITE") {
-          saveDeck(currentDeck.name || "Untitled Deck");
-      }
+    if (!pendingImport) return;
 
-      if (strategy === "OVERWRITE" || strategy === "SAVE_AND_OVERWRITE") {
-          setDeck(pendingImport);
-      }
+    if (strategy === "SAVE_AND_OVERWRITE") {
+      saveDeck(currentDeck.name || "Untitled Deck");
+    }
 
-      set({ pendingImport: null });
+    if (strategy === "OVERWRITE" || strategy === "SAVE_AND_OVERWRITE") {
+      setDeck(pendingImport);
+    }
+
+    set({ pendingImport: null });
   },
 
   setPendingSwapCard: (card) => set({ pendingSwapCard: card }),
@@ -71,13 +70,20 @@ export const createUISlice: StateCreator<
   inspectedCard: null,
   inspectorPosition: null,
   inspectorOptions: {},
-  openInspector: (item, position, options) => set({ 
-      inspectorOpen: true, 
+  openInspector: (item, position, options) =>
+    set({
+      inspectorOpen: true,
       inspectedCard: item,
       inspectorPosition: position || null,
-      inspectorOptions: options || {}
-  }),
-  closeInspector: () => set({ inspectorOpen: false, inspectedCard: null, inspectorPosition: null, inspectorOptions: {} }),
+      inspectorOptions: options || {},
+    }),
+  closeInspector: () =>
+    set({
+      inspectorOpen: false,
+      inspectedCard: null,
+      inspectorPosition: null,
+      inspectorOptions: {},
+    }),
 
   // Hover Inspector State
   hoveredItem: null,
@@ -88,7 +94,8 @@ export const createUISlice: StateCreator<
   // Command Center State
   commandCenterOpen: false,
   openCommandCenter: () => set({ commandCenterOpen: true }),
-  closeCommandCenter: () => set({ commandCenterOpen: false, isImporting: false }),
+  closeCommandCenter: () =>
+    set({ commandCenterOpen: false, isImporting: false }),
 
   // Browser Filters
   browserFilters: {
@@ -100,26 +107,28 @@ export const createUISlice: StateCreator<
 
   setBrowserFilters: (browserFilters) => set({ browserFilters }),
 
-  toggleBrowserFilter: (type, value) => set((state) => {
-    const current = state.browserFilters[type];
-    const updated = current.includes(value)
-      ? current.filter((item) => item !== value)
-      : [...current, value];
-    
-    return {
-        browserFilters: {
-            ...state.browserFilters,
-            [type]: updated
-        }
-    };
-  }),
+  toggleBrowserFilter: (type, value) =>
+    set((state) => {
+      const current = state.browserFilters[type];
+      const updated = current.includes(value)
+        ? current.filter((item) => item !== value)
+        : [...current, value];
 
-  clearBrowserFilters: () => set({
-    browserFilters: {
+      return {
+        browserFilters: {
+          ...state.browserFilters,
+          [type]: updated,
+        },
+      };
+    }),
+
+  clearBrowserFilters: () =>
+    set({
+      browserFilters: {
         schools: [],
         ranks: [],
         categories: [],
         classes: [],
-    }
-  }),
+      },
+    }),
 });

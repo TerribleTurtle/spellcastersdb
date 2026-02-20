@@ -22,7 +22,6 @@ import { UnitBrowser } from "@/features/deck-builder/browser/UnitBrowser";
 import { useDeckEditorUI } from "@/features/deck-builder/hooks/ui/useDeckEditorUI";
 import { useTeamEditor } from "@/features/deck-builder/hooks/ui/useTeamEditor";
 import { MobileContextBar } from "@/features/deck-builder/ui/mobile/MobileContextBar";
-import { MobileHeader } from "@/features/deck-builder/ui/mobile/MobileHeader";
 import { SwapModeBanner } from "@/features/deck-builder/ui/overlays/SwapModeBanner";
 import { InspectorPanel } from "@/features/shared/inspector/InspectorPanel";
 import { TeamDeckEditorRow } from "@/features/team-builder/components/TeamDeckEditorRow";
@@ -155,13 +154,6 @@ export function TeamEditorLayout({
       <DeckBuilderShell
         mobileHeader={
           <div className="xl:hidden">
-            <MobileHeader
-              mode={mode}
-              onSetMode={setMode}
-              onShare={handleTeamShare}
-              onClear={handleTeamClear}
-              onOpenLibrary={openCommandCenter}
-            />
             <MobileContextBar
               deckName={teamName || ""}
               onRename={setTeamName}
@@ -176,6 +168,11 @@ export function TeamEditorLayout({
                     )
                   : true
               }
+              mode={mode}
+              onSetMode={setMode}
+              onOpenLibrary={openCommandCenter}
+              onShare={handleTeamShare}
+              onClear={handleTeamClear}
               canCollapse={true}
               areAllCollapsed={areAllCollapsed}
               onToggleCollapse={areAllCollapsed ? expandAll : collapseAll}
@@ -377,7 +374,7 @@ export function TeamEditorLayout({
           /* Mobile Stacked Decks Container (Fixed Bottom) */
           <div
             className={cn(
-              "fixed bottom-0 left-0 right-0 z-40 flex flex-col justify-end pointer-events-none pb-[max(0px,env(safe-area-inset-bottom))]",
+              "fixed bottom-0 left-0 right-0 z-40 flex flex-col justify-end pointer-events-none pb-[max(0px,env(safe-area-inset-bottom))] rounded-t-xl overflow-hidden",
               "xl:hidden"
             )}
           >

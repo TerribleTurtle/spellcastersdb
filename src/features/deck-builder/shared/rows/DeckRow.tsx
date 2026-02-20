@@ -1,19 +1,26 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
+
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { GripVertical, Check, AlertCircle, ArrowRight, ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import {
+  AlertCircle,
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  GripVertical,
+} from "lucide-react";
 
-import { Deck } from "@/types/deck";
-import { cn } from "@/lib/utils";
-import { useState, useRef, useEffect } from "react";
-import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { GameImage } from "@/components/ui/GameImage";
-import { validateDeck } from "@/services/validation/deck-validation";
-import { encodeDeck } from "@/services/utils/encoding";
-import { copyToClipboard } from "@/lib/clipboard";
+import { Button } from "@/components/ui/button";
 import { ItemMenu } from "@/features/shared/deck/ui/ItemMenu";
+import { copyToClipboard } from "@/lib/clipboard";
+import { cn } from "@/lib/utils";
+import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { encodeDeck } from "@/services/utils/encoding";
+import { validateDeck } from "@/services/validation/deck-validation";
+import { Deck } from "@/types/deck";
 
 interface DeckRowProps {
   deck: Deck;
@@ -44,7 +51,7 @@ export function DeckRow({
   className,
   selectionMode = false,
   isSelected = false,
-  onToggleSelect
+  onToggleSelect,
 }: DeckRowProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(deck.name || "");
@@ -103,40 +110,42 @@ export function DeckRow({
           : "bg-surface-card border-border-subtle hover:border-border-strong hover:bg-surface-card",
         isDragging &&
           "scale-105 shadow-xl shadow-brand-primary/20 z-50 border-brand-primary cursor-grabbing",
-        selectionMode && isSelected && "bg-brand-primary/20 border-brand-primary",
+        selectionMode &&
+          isSelected &&
+          "bg-brand-primary/20 border-brand-primary",
         className
       )}
       onClick={selectionMode ? onToggleSelect : undefined}
     >
-      <div 
+      <div
         className="p-1 text-text-faint hover:text-text-muted -ml-1 mr-1 transition-colors cursor-grab active:cursor-grabbing touch-none outline-none focus-visible:ring-2 focus-visible:ring-brand-primary rounded"
         role="button"
         tabIndex={0}
         aria-label="Drag to reorder deck"
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            // Logic for keyboard reordering would go here, 
+          if (e.key === "Enter" || e.key === " ") {
+            // Logic for keyboard reordering would go here,
             // for now just prevent default to avoid confusion
             e.preventDefault();
           }
         }}
       >
         {selectionMode ? (
-            <div 
-                className={cn(
-                "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                isSelected 
-                    ? "bg-brand-primary border-brand-primary text-black" 
-                    : "border-border-strong group-hover:border-border-subtle0"
-                )}
-                role="checkbox"
-                aria-checked={isSelected}
-                aria-label="Select deck"
-            >
-                {isSelected && <Check size={10} strokeWidth={4} />}
-            </div>
+          <div
+            className={cn(
+              "w-4 h-4 rounded border flex items-center justify-center transition-colors",
+              isSelected
+                ? "bg-brand-primary border-brand-primary text-black"
+                : "border-border-strong group-hover:border-border-subtle0"
+            )}
+            role="checkbox"
+            aria-checked={isSelected}
+            aria-label="Select deck"
+          >
+            {isSelected && <Check size={10} strokeWidth={4} />}
+          </div>
         ) : (
-            <GripVertical size={14} />
+          <GripVertical size={14} />
         )}
       </div>
 
@@ -170,9 +179,9 @@ export function DeckRow({
               >
                 <span className="truncate">{deck.name}</span>
                 {isActive && (
-                    <span className="text-[10px] uppercase font-bold bg-brand-primary/20 text-brand-primary px-1.5 py-0.5 rounded border border-brand-primary/30">
-                        Active
-                    </span>
+                  <span className="text-[10px] uppercase font-bold bg-brand-primary/20 text-brand-primary px-1.5 py-0.5 rounded border border-brand-primary/30">
+                    Active
+                  </span>
                 )}
               </div>
             )}
@@ -201,7 +210,9 @@ export function DeckRow({
             <div
               className={cn(
                 "absolute -bottom-1 -right-1 w-3 h-3 rounded-full border border-surface-card flex items-center justify-center",
-                isValid ? "bg-status-success text-brand-dark" : "bg-status-danger text-text-primary"
+                isValid
+                  ? "bg-status-success text-brand-dark"
+                  : "bg-status-danger text-text-primary"
               )}
               title={isValid ? "Valid Deck" : errors[0]}
             >
@@ -217,7 +228,7 @@ export function DeckRow({
           <div
             className={cn(
               "items-center gap-1",
-              isTeamMode ? "hidden md:flex" : "flex" 
+              isTeamMode ? "hidden md:flex" : "flex"
             )}
           >
             {deck.slots.slice(0, 4).map((s, i) => (
@@ -250,67 +261,73 @@ export function DeckRow({
             </div>
           </div>
 
-
-
           <div className="grow" />
 
           {/* Actions - Hide in selection mode */}
           {!selectionMode && (
-          <div className="flex items-center gap-2 shrink-0 relative z-10">
-             {/* Load/Import Button - Now for BOTH modes */}
-             {isActive && onPutAway ? (
-               <Button 
+            <div className="flex items-center gap-2 shrink-0 relative z-10">
+              {/* Load/Import Button - Now for BOTH modes */}
+              {isActive && onPutAway ? (
+                <Button
                   variant="outline"
                   size="sm"
                   className={cn(
-                      "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-sm transition-colors text-xs font-bold uppercase tracking-wider h-8",
-                      "bg-transparent border-gray-500 text-text-muted hover:text-text-primary hover:border-white hover:bg-surface-card"
+                    "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-sm transition-colors text-xs font-bold uppercase tracking-wider h-8",
+                    "bg-transparent border-gray-500 text-text-muted hover:text-text-primary hover:border-white hover:bg-surface-card"
                   )}
                   onClick={(e) => {
-                      e.stopPropagation();
-                      onPutAway();
+                    e.stopPropagation();
+                    onPutAway();
                   }}
                   title="Put Away Deck"
                   aria-label="Put Away Deck"
-               >
+                >
                   <ArrowLeft size={14} />
                   <span className="hidden sm:inline">Put Away</span>
-               </Button>
-             ) : (
-               <Button 
+                </Button>
+              ) : (
+                <Button
                   variant="default"
                   size="sm"
                   className={cn(
-                      "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-sm transition-colors text-xs font-bold uppercase tracking-wider h-8",
-                      "bg-brand-primary text-brand-dark hover:bg-brand-primary/80 border-0"
+                    "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-sm transition-colors text-xs font-bold uppercase tracking-wider h-8",
+                    "bg-brand-primary text-brand-dark hover:bg-brand-primary/80 border-0"
                   )}
                   onClick={(e) => {
-                      e.stopPropagation();
-                      onLoad?.();
+                    e.stopPropagation();
+                    onLoad?.();
                   }}
                   title={isTeamMode ? "Import Deck to Slot" : "Load Deck"}
                   aria-label={isTeamMode ? "Import Deck to Slot" : "Load Deck"}
-               >
+                >
                   <ArrowRight size={14} />
-                  <span className="hidden sm:inline">{isTeamMode ? "Import" : "Load"}</span>
-               </Button>
-             )}
+                  <span className="hidden sm:inline">
+                    {isTeamMode ? "Import" : "Load"}
+                  </span>
+                </Button>
+              )}
 
-            <ItemMenu
-              onDuplicate={onDuplicate ?? (() => {})}
-              onDelete={onDelete ?? (() => {})}
-              onCopyLink={async () => {
-                const hash = encodeDeck(deck);
-                const url = `${window.location.origin}${window.location.pathname}?d=${hash}`;
-                await copyToClipboard(url);
-              }}
-              type="DECK"
-              onRename={onRename ? () => {
-                setEditName(deck.name || "");
-                setIsEditing(true);
-              } : undefined}
-              onExport={() => {
-                  const blob = new Blob([JSON.stringify(deck, null, 2)], { type: "application/json" });
+              <ItemMenu
+                onDuplicate={onDuplicate ?? (() => {})}
+                onDelete={onDelete ?? (() => {})}
+                onCopyLink={async () => {
+                  const hash = encodeDeck(deck);
+                  const url = `${window.location.origin}${window.location.pathname}?d=${hash}`;
+                  await copyToClipboard(url);
+                }}
+                type="DECK"
+                onRename={
+                  onRename
+                    ? () => {
+                        setEditName(deck.name || "");
+                        setIsEditing(true);
+                      }
+                    : undefined
+                }
+                onExport={() => {
+                  const blob = new Blob([JSON.stringify(deck, null, 2)], {
+                    type: "application/json",
+                  });
                   const url = URL.createObjectURL(blob);
                   const link = document.createElement("a");
                   link.href = url;
@@ -319,9 +336,9 @@ export function DeckRow({
                   link.click();
                   document.body.removeChild(link);
                   URL.revokeObjectURL(url);
-              }}
-            />
-          </div>
+                }}
+              />
+            </div>
           )}
         </div>
       </div>

@@ -1,4 +1,13 @@
-import { Download, Upload, Trash2, X, CheckSquare, Copy, Users } from "lucide-react";
+import {
+  CheckSquare,
+  Copy,
+  Download,
+  Trash2,
+  Upload,
+  Users,
+  X,
+} from "lucide-react";
+
 import { cn } from "@/lib/utils";
 
 interface CommandCenterHeaderProps {
@@ -30,7 +39,10 @@ export function CommandCenterHeader({
     <div className="flex items-center justify-between p-4 border-b border-border-default bg-surface-deck/50 shrink-0">
       <div className="flex items-center gap-3">
         <SettingsIcon mode={mode} isImporting={isImporting} />
-        <h2 id="modal-title" className="text-lg font-bold uppercase tracking-wider text-text-primary">
+        <h2
+          id="modal-title"
+          className="text-lg font-bold uppercase tracking-wider text-text-primary"
+        >
           {isImporting ? "Import Deck" : "Deck Library"}
         </h2>
 
@@ -83,7 +95,9 @@ export function CommandCenterHeader({
               className="flex items-center gap-2 px-3 py-1.5 bg-status-danger-muted hover:bg-status-danger-border text-status-danger-text border border-red-500/50 rounded transition-colors"
             >
               <Trash2 size={16} />
-              <span className="text-xs font-bold uppercase">Delete ({selectedCount})</span>
+              <span className="text-xs font-bold uppercase">
+                Delete ({selectedCount})
+              </span>
             </button>
           </div>
         )}
@@ -115,7 +129,13 @@ export function CommandCenterHeader({
   );
 }
 
-function SettingsIcon({ mode, isImporting }: { mode: string; isImporting: boolean }) {
+function SettingsIcon({
+  mode,
+  isImporting,
+}: {
+  mode: string;
+  isImporting: boolean;
+}) {
   if (isImporting) return <Copy size={20} className="text-brand-primary" />;
   if (mode === "TEAM") return <Users size={20} className="text-brand-accent" />;
   return (

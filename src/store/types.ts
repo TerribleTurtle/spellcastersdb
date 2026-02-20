@@ -1,5 +1,5 @@
+import { Spell, Spellcaster, Titan, UnifiedEntity, Unit } from "@/types/api";
 import { Deck, SlotIndex, Team } from "@/types/deck";
-import { Unit, Spell, Titan, Spellcaster, UnifiedEntity } from "@/types/api";
 
 export type DeckBuilderMode = "SOLO" | "TEAM";
 
@@ -16,7 +16,7 @@ export interface DeckActions {
   clearSlot: (index: SlotIndex) => void;
   swapSlots: (indexA: number, indexB: number) => void;
   /** Attempts to add an item to the first available slot. Returns error message if failed. */
-  quickAdd: (item: UnifiedEntity) => string | null;  
+  quickAdd: (item: UnifiedEntity) => string | null;
   clearDeck: () => void;
   setDeckName: (name: string) => void;
 }
@@ -34,13 +34,22 @@ export interface TeamDataActions {
   setTeamName: (name: string) => void;
   setActiveTeamId: (id: string | null) => void;
   setTeamDecks: (decks: [Deck, Deck, Deck]) => void;
-  
+
   // Team Persistence Actions (Editor)
-  saveTeam: (newId: string, nameInput?: string, activeSlot?: number, activeDeckOverride?: Deck) => void;
+  saveTeam: (
+    newId: string,
+    nameInput?: string,
+    activeSlot?: number,
+    activeDeckOverride?: Deck
+  ) => void;
   loadTeam: (id: string) => void;
-  
+
   // Team Slot Actions (Granular)
-  setTeamSlot: (deckIndex: number, slotIndex: SlotIndex, item: Unit | Spell | Titan) => void;
+  setTeamSlot: (
+    deckIndex: number,
+    slotIndex: SlotIndex,
+    item: Unit | Spell | Titan
+  ) => void;
   clearTeamSlot: (deckIndex: number, slotIndex: SlotIndex) => void;
   setTeamSpellcaster: (deckIndex: number, item: Spellcaster) => void;
   removeTeamSpellcaster: (deckIndex: number) => void;
@@ -50,11 +59,11 @@ export interface TeamDataActions {
   importSoloDeckToTeam: (slotIndex: number, deck: Deck, newId: string) => void;
   loadTeamFromData: (decks: Deck[], newIds: string[]) => void;
   clearTeam: () => void;
-  
+
   // Cross-Pollenation
   exportTeamSlotToSolo: (slotIndex: number, deck: Deck, newId: string) => void;
   checkActiveTeamDeletion: (ids: string[]) => void;
-  
+
   // Smart Add
   quickAddToTeam: (slotIndex: number, item: UnifiedEntity) => string | null;
   moveCardBetweenDecks: (
@@ -63,7 +72,10 @@ export interface TeamDataActions {
     targetDeckIndex: number,
     targetSlotIndex: number
   ) => string | null;
-  moveSpellcasterBetweenDecks: (sourceDeckIndex: number, targetDeckIndex: number) => void;
+  moveSpellcasterBetweenDecks: (
+    sourceDeckIndex: number,
+    targetDeckIndex: number
+  ) => void;
 }
 
 export interface TeamUIActions {
@@ -81,7 +93,7 @@ export interface TeamDataState extends TeamDataActions {
 }
 
 export interface TeamUIState extends TeamUIActions {
-    activeSlot: number | null; // Which slot (0-2) is being edited in main view
+  activeSlot: number | null; // Which slot (0-2) is being edited in main view
 }
 
 export type TeamState = TeamDataState & TeamUIState;
@@ -128,7 +140,7 @@ export interface ViewModeState {
   mode: DeckBuilderMode;
   viewSummary: boolean;
   isReadOnly: boolean;
-  
+
   // Viewing State (migrated from DeckBuilderContainer)
   viewingTeamData: Deck[] | null;
   viewingTeamId: string | null;
@@ -140,11 +152,17 @@ export interface ViewModeState {
   setMode: (mode: DeckBuilderMode) => void;
   setViewSummary: (view: boolean) => void;
   setIsReadOnly: (isReadOnly: boolean) => void;
-  
-  setViewingTeam: (data: Deck[] | null, id?: string | null, name?: string) => void;
+
+  setViewingTeam: (
+    data: Deck[] | null,
+    id?: string | null,
+    name?: string
+  ) => void;
   setViewingDeck: (data: Deck | null, id?: string | null) => void;
   setPendingImport: (deck: Deck | null) => void;
-  resolvePendingImport: (strategy: "OVERWRITE" | "SAVE_AND_OVERWRITE" | "CANCEL") => void;
+  resolvePendingImport: (
+    strategy: "OVERWRITE" | "SAVE_AND_OVERWRITE" | "CANCEL"
+  ) => void;
 
   // Import State
   isImporting: boolean;
@@ -168,7 +186,11 @@ export interface InspectorState {
   inspectedCard: UnifiedEntity | null;
   inspectorPosition: { x: number; y: number } | null;
   inspectorOptions?: { isReadOnly?: boolean };
-  openInspector: (item: UnifiedEntity, position?: { x: number; y: number }, options?: { isReadOnly?: boolean }) => void;
+  openInspector: (
+    item: UnifiedEntity,
+    position?: { x: number; y: number },
+    options?: { isReadOnly?: boolean }
+  ) => void;
   closeInspector: () => void;
 
   // Hover Inspector State
@@ -200,7 +222,10 @@ export interface BrowserFilterState {
     categories: string[];
     classes: string[];
   }) => void;
-  toggleBrowserFilter: (type: "schools" | "ranks" | "categories" | "classes", value: string) => void;
+  toggleBrowserFilter: (
+    type: "schools" | "ranks" | "categories" | "classes",
+    value: string
+  ) => void;
   clearBrowserFilters: () => void;
 }
 
@@ -209,7 +234,14 @@ export interface BrowserFilterState {
  * Manages view modes, filters, and transient drag/drop state.
  * Composed of focused sub-interfaces.
  */
-export type UIState = ViewModeState & DragState & InspectorState & CommandCenterState & BrowserFilterState;
+export type UIState = ViewModeState &
+  DragState &
+  InspectorState &
+  CommandCenterState &
+  BrowserFilterState;
 
 // Combined State
-export type DeckBuilderState = SoloState & TeamState & PersistenceState & UIState;
+export type DeckBuilderState = SoloState &
+  TeamState &
+  PersistenceState &
+  UIState;

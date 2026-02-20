@@ -1,7 +1,9 @@
-import { describe, it, expect } from "vitest";
-import { BackupService, BackupData } from "../BackupService";
+import { describe, expect, it } from "vitest";
+
 import { DeckBuilderState } from "@/store/types";
 import { Deck, Team } from "@/types/deck";
+
+import { BackupData, BackupService } from "../BackupService";
 
 // --- Minimal mock state for generateBackup ---
 
@@ -12,7 +14,7 @@ const mockState = (
     savedDecks: [],
     savedTeams: [],
     ...overrides,
-  } as unknown as DeckBuilderState);
+  }) as unknown as DeckBuilderState;
 
 // --- Tests ---
 
@@ -53,7 +55,9 @@ describe("BackupService", () => {
     });
 
     it("should reject non-array teams", () => {
-      expect(BackupService.validateBackup({ decks: [], teams: "bad" })).toBe(false);
+      expect(BackupService.validateBackup({ decks: [], teams: "bad" })).toBe(
+        false
+      );
     });
 
     it("should accept valid shape", () => {
@@ -69,7 +73,9 @@ describe("BackupService", () => {
 
   describe("parseBackupFile", () => {
     it("should reject invalid JSON", async () => {
-      const file = new File(["not { json"], "bad.json", { type: "application/json" });
+      const file = new File(["not { json"], "bad.json", {
+        type: "application/json",
+      });
       await expect(BackupService.parseBackupFile(file)).rejects.toThrow();
     });
 

@@ -1,6 +1,4 @@
-
-
-import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 interface ImportConflictModalProps {
   onCancel: () => void;
@@ -23,7 +21,10 @@ export function ImportConflictModal({
         aria-labelledby="import-conflict-title"
         className="bg-surface-card border border-brand-primary/50 rounded-lg p-6 max-w-lg w-full shadow-2xl relative animate-in fade-in zoom-in duration-200"
       >
-        <h3 id="import-conflict-title" className="text-xl font-bold text-text-primary mb-2">
+        <h3
+          id="import-conflict-title"
+          className="text-xl font-bold text-text-primary mb-2"
+        >
           Unsaved Deck Changes
         </h3>
         <p className="text-sm text-text-muted leading-relaxed mb-6">

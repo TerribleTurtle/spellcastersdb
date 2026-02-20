@@ -1,10 +1,12 @@
 import { useCallback } from "react";
+
 import { v4 as uuidv4 } from "uuid";
 import { useShallow } from "zustand/react/shallow";
-import { useDeckStore } from "@/store/index";
-import { useTeamImport } from "./useTeamImport";
-import { selectIsEmpty, selectHasChanges } from "@/store/selectors";
 
+import { useDeckStore } from "@/store/index";
+import { selectHasChanges, selectIsEmpty } from "@/store/selectors";
+
+import { useTeamImport } from "./useTeamImport";
 
 export function useTeamBuilder() {
   // 1. Reactive State (Re-renders on change)
@@ -39,14 +41,14 @@ export function useTeamBuilder() {
       loadTeamFromData: s.loadTeamFromData,
       clearTeam: s.clearTeam,
       exportTeamSlotToSolo: s.exportTeamSlotToSolo,
-      
+
       // UI Actions
       setViewSummary: s.setViewSummary,
       setViewingTeam: s.setViewingTeam,
       setPendingImport: s.setPendingImport,
       resolvePendingImport: s.resolvePendingImport,
       renameSavedTeam: s.renameSavedTeam,
-      
+
       // Granular Actions
       setTeamSlot: s.setTeamSlot,
       clearTeamSlot: s.clearTeamSlot,
@@ -59,30 +61,26 @@ export function useTeamBuilder() {
     }))
   );
 
-  const {
-      teamDecks,
-      viewSummary,
-      viewingTeamData,
-  } = state;
+  const { teamDecks, viewSummary, viewingTeamData } = state;
 
   const {
-      setActiveSlot,
-      saveTeam,
-      loadTeamFromData,
-      setViewSummary,
-      setViewingTeam,
-      setPendingImport,
-      resolvePendingImport,
-      
-      // New Actions
-      setTeamSlot,
-      clearTeamSlot,
-      setTeamSpellcaster,
-      removeTeamSpellcaster,
-      swapTeamSlots,
-      quickAddToTeam,
-      moveCardBetweenDecks,
-      moveSpellcasterBetweenDecks,
+    setActiveSlot,
+    saveTeam,
+    loadTeamFromData,
+    setViewSummary,
+    setViewingTeam,
+    setPendingImport,
+    resolvePendingImport,
+
+    // New Actions
+    setTeamSlot,
+    clearTeamSlot,
+    setTeamSpellcaster,
+    removeTeamSpellcaster,
+    swapTeamSlots,
+    quickAddToTeam,
+    moveCardBetweenDecks,
+    moveSpellcasterBetweenDecks,
   } = actions;
 
   // --- Dependencies (Direct Selectors) ---
@@ -98,7 +96,7 @@ export function useTeamBuilder() {
     handleImportCancel,
     handleImportConfirm,
     handleImportSaveAndOverwrite,
-    showConflictModal
+    showConflictModal,
   } = useTeamImport({
     viewingTeamData,
 
@@ -111,29 +109,39 @@ export function useTeamBuilder() {
     resolvePendingImport,
     isEmpty,
     hasChanges,
-    savedTeams: state.savedTeams
+    savedTeams: state.savedTeams,
   });
 
   // --- UI Handlers ---
-  
+
   const handleBack = useCallback(() => {
     setViewSummary(false);
     setViewingTeam(null);
   }, [setViewSummary, setViewingTeam]);
 
-  const handleEditDeck = useCallback((idx: number, forceDiscard: boolean = false) => {
-    if (viewingTeamData) {
-      if (hasChanges && !forceDiscard) {
+  const handleEditDeck = useCallback(
+    (idx: number, forceDiscard: boolean = false) => {
+      if (viewingTeamData) {
+        if (hasChanges && !forceDiscard) {
           return false; // Halted
+        }
+        const newIds = viewingTeamData.map(() => uuidv4());
+        loadTeamFromData(viewingTeamData, newIds);
+        setViewingTeam(null);
       }
-      const newIds = viewingTeamData.map(() => uuidv4());
-      loadTeamFromData(viewingTeamData, newIds);
-      setViewingTeam(null);
-    }
-    setActiveSlot(idx);
-    setViewSummary(false);
-    return true;
-  }, [viewingTeamData, loadTeamFromData, setViewingTeam, setActiveSlot, setViewSummary, hasChanges]);
+      setActiveSlot(idx);
+      setViewSummary(false);
+      return true;
+    },
+    [
+      viewingTeamData,
+      loadTeamFromData,
+      setViewingTeam,
+      setActiveSlot,
+      setViewSummary,
+      hasChanges,
+    ]
+  );
 
   return {
     ...state,
@@ -143,7 +151,7 @@ export function useTeamBuilder() {
     showSummary: viewSummary && teamDecks,
     showConflictModal,
     hasChanges, // Exposed for UI modals
-    
+
     // Handlers
     handleBack,
     handleSave,

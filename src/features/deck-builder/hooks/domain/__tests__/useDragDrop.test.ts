@@ -1,8 +1,9 @@
-import { renderHook, act } from "@testing-library/react";
-import { useDragDrop } from "../useDragDrop";
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { useDeckBuilder } from "../useDeckBuilder";
 import { DragStartEvent } from "@dnd-kit/core";
+import { act, renderHook } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import { useDeckBuilder } from "../useDeckBuilder";
+import { useDragDrop } from "../useDragDrop";
 
 // Mock dependencies
 vi.mock("../useDeckBuilder", () => ({
@@ -15,7 +16,7 @@ vi.mock("@/hooks/useToast", () => ({
 
 vi.mock("@/services/dnd/drag-routing", () => ({
   DragRoutingService: {
-    determineAction: vi.fn(() => ({ type: 'NO_OP' })),
+    determineAction: vi.fn(() => ({ type: "NO_OP" })),
   },
 }));
 
@@ -39,17 +40,20 @@ describe("useDragDrop", () => {
       active: {
         data: {
           current: {
-            item: { entity_id: "test-id", name: "Test Card" }
-          }
-        }
-      }
+            item: { entity_id: "test-id", name: "Test Card" },
+          },
+        },
+      },
     } as unknown as DragStartEvent;
 
     act(() => {
       result.current.handleDragStart(mockEvent);
     });
 
-    expect(setActiveDragItemMock).toHaveBeenCalledWith({ entity_id: "test-id", name: "Test Card" });
+    expect(setActiveDragItemMock).toHaveBeenCalledWith({
+      entity_id: "test-id",
+      name: "Test Card",
+    });
     expect(closeInspectorMock).toHaveBeenCalled();
   });
 

@@ -1,22 +1,22 @@
-import { 
-  Home, 
-  Layers, 
-  Database, 
-  History, 
-  Map, 
-  BookOpen, 
-  HelpCircle, 
-  Bot, 
-  Info,
+import {
+  BookOpen,
+  Bot,
+  Database,
   Github,
-  LucideIcon
+  HelpCircle,
+  History,
+  Home,
+  Info,
+  Layers,
+  LucideIcon,
+  Map,
 } from "lucide-react";
 
 export interface NavLink {
   name: string;
   href: string;
   icon: LucideIcon;
-  internal?: boolean; 
+  internal?: boolean;
 }
 
 export const PRIMARY_NAV: NavLink[] = [
@@ -35,15 +35,18 @@ export const SECONDARY_NAV: NavLink[] = [
 ];
 
 export const EXTERNAL_LINKS: NavLink[] = [
-  { 
-    name: "Contribute", 
+  {
+    name: "Contribute",
     href: "https://github.com/TerribleTurtle/spellcasters-community-api",
     icon: Github,
-    internal: false
-  }
+    internal: false,
+  },
 ];
 
-export const isActivePath = (path: string, pathname: string | null): boolean => {
+export const isActivePath = (
+  path: string,
+  pathname: string | null
+): boolean => {
   if (!pathname) return false;
   return pathname === path || (path !== "/" && pathname.startsWith(path));
 };

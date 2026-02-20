@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, SyntheticEvent } from "react";
+import { SyntheticEvent, useState } from "react";
 
 import Image, { ImageProps } from "next/image";
 

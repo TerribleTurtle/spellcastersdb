@@ -19,10 +19,7 @@ export function useUnitFilters({ defaultFilters }: UseUnitFiltersProps = {}) {
     classes: defaultFilters?.classes || [],
   });
 
-  const toggleFilter = (
-    type: keyof UnitFilters,
-    value: string
-  ) => {
+  const toggleFilter = (type: keyof UnitFilters, value: string) => {
     setActiveFilters((prev) => {
       const current = prev[type];
       const next = current.includes(value)

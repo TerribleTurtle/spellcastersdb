@@ -15,9 +15,7 @@
  * "description" → "Description", "attack_interval" → "Attack Interval"
  */
 function titleCase(s: string): string {
-  return s
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, (c) => c.toUpperCase());
+  return s.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 /**

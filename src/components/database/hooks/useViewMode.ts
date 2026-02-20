@@ -1,11 +1,13 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type ViewMode = "grid" | "list";
 
 export function useViewMode(defaultMode: ViewMode = "grid") {
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     if (typeof window !== "undefined") {
-      return window.matchMedia("(max-width: 768px)").matches ? "list" : defaultMode;
+      return window.matchMedia("(max-width: 768px)").matches
+        ? "list"
+        : defaultMode;
     }
     return defaultMode;
   });
@@ -15,11 +17,11 @@ export function useViewMode(defaultMode: ViewMode = "grid") {
     if (typeof window === "undefined") return;
 
     const mediaQuery = window.matchMedia("(max-width: 768px)");
-    
+
     const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
-       if (e.matches) {
-           setViewMode("list");
-       }
+      if (e.matches) {
+        setViewMode("list");
+      }
     };
 
     mediaQuery.addEventListener("change", handleChange);

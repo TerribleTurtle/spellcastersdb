@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
-import { UnitArchive } from "@/components/database/UnitArchive";
 import { JsonLd } from "@/components/common/JsonLd";
+import { UnitArchive } from "@/components/database/UnitArchive";
 import { getAllEntities } from "@/services/api/api";
 import { Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
 
@@ -34,9 +34,7 @@ export default async function RankPage({ params }: RankPageProps) {
 
   // Filter for JSON-LD (Rank is on Units, Spells, Titans)
   const rankEntities = allEntities.filter(
-    (e) =>
-      "rank" in e &&
-      (e as UnifiedEntity & { rank: string }).rank === rank
+    (e) => "rank" in e && (e as UnifiedEntity & { rank: string }).rank === rank
   );
 
   const jsonLd = {
@@ -49,12 +47,12 @@ export default async function RankPage({ params }: RankPageProps) {
       itemListElement: rankEntities.map((entity, index) => {
         const safeEntity = entity as Unit | Spell | Titan;
         const id = safeEntity.entity_id;
-        
+
         let url = `https://spellcastersdb.com/incantations/units/${id}`;
         if (entity.category === "Spell") {
           url = `https://spellcastersdb.com/incantations/spells/${id}`;
         } else if (entity.category === "Titan") {
-           // Titans are usually Rank V, but logic holds
+          // Titans are usually Rank V, but logic holds
           url = `https://spellcastersdb.com/titans/${id}`;
         }
 

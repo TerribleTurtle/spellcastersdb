@@ -1,11 +1,11 @@
-import { create } from 'zustand';
-import { persist, devtools, subscribeWithSelector } from 'zustand/middleware';
+import { create } from "zustand";
+import { devtools, persist, subscribeWithSelector } from "zustand/middleware";
 
-import { DeckBuilderState } from './types';
-import { createSoloSlice } from './createSoloSlice';
-import { createTeamSlice } from './createTeamSlice';
-import { createPersistenceSlice } from './createPersistenceSlice';
-import { createUISlice } from './createUISlice';
+import { createPersistenceSlice } from "./createPersistenceSlice";
+import { createSoloSlice } from "./createSoloSlice";
+import { createTeamSlice } from "./createTeamSlice";
+import { createUISlice } from "./createUISlice";
+import { DeckBuilderState } from "./types";
 
 // Create the unified store
 /**
@@ -24,7 +24,7 @@ export const useDeckStore = create<DeckBuilderState>()(
         ...createUISlice(...a),
       })),
       {
-        name: 'spellcasters-store-v2',
+        name: "spellcasters-store-v2",
         partialize: (state) => ({
           // User Data (must persist)
           savedDecks: state.savedDecks,
@@ -48,4 +48,3 @@ export type { DeckBuilderState };
 
 // --- Subscriptions ---
 // Moved to useDeckSync.ts check
-

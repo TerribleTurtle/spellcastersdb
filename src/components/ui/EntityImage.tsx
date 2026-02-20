@@ -9,7 +9,10 @@ import { ImageOff } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
 import { cn } from "@/lib/utils";
-import { getCardAltText, getCardImageUrl } from "@/services/assets/asset-helpers";
+import {
+  getCardAltText,
+  getCardImageUrl,
+} from "@/services/assets/asset-helpers";
 import { UnifiedEntity } from "@/types/api";
 
 interface EntityImageProps {
@@ -64,7 +67,9 @@ export function EntityImage({ entity, className, alt }: EntityImageProps) {
       />
 
       {/* Loading Skeleton */}
-      {!loaded && <div className="absolute inset-0 bg-surface-card animate-pulse" />}
+      {!loaded && (
+        <div className="absolute inset-0 bg-surface-card animate-pulse" />
+      )}
     </div>
   );
 }

@@ -36,7 +36,10 @@ export function BetaBanner() {
     <>
       <div className="animate-in fade-in slide-in-from-top-2 duration-500">
         <div className="flex items-center gap-2 bg-linear-to-r from-yellow-900/40 to-orange-900/40 backdrop-blur-md rounded-full border border-status-warning-border px-3 py-1.5 shadow-sm hover:bg-yellow-900/60 transition-colors">
-          <AlertTriangle className="text-status-warning-text shrink-0" size={14} />
+          <AlertTriangle
+            className="text-status-warning-text shrink-0"
+            size={14}
+          />
           <span className="text-xs font-bold text-yellow-100 whitespace-nowrap hidden sm:inline">
             Beta Data: Not Final
           </span>

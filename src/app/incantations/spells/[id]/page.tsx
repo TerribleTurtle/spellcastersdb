@@ -1,11 +1,14 @@
 import { Metadata } from "next";
-
-import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { notFound } from "next/navigation";
-import { JsonLd } from "@/components/common/JsonLd";
 
+import { JsonLd } from "@/components/common/JsonLd";
+import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getEntityById, getSpells } from "@/services/api/api";
-import { fetchChangelog, fetchEntityTimeline, filterChangelogForEntity } from "@/services/api/patch-history";
+import {
+  fetchChangelog,
+  fetchEntityTimeline,
+  filterChangelogForEntity,
+} from "@/services/api/patch-history";
 import { Spell } from "@/types/api";
 
 interface SpellPageProps {
@@ -62,24 +65,27 @@ export default async function SpellPage({ params }: SpellPageProps) {
 
   const jsonLdData = {
     "@context": "https://schema.org",
-    "description": spell.description,
-    "genre": "Strategic Card Game",
-    "isFamilyFriendly": true,
-    "keywords": spell.tags.join(", "),
-    "thumbnailUrl": `https://spellcastersdb.com/api/og/spell?id=${spell.entity_id}`,
-    "mainEntity": {
+    description: spell.description,
+    genre: "Strategic Card Game",
+    isFamilyFriendly: true,
+    keywords: spell.tags.join(", "),
+    thumbnailUrl: `https://spellcastersdb.com/api/og/spell?id=${spell.entity_id}`,
+    mainEntity: {
       "@type": "Thing",
-      "name": spell.name,
-      "description": spell.description,
-      "category": "Spell",
-    }
+      name: spell.name,
+      description: spell.description,
+      category: "Spell",
+    },
   };
 
   return (
     <>
-      <JsonLd data={jsonLdData as Record<string, unknown>} id={`json-ld-spell-${spell.entity_id}`} />
-      <EntityShowcase 
-        item={spell} 
+      <JsonLd
+        data={jsonLdData as Record<string, unknown>}
+        id={`json-ld-spell-${spell.entity_id}`}
+      />
+      <EntityShowcase
+        item={spell}
         backUrl="/incantations/spells"
         backLabel="Back to Spells"
         changelog={entityChangelog}

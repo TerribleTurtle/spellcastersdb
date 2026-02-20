@@ -1,14 +1,12 @@
 "use client";
 
-import { Deck } from "@/types/deck";
-import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
+import { ImportConflictModal } from "@/components/modals/ImportConflictModal";
 import { useDeckBuilder } from "@/features/deck-builder/hooks/domain/useDeckBuilder";
 import { useImportLogic } from "@/features/deck-builder/hooks/domain/useImportLogic";
-
-import { SoloEditorLayout } from "@/features/deck-builder/ui/layouts/SoloEditorLayout";
 import { SoloInspectOverlay } from "@/features/deck-builder/overlays/SoloInspectOverlay";
-import { ImportConflictModal } from "@/components/modals/ImportConflictModal";
-
+import { SoloEditorLayout } from "@/features/deck-builder/ui/layouts/SoloEditorLayout";
+import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
+import { Deck } from "@/types/deck";
 
 interface SoloBuilderViewProps {
   units: (Unit | Spell | Titan)[];
@@ -21,16 +19,13 @@ export function SoloBuilderView({
   spellcasters,
   onImportSolo,
 }: SoloBuilderViewProps) {
-  const deckBuilder = useDeckBuilder(); 
+  const deckBuilder = useDeckBuilder();
 
-  const { 
-    setPendingImport, 
-    resolvePendingImport, 
-    showConflictModal 
-  } = useImportLogic({
-    isEmpty: deckBuilder.isEmpty,
-    hasChanges: deckBuilder.hasChanges
-  });
+  const { setPendingImport, resolvePendingImport, showConflictModal } =
+    useImportLogic({
+      isEmpty: deckBuilder.isEmpty,
+      hasChanges: deckBuilder.hasChanges,
+    });
 
   return (
     <>
@@ -42,12 +37,12 @@ export function SoloBuilderView({
 
       {/* Import Conflict Modal */}
       {showConflictModal && (
-          <ImportConflictModal
-            onCancel={() => setPendingImport(null)}
-            onConfirm={() => resolvePendingImport("OVERWRITE")}
-            onSaveAndImport={() => resolvePendingImport("SAVE_AND_OVERWRITE")}
-          />
-        )}
+        <ImportConflictModal
+          onCancel={() => setPendingImport(null)}
+          onConfirm={() => resolvePendingImport("OVERWRITE")}
+          onSaveAndImport={() => resolvePendingImport("SAVE_AND_OVERWRITE")}
+        />
+      )}
 
       <SoloInspectOverlay />
     </>

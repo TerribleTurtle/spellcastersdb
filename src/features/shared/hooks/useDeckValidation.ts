@@ -1,7 +1,7 @@
-
 import { useMemo } from "react";
-import { Deck } from "@/types/deck";
+
 import { validateDeck } from "@/services/validation/deck-validation";
+import { Deck } from "@/types/deck";
 
 export function useDeckValidation(deck: Deck) {
   const { isValid, errors, stats } = useMemo(() => validateDeck(deck), [deck]);

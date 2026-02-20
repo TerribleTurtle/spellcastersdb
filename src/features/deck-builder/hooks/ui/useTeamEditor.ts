@@ -13,8 +13,8 @@ import { useDeckStore } from "@/store/index";
 import { selectIsExistingTeam, selectIsTeamSaved } from "@/store/selectors";
 import { Deck } from "@/types/deck";
 
-const TRAY_EXPANDED_HEIGHT = 140;
-const TRAY_COLLAPSED_HEIGHT = 32;
+const TRAY_EXPANDED_HEIGHT = 120;
+const TRAY_COLLAPSED_HEIGHT = 26;
 
 export function useTeamEditor() {
   const { activeSlot, setActiveSlot, teamName, teamDecks } = useTeamBuilder();

@@ -2,6 +2,9 @@
 
 import { EntityDisplayItem } from "@/components/entity-card/types";
 
+import { InspectorContent } from "./InspectorContent";
+import { InspectorEmptyState } from "./InspectorEmptyState";
+
 export type InspectorItem = EntityDisplayItem;
 
 interface CardInspectorProps {
@@ -10,14 +13,7 @@ interface CardInspectorProps {
   onClose?: () => void;
 }
 
-import { InspectorContent } from "./InspectorContent";
-import { InspectorEmptyState } from "./InspectorEmptyState";
-
-export function CardInspector({
-  item,
-  onBack,
-  onClose,
-}: CardInspectorProps) {
+export function CardInspector({ item, onBack, onClose }: CardInspectorProps) {
   if (!item) {
     return <InspectorEmptyState />;
   }

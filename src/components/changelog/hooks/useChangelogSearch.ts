@@ -6,12 +6,17 @@
  * Flattens all PatchEntry[] → FlatChangeRow[] (one row per ChangeEntry),
  * then applies Fuse.js fuzzy search, multi-filter, and sort.
  */
-
 import { useMemo, useState } from "react";
+
 import Fuse from "fuse.js";
 
 import { useDebounce } from "@/hooks/useDebounce";
-import type { PatchEntry, ChangeEntry, PatchCategory, ChangeType } from "@/types/patch-history";
+import type {
+  ChangeEntry,
+  ChangeType,
+  PatchCategory,
+  PatchEntry,
+} from "@/types/patch-history";
 
 // ============================================================================
 // Types
@@ -145,13 +150,17 @@ export function useChangelogSearch(patches: PatchEntry[]) {
           const diff = b.patchTimestamp - a.patchTimestamp;
           if (diff !== 0) return diff;
           // Tie-breaker: Newer version first
-          return b.version.localeCompare(a.version, undefined, { numeric: true });
+          return b.version.localeCompare(a.version, undefined, {
+            numeric: true,
+          });
         }
         case "date-asc": {
           const diff = a.patchTimestamp - b.patchTimestamp;
           if (diff !== 0) return diff;
           // Tie-breaker: Older version first
-          return a.version.localeCompare(b.version, undefined, { numeric: true });
+          return a.version.localeCompare(b.version, undefined, {
+            numeric: true,
+          });
         }
         case "name-asc":
           return a.name.localeCompare(b.name);

@@ -1,14 +1,9 @@
 import React from "react";
-import {
-  Clock,
-  Heart,
-  Swords,
-  Users,
-  Zap,
-  Wind,
-  Activity,
-} from "lucide-react";
+
+import { Activity, Clock, Heart, Swords, Users, Wind, Zap } from "lucide-react";
+
 import { Spell, Titan } from "@/types/api";
+
 import { EntityDisplayItem } from "./types";
 import { getDamageDisplay } from "./utils";
 
@@ -29,14 +24,17 @@ export type EntityCategory = "Unit" | "Spell" | "Titan" | "Spellcaster";
 
 // --- Helper Predicates ---
 
-const isTitan = (item: EntityDisplayItem): item is Titan => 
+const isTitan = (item: EntityDisplayItem): item is Titan =>
   (item as Titan).category === "Titan";
 
-const isSpell = (item: EntityDisplayItem): item is Spell => 
+const isSpell = (item: EntityDisplayItem): item is Spell =>
   (item as Spell).category === "Spell";
 
-const hasProperty = <K extends string>(item: unknown, key: K): item is Record<K, unknown> => {
-    return typeof item === 'object' && item !== null && key in item;
+const hasProperty = <K extends string>(
+  item: unknown,
+  key: K
+): item is Record<K, unknown> => {
+  return typeof item === "object" && item !== null && key in item;
 };
 
 // --- Stat Definitions ---
@@ -45,7 +43,8 @@ export const STATS: Record<string, StatDefinition> = {
   health: {
     id: "health",
     label: "Health",
-    getValue: (item) => (hasProperty(item, "health") ? (item.health as number) : undefined),
+    getValue: (item) =>
+      hasProperty(item, "health") ? (item.health as number) : undefined,
     icon: Heart,
     colorClass: "text-status-success",
   },
@@ -57,7 +56,8 @@ export const STATS: Record<string, StatDefinition> = {
     colorClass: "text-emerald-400",
     condition: (item) => isTitan(item) && !!item.passive_health_regen,
   },
-  heal_amount_titan: { // specific logic for Titan heal vs Spell heal if needed, or shared
+  heal_amount_titan: {
+    // specific logic for Titan heal vs Spell heal if needed, or shared
     id: "heal_amount_titan",
     label: "Heal",
     getValue: (item) => (isTitan(item) ? item.heal_amount : undefined),
@@ -76,28 +76,33 @@ export const STATS: Record<string, StatDefinition> = {
   dps: {
     id: "dps",
     label: "DPS",
-    getValue: (item) => (hasProperty(item, "dps") ? (item.dps as number) : undefined),
+    getValue: (item) =>
+      hasProperty(item, "dps") ? (item.dps as number) : undefined,
     icon: Swords,
     colorClass: "text-orange-500",
-    condition: (item) => hasProperty(item, "dps") && (item.dps as number) !== undefined,
+    condition: (item) =>
+      hasProperty(item, "dps") && (item.dps as number) !== undefined,
   },
   attack_speed: {
     id: "attack_speed",
     label: "Atk Speed",
     // Unified access for attack_speed or attack_interval
     getValue: (item) => {
-        if (hasProperty(item, "attack_interval")) return `${item.attack_interval}s`;
-        if (hasProperty(item, "attack_speed")) return `${item.attack_speed}s`;
-        return "0s";
+      if (hasProperty(item, "attack_interval"))
+        return `${item.attack_interval}s`;
+      if (hasProperty(item, "attack_speed")) return `${item.attack_speed}s`;
+      return "0s";
     },
     icon: Zap,
     colorClass: "text-status-warning-text",
-    condition: (item) => hasProperty(item, "attack_interval") || hasProperty(item, "attack_speed"),
+    condition: (item) =>
+      hasProperty(item, "attack_interval") || hasProperty(item, "attack_speed"),
   },
   range: {
     id: "range",
     label: "Range",
-    getValue: (item) => (hasProperty(item, "range") ? (item.range as number) : undefined),
+    getValue: (item) =>
+      hasProperty(item, "range") ? (item.range as number) : undefined,
     icon: Users,
     colorClass: "text-status-info-text",
     condition: (item) => hasProperty(item, "range") && !!item.range,
@@ -105,18 +110,26 @@ export const STATS: Record<string, StatDefinition> = {
   movement_speed: {
     id: "movement_speed",
     label: "Speed",
-    getValue: (item) => (hasProperty(item, "movement_speed") ? (item.movement_speed as number) : undefined),
+    getValue: (item) =>
+      hasProperty(item, "movement_speed")
+        ? (item.movement_speed as number)
+        : undefined,
     icon: Clock,
     colorClass: "text-cyan-400",
-    condition: (item) => hasProperty(item, "movement_speed") && !!item.movement_speed,
+    condition: (item) =>
+      hasProperty(item, "movement_speed") && !!item.movement_speed,
   },
   movement_type: {
     id: "movement_type",
     label: "Move Type",
-    getValue: (item) => (hasProperty(item, "movement_type") ? (item.movement_type as string) : undefined),
+    getValue: (item) =>
+      hasProperty(item, "movement_type")
+        ? (item.movement_type as string)
+        : undefined,
     icon: Wind,
     colorClass: "text-sky-300",
-    condition: (item) => hasProperty(item, "movement_type") && !!item.movement_type,
+    condition: (item) =>
+      hasProperty(item, "movement_type") && !!item.movement_type,
   },
   // Spell Specific
   heal_amount_spell: {
@@ -146,7 +159,8 @@ export const STATS: Record<string, StatDefinition> = {
   population: {
     id: "population",
     label: "Pop",
-    getValue: (item) => (hasProperty(item, "population") ? (item.population as number) : undefined),
+    getValue: (item) =>
+      hasProperty(item, "population") ? (item.population as number) : undefined,
     icon: Users,
     colorClass: "text-purple-400",
     condition: (item) => hasProperty(item, "population") && !!item.population,
@@ -154,7 +168,8 @@ export const STATS: Record<string, StatDefinition> = {
   charges: {
     id: "charges",
     label: "Charges",
-    getValue: (item) => (hasProperty(item, "charges") ? (item.charges as number) : undefined),
+    getValue: (item) =>
+      hasProperty(item, "charges") ? (item.charges as number) : undefined,
     icon: Zap,
     colorClass: "text-status-warning-text",
     condition: (item) => hasProperty(item, "charges") && !!item.charges,
@@ -162,18 +177,24 @@ export const STATS: Record<string, StatDefinition> = {
   recharge_time: {
     id: "recharge_time",
     label: "Recharge",
-    getValue: (item) => (hasProperty(item, "recharge_time") ? `${item.recharge_time}s` : undefined),
+    getValue: (item) =>
+      hasProperty(item, "recharge_time") ? `${item.recharge_time}s` : undefined,
     icon: Clock,
     colorClass: "text-blue-300",
-    condition: (item) => hasProperty(item, "recharge_time") && !!item.recharge_time,
+    condition: (item) =>
+      hasProperty(item, "recharge_time") && !!item.recharge_time,
   },
   max_targets: {
     id: "max_targets",
     label: "Targets",
-    getValue: (item) => (isSpell(item) && (item as Spell & { max_targets?: number }).max_targets ? (item as Spell & { max_targets?: number }).max_targets : undefined),
+    getValue: (item) =>
+      isSpell(item) && (item as Spell & { max_targets?: number }).max_targets
+        ? (item as Spell & { max_targets?: number }).max_targets
+        : undefined,
     icon: Users,
     colorClass: "text-purple-400",
-    condition: (item) => isSpell(item) && !!(item as Spell & { max_targets?: number }).max_targets,
+    condition: (item) =>
+      isSpell(item) && !!(item as Spell & { max_targets?: number }).max_targets,
   },
 };
 
@@ -190,7 +211,7 @@ export const STAT_STRATEGIES: Record<EntityCategory, StatDefinition[]> = {
     STATS.movement_type,
     STATS.population,
     // STATS.charges, // HIDDEN_STATS_V2
-    STATS.recharge_time, 
+    STATS.recharge_time,
   ],
   Titan: [
     STATS.health,
@@ -213,21 +234,18 @@ export const STAT_STRATEGIES: Record<EntityCategory, StatDefinition[]> = {
     STATS.recharge_time,
     STATS.max_targets,
   ],
-  Spellcaster: [
-      STATS.health,
-      STATS.population,
-  ]
+  Spellcaster: [STATS.health, STATS.population],
 };
 
 export function getStatsStrategy(item: EntityDisplayItem): StatDefinition[] {
-    if ("spellcaster_id" in item) return STAT_STRATEGIES.Spellcaster;
-    
-    // Safer category check
-    if (hasProperty(item, "category")) {
-        const cat = item.category;
-        if (cat === "Titan") return STAT_STRATEGIES.Titan;
-        if (cat === "Spell") return STAT_STRATEGIES.Spell;
-    }
-    
-    return STAT_STRATEGIES.Unit; // Default to Unit (Creature/Building)
+  if ("spellcaster_id" in item) return STAT_STRATEGIES.Spellcaster;
+
+  // Safer category check
+  if (hasProperty(item, "category")) {
+    const cat = item.category;
+    if (cat === "Titan") return STAT_STRATEGIES.Titan;
+    if (cat === "Spell") return STAT_STRATEGIES.Spell;
+  }
+
+  return STAT_STRATEGIES.Unit; // Default to Unit (Creature/Building)
 }

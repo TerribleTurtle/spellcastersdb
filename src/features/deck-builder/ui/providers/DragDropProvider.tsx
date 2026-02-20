@@ -1,27 +1,33 @@
 import { ReactNode, memo } from "react";
+
 import { DndContext, pointerWithin } from "@dnd-kit/core";
+
 import { useDragDrop } from "@/features/deck-builder/hooks/domain/useDragDrop";
 import { useScrollLock } from "@/features/deck-builder/hooks/ui/useScrollLock";
-import { DragOverlayContainer } from "./DragOverlayContainer";
 import { useDeckStore } from "@/store/index";
+
+import { DragOverlayContainer } from "./DragOverlayContainer";
 
 interface DragDropProviderProps {
   children: ReactNode;
 }
 
-export const DragDropProvider = memo(function DragDropProvider({ children }: DragDropProviderProps) {
+export const DragDropProvider = memo(function DragDropProvider({
+  children,
+}: DragDropProviderProps) {
   // Only subscribe to handlers, NOT activeDragItem
-  const { sensors, handleDragStart, handleDragEnd, handleDragCancel } = useDragDrop();
-  
+  const { sensors, handleDragStart, handleDragEnd, handleDragCancel } =
+    useDragDrop();
+
   // Mobile Scroll Lock - needs to know if dragging, but we can get that from store if needed
   // Or better, let useScrollLock handle its own subscription if it doesn't already.
   // Checking useScrollLock implementation... it takes a boolean.
   // We can subscribe deeply here just for the lock, OR move lock to container.
   // For now, let's subscribe to *just* presence of drag item for lock, but ensure we don't re-render children.
-  // Actually, DndContext re-renders when props change. handleDragStart creates new closures? 
+  // Actually, DndContext re-renders when props change. handleDragStart creates new closures?
   // usage of useDragDrop suggests they are stable (useCallback).
-  
-  const isDragging = useDeckStore(state => !!state.activeDragItem);
+
+  const isDragging = useDeckStore((state) => !!state.activeDragItem);
   useScrollLock(isDragging);
 
   return (

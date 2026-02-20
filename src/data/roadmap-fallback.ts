@@ -38,8 +38,8 @@ export const FALLBACK_ISSUES: RoadmapIssue[] = [
     html_url: "https://github.com/TerribleTurtle/spellcastersdb/issues/22",
     state: "open",
     labels: [
-        { name: "investigation", color: "d73a4a" },
-        { name: "mechanics", color: "c2e0c6" },
+      { name: "investigation", color: "d73a4a" },
+      { name: "mechanics", color: "c2e0c6" },
     ],
   },
   {
@@ -49,8 +49,8 @@ export const FALLBACK_ISSUES: RoadmapIssue[] = [
     html_url: "https://github.com/TerribleTurtle/spellcastersdb/issues/21",
     state: "open",
     labels: [
-        { name: "investigation", color: "d73a4a" },
-        { name: "mechanics", color: "c2e0c6" },
+      { name: "investigation", color: "d73a4a" },
+      { name: "mechanics", color: "c2e0c6" },
     ],
   },
   {

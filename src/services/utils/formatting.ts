@@ -13,16 +13,16 @@ export function formatEntityName(id: string): string {
 }
 
 const PLURAL_TARGETS: Record<string, string> = {
-  "Creature": "Creatures",
-  "Building": "Buildings",
-  "Spellcaster": "Spellcasters",
-  "Lifestone": "Lifestones",
-  "Flying": "Flying",
-  "Hover": "Hovering",
-  "Ground": "Ground",
-  "Ally": "Allies",
-  "Enemy": "Enemies",
-  "All": "Everything",
+  Creature: "Creatures",
+  Building: "Buildings",
+  Spellcaster: "Spellcasters",
+  Lifestone: "Lifestones",
+  Flying: "Flying",
+  Hover: "Hovering",
+  Ground: "Ground",
+  Ally: "Allies",
+  Enemy: "Enemies",
+  All: "Everything",
 };
 
 export function formatTargetName(target: string): string {

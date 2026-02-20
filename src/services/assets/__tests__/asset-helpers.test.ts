@@ -1,13 +1,9 @@
-import { describe, it, expect } from "vitest";
-import { getCardAltText } from "../asset-helpers";
-import { 
-  Spellcaster, 
-  Unit, 
-  Spell, 
-  Titan, 
-  UnifiedEntity 
-} from "@/types/api";
+import { describe, expect, it } from "vitest";
+
+import { Spell, Spellcaster, Titan, UnifiedEntity, Unit } from "@/types/api";
 import { EntityCategory } from "@/types/enums";
+
+import { getCardAltText } from "../asset-helpers";
 
 describe("getCardAltText", () => {
   it("generates correct alt text for Spellcasters", () => {
@@ -19,9 +15,11 @@ describe("getCardAltText", () => {
       tags: [],
       health: 1000,
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      abilities: {} as any
+      abilities: {} as any,
     };
-    expect(getCardAltText(spellcaster)).toBe("Kael'thas - Enchanter Spellcaster");
+    expect(getCardAltText(spellcaster)).toBe(
+      "Kael'thas - Enchanter Spellcaster"
+    );
   });
 
   it("generates correct alt text for Titans", () => {
@@ -35,7 +33,7 @@ describe("getCardAltText", () => {
       tags: [],
       health: 5000,
       damage: 500,
-      movement_speed: 10
+      movement_speed: 10,
     };
     expect(getCardAltText(titan)).toBe("Molten Giant - Titan (Rank V)");
   });
@@ -49,9 +47,11 @@ describe("getCardAltText", () => {
       rank: "I",
       description: "",
       tags: [],
-      health: 100
+      health: 100,
     };
-    expect(getCardAltText(unit)).toBe("Skeleton Warrior - Rank I Necromancy Creature");
+    expect(getCardAltText(unit)).toBe(
+      "Skeleton Warrior - Rank I Necromancy Creature"
+    );
   });
 
   it("generates correct alt text for Units (Building)", () => {
@@ -63,9 +63,11 @@ describe("getCardAltText", () => {
       rank: "III",
       description: "",
       tags: [],
-      health: 500
+      health: 500,
     };
-    expect(getCardAltText(building)).toBe("Tesla Coil - Rank III Technomancy Building");
+    expect(getCardAltText(building)).toBe(
+      "Tesla Coil - Rank III Technomancy Building"
+    );
   });
 
   it("generates correct alt text for Spells", () => {
@@ -75,14 +77,14 @@ describe("getCardAltText", () => {
       category: EntityCategory.Spell,
       magic_school: "Elemental",
       description: "",
-      tags: []
+      tags: [],
     };
     expect(getCardAltText(spell)).toBe("Fireball - Elemental Spell");
   });
 
   it("fallbacks to name if metadata is missing", () => {
     const basic: Partial<UnifiedEntity> = {
-      name: "Unknown Entity"
+      name: "Unknown Entity",
     };
     expect(getCardAltText(basic as UnifiedEntity)).toBe("Unknown Entity");
   });

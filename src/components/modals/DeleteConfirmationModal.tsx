@@ -1,5 +1,6 @@
-import { AlertTriangle, Trash2 } from 'lucide-react';
-import { useFocusTrap } from '@/hooks/useFocusTrap';
+import { AlertTriangle, Trash2 } from "lucide-react";
+
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 export interface DeleteConfirmationModalProps {
   title?: string;
@@ -14,13 +15,13 @@ export function DeleteConfirmationModal({
   description = "Are you sure you want to delete this item? This action cannot be undone.",
   onConfirm,
   onCancel,
-  confirmText = "Delete"
+  confirmText = "Delete",
 }: DeleteConfirmationModalProps) {
   const modalRef = useFocusTrap(true, onCancel);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div 
+      <div
         ref={modalRef}
         className="bg-surface-card border border-border-default rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-4"
         role="dialog"
@@ -34,9 +35,7 @@ export function DeleteConfirmationModal({
           <h3 id="modal-title" className="text-lg font-bold text-text-primary">
             {title}
           </h3>
-          <p className="text-sm text-text-muted">
-            {description}
-          </p>
+          <p className="text-sm text-text-muted">{description}</p>
         </div>
 
         <div className="grid grid-cols-1 gap-2 pt-2">

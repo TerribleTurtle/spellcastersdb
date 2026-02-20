@@ -7,8 +7,8 @@
  * <PatchBadge type="Patch" variant="icon" />
  * <PatchBadge type="Hotfix" variant="full" />
  */
-
 import { FileDiff, Flame, Sparkles } from "lucide-react";
+
 import { cn } from "@/lib/utils";
 import type { PatchCategory } from "@/types/patch-history";
 
@@ -63,7 +63,11 @@ interface PatchBadgeProps {
   className?: string; // Allow custom sizing/positioning
 }
 
-export function PatchBadge({ type, variant = "icon", className }: PatchBadgeProps) {
+export function PatchBadge({
+  type,
+  variant = "icon",
+  className,
+}: PatchBadgeProps) {
   const config = PATCH_CONFIG[type];
   if (!config) return null;
 

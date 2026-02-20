@@ -1,33 +1,43 @@
-import { describe, it, expect } from "vitest";
-import { selectIsEmpty, selectHasChanges } from "../selectors";
-import { DeckBuilderState } from "../types";
-import { Deck, DeckSlot, SlotType } from "@/types/deck";
-import { Spellcaster, Unit } from "@/types/api";
+import { describe, expect, it } from "vitest";
 
-const createMockSlots = (): [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot] => {
-    return Array.from({ length: 5 }, (_, i) => ({
-        index: i,
-        unit: null,
-        allowedTypes: i === 4 ? [SlotType.Titan] : [SlotType.Unit]
-    })) as [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
+import { Spellcaster, Unit } from "@/types/api";
+import { Deck, DeckSlot, SlotType } from "@/types/deck";
+
+import { selectHasChanges, selectIsEmpty } from "../selectors";
+import { DeckBuilderState } from "../types";
+
+const createMockSlots = (): [
+  DeckSlot,
+  DeckSlot,
+  DeckSlot,
+  DeckSlot,
+  DeckSlot,
+] => {
+  return Array.from({ length: 5 }, (_, i) => ({
+    index: i,
+    unit: null,
+    allowedTypes: i === 4 ? [SlotType.Titan] : [SlotType.Unit],
+  })) as [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
 };
 
 // Mock Partial State
-const createMockState = (overrides: Partial<DeckBuilderState> = {}): DeckBuilderState => ({
+const createMockState = (
+  overrides: Partial<DeckBuilderState> = {}
+): DeckBuilderState => ({
   currentDeck: {
     id: undefined,
     name: "",
     spellcaster: null,
-    slots: createMockSlots(), 
+    slots: createMockSlots(),
   } as Deck,
   savedDecks: [],
   teamName: "",
   activeTeamId: null,
   activeSlot: null,
   teamDecks: [
-      { spellcaster: null, slots: createMockSlots(), name: "" },
-      { spellcaster: null, slots: createMockSlots(), name: "" },
-      { spellcaster: null, slots: createMockSlots(), name: "" }
+    { spellcaster: null, slots: createMockSlots(), name: "" },
+    { spellcaster: null, slots: createMockSlots(), name: "" },
+    { spellcaster: null, slots: createMockSlots(), name: "" },
   ] as unknown as [Deck, Deck, Deck],
   savedTeams: [],
   // Dummy implementations for actions
@@ -111,18 +121,17 @@ const createMockState = (overrides: Partial<DeckBuilderState> = {}): DeckBuilder
   openCommandCenter: () => {},
   closeCommandCenter: () => {},
 
-
   isImporting: false,
   setIsImporting: () => {},
 
-  deleteDecks: () => {}, 
-  checkDeckNameAvailable: () => true, 
+  deleteDecks: () => {},
+  checkDeckNameAvailable: () => true,
   renameSavedDeck: () => {},
   importDeckToLibrary: () => {},
-  clearSavedDecks: () => {}, 
-  pendingSwapCard: null, 
-  setPendingSwapCard: () => {}, 
-  
+  clearSavedDecks: () => {},
+  pendingSwapCard: null,
+  setPendingSwapCard: () => {},
+
   ...overrides,
 });
 
@@ -136,67 +145,80 @@ describe("DeckStore Selectors", () => {
     it("should return false if spellcaster is selected", () => {
       const state = createMockState({
         currentDeck: {
-           id: undefined, name: "",
-           spellcaster: { spellcaster_id: "1" } as unknown as Spellcaster,
-           slots: Array(8).fill({ unit: null })
-        } as Deck
+          id: undefined,
+          name: "",
+          spellcaster: { spellcaster_id: "1" } as unknown as Spellcaster,
+          slots: Array(8).fill({ unit: null }),
+        } as Deck,
       });
       expect(selectIsEmpty(state)).toBe(false);
     });
 
     it("should return false if a slot is filled", () => {
-         const slots = createMockSlots();
-         slots[0] = { ...slots[0], unit: { entity_id: "u1" } as unknown as Unit };
-         
-         const state = createMockState({
-            currentDeck: {
-               id: undefined, name: "",
-               spellcaster: null,
-               slots
-            } as Deck
-          });
-          expect(selectIsEmpty(state)).toBe(false);
+      const slots = createMockSlots();
+      slots[0] = { ...slots[0], unit: { entity_id: "u1" } as unknown as Unit };
+
+      const state = createMockState({
+        currentDeck: {
+          id: undefined,
+          name: "",
+          spellcaster: null,
+          slots,
+        } as Deck,
+      });
+      expect(selectIsEmpty(state)).toBe(false);
     });
   });
 
   describe("selectHasChanges", () => {
-      it("should return false if deck is empty and new (no ID)", () => {
-          const state = createMockState();
-          // Logic: if no ID, return !isEmpty. isEmpty is true, so returns false.
-          expect(selectHasChanges(state)).toBe(false);
-      });
+    it("should return false if deck is empty and new (no ID)", () => {
+      const state = createMockState();
+      // Logic: if no ID, return !isEmpty. isEmpty is true, so returns false.
+      expect(selectHasChanges(state)).toBe(false);
+    });
 
-      it("should return true if deck has content and is new (no ID)", () => {
-        const slots = createMockSlots();
-        slots[0] = { ...slots[0], unit: { entity_id: "u1" } as unknown as Unit };
-        const state = createMockState({
-            currentDeck: {
-               id: undefined, name: "",
-               spellcaster: null,
-               slots
-            } as Deck
-          });
-          expect(selectHasChanges(state)).toBe(true);
+    it("should return true if deck has content and is new (no ID)", () => {
+      const slots = createMockSlots();
+      slots[0] = { ...slots[0], unit: { entity_id: "u1" } as unknown as Unit };
+      const state = createMockState({
+        currentDeck: {
+          id: undefined,
+          name: "",
+          spellcaster: null,
+          slots,
+        } as Deck,
       });
+      expect(selectHasChanges(state)).toBe(true);
+    });
 
-      it("should return false if deck matches saved version", () => {
-           const deck: Deck = { id: "1", name: "My Deck", spellcaster: null, slots: createMockSlots() };
-           const state = createMockState({
-               currentDeck: { ...deck }, // copy
-               savedDecks: [deck]
-           });
-           expect(selectHasChanges(state)).toBe(false);
+    it("should return false if deck matches saved version", () => {
+      const deck: Deck = {
+        id: "1",
+        name: "My Deck",
+        spellcaster: null,
+        slots: createMockSlots(),
+      };
+      const state = createMockState({
+        currentDeck: { ...deck }, // copy
+        savedDecks: [deck],
       });
+      expect(selectHasChanges(state)).toBe(false);
+    });
 
-      it("should return true if deck differs from saved version", () => {
-        const originalDeck: Deck = { id: "1", name: "My Deck", spellcaster: null, slots: createMockSlots() };
-        const modifiedDeck: Deck = { ...originalDeck, name: "Modified Name" };
-        
-        const state = createMockState({
-            currentDeck: modifiedDeck,
-            savedDecks: [originalDeck]
-        });
-        expect(selectHasChanges(state)).toBe(true);
-   });
+    it("should return true if deck differs from saved version", () => {
+      const originalDeck: Deck = {
+        id: "1",
+        name: "My Deck",
+        spellcaster: null,
+        slots: createMockSlots(),
+      };
+      const modifiedDeck: Deck = { ...originalDeck, name: "Modified Name" };
+
+      const state = createMockState({
+        currentDeck: modifiedDeck,
+        savedDecks: [originalDeck],
+      });
+      expect(selectHasChanges(state)).toBe(true);
+    });
   });
 });

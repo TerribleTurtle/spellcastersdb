@@ -22,9 +22,7 @@ export const CONFIG = {
 
   // Local Development Overrides
   DEV: {
-    LOCAL_DATA_PATH:
-        process.env.LOCAL_DATA_PATH ||
-        process.env.LOCAL_API_PATH,
+    LOCAL_DATA_PATH: process.env.LOCAL_DATA_PATH || process.env.LOCAL_API_PATH,
   },
 
   // UI Constants

@@ -1,10 +1,9 @@
-
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
- * A hook to manage ephemeral state (like "Copied!" or "Saved!" messages) that automatically 
+ * A hook to manage ephemeral state (like "Copied!" or "Saved!" messages) that automatically
  * resets after a specified duration.
- * 
+ *
  * @param durationMs Duration in milliseconds before the state resets (default: 2000)
  * @returns [isActive, trigger, reset]
  */
@@ -14,7 +13,7 @@ export function useEphemeralState(durationMs: number = 2000) {
 
   const trigger = useCallback(() => {
     setIsActive(true);
-    
+
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -26,7 +25,7 @@ export function useEphemeralState(durationMs: number = 2000) {
 
   const reset = useCallback(() => {
     if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
+      clearTimeout(timeoutRef.current);
     }
     setIsActive(false);
   }, []);

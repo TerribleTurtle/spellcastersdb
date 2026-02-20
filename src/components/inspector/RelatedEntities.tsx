@@ -1,7 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
+
 import Link from "next/link";
+
 import { EntityImage } from "@/components/ui/EntityImage";
 import { UnifiedEntity } from "@/types/api";
 
@@ -12,10 +14,13 @@ interface RelatedEntitiesProps {
 
 /** Helper to get the detail link for any entity type */
 function getEntityLink(entity: UnifiedEntity): string {
-  if ("spellcaster_id" in entity) return `/spellcasters/${entity.spellcaster_id}`;
+  if ("spellcaster_id" in entity)
+    return `/spellcasters/${entity.spellcaster_id}`;
   if (entity.category === "Titan") return `/titans/${entity.entity_id}`;
-  if (entity.category === "Spell") return `/incantations/spells/${entity.entity_id}`;
-  if (entity.category === "Consumable") return `/consumables/${entity.entity_id}`;
+  if (entity.category === "Spell")
+    return `/incantations/spells/${entity.entity_id}`;
+  if (entity.category === "Consumable")
+    return `/consumables/${entity.entity_id}`;
   return `/incantations/units/${entity.entity_id}`;
 }
 
@@ -26,12 +31,12 @@ function spreadSample<T>(items: T[], count: number): T[] {
   return Array.from({ length: count }, (_, i) => items[Math.floor(i * step)]);
 }
 
-export function RelatedEntities({ entities, title = "Related" }: RelatedEntitiesProps) {
+export function RelatedEntities({
+  entities,
+  title = "Related",
+}: RelatedEntitiesProps) {
   // Pick up to 6 evenly spread items (deterministic, pure)
-  const sample = useMemo(
-    () => spreadSample(entities, 6),
-    [entities]
-  );
+  const sample = useMemo(() => spreadSample(entities, 6), [entities]);
 
   if (!sample || sample.length === 0) return null;
 

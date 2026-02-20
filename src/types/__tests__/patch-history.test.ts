@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
+
 import { PATCH_CATEGORY_LABELS } from "../../lib/patch-utils";
 
 describe("Patch History Utilities", () => {

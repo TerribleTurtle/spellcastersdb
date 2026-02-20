@@ -1,6 +1,6 @@
+import { describe, expect, it } from "vitest";
 
-import { describe, it, expect } from "vitest";
-import { UnitSchema, SpellSchema } from "./data-schemas";
+import { SpellSchema, UnitSchema } from "./data-schemas";
 
 describe("Schema Migration v1.2", () => {
   it("should validate a valid V1.2 Unit", () => {
@@ -15,14 +15,12 @@ describe("Schema Migration v1.2", () => {
       damage: 10,
       movement_speed: 5,
       mechanics: {
-        damage_modifiers: [
-            { target_type: "Flying", multiplier: 1.5 }
-        ]
-      }
+        damage_modifiers: [{ target_type: "Flying", multiplier: 1.5 }],
+      },
     };
     const result = UnitSchema.safeParse(validUnit);
     if (!result.success) {
-        console.error(result.error);
+      console.error(result.error);
     }
     expect(result.success).toBe(true);
   });
@@ -35,27 +33,26 @@ describe("Schema Migration v1.2", () => {
       magic_school: "Fire", // Note: existing schema might check enum literals, need to verify "Fire" vs "Elemental"
       // "Fire" isn't in the enum in schemas.ts (Elemental is). Let's use "Elemental".
       // Wait, source of truth says magic_school is Elemental, Wild, etc.
-    //   magic_school: "Elemental", 
-    //   description: "A test spell",
-    //   tags: ["Test"],
-    //   damage: 50,
-    //   mechanics: {
-    //     waves: 3
-    //   }
+      //   magic_school: "Elemental",
+      //   description: "A test spell",
+      //   tags: ["Test"],
+      //   damage: 50,
+      //   mechanics: {
+      //     waves: 3
+      //   }
     };
 
     // Correcting for the existing enum in schemas.ts
     const correctedSpell = {
-        ...validSpell,
-        magic_school: "Elemental",
-        description: "A test spell",
-        tags: ["Test"],
-        damage: 50,
-        mechanics: {
-            waves: 3
-        }
+      ...validSpell,
+      magic_school: "Elemental",
+      description: "A test spell",
+      tags: ["Test"],
+      damage: 50,
+      mechanics: {
+        waves: 3,
+      },
     };
-
 
     const result = SpellSchema.safeParse(correctedSpell);
     expect(result.success).toBe(true);
@@ -70,27 +67,27 @@ describe("Schema Migration v1.2", () => {
       description: "Bad",
       tags: [],
       health: 100,
-      mana: 50 // Unknown property -> Should fail now
+      mana: 50, // Unknown property -> Should fail now
     };
     const result = UnitSchema.safeParse(invalidUnit);
-    expect(result.success).toBe(false); 
+    expect(result.success).toBe(false);
   });
 
   it("should fail if Unit has Spell mechanics (waves)", () => {
-      const invalidUnit = {
-        entity_id: "test_unit_waves",
-        name: "Wave Unit",
-        category: "Creature",
-        magic_school: "Wild",
-        description: "Bad",
-        tags: [],
-        health: 100,
-        mechanics: {
-            waves: 3 // Illegal on Unit
-        }
-      };
-      const result = UnitSchema.safeParse(invalidUnit);
-      expect(result.success).toBe(false);
+    const invalidUnit = {
+      entity_id: "test_unit_waves",
+      name: "Wave Unit",
+      category: "Creature",
+      magic_school: "Wild",
+      description: "Bad",
+      tags: [],
+      health: 100,
+      mechanics: {
+        waves: 3, // Illegal on Unit
+      },
+    };
+    const result = UnitSchema.safeParse(invalidUnit);
+    expect(result.success).toBe(false);
   });
 
   it("should fail if Spell has Unit stats (health)", () => {
@@ -102,32 +99,32 @@ describe("Schema Migration v1.2", () => {
       description: "Bad",
       tags: [],
       damage: 50,
-      health: 100 // Illegal on Spell
+      health: 100, // Illegal on Spell
     };
     const result = SpellSchema.safeParse(invalidSpell);
     expect(result.success).toBe(false);
   });
 
   it("should accept array of strings for damage_modifiers target_type", () => {
-      const complexUnit = {
-        entity_id: "test_unit_complex",
-        name: "Complex Unit",
-        category: "Creature",
-        magic_school: "Wild",
-        description: "Complex",
-        tags: [],
-        health: 100,
-        mechanics: {
-            damage_modifiers: [
-                { 
-                    target_type: ["Flying", "Hover"], // Array!
-                    multiplier: 1.5 
-                }
-            ]
-        }
-      };
-      const result = UnitSchema.safeParse(complexUnit);
-      if (!result.success) console.error(result.error);
-      expect(result.success).toBe(true);
+    const complexUnit = {
+      entity_id: "test_unit_complex",
+      name: "Complex Unit",
+      category: "Creature",
+      magic_school: "Wild",
+      description: "Complex",
+      tags: [],
+      health: 100,
+      mechanics: {
+        damage_modifiers: [
+          {
+            target_type: ["Flying", "Hover"], // Array!
+            multiplier: 1.5,
+          },
+        ],
+      },
+    };
+    const result = UnitSchema.safeParse(complexUnit);
+    if (!result.success) console.error(result.error);
+    expect(result.success).toBe(true);
   });
 });

@@ -1,14 +1,14 @@
 import { StoredDeck, reconstructDeck } from "@/services/api/persistence";
-import { Spellcaster, Unit, Spell, Titan } from "@/types/api";
+import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 import { Deck } from "@/types/deck";
 
 interface DecodedTeam {
+  name?: string;
+  decks: ({
     name?: string;
-    decks: ({
-        name?: string;
-        spellcasterId: string | null;
-        slotIds: (string | null)[];
-    } | null)[];
+    spellcasterId: string | null;
+    slotIds: (string | null)[];
+  } | null)[];
 }
 
 export const ReconstructionService = {
@@ -28,7 +28,7 @@ export const ReconstructionService = {
         string | null,
         string | null,
         string | null,
-        string | null
+        string | null,
       ];
       while (slots.length < 5) slots.push(null);
       importedDecks.push({

@@ -1,7 +1,8 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import { useEffect } from "react";
+
+import { useTheme } from "next-themes";
 
 const THEME_COLORS: Record<string, string> = {
   dark: "#0f172a",

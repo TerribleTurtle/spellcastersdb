@@ -1,10 +1,10 @@
 "use client";
 
-
 import { Target } from "lucide-react";
-import { InitialAttack } from "@/types/api"; 
+
 import { cn } from "@/lib/utils";
 import { formatTargetName } from "@/services/utils/formatting";
+import { InitialAttack } from "@/types/api";
 
 interface InitialAttackDisplayProps {
   initialAttack?: InitialAttack;
@@ -12,7 +12,11 @@ interface InitialAttackDisplayProps {
   showDescriptions?: boolean;
 }
 
-export function InitialAttackDisplay({ initialAttack, isCompact, showDescriptions }: InitialAttackDisplayProps) {
+export function InitialAttackDisplay({
+  initialAttack,
+  isCompact,
+  showDescriptions,
+}: InitialAttackDisplayProps) {
   if (!initialAttack) return null;
 
   return (
@@ -26,7 +30,12 @@ export function InitialAttackDisplay({ initialAttack, isCompact, showDescription
     >
       <Target size={isCompact ? 13 : 16} className="text-orange-400 shrink-0" />
       <div className="flex flex-col">
-        <span className={cn("text-orange-200 font-bold leading-tight", isCompact ? "text-xs" : "text-sm")}>
+        <span
+          className={cn(
+            "text-orange-200 font-bold leading-tight",
+            isCompact ? "text-xs" : "text-sm"
+          )}
+        >
           +{initialAttack.damage_flat} Initial Dmg vs{" "}
           <span className="text-text-primary">
             {initialAttack.target_types.map(formatTargetName).join(", ")}

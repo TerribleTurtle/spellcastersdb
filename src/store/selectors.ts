@@ -1,65 +1,76 @@
-import { DeckBuilderState } from "./types";
 import { areDecksEqual } from "@/services/api/persistence";
+
+import { DeckBuilderState } from "./types";
 
 type SelectorState = Pick<DeckBuilderState, "currentDeck">;
 type ChangesState = Pick<DeckBuilderState, "currentDeck" | "savedDecks">;
 
 export const selectCurrentDeck = (state: SelectorState) => state.currentDeck;
-export const selectSavedDecks = (state: Pick<DeckBuilderState, "savedDecks">) => state.savedDecks;
+export const selectSavedDecks = (state: Pick<DeckBuilderState, "savedDecks">) =>
+  state.savedDecks;
 
 export const selectIsEmpty = (state: SelectorState) => {
-    const { currentDeck } = state;
-    return !currentDeck.spellcaster && currentDeck.slots.every((s) => !s.unit);
+  const { currentDeck } = state;
+  return !currentDeck.spellcaster && currentDeck.slots.every((s) => !s.unit);
 };
 
 export const selectHasChanges = (state: ChangesState) => {
-    const { currentDeck, savedDecks } = state;
-    const empty = selectIsEmpty(state);
+  const { currentDeck, savedDecks } = state;
+  const empty = selectIsEmpty(state);
 
-    if (!currentDeck.id) {
-        return !empty;
-    }
+  if (!currentDeck.id) {
+    return !empty;
+  }
 
-    const saved = savedDecks.find((d) => d.id === currentDeck.id);
-    if (!saved) return true;
+  const saved = savedDecks.find((d) => d.id === currentDeck.id);
+  if (!saved) return true;
 
-    return !areDecksEqual(currentDeck, saved);
+  return !areDecksEqual(currentDeck, saved);
 };
 
 export const selectIsSaved = (state: ChangesState) => {
-    const { currentDeck, savedDecks } = state;
-    if (!currentDeck.id) return false;
-    
-    // Must exist in saved decks AND be equal to it
-    const saved = savedDecks.find((d) => d.id === currentDeck.id);
-    if (!saved) return false;
-    
-    return areDecksEqual(currentDeck, saved);
+  const { currentDeck, savedDecks } = state;
+  if (!currentDeck.id) return false;
+
+  // Must exist in saved decks AND be equal to it
+  const saved = savedDecks.find((d) => d.id === currentDeck.id);
+  if (!saved) return false;
+
+  return areDecksEqual(currentDeck, saved);
 };
 
 export const selectIsExistingDeck = (state: ChangesState) => {
-    const { currentDeck, savedDecks } = state;
-    if (!currentDeck.id) return false;
-    return savedDecks.some((d) => d.id === currentDeck.id);
+  const { currentDeck, savedDecks } = state;
+  if (!currentDeck.id) return false;
+  return savedDecks.some((d) => d.id === currentDeck.id);
 };
 
-export const selectIsExistingTeam = (state: Pick<DeckBuilderState, "activeTeamId" | "savedTeams">) => {
-    const { activeTeamId, savedTeams } = state;
-    if (!activeTeamId) return false;
-    return savedTeams.some((t) => t.id === activeTeamId);
+export const selectIsExistingTeam = (
+  state: Pick<DeckBuilderState, "activeTeamId" | "savedTeams">
+) => {
+  const { activeTeamId, savedTeams } = state;
+  if (!activeTeamId) return false;
+  return savedTeams.some((t) => t.id === activeTeamId);
 };
 
-export const selectIsTeamSaved = (state: Pick<DeckBuilderState, "activeTeamId" | "savedTeams" | "teamName" | "teamDecks">) => {
-    const { activeTeamId, savedTeams, teamName, teamDecks } = state;
-    if (!activeTeamId || !teamDecks) return false;
+export const selectIsTeamSaved = (
+  state: Pick<
+    DeckBuilderState,
+    "activeTeamId" | "savedTeams" | "teamName" | "teamDecks"
+  >
+) => {
+  const { activeTeamId, savedTeams, teamName, teamDecks } = state;
+  if (!activeTeamId || !teamDecks) return false;
 
-    const saved = savedTeams.find((t) => t.id === activeTeamId);
-    if (!saved) return false;
+  const saved = savedTeams.find((t) => t.id === activeTeamId);
+  if (!saved) return false;
 
-    if (saved.name !== teamName) return false;
+  if (saved.name !== teamName) return false;
 
-    // Compare decks
-    if (saved.decks.length !== teamDecks.length) return false;
+  // Compare decks
+  if (saved.decks.length !== teamDecks.length) return false;
 
-    return teamDecks.every((deck, index) => areDecksEqual(deck, saved.decks[index]));
+  return teamDecks.every((deck, index) =>
+    areDecksEqual(deck, saved.decks[index])
+  );
 };

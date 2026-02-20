@@ -25,7 +25,7 @@ export function FilterSection({
 
   return (
     <div
-      className="space-y-3"
+      className="space-y-3 break-inside-avoid"
       data-testid={`filter-section-${title.toLowerCase().replace(/\s+/g, "-")}`}
     >
       <button

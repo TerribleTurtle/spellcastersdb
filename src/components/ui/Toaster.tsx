@@ -1,7 +1,8 @@
 "use client";
 
-import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from "lucide-react";
-import { useToastStore, ToastType } from "@/hooks/useToast";
+import { AlertCircle, AlertTriangle, CheckCircle, Info, X } from "lucide-react";
+
+import { ToastType, useToastStore } from "@/hooks/useToast";
 import { cn } from "@/lib/utils";
 
 const icons = {
@@ -14,9 +15,11 @@ const icons = {
 };
 
 const styles: Record<ToastType, string> = {
-  success: "bg-surface-main border-status-success-border text-status-success-text",
+  success:
+    "bg-surface-main border-status-success-border text-status-success-text",
   error: "bg-surface-main border-status-danger-border text-status-danger-text",
-  destructive: "bg-status-danger-muted border-status-danger-border text-status-danger-text",
+  destructive:
+    "bg-status-danger-muted border-status-danger-border text-status-danger-text",
   info: "bg-surface-main border-status-info-border text-status-info-text",
   default: "bg-surface-main border-border-default text-text-primary",
 };
@@ -25,7 +28,7 @@ export function Toaster() {
   const { toasts, dismissToast } = useToastStore();
 
   return (
-    <div className="fixed top-16 right-4 left-4 md:left-auto md:top-4 md:right-4 z-10000 flex flex-col gap-2 max-w-[420px] pointer-events-none">
+    <div className="fixed top-12 right-4 left-4 md:left-auto md:top-4 md:right-4 z-10000 flex flex-col gap-2 max-w-[420px] pointer-events-none">
       {toasts.map((toast) => (
         <div
           key={toast.id}

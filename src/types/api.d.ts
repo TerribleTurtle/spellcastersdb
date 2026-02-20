@@ -2,11 +2,9 @@
  * TypeScript type definitions for Spellcasters Community API
  * Based on V2 Schema
  */
-
 // ============================================================================
 // Enums & Literal Types
 // ============================================================================
-
 import { EntityCategory } from "./enums";
 
 export type Mode = "SOLO" | "TEAM";
@@ -85,16 +83,16 @@ export interface Feature {
 }
 
 export interface BonusDamage {
-    value: number;
-    unit: "flat" | "percent_max_hp" | "percent_current_hp";
-    target_type?: string;
-    target_types?: string[];
+  value: number;
+  unit: "flat" | "percent_max_hp" | "percent_current_hp";
+  target_type?: string;
+  target_types?: string[];
 }
 
 export interface InitialAttack {
-    damage_flat: number;
-    target_types: string[]; 
-    description: string;
+  damage_flat: number;
+  target_types: string[];
+  description: string;
 }
 
 export interface Stealth {
@@ -104,45 +102,46 @@ export interface Stealth {
 
 export interface Cleave {
   radius: number;
-  arc: number; 
+  arc: number;
   damage_dropoff: number;
 }
 
 export interface UnitMechanics {
-    pierce?: boolean;
-    stealth?: Stealth;
-    cleave?: Cleave | boolean;
-    aura?: Aura[];
-    damage_modifiers?: DamageModifier[];
-    damage_reduction?: DamageReduction[];
-    spawner?: Spawner[];
-    features?: Feature[];
-    capture_speed_modifier?: number;
-    initial_attack?: InitialAttack;
-    bonus_damage?: BonusDamage[];
+  pierce?: boolean;
+  stealth?: Stealth;
+  cleave?: Cleave | boolean;
+  aura?: Aura[];
+  damage_modifiers?: DamageModifier[];
+  damage_reduction?: DamageReduction[];
+  spawner?: Spawner[];
+  features?: Feature[];
+  capture_speed_modifier?: number;
+  initial_attack?: InitialAttack;
+  bonus_damage?: BonusDamage[];
 }
 
 export interface SpellMechanics {
-    pierce?: boolean;
-    stealth?: Stealth;
-    cleave?: Cleave | boolean;
-    waves?: number;
-    interval?: number;
-    stagger_modifier?: boolean; // V2 changed to boolean
-    capture_speed_modifier?: number;
-    aura?: Aura[];
-    spawner?: Spawner[];
-    damage_modifiers?: DamageModifier[];
-    damage_reduction?: DamageReduction[];
-    features?: Feature[];
-    bonus_damage?: BonusDamage[];
+  pierce?: boolean;
+  stealth?: Stealth;
+  cleave?: Cleave | boolean;
+  waves?: number;
+  interval?: number;
+  stagger_modifier?: boolean; // V2 changed to boolean
+  capture_speed_modifier?: number;
+  aura?: Aura[];
+  spawner?: Spawner[];
+  damage_modifiers?: DamageModifier[];
+  damage_reduction?: DamageReduction[];
+  features?: Feature[];
+  bonus_damage?: BonusDamage[];
 }
 
 // Loose mechanics for general use
-export type Mechanics = Omit<UnitMechanics, "damage_modifiers"> & Omit<SpellMechanics, "damage_modifiers"> & {
-  // Legacy support
-  damage_modifiers?: DamageModifier[] | string;
-};
+export type Mechanics = Omit<UnitMechanics, "damage_modifiers"> &
+  Omit<SpellMechanics, "damage_modifiers"> & {
+    // Legacy support
+    damage_modifiers?: DamageModifier[] | string;
+  };
 
 // ============================================================================
 // Core Entity Interfaces
@@ -166,7 +165,6 @@ export interface Incantation {
   mechanics?: UnitMechanics | SpellMechanics;
 }
 
-
 /**
  * Represents Creatures and Buildings
  */
@@ -184,7 +182,7 @@ export interface Unit extends Incantation {
   // Movement
   movement_speed?: number;
   movement_type?: MovementType;
-  
+
   // V2 Specific
   population?: number;
 }
@@ -201,7 +199,7 @@ export interface Spell extends Incantation {
   heal_amount?: number;
   cooldown?: number; // V2 Spells have cooldown
   range?: number;
-  
+
   // Legacy fields likely deprecated but kept safe
   duration?: number;
   radius?: number;
@@ -325,4 +323,10 @@ export interface AllDataResponse {
   _source?: string;
 }
 
-export type UnifiedEntity = Unit | Spell | Titan | Spellcaster | Consumable | Upgrade;
+export type UnifiedEntity =
+  | Unit
+  | Spell
+  | Titan
+  | Spellcaster
+  | Consumable
+  | Upgrade;

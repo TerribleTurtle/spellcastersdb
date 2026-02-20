@@ -1,8 +1,10 @@
-import { describe, it, expect } from "vitest";
-import { validateDeck } from "./deck-validation";
+import { describe, expect, it } from "vitest";
+
+import { Spellcaster, Titan, Unit } from "@/types/api";
 import { Deck, DeckSlot, SlotType } from "@/types/deck";
-import { Unit, Spellcaster, Titan } from "@/types/api";
 import { EntityCategory } from "@/types/enums";
+
+import { validateDeck } from "./deck-validation";
 
 // --- Type-Safe Mock Helpers ---
 
@@ -14,10 +16,10 @@ function mockSpellcaster(override: Partial<Spellcaster> = {}): Spellcaster {
     class: "Enchanter", // Valid literal
     tags: [],
     abilities: {
-        passive: [],
-        primary: { name: "P", description: "D" },
-        defense: { name: "D", description: "D" },
-        ultimate: { name: "U", description: "D" },
+      passive: [],
+      primary: { name: "P", description: "D" },
+      defense: { name: "D", description: "D" },
+      ultimate: { name: "U", description: "D" },
     },
     ...override,
   } as Spellcaster;
@@ -38,28 +40,48 @@ function mockUnit(override: Partial<Unit> = {}): Unit {
 }
 
 function mockTitan(override: Partial<Titan> = {}): Titan {
-    return {
-        entity_id: "t_1",
-        name: "Test Titan",
-        category: EntityCategory.Titan,
-        rank: "V",
-        health: 1000,
-        damage: 100,
-        movement_speed: 10,
-        tags: [],
-        magic_school: "Titan",
-        description: "Titan desc",
-        ...override
-    } as Titan;
+  return {
+    entity_id: "t_1",
+    name: "Test Titan",
+    category: EntityCategory.Titan,
+    rank: "V",
+    health: 1000,
+    damage: 100,
+    movement_speed: 10,
+    tags: [],
+    magic_school: "Titan",
+    description: "Titan desc",
+    ...override,
+  } as Titan;
 }
 
 function createDeck(override: Partial<Deck> = {}): Deck {
   const baseSlots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot] = [
-    { index: 0, unit: mockUnit({ name: "Creature 1", rank: "I" }), allowedTypes: [SlotType.Unit] },
-    { index: 1, unit: mockUnit({ name: "Creature 2", rank: "III" }), allowedTypes: [SlotType.Unit] },
-    { index: 2, unit: mockUnit({ name: "Creature 3", rank: "III" }), allowedTypes: [SlotType.Unit] },
-    { index: 3, unit: mockUnit({ name: "Creature 4", rank: "III" }), allowedTypes: [SlotType.Unit] },
-    { index: 4, unit: mockTitan({ name: "Titan 1" }), allowedTypes: [SlotType.Titan] },
+    {
+      index: 0,
+      unit: mockUnit({ name: "Creature 1", rank: "I" }),
+      allowedTypes: [SlotType.Unit],
+    },
+    {
+      index: 1,
+      unit: mockUnit({ name: "Creature 2", rank: "III" }),
+      allowedTypes: [SlotType.Unit],
+    },
+    {
+      index: 2,
+      unit: mockUnit({ name: "Creature 3", rank: "III" }),
+      allowedTypes: [SlotType.Unit],
+    },
+    {
+      index: 3,
+      unit: mockUnit({ name: "Creature 4", rank: "III" }),
+      allowedTypes: [SlotType.Unit],
+    },
+    {
+      index: 4,
+      unit: mockTitan({ name: "Titan 1" }),
+      allowedTypes: [SlotType.Titan],
+    },
   ];
 
   return {
@@ -90,69 +112,88 @@ describe("validateDeck Logic", () => {
 
   describe("Unit Count Rules", () => {
     it("should fail if less than 4 units are selected", () => {
-        const deck = createDeck();
-        // Clear a slot
-        deck.slots[0].unit = null; 
-        
-        const result = validateDeck(deck);
-        expect(result.isValid).toBe(false);
-        expect(result.errors).toContain("Must have 4 Units");
+      const deck = createDeck();
+      // Clear a slot
+      deck.slots[0].unit = null;
+
+      const result = validateDeck(deck);
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain("Must have 4 Units");
     });
 
     it("should fail if Titan is missing", () => {
-        const deck = createDeck();
-        deck.slots[4].unit = null;
+      const deck = createDeck();
+      deck.slots[4].unit = null;
 
-        const result = validateDeck(deck);
-        expect(result.isValid).toBe(false);
-        expect(result.errors).toContain("Must have 1 Titan");
+      const result = validateDeck(deck);
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain("Must have 1 Titan");
     });
   });
 
   describe("Rank & Category Rules", () => {
     it("should fail if NO Rank I or II Creature is present", () => {
-        const deck = createDeck();
-        // Upgrade the only Rank I unit to Rank III
-        deck.slots[0].unit = mockUnit({ name: "Big Unit", rank: "III" });
+      const deck = createDeck();
+      // Upgrade the only Rank I unit to Rank III
+      deck.slots[0].unit = mockUnit({ name: "Big Unit", rank: "III" });
 
-        const result = validateDeck(deck);
-        expect(result.isValid).toBe(false);
-        expect(result.errors).toContain("Must include at least 1 Rank I or II Creature");
+      const result = validateDeck(deck);
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain(
+        "Must include at least 1 Rank I or II Creature"
+      );
     });
 
     it("should fail if the only Rank I/II unit is a BUILDING (must be Creature)", () => {
-        const deck = createDeck();
-        // Slot 0 is Rank I, but change it to Building
-        deck.slots[0].unit = mockUnit({ name: "Tower", rank: "I", category: EntityCategory.Building });
+      const deck = createDeck();
+      // Slot 0 is Rank I, but change it to Building
+      deck.slots[0].unit = mockUnit({
+        name: "Tower",
+        rank: "I",
+        category: EntityCategory.Building,
+      });
 
-        const result = validateDeck(deck);
-        expect(result.isValid).toBe(false);
-        expect(result.errors).toContain("Must include at least 1 Rank I or II Creature");
+      const result = validateDeck(deck);
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain(
+        "Must include at least 1 Rank I or II Creature"
+      );
     });
 
     it("should fail if the only Rank I/II unit is a SPELL (must be Creature)", () => {
-        const deck = createDeck();
-        // Slot 0 is Rank I, but change it to Spell. Cast as unknown as Unit to simulate invalid type in slot
-        deck.slots[0].unit = { ...mockUnit({ name: "Zap", rank: "I" }), category: "Spell" } as unknown as Unit;
+      const deck = createDeck();
+      // Slot 0 is Rank I, but change it to Spell. Cast as unknown as Unit to simulate invalid type in slot
+      deck.slots[0].unit = {
+        ...mockUnit({ name: "Zap", rank: "I" }),
+        category: "Spell",
+      } as unknown as Unit;
 
-        const result = validateDeck(deck);
-        expect(result.isValid).toBe(false);
-        expect(result.errors).toContain("Must include at least 1 Rank I or II Creature");
+      const result = validateDeck(deck);
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain(
+        "Must include at least 1 Rank I or II Creature"
+      );
     });
 
     it("should fail if deck has 4 units but ZERO creatures (all Buildings/Spells)", () => {
-        const deck = createDeck();
-        
-        deck.slots.forEach((s, i) => {
-            if (i < 4 && s.unit) {
-                const rank = i === 0 ? "I" : "III";
-                s.unit = mockUnit({ name: `Building ${i}`, category: EntityCategory.Building, rank });
-            }
-        });
+      const deck = createDeck();
 
-        const result = validateDeck(deck);
-        expect(result.isValid).toBe(false);
-        expect(result.errors).toContain("Deck must include at least 1 Creature (cannot be all Spells/Buildings)");
+      deck.slots.forEach((s, i) => {
+        if (i < 4 && s.unit) {
+          const rank = i === 0 ? "I" : "III";
+          s.unit = mockUnit({
+            name: `Building ${i}`,
+            category: EntityCategory.Building,
+            rank,
+          });
+        }
+      });
+
+      const result = validateDeck(deck);
+      expect(result.isValid).toBe(false);
+      expect(result.errors).toContain(
+        "Deck must include at least 1 Creature (cannot be all Spells/Buildings)"
+      );
     });
   });
 });

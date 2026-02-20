@@ -1,10 +1,15 @@
-import { Team, DeckOperationResult, Deck } from "@/types/deck";
 import { TEAM_ERRORS } from "@/services/config/errors";
-import { UnifiedEntity, Spellcaster, Unit, Spell, Titan } from "@/types/api";
-import { DeckRules } from "@/services/rules/deck-rules";
-import { isUnit, isSpell, isTitan, isSpellcaster } from "@/services/validation/guards";
-import { cloneDeck } from "@/services/utils/deck-utils";
 import { applyDeckTransaction } from "@/services/domain/team/TeamUtils";
+import { DeckRules } from "@/services/rules/deck-rules";
+import { cloneDeck } from "@/services/utils/deck-utils";
+import {
+  isSpell,
+  isSpellcaster,
+  isTitan,
+  isUnit,
+} from "@/services/validation/guards";
+import { Spell, Spellcaster, Titan, UnifiedEntity, Unit } from "@/types/api";
+import { Deck, DeckOperationResult, Team } from "@/types/deck";
 
 export const TeamModification = {
   /**
@@ -17,15 +22,19 @@ export const TeamModification = {
     item: UnifiedEntity | null
   ): DeckOperationResult<Team["decks"]> {
     return applyDeckTransaction(teamDecks, deckIndex, (deck) => {
-        if (!item) {
-            return { success: true, data: DeckRules.clearSlot(deck, slotIndex) };
-        }
+      if (!item) {
+        return { success: true, data: DeckRules.clearSlot(deck, slotIndex) };
+      }
 
-        if (isUnit(item) || isSpell(item) || isTitan(item)) {
-            return DeckRules.setSlot(deck, slotIndex, item as Unit | Spell | Titan);
-        }
+      if (isUnit(item) || isSpell(item) || isTitan(item)) {
+        return DeckRules.setSlot(deck, slotIndex, item as Unit | Spell | Titan);
+      }
 
-        return { success: false, error: TEAM_ERRORS.INVALID_TYPE_SLOT, code: "INVALID_TYPE" };
+      return {
+        success: false,
+        error: TEAM_ERRORS.INVALID_TYPE_SLOT,
+        code: "INVALID_TYPE",
+      };
     });
   },
 
@@ -37,104 +46,113 @@ export const TeamModification = {
     deckIndex: number,
     slotIndex: number
   ): DeckOperationResult<Team["decks"]> {
-     return applyDeckTransaction(teamDecks, deckIndex, (deck) => ({
-         success: true,
-         data: DeckRules.clearSlot(deck, slotIndex)
-     }));
+    return applyDeckTransaction(teamDecks, deckIndex, (deck) => ({
+      success: true,
+      data: DeckRules.clearSlot(deck, slotIndex),
+    }));
   },
 
   /**
    * Sets the spellcaster for a specific deck.
    */
   setSpellcaster(
-      teamDecks: Team["decks"],
-      deckIndex: number,
-      item: Spellcaster
+    teamDecks: Team["decks"],
+    deckIndex: number,
+    item: Spellcaster
   ): DeckOperationResult<Team["decks"]> {
-      return applyDeckTransaction(teamDecks, deckIndex, (deck) => ({
-          success: true,
-          data: DeckRules.setSpellcaster(deck, item)
-      }));
+    return applyDeckTransaction(teamDecks, deckIndex, (deck) => ({
+      success: true,
+      data: DeckRules.setSpellcaster(deck, item),
+    }));
   },
 
   /**
    * Removes the spellcaster from a specific deck.
    */
   removeSpellcaster(
-      teamDecks: Team["decks"],
-      deckIndex: number
+    teamDecks: Team["decks"],
+    deckIndex: number
   ): DeckOperationResult<Team["decks"]> {
-      return applyDeckTransaction(teamDecks, deckIndex, (deck) => ({
-          success: true,
-          data: DeckRules.removeSpellcaster(deck)
-      }));
+    return applyDeckTransaction(teamDecks, deckIndex, (deck) => ({
+      success: true,
+      data: DeckRules.removeSpellcaster(deck),
+    }));
   },
 
   /**
    * Swaps two slots within the same deck.
    */
   swapSlots(
-      teamDecks: Team["decks"],
-      deckIndex: number,
-      indexA: number,
-      indexB: number
+    teamDecks: Team["decks"],
+    deckIndex: number,
+    indexA: number,
+    indexB: number
   ): DeckOperationResult<Team["decks"]> {
-      return applyDeckTransaction(teamDecks, deckIndex, (deck) => 
-          DeckRules.swapSlots(deck, indexA, indexB)
-      );
+    return applyDeckTransaction(teamDecks, deckIndex, (deck) =>
+      DeckRules.swapSlots(deck, indexA, indexB)
+    );
   },
 
   /**
    * Attempts to quick-add an item to a deck.
    */
   quickAdd(
-      teamDecks: Team["decks"],
-      deckIndex: number,
-      item: UnifiedEntity
+    teamDecks: Team["decks"],
+    deckIndex: number,
+    item: UnifiedEntity
   ): DeckOperationResult<Team["decks"]> {
-      return applyDeckTransaction(teamDecks, deckIndex, (deck) => {
-          // Type Guard for Quick Add (Unit | Spell | Titan | Spellcaster)
-          if (isUnit(item) || isSpell(item) || isTitan(item) || isSpellcaster(item)) {
-              return DeckRules.quickAdd(deck, item as Unit | Spell | Titan | Spellcaster);
-          }
-          return { success: false, error: TEAM_ERRORS.INVALID_TYPE_QUICK_ADD, code: "INVALID_TYPE" };
-      });
+    return applyDeckTransaction(teamDecks, deckIndex, (deck) => {
+      // Type Guard for Quick Add (Unit | Spell | Titan | Spellcaster)
+      if (
+        isUnit(item) ||
+        isSpell(item) ||
+        isTitan(item) ||
+        isSpellcaster(item)
+      ) {
+        return DeckRules.quickAdd(
+          deck,
+          item as Unit | Spell | Titan | Spellcaster
+        );
+      }
+      return {
+        success: false,
+        error: TEAM_ERRORS.INVALID_TYPE_QUICK_ADD,
+        code: "INVALID_TYPE",
+      };
+    });
   },
 
   /**
    * Imports a solo deck into a specific team slot.
    */
   importDeck(
-      teamDecks: Team["decks"],
-      slotIndex: number,
-      deck: Deck,
-      newId: string
+    teamDecks: Team["decks"],
+    slotIndex: number,
+    deck: Deck,
+    newId: string
   ): DeckOperationResult<Team["decks"]> {
-      const newDecks = [...teamDecks] as Team["decks"];
-      
-      if (slotIndex < 0 || slotIndex >= newDecks.length) {
-          return { success: false, error: TEAM_ERRORS.INVALID_SLOT_INDEX };
-      }
+    const newDecks = [...teamDecks] as Team["decks"];
 
-      newDecks[slotIndex] = {
-          ...cloneDeck(deck),
-          id: newId
-      };
+    if (slotIndex < 0 || slotIndex >= newDecks.length) {
+      return { success: false, error: TEAM_ERRORS.INVALID_SLOT_INDEX };
+    }
 
-      return { success: true, data: newDecks };
+    newDecks[slotIndex] = {
+      ...cloneDeck(deck),
+      id: newId,
+    };
+
+    return { success: true, data: newDecks };
   },
 
   /**
    * Prepares a team deck for export to the solo library.
    */
-  exportDeck(
-      deck: Deck,
-      newId: string
-  ): Deck {
-      return {
-          ...cloneDeck(deck),
-          id: newId,
-          name: `${deck.name} (From Team)`
-      };
-  }
+  exportDeck(deck: Deck, newId: string): Deck {
+    return {
+      ...cloneDeck(deck),
+      id: newId,
+      name: `${deck.name} (From Team)`,
+    };
+  },
 };

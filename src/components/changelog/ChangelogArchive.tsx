@@ -6,32 +6,39 @@
  * Renders every change as a flat row with search, sort, and multi-filter.
  * Reuses PatchBadge and Badge from the existing UI library.
  */
-
 import { useState } from "react";
+
 import Link from "next/link";
+
 import {
-  Search,
-  SlidersHorizontal,
-  X,
+  ArrowDown,
   ArrowDownAZ,
+  ArrowUp,
   ArrowUpAZ,
   ChevronDown,
   ChevronRight,
-  ExternalLink,
   Clock,
-  ArrowDown,
-  ArrowUp,
+  ExternalLink,
+  Search,
+  SlidersHorizontal,
+  X,
 } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
+import { type DiffData, DiffLine } from "@/components/ui/DiffLine";
+import { LocalDate } from "@/components/ui/LocalDate";
 import { PatchBadge } from "@/components/ui/PatchBadge";
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { PatchEntry, PatchCategory, ChangeType } from "@/types/patch-history";
+import type {
+  ChangeType,
+  PatchCategory,
+  PatchEntry,
+} from "@/types/patch-history";
 
 import {
-  useChangelogSearch,
   type FlatChangeRow,
   type SortMode,
+  useChangelogSearch,
 } from "./hooks/useChangelogSearch";
 
 // ============================================================================
@@ -57,9 +64,6 @@ function getEntityUrl(row: FlatChangeRow): string | null {
   return null;
 }
 
-import { LocalDate } from "@/components/ui/LocalDate";
-import { DiffLine, type DiffData } from "@/components/ui/DiffLine";
-
 const CHANGE_TYPE_CONFIG: Record<
   ChangeType,
   { label: string; bg: string; text: string; border: string }
@@ -84,7 +88,11 @@ const CHANGE_TYPE_CONFIG: Record<
   },
 };
 
-const SORT_OPTIONS: { value: SortMode; label: string; icon: typeof ArrowDown }[] = [
+const SORT_OPTIONS: {
+  value: SortMode;
+  label: string;
+  icon: typeof ArrowDown;
+}[] = [
   { value: "date-desc", label: "Newest First", icon: ArrowDown },
   { value: "date-asc", label: "Oldest First", icon: ArrowUp },
   { value: "name-asc", label: "Name A → Z", icon: ArrowDownAZ },
@@ -196,8 +204,8 @@ function ChangeRow({
         <div className="px-4 pb-3 pt-0 border-t border-border-subtle ml-6">
           <div className="pl-4 mt-2 space-y-1 border-l border-border-subtle">
             {row.diffs.slice(0, 8).map((d, i) => (
-                <DiffLine key={i} diff={d as DiffData} />
-             ))}
+              <DiffLine key={i} diff={d as DiffData} />
+            ))}
             {row.diffs.length > 8 && (
               <div className="text-[10px] text-text-faint italic">
                 +{row.diffs.length - 8} more changes...
@@ -421,7 +429,8 @@ export function ChangelogArchive({ patches }: ChangelogArchiveProps) {
           <strong className="text-text-primary">
             {Math.min(visibleCount, results.length)}
           </strong>{" "}
-          of <strong className="text-text-primary">{results.length}</strong> changes
+          of <strong className="text-text-primary">{results.length}</strong>{" "}
+          changes
           {results.length !== totalCount && (
             <span className="text-text-faint">
               {" "}

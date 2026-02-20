@@ -1,8 +1,12 @@
+import { v4 as uuidv4 } from "uuid";
 import { create } from "zustand";
 
-import { v4 as uuidv4 } from "uuid";
-
-export type ToastType = "success" | "error" | "info" | "destructive" | "default";
+export type ToastType =
+  | "success"
+  | "error"
+  | "info"
+  | "destructive"
+  | "default";
 
 export interface Toast {
   id: string;
