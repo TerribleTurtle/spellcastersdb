@@ -321,7 +321,7 @@ export function TeamEditorLayout({
           /* Main Content: Vault */
           <section
             aria-label="Unit Library"
-            className="flex-1 overflow-hidden relative transition-[padding] duration-300 ease-in-out xl:col-start-1 xl:row-start-2 xl:pb-0! xl:border-r xl:border-border-default"
+            className="flex-1 overflow-hidden relative transition-[padding] duration-150 ease-in-out xl:col-start-1 xl:row-start-2 xl:pb-0! xl:border-r xl:border-border-default"
             style={{ paddingBottom: `${footerHeight}px` }}
           >
             {pendingSwapCard && (

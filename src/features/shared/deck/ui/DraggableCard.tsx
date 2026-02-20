@@ -147,7 +147,7 @@ export const DraggableCard = React.memo(function DraggableCard({
 
         {/* Quick Add Badge - Top Left */}
         <div
-          className="absolute top-1 left-1 bg-surface-overlay p-1.5 lg:p-1 rounded text-brand-accent shadow-md border border-border-default hover:bg-brand-primary hover:text-text-primary transition-colors z-20 pointer-events-auto"
+          className="absolute top-1 left-1 bg-surface-overlay p-1 rounded text-brand-accent shadow-md border border-border-default hover:bg-brand-primary hover:text-text-primary transition-colors z-20 pointer-events-auto"
           onClick={handleQuickAdd}
           onPointerDown={(e) => e.stopPropagation()}
           onTouchStart={(e) => e.stopPropagation()}
@@ -155,7 +155,7 @@ export const DraggableCard = React.memo(function DraggableCard({
           aria-label="Quick Add"
         >
           <Plus
-            className="w-5 h-5 lg:w-5 lg:h-5 2xl:w-6 2xl:h-6"
+            className="w-4 h-4 lg:w-4 lg:h-4 2xl:w-5 2xl:h-5"
             strokeWidth={3}
           />
         </div>

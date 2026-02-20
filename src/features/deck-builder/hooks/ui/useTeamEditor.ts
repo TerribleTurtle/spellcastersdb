@@ -13,7 +13,7 @@ import { useDeckStore } from "@/store/index";
 import { selectIsExistingTeam, selectIsTeamSaved } from "@/store/selectors";
 import { Deck } from "@/types/deck";
 
-const TRAY_EXPANDED_HEIGHT = 180;
+const TRAY_EXPANDED_HEIGHT = 140;
 const TRAY_COLLAPSED_HEIGHT = 32;
 
 export function useTeamEditor() {

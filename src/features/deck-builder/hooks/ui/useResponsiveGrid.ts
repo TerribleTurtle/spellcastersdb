@@ -6,9 +6,9 @@ import { useCallback, useRef, useState } from "react";
  * window.innerWidth because the browser panel is constrained by the
  * site shell, sidebar, and inspector panel.
  */
-const MIN_CARD_WIDTH = 90; // px — minimum width before reducing columns
+const MIN_CARD_WIDTH = 80; // px — minimum width before reducing columns
 const MAX_COLUMNS = 8;
-const MIN_COLUMNS = 2;
+const MIN_COLUMNS = 4;
 
 export function useResponsiveGrid(defaultColumns = 4) {
   const [columns, setColumns] = useState(defaultColumns);

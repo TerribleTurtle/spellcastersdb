@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.22] - 2026-02-19
+
+### Changed
+
+- **Mobile Grid**: Reduced horizontal padding from `px-4` to `px-2` to allow for wider cards on small screens.
+- **Card Sizing**: Adjusted aspect ratio from 4:5 to 3:4 for better fit.
+- **UI Polish**:
+  - Enlarged "Quick Add" plus buttons (14px → 20px) for better touch targets.
+  - Tightened bottom drawer header height (`180px` → `140px` and `padding-bottom` fix) to eliminate dead space.
+  - Reduced Section Header heights in Unit Browser to `32px` for a more compact view.
+
 ## [1.0.21] - 2026-02-19
 
 ### Fixed
