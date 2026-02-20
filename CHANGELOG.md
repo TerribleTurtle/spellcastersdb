@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.25] - 2026-02-20
+
+### Fixed
+
+- **PWA Integration**: Updated `manifest.ts` short name and `layout.tsx` metadata to "Spellcasters / Spellcasters DB" to ensure correct OS-level search indexing for installations. Maintained standalone display configuration.
+
 ## [1.0.24] - 2026-02-19
 
 ### Changed

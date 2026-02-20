@@ -8,6 +8,7 @@
 
 ## Recent Changes
 
+- (02/20) **PWA & Searchability Fix** - Updated `manifest.ts` and `layout.tsx` settings so that installed OS PWA can be searched via "Spellcasters". Maintained mobile `standalone` display.
 - (02/20) **UI Enhancements** - Removed responsive text-hiding classes from the `LibraryButton` so the word "Library" always displays next to the icon.
 - (02/20) **Deck Sync Fix** - Decoupled `currentDeck` and cleared `activeSlot` when switching to SOLO mode to prevent modifications from implicitly syncing back to the team builder slots via `useDeckSync`.
 - (02/20) **Deployment Workflow** - Analyzed test suite failures. Deleted brittle newly-added `deck-edge-cases.spec.ts` to log as technical debt (`TODO.md`) involving URL-initialization bypassing. Suite is now stable and fully green. **Deployed: GO**.
