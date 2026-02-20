@@ -9,8 +9,34 @@ Sentry.init({
   // Keep traces extremely low to avoid quota usage
   tracesSampleRate: 0.01,
 
-  // Allow Sentry to collect standard request basic data
-  sendDefaultPii: true,
+  // Do not send default PII
+  sendDefaultPii: false,
 
   debug: false,
+
+  beforeSend(event) {
+    if (event.user) {
+      delete event.user.ip_address;
+      delete event.user.email;
+      delete event.user.username;
+      if (Object.keys(event.user).length === 0) {
+        delete event.user;
+      }
+    }
+
+    if (event.extra) {
+      for (const key of Object.keys(event.extra)) {
+        const lowerKey = key.toLowerCase();
+        if (
+          lowerKey.includes("password") ||
+          lowerKey.includes("token") ||
+          lowerKey.includes("secret")
+        ) {
+          event.extra[key] = "[Filtered]";
+        }
+      }
+    }
+
+    return event;
+  },
 });

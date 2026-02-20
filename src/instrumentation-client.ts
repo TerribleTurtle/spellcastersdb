@@ -13,10 +13,10 @@ Sentry.init({
   replaysOnErrorSampleRate: 0,
   replaysSessionSampleRate: 0,
 
-  // Allow Sentry to collect standard request basic data so events aren't dropped as invalid
-  sendDefaultPii: true,
+  // Do not send default PII
+  sendDefaultPii: false,
 
-  debug: true,
+  debug: false,
 
   // Filter out noise that isn't actionable
   ignoreErrors: [
@@ -30,4 +30,32 @@ Sentry.init({
     "ResizeObserver loop width and height error",
     "ResizeObserver loop limit exceeded",
   ],
+
+  beforeSend(event) {
+    // Strip user objects if they accidentally leak
+    if (event.user) {
+      delete event.user.ip_address;
+      delete event.user.email;
+      delete event.user.username;
+      if (Object.keys(event.user).length === 0) {
+        delete event.user;
+      }
+    }
+
+    // Strip tokens or passwords from extra data
+    if (event.extra) {
+      for (const key of Object.keys(event.extra)) {
+        const lowerKey = key.toLowerCase();
+        if (
+          lowerKey.includes("password") ||
+          lowerKey.includes("token") ||
+          lowerKey.includes("secret")
+        ) {
+          event.extra[key] = "[Filtered]";
+        }
+      }
+    }
+
+    return event;
+  },
 });
