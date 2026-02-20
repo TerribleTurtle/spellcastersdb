@@ -196,20 +196,24 @@ export function EntityShowcase({
                   {movementType}
                 </span>
               )}
-              {"population" in item &&
-                (item as Unit).population != null &&
-                (item as Unit).population > 0 && (
+              {(() => {
+                const pop =
+                  "population" in item ? (item as Unit).population : undefined;
+                return pop != null && pop > 0 ? (
                   <span className="bg-surface-card border border-border-default text-text-secondary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
-                    Pop: {(item as Unit).population}
+                    Pop: {pop}
                   </span>
-                )}
-              {"cooldown" in item &&
-                (item as Spell).cooldown != null &&
-                (item as Spell).cooldown > 0 && (
+                ) : null;
+              })()}
+              {(() => {
+                const cd =
+                  "cooldown" in item ? (item as Spell).cooldown : undefined;
+                return cd != null && cd > 0 ? (
                   <span className="bg-surface-card border border-border-default text-text-secondary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
-                    CD: {(item as Spell).cooldown}s
+                    CD: {cd}s
                   </span>
-                )}
+                ) : null;
+              })()}
             </div>
 
             {/* Tags */}
