@@ -20,11 +20,16 @@ export default function OfflinePage() {
         </p>
 
         <button
-          onClick={() => window.location.reload()}
-          className="bg-brand-primary/20 hover:bg-brand-primary/30 text-brand-primary border border-brand-primary/50 transition-colors px-6 py-2 rounded-lg font-medium tracking-wide w-full"
+          id="offline-retry-button"
+          className="bg-brand-primary/20 hover:bg-brand-primary/30 text-brand-primary border border-brand-primary/50 transition-colors px-6 py-2 rounded-lg font-medium tracking-wide w-full relative z-10"
         >
           Try Again
         </button>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.getElementById('offline-retry-button').addEventListener('click', function() { window.location.reload(); });`,
+          }}
+        />
       </div>
     </div>
   );
