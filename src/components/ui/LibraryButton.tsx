@@ -4,15 +4,9 @@ import { Library } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 
-interface LibraryButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  collapsed?: boolean;
-}
+type LibraryButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-export function LibraryButton({
-  className,
-  collapsed,
-  ...props
-}: LibraryButtonProps) {
+export function LibraryButton({ className, ...props }: LibraryButtonProps) {
   return (
     <button
       type="button"

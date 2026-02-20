@@ -10,6 +10,13 @@ test.describe("Team Builder DND", () => {
     await page.goto("/deck-builder");
     await expect(page.getByTestId("deck-builder-desktop-header")).toBeVisible();
 
+    // Dismiss the Welcome Modal if it appears (shown on first visit)
+    const dismissButton = page.getByRole("button", { name: /begin casting/i });
+    if (await dismissButton.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await dismissButton.click();
+      await expect(dismissButton).not.toBeVisible();
+    }
+
     // Switch to Team Mode
     const teamButton = page.getByRole("button", { name: "Team" }).first();
     await expect(teamButton).toBeVisible();

@@ -143,4 +143,9 @@ export const createUISlice: StateCreator<DeckBuilderState, [], [], UIState> = (
         classes: [],
       },
     }),
+
+  // Welcome Modal State
+  hasSeenDeckBuilderWelcome: false,
+  setHasSeenDeckBuilderWelcome: (seen: boolean) =>
+    set({ hasSeenDeckBuilderWelcome: seen }),
 });

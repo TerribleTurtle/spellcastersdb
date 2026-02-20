@@ -13,6 +13,7 @@ import { useDeckStore } from "@/store/index";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 import { Deck } from "@/types/deck";
 
+import { DeckBuilderWelcomeModal } from "../overlays/DeckBuilderWelcomeModal";
 // import { SoloBuilderView } from "@/features/deck-builder/components/SoloBuilderView";
 // import { TeamBuilderView } from "@/features/team-builder/TeamBuilderView";
 import { DragDropErrorBoundary } from "../providers/DragDropErrorBoundary";
@@ -88,6 +89,7 @@ export function DeckBuilderView({ units, spellcasters }: DeckBuilderViewProps) {
           {/* HoverInspector disabled/removed per new layout */}
           {/* <HoverInspector /> */}
           {commandCenterOpen && <CommandCenterModal />}
+          <DeckBuilderWelcomeModal />
         </DragDropProvider>
       </DragDropErrorBoundary>
     </div>

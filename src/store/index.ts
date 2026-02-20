@@ -38,6 +38,7 @@ export const useDeckStore = create<DeckBuilderState>()(
           // Session State (read by useAppHydration)
           mode: state.mode,
           viewSummary: state.viewSummary,
+          hasSeenDeckBuilderWelcome: state.hasSeenDeckBuilderWelcome,
         }),
       }
     )

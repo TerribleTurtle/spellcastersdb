@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useDeckStore } from "@/store/index";
 
 interface CommandCenterHeaderProps {
   mode: string;
@@ -35,6 +36,10 @@ export function CommandCenterHeader({
   onToggleSelectionMode,
   onClose,
 }: CommandCenterHeaderProps) {
+  const setHasSeenDeckBuilderWelcome = useDeckStore(
+    (state) => state.setHasSeenDeckBuilderWelcome
+  );
+
   return (
     <div className="flex items-center justify-between p-4 border-b border-border-default bg-surface-deck/50 shrink-0">
       <div className="flex items-center gap-3">
@@ -57,6 +62,18 @@ export function CommandCenterHeader({
       </div>
 
       <div className="flex items-center gap-3">
+        {/* Intro Button */}
+        <button
+          onClick={() => {
+            onClose();
+            setHasSeenDeckBuilderWelcome(false);
+          }}
+          className="mr-1 px-3 py-1.5 text-xs font-bold text-text-muted hover:text-text-primary hover:bg-surface-hover rounded-md transition-colors uppercase"
+          title="Introduction"
+        >
+          Intro
+        </button>
+
         {/* Backup / Restore / Clear Actions (Only visible when NOT importing single deck) */}
         {!isImporting && !selectionMode && (
           <div className="flex items-center gap-1 mr-2 border-r border-border-default pr-2">

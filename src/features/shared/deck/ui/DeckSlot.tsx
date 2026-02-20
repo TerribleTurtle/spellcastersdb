@@ -1,5 +1,6 @@
 import { useDndContext, useDraggable, useDroppable } from "@dnd-kit/core";
-import { Shield } from "lucide-react";
+import { Shield, X } from "lucide-react";
+import { useShallow } from "zustand/react/shallow";
 
 import { GameImage } from "@/components/ui/GameImage";
 import { RankBadge } from "@/components/ui/rank-badge";
@@ -9,6 +10,7 @@ import {
   getCardImageUrl,
 } from "@/services/assets/asset-helpers";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
+import { useDeckStore } from "@/store/index";
 import { Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
 import { type DeckSlot, SlotType } from "@/types/deck";
 import { DragData, DraggableEntity, DropData } from "@/types/dnd";
@@ -39,6 +41,31 @@ export function DeckSlot({
     ? `slot-drag-${deckId}-${slot.index}`
     : `slot-drag-${slot.index}`;
   const draggableId = idSuffix ? `${baseDragId}-${idSuffix}` : baseDragId;
+
+  const { mode, isReadOnly, clearSlot, clearTeamSlot, teamDecks } =
+    useDeckStore(
+      useShallow((state) => ({
+        mode: state.mode,
+        isReadOnly: state.isReadOnly,
+        clearSlot: state.clearSlot,
+        clearTeamSlot: state.clearTeamSlot,
+        teamDecks: state.teamDecks,
+      }))
+    );
+
+  const handleRemove = (e: React.MouseEvent | React.PointerEvent) => {
+    e.stopPropagation();
+    if (isReadOnly) return;
+
+    if (mode === "TEAM" && deckId) {
+      const deckIndex = teamDecks.findIndex((d) => d.id === deckId);
+      if (deckIndex !== -1) {
+        clearTeamSlot(deckIndex, slot.index);
+      }
+    } else {
+      clearSlot(slot.index);
+    }
+  };
 
   const dropData: DropData = {
     type: "DECK_SLOT",
@@ -159,6 +186,22 @@ export function DeckSlot({
         }
       }}
     >
+      {/* Remove Button */}
+      {slot.unit && !isReadOnly && !isDragging && (
+        <button
+          type="button"
+          className="absolute -top-1.5 -right-1.5 z-60 p-1 md:p-1 bg-surface-main hover:bg-status-danger hover:text-white rounded-full text-text-muted transition-colors shadow-md ring-1 ring-border-default/50 hover:ring-status-danger cursor-pointer pointer-events-auto"
+          onPointerDown={handleRemove}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          title="Remove from deck"
+          data-testid={`remove-slot-${slot.index}`}
+        >
+          <X size={12} className="w-3 h-3 md:w-3.5 md:h-3.5" />
+        </button>
+      )}
+
       {/* Draggable Wrapper */}
       {slot.unit && (
         <div

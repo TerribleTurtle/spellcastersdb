@@ -20,8 +20,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const startTime = Date.now();
-
     // 1. Revalidate Data Cache (This updates all pages that use fetch with 'game-data' tag)
     // This is much more robust than guessing paths.
     // 'max' is required by this Next.js version (16.1.6) for revalidateTag.
