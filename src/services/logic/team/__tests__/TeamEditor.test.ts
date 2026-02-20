@@ -2,9 +2,8 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import { INITIAL_DECK } from "@/services/api/persistence";
 import { cloneDeck } from "@/services/utils/deck-utils";
-import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
+import { Spellcaster, Unit } from "@/types/api";
 import { Team } from "@/types/deck";
-import { SlotType } from "@/types/deck";
 import { EntityCategory } from "@/types/enums";
 
 import { TeamEditor } from "../TeamEditor";
@@ -38,19 +37,6 @@ const MockSpellcaster: Spellcaster = {
     defense: { name: "B", description: "D" },
     ultimate: { name: "C", description: "D" },
   },
-};
-
-const MockTitan: Titan = {
-  entity_id: "titan_1",
-  name: "Titan",
-  category: EntityCategory.Titan,
-  rank: "V",
-  magic_school: "Titan",
-  tags: [],
-  description: "desc",
-  health: 1000,
-  damage: 100,
-  movement_speed: 10,
 };
 
 describe("TeamEditor", () => {

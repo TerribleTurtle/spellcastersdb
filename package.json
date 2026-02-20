@@ -1,11 +1,11 @@
 {
   "name": "spellcastersdb",
-  "version": "1.0.20",
+  "version": "1.0.23",
   "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "check-data": "node scripts/test-fetch.mjs",
     "type-check": "tsc --noEmit",
@@ -14,6 +14,8 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "preflight": "npm run type-check && npm run format:check && npm run lint && npm test && npm run deps:validate",
     "deps:validate": "depcruise --validate .dependency-cruiser.cjs src --ts-config tsconfig.json",
     "new:component": "tsx scripts/new-component.ts",
@@ -30,6 +32,7 @@
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-dropdown-menu": "^2.1.16",
     "@radix-ui/react-slot": "^1.2.4",
+    "@serwist/next": "^9.5.6",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.36.2",
     "@vercel/analytics": "^1.6.1",
@@ -48,6 +51,7 @@
     "react-dom": "^19.2.4",
     "react-virtuoso": "^4.18.1",
     "server-only": "^0.0.1",
+    "serwist": "^9.5.6",
     "sharp": "^0.34.5",
     "tailwind-merge": "^3.4.0",
     "uuid": "^13.0.0",
@@ -55,6 +59,7 @@
     "zustand": "^5.0.11"
   },
   "devDependencies": {
+    "@playwright/test": "^1.58.2",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",

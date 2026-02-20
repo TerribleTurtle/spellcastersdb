@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.23] - 2026-02-19
+
+### Added
+
+- **PWA Support (Phases 1 & 2)**:
+  - **Installable App**: Added `manifest.ts` (standalone display, theme colors, app icons) so the site can be installed on mobile devices and desktops.
+  - **Service Worker**: Integrated `@serwist/next` with a typed `sw.ts` configuration providing:
+    - Automatic precaching of Next.js build assets.
+    - `StaleWhileRevalidate` caching for the GitHub Pages JSON API (`sc-api-data`).
+    - `CacheFirst` caching for card images (`sc-card-images`).
+    - Offline fallback route (`/~offline`) with a themed "You are offline" page.
+  - **Client UX (Phase 3)**: SSR-safe `<OfflineIndicator />` client component for native online/offline banner notifications.
+  - **Security**: Added `worker-src 'self'` and `manifest-src 'self'` to Content Security Policy.
+  - **Icons**: Generated 192×192 and 512×512 PNG app icons from `logo.svg`.
+  - **TypeScript**: Added `webworker` lib and `@serwist/next/typings` for full type safety in the service worker context.
+
 ## [1.0.22] - 2026-02-19
 
 ### Changed

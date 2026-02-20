@@ -19,7 +19,8 @@
 - **Live Updates**: Powered by a static JSON API that allows for rapid balance updates without full site rebuilds.
 - **Roadmap**: A live, interactive issue tracker connected to GitHub, featuring search and filtering.
 - **Accessibility (WCAG 2.1 AA)**: Skip navigation, focus-trapped modals, ARIA labels/states on all interactive controls, and `prefers-reduced-motion` support.
-- **Theming**: 6 custom themes (Dark, Light, Arcane, Inferno, Frost, Retro) plus a secret Rainbow mode (Konami Code).
+- **PWA**: Installable as a native-like app on mobile and desktop. Service worker provides offline caching for pages, API data, and card images.
+- **Theming**: 7 custom themes (Dark, Light, Arcane, Inferno, Frost, Retro, GlitchWitch) plus a secret Rainbow mode (Konami Code).
 - **Design System**: A dedicated `/design-system` route for previewing tokens, components, and building custom themes with live preview and export/import capabilities.
 - **SEO Optimized**: Fully crawlable with dynamic sitemaps, structured data (JSON-LD), and semantic HTML for maximum discoverability.
 - **Legal Compliance**: Dedicated `/privacy` and `/terms` pages with transparent data practices.
@@ -47,7 +48,8 @@
 - **Infrastructure Hardening**:
   - **Architecture Enforcement**: `dependency-cruiser` validates import boundaries (`components/ui` ↛ `features`, `features` ↛ `app`) on every preflight run.
   - **Observability**: A `MonitoringService` (`src/services/monitoring/`) abstracts error reporting. Default `ConsoleAdapter` outputs structured logs; swap in a Sentry/Axiom adapter with zero app-code changes.
-  - **E2E Readiness**: Standardized `data-testid` attributes on all shell, database, and deck builder components. See [E2E Conventions](docs/E2E_CONVENTIONS.md) for naming rules.
+  - **PWA Engine**: `@serwist/next` provides automatic precaching, runtime caching (`StaleWhileRevalidate` for API data, `CacheFirst` for images), and a `/~offline` fallback route.
+  - **E2E Readiness**: Standardized `data-testid` attributes on all shell, database, and deck builder components. Full Playwright E2E suite (16 tests) covering navigation, theming, drag-and-drop, team builder, and deck state management across Desktop Chromium and Mobile Safari. See [E2E Conventions](docs/E2E_CONVENTIONS.md) for naming rules.
 
 ## Getting Started
 
@@ -90,6 +92,8 @@ For detailed setup instructions, including **Local API Development**, please see
 | `npm run new:component`   | Scaffolds a new React component                          |
 | `npm run new:route`       | Scaffolds a new App Router page                          |
 | `npm run script:validate` | Validates production data integrity                      |
+| `npm run test:e2e`        | Runs the E2E test suite (Playwright)                     |
+| `npm run test:e2e:ui`     | Opens the Playwright UI for interactive debugging        |
 
 ## Documentation
 

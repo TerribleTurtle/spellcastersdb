@@ -28,11 +28,10 @@ module.exports = {
     /* 1. No Circular Dependencies */
     {
       name: "no-circular",
-      severity: "warn",
+      severity: "error",
       comment:
         "This dependency is part of a circular relationship. You might want to revise " +
-        "your solution (i.e. use dependency injection, split modules). " +
-        "Known: features/shared/inspector has pre-existing cycles (tracked for future cleanup).",
+        "your solution (i.e. use dependency injection, split modules).",
       from: {},
       to: {
         circular: true,
