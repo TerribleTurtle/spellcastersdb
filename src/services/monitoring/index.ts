@@ -3,15 +3,19 @@ import {
   MonitoringAdapter,
   MonitoringContext,
 } from "./ConsoleAdapter";
+import { SentryAdapter } from "./SentryAdapter";
 
 class MonitoringService {
   private static instance: MonitoringService;
   private adapter: MonitoringAdapter;
 
   private constructor() {
-    // Default to ConsoleAdapter.
-    // In the future, we can swap this based on env vars (e.g. if (process.env.SENTRY_DSN) ...)
-    this.adapter = new ConsoleAdapter();
+    // If Sentry is configured, route all logs there instead of Console
+    if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+      this.adapter = new SentryAdapter();
+    } else {
+      this.adapter = new ConsoleAdapter();
+    }
   }
 
   public static getInstance(): MonitoringService {

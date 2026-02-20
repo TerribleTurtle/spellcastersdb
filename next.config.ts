@@ -1,6 +1,7 @@
 import type { NextConfig } from "next";
 
 import createBundleAnalyzer from "@next/bundle-analyzer";
+import { withSentryConfig } from "@sentry/nextjs";
 import withSerwistInit from "@serwist/next";
 import { spawnSync } from "node:child_process";
 
@@ -124,7 +125,7 @@ const nextConfig: NextConfig = {
               "base-uri 'self'",
               "form-action 'self'",
               "frame-ancestors 'none'",
-              "connect-src 'self' https://terribleturtle.github.io https://vitals.vercel-insights.com https://tally.so",
+              "connect-src 'self' https://terribleturtle.github.io https://vitals.vercel-insights.com https://tally.so https://*.ingest.us.sentry.io",
               "frame-src 'self' https://tally.so",
               "worker-src 'self'",
               "manifest-src 'self'",
@@ -180,4 +181,14 @@ const withSerwist = withSerwistInit({
   disable: process.env.NODE_ENV === "development",
 });
 
-export default withBundleAnalyzer(withSerwist(nextConfig));
+const exportedConfig = withBundleAnalyzer(withSerwist(nextConfig));
+
+export default withSentryConfig(exportedConfig, {
+  // The name of the Sentry project
+  project: "spellcastersdb",
+
+  // Hide source maps from generated client bundles
+  sourcemaps: {
+    disable: true,
+  },
+});
