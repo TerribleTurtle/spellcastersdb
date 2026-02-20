@@ -191,4 +191,7 @@ export default withSentryConfig(exportedConfig, {
   sourcemaps: {
     disable: true,
   },
+
+  // Route Sentry traffic through a Next.js API route to bypass ad-blockers
+  tunnelRoute: "/monitoring",
 });
