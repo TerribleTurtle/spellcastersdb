@@ -144,6 +144,42 @@
 }
 
 
+/* 🧙‍♀️ GlitchWitch — Pink/green/purple on near-black */
+.theme-glitchwitch {
+  color-scheme: dark;
+  --sp-brand-primary: #e984b3;
+  --sp-brand-secondary: #08fe00;
+  --sp-brand-accent: #7020b5;
+  --sp-brand-dark: #08fe00;
+  --sp-surface-main: #080808;
+  --sp-surface-card: color-mix(in oklch, #e984b3 5%, transparent);
+  --sp-surface-hover: color-mix(in oklch, #e984b3 10%, transparent);
+  --sp-surface-highlight: rgba(233, 132, 179, 0.2);
+  --sp-surface-deck: #040404;
+  --sp-surface-raised: color-mix(in oklch, #e984b3 8%, transparent);
+  --sp-surface-dim: color-mix(in oklch, black 20%, transparent);
+  --sp-surface-inset: color-mix(in oklch, black 40%, transparent);
+  --sp-surface-overlay: color-mix(in oklch, black 80%, transparent);
+  --sp-surface-overlay-heavy: color-mix(in oklch, black 90%, transparent);
+  --sp-surface-scrim: color-mix(in oklch, black 60%, transparent);
+  --sp-border-subtle: color-mix(in oklch, #e984b3 8%, transparent);
+  --sp-border-default: color-mix(in oklch, #e984b3 15%, transparent);
+  --sp-border-strong: color-mix(in oklch, #e984b3 25%, transparent);
+  --sp-text-primary: #7020b5;
+  --sp-text-secondary: #bc8a20;
+  --sp-text-muted: #8935e1;
+  --sp-text-dimmed: color-mix(in oklch, #8935e1 70%, transparent);
+  --sp-text-faint: color-mix(in oklch, #8935e1 50%, transparent);
+  --sp-scrollbar-track: rgba(233, 132, 179, 0.03);
+  --sp-scrollbar-thumb: rgba(233, 132, 179, 0.2);
+  --sp-scrollbar-thumb-hover: rgba(233, 132, 179, 0.35);
+  background: radial-gradient(
+    circle at top center,
+    rgba(233, 132, 179, 0.15),
+    #080808
+  );
+}
+
 /* ==========================================
    🌈 Rainbow Theme (Konami Code Easter Egg)
    ========================================== */

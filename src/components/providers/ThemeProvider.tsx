@@ -18,6 +18,7 @@ const BUILT_IN_THEMES = [
   "theme-inferno",
   "theme-frost",
   "theme-retro",
+  "theme-glitchwitch",
   "theme-rainbow",
 ] as const;
 

@@ -6,7 +6,15 @@ import { createPortal } from "react-dom";
 
 import { useTheme } from "next-themes";
 
-import { Flame, Moon, Palette, Skull, Snowflake, Sun } from "lucide-react";
+import {
+  Flame,
+  FlaskConical,
+  Moon,
+  Palette,
+  Skull,
+  Snowflake,
+  Sun,
+} from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useKonamiCode } from "@/hooks/useKonamiCode";
@@ -20,6 +28,7 @@ const VISIBLE_THEMES = [
   { value: "theme-inferno", label: "Inferno", icon: Flame },
   { value: "theme-frost", label: "Frost", icon: Snowflake },
   { value: "theme-retro", label: "Retro", icon: Palette },
+  { value: "theme-glitchwitch", label: "GlitchWitch", icon: FlaskConical },
 ] as const;
 
 export interface ThemePickerProps {

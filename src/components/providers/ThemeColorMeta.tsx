@@ -12,6 +12,7 @@ const THEME_COLORS: Record<string, string> = {
   "theme-frost": "#0c1929",
   "theme-rainbow": "#0f172a",
   "theme-retro": "#000000",
+  "theme-glitchwitch": "#080808",
 };
 
 /**
