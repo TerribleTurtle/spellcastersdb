@@ -133,3 +133,58 @@ describe("Remote Data Validation", () => {
     consoleSpy.mockRestore();
   });
 });
+
+describe("fetchJson Error Instrumentation", () => {
+  beforeEach(() => {
+    global.fetch = vi.fn();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("should preserve the original error as cause when fetch rejects", async () => {
+    const { fetchJson, DataFetchError } = await import("./api-client");
+    const networkError = new TypeError("fetch failed");
+    (global.fetch as Mock).mockRejectedValue(networkError);
+
+    try {
+      await fetchJson("https://example.com/data.json");
+      expect.fail("Should have thrown");
+    } catch (err) {
+      expect(err).toBeInstanceOf(DataFetchError);
+      const typedErr = err as InstanceType<typeof DataFetchError>;
+      expect(typedErr.message).toBe("fetch failed");
+      expect(typedErr.status).toBe(500);
+      expect(typedErr.cause).toBe(networkError);
+    }
+  });
+
+  it("should re-throw DataFetchError without wrapping", async () => {
+    const { fetchJson, DataFetchError } = await import("./api-client");
+    const original = new DataFetchError("Not Found", 404);
+    (global.fetch as Mock).mockImplementation(() => {
+      throw original;
+    });
+
+    try {
+      await fetchJson("https://example.com/missing.json");
+      expect.fail("Should have thrown");
+    } catch (err) {
+      expect(err).toBe(original); // same reference, not re-wrapped
+    }
+  });
+
+  it("should include URL in the DataFetchError message for HTTP errors", async () => {
+    const { fetchJson } = await import("./api-client");
+    (global.fetch as Mock).mockResolvedValue({
+      ok: false,
+      status: 503,
+      statusText: "Service Unavailable",
+    });
+
+    await expect(
+      fetchJson("https://example.com/api/units.json")
+    ).rejects.toThrow(/https:\/\/example\.com\/api\/units\.json.*503/);
+  });
+});
