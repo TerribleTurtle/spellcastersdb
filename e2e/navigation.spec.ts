@@ -63,14 +63,15 @@ test.describe("Navigation", () => {
 
     await expect(page).toHaveURL(/.*\/database/);
 
-    // Sidebar expand/collapse toggle
-    const collapseBtn = page.getByTestId("sidebar-collapse-btn");
+    // At 1440px viewport (< 1536px 2XL breakpoint), sidebar auto-collapses
     const expandBtn = page.getByTestId("sidebar-expand-btn");
+    await expect(expandBtn).toBeVisible();
 
-    // Assuming it starts expanded in our 1440x900 viewport:
-    if (await collapseBtn.isVisible()) {
-      await collapseBtn.click();
-      await expect(expandBtn).toBeVisible();
-    }
+    // Expand, verify collapse button appears, then collapse back
+    await expandBtn.click();
+    const collapseBtn = page.getByTestId("sidebar-collapse-btn");
+    await expect(collapseBtn).toBeVisible();
+    await collapseBtn.click();
+    await expect(expandBtn).toBeVisible();
   });
 });
