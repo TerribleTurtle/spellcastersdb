@@ -57,3 +57,20 @@ npm run test:e2e:ui
 ### DND Testing Notes
 
 `dnd-kit` uses `PointerSensor` which requires manual `mouse.down/move/up` sequences. Playwright's `dragTo()` does not reliably trigger the sensor threshold. The E2E tests use manual pointer event trajectories for reliable cross-browser DND simulation.
+
+## Antipatterns
+
+### ❌ Conditional `isVisible()` Checks
+
+Never use `isVisible()` inside an `if` statement. It evaluates **immediately** without waiting for hydration, animations, or state changes, making it inherently flaky.
+
+```typescript
+// ❌ BAD — races against React hydration
+if (await element.isVisible()) {
+  await element.click();
+}
+
+// ✅ GOOD — auto-waits up to the configured timeout
+await expect(element).toBeVisible();
+await element.click();
+```
