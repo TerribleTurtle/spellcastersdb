@@ -60,6 +60,15 @@ export async function fetchChunk<T>(endpoint: string): Promise<T> {
   });
 }
 
+/**
+ * Fetches all game data from the remote API using individual chunk endpoints.
+ *
+ * Titans, Consumables, and Upgrades are fetched with graceful `.catch()` fallbacks
+ * (returning `[]`) because they are supplementary data — a failure to load them
+ * should never block the critical rendering path (Units, Spells, Spellcasters).
+ *
+ * @returns The complete `AllDataResponse` with `_source` set to `"Remote API (Chunked)"`.
+ */
 export async function fetchChunkedData(): Promise<AllDataResponse> {
   const [units, spells, spellcasters, titans, consumables, upgrades] =
     await Promise.all([
@@ -106,6 +115,13 @@ export async function fetchChunkedData(): Promise<AllDataResponse> {
   return { ...data, _source: `Remote API (Chunked)` };
 }
 
+/**
+ * Fetches only the critical game data chunks (Units, Spells, Spellcasters, Titans).
+ * Consumables and Upgrades are omitted entirely to minimize TTFB.
+ *
+ * @returns The game data object with `consumables` and `upgrades` as empty arrays,
+ *          and `_source` set to `"Remote API (Critical)"`.
+ */
 export async function fetchCriticalChunkedData(): Promise<AllDataResponse> {
   const [units, spells, spellcasters, titans] = await Promise.all([
     fetchChunk<RawUnit[]>("units.json"),

@@ -55,7 +55,9 @@ export default function PrivacyPage() {
               </ul>
               <p className="mt-3 text-sm text-text-dimmed italic">
                 This data never leaves your device unless you explicitly share a
-                deck via URL or export string.
+                deck via URL or export string. You can permanently delete all
+                saved data by clearing your browser&apos;s site data or local
+                storage via your browser&apos;s settings.
               </p>
             </div>
 
@@ -77,6 +79,43 @@ export default function PrivacyPage() {
               <p className="mt-3 text-sm text-text-dimmed italic">
                 This data is aggregated and does not identify you personally.
                 Vercel Analytics is privacy-friendly and does not use cookies.
+              </p>
+            </div>
+
+            <div className="border-t border-border-subtle pt-6">
+              <h3 className="text-lg font-bold text-text-primary mb-2 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-brand-primary"></span>
+                Error Monitoring (Sentry)
+              </h3>
+              <p className="mb-2">
+                We use <strong>Sentry</strong> to track and monitor application
+                errors and prevent crashes. Our Sentry configuration is strictly
+                configured for privacy:
+              </p>
+              <ul className="list-disc list-inside mt-2 space-y-1 ml-4 text-text-muted">
+                <li>No cookies or session replays are used</li>
+                <li>
+                  All Personally Identifiable Information (PII) such as IP
+                  addresses, emails, and session tokens is stripped before data
+                  is sent
+                </li>
+              </ul>
+              <p className="mt-3 text-sm text-text-dimmed italic">
+                This ensures that error logs contain only technical diagnostic
+                data and no personal details.
+              </p>
+            </div>
+
+            <div className="border-t border-border-subtle pt-6">
+              <h3 className="text-lg font-bold text-text-primary mb-2 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-brand-primary"></span>
+                Feedback (Tally)
+              </h3>
+              <p className="mb-2">
+                We embed a <strong>Tally.so</strong> widget to optionally
+                collect user feedback. Any information you choose to provide in
+                the feedback form is processed and stored by Tally&apos;s
+                servers securely.
               </p>
             </div>
           </div>

@@ -15,7 +15,6 @@ import {
 
 import { DebugFeatures } from "@/components/debug/DebugFeatures";
 import { DebugHeaderInfo } from "@/components/debug/DebugHeaderInfo";
-import { SentryCrashTest } from "@/components/debug/SentryCrashTest";
 import { fetchGameData } from "@/services/api/api";
 
 export const metadata: Metadata = {
@@ -115,22 +114,6 @@ export default async function DebugPage() {
             }
           />
         </header>
-
-        {/* Sentry Integration Test */}
-        <div className="mb-8 p-6 bg-surface-card rounded-xl border border-status-danger-border flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <h2 className="text-xl font-bold flex items-center gap-2 text-status-danger-text">
-              <Activity size={20} />
-              Sentry Integration Test
-            </h2>
-            <p className="text-text-muted text-sm mt-1 max-w-lg">
-              Click this button to intentionally crash the React render tree.
-              This exercises the `global-error.tsx` boundary and forces an event
-              to be sent to your live Sentry dashboard.
-            </p>
-          </div>
-          <SentryCrashTest />
-        </div>
 
         {/* Top Row: High Level Counts */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">

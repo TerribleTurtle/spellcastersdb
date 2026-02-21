@@ -1,33 +1,36 @@
 # GitHub Issues
 
 > **Generated on:** 2026-02-14
+>
+> ⚠️ **Frozen Snapshot.** Many issues below have been resolved since this date. Check the [live issues](https://github.com/TerribleTurtle/spellcastersdb/issues) for current status.
 
-| Issue | Title | Labels | Link |
-| :--- | :--- | :--- | :--- |
-| #21 | Investigation - Titan | `investigation`, `mechanics` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/21) |
-| #20 | Truncate Long Build Names | `ui`, `css` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/20) |
-| #19 | Optimize Stat Layout | `ui`, `stats` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/19) |
-| #18 | Full Deck double-click behavior | `logic`, `interaction` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/18) |
-| #17 | Prevent Text Selection on Drag | `mobile`, `interaction` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/17) |
-| #16 | Lock Scroll on Drag | `bug`, `mobile`, `interaction` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/16) |
-| #15 | Mobile Plus Button Sizing | `ui`, `mobile`, `cleanup` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/15) |
-| #14 | Reorder Mobile Share Window | `ui`, `mobile` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/14) |
-| #13 | Fix Mobile Build Section Sizing | `bug`, `mobile`, `layout` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/13) |
-| #12 | Increase Mobile Close Button Hitbox | `mobile`, `accessibility` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/12) |
-| #11 | Fix Mobile Button Overlap | `bug`, `ui`, `mobile` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/11) |
-| #9 | Info Panel Visibility | `enhancement`, `ui`, `desktop` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/9) |
-| #8 | Rename Delete to Clear | `ui`, `semantics` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/8) |
-| #7 | Remove Redundant Controls | `ui`, `cleanup` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/7) |
-| #6 | Relocate Solo/Team Switcher | `ui`, `desktop` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/6) |
-| #5 | Mobile Data Migration Safety | `bug`, `mobile`, `data` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/5) |
-| #4 | Refine Search Logic weights | `bug`, `logic` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/4) |
-| #3 | Improve Deck Naming Logic | `enhancement`, `logic` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/3) |
-| #2 | Refactor Save Button Logic | `core-logic`, `ux` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/2) |
-| #1 | Implement Auto-Save | `enhancement`, `core-logic` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/1) |
+| Issue | Title                               | Labels                         | Link                                                               |
+| :---- | :---------------------------------- | :----------------------------- | :----------------------------------------------------------------- |
+| #21   | Investigation - Titan               | `investigation`, `mechanics`   | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/21) |
+| #20   | Truncate Long Build Names           | `ui`, `css`                    | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/20) |
+| #19   | Optimize Stat Layout                | `ui`, `stats`                  | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/19) |
+| #18   | Full Deck double-click behavior     | `logic`, `interaction`         | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/18) |
+| #17   | Prevent Text Selection on Drag      | `mobile`, `interaction`        | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/17) |
+| #16   | Lock Scroll on Drag                 | `bug`, `mobile`, `interaction` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/16) |
+| #15   | Mobile Plus Button Sizing           | `ui`, `mobile`, `cleanup`      | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/15) |
+| #14   | Reorder Mobile Share Window         | `ui`, `mobile`                 | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/14) |
+| #13   | Fix Mobile Build Section Sizing     | `bug`, `mobile`, `layout`      | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/13) |
+| #12   | Increase Mobile Close Button Hitbox | `mobile`, `accessibility`      | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/12) |
+| #11   | Fix Mobile Button Overlap           | `bug`, `ui`, `mobile`          | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/11) |
+| #9    | Info Panel Visibility               | `enhancement`, `ui`, `desktop` | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/9)  |
+| #8    | Rename Delete to Clear              | `ui`, `semantics`              | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/8)  |
+| #7    | Remove Redundant Controls           | `ui`, `cleanup`                | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/7)  |
+| #6    | Relocate Solo/Team Switcher         | `ui`, `desktop`                | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/6)  |
+| #5    | Mobile Data Migration Safety        | `bug`, `mobile`, `data`        | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/5)  |
+| #4    | Refine Search Logic weights         | `bug`, `logic`                 | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/4)  |
+| #3    | Improve Deck Naming Logic           | `enhancement`, `logic`         | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/3)  |
+| #2    | Refactor Save Button Logic          | `core-logic`, `ux`             | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/2)  |
+| #1    | Implement Auto-Save                 | `enhancement`, `core-logic`    | [Link](https://github.com/TerribleTurtle/spellcastersdb/issues/1)  |
 
 ## Details
 
 ### #21: Investigation - Titan
+
 **Labels**: `investigation`, `mechanics`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/21
@@ -38,20 +41,22 @@
 ---
 
 ### #20: Truncate Long Build Names
+
 **Labels**: `ui`, `css`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/20
 
 > > **Context**: Long build names break the layout.
 > > **Requirement**: Truncate long Build Names to 2 lines, then shrink font size if necessary (CSS `line-clamp` or dynamic font scaling).
-> 
+>
 > ---
-> 
+>
 > ## Investigation Needed
 
 ---
 
 ### #19: Optimize Stat Layout
+
 **Labels**: `ui`, `stats`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/19
@@ -64,20 +69,22 @@
 ---
 
 ### #18: Full Deck double-click behavior
+
 **Labels**: `logic`, `interaction`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/18
 
 > > **Current**: Double-clicking a card when deck is full does nothing, leaving the user unsure if the action failed.
 > > **Fix**: Trigger a popup: "Deck full. Select a slot to swap?"
-> 
+>
 > ---
-> 
+>
 > ## Stats & Attributes
 
 ---
 
 ### #17: Prevent Text Selection on Drag
+
 **Labels**: `mobile`, `interaction`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/17
@@ -88,6 +95,7 @@
 ---
 
 ### #16: Lock Scroll on Drag
+
 **Labels**: `bug`, `mobile`, `interaction`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/16
@@ -98,20 +106,22 @@
 ---
 
 ### #15: Mobile Plus Button Sizing
+
 **Labels**: `ui`, `mobile`, `cleanup`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/15
 
 > > **Context**: The huge "+" button takes up too much space and distracts from card readability.
 > > **Requirement**: Evaluate removing it if double-tap adds cards reliably, or make it significantly smaller.
-> 
+>
 > ---
-> 
+>
 > ## Interaction & Gestures (Mobile)
 
 ---
 
 ### #14: Reorder Mobile Share Window
+
 **Labels**: `ui`, `mobile`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/14
@@ -126,6 +136,7 @@
 ---
 
 ### #13: Fix Mobile Build Section Sizing
+
 **Labels**: `bug`, `mobile`, `layout`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/13
@@ -136,6 +147,7 @@
 ---
 
 ### #12: Increase Mobile Close Button Hitbox
+
 **Labels**: `mobile`, `accessibility`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/12
@@ -146,6 +158,7 @@
 ---
 
 ### #11: Fix Mobile Button Overlap
+
 **Labels**: `bug`, `ui`, `mobile`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/11
@@ -156,6 +169,7 @@
 ---
 
 ### #9: Info Panel Visibility
+
 **Labels**: `enhancement`, `ui`, `desktop`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/9
@@ -166,6 +180,7 @@
 ---
 
 ### #8: Rename Delete to Clear
+
 **Labels**: `ui`, `semantics`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/8
@@ -179,6 +194,7 @@
 ---
 
 ### #7: Remove Redundant Controls
+
 **Labels**: `ui`, `cleanup`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/7
@@ -189,6 +205,7 @@
 ---
 
 ### #6: Relocate Solo/Team Switcher
+
 **Labels**: `ui`, `desktop`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/6
@@ -202,20 +219,22 @@
 ---
 
 ### #5: Mobile Data Migration Safety
+
 **Labels**: `bug`, `mobile`, `data`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/5
 
 > > **Context**: Users reported data loss on recent updates. Local storage data needs to be robust against schema changes.
 > > **Requirement**: Ensure local storage decks are migrated properly in future updates (Post-EA Task).
-> 
+>
 > ---
-> 
+>
 > ## Desktop UI/UX
 
 ---
 
 ### #4: Refine Search Logic weights
+
 **Labels**: `bug`, `logic`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/4
@@ -226,6 +245,7 @@
 ---
 
 ### #3: Improve Deck Naming Logic
+
 **Labels**: `enhancement`, `logic`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/3
@@ -240,6 +260,7 @@
 ---
 
 ### #2: Refactor Save Button Logic
+
 **Labels**: `core-logic`, `ux`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/2
@@ -253,6 +274,7 @@
 ---
 
 ### #1: Implement Auto-Save
+
 **Labels**: `enhancement`, `core-logic`
 
 **Link**: https://github.com/TerribleTurtle/spellcastersdb/issues/1
@@ -262,4 +284,3 @@
 > > **Triggers**: Trigger save on any card change to prevent data loss.
 
 ---
-

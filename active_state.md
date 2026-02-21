@@ -1,13 +1,17 @@
 # Project Status
 
--## Current Focus
+## Current Focus
 
 - **Deployed** — Commit `c95c0bc` pushed to `origin/main`. Sentry integration + docs cleanup. Vercel auto-deploys from main. CI pipeline running.
+- **Documentation Refinement** — Executing a dedicated documentation cleanup sprint to resolve drift, missing knowledge gaps, and clarify configuration requirements.
 
-* **Mode**: Deploy Gate (CONDITIONAL GO)
+* **Mode**: Documentation Cleanup
 
 ## Recent Changes
 
+- (02/20) **Removed Sentry Test Button** - Removed the `SentryCrashTest` button component and its wrapper element from `src/app/debug/page.tsx` to clean up the debug view.
+- (02/20) **Privacy Remediation Executed** - Updated `src/app/privacy/page.tsx` with missing disclosures for Sentry and Tally.so as sub-processors. Added exact instructions for users to perform local storage erasure. Verified via `type-check` and `lint`.
+- (02/20) **Data Protection & Privacy Audit** - Executed the `@privacy` DPO workflow. Verified zero PII storage, cookie-less Vercel Analytics, and stripped Sentry logs. Generated `docs/PRIVACY_AUDIT_REPORT.md` identifying a medium priority gap: Sentry and Tally.so need disclosure in the Privacy Policy.
 - (02/20) **Sentry Remediation & Stabilization** - Executed `@loop` target phase to fix Sentry audit findings. Added Sentry ingest domains to `next.config.ts` Content-Security-Policy `connect-src`. Created Next.js `global-error.tsx` boundary. Wired `SentryAdapter` into the central `MonitoringService`. Disabled SDK internal telemetry on client and server payloads.
 - (02/20) **Sentry Integration (Phase 1)** - Integrated Sentry with strict data privacy and quota controls (v8 SDK). Configured `tracesSampleRate: 0.01`, fully disabled Session Replay, stripped all PII (IPs, emails, tokens) via `beforeSend`, and suppressed noise (hydration errors). Updated `next.config.ts` and `src/instrumentation.ts` for Next.js App Router hooks.
 - (02/20) **CTO Scorecard Assessment** - Executed the `@assess` workflow. Analyzed the UX, Architecture, Security, and DevOps pillars. Generated `CTO_SCORECARD.md` artifact with an "Enterprise" maturity rating, identifying strengths in CI/CD and modularity, and gaps in Cloud State and Telemetry integration.

@@ -32,7 +32,7 @@ The Forge is a utility that enforces game-legal loadouts to prevent "impossible"
   - **Slot 5 (Titan):** Strictly reserved for cards in the **Titan** category.
 - **Deck Analytics:** Real-time calculation of average charge_time, total cost_population, and damage type balance.
 
-### **2.3 Community & Top Decks (Planned)**
+### **2.3 Community & Top Decks [PLANNED]**
 
 A section to guide players on builds.
 
@@ -45,9 +45,9 @@ A section to guide players on builds.
 
 ### **3.1 Data Management**
 
-- **Primary Source:** https://terribleturtle.github.io/spellcasters-community-api/all\_data.json.
+- **Primary Source:** https://terribleturtle.github.io/spellcasters-community-api/all_data.json.
 - **Image Assets:** Sourced directly from GitHub Pages or proxied for optimized loading.
-- **Client State:** React Context or a similar lightweight state manager for the active deck selection.
+- **Client State:** Zustand store (sliced) for global state management and active deck selection.
 
 ### **3.2 Sharing & Social Loop**
 

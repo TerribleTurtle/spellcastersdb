@@ -14,7 +14,7 @@ The API is served via GitHub Pages as static JSON files. The primary endpoint us
 | Type            | Description                                   | Source Key     |
 | :-------------- | :-------------------------------------------- | :------------- |
 | **Spellcaster** | The player characters (formerly Heroes).      | `spellcasters` |
-| **Unit**        | Creatures and Buildings. placed on the board. | `units`        |
+| **Unit**        | Creatures and Buildings, placed on the board. | `units`        |
 | **Spell**       | Instant actions.                              | `spells`       |
 | **Titan**       | Unique, powerful units (1 per deck).          | `titans`       |
 | **Consumable**  | Items found in chests.                        | `consumables`  |

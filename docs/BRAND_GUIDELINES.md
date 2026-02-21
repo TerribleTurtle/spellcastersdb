@@ -134,7 +134,7 @@ Core themes override `--sp-*` CSS custom properties in `src/styles/design-tokens
 | Dark  | `.dark`   | `#9333ea`     | Default — purple on slate  |
 | Light | `.light`  | `#7c3aed`     | Inverted — violet on white |
 
-Additional fun/side themes (Arcane, Inferno, Frost, Retro, Rainbow) are defined in `src/styles/themes.css` but are not part of the core brand identity.
+Additional fun/side themes (Arcane, Inferno, Frost, Retro, GlitchWitch, Rainbow) are defined in `src/styles/themes.css` but are not part of the core brand identity.
 
 ## 6. Important Notes
 
