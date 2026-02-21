@@ -41,9 +41,8 @@ Ensure the following flows are fully covered with test IDs:
 | `e2e/deck-builder-desktop.spec.ts` | 1     | Desktop          | DND into slot + Quick Add                |
 | `e2e/deck-builder-mobile.spec.ts`  | 1     | Mobile           | Touch DND into dock slot                 |
 | `e2e/team-builder.spec.ts`         | 1     | Desktop          | Mode switch + Team DND                   |
-| `e2e/deck-edge-cases.spec.ts`      | 1     | Desktop          | Clear Deck modal flow                    |
 
-**Total: 8 test cases × 2 browser projects = 16 Playwright tests.**
+**Total: 7 test cases × 2 browser projects = 14 Playwright tests.**
 
 ## Running E2E Tests
 

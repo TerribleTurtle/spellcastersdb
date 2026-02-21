@@ -39,7 +39,7 @@
   - **Read-Through Caching**: Optimizes data fetching.
   - **Virtualization**: `react-virtuoso` for large lists.
   - **Zod Validation**: Ensures data integrity at runtime.
-  - **Comprehensive Testing**: 275 unit and integration tests (Vitest) covering core logic, validation, and data integrity.
+  - **Comprehensive Testing**: Unit and integration tests (Vitest) covering core logic, validation, and data integrity.
   - **Revalidation API**: On-demand cache invalidation via `/api/revalidate` (using `Authorization` header) with `revalidateTag` for robust content updates.
     - **CI/CD**: The "Daily Revalidation" workflow requires `REVALIDATION_SECRET` and optionally `APP_URL` (defaults to `https://www.spellcastersdb.com`) in GitHub Secrets.
   - **State Persistence**: Optimized `zustand/persist` with `partialize` to serialize only critical user data, excluding transient UI state for consistent high performance.
@@ -50,7 +50,7 @@
   - **Architecture Enforcement**: `dependency-cruiser` validates import boundaries (`components/ui` ↛ `features`, `features` ↛ `app`) on every preflight run.
   - **Observability**: A `MonitoringService` (`src/services/monitoring/`) abstracts error reporting. Default `ConsoleAdapter` outputs structured logs; swap in a Sentry/Axiom adapter with zero app-code changes.
   - **PWA Engine**: `@serwist/next` provides automatic precaching, runtime caching (`StaleWhileRevalidate` for API data, `CacheFirst` for images), and a `/~offline` fallback route.
-  - **E2E Readiness**: Standardized `data-testid` attributes on all shell, database, and deck builder components. Full Playwright E2E suite (16 tests) covering navigation, theming, drag-and-drop, team builder, and deck state management across Desktop Chromium and Mobile Safari. See [E2E Conventions](docs/E2E_CONVENTIONS.md) for naming rules.
+  - **E2E Readiness**: Standardized `data-testid` attributes on all shell, database, and deck builder components. Full Playwright E2E suite (14 tests) covering navigation, theming, drag-and-drop, team builder, and deck state management across Desktop Chromium and Mobile Safari. See [E2E Conventions](docs/E2E_CONVENTIONS.md) for naming rules.
 
 ## Getting Started
 
@@ -65,8 +65,9 @@
 
     ```bash
     cp .env.local.example .env.local
-    # Optional: Add GITHUB_TOKEN to .env.local for higher API rate limits
     ```
+
+    > **Note:** The `.env.local` file contains several important configuration flags (e.g., `NEXT_PUBLIC_PREFERRED_ASSET_FORMAT`, `REVALIDATION_SECRET`, `NEXT_PUBLIC_SENTRY_DSN`). Please review the full [Environment Variables Table in CONTRIBUTING.md](CONTRIBUTING.md#environment-variables) for details on all available options.
 
 3.  **Run Development Server**:
     ```bash

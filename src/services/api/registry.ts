@@ -37,6 +37,8 @@ export class EntityRegistry {
   /**
    * Populates the registry with data.
    * Can be called multiple times to refresh data (clears old data first).
+   *
+   * @param data - The complete `AllDataResponse` payload from the API.
    */
   public initialize(data: AllDataResponse) {
     this.clear();
@@ -91,32 +93,40 @@ export class EntityRegistry {
   }
 
   /**
-   * Retrieves a Unit by its ID.
-   * @returns The Unit object if found, otherwise undefined.
+   * Retrieves a Unit by its entity_id.
+   *
+   * @param id - The entity_id to look up.
+   * @returns The Unit object if found, otherwise `undefined`.
    */
   public getUnit(id: string): Unit | undefined {
     return this.units.get(id);
   }
 
   /**
-   * Retrieves a Spell by its ID.
-   * @returns The Spell object if found, otherwise undefined.
+   * Retrieves a Spell by its entity_id.
+   *
+   * @param id - The entity_id to look up.
+   * @returns The Spell object if found, otherwise `undefined`.
    */
   public getSpell(id: string): Spell | undefined {
     return this.spells.get(id);
   }
 
   /**
-   * Retrieves a Titan by its ID.
-   * @returns The Titan object if found, otherwise undefined.
+   * Retrieves a Titan by its entity_id.
+   *
+   * @param id - The entity_id to look up.
+   * @returns The Titan object if found, otherwise `undefined`.
    */
   public getTitan(id: string): Titan | undefined {
     return this.titans.get(id);
   }
 
   /**
-   * Retrieves a Spellcaster by its ID.
-   * @returns The Spellcaster object if found, otherwise undefined.
+   * Retrieves a Spellcaster by its entity_id (or legacy spellcaster_id).
+   *
+   * @param id - The entity_id to look up.
+   * @returns The Spellcaster object if found, otherwise `undefined`.
    */
   public getSpellcaster(id: string): Spellcaster | undefined {
     return this.spellcasters.get(id);

@@ -41,6 +41,9 @@ Review the settings in `.env.local`.
 | `LOCAL_ASSETS_PATH`                  | Path to local image assets            | _(Optional)_                                                         |
 | `UPSTASH_REDIS_REST_URL`             | Redis URL for rate limiting           | _(Optional)_                                                         |
 | `UPSTASH_REDIS_REST_TOKEN`           | Redis Token                           | _(Optional)_                                                         |
+| `SENTRY_AUTH_TOKEN`                  | Sentry source map upload token        | _(Optional)_                                                         |
+| `NEXT_PUBLIC_SENTRY_DSN`             | Sentry DSN for error tracking         | _(Optional)_                                                         |
+| `PORT`                               | Dev server port for local proxy       | `3000`                                                               |
 
 **Note on Local API Development:**
 If you are working on the Data Layer, you can point the app to a local version of the [Spellcasters Community API](https://github.com/TerribleTurtle/spellcasters-community-api).

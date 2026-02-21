@@ -53,6 +53,8 @@
 - [x] Implement `@vercel/og` for dynamic deck previews
 - [x] Design OG template: Clean, game-accurate view of Spellcaster + Units (Names/Ranks)
 
+> **Note:** Phase 6 was merged into Phase 7 (User Experience Polish).
+
 ## Phase 7: User Experience Polish
 
 - [x] Fix drag and drop logic: Dragging unit to spellcaster should cancel drop instead of removing unit
@@ -148,3 +150,12 @@
 - [x] Badge on `DraggableCard`, `UnitCard`, `InspectorHeader`
 - [x] `PatchHistorySection` with stat comparison on all 4 card detail pages
 - [x] 5 new PatchBadge unit tests (200 total tests passing)
+
+## Post-Phase 10 Maintenance
+
+- [x] **Local Lighthouse Integration**: Added `@lhci/cli`, `lighthouserc.js` and `npm run lighthouse` for protecting regressions before push.
+- [x] Integrate global search shortcut (`CMD+K`)
+  - Status: Basic text search works, needs deep linking to units/decks.
+- [x] Test Suite Hardening & Stabilization
+  - **Status:** Conducted full audit, replaced hardcoded E2E waits (removed flakiness), documented dnd-kit sensor micro-delays, and added unit coverage to metadata/hooks.
+- [x] **PWA & Offline Support**: Service worker, offline fallbacks, and PWA manifest correctly configured.

@@ -28,7 +28,16 @@ export { DataFetchError };
 /**
  * Explicitly initializes the data registry.
  * This ensures that the global registry is populated before any synchronous data access.
- * Should be called at app bootstrap.
+ * Should be called at app bootstrap (e.g., in a top-level layout or middleware).
+ *
+ * @returns Resolves once the registry is populated. No-ops if already initialized.
+ *
+ * @example
+ * ```ts
+ * // In a Server Component or layout
+ * await ensureDataLoaded();
+ * const unit = registry.get("fire_imp_1");
+ * ```
  */
 export async function ensureDataLoaded(): Promise<void> {
   if (registry.isInitialized()) return;
@@ -104,7 +113,16 @@ export async function fetchGameData(): Promise<AllDataResponse> {
 
 /**
  * Fetches only the critical game data (Units, Spells, Titans, Spellcasters).
- * Skips Consumables and Upgrades to reduce TTFB.
+ * Skips Consumables and Upgrades to reduce TTFB on initial page loads.
+ *
+ * @returns The game data object with `consumables` and `upgrades` as empty arrays.
+ *
+ * @example
+ * ```ts
+ * const data = await fetchCriticalGameData();
+ * // data.units, data.spells, data.titans, data.spellcasters are populated
+ * // data.consumables and data.upgrades are empty
+ * ```
  */
 export async function fetchCriticalGameData(): Promise<AllDataResponse> {
   return fetchWithFallback((source) => source.fetchCritical());
@@ -262,7 +280,16 @@ export async function getEntityById(
 }
 
 /**
- * Legacy support: Get Unit by ID (only checks Units)
+ * Legacy support: Get a Unit by its entity_id (only checks the Units map).
+ *
+ * @param entityId - The unique entity_id of the unit.
+ * @returns The Unit object, or `null` if not found.
+ *
+ * @example
+ * ```ts
+ * const unit = await getUnitById("fire_imp_1");
+ * if (unit) console.log(unit.name, unit.stats);
+ * ```
  */
 export async function getUnitById(entityId: string): Promise<Unit | null> {
   if (!registry.isInitialized()) {
@@ -272,7 +299,16 @@ export async function getUnitById(entityId: string): Promise<Unit | null> {
 }
 
 /**
- * Get a specific spellcaster by id
+ * Get a specific Spellcaster by its entity_id.
+ *
+ * @param entityId - The unique entity_id (or legacy spellcaster_id) of the spellcaster.
+ * @returns The Spellcaster object, or `null` if not found.
+ *
+ * @example
+ * ```ts
+ * const sc = await getSpellcasterById("nadia");
+ * if (sc) console.log(sc.name, sc.abilities);
+ * ```
  */
 export async function getSpellcasterById(
   entityId: string
@@ -284,7 +320,10 @@ export async function getSpellcasterById(
 }
 
 /**
- * Returns a unified list of all searchable entities
+ * Returns a unified list of all searchable entities (Units, Spells, Titans,
+ * Spellcasters, Consumables). Upgrades are intentionally excluded.
+ *
+ * @returns An array of `UnifiedEntity` objects for powering search/filter UIs.
  *
  * @example
  * ```ts
