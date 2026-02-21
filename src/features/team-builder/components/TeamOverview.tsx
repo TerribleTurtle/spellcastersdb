@@ -1,5 +1,8 @@
+import { useState } from "react";
+
 import { CheckCircle2, Link as LinkIcon } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { useEphemeralState } from "@/hooks/useEphemeralState";
 import { useToast } from "@/hooks/useToast";
 import { copyToClipboard } from "@/lib/clipboard";
@@ -37,17 +40,34 @@ export function TeamOverview({
   const { isActive: copied, trigger: triggerCopied } = useEphemeralState(2000);
   const { showToast } = useToast();
 
+  const [isSharing, setIsSharing] = useState(false);
+
   const handleShare = async () => {
-    // Dynamic import to avoid circular dep issues if encoding depends on types not fully loaded, though usually fine.
-    const { encodeTeam } = await import("@/services/utils/encoding");
+    setIsSharing(true);
+    try {
+      // Dynamic import to avoid circular dep issues
+      const { createShortLink } =
+        await import("@/services/sharing/create-short-link");
 
-    const hash = encodeTeam(decks, teamName || "Untitled Team");
-    const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
+      const { url, isShortLink, rateLimited } = await createShortLink({
+        teamDecks: decks,
+        teamName: teamName || "Untitled Team",
+        isTeamMode: true,
+      });
 
-    const success = await copyToClipboard(url);
-    if (success) {
-      triggerCopied();
-      showToast("Team Link Copied!", "success");
+      const success = await copyToClipboard(url);
+      if (success) {
+        triggerCopied();
+        if (rateLimited) {
+          showToast("Rate limit exceeded. Copied long URL instead.", "error");
+        } else if (isShortLink) {
+          showToast("Short link copied!", "success");
+        } else {
+          showToast("Copied long link (short link unavailable)", "error");
+        }
+      }
+    } finally {
+      setIsSharing(false);
     }
   };
 
@@ -62,18 +82,26 @@ export function TeamOverview({
         </h2>
 
         {/* Share Button - Absolute Right */}
-        <button
+        <Button
+          variant="outline"
+          size="icon"
           onClick={handleShare}
           className={cn(
-            "absolute top-1/2 -translate-y-1/2 right-4 z-20 p-2 rounded-full border transition-all shadow-lg",
+            "absolute top-1/2 -translate-y-1/2 right-4 z-20 rounded-full transition-all shadow-lg",
             copied
-              ? "bg-green-500 text-text-primary border-green-500"
-              : "bg-surface-card border-border-default text-text-primary hover:bg-brand-primary hover:border-brand-primary"
+              ? "bg-status-success text-brand-dark border-status-success-border hover:bg-status-success/90"
+              : "bg-surface-card border-border-default hover:bg-brand-primary hover:border-brand-primary"
           )}
           title="Share Team"
         >
-          {copied ? <CheckCircle2 size={16} /> : <LinkIcon size={16} />}
-        </button>
+          {isSharing ? (
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-current" />
+          ) : copied ? (
+            <CheckCircle2 size={16} />
+          ) : (
+            <LinkIcon size={16} />
+          )}
+        </Button>
       </div>
 
       {/* Main Content - Scrollable List of Horizontal Decks */}

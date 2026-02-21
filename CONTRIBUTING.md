@@ -29,21 +29,21 @@ Review the settings in `.env.local`.
 
 ### Environment Variables
 
-| Variable                             | Description                           | Default / Example                                                    |
-| :----------------------------------- | :------------------------------------ | :------------------------------------------------------------------- |
-| `NEXT_PUBLIC_API_URL`                | Base URL for game data                | `https://terribleturtle.github.io/spellcasters-community-api/api/v2` |
-| `NEXT_PUBLIC_USE_LOCAL_ASSETS`       | Toggle to use local images            | `false`                                                              |
-| `NEXT_PUBLIC_PREFERRED_ASSET_FORMAT` | Asset format (webp/png)               | `webp`                                                               |
-| `LOCAL_DATA_PATH`                    | Absolute path to local data JSON      | `C:\Projects\spellcasters-community-api\api\v2\all_data.json`        |
-| `LOCAL_API_PATH`                     | _Legacy Fallback for LOCAL_DATA_PATH_ | _(Optional)_                                                         |
-| `GITHUB_TOKEN`                       | Increases GitHub API rate limits      | _(Optional)_                                                         |
-| `REVALIDATION_SECRET`                | Secures `/api/revalidate` endpoint    | _(Required in production)_                                           |
-| `LOCAL_ASSETS_PATH`                  | Path to local image assets            | _(Optional)_                                                         |
-| `UPSTASH_REDIS_REST_URL`             | Redis URL for rate limiting           | _(Optional)_                                                         |
-| `UPSTASH_REDIS_REST_TOKEN`           | Redis Token                           | _(Optional)_                                                         |
-| `SENTRY_AUTH_TOKEN`                  | Sentry source map upload token        | _(Optional)_                                                         |
-| `NEXT_PUBLIC_SENTRY_DSN`             | Sentry DSN for error tracking         | _(Optional)_                                                         |
-| `PORT`                               | Dev server port for local proxy       | `3000`                                                               |
+| Variable                             | Description                                 | Default / Example                                                    |
+| :----------------------------------- | :------------------------------------------ | :------------------------------------------------------------------- |
+| `NEXT_PUBLIC_API_URL`                | Base URL for game data                      | `https://terribleturtle.github.io/spellcasters-community-api/api/v2` |
+| `NEXT_PUBLIC_USE_LOCAL_ASSETS`       | Toggle to use local images                  | `false`                                                              |
+| `NEXT_PUBLIC_PREFERRED_ASSET_FORMAT` | Asset format (webp/png)                     | `webp`                                                               |
+| `LOCAL_DATA_PATH`                    | Absolute path to local data JSON            | `C:\Projects\spellcasters-community-api\api\v2\all_data.json`        |
+| `LOCAL_API_PATH`                     | _Legacy Fallback for LOCAL_DATA_PATH_       | _(Optional)_                                                         |
+| `GITHUB_TOKEN`                       | Increases GitHub API rate limits            | _(Optional)_                                                         |
+| `REVALIDATION_SECRET`                | Secures `/api/revalidate` endpoint          | _(Required in production)_                                           |
+| `LOCAL_ASSETS_PATH`                  | Path to local image assets                  | _(Optional)_                                                         |
+| `UPSTASH_REDIS_REST_URL`             | Redis URL for rate limiting & short links   | _(Optional)_                                                         |
+| `UPSTASH_REDIS_REST_TOKEN`           | Redis token for rate limiting & short links | _(Optional)_                                                         |
+| `SENTRY_AUTH_TOKEN`                  | Sentry source map upload token              | _(Optional)_                                                         |
+| `NEXT_PUBLIC_SENTRY_DSN`             | Sentry DSN for error tracking               | _(Optional)_                                                         |
+| `PORT`                               | Dev server port for local proxy             | `3000`                                                               |
 
 **Note on Local API Development:**
 If you are working on the Data Layer, you can point the app to a local version of the [Spellcasters Community API](https://github.com/TerribleTurtle/spellcasters-community-api).

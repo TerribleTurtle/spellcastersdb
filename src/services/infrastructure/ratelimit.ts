@@ -1,7 +1,8 @@
 import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
 
 import { monitoring } from "@/services/monitoring";
+
+import { redis } from "./redis";
 
 /**
  * Rate Limiter instance using Upstash Redis.
@@ -9,12 +10,9 @@ import { monitoring } from "@/services/monitoring";
  */
 export let ratelimit: Ratelimit | null = null;
 
-if (
-  process.env.UPSTASH_REDIS_REST_URL &&
-  process.env.UPSTASH_REDIS_REST_TOKEN
-) {
+if (redis) {
   ratelimit = new Ratelimit({
-    redis: Redis.fromEnv(),
+    redis,
     // Allow 10 requests per 10 seconds window (sliding)
     limiter: Ratelimit.slidingWindow(10, "10 s"),
     analytics: true,

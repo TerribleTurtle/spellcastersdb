@@ -70,14 +70,26 @@ export const TeamDeckEditorRow = memo(function TeamDeckEditorRow({
   }, [index, setActiveSlot, openCommandCenter]);
 
   const handleShare = useCallback(async () => {
-    const { encodeTeam } = await import("@/services/utils/encoding");
+    const { createShortLink } =
+      await import("@/services/sharing/create-short-link");
     const { copyToClipboard } = await import("@/lib/clipboard");
 
     const state = useDeckStore.getState();
-    const hash = encodeTeam(state.teamDecks, state.teamName);
-    const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
+    const { url, isShortLink, rateLimited } = await createShortLink({
+      teamDecks: state.teamDecks,
+      teamName: state.teamName,
+      isTeamMode: true,
+    });
 
-    if (await copyToClipboard(url)) showToast("Team Link Copied!", "success");
+    if (await copyToClipboard(url)) {
+      if (rateLimited) {
+        showToast("Rate limit exceeded. Copied long URL instead.", "warning");
+      } else if (isShortLink) {
+        showToast("Team Link Copied!", "success");
+      } else {
+        showToast("Copied long link (short link unavailable)", "warning");
+      }
+    }
   }, [showToast]);
 
   /* 

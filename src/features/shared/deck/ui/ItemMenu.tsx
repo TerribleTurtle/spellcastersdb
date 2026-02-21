@@ -19,7 +19,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/hooks/useToast";
 
 export function ItemMenu({
   onDuplicate,
@@ -37,8 +36,6 @@ export function ItemMenu({
   type: "DECK" | "TEAM";
 }) {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const { showToast } = useToast();
-
   // Derived labels
   const duplicateLabel = type === "TEAM" ? "Duplicate Team" : "Duplicate Deck";
   const shareLabel = type === "TEAM" ? "Share Team" : "Share Deck";
@@ -72,7 +69,6 @@ export function ItemMenu({
             <DropdownMenuItem
               onClick={() => {
                 onCopyLink();
-                showToast("Link copied to clipboard");
               }}
               className="cursor-pointer"
             >

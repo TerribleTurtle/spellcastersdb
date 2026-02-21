@@ -16,6 +16,8 @@ Sentry.init({
     "ResizeObserver loop",
     "Non-Error promise rejection",
     /Loading chunk \d+ failed/,
+    "fetch failed",
+    "write ETIMEDOUT",
   ],
 
   denyUrls: [/extensions\//i, /^chrome:\/\//i, /^moz-extension:\/\//i],

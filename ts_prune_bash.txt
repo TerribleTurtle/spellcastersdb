@@ -1,0 +1,229 @@
+\next.config.ts:186 - default
+\playwright.config.ts:6 - default
+\vitest.config.ts:5 - default
+\src\instrumentation.ts:7 - register
+\src\instrumentation.ts:5 - onRequestError
+\.next\types\routes.d.ts:53 - ParamsOf
+\.next\types\routes.d.ts:61 - PageRoutes (used in module)
+\.next\types\routes.d.ts:61 - RedirectRoutes (used in module)
+\.next\types\routes.d.ts:61 - RewriteRoutes (used in module)
+\src\app\error.tsx:11 - default
+\src\app\global-error.tsx:7 - default
+\src\app\layout.tsx:109 - default
+\src\app\layout.tsx:32 - viewport
+\src\app\layout.tsx:38 - metadata
+\src\app\manifest.ts:3 - default
+\src\app\not-found.tsx:5 - default
+\src\app\robots.ts:3 - default
+\src\app\sitemap.ts:7 - default
+\src\app\sitemap.ts:5 - revalidate
+\src\hooks\useToast.ts:11 - Toast (used in module)
+\src\lib\nav-links.ts:15 - NavLink (used in module)
+\src\store\index.ts:48 - DeckBuilderState (used in module)
+\src\store\types.ts:10 - DeckActions (used in module)
+\src\store\types.ts:33 - TeamDataActions (used in module)
+\src\store\types.ts:81 - TeamUIActions (used in module)
+\src\store\types.ts:86 - TeamActions
+\src\store\types.ts:88 - TeamDataState (used in module)
+\src\store\types.ts:95 - TeamUIState (used in module)
+\src\store\types.ts:104 - PersistenceActions (used in module)
+\src\store\types.ts:139 - ViewModeState (used in module)
+\src\store\types.ts:173 - DragState (used in module)
+\src\store\types.ts:183 - InspectorState (used in module)
+\src\store\types.ts:204 - CommandCenterState (used in module)
+\src\store\types.ts:211 - BrowserFilterState (used in module)
+\src\store\types.ts:233 - WelcomeModalState (used in module)
+\src\types\api.d.ts:22 - UnitCategory (used in module)
+\src\types\api.d.ts:23 - SpellCategory (used in module)
+\src\types\api.d.ts:24 - TitanCategory (used in module)
+\src\types\api.d.ts:25 - IncantationCategory
+\src\types\api.d.ts:27 - UnitRank (used in module)
+\src\types\api.d.ts:29 - SpellcasterClass (used in module)
+\src\types\api.d.ts:35 - MovementType (used in module)
+\src\types\api.d.ts:41 - ConditionObject (used in module)
+\src\types\api.d.ts:47 - Condition (used in module)
+\src\types\api.d.ts:67 - DamageReduction (used in module)
+\src\types\api.d.ts:98 - Stealth (used in module)
+\src\types\api.d.ts:103 - Cleave (used in module)
+\src\types\api.d.ts:233 - Ability (used in module)
+\src\types\api.d.ts:245 - SpellcasterAbilities (used in module)
+\src\types\api.d.ts:310 - BuildInfo (used in module)
+\src\types\deck.ts:14 - ValidationStatus
+\src\types\dnd.ts:3 - SlotIndex
+\src\types\dnd.ts:5 - DragSourceType (used in module)
+\src\types\dnd.ts:11 - DropTargetType (used in module)
+\src\types\dnd.ts:43 - DND_TYPES
+\src\types\patch-history.d.ts:59 - ChangelogPage
+\src\types\patch-history.d.ts:65 - ChangelogIndex
+\src\types\roadmap.ts:1 - RoadmapLabel (used in module)
+\.next\dev\types\routes.d.ts:53 - ParamsOf
+\.next\dev\types\routes.d.ts:61 - PageRoutes (used in module)
+\.next\dev\types\routes.d.ts:61 - RedirectRoutes (used in module)
+\.next\dev\types\routes.d.ts:61 - RewriteRoutes (used in module)
+\.next\types\app\page.ts:56 - PageProps (used in module)
+\.next\types\app\page.ts:60 - LayoutProps
+\src\app\about\loading.tsx:3 - default
+\src\app\changes\loading.tsx:3 - default
+\src\app\database\loading.tsx:3 - default
+\src\app\discord-bot\loading.tsx:3 - default
+\src\app\faq\loading.tsx:3 - default
+\src\app\guide\loading.tsx:3 - default
+\src\app\roadmap\loading.tsx:1 - default
+\src\app\spellcasters\loading.tsx:3 - default
+\src\components\common\FeedbackButton.tsx:18 - FeedbackButton
+\src\components\debug\SentryCrashTest.tsx:5 - SentryCrashTest
+\src\components\entity-card\stats-strategies.tsx:12 - StatDefinition (used in module)
+\src\components\entity-card\stats-strategies.tsx:23 - EntityCategory (used in module)
+\src\components\entity-card\stats-strategies.tsx:42 - STATS (used in module)
+\src\components\entity-card\stats-strategies.tsx:203 - STAT_STRATEGIES (used in module)
+\src\components\inspector\EntityShowcase.tsx:24 - EntityItem (used in module)
+\src\components\layout\BetaBanner.tsx:9 - BetaBanner
+\src\components\layout\DeckTitle.tsx:5 - DeckTitle
+\src\components\layout\TeamShareButton.tsx:10 - TeamShareButton
+\src\components\modals\ConfirmationModal.tsx:13 - ConfirmationModal
+\src\components\modals\ConfirmationModal.tsx:5 - ConfirmationModalProps (used in module)
+\src\components\modals\DeleteConfirmationModal.tsx:13 - DeleteConfirmationModal
+\src\components\modals\DeleteConfirmationModal.tsx:5 - DeleteConfirmationModalProps (used in module)
+\src\components\modals\UnsavedChangesModal.tsx:5 - UnsavedChangesModalProps (used in module)
+\src\components\ui\badge.tsx:27 - BadgeProps (used in module)
+\src\components\ui\badge.tsx:38 - badgeVariants (used in module)
+\src\components\ui\button.tsx:38 - ButtonProps (used in module)
+\src\components\ui\button.tsx:59 - buttonVariants (used in module)
+\src\components\ui\dialog.tsx:112 - DialogPortal (used in module)
+\src\components\ui\dialog.tsx:113 - DialogOverlay (used in module)
+\src\components\ui\dialog.tsx:114 - DialogClose (used in module)
+\src\components\ui\dialog.tsx:115 - DialogTrigger (used in module)
+\src\components\ui\dropdown-menu.tsx:190 - DropdownMenuCheckboxItem (used in module)
+\src\components\ui\dropdown-menu.tsx:191 - DropdownMenuRadioItem (used in module)
+\src\components\ui\dropdown-menu.tsx:192 - DropdownMenuLabel (used in module)
+\src\components\ui\dropdown-menu.tsx:194 - DropdownMenuShortcut (used in module)
+\src\components\ui\dropdown-menu.tsx:195 - DropdownMenuGroup (used in module)
+\src\components\ui\dropdown-menu.tsx:196 - DropdownMenuPortal (used in module)
+\src\components\ui\dropdown-menu.tsx:197 - DropdownMenuSub (used in module)
+\src\components\ui\dropdown-menu.tsx:198 - DropdownMenuSubContent (used in module)
+\src\components\ui\dropdown-menu.tsx:199 - DropdownMenuSubTrigger (used in module)
+\src\components\ui\dropdown-menu.tsx:200 - DropdownMenuRadioGroup (used in module)
+\src\components\ui\rank-badge.tsx:8 - RankBadgeProps (used in module)
+\src\components\ui\ThemePicker.tsx:34 - ThemePickerProps (used in module)
+\src\components\ui\ThemeToggle.tsx:11 - ThemeToggle
+\src\services\api\patch-history.ts:107 - fetchChangelogLatest
+\src\services\api\persistence.ts:18 - INITIAL_SLOTS (used in module)
+\src\services\assets\asset-strategy.ts:1 - AssetFolder (used in module)
+\src\services\assets\asset-strategy.ts:9 - ASSET_STRATEGY (used in module)
+\src\services\assets\asset-strategy.ts:19 - DEFAULT_ASSET_FOLDER (used in module)
+\src\services\config\constants.ts:6 - EntityCategory (used in module)
+\src\services\config\constants.ts:27 - School
+\src\services\config\constants.ts:55 - SpellcasterClass
+\src\services\config\constants.ts:57 - CLASS_CONFIG
+\src\services\config\constants.ts:117 - SPELLCASTER_ZONE_ID
+\src\services\config\constants.ts:119 - SLOT_PREFIX
+\src\services\config\constants.ts:120 - SLOT_DRAG_PREFIX
+\src\services\config\constants.ts:121 - SPELLCASTER_SLOT_DRAG_ID
+\src\services\config\constants.ts:125 - DEFAULT_RANK
+\src\services\dnd\drag-actions.ts:3 - SlotIndex (used in module)
+\src\services\dnd\drag-actions.ts:5 - DragActionType
+\src\services\dnd\drag-actions.ts:13 - DragAction
+\src\services\domain\DeckService.ts:9 - DeckService
+\src\services\domain\filtering.ts:13 - matchesSearch
+\src\services\domain\filtering.ts:42 - matchesFilters (used in module)
+\src\services\domain\sorting.ts:23 - getComparator (used in module)
+\src\services\domain\sorting.ts:114 - compareByName (used in module)
+\src\services\infrastructure\export-service.ts:3 - downloadTeamJson
+\src\services\monitoring\index.ts:48 - monitoring
+\src\services\monitoring\index.ts:49 - MonitoringContext (used in module)
+\src\services\persistence\custom-themes.ts:6 - CustomThemeSchema (used in module)
+\src\services\rules\search-rules.ts:25 - SearchableAttributes (used in module)
+\src\services\utils\deck-utils.ts:12 - cloneSlots
+\src\services\validation\data-schemas.ts:10 - IncantationBase (used in module)
+\src\services\validation\data-schemas.ts:109 - UnitMechanicsSchema (used in module)
+\src\services\validation\data-schemas.ts:152 - SpellMechanicsSchema (used in module)
+\src\services\validation\data-schemas.ts:182 - MechanicsSchema (used in module)
+\src\services\validation\data-schemas.ts:251 - TitanSchema (used in module)
+\src\services\validation\data-schemas.ts:290 - AbilitySchema (used in module)
+\src\services\validation\data-schemas.ts:305 - SpellcasterSchema (used in module)
+\src\services\validation\data-schemas.ts:346 - ConsumableSchema (used in module)
+\src\services\validation\data-schemas.ts:361 - UpgradeSchema (used in module)
+\src\services\validation\deck-validation.ts:12 - ValidationResult (used in module)
+\src\services\validation\guards.ts:53 - isUnifiedEntity
+\src\services\validation\integrity-checker.ts:3 - IntegrityIssue (used in module)
+\src\services\validation\patch-history-schemas.ts:13 - ChangeTypeSchema (used in module)
+\src\services\validation\patch-history-schemas.ts:15 - PatchCategorySchema (used in module)
+\src\services\validation\patch-history-schemas.ts:17 - ChangeEntrySchema (used in module)
+\src\services\validation\patch-history-schemas.ts:30 - PatchEntrySchema (used in module)
+\src\services\validation\patch-history-schemas.ts:55 - TimelineEntrySchema (used in module)
+\.next\types\app\~offline\page.ts:56 - PageProps (used in module)
+\.next\types\app\~offline\page.ts:60 - LayoutProps
+\.next\types\app\about\page.ts:56 - PageProps (used in module)
+\.next\types\app\about\page.ts:60 - LayoutProps
+\.next\types\app\changes\page.ts:56 - PageProps (used in module)
+\.next\types\app\changes\page.ts:60 - LayoutProps
+\.next\types\app\consumables\page.ts:56 - PageProps (used in module)
+\.next\types\app\consumables\page.ts:60 - LayoutProps
+\.next\types\app\database\page.ts:56 - PageProps (used in module)
+\.next\types\app\database\page.ts:60 - LayoutProps
+\.next\types\app\debug\page.ts:56 - PageProps (used in module)
+\.next\types\app\debug\page.ts:60 - LayoutProps
+\.next\types\app\deck-builder\page.ts:56 - PageProps (used in module)
+\.next\types\app\deck-builder\page.ts:60 - LayoutProps
+\.next\types\app\design-system\layout.ts:56 - PageProps
+\.next\types\app\design-system\layout.ts:60 - LayoutProps (used in module)
+\.next\types\app\design-system\page.ts:56 - PageProps (used in module)
+\.next\types\app\design-system\page.ts:60 - LayoutProps
+\.next\types\app\discord-bot\page.ts:56 - PageProps (used in module)
+\.next\types\app\discord-bot\page.ts:60 - LayoutProps
+\.next\types\app\faq\page.ts:56 - PageProps (used in module)
+\.next\types\app\faq\page.ts:60 - LayoutProps
+\.next\types\app\guide\page.ts:56 - PageProps (used in module)
+\.next\types\app\guide\page.ts:60 - LayoutProps
+\.next\types\app\privacy\page.ts:56 - PageProps (used in module)
+\.next\types\app\privacy\page.ts:60 - LayoutProps
+\.next\types\app\roadmap\page.ts:56 - PageProps (used in module)
+\.next\types\app\roadmap\page.ts:60 - LayoutProps
+\.next\types\app\spellcasters\page.ts:56 - PageProps (used in module)
+\.next\types\app\spellcasters\page.ts:60 - LayoutProps
+\.next\types\app\terms\page.ts:56 - PageProps (used in module)
+\.next\types\app\terms\page.ts:60 - LayoutProps
+\src\app\classes\[class]\loading.tsx:3 - default
+\src\app\incantations\spells\loading.tsx:3 - default
+\src\app\incantations\units\loading.tsx:3 - default
+\src\app\ranks\[rank]\loading.tsx:3 - default
+\src\app\schools\[school]\loading.tsx:3 - default
+\src\app\spellcasters\[id]\loading.tsx:1 - default
+\src\app\types\[category]\loading.tsx:3 - default
+\src\components\changelog\hooks\useChangelogSearch.ts:49 - ChangelogFilters (used in module)
+\src\components\database\hooks\useUnitFilters.ts:3 - UnitFilters (used in module)
+\src\features\shared\inspector\CardInspector.tsx:8 - InspectorItem (used in module)
+\src\features\team-builder\components\TeamHeader.tsx:16 - TeamHeader
+\.next\types\app\api\og\route.ts:316 - PageProps
+\.next\types\app\api\og\route.ts:320 - LayoutProps
+\.next\types\app\api\revalidate\route.ts:316 - PageProps
+\.next\types\app\api\revalidate\route.ts:320 - LayoutProps
+\.next\types\app\classes\[class]\page.ts:56 - PageProps (used in module)
+\.next\types\app\classes\[class]\page.ts:60 - LayoutProps
+\.next\types\app\consumables\[id]\page.ts:56 - PageProps (used in module)
+\.next\types\app\consumables\[id]\page.ts:60 - LayoutProps
+\.next\types\app\incantations\spells\page.ts:56 - PageProps (used in module)
+\.next\types\app\incantations\spells\page.ts:60 - LayoutProps
+\.next\types\app\incantations\units\page.ts:56 - PageProps (used in module)
+\.next\types\app\incantations\units\page.ts:60 - LayoutProps
+\.next\types\app\ranks\[rank]\page.ts:56 - PageProps (used in module)
+\.next\types\app\ranks\[rank]\page.ts:60 - LayoutProps
+\.next\types\app\schools\[school]\page.ts:56 - PageProps (used in module)
+\.next\types\app\schools\[school]\page.ts:60 - LayoutProps
+\.next\types\app\spellcasters\[id]\page.ts:56 - PageProps (used in module)
+\.next\types\app\spellcasters\[id]\page.ts:60 - LayoutProps
+\.next\types\app\titans\[id]\page.ts:56 - PageProps (used in module)
+\.next\types\app\titans\[id]\page.ts:60 - LayoutProps
+\.next\types\app\types\[category]\page.ts:56 - PageProps (used in module)
+\.next\types\app\types\[category]\page.ts:60 - LayoutProps
+\src\features\deck-builder\hooks\domain\useForgeLogic.ts:19 - useForgeLogic
+\src\features\deck-builder\hooks\domain\useForgeLogic.ts:12 - SavedListTab (used in module)
+\src\features\deck-builder\hooks\ui\useDeckEditorUI.ts:13 - SelectableItem (used in module)
+\src\features\deck-builder\ui\root\DeckBuilderView.tsx:49 - DeckBuilderViewProps (used in module)
+\src\features\shared\deck\ui\DeckActionToolbar.tsx:7 - DeckActionToolbarProps (used in module)
+\.next\types\app\api\local-assets\[...path]\route.ts:316 - PageProps
+\.next\types\app\api\local-assets\[...path]\route.ts:320 - LayoutProps
+\.next\types\app\incantations\spells\[id]\page.ts:56 - PageProps (used in module)
+\.next\types\app\incantations\spells\[id]\page.ts:60 - LayoutProps
+\.next\types\app\incantations\units\[id]\page.ts:56 - PageProps (used in module)
+\.next\types\app\incantations\units\[id]\page.ts:60 - LayoutProps

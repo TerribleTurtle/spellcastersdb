@@ -115,7 +115,8 @@ export function SaveDeckModal({
               }
               className={cn(
                 "bg-surface-inset border-border-default text-text-primary placeholder-gray-600 focus-visible:ring-brand-primary/50",
-                error && "border-red-500/50 focus-visible:ring-red-500/50"
+                error &&
+                  "border-status-danger/50 focus-visible:ring-status-danger/50"
               )}
               placeholder="Enter deck name..."
               autoFocus

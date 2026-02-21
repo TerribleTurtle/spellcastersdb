@@ -184,13 +184,25 @@ export function useTeamEditor() {
 
   const handleTeamShare = async () => {
     if (!teamDecks) return;
-    const { encodeTeam } = await import("@/services/utils/encoding");
-    const hash = encodeTeam(teamDecks, teamName);
-    const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
+    const { createShortLink } =
+      await import("@/services/sharing/create-short-link");
+    const { url, isShortLink, rateLimited } = await createShortLink({
+      teamDecks,
+      teamName,
+      isTeamMode: true,
+      deck: currentDeck,
+      activeSlot,
+    });
 
     const success = await copyToClipboard(url);
     if (success) {
-      showToast("Team Link Copied!", "success");
+      if (rateLimited) {
+        showToast("Rate limit exceeded. Copied long URL instead.", "warning");
+      } else if (isShortLink) {
+        showToast("Team Link Copied!", "success");
+      } else {
+        showToast("Copied long link (short link unavailable)", "warning");
+      }
     }
   };
 

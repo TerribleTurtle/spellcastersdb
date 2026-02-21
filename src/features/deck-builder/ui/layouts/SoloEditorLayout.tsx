@@ -14,13 +14,13 @@ import {
 
 import { UnsavedChangesModal } from "@/components/modals/UnsavedChangesModal";
 import { LibraryButton } from "@/components/ui/LibraryButton";
+import { Button } from "@/components/ui/button";
 import { useDeckBuilder } from "@/features/deck-builder/hooks/domain/useDeckBuilder";
 import { useDeckEditorUI } from "@/features/deck-builder/hooks/ui/useDeckEditorUI";
 import { SoloOverview } from "@/features/deck-builder/overlays/SoloOverview";
 import { useToast } from "@/hooks/useToast";
 import { copyToClipboard } from "@/lib/clipboard";
 import { cn } from "@/lib/utils";
-import { encodeDeck } from "@/services/utils/encoding";
 import { useDeckStore } from "@/store/index";
 import { selectIsExistingDeck, selectIsSaved } from "@/store/selectors";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
@@ -106,13 +106,29 @@ export function SoloEditorLayout({
     }
   };
 
-  const handleShare = async () => {
-    const hash = encodeDeck(currentDeck);
-    const url = `${window.location.origin}${window.location.pathname}?d=${hash}`;
+  const [isSharing, setIsSharing] = React.useState(false);
 
-    const success = await copyToClipboard(url);
-    if (success) {
-      showToast("Deck Link Copied!", "success");
+  const handleShare = async () => {
+    setIsSharing(true);
+    try {
+      const { createShortLink } =
+        await import("@/services/sharing/create-short-link");
+      const { url, isShortLink, rateLimited } = await createShortLink({
+        deck: currentDeck,
+      });
+
+      const success = await copyToClipboard(url);
+      if (success) {
+        if (rateLimited) {
+          showToast("Rate limit exceeded. Copied long URL instead.", "warning");
+        } else if (isShortLink) {
+          showToast("Deck Link Copied!", "success");
+        } else {
+          showToast("Copied long link (short link unavailable)", "warning");
+        }
+      }
+    } finally {
+      setIsSharing(false);
     }
   };
 
@@ -179,7 +195,7 @@ export function SoloEditorLayout({
                 isEmptyDeck && !isSaved
                   ? "opacity-50 cursor-not-allowed bg-surface-raised border-border-subtle text-text-dimmed"
                   : isSaved
-                    ? "bg-status-success-muted text-status-success-text border-green-500/50 hover:bg-status-success-border"
+                    ? "bg-status-success-muted text-status-success-text hover:bg-status-success-border"
                     : "bg-brand-primary/10 text-brand-primary border-brand-primary/50 hover:bg-brand-primary/20 hover:border-brand-primary"
               )}
               title={
@@ -223,13 +239,19 @@ export function SoloEditorLayout({
             )}
 
             {/* Share */}
-            <button
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={handleShare}
-              className="p-2 text-text-muted hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors"
+              className="text-text-muted hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors h-[34px] w-[34px]"
               title="Share"
             >
-              <Share2 size={18} />
-            </button>
+              {isSharing ? (
+                <div className="animate-spin rounded-full h-[18px] w-[18px] border-b-2 border-current" />
+              ) : (
+                <Share2 size={18} />
+              )}
+            </Button>
 
             {/* Clear */}
             <button
