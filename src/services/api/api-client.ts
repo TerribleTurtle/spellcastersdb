@@ -14,9 +14,10 @@ export { DataValidationError };
 export class DataFetchError extends Error {
   constructor(
     message: string,
-    public status?: number
+    public status?: number,
+    public cause?: unknown
   ) {
-    super(message);
+    super(message, { cause });
     this.name = "DataFetchError";
   }
 }
@@ -34,6 +35,7 @@ export async function fetchJson<T>(
         context: "api-client.ts:fetchFromApi",
         status: response.status,
         statusText: response.statusText,
+        url,
       });
       throw new DataFetchError(errorMsg, response.status);
     }
@@ -43,9 +45,17 @@ export async function fetchJson<T>(
     if (error instanceof DataFetchError) {
       throw error;
     }
+
+    monitoring.captureException(error, {
+      message: `Network error fetching ${url}`,
+      context: "api-client.ts:fetchJson",
+      url,
+    });
+
     throw new DataFetchError(
       error instanceof Error ? error.message : "Unknown fetch error",
-      500
+      500,
+      error
     );
   }
 }
