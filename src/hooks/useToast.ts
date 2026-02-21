@@ -6,6 +6,7 @@ export type ToastType =
   | "error"
   | "info"
   | "destructive"
+  | "warning"
   | "default";
 
 export interface Toast {

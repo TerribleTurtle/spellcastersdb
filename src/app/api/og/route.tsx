@@ -4,6 +4,7 @@ import { promises as fs } from "fs";
 import path from "path";
 
 import { fetchGameData } from "@/services/api/api";
+import { anonymizeIp } from "@/services/infrastructure/anonymize-ip";
 import { ratelimit } from "@/services/infrastructure/ratelimit";
 import { monitoring } from "@/services/monitoring";
 
@@ -16,11 +17,12 @@ export const runtime = "nodejs";
 export async function GET(request: NextRequest) {
   // Rate Limiting
   if (ratelimit) {
-    const ip =
+    const rawIp =
       request.headers.get("x-forwarded-for") ??
       request.headers.get("x-real-ip") ??
       "127.0.0.1";
-    const { success } = await ratelimit.limit(ip);
+
+    const { success } = await ratelimit.limit(anonymizeIp(rawIp));
     if (!success) {
       return new Response("Too Many Requests", { status: 429 });
     }

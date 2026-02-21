@@ -26,7 +26,7 @@ export function ClearDataConfirmationModal({
     >
       <div
         ref={modalRef}
-        className="w-full max-w-md bg-surface-main border border-red-500/30 rounded-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+        className="w-full max-w-md bg-surface-main border border-status-danger/30 rounded-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"

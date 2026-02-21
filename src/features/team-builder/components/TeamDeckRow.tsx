@@ -69,8 +69,8 @@ export const TeamDeckRow = memo(function TeamDeckRow({
                 className={cn(
                   "flex items-center justify-center w-5 h-5 rounded-full border-2",
                   isValid
-                    ? "bg-green-500 text-text-primary border-green-400"
-                    : "bg-red-500 text-text-primary border-red-400"
+                    ? "bg-status-success text-brand-dark border-status-success-border"
+                    : "bg-status-danger text-text-primary border-status-danger-border"
                 )}
                 title={isValid ? "Deck Valid" : errors.join("\n")}
                 aria-label={isValid ? "Deck Valid" : "Deck Invalid"}

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Check, Link as LinkIcon } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { copyToClipboard } from "@/lib/clipboard";
 import { cn } from "@/lib/utils";
 import { Deck } from "@/types/deck";
@@ -38,32 +39,48 @@ function ShareTeamButton({
   teamName: string;
 }) {
   const [copied, setCopied] = useState(false);
+  const [isSharing, setIsSharing] = useState(false);
 
   const handleShare = async () => {
-    // Dynamically generate the URL with the team hash
-    const { encodeTeam } = await import("@/services/utils/encoding");
-    const hash = encodeTeam(decks, teamName);
-    const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
+    setIsSharing(true);
+    try {
+      const { createShortLink } =
+        await import("@/services/sharing/create-short-link");
+      const { url } = await createShortLink({
+        teamDecks: decks,
+        teamName,
+        isTeamMode: true,
+      });
 
-    const success = await copyToClipboard(url);
-    if (success) {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      const success = await copyToClipboard(url);
+      if (success) {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } finally {
+      setIsSharing(false);
     }
   };
 
   return (
-    <button
+    <Button
+      variant="outline"
       onClick={handleShare}
       className={cn(
-        "flex items-center gap-2 px-4 py-2 rounded-full border transition-all text-xs font-bold uppercase tracking-wider mt-2",
+        "flex items-center gap-2 px-4 py-2 rounded-full transition-all text-xs font-bold uppercase tracking-wider mt-2",
         copied
-          ? "bg-status-success-border border-green-500/50 text-status-success-text"
-          : "bg-surface-card border-border-default text-text-secondary hover:bg-surface-card hover:text-text-primary"
+          ? "bg-status-success-border text-status-success-text hover:bg-status-success-border/90"
+          : "bg-surface-card border-border-default text-text-secondary hover:bg-surface-hover hover:text-text-primary"
       )}
     >
-      {copied ? <Check size={14} /> : <LinkIcon size={14} />}
+      {isSharing ? (
+        <div className="animate-spin rounded-full h-3.5 w-3.5 border-b-2 border-current" />
+      ) : copied ? (
+        <Check size={14} />
+      ) : (
+        <LinkIcon size={14} />
+      )}
       {copied ? "Link Copied" : "Share Team"}
-    </button>
+    </Button>
   );
 }

@@ -1,4 +1,5 @@
 import { PageShell } from "@/components/layout/PageShell";
+import { ClearDataButton } from "@/components/privacy/ClearDataButton";
 
 export const metadata = {
   title: "Privacy Policy",
@@ -57,28 +58,33 @@ export default function PrivacyPage() {
                 This data never leaves your device unless you explicitly share a
                 deck via URL or export string. You can permanently delete all
                 saved data by clearing your browser&apos;s site data or local
-                storage via your browser&apos;s settings.
+                storage via your browser&apos;s settings (e.g., in Chrome:
+                Settings &gt; Privacy and security &gt; Site settings, or by
+                using the &quot;Clear browsing data&quot; tool).
               </p>
+              <ClearDataButton />
             </div>
 
             <div className="border-t border-border-subtle pt-6">
               <h3 className="text-lg font-bold text-text-primary mb-2 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-brand-primary"></span>
-                Analytics
+                Analytics &amp; Performance
               </h3>
               <p className="mb-2">
-                We use <strong>Vercel Analytics</strong> to understand website
-                traffic and improve performance. It collects anonymous data such
-                as:
+                We use <strong>Vercel Analytics</strong> and{" "}
+                <strong>Vercel Speed Insights</strong> to understand website
+                traffic and monitor performance. They collect anonymous data
+                such as:
               </p>
               <ul className="list-disc list-inside mt-2 space-y-1 ml-4 text-text-muted">
-                <li>Page views and load times</li>
+                <li>Page views and navigation patterns</li>
+                <li>Core Web Vitals (load times, responsiveness)</li>
                 <li>Device type (Desktop/Mobile)</li>
                 <li>Country of origin</li>
               </ul>
               <p className="mt-3 text-sm text-text-dimmed italic">
                 This data is aggregated and does not identify you personally.
-                Vercel Analytics is privacy-friendly and does not use cookies.
+                Both services are privacy-friendly and do not use cookies.
               </p>
             </div>
 
@@ -99,11 +105,40 @@ export default function PrivacyPage() {
                   addresses, emails, and session tokens is stripped before data
                   is sent
                 </li>
+                <li>
+                  Error data is routed through our own server rather than
+                  directly to Sentry, preventing third-party network requests
+                  from your browser
+                </li>
               </ul>
               <p className="mt-3 text-sm text-text-dimmed italic">
                 This ensures that error logs contain only technical diagnostic
                 data and no personal details.
               </p>
+            </div>
+
+            <div className="border-t border-border-subtle pt-6">
+              <h3 className="text-lg font-bold text-text-primary mb-2 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-brand-primary"></span>
+                Rate Limiting
+              </h3>
+              <p className="mb-2">
+                To protect against abuse, certain API routes use rate-limiting
+                powered by Upstash Redis. We ensure your privacy by applying a
+                <strong> one-way cryptographic hash</strong> to your IP address
+                before it is used.
+              </p>
+              <ul className="list-disc list-inside mt-2 space-y-1 ml-4 text-text-muted">
+                <li>
+                  Your actual IP address is <strong>never</strong> sent to or
+                  stored in the rate-limiting database
+                </li>
+                <li>
+                  The anonymized hash (which cannot be reversed back to your IP)
+                  is retained for a maximum of 10 seconds and then automatically
+                  flushed
+                </li>
+              </ul>
             </div>
 
             <div className="border-t border-border-subtle pt-6">
@@ -116,6 +151,13 @@ export default function PrivacyPage() {
                 collect user feedback. Any information you choose to provide in
                 the feedback form is processed and stored by Tally&apos;s
                 servers securely.
+              </p>
+              <p className="mt-3 text-sm text-text-dimmed italic">
+                When you open the feedback form, the current page URL
+                (containing only game state data, such as the cards in your
+                deck) is automatically included as context. This URL does not
+                contain any personal identifiers. No other personal data is
+                sent.
               </p>
             </div>
           </div>

@@ -118,7 +118,7 @@ export function MobileContextBar({
           isEmptyDeck && !isSaved
             ? "opacity-50 cursor-not-allowed bg-surface-raised border-border-subtle text-text-dimmed"
             : isSaved
-              ? "bg-status-success-muted text-status-success-text border-green-500/50"
+              ? "bg-status-success-muted text-status-success-text border-status-success-border"
               : "bg-brand-primary/10 text-brand-primary border-brand-primary/50"
         )}
         aria-label={isSaved ? "Deck Saved" : "Save Deck"}

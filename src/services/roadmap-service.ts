@@ -1,4 +1,5 @@
 import { FALLBACK_ISSUES } from "@/data/roadmap-fallback";
+import { DataFetchError, fetchJson } from "@/services/api/api-client";
 import { monitoring } from "@/services/monitoring";
 import { RoadmapIssue } from "@/types/roadmap";
 
@@ -36,29 +37,10 @@ export const roadmapService = {
         headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
       }
 
-      const res = await fetch(GITHUB_API_URL, {
+      const data = await fetchJson<GitHubIssue[]>(GITHUB_API_URL, {
         headers,
         next: { revalidate: 60 }, // Cache for 60 seconds (ISR)
       });
-
-      if (!res.ok) {
-        if (res.status === 403 || res.status === 429) {
-          monitoring.captureMessage(
-            `[RoadmapService] Rate limit hit (${res.status}). Using fallback data.`,
-            "warning",
-            { context: "roadmap-service.ts:getIssues", status: res.status }
-          );
-        } else {
-          monitoring.captureMessage(
-            `[RoadmapService] GitHub API Error: ${res.status} ${res.statusText}`,
-            "error",
-            { context: "roadmap-service.ts:getIssues", status: res.status }
-          );
-        }
-        return { issues: FALLBACK_ISSUES, isLive: false };
-      }
-
-      const data = await res.json();
 
       // Basic validation/sanitization to ensure it matches our interface
       const issues: RoadmapIssue[] = data.map((issue: GitHubIssue) => ({
@@ -83,10 +65,26 @@ export const roadmapService = {
 
       return { issues: cleanIssues, isLive: true };
     } catch (error) {
-      monitoring.captureException(error, {
-        message: "[RoadmapService] Network/Fetch Error",
-        context: "roadmap-service.ts:getIssues",
-      });
+      if (error instanceof DataFetchError) {
+        if (error.status === 403 || error.status === 429) {
+          monitoring.captureMessage(
+            `[RoadmapService] Rate limit hit (${error.status}). Using fallback data.`,
+            "warning",
+            { context: "roadmap-service.ts:getIssues", status: error.status }
+          );
+        } else {
+          monitoring.captureMessage(
+            `[RoadmapService] GitHub API Error: ${error.status} ${error.message}`,
+            "error",
+            { context: "roadmap-service.ts:getIssues", status: error.status }
+          );
+        }
+      } else {
+        monitoring.captureException(error, {
+          message: "[RoadmapService] Network/Fetch Error",
+          context: "roadmap-service.ts:getIssues",
+        });
+      }
       return { issues: FALLBACK_ISSUES, isLive: false };
     }
   },

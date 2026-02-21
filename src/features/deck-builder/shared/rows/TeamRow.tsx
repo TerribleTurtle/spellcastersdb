@@ -5,13 +5,14 @@ import { CSS } from "@dnd-kit/utilities";
 import { ArrowRight, Check, GripVertical } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
+import { Button } from "@/components/ui/button";
 // Re-using ItemMenu from ForgeControls
 
 import { ItemMenu } from "@/features/shared/deck/ui/ItemMenu";
+import { useToast } from "@/hooks/useToast";
 import { copyToClipboard } from "@/lib/clipboard";
 import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
-import { encodeTeam } from "@/services/utils/encoding";
 import { Deck, Team } from "@/types/deck";
 
 interface TeamRowProps {
@@ -66,6 +67,8 @@ export function TeamRow({
       setEditName(team.name || "");
     }
   };
+
+  const { showToast } = useToast();
 
   const {
     attributes,
@@ -196,32 +199,36 @@ export function TeamRow({
           {!selectionMode && (
             <div className="flex items-center gap-2 shrink-0 relative z-10">
               {isActive && onPutAway ? (
-                <button
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     onPutAway();
                   }}
                   data-testid={`team-put-away-btn-${team.id}`}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent border border-text-muted text-text-muted rounded-full shadow-sm hover:text-text-primary hover:border-text-primary hover:bg-surface-card transition-colors text-xs font-bold uppercase tracking-wider"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-transparent border-border-strong text-text-muted rounded-full shadow-sm hover:text-text-primary hover:border-text-primary hover:bg-surface-card transition-colors text-xs font-bold uppercase tracking-wider h-8"
                   title="Put Away Team"
                 >
                   <span className="hidden sm:inline">Put Away</span>
-                </button>
+                </Button>
               ) : (
-                <button
+                <Button
+                  variant="default"
+                  size="sm"
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     onLoad();
                   }}
                   data-testid={`team-load-btn-${team.id}`}
-                  className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-primary text-brand-dark rounded-full shadow-sm hover:bg-brand-primary/80 transition-colors text-xs font-bold uppercase tracking-wider"
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-brand-primary text-brand-dark rounded-full shadow-sm hover:bg-brand-primary/80 border-0 transition-colors text-xs font-bold uppercase tracking-wider h-8"
                   title="Load Team"
                 >
                   <ArrowRight size={14} />
                   <span className="hidden sm:inline">Load</span>
-                </button>
+                </Button>
               )}
               <ItemMenu
                 onDuplicate={onDuplicate}
@@ -236,9 +243,30 @@ export function TeamRow({
                     : undefined
                 }
                 onCopyLink={async () => {
-                  const hash = encodeTeam(team.decks, team.name);
-                  const url = `${window.location.origin}${window.location.pathname}?team=${hash}`;
-                  await copyToClipboard(url);
+                  const { createShortLink } =
+                    await import("@/services/sharing/create-short-link");
+                  const { url, isShortLink, rateLimited } =
+                    await createShortLink({
+                      teamDecks: team.decks,
+                      teamName: team.name,
+                      isTeamMode: true,
+                    });
+                  const success = await copyToClipboard(url);
+                  if (success) {
+                    if (rateLimited) {
+                      showToast(
+                        "Rate limit exceeded. Copied long URL instead.",
+                        "warning"
+                      );
+                    } else if (isShortLink) {
+                      showToast("Team link copied to clipboard.", "success");
+                    } else {
+                      showToast(
+                        "Copied long link (short link unavailable)",
+                        "warning"
+                      );
+                    }
+                  }
                 }}
                 onExport={() => {
                   const exportData = {

@@ -213,7 +213,7 @@ export default async function DebugPage() {
                       label={`Rank ${rank}`}
                       value={count}
                       total={rankedEntities.length}
-                      color="bg-yellow-500"
+                      color="bg-status-warning"
                     />
                   ))}
               </div>
@@ -230,7 +230,7 @@ export default async function DebugPage() {
                       label={cat}
                       value={count}
                       total={data.units.length}
-                      color="bg-green-500"
+                      color="bg-status-success"
                     />
                   ))}
               </div>

@@ -22,6 +22,8 @@ const styles: Record<ToastType, string> = {
     "bg-status-danger-muted border-status-danger-border text-status-danger-text",
   info: "bg-surface-main border-status-info-border text-status-info-text",
   default: "bg-surface-main border-border-default text-text-primary",
+  warning:
+    "bg-surface-main border-status-warning-border text-status-warning-text",
 };
 
 export function Toaster() {

@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.26] - 2026-02-21
+
+### Added
+
+- **Sentry Monitoring**: Full Sentry integration with global error boundary, client instrumentation for Next.js 16, `DataFetchError` cause/URL tracing, PII-safe `beforeSend` sanitizer, and ingest traffic proxied through Next.js tunnel.
+- **Sentry Debug**: Added crash test button on `/debug` page for verifying Sentry ingestion.
+- **GlitchWitch Theme**: New built-in theme with unique styling.
+- **Bonus Damage Display**: Entity Inspector now renders `bonus_damage` mechanics (including `% Max HP` and `% Current HP`).
+- **Patch History Diffs**: Word-level diffs with Added/Removed badges, locale-aware date formatting, and improved readability.
+
+### Changed
+
+- **E2E Tests**: Refactored flaky sidebar visibility checks to use deterministic assertions; stabilized full Playwright suite.
+- **Patch History**: Extracted `DiffLine` and `LocalDate` components (DRY). Improved diff field name readability and patch sorting with version tie-breaker.
+- **Layout & Mobile**: Consolidated `max-width` tokens, rewrote `useResponsiveGrid` with `ResizeObserver`, polished mobile grid/drawer/badges/headers, and fixed collapsed drawer height.
+- **Design System**: Throttled color picker CSS updates to reduce jank.
+- **Konami Mode**: Resolved stale closure and GPU animation bugs.
+- **Light Theme**: Renamed label to "Why?".
+
+### Fixed
+
+- **Sentry**: Relaxed PII filters preventing event ingestion; resolved Next.js 16 client instrumentation loading issue.
+- **UI**: Fixed 0 rendering on entity pages, portal theme picker to prevent sidebar overflow clipping, deck data hydration on load, and patch history visibility when filters hide all entries.
+- **Build**: Resolved lint-staged failures and hardened preflight pipeline.
+- **Types**: Narrowed `population`/`cooldown` for TS strict mode; aligned test fixtures with current type definitions.
+- **State**: Decoupled solo store and fixed library button; safely deduplicated bonus damage modifiers.
+- **Schema**: Re-added `changelog` to `CommonSchemaParts` to unblock strict validation.
+
 ## [1.0.25] - 2026-02-20
 
 ### Fixed

@@ -15,10 +15,10 @@ import {
 import { GameImage } from "@/components/ui/GameImage";
 import { Button } from "@/components/ui/button";
 import { ItemMenu } from "@/features/shared/deck/ui/ItemMenu";
+import { useToast } from "@/hooks/useToast";
 import { copyToClipboard } from "@/lib/clipboard";
 import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
-import { encodeDeck } from "@/services/utils/encoding";
 import { validateDeck } from "@/services/validation/deck-validation";
 import { Deck } from "@/types/deck";
 
@@ -96,6 +96,7 @@ export function DeckRow({
   };
 
   const { isValid, errors } = validateDeck(deck);
+  const { showToast } = useToast();
 
   return (
     <div
@@ -273,7 +274,7 @@ export function DeckRow({
                   size="sm"
                   className={cn(
                     "flex items-center gap-1.5 px-3 py-1.5 rounded-full shadow-sm transition-colors text-xs font-bold uppercase tracking-wider h-8",
-                    "bg-transparent border-gray-500 text-text-muted hover:text-text-primary hover:border-white hover:bg-surface-card"
+                    "bg-transparent border-border-strong text-text-muted hover:text-text-primary hover:border-text-primary hover:bg-surface-card"
                   )}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -311,9 +312,26 @@ export function DeckRow({
                 onDuplicate={onDuplicate ?? (() => {})}
                 onDelete={onDelete ?? (() => {})}
                 onCopyLink={async () => {
-                  const hash = encodeDeck(deck);
-                  const url = `${window.location.origin}${window.location.pathname}?d=${hash}`;
-                  await copyToClipboard(url);
+                  const { createShortLink } =
+                    await import("@/services/sharing/create-short-link");
+                  const { url, isShortLink, rateLimited } =
+                    await createShortLink({ deck });
+                  const success = await copyToClipboard(url);
+                  if (success) {
+                    if (rateLimited) {
+                      showToast(
+                        "Rate limit exceeded. Copied long URL instead.",
+                        "warning"
+                      );
+                    } else if (isShortLink) {
+                      showToast("Deck link copied to clipboard.", "success");
+                    } else {
+                      showToast(
+                        "Copied long link (short link unavailable)",
+                        "warning"
+                      );
+                    }
+                  }
                 }}
                 type="DECK"
                 onRename={

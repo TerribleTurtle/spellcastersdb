@@ -1,0 +1,243 @@
+﻿bash.exe : warning: in 
+the working copy of 
+'CONTRIBUTING.md', LF 
+will be replaced by 
+CRLF the next time Git 
+touches it
+At line:1 char:1
++ & "C:\Program Files\G
+it\bin\bash.exe" -c 
+"git diff 
+--name-status HEAD ...
++ ~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
+~~
+    + CategoryInfo     
+         : NotSpecifi  
+  ed: (warning: in t   
+ he... Git touches     
+it:String) [], Rem    
+oteException
+    + FullyQualifiedEr 
+   rorId : NativeComm  
+  andError
+ 
+warning: in the 
+working copy of 
+'README.md', LF will 
+be replaced by CRLF 
+the next time Git 
+touches it
+warning: in the 
+working copy of 
+'TODO.md', LF will be 
+replaced by CRLF the 
+next time Git touches 
+it
+warning: in the 
+working copy of 
+'eslint.config.mjs', 
+LF will be replaced by 
+CRLF the next time Git 
+touches it
+warning: in the 
+working copy of 
+'package-lock.json', 
+LF will be replaced by 
+CRLF the next time Git 
+touches it
+warning: in the 
+working copy of 
+'package.json', LF 
+will be replaced by 
+CRLF the next time Git 
+touches it
+warning: in the 
+working copy of 'sentry
+.edge.config.ts', LF 
+will be replaced by 
+CRLF the next time Git 
+touches it
+warning: in the 
+working copy of 'sentry
+.server.config.ts', LF 
+will be replaced by 
+CRLF the next time Git 
+touches it
+warning: in the 
+working copy of 'src/ap
+p/api/og/route.tsx', 
+LF will be replaced by 
+CRLF the next time Git 
+touches it
+warning: in the 
+working copy of 'src/ap
+p/debug/page.tsx', LF 
+will be replaced by 
+CRLF the next time Git 
+touches it
+warning: in the 
+working copy of 'src/ap
+p/privacy/page.tsx', 
+LF will be replaced by 
+CRLF the next time Git 
+touches it
+warning: in the 
+working copy of 'src/co
+mponents/layout/TeamSha
+reButton.tsx', LF will 
+be replaced by CRLF 
+the next time Git 
+touches it
+warning: in the 
+working copy of 'src/co
+mponents/modals/SaveDec
+kModal.tsx', LF will 
+be replaced by CRLF 
+the next time Git 
+touches it
+warning: in the 
+working copy of 'src/co
+mponents/roadmap/IssueC
+ard.tsx', LF will be 
+replaced by CRLF the 
+next time Git touches 
+it
+warning: in the 
+working copy of 'src/fe
+atures/deck-builder/for
+ge/modals/ClearDataConf
+irmationModal.tsx', LF 
+will be replaced by 
+CRLF the next time Git 
+touches it
+warning: in the 
+working copy of 'src/fe
+atures/deck-builder/hoo
+ks/persistence/useDeckS
+haring.ts', LF will be 
+replaced by CRLF the 
+next time Git touches 
+it
+warning: in the 
+working copy of 'src/fe
+atures/deck-builder/hoo
+ks/ui/useTeamEditor.ts'
+, LF will be replaced 
+by CRLF the next time 
+Git touches it
+warning: in the 
+working copy of 'src/fe
+atures/deck-builder/ove
+rlays/SoloOverview.tsx'
+, LF will be replaced 
+by CRLF the next time 
+Git touches it
+warning: in the 
+working copy of 'src/fe
+atures/deck-builder/ui/
+mobile/MobileContextBar
+.tsx', LF will be 
+replaced by CRLF the 
+next time Git touches 
+it
+warning: in the 
+working copy of 'src/fe
+atures/deck-builder/ui/
+root/DeckBuilderContain
+er.tsx', LF will be 
+replaced by CRLF the 
+next time Git touches 
+it
+warning: in the 
+working copy of 'src/fe
+atures/shared/deck/ui/I
+temMenu.tsx', LF will 
+be replaced by CRLF 
+the next time Git 
+touches it
+warning: in the 
+working copy of 'src/fe
+atures/team-builder/com
+ponents/TeamDeckEditorR
+ow.tsx', LF will be 
+replaced by CRLF the 
+next time Git touches 
+it
+warning: in the 
+working copy of 'src/fe
+atures/team-builder/com
+ponents/TeamDeckRow.tsx
+', LF will be replaced 
+by CRLF the next time 
+Git touches it
+warning: in the 
+working copy of 'src/fe
+atures/team-builder/com
+ponents/TeamHeader.tsx'
+, LF will be replaced 
+by CRLF the next time 
+Git touches it
+warning: in the 
+working copy of 'src/fe
+atures/team-builder/com
+ponents/TeamOverview.ts
+x', LF will be 
+replaced by CRLF the 
+next time Git touches 
+it
+warning: in the 
+working copy of 'src/in
+strumentation-client.ts
+', LF will be replaced 
+by CRLF the next time 
+Git touches it
+warning: in the 
+working copy of 'src/se
+rvices/infrastructure/r
+atelimit.ts', LF will 
+be replaced by CRLF 
+the next time Git 
+touches it
+warning: in the 
+working copy of 'src/se
+rvices/roadmap-service.
+ts', LF will be 
+replaced by CRLF the 
+next time Git touches 
+it
+M	CONTRIBUTING.md
+M	README.md
+M	TODO.md
+D	docs/PRIVACY_AUDIT_REPORT.md
+M	eslint.config.mjs
+M	package-lock.json
+M	package.json
+M	sentry.edge.config.ts
+M	sentry.server.config.ts
+M	src/app/api/og/route.tsx
+M	src/app/debug/page.tsx
+M	src/app/privacy/page.tsx
+M	src/components/layout/TeamShareButton.tsx
+M	src/components/modals/SaveDeckModal.tsx
+M	src/components/roadmap/IssueCard.tsx
+M	src/components/ui/Toaster.tsx
+M	src/features/deck-builder/forge/modals/ClearDataConfirmationModal.tsx
+M	src/features/deck-builder/hooks/persistence/useDeckSharing.ts
+M	src/features/deck-builder/hooks/ui/useTeamEditor.ts
+M	src/features/deck-builder/overlays/SoloOverview.tsx
+M	src/features/deck-builder/shared/rows/DeckRow.tsx
+M	src/features/deck-builder/shared/rows/TeamRow.tsx
+M	src/features/deck-builder/ui/layouts/SoloEditorLayout.tsx
+M	src/features/deck-builder/ui/mobile/MobileContextBar.tsx
+M	src/features/deck-builder/ui/root/DeckBuilderContainer.tsx
+M	src/features/shared/deck/ui/ItemMenu.tsx
+M	src/features/team-builder/components/TeamDeckEditorRow.tsx
+M	src/features/team-builder/components/TeamDeckRow.tsx
+M	src/features/team-builder/components/TeamHeader.tsx
+M	src/features/team-builder/components/TeamOverview.tsx
+M	src/hooks/useToast.ts
+M	src/instrumentation-client.ts
+M	src/services/infrastructure/ratelimit.ts
+M	src/services/roadmap-service.ts

@@ -11,13 +11,13 @@ import {
 import { ImportConflictModal } from "@/components/modals/ImportConflictModal";
 import { SaveDeckModal } from "@/components/modals/SaveDeckModal";
 import { GameImage } from "@/components/ui/GameImage";
+import { Button } from "@/components/ui/button";
 import { DeckOverview } from "@/features/shared/deck/ui/DeckOverview";
 import { useEphemeralState } from "@/hooks/useEphemeralState";
 import { useToast } from "@/hooks/useToast";
 import { copyToClipboard } from "@/lib/clipboard";
 import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
-import { encodeDeck } from "@/services/utils/encoding";
 import { validateDeck } from "@/services/validation/deck-validation";
 import { useDeckStore } from "@/store/index";
 import { UnifiedEntity } from "@/types/api";
@@ -88,14 +88,28 @@ export function SoloOverview({
     onSave(deckToSave);
   };
 
-  const handleShare = async () => {
-    const hash = encodeDeck(deck);
-    const url = `${window.location.origin}${window.location.pathname}?d=${hash}`;
+  const [isSharing, setIsSharing] = useState(false);
 
-    const success = await copyToClipboard(url);
-    if (success) {
-      triggerCopied();
-      showToast("Deck link copied to clipboard.", "success");
+  const handleShare = async () => {
+    setIsSharing(true);
+    try {
+      const { createShortLink } =
+        await import("@/services/sharing/create-short-link");
+      const { url, isShortLink, rateLimited } = await createShortLink({ deck });
+
+      const success = await copyToClipboard(url);
+      if (success) {
+        triggerCopied();
+        if (rateLimited) {
+          showToast("Rate limit exceeded. Copied long URL instead.", "error");
+        } else if (isShortLink) {
+          showToast("Deck link copied to clipboard.", "success");
+        } else {
+          showToast("Copied long link (short link unavailable)", "error");
+        }
+      }
+    } finally {
+      setIsSharing(false);
     }
   };
 
@@ -131,19 +145,27 @@ export function SoloOverview({
             {/* Horizontal Deck Layout */}
             <div className="w-full bg-surface-card border border-border-default rounded-xl p-2 md:p-10 shadow-2xl relative overflow-hidden group">
               {/* Share Button - Absolute Top Right */}
-              <button
+              <Button
+                variant="outline"
+                size="icon"
                 onClick={handleShare}
                 data-testid="share-deck-btn"
                 className={cn(
-                  "absolute top-2 right-2 z-20 p-2 rounded-full border transition-all shadow-lg",
+                  "absolute top-2 right-2 z-20 rounded-full transition-all shadow-lg text-text-primary",
                   copied
-                    ? "bg-status-success text-brand-dark border-status-success-border"
-                    : "bg-surface-inset border-border-default text-text-primary hover:bg-brand-primary hover:border-brand-primary hover:text-brand-dark"
+                    ? "bg-status-success text-brand-dark border-status-success-border hover:bg-status-success/90"
+                    : "bg-surface-inset border-border-default hover:bg-brand-primary hover:border-brand-primary hover:text-brand-dark"
                 )}
                 title="Share Deck"
               >
-                {copied ? <CheckCircle2 size={14} /> : <LinkIcon size={14} />}
-              </button>
+                {isSharing ? (
+                  <div className="animate-spin rounded-full h-3.5 w-3.5 border-b-2 border-current" />
+                ) : copied ? (
+                  <CheckCircle2 size={14} />
+                ) : (
+                  <LinkIcon size={14} />
+                )}
+              </Button>
 
               {/* Validation Badge - Absolute Top Left */}
               <div

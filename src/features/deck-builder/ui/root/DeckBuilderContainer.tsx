@@ -3,6 +3,7 @@
 import { useDataHydration } from "@/features/deck-builder/hooks/persistence/useDataHydration";
 import { useDeckSync } from "@/features/deck-builder/hooks/persistence/useDeckSync";
 import { useUrlSync } from "@/features/deck-builder/hooks/persistence/useUrlSync";
+import { useShareErrorHandler } from "@/features/deck-builder/hooks/ui/useShareErrorHandler";
 import { useToast } from "@/hooks/useToast";
 import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
 
@@ -19,6 +20,9 @@ export function DeckBuilderContainer({
   spellcasters,
 }: DeckBuilderContainerProps) {
   const { showToast } = useToast();
+
+  // 0. Handle any share errors from short links
+  useShareErrorHandler();
 
   // 1. Hydrate Stale Data (e.g. old cooldowns in storage)
   useDataHydration({ units, spellcasters });
