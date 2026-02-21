@@ -29,9 +29,19 @@ Sentry.init({
     "The user aborted a request",
     "ResizeObserver loop width and height error",
     "ResizeObserver loop limit exceeded",
+    "Non-Error promise rejection",
+    /Loading chunk \d+ failed/,
   ],
 
+  denyUrls: [/extensions\//i, /^chrome:\/\//i, /^moz-extension:\/\//i],
+
   beforeSend(event) {
+    const ua = typeof navigator !== "undefined" ? navigator.userAgent : "";
+    if (
+      /bot|crawl|spider|slurp|facebookexternalhit|Bytespider|GPTBot/i.test(ua)
+    ) {
+      return null;
+    }
     // Strip user objects if they accidentally leak
     if (event.user) {
       delete event.user.ip_address;

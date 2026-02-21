@@ -12,9 +12,24 @@ Sentry.init({
   // Do not send default PII
   sendDefaultPii: false,
 
+  ignoreErrors: [
+    "ResizeObserver loop",
+    "Non-Error promise rejection",
+    /Loading chunk \d+ failed/,
+  ],
+
+  denyUrls: [/extensions\//i, /^chrome:\/\//i, /^moz-extension:\/\//i],
+
   debug: false,
 
   beforeSend(event) {
+    const ua = event.request?.headers?.["user-agent"] || "";
+    if (
+      /bot|crawl|spider|slurp|facebookexternalhit|Bytespider|GPTBot/i.test(ua)
+    ) {
+      return null;
+    }
+
     if (event.user) {
       delete event.user.ip_address;
       delete event.user.email;
