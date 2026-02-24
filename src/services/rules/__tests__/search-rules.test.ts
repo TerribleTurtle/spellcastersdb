@@ -36,7 +36,7 @@ describe("getSearchableAttributes", () => {
 
   it("should default Spellcaster class to 'Unknown' if missing", () => {
     const entity = makeEntity({ category: "Spellcaster", name: "Anon" });
-    delete (entity as Record<string, unknown>).class;
+    delete (entity as unknown as Record<string, unknown>).class;
     const result = getSearchableAttributes(entity);
 
     expect(result.class).toBe("Unknown");
