@@ -402,22 +402,36 @@ export const UpgradeSchema = z
     message: "entity_id or upgrade_id is required",
   });
 
+const DamageTierSchema = z.object({
+  tier: z.enum(["I", "II", "III"]),
+  value: z.number(),
+  calculation_unit: z.string(),
+  interval: z.number().optional(),
+});
+
+const InfusionAlliedEffectSchema = z.object({
+  description: z.string(),
+  stat_multiplier: z.record(z.string(), z.number()).optional(),
+  heal: z
+    .object({
+      value: z.number(),
+      interval: z.number(),
+    })
+    .optional(),
+});
+
+const InfusionEnemyEffectSchema = z.object({
+  description: z.string(),
+  status_buildup: z.string().optional(),
+  damage_tiers: z.array(DamageTierSchema).optional(),
+});
+
 const InfusionSchema = z.object({
   id: z.string(),
   name: z.string(),
   element: z.enum(["Fire", "Lightning", "Poison", "Ice"]),
-  allied_effect: z.string(),
-  enemy_effect: z.string(),
-  damage_tiers: z
-    .array(
-      z.object({
-        tier: z.enum(["I", "II", "III"]),
-        value: z.number(),
-        calculation_unit: z.string(),
-        interval: z.number().optional(),
-      })
-    )
-    .optional(),
+  allied_effect: InfusionAlliedEffectSchema,
+  enemy_effect: InfusionEnemyEffectSchema,
 });
 
 export const AllDataSchema = z.object({

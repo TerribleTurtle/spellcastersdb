@@ -92,7 +92,7 @@ export default async function InfusionsIndexPage() {
                   </div>
 
                   <p className="text-sm text-text-secondary leading-relaxed grow">
-                    {infusion.allied_effect}
+                    {infusion.allied_effect.description}
                   </p>
 
                   <div className="mt-5 pt-4 border-t border-border-subtle flex flex-col gap-3">
@@ -103,12 +103,12 @@ export default async function InfusionsIndexPage() {
                       />
                       <span
                         className="line-clamp-2"
-                        title={infusion.enemy_effect}
+                        title={infusion.enemy_effect.description}
                       >
                         <span className="font-bold text-status-danger-text mr-1">
                           Enemy:
                         </span>
-                        {infusion.enemy_effect}
+                        {infusion.enemy_effect.description}
                       </span>
                     </div>
                     <div className="flex items-center justify-end">
