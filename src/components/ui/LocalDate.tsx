@@ -31,10 +31,11 @@ export function LocalDate({
           })
         );
       } else {
-        // Dates are date-only strings (e.g. "2026-02-18"), so we parse them
-        // as local dates and format with the viewer's locale — no time component.
-        // This prevents the "UTC midnight" shift problem.
-        const [year, month, day] = iso.split("-").map(Number);
+        // Dates are date-only strings (e.g. "2026-02-18") or full ISO strings.
+        // We extract just the YYYY-MM-DD part to prevent "UTC midnight" shifting
+        // and parse it locally.
+        const datePart = iso.split("T")[0]; // "2026-02-18"
+        const [year, month, day] = datePart.split("-").map(Number);
         const d = new Date(year, month - 1, day);
 
         setDisplay(d.toLocaleDateString(undefined, { dateStyle: "medium" }));

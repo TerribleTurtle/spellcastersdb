@@ -11,7 +11,7 @@ import {
 import { AllDataResponse } from "@/types/api";
 import { EntityCategory } from "@/types/enums";
 
-import { fetchGameData } from "./api";
+import { fetchGameData } from "../api";
 
 // Mock server-only to allow testing server code in client/test env
 vi.mock("server-only", () => {
@@ -144,7 +144,7 @@ describe("fetchJson Error Instrumentation", () => {
   });
 
   it("should preserve the original error as cause when fetch rejects", async () => {
-    const { fetchJson, DataFetchError } = await import("./api-client");
+    const { fetchJson, DataFetchError } = await import("../api-client");
     const networkError = new TypeError("fetch failed");
     (global.fetch as Mock).mockRejectedValue(networkError);
 
@@ -161,7 +161,7 @@ describe("fetchJson Error Instrumentation", () => {
   });
 
   it("should re-throw DataFetchError without wrapping", async () => {
-    const { fetchJson, DataFetchError } = await import("./api-client");
+    const { fetchJson, DataFetchError } = await import("../api-client");
     const original = new DataFetchError("Not Found", 404);
     (global.fetch as Mock).mockImplementation(() => {
       throw original;
@@ -176,7 +176,7 @@ describe("fetchJson Error Instrumentation", () => {
   });
 
   it("should include URL in the DataFetchError message for HTTP errors", async () => {
-    const { fetchJson } = await import("./api-client");
+    const { fetchJson } = await import("../api-client");
     (global.fetch as Mock).mockResolvedValue({
       ok: false,
       status: 503,

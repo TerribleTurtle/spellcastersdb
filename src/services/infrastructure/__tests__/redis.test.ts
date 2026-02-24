@@ -36,7 +36,7 @@ describe("redis infrastructure plugin", () => {
     );
 
     // Act
-    const redisModule = await import("./redis");
+    const redisModule = await import("../redis");
 
     // Assert
     expect(Redis.fromEnv).toHaveBeenCalled();
@@ -51,7 +51,7 @@ describe("redis infrastructure plugin", () => {
     vi.stubEnv("UPSTASH_REDIS_REST_TOKEN", ""); // falsy
 
     // Act
-    const redisModule = await import("./redis");
+    const redisModule = await import("../redis");
 
     // Assert
     expect(Redis.fromEnv).not.toHaveBeenCalled();
@@ -72,7 +72,7 @@ describe("redis infrastructure plugin", () => {
     });
 
     // Act
-    const redisModule = await import("./redis");
+    const redisModule = await import("../redis");
 
     // Assert
     expect(Redis.fromEnv).toHaveBeenCalled();

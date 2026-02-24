@@ -39,7 +39,7 @@
   - **Read-Through Caching**: Optimizes data fetching.
   - **Virtualization**: `react-virtuoso` for large lists.
   - **Zod Validation**: Ensures data integrity at runtime.
-  - **Comprehensive Testing**: Unit and integration tests (Vitest) covering core logic, validation, and data integrity.
+  - **Comprehensive Testing**: Rigorous unit and integration tests (Vitest) covering core logic, custom hooks, and data validation, enforced by strict coverage threshold lock (`vitest.config.ts`) to prevent regressions.
   - **Revalidation API**: On-demand cache invalidation via `/api/revalidate` (using `Authorization` header) with `revalidateTag` for robust content updates.
     - **CI/CD**: The "Daily Revalidation" workflow requires `REVALIDATION_SECRET` and optionally `APP_URL` (defaults to `https://www.spellcastersdb.com`) in GitHub Secrets.
   - **State Persistence**: Optimized `zustand/persist` with `partialize` to serialize only critical user data, excluding transient UI state for consistent high performance.

@@ -144,6 +144,22 @@ export type Mechanics = Omit<UnitMechanics, "damage_modifiers"> &
   };
 
 // ============================================================================
+// Patch History (Inline)
+// ============================================================================
+
+export interface StatChange {
+  field: string;
+  old: unknown;
+  new: unknown;
+}
+
+export interface StatChangeEntry {
+  version: string;
+  date: string;
+  changes: StatChange[];
+}
+
+// ============================================================================
 // Core Entity Interfaces
 // ============================================================================
 
@@ -163,6 +179,9 @@ export interface Incantation {
   // Config
   rank?: UnitRank;
   mechanics?: UnitMechanics | SpellMechanics;
+
+  // Patch History
+  stat_changes?: StatChangeEntry[];
 }
 
 /**
@@ -228,6 +247,8 @@ export interface Titan {
   movement_speed: number;
   heal_amount?: number;
   passive_health_regen?: number;
+
+  stat_changes?: StatChangeEntry[];
 }
 
 export interface Ability {
@@ -268,6 +289,8 @@ export interface Spellcaster {
 
   // Kit
   abilities: SpellcasterAbilities;
+
+  stat_changes?: StatChangeEntry[];
 }
 
 export interface Consumable {
@@ -286,6 +309,8 @@ export interface Consumable {
   tags: string[];
   category: EntityCategory.Consumable;
   rarity?: string;
+
+  stat_changes?: StatChangeEntry[];
 }
 
 export interface Upgrade {
@@ -301,6 +326,8 @@ export interface Upgrade {
 
   tags: string[];
   category: EntityCategory.Upgrade;
+
+  stat_changes?: StatChangeEntry[];
 }
 
 // ============================================================================

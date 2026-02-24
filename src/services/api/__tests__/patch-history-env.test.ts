@@ -11,7 +11,7 @@ global.fetch = fetchMock;
 describe("patch-history service (Environment URL Switching)", () => {
   beforeEach(() => {
     vi.resetAllMocks();
-    // Mock changelog_index.json returning null (404) to trigger legacy fallback
+    // Mock audit.json returning 404 to test URL construction
     fetchMock.mockResolvedValue({
       ok: false,
       status: 404,

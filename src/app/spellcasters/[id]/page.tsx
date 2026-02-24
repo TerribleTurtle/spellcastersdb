@@ -6,11 +6,7 @@ import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getSpellcasterById, getSpellcasters } from "@/services/api/api";
-import {
-  fetchChangelog,
-  fetchEntityTimeline,
-  filterChangelogForEntity,
-} from "@/services/api/patch-history";
+import { mapStatChangesToChangelog } from "@/services/api/patch-history";
 
 interface SpellcasterPageProps {
   params: Promise<{ id: string }>;
@@ -65,13 +61,13 @@ export default async function SpellcasterPage({
     notFound();
   }
 
-  // Fetch patch history data and related entities in parallel
-  const [changelog, timeline, allSpellcasters] = await Promise.all([
-    fetchChangelog(),
-    fetchEntityTimeline(id),
-    getSpellcasters(),
-  ]);
-  const entityChangelog = filterChangelogForEntity(changelog, id);
+  // Fetch related entities
+  const allSpellcasters = await getSpellcasters();
+
+  // Synthesize UI Patch History directly from inline stat_changes
+  const entityChangelog = spellcaster.stat_changes
+    ? mapStatChangesToChangelog(spellcaster.stat_changes, id, spellcaster.name)
+    : [];
   const relatedEntities = allSpellcasters.filter(
     (s) => s.spellcaster_id !== id
   );
@@ -106,7 +102,7 @@ export default async function SpellcasterPage({
         backUrl="/spellcasters"
         backLabel="Back to Spellcasters"
         changelog={entityChangelog}
-        timeline={timeline}
+        timeline={[]}
         showControls={true}
         breadcrumbs={[
           { label: "Spellcasters", href: "/spellcasters" },

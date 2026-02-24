@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { INITIAL_DECK } from "@/services/api/persistence";
 import { Team } from "@/types/deck";
 
-import { downloadTeamJson } from "./export-service";
+import { downloadTeamJson } from "../export-service";
 
 describe("export-service", () => {
   let createObjectURLSpy: ReturnType<typeof vi.fn>;

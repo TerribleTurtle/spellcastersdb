@@ -4,11 +4,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getEntityById, getSpells } from "@/services/api/api";
-import {
-  fetchChangelog,
-  fetchEntityTimeline,
-  filterChangelogForEntity,
-} from "@/services/api/patch-history";
+import { mapStatChangesToChangelog } from "@/services/api/patch-history";
 import { Spell } from "@/types/api";
 
 interface SpellPageProps {
@@ -52,13 +48,13 @@ export default async function SpellPage({ params }: SpellPageProps) {
     notFound();
   }
 
-  // Fetch patch history data and related entities in parallel
-  const [changelog, timeline, allSpells] = await Promise.all([
-    fetchChangelog(),
-    fetchEntityTimeline(id),
-    getSpells(),
-  ]);
-  const entityChangelog = filterChangelogForEntity(changelog, id);
+  // Fetch related entities
+  const allSpells = await getSpells();
+
+  // Synthesize UI Patch History directly from inline stat_changes
+  const entityChangelog = spell.stat_changes
+    ? mapStatChangesToChangelog(spell.stat_changes, id, spell.name)
+    : [];
   const relatedEntities = allSpells.filter(
     (s: Spell) => s.entity_id !== id && s.magic_school === spell.magic_school
   );
@@ -89,7 +85,7 @@ export default async function SpellPage({ params }: SpellPageProps) {
         backUrl="/incantations/spells"
         backLabel="Back to Spells"
         changelog={entityChangelog}
-        timeline={timeline}
+        timeline={[]}
         showControls={true}
         breadcrumbs={[
           { label: "Spells", href: "/incantations/spells" },

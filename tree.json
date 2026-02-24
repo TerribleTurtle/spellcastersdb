@@ -1,0 +1,2299 @@
+{
+  "sha": "0c576a19a84091ceb44701b415bb6031d0f394bd",
+  "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/0c576a19a84091ceb44701b415bb6031d0f394bd",
+  "tree": [
+    {
+      "path": ".agent",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "d0f43c83c40e35bbe9c7d0551fbba738aa41f1e0",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/d0f43c83c40e35bbe9c7d0551fbba738aa41f1e0"
+    },
+    {
+      "path": ".agent/rules",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "783a3b22a8aebb988a5c78de699a9fca7f3ff0fb",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/783a3b22a8aebb988a5c78de699a9fca7f3ff0fb"
+    },
+    {
+      "path": ".agent/rules/bash.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "118685e7f3ea24b0fa31754369bb3506c1a9b3b3",
+      "size": 548,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/118685e7f3ea24b0fa31754369bb3506c1a9b3b3"
+    },
+    {
+      "path": ".coverage",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "821e4337d848dc87089503943a7ae9e7b52c2440",
+      "size": 53248,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/821e4337d848dc87089503943a7ae9e7b52c2440"
+    },
+    {
+      "path": ".github",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "6d68e7883c0637581b4ef2360fee9c6975ceca69",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/6d68e7883c0637581b4ef2360fee9c6975ceca69"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2a78538a66050851d1b35025391960ed7d73f211",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/2a78538a66050851d1b35025391960ed7d73f211"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/bug_report.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "984aa42dcc442e3a37ea3da4bd608fa6b176e824",
+      "size": 659,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/984aa42dcc442e3a37ea3da4bd608fa6b176e824"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/data_submission.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c0ee55bb18f7cc690df4ededb86a718b429a8535",
+      "size": 643,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/c0ee55bb18f7cc690df4ededb86a718b429a8535"
+    },
+    {
+      "path": ".github/ISSUE_TEMPLATE/feature_request.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "01e581924b09bfcd76a36205e12266dde3b65d6f",
+      "size": 632,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/01e581924b09bfcd76a36205e12266dde3b65d6f"
+    },
+    {
+      "path": ".github/PULL_REQUEST_TEMPLATE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eaa60bb6bd1f6b1a7037476d00b2b94506688460",
+      "size": 1448,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/eaa60bb6bd1f6b1a7037476d00b2b94506688460"
+    },
+    {
+      "path": ".github/dependabot.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "798e8fa3392017bcd1f33a22f6ac45104c015383",
+      "size": 538,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/798e8fa3392017bcd1f33a22f6ac45104c015383"
+    },
+    {
+      "path": ".github/workflows",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "2a33a0e11c34ee370393cce79400f21a8a5794fa",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/2a33a0e11c34ee370393cce79400f21a8a5794fa"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dec6ab61a8fb4e43a13e484010f7330c931df414",
+      "size": 3063,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/dec6ab61a8fb4e43a13e484010f7330c931df414"
+    },
+    {
+      "path": ".github/workflows/deploy.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d24ee1ffe46fa97fbd4b01457adceaf53688d44b",
+      "size": 3604,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d24ee1ffe46fa97fbd4b01457adceaf53688d44b"
+    },
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0261254bf6ff72c92250b16dfe04388eb7b6158a",
+      "size": 638,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/0261254bf6ff72c92250b16dfe04388eb7b6158a"
+    },
+    {
+      "path": ".nojekyll",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e69de29bb2d1d6434b8b29ae775ad8c2e48c5391",
+      "size": 0,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c6b24e3fe7f5f07373b00b87f9040c6f2509354f",
+      "size": 292,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/c6b24e3fe7f5f07373b00b87f9040c6f2509354f"
+    },
+    {
+      "path": "CODE_OF_CONDUCT.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d8453edd9118579f13006bcf71b996ea3f0daa96",
+      "size": 2249,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d8453edd9118579f13006bcf71b996ea3f0daa96"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4d3d127f3eacc11e493516e3c5627477f76b1dd5",
+      "size": 8659,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/4d3d127f3eacc11e493516e3c5627477f76b1dd5"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7d89a44625fc782c7655ddc40654752ee7a4ab78",
+      "size": 1079,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/7d89a44625fc782c7655ddc40654752ee7a4ab78"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "945e085daa7ff7d0071c73f4a63f151de71081f3",
+      "size": 7024,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/945e085daa7ff7d0071c73f4a63f151de71081f3"
+    },
+    {
+      "path": "SCHEMA_CHANGELOG.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "882d242c8fc6df96f91a47d0630de5c003e66eea",
+      "size": 4641,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/882d242c8fc6df96f91a47d0630de5c003e66eea"
+    },
+    {
+      "path": "active_state.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3815dd36a66157ade2156d5441d29dab6b4a749b",
+      "size": 1453,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/3815dd36a66157ade2156d5441d29dab6b4a749b"
+    },
+    {
+      "path": "ajv2019.bundle.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2e2f6434c6223e64f17ef88fe18d18a705492c23",
+      "size": 301737,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/2e2f6434c6223e64f17ef88fe18d18a705492c23"
+    },
+    {
+      "path": "assets",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "ea51ddaf6bd7627edbd9ab94752e23c78df357de",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/ea51ddaf6bd7627edbd9ab94752e23c78df357de"
+    },
+    {
+      "path": "assets/gaia_beast_cardBAK.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "38379a34beaedfc7252bdb1120c08c52eff723b6",
+      "size": 59548,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/38379a34beaedfc7252bdb1120c08c52eff723b6"
+    },
+    {
+      "path": "assets/heroes",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4ff2803a362bebe3f48fd1cdfde9eba5df204a01",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/4ff2803a362bebe3f48fd1cdfde9eba5df204a01"
+    },
+    {
+      "path": "assets/heroes/astral_monk.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b9533a201f4df997a86421b4e087c26511bc728c",
+      "size": 192152,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/b9533a201f4df997a86421b4e087c26511bc728c"
+    },
+    {
+      "path": "assets/heroes/astral_monk.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bde6c6845f18c412f9c92560f3dcc1e941db1ecb",
+      "size": 29670,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/bde6c6845f18c412f9c92560f3dcc1e941db1ecb"
+    },
+    {
+      "path": "assets/heroes/fire_elementalist.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cdaf85dcbbbcb859011b124ed90d268c301f0cba",
+      "size": 122058,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/cdaf85dcbbbcb859011b124ed90d268c301f0cba"
+    },
+    {
+      "path": "assets/heroes/fire_elementalist.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f769f9f1834b75163ac7efd46ee1e24850320eaf",
+      "size": 21830,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f769f9f1834b75163ac7efd46ee1e24850320eaf"
+    },
+    {
+      "path": "assets/heroes/iron_sorcerer.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "edcb3ba0498e9efa392a171811fd4c24f82520b8",
+      "size": 147405,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/edcb3ba0498e9efa392a171811fd4c24f82520b8"
+    },
+    {
+      "path": "assets/heroes/iron_sorcerer.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "933b7ac9e5b20dc6cfdee3040cc2d8e80ac021ab",
+      "size": 19066,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/933b7ac9e5b20dc6cfdee3040cc2d8e80ac021ab"
+    },
+    {
+      "path": "assets/heroes/mystic_scribe.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4b99e58712a29f557b5cd3723def477c0ab491c0",
+      "size": 138815,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/4b99e58712a29f557b5cd3723def477c0ab491c0"
+    },
+    {
+      "path": "assets/heroes/mystic_scribe.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3c34c7f7e064d6e2542613e23f66d49065d2dc3e",
+      "size": 21316,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/3c34c7f7e064d6e2542613e23f66d49065d2dc3e"
+    },
+    {
+      "path": "assets/heroes/stone_shaman.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "177f719f75c00c0559cf69e978340b40037c02c8",
+      "size": 158751,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/177f719f75c00c0559cf69e978340b40037c02c8"
+    },
+    {
+      "path": "assets/heroes/stone_shaman.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "60831c3d0a986dbba0069c81f00d11ec02f23b43",
+      "size": 20764,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/60831c3d0a986dbba0069c81f00d11ec02f23b43"
+    },
+    {
+      "path": "assets/heroes/swamp_witch.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "77f8981c7389d026ac129f1897ce09ca9ab320be",
+      "size": 160119,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/77f8981c7389d026ac129f1897ce09ca9ab320be"
+    },
+    {
+      "path": "assets/heroes/swamp_witch.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "885ed5828d265ba100f81b848c856ec0370278a6",
+      "size": 20536,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/885ed5828d265ba100f81b848c856ec0370278a6"
+    },
+    {
+      "path": "assets/spells",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "72c5d5531dea9ebb0071102409f440484d27883d",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/72c5d5531dea9ebb0071102409f440484d27883d"
+    },
+    {
+      "path": "assets/spells/astral_nova.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "68a8fe8e0e36760959491d96242f58480bcdbd3d",
+      "size": 94788,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/68a8fe8e0e36760959491d96242f58480bcdbd3d"
+    },
+    {
+      "path": "assets/spells/astral_nova.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c511fd8490204c6a4038e2ecfe8703804bf4f35",
+      "size": 29274,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/2c511fd8490204c6a4038e2ecfe8703804bf4f35"
+    },
+    {
+      "path": "assets/spells/astral_shot.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5513dc0d0abf0e1f4c0200ee23c8ef3cb4bed641",
+      "size": 65519,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/5513dc0d0abf0e1f4c0200ee23c8ef3cb4bed641"
+    },
+    {
+      "path": "assets/spells/astral_shot.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7af602c7d176cc8c9eb37508679224144aa962ca",
+      "size": 15812,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/7af602c7d176cc8c9eb37508679224144aa962ca"
+    },
+    {
+      "path": "assets/spells/earthquake.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a6d48d156f1a3500009e930b236b0e2ea86b4401",
+      "size": 81416,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/a6d48d156f1a3500009e930b236b0e2ea86b4401"
+    },
+    {
+      "path": "assets/spells/earthquake.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ee8607d72edc69f9ad19456a8f9ac88b09c693a",
+      "size": 22438,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/1ee8607d72edc69f9ad19456a8f9ac88b09c693a"
+    },
+    {
+      "path": "assets/spells/fire_ball.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cc7d68b7c2a57321bba387104dd6eb3710a61bc3",
+      "size": 55916,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/cc7d68b7c2a57321bba387104dd6eb3710a61bc3"
+    },
+    {
+      "path": "assets/spells/fire_ball.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "50b44b577db198b3289358fb31a05bd14a971564",
+      "size": 14320,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/50b44b577db198b3289358fb31a05bd14a971564"
+    },
+    {
+      "path": "assets/spells/fire_rain.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9652fdefbbd81abdfe81deedb2a90a588b52acfe",
+      "size": 63608,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/9652fdefbbd81abdfe81deedb2a90a588b52acfe"
+    },
+    {
+      "path": "assets/spells/fire_rain.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "30f6e9150d0836aef055334865c06f1edef8c3c2",
+      "size": 25426,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/30f6e9150d0836aef055334865c06f1edef8c3c2"
+    },
+    {
+      "path": "assets/spells/fire_ray.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "da1819441a0b51d5eda30ccf769afeff6bc63fcb",
+      "size": 52300,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/da1819441a0b51d5eda30ccf769afeff6bc63fcb"
+    },
+    {
+      "path": "assets/spells/fire_ray.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7b559c41d1f0a0a3822aa6fd777814727c61f88e",
+      "size": 16318,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/7b559c41d1f0a0a3822aa6fd777814727c61f88e"
+    },
+    {
+      "path": "assets/spells/flame_surge.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "00d923cb795b4f93bec353f48d3263b1e824727a",
+      "size": 74590,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/00d923cb795b4f93bec353f48d3263b1e824727a"
+    },
+    {
+      "path": "assets/spells/flame_surge.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cbd03029231799bac9707b97be3149d907051ee3",
+      "size": 22180,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/cbd03029231799bac9707b97be3149d907051ee3"
+    },
+    {
+      "path": "assets/spells/frost_surge.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ce559199ca9cfb196c29b66316e754fc58e5818",
+      "size": 81176,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/8ce559199ca9cfb196c29b66316e754fc58e5818"
+    },
+    {
+      "path": "assets/spells/frost_surge.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3c4f7d63603f387a85f0073f5c3de80555a666ca",
+      "size": 26414,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/3c4f7d63603f387a85f0073f5c3de80555a666ca"
+    },
+    {
+      "path": "assets/spells/grand_lightning.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6aa4c2c7678837464a6d526de437ab8c97f2741b",
+      "size": 77936,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6aa4c2c7678837464a6d526de437ab8c97f2741b"
+    },
+    {
+      "path": "assets/spells/grand_lightning.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3583483db4a48cdf9fff1c36cf88e09f5d390ad2",
+      "size": 28176,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/3583483db4a48cdf9fff1c36cf88e09f5d390ad2"
+    },
+    {
+      "path": "assets/spells/heal_ray.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e06896dc8e479b54f9e3d9b0d1998496523ae3a",
+      "size": 69888,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6e06896dc8e479b54f9e3d9b0d1998496523ae3a"
+    },
+    {
+      "path": "assets/spells/heal_ray.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4f32e7bcc79acec0225432f41e090e3142f2b3d1",
+      "size": 26474,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/4f32e7bcc79acec0225432f41e090e3142f2b3d1"
+    },
+    {
+      "path": "assets/spells/poison_grenade.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6205546130ad07f993c091f0725ccfc76ffa8a86",
+      "size": 71167,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6205546130ad07f993c091f0725ccfc76ffa8a86"
+    },
+    {
+      "path": "assets/spells/poison_grenade.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "70573ab548f31b6f9033a2dc13520cc446e7127b",
+      "size": 21964,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/70573ab548f31b6f9033a2dc13520cc446e7127b"
+    },
+    {
+      "path": "assets/spells/resurrection.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c0d02e8be5c258b9b9850feca5b2aa538e39c55e",
+      "size": 72529,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/c0d02e8be5c258b9b9850feca5b2aa538e39c55e"
+    },
+    {
+      "path": "assets/spells/resurrection.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5ba788040a2beb0bd07e37310cbd8dfd69ff1ac8",
+      "size": 27338,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/5ba788040a2beb0bd07e37310cbd8dfd69ff1ac8"
+    },
+    {
+      "path": "assets/spells/sacrifice.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "144a79c78af741c19193d56a7d4fa2cf93da4470",
+      "size": 56782,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/144a79c78af741c19193d56a7d4fa2cf93da4470"
+    },
+    {
+      "path": "assets/spells/sacrifice.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c6bf9044137113367fa92e374de931910bafcef",
+      "size": 19556,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/0c6bf9044137113367fa92e374de931910bafcef"
+    },
+    {
+      "path": "assets/spells/thunder_ray.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "63dbe350c82a45dcd294f5d50c730077b7c06bb3",
+      "size": 68278,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/63dbe350c82a45dcd294f5d50c730077b7c06bb3"
+    },
+    {
+      "path": "assets/spells/thunder_ray.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "10ac3c05510ab79020bd349efdfd67bc5d213dd7",
+      "size": 22224,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/10ac3c05510ab79020bd349efdfd67bc5d213dd7"
+    },
+    {
+      "path": "assets/thanatos_cardBAK.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d86ae591365b026ec5f593ce5c61d6f32c05cd17",
+      "size": 62187,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d86ae591365b026ec5f593ce5c61d6f32c05cd17"
+    },
+    {
+      "path": "assets/titans",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "77d9398c99ae975fa1734cb5350401f3a5b53059",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/77d9398c99ae975fa1734cb5350401f3a5b53059"
+    },
+    {
+      "path": "assets/titans/gaia_beast.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "51408a29e2b9c9b3ec55dfdde67cfbb84455109c",
+      "size": 85103,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/51408a29e2b9c9b3ec55dfdde67cfbb84455109c"
+    },
+    {
+      "path": "assets/titans/gaia_beast.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f8403854d76c4dda351b776c546e92a5f1a4b59d",
+      "size": 19122,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f8403854d76c4dda351b776c546e92a5f1a4b59d"
+    },
+    {
+      "path": "assets/titans/thanatos.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ce22216bfd18313e2dd9bcaf450c1259984421c",
+      "size": 84529,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/0ce22216bfd18313e2dd9bcaf450c1259984421c"
+    },
+    {
+      "path": "assets/titans/thanatos.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d12296b365a9fdaaadcddf40334465a975a71600",
+      "size": 19146,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d12296b365a9fdaaadcddf40334465a975a71600"
+    },
+    {
+      "path": "assets/units",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c446d904a98154c944c9b2345e1714f376cee5ff",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/c446d904a98154c944c9b2345e1714f376cee5ff"
+    },
+    {
+      "path": "assets/units/astral_tower.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "51fadd9e778b4c53d843d838e49f7bb5872faa44",
+      "size": 31699,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/51fadd9e778b4c53d843d838e49f7bb5872faa44"
+    },
+    {
+      "path": "assets/units/astral_tower.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e207c7843338c654b36a8ba96605fdf9d1dd2df0",
+      "size": 7426,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/e207c7843338c654b36a8ba96605fdf9d1dd2df0"
+    },
+    {
+      "path": "assets/units/ballista.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24ecf1b5abe1ab3e5c63486003940cf05ffc26de",
+      "size": 57575,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/24ecf1b5abe1ab3e5c63486003940cf05ffc26de"
+    },
+    {
+      "path": "assets/units/ballista.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e8bdf545dddaa61cde711826f9b3d8bf17a9bace",
+      "size": 13756,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/e8bdf545dddaa61cde711826f9b3d8bf17a9bace"
+    },
+    {
+      "path": "assets/units/crypt.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c8e207a3a2d83c50916e885b557b097cbee19159",
+      "size": 65986,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/c8e207a3a2d83c50916e885b557b097cbee19159"
+    },
+    {
+      "path": "assets/units/crypt.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a6206b14329076a37c99d4890462299e86a97c68",
+      "size": 12402,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/a6206b14329076a37c99d4890462299e86a97c68"
+    },
+    {
+      "path": "assets/units/dryad.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "136640e88888c94f30fbf1c596d2497d08ffa3c4",
+      "size": 55051,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/136640e88888c94f30fbf1c596d2497d08ffa3c4"
+    },
+    {
+      "path": "assets/units/dryad.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a7c8eece7cd6c124b58ed7d966554abd8839d4a1",
+      "size": 15104,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/a7c8eece7cd6c124b58ed7d966554abd8839d4a1"
+    },
+    {
+      "path": "assets/units/earth_golem.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3e526412ce297ecc73850a4eedae5202c3de9caf",
+      "size": 90393,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/3e526412ce297ecc73850a4eedae5202c3de9caf"
+    },
+    {
+      "path": "assets/units/earth_golem.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ff963157fe6de579cc42c4584e24d5062aa3c5c7",
+      "size": 17968,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/ff963157fe6de579cc42c4584e24d5062aa3c5c7"
+    },
+    {
+      "path": "assets/units/faerie.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "86239c161f134e97530e79c2887b328062dd74b9",
+      "size": 78535,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/86239c161f134e97530e79c2887b328062dd74b9"
+    },
+    {
+      "path": "assets/units/faerie.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ae96382303a1825ff7e0289faa6912f4c857b1d1",
+      "size": 15738,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/ae96382303a1825ff7e0289faa6912f4c857b1d1"
+    },
+    {
+      "path": "assets/units/giant_shielder.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "10c19a19c80cc00ad9b6e792f0b0412fa4925c17",
+      "size": 89385,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/10c19a19c80cc00ad9b6e792f0b0412fa4925c17"
+    },
+    {
+      "path": "assets/units/giant_shielder.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1f12bd761b53057d78551added35aa4b75c23cc6",
+      "size": 13872,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/1f12bd761b53057d78551added35aa4b75c23cc6"
+    },
+    {
+      "path": "assets/units/harpy.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "912664210fed00c495e57f7e870ec00bc07f0f94",
+      "size": 73018,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/912664210fed00c495e57f7e870ec00bc07f0f94"
+    },
+    {
+      "path": "assets/units/harpy.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "978b09fc64c295304dfba297a3372091c784466b",
+      "size": 17282,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/978b09fc64c295304dfba297a3372091c784466b"
+    },
+    {
+      "path": "assets/units/harpy_nest.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b1b48f7975a46700457f829d680674390a258c06",
+      "size": 61963,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/b1b48f7975a46700457f829d680674390a258c06"
+    },
+    {
+      "path": "assets/units/harpy_nest.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c7ebb67bf074ee29b66d6829e945a4c9896aa85e",
+      "size": 13834,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/c7ebb67bf074ee29b66d6829e945a4c9896aa85e"
+    },
+    {
+      "path": "assets/units/juggernaut.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f95d943215a3e2195e11454b18bf7063fec9833e",
+      "size": 77322,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f95d943215a3e2195e11454b18bf7063fec9833e"
+    },
+    {
+      "path": "assets/units/juggernaut.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "32d144a79d077614c8737761f8f59940f83c392a",
+      "size": 13614,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/32d144a79d077614c8737761f8f59940f83c392a"
+    },
+    {
+      "path": "assets/units/lich.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fc6ba63eb99fca198ad2f5150c98c54aa365e01e",
+      "size": 70621,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/fc6ba63eb99fca198ad2f5150c98c54aa365e01e"
+    },
+    {
+      "path": "assets/units/lich.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7f9263dc66dcf7551bde5c5079b22d90e8d4273",
+      "size": 18482,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d7f9263dc66dcf7551bde5c5079b22d90e8d4273"
+    },
+    {
+      "path": "assets/units/lizard_archer.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "857d10e23f6c6db3c60535c4dc4ee440f3136e41",
+      "size": 68550,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/857d10e23f6c6db3c60535c4dc4ee440f3136e41"
+    },
+    {
+      "path": "assets/units/lizard_archer.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9ded568e1fefdd510e1295456c847d28cf5f35a0",
+      "size": 15550,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/9ded568e1fefdd510e1295456c847d28cf5f35a0"
+    },
+    {
+      "path": "assets/units/ogre.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1376ed4c17b230972ea9f1b63a92ed6e70fa7964",
+      "size": 70513,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/1376ed4c17b230972ea9f1b63a92ed6e70fa7964"
+    },
+    {
+      "path": "assets/units/ogre.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "727a1ca8263bc26ee30fae4a037df3dc2e2ed849",
+      "size": 12356,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/727a1ca8263bc26ee30fae4a037df3dc2e2ed849"
+    },
+    {
+      "path": "assets/units/rampart.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "15c034313adad858fa2daa1f90a350dc210ca9c8",
+      "size": 58375,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/15c034313adad858fa2daa1f90a350dc210ca9c8"
+    },
+    {
+      "path": "assets/units/rampart.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f35469440331659447001303d2ac1b216c308b8d",
+      "size": 9642,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f35469440331659447001303d2ac1b216c308b8d"
+    },
+    {
+      "path": "assets/units/rocket_soldier.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc8f31a10ee543aa5b4e967488ccd4109e274105",
+      "size": 75632,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/dc8f31a10ee543aa5b4e967488ccd4109e274105"
+    },
+    {
+      "path": "assets/units/rocket_soldier.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a2d079471036b99f2585822d9bdf6a1bff9fa53",
+      "size": 13670,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6a2d079471036b99f2585822d9bdf6a1bff9fa53"
+    },
+    {
+      "path": "assets/units/ruin_spider.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0e6b285a8f7178e78822831152981bc9b539ee57",
+      "size": 57178,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/0e6b285a8f7178e78822831152981bc9b539ee57"
+    },
+    {
+      "path": "assets/units/ruin_spider.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ec942dbaaf3daeab08c2adad424d7efa88aae35b",
+      "size": 10656,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/ec942dbaaf3daeab08c2adad424d7efa88aae35b"
+    },
+    {
+      "path": "assets/units/skeleton_warrior.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d5adb27486230e7b97279adbca11443944d63572",
+      "size": 71976,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d5adb27486230e7b97279adbca11443944d63572"
+    },
+    {
+      "path": "assets/units/skeleton_warrior.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e1ad715197e47bfb6c033f702edd8a285b1f2cde",
+      "size": 15262,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/e1ad715197e47bfb6c033f702edd8a285b1f2cde"
+    },
+    {
+      "path": "assets/units/steam_tank.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a0807698414428ed4ee0f62e1dfa7e2c1da6644",
+      "size": 73082,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6a0807698414428ed4ee0f62e1dfa7e2c1da6644"
+    },
+    {
+      "path": "assets/units/steam_tank.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4baef4bfcf4a27cf340f4099cf21327e184d8c17",
+      "size": 15838,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/4baef4bfcf4a27cf340f4099cf21327e184d8c17"
+    },
+    {
+      "path": "assets/units/stone_behemoth.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9a36c70f83eaf4b8d905168d9185316e47bee152",
+      "size": 86330,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/9a36c70f83eaf4b8d905168d9185316e47bee152"
+    },
+    {
+      "path": "assets/units/stone_behemoth.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0586b0957699f6aa55307db784139293c446024d",
+      "size": 18176,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/0586b0957699f6aa55307db784139293c446024d"
+    },
+    {
+      "path": "assets/units/wolven_hunter.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2ad518008776eeaff1b6de0bcf800d580ac45848",
+      "size": 61530,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/2ad518008776eeaff1b6de0bcf800d580ac45848"
+    },
+    {
+      "path": "assets/units/wolven_hunter.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ec3e9c5c020409aa775395cdea252d3d89438cb8",
+      "size": 13440,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/ec3e9c5c020409aa775395cdea252d3d89438cb8"
+    },
+    {
+      "path": "assets/units/wyvern.png",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "290c02b9884ef9768b94371f01d2dd880ff8ad90",
+      "size": 66923,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/290c02b9884ef9768b94371f01d2dd880ff8ad90"
+    },
+    {
+      "path": "assets/units/wyvern.webp",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "25705039145aaad9a2712529ab38930aeea0c45d",
+      "size": 13458,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/25705039145aaad9a2712529ab38930aeea0c45d"
+    },
+    {
+      "path": "audit.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "59f8642e575ec0d71afbb98d57737486914e6c86",
+      "size": 318725,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/59f8642e575ec0d71afbb98d57737486914e6c86"
+    },
+    {
+      "path": "build_ajv.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "72ca52e346066400ebeb023eea80b07410546c16",
+      "size": 214,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/72ca52e346066400ebeb023eea80b07410546c16"
+    },
+    {
+      "path": "data",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "bd74c1014939bac73727fa52a5c73d1d0e278508",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/bd74c1014939bac73727fa52a5c73d1d0e278508"
+    },
+    {
+      "path": "data/consumables",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "63d2020b770394696fd81f9be8cc97807dcfed8d",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/63d2020b770394696fd81f9be8cc97807dcfed8d"
+    },
+    {
+      "path": "data/consumables/charge_orb_1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f0a0a86786eafc0058fa33f7f5fc15f30080e38f",
+      "size": 357,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f0a0a86786eafc0058fa33f7f5fc15f30080e38f"
+    },
+    {
+      "path": "data/consumables/charge_orb_2.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9e4a18a6076224fdf007bb660906a10f351ceda1",
+      "size": 375,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/9e4a18a6076224fdf007bb660906a10f351ceda1"
+    },
+    {
+      "path": "data/consumables/conquest_banner.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "144737f51f7897039cbf6969ea7037ff2c6fdde3",
+      "size": 425,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/144737f51f7897039cbf6969ea7037ff2c6fdde3"
+    },
+    {
+      "path": "data/consumables/healing_grimoire_1.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "10ca64fb231a123ece1f47e8b6b057b94aa82843",
+      "size": 373,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/10ca64fb231a123ece1f47e8b6b057b94aa82843"
+    },
+    {
+      "path": "data/consumables/healing_grimoire_2.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f092d52409bb6359bde6dc1c930ddb881766abba",
+      "size": 375,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f092d52409bb6359bde6dc1c930ddb881766abba"
+    },
+    {
+      "path": "data/consumables/healing_grimoire_3.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5bbac229d8ea2a62e2100ef51a111eba9113f05f",
+      "size": 377,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/5bbac229d8ea2a62e2100ef51a111eba9113f05f"
+    },
+    {
+      "path": "data/consumables/power_grimoire.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2a11ff2f084c73a8a1874057360085dd433e18bf",
+      "size": 381,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/2a11ff2f084c73a8a1874057360085dd433e18bf"
+    },
+    {
+      "path": "data/consumables/protection_grimoire.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1d1bc82c1525813a81b52792334b4748ab91dc90",
+      "size": 394,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/1d1bc82c1525813a81b52792334b4748ab91dc90"
+    },
+    {
+      "path": "data/game_config.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "79daeba9f24303c4fc14e3c7aafd4151abf7ecae",
+      "size": 813,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/79daeba9f24303c4fc14e3c7aafd4151abf7ecae"
+    },
+    {
+      "path": "data/heroes",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "037815dd6a3a231e6f73dc0b02ce2a57779311f5",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/037815dd6a3a231e6f73dc0b02ce2a57779311f5"
+    },
+    {
+      "path": "data/heroes/astral_monk.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a25c0cf2888412e77561e7ea33e1a9f4fa016946",
+      "size": 1783,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/a25c0cf2888412e77561e7ea33e1a9f4fa016946"
+    },
+    {
+      "path": "data/heroes/fire_elementalist.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c615787e71a674a1aa3be21e176c4d2d6ef6a11f",
+      "size": 1568,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/c615787e71a674a1aa3be21e176c4d2d6ef6a11f"
+    },
+    {
+      "path": "data/heroes/iron_sorcerer.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "08552d11638c4a0c1756ad536994a04d6b52b551",
+      "size": 1539,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/08552d11638c4a0c1756ad536994a04d6b52b551"
+    },
+    {
+      "path": "data/heroes/mystic_scribe.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fccb6f75c77b0ee1c299e1ff9f1c054bc38c4613",
+      "size": 2117,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/fccb6f75c77b0ee1c299e1ff9f1c054bc38c4613"
+    },
+    {
+      "path": "data/heroes/stone_shaman.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b81d6dbc15c7dc3fc6024cc270b84c9bb29a61cf",
+      "size": 2196,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/b81d6dbc15c7dc3fc6024cc270b84c9bb29a61cf"
+    },
+    {
+      "path": "data/heroes/swamp_witch.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "35915de7860347f228a5fb5507cdc1b5a34ca980",
+      "size": 2075,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/35915de7860347f228a5fb5507cdc1b5a34ca980"
+    },
+    {
+      "path": "data/patches.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0637a088a01e8ddab3bf3fa98dbe804cbde1a0dc",
+      "size": 2,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/0637a088a01e8ddab3bf3fa98dbe804cbde1a0dc"
+    },
+    {
+      "path": "data/queue.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0637a088a01e8ddab3bf3fa98dbe804cbde1a0dc",
+      "size": 2,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/0637a088a01e8ddab3bf3fa98dbe804cbde1a0dc"
+    },
+    {
+      "path": "data/spells",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b4d3300896ba0a3212484a359d32bbcc093bf291",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/b4d3300896ba0a3212484a359d32bbcc093bf291"
+    },
+    {
+      "path": "data/spells/astral_nova.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "72614e57a351582111fc08b1792d9f104bb95abf",
+      "size": 611,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/72614e57a351582111fc08b1792d9f104bb95abf"
+    },
+    {
+      "path": "data/spells/astral_shot.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cf396aa8e96b16072c49156891558fa0eb569385",
+      "size": 452,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/cf396aa8e96b16072c49156891558fa0eb569385"
+    },
+    {
+      "path": "data/spells/earthquake.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8a50dacfc53bd4e8dde81bab881f12e6e8202374",
+      "size": 932,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/8a50dacfc53bd4e8dde81bab881f12e6e8202374"
+    },
+    {
+      "path": "data/spells/fire_ball.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "72d3253b63940eee2094d49b2efc1cddc51d4688",
+      "size": 493,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/72d3253b63940eee2094d49b2efc1cddc51d4688"
+    },
+    {
+      "path": "data/spells/fire_rain.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6e891d6f3d37f07a4687404074309a3c45f8212b",
+      "size": 560,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6e891d6f3d37f07a4687404074309a3c45f8212b"
+    },
+    {
+      "path": "data/spells/fire_ray.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "690f1f5273c8d3d7cfb2e61053dd8ed440cbd6df",
+      "size": 416,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/690f1f5273c8d3d7cfb2e61053dd8ed440cbd6df"
+    },
+    {
+      "path": "data/spells/flame_surge.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7238e762d22c119992b59027a3c20cc5073805b9",
+      "size": 363,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/7238e762d22c119992b59027a3c20cc5073805b9"
+    },
+    {
+      "path": "data/spells/frost_surge.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c75324c877bcf0ec4daf37cf22ac241498f6f3f",
+      "size": 366,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/2c75324c877bcf0ec4daf37cf22ac241498f6f3f"
+    },
+    {
+      "path": "data/spells/grand_lightning.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6c9bc3cbbb1fa457690ec49ee4431f28da26e662",
+      "size": 403,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6c9bc3cbbb1fa457690ec49ee4431f28da26e662"
+    },
+    {
+      "path": "data/spells/heal_ray.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d83acdb51331ed978e74caf28e45d545ea399959",
+      "size": 389,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d83acdb51331ed978e74caf28e45d545ea399959"
+    },
+    {
+      "path": "data/spells/poison_grenade.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5df4ac5ab65c221dd0d378ee31c9e216b3e85af7",
+      "size": 564,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/5df4ac5ab65c221dd0d378ee31c9e216b3e85af7"
+    },
+    {
+      "path": "data/spells/resurrection.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4318aeb752176396694b1e9ef9fae60d85e8669b",
+      "size": 372,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/4318aeb752176396694b1e9ef9fae60d85e8669b"
+    },
+    {
+      "path": "data/spells/sacrifice.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9bbb0663b0836e8e5f5ae3c99e654b1308e23d27",
+      "size": 412,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/9bbb0663b0836e8e5f5ae3c99e654b1308e23d27"
+    },
+    {
+      "path": "data/spells/thunder_ray.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f0a029250380b54ad22a5d7c365ef17f4b2d85d4",
+      "size": 476,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f0a029250380b54ad22a5d7c365ef17f4b2d85d4"
+    },
+    {
+      "path": "data/titans",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f306965ed22124d2d98a81ddf1fe651b652ecde6",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/f306965ed22124d2d98a81ddf1fe651b652ecde6"
+    },
+    {
+      "path": "data/titans/gaia_beast.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "283898007d636df9c128720b7a76709f9ee69259",
+      "size": 935,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/283898007d636df9c128720b7a76709f9ee69259"
+    },
+    {
+      "path": "data/titans/thanatos.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8ce8eb9f02fc05842aacdee6fa5ae44a44f5b687",
+      "size": 1082,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/8ce8eb9f02fc05842aacdee6fa5ae44a44f5b687"
+    },
+    {
+      "path": "data/units",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3afabc46d9242e11b3e59a52c6086a48e3ea856f",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/3afabc46d9242e11b3e59a52c6086a48e3ea856f"
+    },
+    {
+      "path": "data/units/astral_tower.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d78a574e5c8f4f5de67a999c309c0b6bc9854602",
+      "size": 495,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d78a574e5c8f4f5de67a999c309c0b6bc9854602"
+    },
+    {
+      "path": "data/units/ballista.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "178b8218346ce57ee2e9e2cebc58867431ea6e55",
+      "size": 448,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/178b8218346ce57ee2e9e2cebc58867431ea6e55"
+    },
+    {
+      "path": "data/units/crypt.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a9ac09deb107504ebce04e50492dcbaca99c4216",
+      "size": 660,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/a9ac09deb107504ebce04e50492dcbaca99c4216"
+    },
+    {
+      "path": "data/units/dryad.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8a324644ad18198c8fd99c8ae1a05c8fc5369420",
+      "size": 824,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/8a324644ad18198c8fd99c8ae1a05c8fc5369420"
+    },
+    {
+      "path": "data/units/earth_golem.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bfd6145b4eaaefea28ef01bf69aed6dc0b2299fa",
+      "size": 1064,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/bfd6145b4eaaefea28ef01bf69aed6dc0b2299fa"
+    },
+    {
+      "path": "data/units/faerie.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ccf7f47b4390d4564914464368ca5f217aa7afee",
+      "size": 602,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/ccf7f47b4390d4564914464368ca5f217aa7afee"
+    },
+    {
+      "path": "data/units/giant_shielder.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "10005493f0ecc4f5153b5ce5d94aea3e837a622f",
+      "size": 653,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/10005493f0ecc4f5153b5ce5d94aea3e837a622f"
+    },
+    {
+      "path": "data/units/harpy.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d1102385380c7547d8b86843c836134ccf4125fb",
+      "size": 987,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d1102385380c7547d8b86843c836134ccf4125fb"
+    },
+    {
+      "path": "data/units/harpy_nest.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a3740e3595ec19e5519a1a831f6d582bde79285f",
+      "size": 628,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/a3740e3595ec19e5519a1a831f6d582bde79285f"
+    },
+    {
+      "path": "data/units/juggernaut.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "022ae7cd77386d524f06fabd9115794c6dbd3df6",
+      "size": 748,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/022ae7cd77386d524f06fabd9115794c6dbd3df6"
+    },
+    {
+      "path": "data/units/lich.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0ace85bf9f71df78b4210fde7a6a2ee104f9e94a",
+      "size": 1036,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/0ace85bf9f71df78b4210fde7a6a2ee104f9e94a"
+    },
+    {
+      "path": "data/units/lizard_archer.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b410d5aa0ff9242c27edd58135fb91a135fe3a82",
+      "size": 765,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/b410d5aa0ff9242c27edd58135fb91a135fe3a82"
+    },
+    {
+      "path": "data/units/ogre.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fceb8467f829981372673bd080f7b1b954fc4867",
+      "size": 779,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/fceb8467f829981372673bd080f7b1b954fc4867"
+    },
+    {
+      "path": "data/units/rampart.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "238e5c87826f837d8fae77cc82ccff837bc40748",
+      "size": 362,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/238e5c87826f837d8fae77cc82ccff837bc40748"
+    },
+    {
+      "path": "data/units/rocket_soldier.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b2c7d7d5ca42b1d101169435774f870cee55456",
+      "size": 824,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/1b2c7d7d5ca42b1d101169435774f870cee55456"
+    },
+    {
+      "path": "data/units/ruin_spider.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "de19013c8ea023628ca1aa2b5312a08d2ea92bda",
+      "size": 919,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/de19013c8ea023628ca1aa2b5312a08d2ea92bda"
+    },
+    {
+      "path": "data/units/skeleton_warrior.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4daff35709ba47d068c9c5185e5742104ea5473c",
+      "size": 800,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/4daff35709ba47d068c9c5185e5742104ea5473c"
+    },
+    {
+      "path": "data/units/steam_tank.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a8edcc9fd1eec6576b5d3dc97af72d470c6045f3",
+      "size": 510,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/a8edcc9fd1eec6576b5d3dc97af72d470c6045f3"
+    },
+    {
+      "path": "data/units/stone_behemoth.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ee8553c1ead9c5d52abf87f25215b55bb37ca6b2",
+      "size": 528,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/ee8553c1ead9c5d52abf87f25215b55bb37ca6b2"
+    },
+    {
+      "path": "data/units/wolven_hunter.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9d4d2162ae28ec27e6a1cee84d6ad6f4f9f32c3d",
+      "size": 502,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/9d4d2162ae28ec27e6a1cee84d6ad6f4f9f32c3d"
+    },
+    {
+      "path": "data/units/wyvern.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c471bed9370be47e495748d571f24622db594fb8",
+      "size": 651,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/c471bed9370be47e495748d571f24622db594fb8"
+    },
+    {
+      "path": "data/upgrades",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "b027776201425aee46ac7d12d9a319c983d953b0",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/b027776201425aee46ac7d12d9a319c983d953b0"
+    },
+    {
+      "path": "data/upgrades/placeholder.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "53627081a982f6043039e907a632982639de05bf",
+      "size": 260,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/53627081a982f6043039e907a632982639de05bf"
+    },
+    {
+      "path": "docs",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "cca6adb7b34541129a566c2b6c5ac5ca5efbf5d4",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/cca6adb7b34541129a566c2b6c5ac5ca5efbf5d4"
+    },
+    {
+      "path": "docs/EXTENSIBILITY_GUIDE.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d360f227e9cbb20a053a47de469b65f5e51d9dc2",
+      "size": 3388,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d360f227e9cbb20a053a47de469b65f5e51d9dc2"
+    },
+    {
+      "path": "docs/HISTORY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f75cef966711b6e65d31899ec70de5d90afd66e9",
+      "size": 1754,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f75cef966711b6e65d31899ec70de5d90afd66e9"
+    },
+    {
+      "path": "docs/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "33921ebcfae219814e9a8b3fe4b964d50ece6d8a",
+      "size": 367,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/33921ebcfae219814e9a8b3fe4b964d50ece6d8a"
+    },
+    {
+      "path": "docs/SECURITY.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ac69f66a3a24b87fa9ade7b6496f97b7c21d1633",
+      "size": 1100,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/ac69f66a3a24b87fa9ade7b6496f97b7c21d1633"
+    },
+    {
+      "path": "docs/updates",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "04677c2fa1cdec1164292164dbe42abded66f25f",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/04677c2fa1cdec1164292164dbe42abded66f25f"
+    },
+    {
+      "path": "docs/updates/2026-02-10_spellcaster_stats_update.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bd92fde2ba1b9996aa0656da015188629c8ff762",
+      "size": 1596,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/bd92fde2ba1b9996aa0656da015188629c8ff762"
+    },
+    {
+      "path": "index.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "65477242ac87939928b3fecebfa6199bbde2e9c2",
+      "size": 4327,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/65477242ac87939928b3fecebfa6199bbde2e9c2"
+    },
+    {
+      "path": "package-lock.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f8f4445e8999e7a2e1f314c9850a571c12cac049",
+      "size": 43693,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f8f4445e8999e7a2e1f314c9850a571c12cac049"
+    },
+    {
+      "path": "package.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c776a9a131ea19b691e165014af0d04dbaf95a9d",
+      "size": 107,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/c776a9a131ea19b691e165014af0d04dbaf95a9d"
+    },
+    {
+      "path": "pyproject.toml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "10164cc29fa481e737b07df41ee56da2d05a5c42",
+      "size": 442,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/10164cc29fa481e737b07df41ee56da2d05a5c42"
+    },
+    {
+      "path": "requirements.txt",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "267cc8654ad3d193373b1b26d1af1f58ceecc233",
+      "size": 96,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/267cc8654ad3d193373b1b26d1af1f58ceecc233"
+    },
+    {
+      "path": "schema-validator.html",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2dc98d00d890556523258adc5caf4867c4704319",
+      "size": 10472,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/2dc98d00d890556523258adc5caf4867c4704319"
+    },
+    {
+      "path": "schema-validator.js",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24d738607e43c2da8d480fb31506c9b5dfdd7159",
+      "size": 17449,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/24d738607e43c2da8d480fb31506c9b5dfdd7159"
+    },
+    {
+      "path": "schemas",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "02d435572344b4f3f55768d22ec12ebb1df73954",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/02d435572344b4f3f55768d22ec12ebb1df73954"
+    },
+    {
+      "path": "schemas/v2",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "f1e510ef0290938c11bede30ff5365b0380e137f",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/f1e510ef0290938c11bede30ff5365b0380e137f"
+    },
+    {
+      "path": "schemas/v2/all_data.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6f293d842ed2ed217003f4b1c4b0f88c14e0e283",
+      "size": 1589,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6f293d842ed2ed217003f4b1c4b0f88c14e0e283"
+    },
+    {
+      "path": "schemas/v2/audit.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c65f328102769ea22e129f5867f742eb6d451f1d",
+      "size": 2052,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/c65f328102769ea22e129f5867f742eb6d451f1d"
+    },
+    {
+      "path": "schemas/v2/changelog.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0a2be5395cbf30d9ff84c468a8f95a3f8d6c718a",
+      "size": 2225,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/0a2be5395cbf30d9ff84c468a8f95a3f8d6c718a"
+    },
+    {
+      "path": "schemas/v2/changelog_index.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "46439194901522a27c00dd3b49cb596beef13676",
+      "size": 983,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/46439194901522a27c00dd3b49cb596beef13676"
+    },
+    {
+      "path": "schemas/v2/consumables.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "962c37d74bc57c765aa94c6062c8382796deea0a",
+      "size": 1133,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/962c37d74bc57c765aa94c6062c8382796deea0a"
+    },
+    {
+      "path": "schemas/v2/definitions",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "8415e98c039551ade17f4171e85ed8edb63f77e4",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/8415e98c039551ade17f4171e85ed8edb63f77e4"
+    },
+    {
+      "path": "schemas/v2/definitions/ability.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "480ed786c69ee01d9e8c4754f75994ea8fefe700",
+      "size": 5522,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/480ed786c69ee01d9e8c4754f75994ea8fefe700"
+    },
+    {
+      "path": "schemas/v2/definitions/core.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9f9341928cb6e2753e09e2867436e51dbb3f999a",
+      "size": 3185,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/9f9341928cb6e2753e09e2867436e51dbb3f999a"
+    },
+    {
+      "path": "schemas/v2/definitions/enums.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "afa4e4edb50217f9cfea852fb3673773feb5426d",
+      "size": 2946,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/afa4e4edb50217f9cfea852fb3673773feb5426d"
+    },
+    {
+      "path": "schemas/v2/definitions/magic.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "599cef9b9e8a67d081248c3e0ba523c9db3b184e",
+      "size": 1045,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/599cef9b9e8a67d081248c3e0ba523c9db3b184e"
+    },
+    {
+      "path": "schemas/v2/definitions/mechanics.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "18d440b63cd086d0765f9c81966560fde3c82d47",
+      "size": 4694,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/18d440b63cd086d0765f9c81966560fde3c82d47"
+    },
+    {
+      "path": "schemas/v2/definitions/mechanics",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "5b01ee9ec8a7b9b87f6e742b9a0b03f7168c36a7",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/5b01ee9ec8a7b9b87f6e742b9a0b03f7168c36a7"
+    },
+    {
+      "path": "schemas/v2/definitions/mechanics/aura.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "467a8591109920b06959c7458ccdeff7ae6a460d",
+      "size": 1384,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/467a8591109920b06959c7458ccdeff7ae6a460d"
+    },
+    {
+      "path": "schemas/v2/definitions/mechanics/bonus_damage.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "651da28e8cc4c03872d92fa2e0d24c137d655046",
+      "size": 790,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/651da28e8cc4c03872d92fa2e0d24c137d655046"
+    },
+    {
+      "path": "schemas/v2/definitions/mechanics/damage_modifier.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fb85e09b1ed50053c3f1133838dab22b7014d3b3",
+      "size": 1436,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/fb85e09b1ed50053c3f1133838dab22b7014d3b3"
+    },
+    {
+      "path": "schemas/v2/definitions/mechanics/damage_reduction.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f61c4e844400cd26149dc10ec293f39b9fbab6e7",
+      "size": 1295,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f61c4e844400cd26149dc10ec293f39b9fbab6e7"
+    },
+    {
+      "path": "schemas/v2/definitions/mechanics/feature.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "24f652d5d8795eea80d2719856d63f263023e475",
+      "size": 658,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/24f652d5d8795eea80d2719856d63f263023e475"
+    },
+    {
+      "path": "schemas/v2/definitions/mechanics/initial_attack.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "65a143c73f1036d9faa322cf71bb9e47d6b1872f",
+      "size": 873,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/65a143c73f1036d9faa322cf71bb9e47d6b1872f"
+    },
+    {
+      "path": "schemas/v2/definitions/mechanics/spawner.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "85c22ce4763fbfc9af6f9417c3b901ada5a9d879",
+      "size": 758,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/85c22ce4763fbfc9af6f9417c3b901ada5a9d879"
+    },
+    {
+      "path": "schemas/v2/definitions/resource.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5bd9b65831ae9079be3f29e83ec33f6acb9466a0",
+      "size": 1168,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/5bd9b65831ae9079be3f29e83ec33f6acb9466a0"
+    },
+    {
+      "path": "schemas/v2/definitions/stats.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6d62993f690be6c1ccebec07b08547c032aeeac6",
+      "size": 3043,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6d62993f690be6c1ccebec07b08547c032aeeac6"
+    },
+    {
+      "path": "schemas/v2/game_config.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5470b387ba83850c0c67cb0d7134c720b42ba7ce",
+      "size": 1666,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/5470b387ba83850c0c67cb0d7134c720b42ba7ce"
+    },
+    {
+      "path": "schemas/v2/heroes.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b98e52f3393e29c91a4778a3d2f004a1e948026d",
+      "size": 2193,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/b98e52f3393e29c91a4778a3d2f004a1e948026d"
+    },
+    {
+      "path": "schemas/v2/patches.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1b79d7564dc8cc69f99c9fb6764cc6ac1009718b",
+      "size": 339,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/1b79d7564dc8cc69f99c9fb6764cc6ac1009718b"
+    },
+    {
+      "path": "schemas/v2/spells.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d8c36779faa2b7e6caf6344b4e3c770ffa9b0bec",
+      "size": 1493,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d8c36779faa2b7e6caf6344b4e3c770ffa9b0bec"
+    },
+    {
+      "path": "schemas/v2/status.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b6d23b60f5f23a90f4ebf944e0572b2cae3ce545",
+      "size": 1570,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/b6d23b60f5f23a90f4ebf944e0572b2cae3ce545"
+    },
+    {
+      "path": "schemas/v2/timeline_entry.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6a271c4e66af8af3e918d8679f988b1e5aad2ea6",
+      "size": 1038,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6a271c4e66af8af3e918d8679f988b1e5aad2ea6"
+    },
+    {
+      "path": "schemas/v2/titans.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "7ea35bfe6ea8a012ba67b423a0204b941a45ac20",
+      "size": 1149,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/7ea35bfe6ea8a012ba67b423a0204b941a45ac20"
+    },
+    {
+      "path": "schemas/v2/units.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4f4291e4108a731bb26049a56529dc429d78449f",
+      "size": 1826,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/4f4291e4108a731bb26049a56529dc429d78449f"
+    },
+    {
+      "path": "schemas/v2/upgrades.schema.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3542e36aa1ed66bc81d80e2567f8d0d229f8e003",
+      "size": 1347,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/3542e36aa1ed66bc81d80e2567f8d0d229f8e003"
+    },
+    {
+      "path": "scripts",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "3f602f56f61918a30fe515494701efdad9959f81",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/3f602f56f61918a30fe515494701efdad9959f81"
+    },
+    {
+      "path": "scripts/README.md",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "d7e37d6de934b1b972b0cbc1644501b3a64e3f4b",
+      "size": 4236,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/d7e37d6de934b1b972b0cbc1644501b3a64e3f4b"
+    },
+    {
+      "path": "scripts/audit_v2.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4ab0c0fdb64d936c6910d38f308187776c2dae84",
+      "size": 11009,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/4ab0c0fdb64d936c6910d38f308187776c2dae84"
+    },
+    {
+      "path": "scripts/build_api.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "374389fa9ee435adc0dcaa7c7e1109c59ae51161",
+      "size": 7905,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/374389fa9ee435adc0dcaa7c7e1109c59ae51161"
+    },
+    {
+      "path": "scripts/build_audit_log.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cf8492ae80b46b22ae9af9f3145c061ace5db2d3",
+      "size": 5486,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/cf8492ae80b46b22ae9af9f3145c061ace5db2d3"
+    },
+    {
+      "path": "scripts/build_changelogs.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cd59092dcab9e021f8a450707beeaf03f66a64e5",
+      "size": 3353,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/cd59092dcab9e021f8a450707beeaf03f66a64e5"
+    },
+    {
+      "path": "scripts/check.ps1",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "4f4ae6a1bd1a506d9141ef0e1462441277e0b03d",
+      "size": 1099,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/4f4ae6a1bd1a506d9141ef0e1462441277e0b03d"
+    },
+    {
+      "path": "scripts/config.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8936914b0b9843157718809c77163b3d4147dd7c",
+      "size": 1929,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/8936914b0b9843157718809c77163b3d4147dd7c"
+    },
+    {
+      "path": "scripts/generate_patch.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "66f8cbf14ec94b120cddbe7eb3152659d1477686",
+      "size": 11969,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/66f8cbf14ec94b120cddbe7eb3152659d1477686"
+    },
+    {
+      "path": "scripts/migration",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "9fb19890cf72e5bdb44a68a804b243a354d2b881",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/9fb19890cf72e5bdb44a68a804b243a354d2b881"
+    },
+    {
+      "path": "scripts/migration/remove_hero_speed.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0f66a633aa0019aa54ce5ebbcf719d6a52a79fe3",
+      "size": 820,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/0f66a633aa0019aa54ce5ebbcf719d6a52a79fe3"
+    },
+    {
+      "path": "scripts/patch_utils.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "da57d3b4ba167dcb7027d45155ed8f24a61b49cc",
+      "size": 4173,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/da57d3b4ba167dcb7027d45155ed8f24a61b49cc"
+    },
+    {
+      "path": "scripts/release.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c8765aad6996b345d65a90d6b4a3ced35f8ce951",
+      "size": 4417,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/c8765aad6996b345d65a90d6b4a3ced35f8ce951"
+    },
+    {
+      "path": "scripts/validate_integrity.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "fc18f8d29510647dc5ae20173572945b17005dbb",
+      "size": 12473,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/fc18f8d29510647dc5ae20173572945b17005dbb"
+    },
+    {
+      "path": "scripts/validate_schemas.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "c0637439f14797cbd55e409db38fa35e2ceb45fd",
+      "size": 4419,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/c0637439f14797cbd55e409db38fa35e2ceb45fd"
+    },
+    {
+      "path": "scripts/verify_strictness.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2372d3a39cc64bd7e9f604f748695fde6b7f9179",
+      "size": 3567,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/2372d3a39cc64bd7e9f604f748695fde6b7f9179"
+    },
+    {
+      "path": "style.css",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "01d91745aa25f206a03123cf8a26c91b31f08064",
+      "size": 2546,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/01d91745aa25f206a03123cf8a26c91b31f08064"
+    },
+    {
+      "path": "tests",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "26882127d405a61916f4b373ba14272169a8de48",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/26882127d405a61916f4b373ba14272169a8de48"
+    },
+    {
+      "path": "tests/conftest.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "70d37fe230e3387e41602909106c8f74f7384e00",
+      "size": 2625,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/70d37fe230e3387e41602909106c8f74f7384e00"
+    },
+    {
+      "path": "tests/test_build.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6aa3d693e5acb41b14cc60ed12addd7d2669ca7f",
+      "size": 1825,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6aa3d693e5acb41b14cc60ed12addd7d2669ca7f"
+    },
+    {
+      "path": "tests/test_build_api_aggressive.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "51b2cc4284019392ddc96d319318be80bc1bce78",
+      "size": 12279,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/51b2cc4284019392ddc96d319318be80bc1bce78"
+    },
+    {
+      "path": "tests/test_build_audit_log.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2ef1420925a60d7db85fe5d1a94f19f39a5318fa",
+      "size": 5671,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/2ef1420925a60d7db85fe5d1a94f19f39a5318fa"
+    },
+    {
+      "path": "tests/test_build_audit_log_aggressive.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "48283441fc5abd72bdf1d93e172fe60fb539e6ca",
+      "size": 9938,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/48283441fc5abd72bdf1d93e172fe60fb539e6ca"
+    },
+    {
+      "path": "tests/test_build_changelogs.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "65e254965aeb433baba9f82f8c9f6d233bf212d0",
+      "size": 5060,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/65e254965aeb433baba9f82f8c9f6d233bf212d0"
+    },
+    {
+      "path": "tests/test_build_changelogs_aggressive.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "77bc4efd5bf1391aa41311ab8898574f818bcb56",
+      "size": 7502,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/77bc4efd5bf1391aa41311ab8898574f818bcb56"
+    },
+    {
+      "path": "tests/test_config.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "eedb52dcc49d90e242e02a0885f998fb8d7713e5",
+      "size": 1274,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/eedb52dcc49d90e242e02a0885f998fb8d7713e5"
+    },
+    {
+      "path": "tests/test_generate_patch.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "223d93bcda4a5aae26d8948461d1e97955794586",
+      "size": 6387,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/223d93bcda4a5aae26d8948461d1e97955794586"
+    },
+    {
+      "path": "tests/test_generate_patch_aggressive.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2274e40d1126713392835b12ee143786735a8abc",
+      "size": 8585,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/2274e40d1126713392835b12ee143786735a8abc"
+    },
+    {
+      "path": "tests/test_generate_patch_integration.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e401855919838efe9d48682482e5b5e4c502fc1a",
+      "size": 17783,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/e401855919838efe9d48682482e5b5e4c502fc1a"
+    },
+    {
+      "path": "tests/test_generate_patch_stress.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dd0cf0864ebc2bee4c197c134136cdd7a6155af2",
+      "size": 26984,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/dd0cf0864ebc2bee4c197c134136cdd7a6155af2"
+    },
+    {
+      "path": "tests/test_patch_utils.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "05a0f60a107046ee1bb98e5506d2599dea93b680",
+      "size": 8235,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/05a0f60a107046ee1bb98e5506d2599dea93b680"
+    },
+    {
+      "path": "tests/test_referential.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "75e66ee5e44187d17600fb2bd11f334c253cd5f6",
+      "size": 2443,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/75e66ee5e44187d17600fb2bd11f334c253cd5f6"
+    },
+    {
+      "path": "tests/test_schemas.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "72b7739eaa535205cee0a4ce85b7cbb12ea8b33d",
+      "size": 4522,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/72b7739eaa535205cee0a4ce85b7cbb12ea8b33d"
+    },
+    {
+      "path": "tests/test_strictness.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "06385b897ab0020d4876d2f8204caf0314893c3c",
+      "size": 2819,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/06385b897ab0020d4876d2f8204caf0314893c3c"
+    },
+    {
+      "path": "tests/test_validate_integrity.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "cfdda1cc5991ece0f32bda39573846345232cfe8",
+      "size": 5659,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/cfdda1cc5991ece0f32bda39573846345232cfe8"
+    },
+    {
+      "path": "tests/test_validate_integrity_aggressive.py",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9f325c9ae24c8707c224a8fcbaf90906452004a7",
+      "size": 10416,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/9f325c9ae24c8707c224a8fcbaf90906452004a7"
+    },
+    {
+      "path": "timeline",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "c3bf2f3448600f98cc0cb95d45f6b1f2629c404f",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/c3bf2f3448600f98cc0cb95d45f6b1f2629c404f"
+    },
+    {
+      "path": "timeline/astral_monk.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e4fa45957608586ae870a175e176eceefd4b295d",
+      "size": 2104,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/e4fa45957608586ae870a175e176eceefd4b295d"
+    },
+    {
+      "path": "timeline/astral_nova.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5d2adb4bff62558049a9330c6186b191def96207",
+      "size": 790,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/5d2adb4bff62558049a9330c6186b191def96207"
+    },
+    {
+      "path": "timeline/astral_shot.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "ba62599075ac00177cfe889c34086fde79ac9681",
+      "size": 614,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/ba62599075ac00177cfe889c34086fde79ac9681"
+    },
+    {
+      "path": "timeline/astral_tower.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "dc0ca54cffc277951f318125363f6017062c6289",
+      "size": 644,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/dc0ca54cffc277951f318125363f6017062c6289"
+    },
+    {
+      "path": "timeline/crypt.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b04d07f83abb75b83347be9fcb072268058f02b5",
+      "size": 857,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/b04d07f83abb75b83347be9fcb072268058f02b5"
+    },
+    {
+      "path": "timeline/dryad.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f7f00e756f3c924306ca86313cb0c097c8c46540",
+      "size": 1041,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f7f00e756f3c924306ca86313cb0c097c8c46540"
+    },
+    {
+      "path": "timeline/earthquake.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8e28eaa6f27554f6fdfca25c391b9ba7bf176056",
+      "size": 1182,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/8e28eaa6f27554f6fdfca25c391b9ba7bf176056"
+    },
+    {
+      "path": "timeline/fire_ball.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "8aaaa2ecf3c4fc481a1496271a49e38c6ed91343",
+      "size": 646,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/8aaaa2ecf3c4fc481a1496271a49e38c6ed91343"
+    },
+    {
+      "path": "timeline/fire_elementalist.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "e6bcbcf67cda9059cf9fdfba5cfc77a5e91936c9",
+      "size": 1849,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/e6bcbcf67cda9059cf9fdfba5cfc77a5e91936c9"
+    },
+    {
+      "path": "timeline/frost_surge.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "45bf97c8e3644396efead12a12a4984c9368be4f",
+      "size": 499,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/45bf97c8e3644396efead12a12a4984c9368be4f"
+    },
+    {
+      "path": "timeline/giant_shielder.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "1ad2ecf29bb151e23012f19b3b29678ff87050ab",
+      "size": 850,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/1ad2ecf29bb151e23012f19b3b29678ff87050ab"
+    },
+    {
+      "path": "timeline/harpy.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "08993a2d387e9d1134c2488df169b37a5dc80267",
+      "size": 1244,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/08993a2d387e9d1134c2488df169b37a5dc80267"
+    },
+    {
+      "path": "timeline/harpy_nest.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "f47fca4b60a00984d4a4f692426aeca9e383aa0e",
+      "size": 825,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/f47fca4b60a00984d4a4f692426aeca9e383aa0e"
+    },
+    {
+      "path": "timeline/iron_sorcerer.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "a8e285e79a7263450cce9b627082de691c3a930c",
+      "size": 1816,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/a8e285e79a7263450cce9b627082de691c3a930c"
+    },
+    {
+      "path": "timeline/lich.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b8f524b0579042d3043b1b54c42543d22efa610e",
+      "size": 1172,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/b8f524b0579042d3043b1b54c42543d22efa610e"
+    },
+    {
+      "path": "timeline/lizard_archer.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "3460b9b23e28a711bafd1be9b8e0900d96aaca90",
+      "size": 990,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/3460b9b23e28a711bafd1be9b8e0900d96aaca90"
+    },
+    {
+      "path": "timeline/mystic_scribe.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0570b923c34327d6224b11730be5b952a461ece0",
+      "size": 2468,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/0570b923c34327d6224b11730be5b952a461ece0"
+    },
+    {
+      "path": "timeline/ogre.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6fc2644d0bba35563b18d4a223f02bc20a7dcf39",
+      "size": 1004,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6fc2644d0bba35563b18d4a223f02bc20a7dcf39"
+    },
+    {
+      "path": "timeline/poison_grenade.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "23d9c0314c4168279d97e1780470bcc8d8c6c242",
+      "size": 745,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/23d9c0314c4168279d97e1780470bcc8d8c6c242"
+    },
+    {
+      "path": "timeline/steam_tank.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2c71381d5268dc36177225786e8e287f5060904c",
+      "size": 671,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/2c71381d5268dc36177225786e8e287f5060904c"
+    },
+    {
+      "path": "timeline/stone_behemoth.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "bdf9c33cd0420e1ce627467d6f27431c4eb9754b",
+      "size": 689,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/bdf9c33cd0420e1ce627467d6f27431c4eb9754b"
+    },
+    {
+      "path": "timeline/stone_shaman.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "2cbe7652cc3ad6fa4bc183c6db0b555148426ce7",
+      "size": 2555,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/2cbe7652cc3ad6fa4bc183c6db0b555148426ce7"
+    },
+    {
+      "path": "timeline/swamp_witch.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "b716191c63b9238a86e4780b0efa6901b858f314",
+      "size": 2467,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/b716191c63b9238a86e4780b0efa6901b858f314"
+    },
+    {
+      "path": "timeline/thunder_ray.json",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "6cccba1b882f708ae4888e325e4e3e9f5af4e2e6",
+      "size": 634,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/6cccba1b882f708ae4888e325e4e3e9f5af4e2e6"
+    },
+    {
+      "path": "types",
+      "mode": "040000",
+      "type": "tree",
+      "sha": "4079e631c46703ae7178c5a6413b462d6c490c1b",
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/trees/4079e631c46703ae7178c5a6413b462d6c490c1b"
+    },
+    {
+      "path": "types/patch-history.d.ts",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "5210bc78c7a570c6d855f4ec252057e4a98f603d",
+      "size": 2818,
+      "url": "https://api.github.com/repos/TerribleTurtle/spellcasters-community-api/git/blobs/5210bc78c7a570c6d855f4ec252057e4a98f603d"
+    }
+  ],
+  "truncated": false
+}

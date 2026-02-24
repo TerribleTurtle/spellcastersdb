@@ -7,6 +7,7 @@ const API_URL =
   "https://terribleturtle.github.io/spellcasters-community-api/api/v2/all_data.json";
 
 describe("Strict Core Schema Validation", () => {
+  // TODO(GH#TBD): Un-skip when V2 API deploys — see roadmap for tracking
   it.skip("should validate live data against strict Zod schemas", async () => {
     // SKIPPED: Live data is V1 (outdated). We are implementing V2 Strict Schema ahead of API deployment.
     // This test will fail until API is updated.

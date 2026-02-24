@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { AllDataResponse } from "@/types/api";
 import { EntityCategory } from "@/types/enums";
 
-import { EntityRegistry } from "./registry";
+import { EntityRegistry } from "../registry";
 
 describe("EntityRegistry", () => {
   const registry = EntityRegistry.getInstance();
