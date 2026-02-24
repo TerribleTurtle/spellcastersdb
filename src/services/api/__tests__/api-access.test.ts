@@ -51,6 +51,7 @@ describe("API Access & Reliability", () => {
         spellcasters: [],
         consumables: [],
         upgrades: [],
+        infusions: [],
         build_info: { version: "1", generated_at: "now" },
       };
 

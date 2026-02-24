@@ -1,6 +1,8 @@
 "use client";
 
-import { ArrowRight, Eye, Shield, Sword } from "lucide-react";
+import Link from "next/link";
+
+import { ArrowRight, Eye, Flame, Shield, Sword } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { formatTargetName } from "@/services/utils/formatting";
@@ -49,9 +51,17 @@ export function EntityMechanics({
     !!mechanics.initial_attack ||
     (mechanics.bonus_damage?.length ?? 0) > 0 ||
     mechanics.waves ||
-    mechanics.interval;
+    mechanics.interval ||
+    !!mechanics.infusion;
 
   if (!hasMechanics) return null;
+
+  /**
+   * Derive a human-readable name from an infusion ID.
+   * e.g. "fire_infusion" → "Fire Infusion"
+   */
+  const formatInfusionName = (id: string) =>
+    id.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
   const isCompact = variant === "compact";
   const shouldShowDescription = showDescriptions ?? !isCompact;
@@ -269,6 +279,25 @@ export function EntityMechanics({
         interval={mechanics.interval}
         isCompact={isCompact}
       />
+
+      {/* Infusion Link */}
+      {mechanics.infusion && (
+        <Link
+          href={`/guide/infusions/${mechanics.infusion.id}`}
+          className={cn(
+            "flex items-center gap-1.5 rounded border p-2 transition-colors",
+            "bg-orange-500/10 border-orange-500/20 text-orange-300 hover:bg-orange-500/20 hover:border-orange-500/30"
+          )}
+        >
+          <Flame
+            size={isCompact ? 13 : 16}
+            className="text-orange-400 shrink-0"
+          />
+          <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm")}>
+            {formatInfusionName(mechanics.infusion.id)}
+          </span>
+        </Link>
+      )}
     </div>
   );
 }

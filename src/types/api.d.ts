@@ -100,6 +100,26 @@ export interface Stealth {
   break_on_attack: boolean;
 }
 
+export interface InfusionRef {
+  id: string;
+}
+
+export interface DamageTier {
+  tier: "I" | "II" | "III";
+  value: number;
+  calculation_unit: string;
+  interval?: number;
+}
+
+export interface Infusion {
+  id: string;
+  name: string;
+  element: "Fire" | "Lightning" | "Poison" | "Ice";
+  effect: string;
+  status_buildup: string;
+  damage_tiers?: DamageTier[];
+}
+
 export interface Cleave {
   radius: number;
   arc: number;
@@ -118,6 +138,7 @@ export interface UnitMechanics {
   capture_speed_modifier?: number;
   initial_attack?: InitialAttack;
   bonus_damage?: BonusDamage[];
+  infusion?: InfusionRef;
 }
 
 export interface SpellMechanics {
@@ -134,6 +155,7 @@ export interface SpellMechanics {
   damage_reduction?: DamageReduction[];
   features?: Feature[];
   bonus_damage?: BonusDamage[];
+  infusion?: InfusionRef;
 }
 
 // Loose mechanics for general use
@@ -141,6 +163,7 @@ export type Mechanics = Omit<UnitMechanics, "damage_modifiers"> &
   Omit<SpellMechanics, "damage_modifiers"> & {
     // Legacy support
     damage_modifiers?: DamageModifier[] | string;
+    infusion?: InfusionRef;
   };
 
 // ============================================================================
@@ -347,6 +370,7 @@ export interface AllDataResponse {
   titans: Titan[];
   consumables: Consumable[];
   upgrades: Upgrade[];
+  infusions: Infusion[];
   _source?: string;
 }
 

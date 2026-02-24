@@ -97,6 +97,10 @@ const StealthSchema = z.object({
   break_on_attack: z.boolean(),
 });
 
+const InfusionRefSchema = z.object({
+  id: z.string(),
+});
+
 // CleaveSchema removed - replaced by boolean in V2
 // const CleaveSchema = z.object({
 //   radius: z.number(),
@@ -145,6 +149,7 @@ export const UnitMechanicsSchema = z
         })
       )
       .optional(),
+    infusion: InfusionRefSchema.optional(),
   })
   .strict();
 
@@ -173,6 +178,7 @@ export const SpellMechanicsSchema = z
         })
       )
       .optional(),
+    infusion: InfusionRefSchema.optional(),
   })
   .strict();
 
@@ -192,6 +198,7 @@ export const MechanicsSchema = z
     spawner: z.array(SpawnerSchema).optional(),
     features: z.array(FeaturesSchema).optional(),
     auto_capture_altars: z.boolean().optional(),
+    infusion: InfusionRefSchema.optional(),
   })
   .strict();
 
@@ -395,6 +402,24 @@ export const UpgradeSchema = z
     message: "entity_id or upgrade_id is required",
   });
 
+const InfusionSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  element: z.enum(["Fire", "Lightning", "Poison", "Ice"]),
+  effect: z.string(),
+  status_buildup: z.string(),
+  damage_tiers: z
+    .array(
+      z.object({
+        tier: z.enum(["I", "II", "III"]),
+        value: z.number(),
+        calculation_unit: z.string(),
+        interval: z.number().optional(),
+      })
+    )
+    .optional(),
+});
+
 export const AllDataSchema = z.object({
   build_info: z.object({
     version: z.string(),
@@ -406,4 +431,5 @@ export const AllDataSchema = z.object({
   titans: z.array(TitanSchema),
   consumables: z.array(ConsumableSchema),
   upgrades: z.array(UpgradeSchema),
+  infusions: z.array(InfusionSchema).optional().default([]),
 });

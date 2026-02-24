@@ -221,7 +221,25 @@ export default function GuidePage() {
           </p>
         </section>
 
-        {/* Next Steps */}
+        {/* Infusions */}
+        <section className="bg-surface-card border border-brand-accent/30 rounded-lg p-6 hover:border-brand-accent/60 transition-colors shadow-sm">
+          <h2 className="text-2xl font-semibold mb-4 text-brand-accent flex items-center gap-2">
+            Infusions Database
+          </h2>
+          <p className="text-text-secondary leading-relaxed mb-4">
+            Infusions are elemental enhancements applied to units and spells
+            that deal damage over time, crowd control, and apply status
+            buildups.
+          </p>
+          <Link
+            href="/guide/infusions"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-accent/10 border border-brand-accent/20 text-brand-accent font-semibold rounded hover:bg-brand-accent/20 transition-colors"
+          >
+            Explore Infusions &rarr;
+          </Link>
+        </section>
+
+        {/* Ready to Build */}
         <section className="bg-surface-card border border-brand-primary/30 rounded-lg p-6 hover:border-brand-primary/50 transition-colors">
           <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
             Ready to Build?

@@ -3,6 +3,8 @@
  * @description CRITICAL CORE COMPONENT. Handles display of all entity images with fallback logic.
  * DO NOT DELETE OR MODIFY WITHOUT VERIFICATION.
  */
+"use client";
+
 import { useState } from "react";
 
 import { ImageOff } from "lucide-react";

@@ -54,6 +54,7 @@ describe("Remote Data Validation", () => {
     titans: [],
     consumables: [],
     upgrades: [],
+    infusions: [],
   };
 
   beforeEach(() => {
@@ -76,6 +77,7 @@ describe("Remote Data Validation", () => {
       else if (url.includes("consumables.json"))
         body = mockApiResponse.consumables;
       else if (url.includes("upgrades.json")) body = mockApiResponse.upgrades;
+      else if (url.includes("infusions.json")) body = mockApiResponse.infusions;
 
       return Promise.resolve({
         ok: true,
@@ -85,8 +87,8 @@ describe("Remote Data Validation", () => {
 
     const data = await fetchGameData();
 
-    // 6 chunks expected
-    expect(global.fetch).toHaveBeenCalledTimes(6);
+    // 7 chunks expected
+    expect(global.fetch).toHaveBeenCalledTimes(7);
     expect(data.spellcasters).toHaveLength(1);
     expect(data.units).toHaveLength(1);
     // build_info is mocked in api-client, so we check if it is present and has version
