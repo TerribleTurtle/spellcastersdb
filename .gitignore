@@ -160,3 +160,6 @@ ARCHIVE.md
 
 # test/report artifacts
 playwright-report/
+
+# Agent context files
+.agent/

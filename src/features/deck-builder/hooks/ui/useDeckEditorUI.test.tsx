@@ -63,17 +63,15 @@ describe("useDeckEditorUI", () => {
       dismissToast: vi.fn(),
     });
 
-    vi.mocked(useDeckStore).mockImplementation(
-      (selector: any  ) => {
-        // Very naive mock of zustand store selector
-        // In the hook: state => state.pendingSwapCard AND state => state.setPendingSwapCard
-        const state = {
-          pendingSwapCard: null,
-          setPendingSwapCard: mockSetPendingSwapCard,
-        };
-        return selector(state);
-      }
-    );
+    vi.mocked(useDeckStore).mockImplementation((selector: any) => {
+      // Very naive mock of zustand store selector
+      // In the hook: state => state.pendingSwapCard AND state => state.setPendingSwapCard
+      const state = {
+        pendingSwapCard: null,
+        setPendingSwapCard: mockSetPendingSwapCard,
+      };
+      return selector(state);
+    });
 
     vi.mocked(useDeckEditorNavigation).mockReturnValue({
       activeMobileTab: "BROWSER",
@@ -162,15 +160,13 @@ describe("useDeckEditorUI", () => {
       const pendingCard = { name: "Swap Card", entity_id: "s1" } as unknown;
 
       beforeEach(() => {
-        vi.mocked(useDeckStore).mockImplementation(
-          (selector: any  ) => {
-            const state = {
-              pendingSwapCard: pendingCard,
-              setPendingSwapCard: mockSetPendingSwapCard,
-            };
-            return selector(state);
-          }
-        );
+        vi.mocked(useDeckStore).mockImplementation((selector: any) => {
+          const state = {
+            pendingSwapCard: pendingCard,
+            setPendingSwapCard: mockSetPendingSwapCard,
+          };
+          return selector(state);
+        });
       });
 
       it("should execute SOLO swap and show toast", () => {

@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 
+import { MEDIA_QUERIES } from "@/services/config/breakpoints";
+
 type ViewMode = "grid" | "list";
 
 export function useViewMode(defaultMode: ViewMode = "grid") {
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     if (typeof window !== "undefined") {
-      return window.matchMedia("(max-width: 768px)").matches
+      return window.matchMedia(MEDIA_QUERIES.mdDown).matches
         ? "list"
         : defaultMode;
     }
@@ -16,7 +18,7 @@ export function useViewMode(defaultMode: ViewMode = "grid") {
     // Ensure we are client-side
     if (typeof window === "undefined") return;
 
-    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const mediaQuery = window.matchMedia(MEDIA_QUERIES.mdDown);
 
     const handleChange = (e: MediaQueryListEvent | MediaQueryList) => {
       if (e.matches) {

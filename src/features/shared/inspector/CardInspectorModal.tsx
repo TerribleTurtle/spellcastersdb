@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { cn } from "@/lib/utils";
+import { BREAKPOINTS, MEDIA_QUERIES } from "@/services/config/breakpoints";
 import { useDeckStore } from "@/store/index";
 
 import { CardInspector } from "./CardInspector";
@@ -18,8 +19,8 @@ export function CardInspectorModal() {
     setMounted(true);
 
     const checkDesktop = () => {
-      // Use 1280px as hard cutoff for 'xl'
-      const isWide = window.innerWidth >= 1280;
+      // Use xl breakpoint as hard cutoff for 'xl'
+      const isWide = window.innerWidth >= BREAKPOINTS.xl;
       setIsDesktop(isWide);
     };
 
@@ -27,7 +28,7 @@ export function CardInspectorModal() {
     checkDesktop();
 
     // Check with matchMedia for listener
-    const mediaQuery = window.matchMedia("(min-width: 1280px)");
+    const mediaQuery = window.matchMedia(MEDIA_QUERIES.xlUp);
     const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
     mediaQuery.addEventListener("change", handler);
 
@@ -60,7 +61,7 @@ export function CardInspectorModal() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-            @media (min-width: 1280px) {
+            @media ${MEDIA_QUERIES.xlUp} {
                 .card-inspector-modal-container {
                     display: none !important;
                     visibility: hidden !important;

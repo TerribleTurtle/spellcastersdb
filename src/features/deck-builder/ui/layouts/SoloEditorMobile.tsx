@@ -221,6 +221,7 @@ export function SoloEditorMobile({
         validation={validation}
         onSelect={onSelectItem}
         deckId={currentDeck.id}
+        deckName={currentDeck.name}
         isSwapMode={isSwapMode}
       />
     </div>

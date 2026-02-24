@@ -9,6 +9,7 @@ import {
   getCardAltText,
   getCardImageUrl,
 } from "@/services/assets/asset-helpers";
+import { BREAKPOINTS } from "@/services/config/breakpoints";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
 import { useDeckStore } from "@/store/index";
 import { Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
@@ -243,7 +244,7 @@ export function DeckSlot({
               src={getCardImageUrl(slot.unit)}
               alt={getCardAltText(slot.unit)}
               fill
-              sizes="(max-width: 768px) 100vw, 33vw"
+              sizes={`(max-width: ${BREAKPOINTS.md}px) 100vw, 33vw`}
               className="object-cover object-top"
             />
             {/* Rank/Titan Badge */}

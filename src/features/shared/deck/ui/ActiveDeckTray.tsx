@@ -115,35 +115,6 @@ export function ActiveDeckTray({
             deckId={deckId}
             idSuffix={idSuffix}
           />
-
-          {/* Validation Indicator - Directly to the right of Titan */}
-          {validation && (
-            <div
-              className={cn(
-                "absolute z-50 flex items-center gap-1.5 rounded-full shadow-sm border backdrop-blur-md transition-all cursor-help whitespace-nowrap",
-                // Mobile AND XL: Top-Right Corner Overlay
-                "-top-2 -right-2 px-1.5 py-0.5 xl:top-0 xl:right-0 xl:p-1 xl:px-2",
-                validation.isValid
-                  ? "bg-status-success-muted border-status-success-border text-status-success-text"
-                  : "bg-status-danger-muted border-status-danger-border text-status-danger-text"
-              )}
-              title={
-                validation.isValid ? "Deck Valid" : validation.errors.join("\n")
-              }
-              data-testid="validation-indicator"
-            >
-              {validation.isValid ? (
-                <CheckCircle2 size={12} />
-              ) : (
-                <AlertCircle size={12} />
-              )}
-              <span className="text-[9px] font-bold uppercase tracking-widest hidden">
-                {validation.isValid
-                  ? "Valid"
-                  : `${validation.errors.length} Issues`}
-              </span>
-            </div>
-          )}
         </div>
       </div>
     </div>

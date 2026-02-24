@@ -8,6 +8,7 @@ import { useAccordionState } from "@/hooks/useAccordionState";
 import { useToast } from "@/hooks/useToast";
 import { copyToClipboard } from "@/lib/clipboard";
 import { INITIAL_DECK } from "@/services/api/persistence";
+import { BREAKPOINTS } from "@/services/config/breakpoints";
 import { isDeckEmpty } from "@/services/utils/deck-utils";
 import { useDeckStore } from "@/store/index";
 import { selectIsExistingTeam, selectIsTeamSaved } from "@/store/selectors";
@@ -33,7 +34,7 @@ export function useTeamEditor() {
   // Initialize based on current width if available (client-side)
   const [allowMultiple, setAllowMultiple] = useState(() => {
     if (typeof window !== "undefined") {
-      return window.innerWidth >= 1280;
+      return window.innerWidth >= BREAKPOINTS.xl;
     }
     return false; // Default to mobile/accordion for SSR/initial
   });
@@ -43,7 +44,7 @@ export function useTeamEditor() {
     const checkWidth = () => {
       clearTimeout(timeoutId);
       timeoutId = setTimeout(
-        () => setAllowMultiple(window.innerWidth >= 1280),
+        () => setAllowMultiple(window.innerWidth >= BREAKPOINTS.xl),
         150
       );
     };
