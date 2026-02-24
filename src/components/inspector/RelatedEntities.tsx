@@ -5,23 +5,12 @@ import { useMemo } from "react";
 import Link from "next/link";
 
 import { EntityImage } from "@/components/ui/EntityImage";
+import { routes } from "@/lib/routes";
 import { UnifiedEntity } from "@/types/api";
 
 interface RelatedEntitiesProps {
   entities: UnifiedEntity[];
   title?: string;
-}
-
-/** Helper to get the detail link for any entity type */
-function getEntityLink(entity: UnifiedEntity): string {
-  if ("spellcaster_id" in entity)
-    return `/spellcasters/${entity.spellcaster_id}`;
-  if (entity.category === "Titan") return `/titans/${entity.entity_id}`;
-  if (entity.category === "Spell")
-    return `/incantations/spells/${entity.entity_id}`;
-  if (entity.category === "Consumable")
-    return `/consumables/${entity.entity_id}`;
-  return `/incantations/units/${entity.entity_id}`;
 }
 
 /** Deterministic spread sample — picks evenly spaced items from the array */
@@ -49,7 +38,7 @@ export function RelatedEntities({
         {sample.map((entity) => (
           <Link
             key={entity.entity_id}
-            href={getEntityLink(entity)}
+            href={routes.entityLink(entity)}
             className="group flex flex-col items-center gap-2 p-2 rounded-lg border border-border-subtle bg-surface-card hover:bg-surface-hover hover:border-brand-accent/30 transition-all"
           >
             <EntityImage entity={entity} className="w-14 h-14 rounded-lg" />

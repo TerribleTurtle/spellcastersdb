@@ -406,8 +406,8 @@ const InfusionSchema = z.object({
   id: z.string(),
   name: z.string(),
   element: z.enum(["Fire", "Lightning", "Poison", "Ice"]),
-  effect: z.string(),
-  status_buildup: z.string(),
+  allied_effect: z.string(),
+  enemy_effect: z.string(),
   damage_tiers: z
     .array(
       z.object({

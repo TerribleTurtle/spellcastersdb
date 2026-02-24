@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
+import { routes } from "@/lib/routes";
 import { getSpellcasterById, getSpellcasters } from "@/services/api/api";
 import {
   fetchEntityTimeline,
@@ -81,16 +82,16 @@ export default async function SpellcasterPage({
     "@type": "Person",
     name: spellcaster.name,
     description: spellcaster.abilities.primary.description,
-    url: `https://spellcastersdb.com/spellcasters/${spellcaster.spellcaster_id}`,
+    url: `https://spellcastersdb.com${routes.spellcaster(spellcaster.spellcaster_id!)}`,
     image: `https://spellcastersdb.com/api/og?spellcasterId=${spellcaster.spellcaster_id}`,
   };
 
   const breadcrumbs = [
     { name: "Home", url: "/" },
-    { name: "Spellcasters", url: "/spellcasters" },
+    { name: "Spellcasters", url: routes.spellcaster("") },
     {
       name: spellcaster.name,
-      url: `/spellcasters/${spellcaster.spellcaster_id}`,
+      url: routes.spellcaster(spellcaster.spellcaster_id!),
     },
   ];
 
@@ -103,13 +104,13 @@ export default async function SpellcasterPage({
       <BreadcrumbsLd items={breadcrumbs} />
       <EntityShowcase
         item={spellcaster}
-        backUrl="/spellcasters"
+        backUrl={routes.spellcaster("")}
         backLabel="Back to Spellcasters"
         changelog={entityChangelog}
         timeline={entityTimeline}
         showControls={true}
         breadcrumbs={[
-          { label: "Spellcasters", href: "/spellcasters" },
+          { label: "Spellcasters", href: routes.spellcaster("") },
           { label: spellcaster.name },
         ]}
         relatedEntities={relatedEntities}

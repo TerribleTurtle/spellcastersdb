@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
+import { routes } from "@/lib/routes";
 import { getEntityById, getSpells } from "@/services/api/api";
 import {
   fetchEntityTimeline,
@@ -86,13 +87,13 @@ export default async function SpellPage({ params }: SpellPageProps) {
       />
       <EntityShowcase
         item={spell}
-        backUrl="/incantations/spells"
+        backUrl={routes.spell("")}
         backLabel="Back to Spells"
         changelog={entityChangelog}
         timeline={entityTimeline}
         showControls={true}
         breadcrumbs={[
-          { label: "Spells", href: "/incantations/spells" },
+          { label: "Spells", href: routes.spell("") },
           { label: spell.name },
         ]}
         relatedEntities={relatedEntities}

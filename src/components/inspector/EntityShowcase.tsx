@@ -13,6 +13,7 @@ import { PatchHistorySection } from "@/components/inspector/PatchHistorySection"
 import { RelatedEntities } from "@/components/inspector/RelatedEntities";
 import { GameImage } from "@/components/ui/GameImage";
 import { SmartRankBadge } from "@/components/ui/rank-badge";
+import { routes } from "@/lib/routes";
 import {
   getCardAltText,
   getCardImageUrl,
@@ -161,7 +162,7 @@ export function EntityShowcase({
                   )}
                   {magicSchool && (
                     <Link
-                      href={`/schools/${magicSchool}`}
+                      href={routes.school(magicSchool)}
                       className="bg-brand-secondary/80 hover:bg-brand-secondary text-text-primary px-3 py-1 rounded text-[10px] font-bold uppercase tracking-wider backdrop-blur-md transition-colors"
                     >
                       {magicSchool}
@@ -222,7 +223,7 @@ export function EntityShowcase({
                 {tags.map((tag) => (
                   <Link
                     key={tag}
-                    href={`/database?search=${encodeURIComponent(tag)}`}
+                    href={routes.database(tag)}
                     className="bg-surface-card hover:bg-surface-hover border border-border-subtle hover:border-brand-primary/30 text-text-muted hover:text-text-primary px-2.5 py-1 rounded text-[10px] font-medium transition-all"
                   >
                     #{tag}

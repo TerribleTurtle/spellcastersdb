@@ -28,6 +28,7 @@ import { type DiffData, DiffLine } from "@/components/ui/DiffLine";
 import { LocalDate } from "@/components/ui/LocalDate";
 import { PatchBadge } from "@/components/ui/PatchBadge";
 import { Badge } from "@/components/ui/badge";
+import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import type {
   ChangeType,
@@ -47,21 +48,7 @@ import {
 
 /** Resolve entity URL from target_id and category. */
 function getEntityUrl(row: FlatChangeRow): string | null {
-  // target_id format: "category/entity_id.json" or "entity_id.json"
-  const parts = row.targetId.replace(".json", "").split("/");
-  const entityId = parts[parts.length - 1];
-  const cat = row.category.toLowerCase();
-
-  if (cat === "heroes" || cat === "spellcaster" || cat === "spellcasters")
-    return `/spellcasters/${entityId}`;
-  if (cat === "units" || cat === "creature" || cat === "building")
-    return `/incantations/units/${entityId}`;
-  if (cat === "spells" || cat === "spell")
-    return `/incantations/spells/${entityId}`;
-  if (cat === "titans" || cat === "titan") return `/titans/${entityId}`;
-  if (cat === "consumables" || cat === "consumable")
-    return `/consumables/${entityId}`;
-  return null;
+  return routes.entityLinkFromChangelog(row.targetId, row.category);
 }
 
 const CHANGE_TYPE_CONFIG: Record<
@@ -181,9 +168,9 @@ function ChangeRow({
         </span>
 
         {/* Date */}
-        <span className="text-[10px] text-text-faint shrink-0 hidden lg:flex items-center gap-1 w-36 justify-end">
+        <span className="text-[10px] text-text-faint shrink-0 hidden lg:flex items-center gap-1 min-w-[140px] justify-end">
           <Clock size={10} />
-          <LocalDate iso={row.patchDate} />
+          <LocalDate iso={row.patchDate} showTime={true} />
         </span>
 
         {/* Link out */}

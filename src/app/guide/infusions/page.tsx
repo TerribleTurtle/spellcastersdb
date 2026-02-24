@@ -1,8 +1,9 @@
 import Link from "next/link";
 
-import { Activity, Flame, Info, Skull, Snowflake, Zap } from "lucide-react";
+import { Flame, Info, Skull, Snowflake, Zap } from "lucide-react";
 
 import { PageShell } from "@/components/layout/PageShell";
+import { routes } from "@/lib/routes";
 import { fetchGameData } from "@/services/api/api";
 import { Infusion } from "@/types/api";
 
@@ -35,8 +36,8 @@ export default async function InfusionsIndexPage() {
       title="Infusions Database"
       maxWidth="4xl"
       breadcrumbs={[
-        { label: "Guide", href: "/guide" },
-        { label: "Infusions", href: "/guide/infusions" },
+        { label: "Guide", href: routes.guide() },
+        { label: "Infusions", href: routes.infusions() },
       ]}
     >
       <div className="space-y-8">
@@ -63,7 +64,7 @@ export default async function InfusionsIndexPage() {
         {infusions.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {infusions.map((infusion: Infusion) => {
-              const Icon = INFUSION_ICONS[infusion.id] || Activity;
+              const Icon = INFUSION_ICONS[infusion.id] || Info;
               const colorClass =
                 INFUSION_COLORS[infusion.id] ||
                 "text-brand-primary border-brand-primary/30 bg-brand-primary/10";
@@ -71,7 +72,7 @@ export default async function InfusionsIndexPage() {
               return (
                 <Link
                   key={infusion.id}
-                  href={`/guide/infusions/${infusion.id}`}
+                  href={routes.infusion(infusion.id)}
                   className="group flex flex-col h-full bg-surface-card border border-border-default rounded-lg p-5 hover:border-brand-accent transition-colors shadow-sm"
                 >
                   <div className="flex items-start justify-between mb-4">
@@ -91,17 +92,30 @@ export default async function InfusionsIndexPage() {
                   </div>
 
                   <p className="text-sm text-text-secondary leading-relaxed grow">
-                    {infusion.effect}
+                    {infusion.allied_effect}
                   </p>
 
-                  <div className="mt-5 pt-4 border-t border-border-subtle flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-xs font-bold text-text-dimmed">
-                      <Activity size={14} />
-                      <span>Buildup: {infusion.status_buildup}</span>
+                  <div className="mt-5 pt-4 border-t border-border-subtle flex flex-col gap-3">
+                    <div className="flex items-start gap-2 text-xs text-text-dimmed">
+                      <Skull
+                        size={14}
+                        className="mt-0.5 shrink-0 text-status-danger-text"
+                      />
+                      <span
+                        className="line-clamp-2"
+                        title={infusion.enemy_effect}
+                      >
+                        <span className="font-bold text-status-danger-text mr-1">
+                          Enemy:
+                        </span>
+                        {infusion.enemy_effect}
+                      </span>
                     </div>
-                    <span className="text-brand-primary text-sm font-bold opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
-                      View Details &rarr;
-                    </span>
+                    <div className="flex items-center justify-end">
+                      <span className="text-brand-primary text-sm font-bold opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all">
+                        View Details &rarr;
+                      </span>
+                    </div>
                   </div>
                 </Link>
               );

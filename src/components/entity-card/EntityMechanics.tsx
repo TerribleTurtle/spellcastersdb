@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 
-import { ArrowRight, Eye, Flame, Shield, Sword } from "lucide-react";
+import { ArrowRight, Eye, Shield, Sparkles, Sword } from "lucide-react";
 
+import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { formatTargetName } from "@/services/utils/formatting";
 import { Mechanics, SpellMechanics, UnitMechanics } from "@/types/api";
@@ -283,15 +284,15 @@ export function EntityMechanics({
       {/* Infusion Link */}
       {mechanics.infusion && (
         <Link
-          href={`/guide/infusions/${mechanics.infusion.id}`}
+          href={routes.infusion(mechanics.infusion.id)}
           className={cn(
             "flex items-center gap-1.5 rounded border p-2 transition-colors",
-            "bg-orange-500/10 border-orange-500/20 text-orange-300 hover:bg-orange-500/20 hover:border-orange-500/30"
+            "bg-purple-500/10 border-purple-500/20 text-purple-300 hover:bg-purple-500/20 hover:border-purple-500/30"
           )}
         >
-          <Flame
+          <Sparkles
             size={isCompact ? 13 : 16}
-            className="text-orange-400 shrink-0"
+            className="text-purple-400 shrink-0"
           />
           <span className={cn("font-bold", isCompact ? "text-xs" : "text-sm")}>
             {formatInfusionName(mechanics.infusion.id)}
