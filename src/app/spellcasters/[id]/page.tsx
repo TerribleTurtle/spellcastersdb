@@ -6,7 +6,10 @@ import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getSpellcasterById, getSpellcasters } from "@/services/api/api";
-import { mapStatChangesToChangelog } from "@/services/api/patch-history";
+import {
+  fetchEntityTimeline,
+  mapStatChangesToChangelog,
+} from "@/services/api/patch-history";
 
 interface SpellcasterPageProps {
   params: Promise<{ id: string }>;
@@ -68,6 +71,7 @@ export default async function SpellcasterPage({
   const entityChangelog = spellcaster.stat_changes
     ? mapStatChangesToChangelog(spellcaster.stat_changes, id, spellcaster.name)
     : [];
+  const entityTimeline = await fetchEntityTimeline(id);
   const relatedEntities = allSpellcasters.filter(
     (s) => s.spellcaster_id !== id
   );
@@ -102,7 +106,7 @@ export default async function SpellcasterPage({
         backUrl="/spellcasters"
         backLabel="Back to Spellcasters"
         changelog={entityChangelog}
-        timeline={[]}
+        timeline={entityTimeline}
         showControls={true}
         breadcrumbs={[
           { label: "Spellcasters", href: "/spellcasters" },

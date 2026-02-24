@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.27] - 2026-02-24
+
+### Fixed
+
+- **Patch History Endpoint**: Separated `PATCH_HISTORY_BASE_URL` in config to resolve `audit.json` 404s, pointing directly to the community API root instead of the `/api/v2` namespace.
+- **Entity Timeline**: Wired `fetchEntityTimeline` into all entity detail pages (Units, Spells, Titans, Spellcasters) to properly display version-gated stat snapshots in the Patch History section.
+
 ## [1.0.26] - 2026-02-21
 
 ### Added

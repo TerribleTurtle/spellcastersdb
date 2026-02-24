@@ -5,7 +5,10 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getUnitById, getUnits } from "@/services/api/api";
-import { mapStatChangesToChangelog } from "@/services/api/patch-history";
+import {
+  fetchEntityTimeline,
+  mapStatChangesToChangelog,
+} from "@/services/api/patch-history";
 import { Unit } from "@/types/api";
 
 interface UnitPageProps {
@@ -58,6 +61,7 @@ export default async function UnitPage({ params }: UnitPageProps) {
   const entityChangelog = unit.stat_changes
     ? mapStatChangesToChangelog(unit.stat_changes, id, unit.name)
     : [];
+  const entityTimeline = await fetchEntityTimeline(id);
 
   const relatedEntities = allUnits.filter(
     (u: Unit) => u.entity_id !== id && u.magic_school === unit.magic_school
@@ -108,7 +112,7 @@ export default async function UnitPage({ params }: UnitPageProps) {
         backUrl="/incantations/units"
         backLabel="Back to Units"
         changelog={entityChangelog}
-        timeline={[]}
+        timeline={entityTimeline}
         showControls={true}
         breadcrumbs={[
           { label: "Units", href: "/incantations/units" },

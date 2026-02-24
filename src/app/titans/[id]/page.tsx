@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getEntityById, getTitans } from "@/services/api/api";
-import { mapStatChangesToChangelog } from "@/services/api/patch-history";
+import {
+  fetchEntityTimeline,
+  mapStatChangesToChangelog,
+} from "@/services/api/patch-history";
 import { Titan } from "@/types/api";
 
 interface TitanPageProps {
@@ -55,6 +58,7 @@ export default async function TitanPage({ params }: TitanPageProps) {
   const entityChangelog = titan.stat_changes
     ? mapStatChangesToChangelog(titan.stat_changes, id, titan.name)
     : [];
+  const entityTimeline = await fetchEntityTimeline(id);
   const relatedEntities = allTitans.filter((t: Titan) => t.entity_id !== id);
 
   const jsonLdData = {
@@ -79,7 +83,7 @@ export default async function TitanPage({ params }: TitanPageProps) {
         backUrl="/titans"
         backLabel="Back to Titans"
         changelog={entityChangelog}
-        timeline={[]}
+        timeline={entityTimeline}
         showControls={true}
         breadcrumbs={[
           { label: "Titans", href: "/titans" },
