@@ -1,0 +1,425 @@
+
+C:\Projects\spellcastersdb\e2e\deck-builder-desktop.spec.ts
+  30:33  warning  No magic number: 10  no-magic-numbers
+  31:34  warning  No magic number: 10  no-magic-numbers
+
+C:\Projects\spellcastersdb\e2e\deck-builder-mobile.spec.ts
+  22:31  warning  No magic number: 500  no-magic-numbers
+  39:33  warning  No magic number: 10   no-magic-numbers
+  40:34  warning  No magic number: 10   no-magic-numbers
+
+C:\Projects\spellcastersdb\e2e\team-builder.spec.ts
+  58:33  warning  No magic number: 10  no-magic-numbers
+  59:34  warning  No magic number: 10  no-magic-numbers
+
+C:\Projects\spellcastersdb\next.config.ts
+  150:17  warning  No magic number: 45    no-magic-numbers
+  150:21  warning  No magic number: 75    no-magic-numbers
+  151:19  warning  No magic number: 640   no-magic-numbers
+  151:24  warning  No magic number: 828   no-magic-numbers
+  151:29  warning  No magic number: 1200  no-magic-numbers
+  151:35  warning  No magic number: 1920  no-magic-numbers
+  152:18  warning  No magic number: 96    no-magic-numbers
+  152:22  warning  No magic number: 128   no-magic-numbers
+  152:27  warning  No magic number: 256   no-magic-numbers
+  152:32  warning  No magic number: 384   no-magic-numbers
+
+C:\Projects\spellcastersdb\playwright.config.ts
+  50:14  warning  No magic number: 120   no-magic-numbers
+  50:20  warning  No magic number: 1000  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\app\api\og\render-deck.tsx
+   93:59  warning  No magic number: 4000                   no-magic-numbers
+  137:7   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  153:9   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  165:9   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  179:9   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  189:11  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  200:16  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  203:15  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  215:15  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  225:21  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  228:21  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  233:16  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  240:11  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  251:15  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  269:17  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  278:17  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  293:19  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  310:13  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  318:24  warning  No magic number: 5                      no-magic-numbers
+  326:21  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  338:23  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  372:19  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  390:21  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  399:21  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  421:21  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  436:23  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\app\api\og\render-entity.tsx
+   53:7   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+   71:9   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+   83:9   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+   94:11  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  107:11  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  122:11  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  133:17  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\app\api\og\render-team.tsx
+   98:7   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  114:9   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  126:9   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  139:9   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  149:11  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  160:16  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  162:15  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  173:15  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  183:21  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  186:21  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  193:11  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  209:17  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  219:21  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  235:23  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  244:23  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  259:25  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  271:25  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  286:21  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  298:23  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\app\api\revalidate\route.ts
+  12:28  warning  No magic number: 7  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\app\api\share\__tests__\route.test.ts
+    1:10  warning  'NextResponse' is defined but never used  @typescript-eslint/no-unused-vars
+   52:27  warning  No magic number: 60_000                   no-magic-numbers
+   71:29  warning  No magic number: 200                      no-magic-numbers
+   73:34  warning  No magic number: 7                        no-magic-numbers
+   89:13  warning  No magic number: 30                       no-magic-numbers
+   89:23  warning  No magic number: 60                       no-magic-numbers
+   89:28  warning  No magic number: 60                       no-magic-numbers
+  103:29  warning  No magic number: 200                      no-magic-numbers
+  104:34  warning  No magic number: 7                        no-magic-numbers
+  115:29  warning  No magic number: 400                      no-magic-numbers
+  125:29  warning  No magic number: 400                      no-magic-numbers
+  136:27  warning  No magic number: 60_000                   no-magic-numbers
+  149:29  warning  No magic number: 429                      no-magic-numbers
+  175:29  warning  No magic number: 503                      no-magic-numbers
+  202:29  warning  No magic number: 500                      no-magic-numbers
+
+C:\Projects\spellcastersdb\src\app\api\share\route.ts
+   8:21  warning  No magic number: 30  no-magic-numbers
+   8:31  warning  No magic number: 60  no-magic-numbers
+   8:36  warning  No magic number: 60  no-magic-numbers
+  56:67  warning  No magic number: 7   no-magic-numbers
+
+C:\Projects\spellcastersdb\src\app\changes\page.tsx
+  21:31  warning  No magic number: 5  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\app\debug\page.tsx
+  372:11  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\app\deck-builder\page.tsx
+  45:53  warning  No magic number: 6  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\app\page.tsx
+   65:11  warning  Prop "style" is forbidden on Components  react/forbid-component-props
+   90:11  warning  Prop "style" is forbidden on Components  react/forbid-component-props
+  115:11  warning  Prop "style" is forbidden on Components  react/forbid-component-props
+
+C:\Projects\spellcastersdb\src\app\roadmap\loading.tsx
+  12:20  warning  No magic number: 6  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\app\spellcasters\[id]\loading.tsx
+  36:28  warning  No magic number: 6  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\app\sw.ts
+  59:43  warning  No magic number: 302  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\changelog\hooks\useChangelogSearch.ts
+  103:51  warning  No magic number: 250  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\debug\DebugFeatures.tsx
+  282:46  warning  No magic number: 5   no-magic-numbers
+  283:34  warning  No magic number: 5   no-magic-numbers
+  284:36  warning  No magic number: 5   no-magic-numbers
+  328:17  warning  No magic number: 20  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\entity-card\EntityMechanics.tsx
+   75:31  warning  No magic number: 13     no-magic-numbers
+   92:31  warning  No magic number: 13     no-magic-numbers
+  122:31  warning  No magic number: 13     no-magic-numbers
+  180:57  warning  No magic number: 0.001  no-magic-numbers
+  202:31  warning  No magic number: 13     no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\entity-card\EntityStats.tsx
+  44:52  warning  No magic number: 18  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\entity-card\mechanics\AuraList.tsx
+  35:31  warning  No magic number: 13  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\entity-card\mechanics\BonusDamageList.tsx
+  57:33  warning  No magic number: 13  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\entity-card\mechanics\DamageModifierList.tsx
+  41:33  warning  No magic number: 13  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\entity-card\mechanics\FeaturesList.tsx
+  34:34  warning  No magic number: 13  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\entity-card\mechanics\InitialAttackDisplay.tsx
+  31:33  warning  No magic number: 13  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\entity-card\mechanics\SpawnerList.tsx
+  30:31  warning  No magic number: 14  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\entity-card\mechanics\WaveMechanic.tsx
+  29:35  warning  No magic number: 13  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\inspector\RelatedEntities.tsx
+  39:55  warning  No magic number: 6  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\layout\DesktopSidebar.tsx
+  40:29  warning  No magic number: 1536  no-magic-numbers
+  55:53  warning  No magic number: 150   no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\layout\TeamShareButton.tsx
+  15:74  warning  No magic number: 2000  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\privacy\ClearDataButton.tsx
+  21:10  warning  No magic number: 1500  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\pwa\OfflineIndicator.tsx
+  24:50  warning  No magic number: 3000  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\components\ui\ThemeBuilder.tsx
+  166:19  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\components\ui\ThemePicker.tsx
+  124:9   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  174:19  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\components\ui\TokenCatalog.tsx
+  78:19  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\deck-builder\browser\OptimizedCardImage.tsx
+  30:13  warning  No magic number: 45  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\deck-builder\browser\UnitBrowser.tsx
+  205:11  warning  Prop "style" is forbidden on Components  react/forbid-component-props
+  209:45  warning  No magic number: 120                     no-magic-numbers
+  209:51  warning  No magic number: 250                     no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\deck-builder\browser\UnitGridRow.tsx
+  26:7  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\deck-builder\forge\CommandCenterModal.tsx
+  53:7  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\deck-builder\forge\lists\SoloForgeList.tsx
+  138:15  warning  Prop "style" is forbidden on Components  react/forbid-component-props
+
+C:\Projects\spellcastersdb\src\features\deck-builder\hooks\persistence\useDeckPersistence.ts
+  46:23  warning  No magic number: 2000  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\deck-builder\hooks\persistence\useDeckSharing.ts
+  24:74  warning  No magic number: 2000                             no-magic-numbers
+  32:20  warning  'isShortLink' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  32:33  warning  'rateLimited' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Projects\spellcastersdb\src\features\deck-builder\hooks\ui\__tests__\useTeamEditor.test.tsx
+   18:9   warning  No magic number: 5     no-magic-numbers
+   86:20  warning  No magic number: 800   no-magic-numbers
+  117:20  warning  No magic number: 1400  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\deck-builder\hooks\ui\useAutoExpand.ts
+  13:19  warning  No magic number: 500  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\deck-builder\hooks\ui\useCommandCenter.ts
+  89:64  warning  No magic number: 10  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\deck-builder\hooks\ui\useDeckEditorUI.test.tsx
+   10:10  warning  'SelectableItem' is defined but never used  @typescript-eslint/no-unused-vars
+   63:59  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  160:63  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  222:27  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  223:20  error    Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+C:\Projects\spellcastersdb\src\features\deck-builder\hooks\ui\useTeamEditor.test.tsx
+  100:33  warning  No magic number: 1920                     no-magic-numbers
+  123:59  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Projects\spellcastersdb\src\features\deck-builder\hooks\ui\useTeamEditor.ts
+  36:35  warning  No magic number: 1280  no-magic-numbers
+  46:53  warning  No magic number: 1280  no-magic-numbers
+  47:9   warning  No magic number: 150   no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\deck-builder\hooks\ui\useUnitBrowserState.ts
+  16:57  warning  No magic number: 300  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\deck-builder\overlays\SoloInspectOverlay.tsx
+  25:9  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\deck-builder\overlays\SoloOverview.tsx
+  45:74  warning  No magic number: 2000  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\deck-builder\shared\rows\DeckRow.tsx
+   95:26  warning  No magic number: 50                     no-magic-numbers
+  104:7   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\deck-builder\shared\rows\TeamRow.tsx
+  86:26  warning  No magic number: 50                     no-magic-numbers
+  92:7   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\deck-builder\ui\layouts\SoloEditorDesktop.tsx
+  74:9  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\deck-builder\ui\layouts\SoloEditorLayout.tsx
+   59:39  warning  No magic number: 180                    no-magic-numbers
+   59:45  warning  No magic number: 48                     no-magic-numbers
+  314:13  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\deck-builder\ui\layouts\TeamEditorLayout.tsx
+  190:19  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+  191:65  warning  No magic number: 14                     no-magic-numbers
+  322:13  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\shared\deck\drawer\DeckDrawer.tsx
+  139:5   warning  No magic number: 500   no-magic-numbers
+  236:36  warning  No magic number: 1280  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\shared\deck\ui\DeckOverview.tsx
+  155:47  warning  No magic number: 10  no-magic-numbers
+  164:47  warning  No magic number: 10  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\shared\deck\ui\DeckSlot.tsx
+  211:11  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\shared\deck\ui\SpellcasterSlot.tsx
+  164:11  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\shared\inspector\CardInspectorModal.tsx
+  22:43  warning  No magic number: 1280                   no-magic-numbers
+  53:7   warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\team-builder\TeamBuilderView.tsx
+  90:13  warning  Prop "style" is forbidden on DOM Nodes  react/forbid-dom-props
+
+C:\Projects\spellcastersdb\src\features\team-builder\components\TeamHeader.tsx
+  58:44  warning  No magic number: 2000  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\features\team-builder\components\TeamOverview.tsx
+  40:74  warning  No magic number: 2000  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\hooks\__tests__\useDebounce.test.ts
+  17:64  warning  No magic number: 500  no-magic-numbers
+  37:30  warning  No magic number: 500  no-magic-numbers
+  54:30  warning  No magic number: 200  no-magic-numbers
+  61:30  warning  No magic number: 300  no-magic-numbers
+  68:30  warning  No magic number: 200  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\hooks\useEphemeralState.ts
+  10:56  warning  No magic number: 2000  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\hooks\useToast.ts
+  32:8  warning  No magic number: 3000  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\hooks\useUnitSearch.ts
+   37:51  warning  No magic number: 300  no-magic-numbers
+   97:59  warning  No magic number: 99   no-magic-numbers
+   98:59  warning  No magic number: 99   no-magic-numbers
+  103:52  warning  No magic number: 99   no-magic-numbers
+  104:52  warning  No magic number: 99   no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\api\__tests__\api-access.test.ts
+  74:76  warning  No magic number: 500  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\api\api-client.ts
+  57:7  warning  No magic number: 500  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\api\api.test.ts
+   89:48  warning  No magic number: 6    no-magic-numbers
+  158:36  warning  No magic number: 500  no-magic-numbers
+  165:54  warning  No magic number: 404  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\api\asset-cache.ts
+  36:55  warning  No magic number: 8000  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\api\patch-history.ts
+  57:51  warning  No magic number: 3000  no-magic-numbers
+  67:31  warning  No magic number: 404   no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\api\persistence.ts
+   87:21  warning  No magic number: 5  no-magic-numbers
+  122:23  warning  No magic number: 5  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\api\reconstruction.ts
+  33:29  warning  No magic number: 5  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\domain\filtering.ts
+   82:14  warning  No magic number: 1000  no-magic-numbers
+   84:14  warning  No magic number: 500   no-magic-numbers
+   94:14  warning  No magic number: 50    no-magic-numbers
+  102:14  warning  No magic number: 40    no-magic-numbers
+  107:14  warning  No magic number: 30    no-magic-numbers
+  115:14  warning  No magic number: 10    no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\domain\sorting.ts
+  128:41  warning  No magic number: 99  no-magic-numbers
+  129:41  warning  No magic number: 99  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\domain\team\TeamModification.test.ts
+   81:58  warning  No magic number: 99  no-magic-numbers
+  116:60  warning  No magic number: 99  no-magic-numbers
+  137:9   warning  No magic number: 5   no-magic-numbers
+  167:60  warning  No magic number: 10  no-magic-numbers
+  192:59  warning  No magic number: 99  no-magic-numbers
+  222:9   warning  No magic number: 50  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\infrastructure\export-service.test.ts
+   9:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  10:27  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  11:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  12:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  13:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Projects\spellcastersdb\src\services\infrastructure\ratelimit.test.ts
+  38:58  warning  No magic number: 10  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\infrastructure\ratelimit.ts
+  17:38  warning  No magic number: 10  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\logic\team\__tests__\TeamEditor.test.ts
+   61:52  warning  No magic number: 99  no-magic-numbers
+   86:54  warning  No magic number: 99  no-magic-numbers
+  119:54  warning  No magic number: 99  no-magic-numbers
+  139:53  warning  No magic number: 99  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\persistence\custom-themes.test.ts
+  27:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Projects\spellcastersdb\src\services\persistence\custom-themes.ts
+  11:10  warning  No magic number: 30  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\roadmap-service.ts
+  69:30  warning  No magic number: 403  no-magic-numbers
+  69:54  warning  No magic number: 429  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\sharing\__tests__\create-short-link.test.ts
+  110:49  warning  No magic number: 429  no-magic-numbers
+  124:53  warning  No magic number: 500  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\sharing\create-short-link.ts
+  98:28  warning  No magic number: 429  no-magic-numbers
+
+C:\Projects\spellcastersdb\src\services\utils\encoding.ts
+   42:24  warning  No magic number: 6   no-magic-numbers
+   48:31  warning  No magic number: 6   no-magic-numbers
+  127:48  warning  No magic number: 20  no-magic-numbers
+  141:27  warning  No magic number: 7   no-magic-numbers
+  142:54  warning  No magic number: 7   no-magic-numbers
+  143:28  warning  No magic number: 6   no-magic-numbers
+  149:35  warning  No magic number: 6   no-magic-numbers
+
+✖ 242 problems (12 errors, 230 warnings)
+

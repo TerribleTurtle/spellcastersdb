@@ -19,20 +19,70 @@ export default defineConfig({
     },
     coverage: {
       provider: "v8",
-      reporter: ["text", "html"],
+      reporter: ["text", "html", "json"],
       reportsDirectory: "./coverage",
       thresholds: {
-        lines: 1,
-        functions: 1,
-        branches: 1,
+        lines: 40.59,
+        functions: 35.7,
+        branches: 29.34,
+        autoUpdate: true,
       },
       include: ["src/**/*.{ts,tsx}"],
       exclude: [
+        // Already excluded
         "src/**/*.d.ts",
         "src/**/*.test.{ts,tsx}",
+        "src/**/*.spec.{ts,tsx}",
         "src/**/types.ts",
-        "src/app/layout.tsx", // Next.js root layout hard to test
+
+        // Next.js app shell (layouts, loading, error, not-found)
+        "src/app/layout.tsx",
+        "src/app/**/layout.tsx",
+        "src/app/**/loading.tsx",
+        "src/app/error.tsx",
+        "src/app/global-error.tsx",
+        "src/app/not-found.tsx",
+
+        // Next.js generated / config
         "src/app/registry.tsx",
+        "src/app/manifest.ts",
+        "src/app/robots.ts",
+        "src/app/sitemap.ts",
+        "src/app/sw.ts",
+
+        // Sentry / instrumentation
+        "src/instrumentation.ts",
+        "src/instrumentation-client.ts",
+
+        // Static data / assets
+        "src/data/**",
+        "src/assets/**",
+
+        // Type-only barrel files
+        "src/types/**",
+
+        // Test utilities / fixtures
+        "src/tests/**",
+        "src/__tests__/**",
+
+        // UI Primitives (Shadcn)
+        "src/components/ui/**",
+
+        // Top-level Next.js pages (covered by E2E)
+        "src/app/**/page.tsx",
+
+        // Next.js API Routes (better tested via E2E)
+        "src/app/api/**/route.ts",
+        "src/app/api/**/route.tsx",
+
+        // Pure configuration and constant data files
+        "src/lib/config.ts",
+        "src/**/constants.ts",
+        "src/**/*-constants.ts",
+        "src/**/*-config.ts",
+        "src/app/robots.ts",
+        "src/app/sitemap.ts",
+        "src/app/manifest.ts",
       ],
     },
   },
