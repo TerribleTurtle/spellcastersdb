@@ -46,7 +46,15 @@ export function getComparator(mode: GroupMode): Comparator<BrowserItem> {
 }
 
 /**
- * Groups items and returns them in the correct display order.
+ * Groups a filtered list of items into discrete visual sections.
+ *
+ * Architectural Note:
+ * This function enforces stable, predictable rendering by iterating over predefined,
+ * constant arrays (e.g., `BROWSER_CATEGORY_ORDER`, `SCHOOLS`) rather than dynamically
+ * deriving groups from the data. This guarantees that:
+ * 1. Groups always appear in the identical order regardless of search results.
+ * 2. Categories like 'Spellcaster' will always appear before 'Unit' when Mode is 'All'.
+ * 3. Items within each group are then sorted by the provided `mode` comparator.
  */
 export function groupItems(
   items: BrowserItem[],

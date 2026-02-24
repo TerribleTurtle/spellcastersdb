@@ -70,7 +70,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
   - Run `npm run lint` to catch errors.
   - Run `npm run type-check` to ensure TypeScript compliance.
 - **Testing**:
-  - Run `npm test` to execute Vitest unit tests.
+  - Run `npm run test` to execute Vitest unit tests.
   - Run `npm run test:coverage` to see a coverage report.
   - Run `npm run preflight` to run type-check + lint + tests in one go.
   - Run `npm run lighthouse` to verify accessibility, SEO, best practices, and PWA criteria. Performance limits are enforced as warnings due to local dev server latency.
