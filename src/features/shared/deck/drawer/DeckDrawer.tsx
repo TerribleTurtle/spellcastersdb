@@ -3,12 +3,26 @@
 import { memo, useState } from "react";
 
 import { useDroppable } from "@dnd-kit/core";
-import { Check, ChevronDown, ChevronUp, Save } from "lucide-react";
+import {
+  AlertCircle,
+  Check,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  Save,
+} from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useAutoExpand } from "@/features/deck-builder/hooks/ui/useAutoExpand";
 import { useDeckValidation } from "@/features/shared/hooks/useDeckValidation";
 import { cn } from "@/lib/utils";
+import { BREAKPOINTS } from "@/services/config/breakpoints";
 import { useDeckStore } from "@/store/index";
 import { UnifiedEntity } from "@/types/api";
 import { Deck, SlotType } from "@/types/deck";
@@ -105,9 +119,13 @@ export const DeckDrawer = memo(function DeckDrawer({
     if (slotIndex !== undefined) setActiveSlot(slotIndex);
   };
 
+  // Constants
+  const AUTO_EXPAND_DELAY_MS = 500;
+
   // Internal state
   const [internalExpanded, setInternalExpanded] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
 
   const isExpanded = controlledExpanded ?? internalExpanded;
   const validation = useDeckValidation(deck);
@@ -136,8 +154,8 @@ export const DeckDrawer = memo(function DeckDrawer({
       // Activate
       handleActivate();
     },
-    500
-  ); // 500ms delay
+    AUTO_EXPAND_DELAY_MS
+  );
 
   // Toggle expansion
   const toggle = (e?: React.MouseEvent) => {
@@ -233,7 +251,7 @@ export const DeckDrawer = memo(function DeckDrawer({
           // 2. Open & Inactive -> Activate (Keep Open)
           // 3. Open & Active -> Close
 
-          if (window.innerWidth >= 1280) {
+          if (window.innerWidth >= BREAKPOINTS.xl) {
             if (!isExpanded) {
               // Case 1: Closed -> Open & Activate
               toggle(e); // toggle handles calling onActivate internally when opening
@@ -251,15 +269,63 @@ export const DeckDrawer = memo(function DeckDrawer({
         }}
       >
         {/* Left: Check/Status or just Deck Name */}
-        <div className="flex items-center gap-3 max-w-[50%]">
-          <div
-            className={cn(
-              "w-3 h-3 rounded-full shrink-0",
-              forceActive
-                ? activeTheme?.dot || "bg-brand-primary"
-                : "bg-surface-raised"
-            )}
-          />
+        <div className="flex items-center gap-2 max-w-[50%]">
+          {validation && (
+            <TooltipProvider delayDuration={0}>
+              <Tooltip open={isTooltipOpen} onOpenChange={setIsTooltipOpen}>
+                <TooltipTrigger asChild>
+                  <div
+                    className={cn(
+                      "flex items-center justify-center shrink-0 transition-all rounded-full p-0.5",
+                      validation.isValid
+                        ? forceActive
+                          ? "text-status-success"
+                          : "text-status-success/70"
+                        : forceActive
+                          ? "text-status-danger"
+                          : "text-status-danger/70"
+                    )}
+                    data-testid="validation-indicator"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsTooltipOpen(!isTooltipOpen);
+                    }}
+                  >
+                    {validation.isValid ? (
+                      <CheckCircle2 size={16} />
+                    ) : (
+                      <AlertCircle size={16} />
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="top"
+                  hideArrow={true}
+                  className={cn(
+                    "font-medium shadow-md border",
+                    validation.isValid
+                      ? "bg-popover text-status-success-text border-status-success-border"
+                      : "bg-popover text-status-danger-text border-status-danger-border"
+                  )}
+                >
+                  {validation.isValid ? (
+                    "Deck Valid"
+                  ) : (
+                    <div className="flex flex-col gap-1 text-left">
+                      {validation.errors.map((err, i) => (
+                        <div key={i} className="flex gap-2">
+                          <span className="shrink-0 leading-tight pt-0.5">
+                            •
+                          </span>
+                          <span className="leading-tight">{err}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
 
           <DeckNameInput
             name={deck.name || "Untitled"}

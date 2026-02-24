@@ -5,6 +5,7 @@ import { useShallow } from "zustand/react/shallow";
 import { GameImage } from "@/components/ui/GameImage";
 import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { BREAKPOINTS } from "@/services/config/breakpoints";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
 import { CLASS_STYLES } from "@/services/config/rank-class-styles";
 import { useDeckStore } from "@/store/index";
@@ -194,7 +195,7 @@ export function SpellcasterSlot({
               alt={spellcaster.name || "Spellcaster Image"}
               fill
               priority={priority}
-              sizes="(max-width: 768px) 100vw, 33vw"
+              sizes={`(max-width: ${BREAKPOINTS.md}px) 100vw, 33vw`}
               className="object-cover object-top"
             />
             {/* Spellcaster Class Badge - Icon */}

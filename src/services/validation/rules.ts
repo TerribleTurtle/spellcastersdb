@@ -4,7 +4,8 @@ import { Deck, DeckStats } from "@/types/deck";
 import { DECK_VALIDATION_ERRORS } from "./constants";
 
 export function checkDeckSize(stats: DeckStats): string | null {
-  if (stats.unitCount < DECK_SIZE) return DECK_VALIDATION_ERRORS.MISSING_UNITS;
+  if (stats.unitCount < DECK_SIZE)
+    return DECK_VALIDATION_ERRORS.MISSING_INCANTATIONS;
   return null;
 }
 

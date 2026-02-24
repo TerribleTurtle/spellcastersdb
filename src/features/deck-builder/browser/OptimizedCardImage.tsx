@@ -6,6 +6,7 @@ import Image, { ImageProps } from "next/image";
 
 import { cn } from "@/lib/utils";
 import { getCardAltText } from "@/services/assets/asset-helpers";
+import { BREAKPOINTS } from "@/services/config/breakpoints";
 import { UnifiedEntity } from "@/types/api";
 
 interface OptimizedCardImageProps extends Omit<ImageProps, "src" | "alt"> {
@@ -90,7 +91,7 @@ export const OptimizedCardImage = memo(function OptimizedCardImage({
         src={imgSrc}
         alt={alt || (entity ? getCardAltText(entity) : "")}
         fill
-        sizes="(max-width: 768px) 33vw, 200px"
+        sizes={`(max-width: ${BREAKPOINTS.md}px) 33vw, 200px`}
         priority={priority}
         quality={quality}
         className="object-cover"

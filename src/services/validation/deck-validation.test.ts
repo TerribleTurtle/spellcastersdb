@@ -110,15 +110,15 @@ describe("validateDeck Logic", () => {
     });
   });
 
-  describe("Unit Count Rules", () => {
-    it("should fail if less than 4 units are selected", () => {
+  describe("Incantation Count Rules", () => {
+    it("should fail if less than 4 incantations are selected", () => {
       const deck = createDeck();
       // Clear a slot
       deck.slots[0].unit = null;
 
       const result = validateDeck(deck);
       expect(result.isValid).toBe(false);
-      expect(result.errors).toContain("Must have 4 Units");
+      expect(result.errors).toContain("Must have 4 Incantations");
     });
 
     it("should fail if Titan is missing", () => {

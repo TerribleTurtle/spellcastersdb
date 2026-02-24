@@ -13,6 +13,7 @@ import {
   getCardAltText,
   getCardImageUrl,
 } from "@/services/assets/asset-helpers";
+import { BREAKPOINTS } from "@/services/config/breakpoints";
 import { UnifiedEntity } from "@/types/api";
 
 interface EntityImageProps {
@@ -63,7 +64,7 @@ export function EntityImage({ entity, className, alt }: EntityImageProps) {
           // If it bubbles up to here, it means retry failed too.
           setError(true);
         }}
-        sizes="(max-width: 768px) 100vw, 50vw"
+        sizes={`(max-width: ${BREAKPOINTS.md}px) 100vw, 50vw`}
       />
 
       {/* Loading Skeleton */}
