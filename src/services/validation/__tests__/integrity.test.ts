@@ -13,6 +13,7 @@ describe("Data Integrity Checker", () => {
     titans: [],
     consumables: [],
     upgrades: [],
+    infusions: [],
   };
 
   it("should detect duplicate unit IDs", () => {

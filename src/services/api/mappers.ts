@@ -23,6 +23,7 @@ export interface RawData {
   heroes?: unknown[];
   spellcasters?: unknown[];
   units?: RawUnit[];
+  infusions?: unknown[];
   [key: string]: unknown;
 }
 

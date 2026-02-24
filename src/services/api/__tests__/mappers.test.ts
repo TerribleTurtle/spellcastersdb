@@ -40,6 +40,7 @@ describe("mapRawDataToAllData", () => {
     titans: [],
     consumables: [],
     upgrades: [],
+    infusions: [],
   };
 
   it("should map valid data correctly", () => {

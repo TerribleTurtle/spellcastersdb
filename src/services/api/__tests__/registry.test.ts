@@ -64,6 +64,7 @@ describe("EntityRegistry", () => {
     ],
     consumables: [],
     upgrades: [],
+    infusions: [],
   };
 
   beforeEach(() => {

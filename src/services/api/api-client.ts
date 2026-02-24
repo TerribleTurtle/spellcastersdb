@@ -80,33 +80,47 @@ export async function fetchChunk<T>(endpoint: string): Promise<T> {
  * @returns The complete `AllDataResponse` with `_source` set to `"Remote API (Chunked)"`.
  */
 export async function fetchChunkedData(): Promise<AllDataResponse> {
-  const [units, spells, spellcasters, titans, consumables, upgrades] =
-    await Promise.all([
-      fetchChunk<RawUnit[]>("units.json"),
-      fetchChunk<unknown[]>("spells.json"),
-      fetchChunk<unknown[]>("heroes.json"),
-      fetchChunk<unknown[]>("titans.json").catch((err) => {
-        monitoring.captureException(err, {
-          message: "Failed to fetch titans, defaulting to empty",
-          context: "api-client.ts:fetchEntities:titans",
-        });
-        return [];
-      }),
-      fetchChunk<unknown[]>("consumables.json").catch((err) => {
-        monitoring.captureException(err, {
-          message: "Failed to fetch consumables, defaulting to empty",
-          context: "api-client.ts:fetchEntities:consumables",
-        });
-        return [];
-      }),
-      fetchChunk<unknown[]>("upgrades.json").catch((err) => {
-        monitoring.captureException(err, {
-          message: "Failed to fetch upgrades, defaulting to empty array",
-          context: "api-client.ts:fetchEntities:upgrades",
-        });
-        return [];
-      }),
-    ]);
+  const [
+    units,
+    spells,
+    spellcasters,
+    titans,
+    consumables,
+    upgrades,
+    infusions,
+  ] = await Promise.all([
+    fetchChunk<RawUnit[]>("units.json"),
+    fetchChunk<unknown[]>("spells.json"),
+    fetchChunk<unknown[]>("heroes.json"),
+    fetchChunk<unknown[]>("titans.json").catch((err) => {
+      monitoring.captureException(err, {
+        message: "Failed to fetch titans, defaulting to empty",
+        context: "api-client.ts:fetchEntities:titans",
+      });
+      return [];
+    }),
+    fetchChunk<unknown[]>("consumables.json").catch((err) => {
+      monitoring.captureException(err, {
+        message: "Failed to fetch consumables, defaulting to empty",
+        context: "api-client.ts:fetchEntities:consumables",
+      });
+      return [];
+    }),
+    fetchChunk<unknown[]>("upgrades.json").catch((err) => {
+      monitoring.captureException(err, {
+        message: "Failed to fetch upgrades, defaulting to empty array",
+        context: "api-client.ts:fetchEntities:upgrades",
+      });
+      return [];
+    }),
+    fetchChunk<unknown[]>("infusions.json").catch((err) => {
+      monitoring.captureException(err, {
+        message: "Failed to fetch infusions, defaulting to empty array",
+        context: "api-client.ts:fetchEntities:infusions",
+      });
+      return [];
+    }),
+  ]);
 
   const rawData: RawData = {
     build_info: {
@@ -119,6 +133,7 @@ export async function fetchChunkedData(): Promise<AllDataResponse> {
     titans,
     consumables,
     upgrades,
+    infusions,
   };
 
   const data = mapRawDataToAllData(rawData);
