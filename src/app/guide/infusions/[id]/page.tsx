@@ -7,7 +7,7 @@ import { UnitCard } from "@/components/database/UnitCard";
 import { PageShell } from "@/components/layout/PageShell";
 import { routes } from "@/lib/routes";
 import { fetchGameData } from "@/services/api/api";
-import { DamageTier, Infusion, UnifiedEntity } from "@/types/api";
+import { Infusion, UnifiedEntity } from "@/types/api";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${infusion.name} - SC Guide`,
-    description: infusion.allied_effect,
+    description: infusion.allied_effect.description,
   };
 }
 
@@ -113,7 +113,7 @@ export default async function InfusionDetailPage({ params }: Props) {
                   Allied Effect
                 </h3>
                 <p className="text-sm text-text-secondary leading-relaxed">
-                  {infusion.allied_effect}
+                  {infusion.allied_effect.description}
                 </p>
               </div>
               <div className="p-4 bg-surface-inset rounded border border-border-subtle">
@@ -121,8 +121,13 @@ export default async function InfusionDetailPage({ params }: Props) {
                   Enemy Effect
                 </h3>
                 <p className="text-sm text-text-secondary leading-relaxed">
-                  {infusion.enemy_effect}
+                  {infusion.enemy_effect.description}
                 </p>
+                {infusion.enemy_effect.status_buildup && (
+                  <p className="text-xs text-status-danger-text mt-2 font-bold">
+                    Status: {infusion.enemy_effect.status_buildup}
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -130,13 +135,14 @@ export default async function InfusionDetailPage({ params }: Props) {
 
         {/* Technical Details Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {infusion.damage_tiers && infusion.damage_tiers.length > 0 ? (
+          {infusion.enemy_effect.damage_tiers &&
+          infusion.enemy_effect.damage_tiers.length > 0 ? (
             <section className="bg-surface-card border border-border-default rounded-lg p-6">
               <h3 className="text-sm font-bold text-text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
                 <Flame size={16} /> Damage Tiers
               </h3>
               <div className="space-y-2">
-                {infusion.damage_tiers.map((tier: DamageTier) => (
+                {infusion.enemy_effect.damage_tiers.map((tier) => (
                   <div
                     key={tier.tier}
                     className="flex items-center justify-between p-3 bg-surface-inset rounded border border-border-subtle"

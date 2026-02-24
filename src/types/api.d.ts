@@ -111,13 +111,27 @@ export interface DamageTier {
   interval?: number;
 }
 
+export interface InfusionAlliedEffect {
+  description: string;
+  stat_multiplier?: Record<string, number>;
+  heal?: {
+    value: number;
+    interval: number;
+  };
+}
+
+export interface InfusionEnemyEffect {
+  description: string;
+  status_buildup?: string;
+  damage_tiers?: DamageTier[];
+}
+
 export interface Infusion {
   id: string;
   name: string;
   element: "Fire" | "Lightning" | "Poison" | "Ice";
-  allied_effect: string;
-  enemy_effect: string;
-  damage_tiers?: DamageTier[];
+  allied_effect: InfusionAlliedEffect;
+  enemy_effect: InfusionEnemyEffect;
 }
 
 export interface Cleave {
