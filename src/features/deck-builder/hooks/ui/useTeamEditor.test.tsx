@@ -120,23 +120,21 @@ describe("useTeamEditor", () => {
       dismissToast: vi.fn(),
     } as any);
 
-    vi.mocked(useDeckStore).mockImplementation(
-      (selector: any  ) => {
-        const state = {
-          setTeamDecks: mockSetTeamDecks,
-          setTeamName: mockSetTeamName,
-          openCommandCenter: mockOpenCommandCenter,
-          currentDeck: defaultDecks[0],
-          clearDeck: mockClearDeck,
-          saveTeam: mockSaveTeam,
-          saveTeamAsCopy: mockSaveTeamAsCopy,
-          activeTeamId: "team-id",
-          importDeckToLibrary: mockImportDeckToLibrary,
-          clearTeam: mockClearTeam,
-        };
-        return selector(state as any);
-      }
-    );
+    vi.mocked(useDeckStore).mockImplementation((selector: any) => {
+      const state = {
+        setTeamDecks: mockSetTeamDecks,
+        setTeamName: mockSetTeamName,
+        openCommandCenter: mockOpenCommandCenter,
+        currentDeck: defaultDecks[0],
+        clearDeck: mockClearDeck,
+        saveTeam: mockSaveTeam,
+        saveTeamAsCopy: mockSaveTeamAsCopy,
+        activeTeamId: "team-id",
+        importDeckToLibrary: mockImportDeckToLibrary,
+        clearTeam: mockClearTeam,
+      };
+      return selector(state as any);
+    });
 
     vi.mocked(selectIsTeamSaved).mockReturnValue(true);
     vi.mocked(selectIsExistingTeam).mockReturnValue(true);
