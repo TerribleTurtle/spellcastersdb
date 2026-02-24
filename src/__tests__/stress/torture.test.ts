@@ -81,7 +81,10 @@ describe("Logic Hardening (Torture Tests)", () => {
       };
       const { isValid, errors } = validateDeck(badDeck);
       expect(isValid).toBe(false);
-      // Errors should mention slot 4 or missing slots
+      expect(errors.length).toBeGreaterThan(0);
+      expect(errors.some((e) => e.toLowerCase().includes("incantation"))).toBe(
+        true
+      );
     });
   });
 

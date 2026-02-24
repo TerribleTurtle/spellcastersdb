@@ -4,11 +4,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getEntityById, getTitans } from "@/services/api/api";
-import {
-  fetchChangelog,
-  fetchEntityTimeline,
-  filterChangelogForEntity,
-} from "@/services/api/patch-history";
+import { mapStatChangesToChangelog } from "@/services/api/patch-history";
 import { Titan } from "@/types/api";
 
 interface TitanPageProps {
@@ -52,13 +48,13 @@ export default async function TitanPage({ params }: TitanPageProps) {
     notFound();
   }
 
-  // Fetch patch history data and related entities in parallel
-  const [changelog, timeline, allTitans] = await Promise.all([
-    fetchChangelog(),
-    fetchEntityTimeline(id),
-    getTitans(),
-  ]);
-  const entityChangelog = filterChangelogForEntity(changelog, id);
+  // Fetch related entities
+  const allTitans = await getTitans();
+
+  // Synthesize UI Patch History directly from inline stat_changes
+  const entityChangelog = titan.stat_changes
+    ? mapStatChangesToChangelog(titan.stat_changes, id, titan.name)
+    : [];
   const relatedEntities = allTitans.filter((t: Titan) => t.entity_id !== id);
 
   const jsonLdData = {
@@ -83,7 +79,7 @@ export default async function TitanPage({ params }: TitanPageProps) {
         backUrl="/titans"
         backLabel="Back to Titans"
         changelog={entityChangelog}
-        timeline={timeline}
+        timeline={[]}
         showControls={true}
         breadcrumbs={[
           { label: "Titans", href: "/titans" },

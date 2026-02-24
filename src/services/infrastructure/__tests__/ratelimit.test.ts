@@ -27,12 +27,12 @@ describe("ratelimit infrastructure plugin", () => {
   it("should initialize Ratelimit if redis is available", async () => {
     // 1. Mock local file dependency BEFORE importing it
     const mockFakeRedis = { fake: "redis_client" };
-    vi.doMock("./redis", () => ({
+    vi.doMock("../redis", () => ({
       redis: mockFakeRedis,
     }));
 
     // 2. Act: dynamic import triggers top-level code
-    const ratelimitModule = await import("./ratelimit");
+    const ratelimitModule = await import("../ratelimit");
 
     // 3. Assert
     expect(Ratelimit.slidingWindow).toHaveBeenCalledWith(10, "10 s");
@@ -51,12 +51,12 @@ describe("ratelimit infrastructure plugin", () => {
 
   it("should not initialize and should log a warning if redis is null", async () => {
     // 1. Mock local file dependency BEFORE importing
-    vi.doMock("./redis", () => ({
+    vi.doMock("../redis", () => ({
       redis: null,
     }));
 
     // 2. Act
-    const ratelimitModule = await import("./ratelimit");
+    const ratelimitModule = await import("../ratelimit");
 
     // 3. Assert
     expect(Ratelimit).not.toHaveBeenCalled();

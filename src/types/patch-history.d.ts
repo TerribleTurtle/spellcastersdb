@@ -1,6 +1,6 @@
 /**
  * TypeScript type definitions for Patch History API
- * Endpoints: changelog_index.json, changelog_page_N.json, changelog_latest.json, timeline/{id}.json
+ * Endpoints: audit.json, timeline/{id}.json
  *
  * @see {@link docs/api_info.md} for endpoint details.
  */
@@ -97,3 +97,39 @@ export interface TimelineEntry {
  * Newest first. Used for before/after stat comparison.
  */
 export type EntityTimeline = TimelineEntry[];
+
+// ============================================================================
+// Raw Audit Log API (GET /audit.json)
+// ============================================================================
+
+/**
+ * A single granular change field in an audit entry.
+ */
+export interface AuditDiff {
+  path: (string | number)[];
+  old_value?: unknown;
+  new_value?: unknown;
+  removed?: boolean;
+}
+
+/**
+ * A file-level change record in an audit entry.
+ */
+export interface AuditChange {
+  entity_id: string;
+  file: string;
+  category: string;
+  change_type: "add" | "edit" | "delete" | "rename";
+  diffs: AuditDiff[];
+}
+
+/**
+ * A raw commit-level entry from audit.json.
+ */
+export interface AuditEntry {
+  commit: string;
+  timestamp: string;
+  author: string;
+  message: string;
+  changes: AuditChange[];
+}

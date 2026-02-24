@@ -5,11 +5,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getUnitById, getUnits } from "@/services/api/api";
-import {
-  fetchChangelog,
-  fetchEntityTimeline,
-  filterChangelogForEntity,
-} from "@/services/api/patch-history";
+import { mapStatChangesToChangelog } from "@/services/api/patch-history";
 import { Unit } from "@/types/api";
 
 interface UnitPageProps {
@@ -55,13 +51,14 @@ export default async function UnitPage({ params }: UnitPageProps) {
     notFound();
   }
 
-  // Fetch patch history data and related entities in parallel
-  const [changelog, timeline, allUnits] = await Promise.all([
-    fetchChangelog(),
-    fetchEntityTimeline(id),
-    getUnits(),
-  ]);
-  const entityChangelog = filterChangelogForEntity(changelog, id);
+  // Fetch related entities
+  const allUnits = await getUnits();
+
+  // Synthesize UI Patch History directly from inline stat_changes
+  const entityChangelog = unit.stat_changes
+    ? mapStatChangesToChangelog(unit.stat_changes, id, unit.name)
+    : [];
+
   const relatedEntities = allUnits.filter(
     (u: Unit) => u.entity_id !== id && u.magic_school === unit.magic_school
   );
@@ -111,7 +108,7 @@ export default async function UnitPage({ params }: UnitPageProps) {
         backUrl="/incantations/units"
         backLabel="Back to Units"
         changelog={entityChangelog}
-        timeline={timeline}
+        timeline={[]}
         showControls={true}
         breadcrumbs={[
           { label: "Units", href: "/incantations/units" },
