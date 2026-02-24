@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getEntityById, getSpells } from "@/services/api/api";
-import { mapStatChangesToChangelog } from "@/services/api/patch-history";
+import {
+  fetchEntityTimeline,
+  mapStatChangesToChangelog,
+} from "@/services/api/patch-history";
 import { Spell } from "@/types/api";
 
 interface SpellPageProps {
@@ -55,6 +58,7 @@ export default async function SpellPage({ params }: SpellPageProps) {
   const entityChangelog = spell.stat_changes
     ? mapStatChangesToChangelog(spell.stat_changes, id, spell.name)
     : [];
+  const entityTimeline = await fetchEntityTimeline(id);
   const relatedEntities = allSpells.filter(
     (s: Spell) => s.entity_id !== id && s.magic_school === spell.magic_school
   );
@@ -85,7 +89,7 @@ export default async function SpellPage({ params }: SpellPageProps) {
         backUrl="/incantations/spells"
         backLabel="Back to Spells"
         changelog={entityChangelog}
-        timeline={[]}
+        timeline={entityTimeline}
         showControls={true}
         breadcrumbs={[
           { label: "Spells", href: "/incantations/spells" },
