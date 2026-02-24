@@ -115,8 +115,8 @@ export interface Infusion {
   id: string;
   name: string;
   element: "Fire" | "Lightning" | "Poison" | "Ice";
-  effect: string;
-  status_buildup: string;
+  allied_effect: string;
+  enemy_effect: string;
   damage_tiers?: DamageTier[];
 }
 

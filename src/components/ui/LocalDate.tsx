@@ -19,17 +19,25 @@ export function LocalDate({
   const [display, setDisplay] = useState(iso);
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect -- intentional: hydration-safe locale formatting */
     try {
       if (showTime) {
-        // For full timestamps (ISO 8601 with time), standard parsing works fine
-        // and converts to local time correctly.
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setDisplay(
-          new Date(iso).toLocaleString(undefined, {
-            dateStyle: "medium",
-            timeStyle: "long",
-          })
-        );
+        // If it's a full ISO string (has T and time info), use full locale string
+        if (iso.includes("T") && iso.length > 10) {
+          const d = new Date(iso);
+          setDisplay(
+            d.toLocaleString(undefined, {
+              dateStyle: "medium",
+              timeStyle: "short",
+            })
+          );
+        } else {
+          // It's just a date
+          const datePart = iso.split("T")[0];
+          const [year, month, day] = datePart.split("-").map(Number);
+          const d = new Date(year, month - 1, day);
+          setDisplay(d.toLocaleDateString(undefined, { dateStyle: "medium" }));
+        }
       } else {
         // Dates are date-only strings (e.g. "2026-02-18") or full ISO strings.
         // We extract just the YYYY-MM-DD part to prevent "UTC midnight" shifting
@@ -43,6 +51,7 @@ export function LocalDate({
     } catch {
       setDisplay(iso);
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [iso, showTime]);
 
   return (

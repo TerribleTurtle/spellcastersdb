@@ -32,7 +32,7 @@ export default async function ChangesPage() {
       <PageShell
         title="Change Log"
         subtitle="Search and filter every balance change, hotfix, and content update in Spellcasters Chronicles history."
-        maxWidth="page-grid"
+        maxWidth="5xl"
         breadcrumbs={[{ label: "Change Log", href: "/changes" }]}
       >
         <ChangelogArchive patches={patches} />

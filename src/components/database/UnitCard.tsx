@@ -6,6 +6,7 @@ import { ArrowRight } from "lucide-react";
 
 import { EntityImage } from "@/components/ui/EntityImage";
 import { SmartRankBadge } from "@/components/ui/rank-badge";
+import { routes } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { UnifiedEntity } from "@/types/api";
 
@@ -19,7 +20,7 @@ interface UnitCardProps {
 function getEntityMeta(entity: UnifiedEntity) {
   if (entity.category === "Spellcaster") {
     return {
-      href: `/spellcasters/${entity.spellcaster_id}`,
+      href: routes.spellcaster(entity.spellcaster_id!),
       category: "Spellcaster",
       rank: entity.class.toUpperCase(),
       school: "Spellcaster",
@@ -27,7 +28,7 @@ function getEntityMeta(entity: UnifiedEntity) {
   }
   if (entity.category === "Consumable") {
     return {
-      href: `/consumables/${entity.entity_id}`,
+      href: routes.consumable(entity.entity_id),
       category: "Consumable",
       rank: entity.rarity || "COMMON",
       school: "Item",
@@ -36,7 +37,7 @@ function getEntityMeta(entity: UnifiedEntity) {
   // Titan - Updated to use RankBadge logic (rank V)
   if (entity.category === "Titan") {
     return {
-      href: `/titans/${entity.entity_id}`,
+      href: routes.titan(entity.entity_id),
       category: "Titan",
       rank: "V",
       school: entity.magic_school,
@@ -47,7 +48,7 @@ function getEntityMeta(entity: UnifiedEntity) {
   // Spell
   if (entity.category === "Spell") {
     return {
-      href: `/incantations/spells/${entity.entity_id}`,
+      href: routes.spell(entity.entity_id),
       category: "Spell",
       rank: "SPELL",
       school: entity.magic_school,
@@ -60,7 +61,7 @@ function getEntityMeta(entity: UnifiedEntity) {
     (!("magic_school" in entity) && "cost" in entity)
   ) {
     return {
-      href: `/upgrades/${entity.entity_id}`,
+      href: routes.upgrade(entity.entity_id),
       category: "Upgrade",
       rank: "UPGRADE",
       school: "Technology",
@@ -69,7 +70,7 @@ function getEntityMeta(entity: UnifiedEntity) {
 
   // Unit or Spell
   return {
-    href: `/incantations/units/${entity.entity_id}`,
+    href: routes.unit(entity.entity_id),
     category: entity.category,
     rank: "rank" in entity && entity.rank ? entity.rank : "I",
     school: "magic_school" in entity ? entity.magic_school : "Neutral",

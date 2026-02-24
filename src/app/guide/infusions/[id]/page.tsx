@@ -1,10 +1,11 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { Box, Flame, Info, Skull, Snowflake, Target, Zap } from "lucide-react";
+import { Box, Flame, Info, Skull, Snowflake, Zap } from "lucide-react";
 
 import { UnitCard } from "@/components/database/UnitCard";
 import { PageShell } from "@/components/layout/PageShell";
+import { routes } from "@/lib/routes";
 import { fetchGameData } from "@/services/api/api";
 import { DamageTier, Infusion, UnifiedEntity } from "@/types/api";
 
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: `${infusion.name} - SC Guide`,
-    description: infusion.effect,
+    description: infusion.allied_effect,
   };
 }
 
@@ -86,9 +87,9 @@ export default async function InfusionDetailPage({ params }: Props) {
       title={infusion.name}
       maxWidth="4xl"
       breadcrumbs={[
-        { label: "Guide", href: "/guide" },
-        { label: "Infusions", href: "/guide/infusions" },
-        { label: infusion.name, href: `/guide/infusions/${infusion.id}` },
+        { label: "Guide", href: routes.guide() },
+        { label: "Infusions", href: routes.infusions() },
+        { label: infusion.name, href: routes.infusion(infusion.id) },
       ]}
     >
       <div className="space-y-8">
@@ -106,24 +107,29 @@ export default async function InfusionDetailPage({ params }: Props) {
                 {infusion.element}
               </span>
             </div>
-            <p className="text-lg text-text-secondary leading-relaxed max-w-2xl">
-              {infusion.effect}
-            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+              <div className="p-4 bg-surface-inset rounded border border-border-subtle">
+                <h3 className="text-xs font-bold text-status-success-text uppercase tracking-widest flex items-center gap-2 mb-2">
+                  Allied Effect
+                </h3>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  {infusion.allied_effect}
+                </p>
+              </div>
+              <div className="p-4 bg-surface-inset rounded border border-border-subtle">
+                <h3 className="text-xs font-bold text-status-danger-text uppercase tracking-widest flex items-center gap-2 mb-2">
+                  Enemy Effect
+                </h3>
+                <p className="text-sm text-text-secondary leading-relaxed">
+                  {infusion.enemy_effect}
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
         {/* Technical Details Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <section className="bg-surface-card border border-border-default rounded-lg p-6 flex flex-col items-center justify-center text-center">
-            <Target size={32} className="text-brand-accent mb-3 opacity-80" />
-            <h3 className="text-sm font-bold text-text-muted uppercase tracking-widest mb-1">
-              Status Buildup
-            </h3>
-            <p className="text-2xl font-black text-text-primary">
-              {infusion.status_buildup}
-            </p>
-          </section>
-
           {infusion.damage_tiers && infusion.damage_tiers.length > 0 ? (
             <section className="bg-surface-card border border-border-default rounded-lg p-6">
               <h3 className="text-sm font-bold text-text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
@@ -160,8 +166,8 @@ export default async function InfusionDetailPage({ params }: Props) {
                 Damage Output
               </h3>
               <p className="text-sm text-text-dimmed">
-                This infusion applies effects directly via its status buildup
-                rather than scaled percentage damage over time.
+                This infusion applies effects directly rather than scaled
+                percentage damage over time.
               </p>
             </section>
           )}

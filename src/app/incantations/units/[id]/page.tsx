@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 // 3. The UI Component
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
+import { routes } from "@/lib/routes";
 import { getUnitById, getUnits } from "@/services/api/api";
 import {
   fetchEntityTimeline,
@@ -109,13 +110,13 @@ export default async function UnitPage({ params }: UnitPageProps) {
       />
       <EntityShowcase
         item={unit}
-        backUrl="/incantations/units"
+        backUrl={routes.unit("")}
         backLabel="Back to Units"
         changelog={entityChangelog}
         timeline={entityTimeline}
         showControls={true}
         breadcrumbs={[
-          { label: "Units", href: "/incantations/units" },
+          { label: "Units", href: routes.unit("") },
           { label: unit.name },
         ]}
         relatedEntities={relatedEntities}

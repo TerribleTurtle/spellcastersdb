@@ -8,6 +8,8 @@
  * - Added words in green
  * - Unchanged words in gray
  */
+import { ReactNode } from "react";
+
 import { formatDiffPath } from "@/lib/format-change-field";
 
 // ============================================================================
@@ -76,8 +78,21 @@ function wordDiff(oldStr: string, newStr: string): DiffSegment[] {
 
 const ISO_DATETIME_RE = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/;
 
-function formatValue(val: unknown): string {
+function formatValue(val: unknown): ReactNode {
   if (val == null) return "—";
+
+  if (typeof val === "object") {
+    try {
+      return (
+        <pre className="bg-surface-dim p-2 rounded border border-border-default text-[10px] mt-1 mb-1 whitespace-pre-wrap break-all w-full leading-snug">
+          {JSON.stringify(val, null, 2)}
+        </pre>
+      );
+    } catch {
+      return String(val);
+    }
+  }
+
   const str = String(val);
   if (ISO_DATETIME_RE.test(str)) {
     try {
@@ -106,6 +121,14 @@ function areBothTimestamps(a: unknown, b: unknown): boolean {
   );
 }
 
+/** True if either side of the diff is a complex object (not a scalar). */
+function hasComplexValue(lhs: unknown, rhs: unknown): boolean {
+  return (
+    (lhs != null && typeof lhs === "object") ||
+    (rhs != null && typeof rhs === "object")
+  );
+}
+
 // ============================================================================
 // Component
 // ============================================================================
@@ -130,29 +153,48 @@ export function DiffLine({ diff }: DiffLineProps) {
     isStringish(diff.rhs) &&
     !areBothTimestamps(diff.lhs, diff.rhs);
   const label = formatDiffPath(diff.path || []);
+  const complex = hasComplexValue(diff.lhs, diff.rhs);
 
   return (
-    <div className="text-[11px] font-mono text-text-dimmed flex flex-wrap gap-1.5 items-baseline leading-relaxed py-0.5">
+    <div
+      className={
+        complex
+          ? "text-[11px] font-mono text-text-dimmed flex flex-col items-start gap-1 py-1 w-full border-b border-border-subtle/30 last:border-0"
+          : "text-[11px] font-mono text-text-dimmed flex flex-wrap gap-1.5 items-baseline leading-relaxed py-0.5"
+      }
+    >
       <span className="text-text-secondary font-semibold shrink-0">
         {label}:
       </span>
 
       {isAdded ? (
-        <span className="text-emerald-400 flex items-center gap-1">
-          <span className="text-[9px] bg-emerald-500/20 border border-emerald-500/30 rounded px-1 uppercase font-bold">
+        <span
+          className={
+            complex
+              ? "text-emerald-400 flex flex-col items-start gap-1 min-w-0 w-full"
+              : "text-emerald-400 flex items-center gap-1"
+          }
+        >
+          <span className="text-[9px] bg-emerald-500/20 border border-emerald-500/30 rounded px-1 uppercase font-bold shrink-0">
             Added
           </span>
-          {formatValue(diff.rhs)}
+          <span className="break-all">{formatValue(diff.rhs)}</span>
         </span>
       ) : isRemoved ? (
-        <span className="text-status-danger-text flex items-center gap-1">
-          <span className="text-[9px] bg-status-danger-border border border-red-500/30 rounded px-1 uppercase font-bold">
+        <span
+          className={
+            complex
+              ? "text-status-danger-text flex flex-col items-start gap-1 min-w-0 w-full"
+              : "text-status-danger-text flex items-center gap-1"
+          }
+        >
+          <span className="text-[9px] bg-status-danger-border border border-red-500/30 rounded px-1 uppercase font-bold shrink-0">
             Removed
           </span>
-          {formatValue(diff.lhs)}
+          <span className="break-all">{formatValue(diff.lhs)}</span>
         </span>
       ) : isTextChange ? (
-        <span className="text-text-muted inline">
+        <span className="text-text-muted wrap-break-word leading-relaxed flex-1 w-full">
           {wordDiff(diff.lhs as string, diff.rhs as string).map((seg, i) =>
             seg.type === "same" ? (
               <span key={i} className="text-text-secondary">
@@ -174,6 +216,12 @@ export function DiffLine({ diff }: DiffLineProps) {
               </span>
             )
           )}
+        </span>
+      ) : complex ? (
+        <span className="text-text-muted min-w-0 flex flex-col items-start gap-1 w-full">
+          <span className="break-all w-full">{formatValue(diff.lhs)}</span>
+          <span className="text-text-faint shrink-0">→</span>
+          <span className="break-all w-full">{formatValue(diff.rhs)}</span>
         </span>
       ) : (
         <span className="text-text-muted">
