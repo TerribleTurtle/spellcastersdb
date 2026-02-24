@@ -68,6 +68,18 @@ export const matchesFilters = (
   return true;
 };
 
+/**
+ * Calculates a search relevance score for a given item.
+ *
+ * Scoring Hierarchy:
+ * - Exact Match (1000): Unambiguous user intent; bypasses all other signals.
+ * - Prefix Match (500): High likelihood of intent (e.g. typing "fire i" for "Fire Imp").
+ * - Partial Match (100): Standard substring match.
+ * - Tags Match (50): Matches curated entity tags (e.g. "burn", "heal").
+ * - School Match (40): Matches the magic school (e.g. "Fire", "Null").
+ * - Category Match (30): Matches the entity type (e.g. "Spellcaster", "Unit").
+ * - Description Match (10): Lowest priority as descriptions are long and prone to false positives.
+ */
 const calculateScore = (
   item: BrowserItem,
   query: string,

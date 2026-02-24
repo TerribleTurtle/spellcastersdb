@@ -85,8 +85,15 @@ export class EntityRegistry {
 
   /**
    * Retrieves any entity by its ID from the unified map.
+   *
    * @param id - The entity_id to look up.
-   * @returns The entity if found, otherwise undefined.
+   * @returns The entity if found, otherwise `undefined`.
+   *
+   * @example
+   * ```ts
+   * const entity = registry.get("fire_imp_1");
+   * if (entity) console.log(entity.name);
+   * ```
    */
   public get(id: string): UnifiedEntity | undefined {
     return this.unified.get(id);
@@ -97,6 +104,12 @@ export class EntityRegistry {
    *
    * @param id - The entity_id to look up.
    * @returns The Unit object if found, otherwise `undefined`.
+   *
+   * @example
+   * ```ts
+   * const unit = registry.getUnit("fire_imp_1");
+   * if (unit) console.log(unit.name, unit.stats);
+   * ```
    */
   public getUnit(id: string): Unit | undefined {
     return this.units.get(id);
@@ -107,6 +120,11 @@ export class EntityRegistry {
    *
    * @param id - The entity_id to look up.
    * @returns The Spell object if found, otherwise `undefined`.
+   *
+   * @example
+   * ```ts
+   * const spell = registry.getSpell("fireball_1");
+   * ```
    */
   public getSpell(id: string): Spell | undefined {
     return this.spells.get(id);
@@ -117,6 +135,11 @@ export class EntityRegistry {
    *
    * @param id - The entity_id to look up.
    * @returns The Titan object if found, otherwise `undefined`.
+   *
+   * @example
+   * ```ts
+   * const titan = registry.getTitan("golem_prime");
+   * ```
    */
   public getTitan(id: string): Titan | undefined {
     return this.titans.get(id);
@@ -127,6 +150,12 @@ export class EntityRegistry {
    *
    * @param id - The entity_id to look up.
    * @returns The Spellcaster object if found, otherwise `undefined`.
+   *
+   * @example
+   * ```ts
+   * const sc = registry.getSpellcaster("nadia");
+   * if (sc) console.log(sc.name, sc.class);
+   * ```
    */
   public getSpellcaster(id: string): Spellcaster | undefined {
     return this.spellcasters.get(id);
@@ -139,32 +168,68 @@ export class EntityRegistry {
 
   // ---- Bulk Getters ----
 
-  /** Returns all Units as an array. */
+  /**
+   * Returns all Units as an array.
+   * @example
+   * ```ts
+   * const units = registry.getAllUnits();
+   * ```
+   */
   public getAllUnits(): Unit[] {
     return Array.from(this.units.values());
   }
 
-  /** Returns all Spells as an array. */
+  /**
+   * Returns all Spells as an array.
+   * @example
+   * ```ts
+   * const spells = registry.getAllSpells();
+   * ```
+   */
   public getAllSpells(): Spell[] {
     return Array.from(this.spells.values());
   }
 
-  /** Returns all Titans as an array. */
+  /**
+   * Returns all Titans as an array.
+   * @example
+   * ```ts
+   * const titans = registry.getAllTitans();
+   * ```
+   */
   public getAllTitans(): Titan[] {
     return Array.from(this.titans.values());
   }
 
-  /** Returns all Spellcasters as an array. */
+  /**
+   * Returns all Spellcasters as an array.
+   * @example
+   * ```ts
+   * const spellcasters = registry.getAllSpellcasters();
+   * ```
+   */
   public getAllSpellcasters(): Spellcaster[] {
     return Array.from(this.spellcasters.values());
   }
 
-  /** Returns all Consumables as an array. */
+  /**
+   * Returns all Consumables as an array.
+   * @example
+   * ```ts
+   * const consumables = registry.getAllConsumables();
+   * ```
+   */
   public getAllConsumables(): Consumable[] {
     return Array.from(this.consumables.values());
   }
 
-  /** Returns all Upgrades as an array. */
+  /**
+   * Returns all Upgrades as an array.
+   * @example
+   * ```ts
+   * const upgrades = registry.getAllUpgrades();
+   * ```
+   */
   public getAllUpgrades(): Upgrade[] {
     return Array.from(this.upgrades.values());
   }

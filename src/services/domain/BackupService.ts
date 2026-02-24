@@ -13,6 +13,15 @@ export class BackupService {
 
   /**
    * Generates a backup object from the current store state.
+   *
+   * @param state - The current `DeckBuilderState` containing saved decks and teams.
+   * @returns A versioned `BackupData` snapshot with an ISO timestamp.
+   *
+   * @example
+   * ```ts
+   * const backup = BackupService.generateBackup(store.getState());
+   * // { version: 1, timestamp: "2026-02-23T...", decks: [...], teams: [...] }
+   * ```
    */
   public static generateBackup(state: DeckBuilderState): BackupData {
     return {
@@ -24,7 +33,17 @@ export class BackupService {
   }
 
   /**
-   * Triggers a browser download of the backup data.
+   * Triggers a browser download of the backup data as a JSON file.
+   *
+   * @param data - The `BackupData` object to serialize and download.
+   * @param filename - The download filename. Defaults to `"spellcasters-backup.json"`.
+   *
+   * @example
+   * ```ts
+   * const backup = BackupService.generateBackup(state);
+   * BackupService.downloadBackup(backup);             // uses default filename
+   * BackupService.downloadBackup(backup, "my-decks.json"); // custom filename
+   * ```
    */
   public static downloadBackup(
     data: BackupData,
@@ -46,6 +65,18 @@ export class BackupService {
 
   /**
    * Validates the structure of imported backup data.
+   *
+   * @param data - The raw parsed JSON to validate.
+   * @returns `true` (narrowing `data` to `BackupData`) if the object has valid `decks` and `teams` arrays.
+   *
+   * @example
+   * ```ts
+   * const parsed = JSON.parse(fileContents);
+   * if (BackupService.validateBackup(parsed)) {
+   *   // `parsed` is now typed as BackupData
+   *   console.log(parsed.decks.length);
+   * }
+   * ```
    */
   public static validateBackup(data: unknown): data is BackupData {
     if (!data || typeof data !== "object") return false;
@@ -60,7 +91,18 @@ export class BackupService {
   }
 
   /**
-   * Reads and parses a JSON file.
+   * Reads and parses a JSON backup file uploaded by the user.
+   *
+   * @param file - A browser `File` object (e.g. from an `<input type="file">`).
+   * @returns The parsed and validated `BackupData`.
+   * @throws {Error} If the file can't be read or fails structural validation.
+   *
+   * @example
+   * ```ts
+   * const file = inputRef.current.files[0];
+   * const backup = await BackupService.parseBackupFile(file);
+   * store.getState().importBackup(backup);
+   * ```
    */
   public static async parseBackupFile(file: File): Promise<BackupData> {
     return new Promise((resolve, reject) => {

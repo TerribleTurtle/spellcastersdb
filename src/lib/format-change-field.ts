@@ -57,6 +57,16 @@ export function formatDiffPath(path: string[]): string {
 /**
  * Format a `ChangeEntry.field` string into a human-readable label.
  * Returns empty string for "entity" fields (no extra label needed).
+ *
+ * @param field - The raw field path from a changelog entry (e.g. `"attack_interval"` or `"abilities > passive > 0 > description"`).
+ * @returns A formatted, title-cased label, or `""` if the field is `"entity"`.
+ *
+ * @example
+ * ```ts
+ * formatChangeField("attack_interval")                    // "Attack Interval"
+ * formatChangeField("abilities > passive > 0 > description") // "Passive[0] › Description"
+ * formatChangeField("entity")                             // ""
+ * ```
  */
 export function formatChangeField(field: string): string {
   if (!field || field === "entity") return "";

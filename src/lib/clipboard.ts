@@ -2,6 +2,18 @@ import { monitoring } from "@/services/monitoring";
 
 /**
  * Copies text to the clipboard with fallback for non-secure contexts (e.g. mobile local IP dev).
+ *
+ * Uses `navigator.clipboard.writeText` when available, otherwise falls back to
+ * a hidden `<textarea>` + `document.execCommand('copy')`.
+ *
+ * @param text - The string to copy to the clipboard.
+ * @returns `true` if the copy succeeded, `false` otherwise.
+ *
+ * @example
+ * ```ts
+ * const ok = await copyToClipboard("https://spellcastersdb.com/d/abc123");
+ * if (ok) showToast("Link copied!");
+ * ```
  */
 export async function copyToClipboard(text: string): Promise<boolean> {
   // 1. Try modern API first (if available and secure)
