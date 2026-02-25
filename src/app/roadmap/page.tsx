@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   },
 };
 
-// Revalidate every minute (60 seconds)
-export const revalidate = 60;
+// Revalidate every hour (roadmap data doesn't change frequently)
+export const revalidate = 3600;
 
 export default async function RoadmapPage() {
   const { issues, isLive } = await roadmapService.getIssues();

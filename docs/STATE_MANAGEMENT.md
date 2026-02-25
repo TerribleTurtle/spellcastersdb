@@ -17,7 +17,6 @@ The store is constructed in `src/store/index.ts` by combining these slices:
 | **Persistence** | `createPersistenceSlice.ts` | Saving, loading, importing, and exporting decks/teams. |
 | **UI**          | `createUISlice.ts`          | Transient UI state (Sidebar open, filters, etc.).      |
 | **UI Store**    | `ui-store.ts`               | Secondary UI state (modals, etc).                      |
-| **Patches**     | `patch-history-store.ts`    | Caching and filtering for patch history and diffs.     |
 | **Selectors**   | `selectors.ts`              | Optimized state selectors to prevent re-renders.       |
 | **Types**       | `types.ts`                  | Type definitions for Store and Slices.                 |
 

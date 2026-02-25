@@ -1,6 +1,7 @@
 import {
   AllDataResponse,
   Consumable,
+  Infusion,
   Spell,
   Spellcaster,
   Titan,
@@ -21,6 +22,7 @@ export class EntityRegistry {
   private spellcasters = new Map<string, Spellcaster>();
   private consumables = new Map<string, Consumable>();
   private upgrades = new Map<string, Upgrade>();
+  private infusions = new Map<string, Infusion>();
   private unified = new Map<string, UnifiedEntity>();
 
   private initialized = false;
@@ -79,6 +81,12 @@ export class EntityRegistry {
       this.upgrades.set(u.entity_id, u);
       this.unified.set(u.entity_id, u);
     });
+
+    if (data.infusions) {
+      data.infusions.forEach((inf) => {
+        this.infusions.set(inf.id, inf);
+      });
+    }
 
     this.initialized = true;
   }
@@ -234,6 +242,28 @@ export class EntityRegistry {
     return Array.from(this.upgrades.values());
   }
 
+  /**
+   * Retrieves an Infusion by its id.
+   * @example
+   * ```ts
+   * const inf = registry.getInfusion("fire_infusion");
+   * ```
+   */
+  public getInfusion(id: string): Infusion | undefined {
+    return this.infusions.get(id);
+  }
+
+  /**
+   * Returns all Infusions as an array.
+   * @example
+   * ```ts
+   * const infusions = registry.getAllInfusions();
+   * ```
+   */
+  public getAllInfusions(): Infusion[] {
+    return Array.from(this.infusions.values());
+  }
+
   /** Alias for `clear()`. Resets the registry to an empty, uninitialized state. */
   public reset() {
     this.clear();
@@ -247,6 +277,7 @@ export class EntityRegistry {
     this.spellcasters.clear();
     this.consumables.clear();
     this.upgrades.clear();
+    this.infusions.clear();
     this.unified.clear();
     this.initialized = false;
   }

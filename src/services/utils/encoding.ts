@@ -11,6 +11,21 @@ const MAX_NAME_LENGTH = 50;
 /** Removes HTML tags to prevent XSS injection in metadata */
 const sanitizeHtml = (str: string) => str.replace(/<[^>]*>?/gm, "");
 
+/**
+ * Compresses a Deck into a URL-safe string using LZ-string.
+ *
+ * **Format:** Joins spellcaster ID, 5 slot entity IDs, and deck name with `\x1F` (Unit Separator),
+ * then compresses via `LZString.compressToEncodedURIComponent`.
+ *
+ * @param deck - The deck to encode.
+ * @returns A URL-safe compressed string suitable for query params or short links.
+ *
+ * @example
+ * ```ts
+ * const hash = encodeDeck(myDeck);
+ * // Use in URL: `/deck-builder?d=${hash}`
+ * ```
+ */
 export function encodeDeck(deck: Deck): string {
   const ids = [
     deck.spellcaster?.spellcaster_id || "",
@@ -35,6 +50,24 @@ export interface DecodedDeckData {
   name?: string;
 }
 
+/**
+ * Decompresses a URL-safe hash back into deck data (IDs only, not hydrated entities).
+ *
+ * Expects 6–7 `\x1F`-delimited parts (spellcaster + 5 slots + optional name).
+ * Returns `null` for malformed, corrupted, or excessively long inputs.
+ * Sanitizes the deck name to prevent XSS via `sanitizeHtml`.
+ *
+ * @param hash - The LZ-string compressed hash from a URL.
+ * @returns Decoded deck data with raw IDs, or `null` on failure.
+ *
+ * @example
+ * ```ts
+ * const data = decodeDeck(urlParams.get('d')!);
+ * if (data) {
+ *   const unit = registry.getUnit(data.slotIds[0]!);
+ * }
+ * ```
+ */
 export function decodeDeck(hash: string): DecodedDeckData | null {
   try {
     const packed = LZString.decompressFromEncodedURIComponent(hash);
@@ -70,6 +103,23 @@ export function decodeDeck(hash: string): DecodedDeckData | null {
 
 const TEAM_V2_PREFIX = "v2~";
 
+/**
+ * Compresses a team of 3 decks + team name into a single URL-safe string (V2 format).
+ *
+ * **V2 Format:** Prefixed with `"v2~"`, then a single LZ-string payload containing
+ * `[teamName, ...deck1Ids(7), ...deck2Ids(7), ...deck3Ids(7)]` joined by `\x1F`.
+ * This is more efficient than V1 which compressed each deck individually.
+ *
+ * @param decks - Exactly 3 Deck objects.
+ * @param name - Optional team name (max 50 chars, delimiters stripped).
+ * @returns A `"v2~"`-prefixed, URL-safe compressed string.
+ *
+ * @example
+ * ```ts
+ * const hash = encodeTeam([deck1, deck2, deck3], "My Team");
+ * // Use in URL: `/deck-builder?t=${hash}`
+ * ```
+ */
 export function encodeTeam(
   decks: [Deck, Deck, Deck],
   name: string = ""
@@ -116,6 +166,24 @@ function getDeckIds(deck: Deck | null | undefined): string[] {
   ];
 }
 
+/**
+ * Decompresses a team hash back into a team name and 3 decoded decks.
+ *
+ * Supports both V2 (`"v2~"` prefix, single payload) and legacy V1 (tilde-separated
+ * individual deck hashes). Returns `{ name: "", decks: [null, null, null] }` on any
+ * decompression or parsing failure.
+ *
+ * @param hash - The compressed team hash from a URL.
+ * @returns An object with the team `name` and an array of 3 decoded decks (or `null` per deck).
+ *
+ * @example
+ * ```ts
+ * const { name, decks } = decodeTeam(urlParams.get('t')!);
+ * decks.forEach((d, i) => {
+ *   if (d) console.log(`Deck ${i}: ${d.spellcasterId}`);
+ * });
+ * ```
+ */
 export function decodeTeam(hash: string): {
   name: string;
   decks: (DecodedDeckData | null)[];

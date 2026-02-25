@@ -4,7 +4,8 @@ import { Flame, Info, Skull, Snowflake, Zap } from "lucide-react";
 
 import { PageShell } from "@/components/layout/PageShell";
 import { routes } from "@/lib/routes";
-import { fetchGameData } from "@/services/api/api";
+import { ensureDataLoaded } from "@/services/api/api";
+import { registry } from "@/services/api/registry";
 import { Infusion } from "@/types/api";
 
 export const metadata = {
@@ -41,8 +42,8 @@ const INFUSION_COLORS: Record<string, string> = {
 };
 
 export default async function InfusionsIndexPage() {
-  const data = await fetchGameData();
-  const infusions = data.infusions || [];
+  await ensureDataLoaded();
+  const infusions = registry.getAllInfusions();
 
   return (
     <PageShell

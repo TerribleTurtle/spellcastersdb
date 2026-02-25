@@ -6,11 +6,12 @@ import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { DictionaryProvider } from "@/components/providers/DictionaryProvider";
 import { buildDynamicDictionary } from "@/lib/link-dictionary";
 import { routes } from "@/lib/routes";
-import { fetchGameData, getEntityById, getSpells } from "@/services/api/api";
+import { ensureDataLoaded, getEntityById, getSpells } from "@/services/api/api";
 import {
   fetchEntityTimeline,
   mapStatChangesToChangelog,
 } from "@/services/api/patch-history";
+import { registry } from "@/services/api/registry";
 import { Spell } from "@/types/api";
 
 interface SpellPageProps {
@@ -61,8 +62,8 @@ export default async function SpellPage({ params }: SpellPageProps) {
     notFound();
   }
 
-  const data = await fetchGameData();
-  const allSpells = data.spells || [];
+  await ensureDataLoaded();
+  const allSpells = registry.getAllSpells();
 
   // Synthesize UI Patch History directly from inline stat_changes
   const entityChangelog = spell.stat_changes
@@ -76,10 +77,10 @@ export default async function SpellPage({ params }: SpellPageProps) {
   );
 
   const allEntities = [
-    ...(data.units || []),
+    ...registry.getAllUnits(),
     ...allSpells,
-    ...(data.spellcasters || []),
-    ...(data.titans || []),
+    ...registry.getAllSpellcasters(),
+    ...registry.getAllTitans(),
   ];
   const dictionary = buildDynamicDictionary(allEntities);
 

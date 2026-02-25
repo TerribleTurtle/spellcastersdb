@@ -6,7 +6,8 @@ import { Box, Flame, Info, Skull, Snowflake, Zap } from "lucide-react";
 import { UnitCard } from "@/components/database/UnitCard";
 import { PageShell } from "@/components/layout/PageShell";
 import { routes } from "@/lib/routes";
-import { fetchGameData } from "@/services/api/api";
+import { ensureDataLoaded } from "@/services/api/api";
+import { registry } from "@/services/api/registry";
 import { Infusion, UnifiedEntity } from "@/types/api";
 
 type Props = {
@@ -15,18 +16,19 @@ type Props = {
 
 // Static generation
 export async function generateStaticParams() {
-  const data = await fetchGameData();
-  if (!data.infusions) return [];
+  await ensureDataLoaded();
+  const infusions = registry.getAllInfusions();
+  if (!infusions.length) return [];
 
-  return data.infusions.map((inf: Infusion) => ({
+  return infusions.map((inf: Infusion) => ({
     id: inf.id,
   }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const data = await fetchGameData();
-  const infusion = data.infusions?.find((i) => i.id === id);
+  await ensureDataLoaded();
+  const infusion = registry.getInfusion(id);
 
   if (!infusion) return { title: "Infusion Not Found" };
 
@@ -56,8 +58,8 @@ const INFUSION_ICONS: Record<string, React.ElementType> = {
 
 export default async function InfusionDetailPage({ params }: Props) {
   const { id } = await params;
-  const data = await fetchGameData();
-  const infusion = data.infusions?.find((i) => i.id === id);
+  await ensureDataLoaded();
+  const infusion = registry.getInfusion(id);
 
   if (!infusion) {
     notFound();
@@ -70,17 +72,17 @@ export default async function InfusionDetailPage({ params }: Props) {
     mechanics?.infusion?.id === id;
 
   // Check Units
-  data.units.forEach((unit) => {
+  registry.getAllUnits().forEach((unit) => {
     if (checkMechanics(unit.mechanics)) relatedEntities.push(unit);
   });
 
   // Check Spells
-  data.spells.forEach((spell) => {
+  registry.getAllSpells().forEach((spell) => {
     if (checkMechanics(spell.mechanics)) relatedEntities.push(spell);
   });
 
   // Check Spellcasters (Abilities)
-  data.spellcasters.forEach((caster) => {
+  registry.getAllSpellcasters().forEach((caster) => {
     const hasInfusion = [
       ...caster.abilities.passive,
       caster.abilities.primary,

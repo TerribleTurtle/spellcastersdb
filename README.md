@@ -31,7 +31,7 @@
 
 ## Architecture at a Glance
 
-- **Frontend**: Next.js 16+ (App Router), TypeScript, Tailwind CSS.
+- **Frontend**: Next.js 16+ (App Router), TypeScript, Tailwind CSS v4.
 - **Data Layer**:
   - **Static Fetch**: Fetches JSON data from the [Spellcasters Community API](https://github.com/TerribleTurtle/spellcasters-community-api).
   - **Registry**: An in-memory, O(1) lookup map (`src/services/api/registry.ts`) that initializes once per session.
@@ -108,7 +108,13 @@ For detailed setup instructions, including **Local API Development**, please see
 - [**Active State**](active_state.md): The current development focus and daily progress log.
 - [**API Info**](docs/api_info.md): Specification for the JSON data consumed by this app.
 - [**Brand Guidelines**](docs/BRAND_GUIDELINES.md): Colors, fonts, and styling rules.
+- [**Changelog**](CHANGELOG.md): Release history and version notes.
 - [**E2E Conventions**](docs/E2E_CONVENTIONS.md): `data-testid` naming rules and viewport strategy.
+- [**GitHub Token Setup**](docs/GITHUB_TOKEN_SETUP.md): How to configure a GitHub token for roadmap data.
+- [**Privacy Audit**](docs/PRIVACY_AUDIT_REPORT.md): GDPR/CCPA privacy audit findings.
+- [**SEO Strategy**](docs/SpellcastersDB%20SEO%20%26%20Keyword%20Strategy.md): Keyword research and SEO strategy.
+- [**State Management**](docs/STATE_MANAGEMENT.md): Zustand store architecture and persistence strategy.
+- [**Full Index**](docs/README.md): Complete documentation index.
 
 ## 🌐 Part of the Spellcasters Ecosystem
 
