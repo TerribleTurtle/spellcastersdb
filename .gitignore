@@ -163,3 +163,5 @@ playwright-report/
 
 # Agent context files
 .agent/
+all_data_dump.json
+heal_ray_dump.json
