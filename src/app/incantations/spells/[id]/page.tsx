@@ -3,8 +3,10 @@ import { notFound } from "next/navigation";
 
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
+import { DictionaryProvider } from "@/components/providers/DictionaryProvider";
+import { buildDynamicDictionary } from "@/lib/link-dictionary";
 import { routes } from "@/lib/routes";
-import { getEntityById, getSpells } from "@/services/api/api";
+import { fetchGameData, getEntityById, getSpells } from "@/services/api/api";
 import {
   fetchEntityTimeline,
   mapStatChangesToChangelog,
@@ -52,8 +54,8 @@ export default async function SpellPage({ params }: SpellPageProps) {
     notFound();
   }
 
-  // Fetch related entities
-  const allSpells = await getSpells();
+  const data = await fetchGameData();
+  const allSpells = data.spells || [];
 
   // Synthesize UI Patch History directly from inline stat_changes
   const entityChangelog = spell.stat_changes
@@ -61,8 +63,18 @@ export default async function SpellPage({ params }: SpellPageProps) {
     : [];
   const entityTimeline = await fetchEntityTimeline(id);
   const relatedEntities = allSpells.filter(
-    (s: Spell) => s.entity_id !== id && s.magic_school === spell.magic_school
+    (s: Spell) =>
+      s.entity_id !== spell.entity_id &&
+      (s.magic_school === spell.magic_school || s.category === spell.category)
   );
+
+  const allEntities = [
+    ...(data.units || []),
+    ...allSpells,
+    ...(data.spellcasters || []),
+    ...(data.titans || []),
+  ];
+  const dictionary = buildDynamicDictionary(allEntities);
 
   const jsonLdData = {
     "@context": "https://schema.org",
@@ -80,7 +92,7 @@ export default async function SpellPage({ params }: SpellPageProps) {
   };
 
   return (
-    <>
+    <DictionaryProvider dictionary={dictionary}>
       <JsonLd
         data={jsonLdData as Record<string, unknown>}
         id={`json-ld-spell-${spell.entity_id}`}
@@ -97,8 +109,8 @@ export default async function SpellPage({ params }: SpellPageProps) {
           { label: spell.name },
         ]}
         relatedEntities={relatedEntities}
-        relatedTitle={`More ${spell.magic_school} Spells`}
+        relatedTitle="Related Spells"
       />
-    </>
+    </DictionaryProvider>
   );
 }

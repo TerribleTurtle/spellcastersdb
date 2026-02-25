@@ -5,12 +5,19 @@ import { notFound } from "next/navigation";
 import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
+import { DictionaryProvider } from "@/components/providers/DictionaryProvider";
+import { buildDynamicDictionary } from "@/lib/link-dictionary";
 import { routes } from "@/lib/routes";
-import { getSpellcasterById, getSpellcasters } from "@/services/api/api";
+import {
+  fetchGameData,
+  getSpellcasterById,
+  getSpellcasters,
+} from "@/services/api/api";
 import {
   fetchEntityTimeline,
   mapStatChangesToChangelog,
 } from "@/services/api/patch-history";
+import { Spellcaster } from "@/types/api";
 
 interface SpellcasterPageProps {
   params: Promise<{ id: string }>;
@@ -65,8 +72,8 @@ export default async function SpellcasterPage({
     notFound();
   }
 
-  // Fetch related entities
-  const allSpellcasters = await getSpellcasters();
+  const data = await fetchGameData();
+  const allSpellcasters = data.spellcasters || [];
 
   // Synthesize UI Patch History directly from inline stat_changes
   const entityChangelog = spellcaster.stat_changes
@@ -74,8 +81,18 @@ export default async function SpellcasterPage({
     : [];
   const entityTimeline = await fetchEntityTimeline(id);
   const relatedEntities = allSpellcasters.filter(
-    (s) => s.spellcaster_id !== id
+    (s) =>
+      s.spellcaster_id !== spellcaster.spellcaster_id &&
+      s.class === spellcaster.class
   );
+
+  const allEntities = [
+    ...(data.units || []),
+    ...(data.spells || []),
+    ...allSpellcasters,
+    ...(data.titans || []),
+  ];
+  const dictionary = buildDynamicDictionary(allEntities);
 
   const jsonLdData = {
     "@context": "https://schema.org",
@@ -96,10 +113,10 @@ export default async function SpellcasterPage({
   ];
 
   return (
-    <>
+    <DictionaryProvider dictionary={dictionary}>
       <JsonLd
-        data={jsonLdData}
-        id={`json-ld-spellcaster-${spellcaster.spellcaster_id}`}
+        data={jsonLdData as Record<string, unknown>}
+        id={`json-ld-hero-${spellcaster.spellcaster_id}`}
       />
       <BreadcrumbsLd items={breadcrumbs} />
       <EntityShowcase
@@ -114,8 +131,8 @@ export default async function SpellcasterPage({
           { label: spellcaster.name },
         ]}
         relatedEntities={relatedEntities}
-        relatedTitle="Other Spellcasters"
+        relatedTitle="Related Spellcasters"
       />
-    </>
+    </DictionaryProvider>
   );
 }

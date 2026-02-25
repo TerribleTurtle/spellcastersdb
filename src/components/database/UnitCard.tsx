@@ -50,7 +50,7 @@ function getEntityMeta(entity: UnifiedEntity) {
     return {
       href: routes.spell(entity.entity_id),
       category: "Spell",
-      rank: "SPELL",
+      rank: undefined,
       school: entity.magic_school,
     };
   }

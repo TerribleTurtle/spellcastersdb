@@ -220,7 +220,9 @@ export function SmartRankBadge({
   mode = "icon",
   className,
   fallbackClassName = "text-[10px] font-mono font-bold text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border-brand-primary/20",
-}: SmartRankBadgeProps) {
+}: Partial<SmartRankBadgeProps> & Omit<SmartRankBadgeProps, "rank">) {
+  if (!rank) return null;
+
   const useGeometric = isTitan || NUMERIC_RANKS.includes(rank.toUpperCase());
 
   if (useGeometric) {
@@ -235,7 +237,7 @@ export function SmartRankBadge({
   }
 
   return (
-    <Badge variant="outline" className={cn(fallbackClassName, className)}>
+    <Badge variant="outline" className={fallbackClassName}>
       {rank}
     </Badge>
   );

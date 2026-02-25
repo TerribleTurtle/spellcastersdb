@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { PageShell } from "@/components/layout/PageShell";
+import { routes } from "@/lib/routes";
 import { getConsumables } from "@/services/api/api";
 
 export const metadata = {
@@ -26,7 +27,7 @@ export default async function ConsumablesIndexPage() {
           {consumables.map((item) => (
             <Link
               key={item.entity_id}
-              href={`/consumables/${item.entity_id}`}
+              href={routes.consumable(item.entity_id)}
               className="block group bg-surface-card border border-border-default rounded-xl p-6 transition-all hover:bg-surface-hover hover:border-brand-secondary/50 hover:-translate-y-1"
             >
               <div className="mb-4 flex justify-center">

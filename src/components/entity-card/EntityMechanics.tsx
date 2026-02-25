@@ -245,6 +245,10 @@ export function EntityMechanics({
       ))}
 
       {/* Auras */}
+      {(() => {
+        if (mechanics.aura) console.log("RUNTIME AURA DATA:", mechanics.aura);
+        return null;
+      })()}
       <AuraList
         auras={mechanics.aura}
         isCompact={isCompact}

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Star } from "lucide-react";
 
 import { JsonLd } from "@/components/common/JsonLd";
+import { routes } from "@/lib/routes";
 import { getSpellcasters } from "@/services/api/api";
 
 export const metadata = {
@@ -22,7 +23,7 @@ export default async function SpellcastersIndexPage() {
     hasPart: spellcasters.map((s) => ({
       "@type": "GameCharacter",
       name: s.name,
-      url: `https://spellcastersdb.com/spellcasters/${s.spellcaster_id}`,
+      url: `https://spellcastersdb.com${routes.spellcaster(s.spellcaster_id!)}`,
     })),
   };
 
@@ -39,7 +40,7 @@ export default async function SpellcastersIndexPage() {
             {spellcasters.map((spellcaster) => (
               <Link
                 key={spellcaster.spellcaster_id}
-                href={`/spellcasters/${spellcaster.spellcaster_id}`}
+                href={routes.spellcaster(spellcaster.spellcaster_id!)}
                 className="block group bg-surface-card border border-border-default rounded-xl p-6 transition-all hover:bg-surface-hover hover:border-brand-primary/50 hover:-translate-y-1"
               >
                 <div className="flex justify-between items-start mb-4">
