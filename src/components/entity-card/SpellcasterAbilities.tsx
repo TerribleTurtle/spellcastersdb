@@ -1,5 +1,9 @@
 "use client";
 
+import { Info } from "lucide-react";
+
+import { TextWithLinks } from "@/components/common/TextWithLinks";
+import { Tooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { Spellcaster } from "@/types/api";
 
@@ -52,14 +56,14 @@ export function SpellcasterAbilities({
               >
                 {p.name}
               </span>
-              <span
+              <TextWithLinks
+                text={p.description || ""}
+                excludeKeys={[spellcaster.name]}
                 className={cn(
                   "text-text-muted leading-tight",
                   isCompact ? "text-xs" : "text-xs leading-relaxed"
                 )}
-              >
-                {p.description}
-              </span>
+              />
             </div>
           ))}
         </div>
@@ -134,16 +138,16 @@ export function SpellcasterAbilities({
                 </span>
               )}
             </div>
-            <p
+            <TextWithLinks
+              text={ab.description || ""}
+              excludeKeys={[spellcaster.name]}
               className={cn(
                 "text-text-muted leading-tight",
                 isCompact
                   ? "text-[10px] md:text-xs"
                   : "text-xs leading-relaxed group-hover:text-text-secondary transition-colors"
               )}
-            >
-              {ab.description}
-            </p>
+            />
 
             {/* Mechanics */}
             {"mechanics" in ab && ab.mechanics && (

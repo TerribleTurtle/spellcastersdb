@@ -4,12 +4,10 @@ import {
   Database,
   Github,
   HelpCircle,
-  History,
   Home,
   Info,
-  Layers,
   LucideIcon,
-  Map,
+  SwatchBook,
 } from "lucide-react";
 
 export interface NavLink {
@@ -21,15 +19,17 @@ export interface NavLink {
 
 export const PRIMARY_NAV: NavLink[] = [
   { name: "Home", href: "/", icon: Home, internal: true },
-  { name: "Deck Builder", href: "/deck-builder", icon: Layers, internal: true },
+  {
+    name: "Deck Builder",
+    href: "/deck-builder",
+    icon: SwatchBook,
+    internal: true,
+  },
   { name: "Database", href: "/database", icon: Database, internal: true },
-  { name: "History", href: "/changes", icon: History, internal: true },
-  { name: "Roadmap", href: "/roadmap", icon: Map, internal: true },
 ];
 
 export const SECONDARY_NAV: NavLink[] = [
   { name: "Guide", href: "/guide", icon: BookOpen, internal: true },
-  { name: "Infusions", href: "/guide/infusions", icon: Layers, internal: true },
   { name: "FAQ", href: "/faq", icon: HelpCircle, internal: true },
   { name: "Bot", href: "/discord-bot", icon: Bot, internal: true },
   { name: "About", href: "/about", icon: Info, internal: true },

@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { ArrowLeft } from "lucide-react";
 
+import { TextWithLinks } from "@/components/common/TextWithLinks";
 import { EntityMechanics } from "@/components/entity-card/EntityMechanics";
 import { EntityStats } from "@/components/entity-card/EntityStats";
 import { SpellcasterAbilities } from "@/components/entity-card/SpellcasterAbilities";
@@ -63,20 +64,25 @@ export function EntityShowcase({
   const name = item.name;
 
   let rank = "N/A";
+  let rankHref: string | null = null;
   let isTitan = false;
   if (isSpellcaster) {
     if ("class" in item) {
-      rank = (item as Spellcaster).class.toUpperCase();
+      const spellcasterClass = (item as Spellcaster).class;
+      rank = spellcasterClass.toUpperCase();
+      rankHref = routes.class_(spellcasterClass);
     }
   } else {
     const entity = item as Unit | Spell | Titan;
     if (entity.category === "Titan") {
       rank = "V";
       isTitan = true;
+      rankHref = null; // No rank page for Titans
     } else if (entity.category === "Spell") {
       rank = "N/A";
     } else if ("rank" in entity && entity.rank) {
       rank = entity.rank;
+      rankHref = routes.rank(rank);
     }
   }
 
@@ -151,15 +157,27 @@ export function EntityShowcase({
               {/* Badges overlaid on image */}
               <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end z-30">
                 <div className="flex flex-col gap-1.5 items-start">
-                  {rank && rank !== "N/A" && (
-                    <SmartRankBadge
-                      rank={rank}
-                      isTitan={isTitan}
-                      mode="text"
-                      className="px-3 py-1 rounded text-xs font-bold font-mono shadow-lg"
-                      fallbackClassName="bg-surface-card px-3 py-1 rounded text-xs font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md shadow-lg"
-                    />
-                  )}
+                  {rank &&
+                    rank !== "N/A" &&
+                    (rankHref ? (
+                      <Link href={rankHref}>
+                        <SmartRankBadge
+                          rank={rank}
+                          isTitan={isTitan}
+                          mode="text"
+                          className="px-3 py-1 rounded text-xs font-bold font-mono shadow-lg hover:brightness-110 transition-all cursor-pointer"
+                          fallbackClassName="bg-surface-card px-3 py-1 rounded text-xs font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md shadow-lg hover:border-brand-accent/60 transition-colors cursor-pointer"
+                        />
+                      </Link>
+                    ) : (
+                      <SmartRankBadge
+                        rank={rank}
+                        isTitan={isTitan}
+                        mode="text"
+                        className="px-3 py-1 rounded text-xs font-bold font-mono shadow-lg"
+                        fallbackClassName="bg-surface-card px-3 py-1 rounded text-xs font-bold font-mono text-brand-accent border border-brand-accent/30 backdrop-blur-md shadow-lg"
+                      />
+                    ))}
                   {magicSchool && (
                     <Link
                       href={routes.school(magicSchool)}
@@ -184,9 +202,11 @@ export function EntityShowcase({
                 {name}
               </h1>
               {description && (
-                <p className="text-text-muted text-sm sm:text-base leading-relaxed max-w-xl">
-                  {description}
-                </p>
+                <TextWithLinks
+                  text={description}
+                  excludeKeys={[name]}
+                  className="text-text-muted text-sm sm:text-base leading-relaxed max-w-xl"
+                />
               )}
             </div>
 

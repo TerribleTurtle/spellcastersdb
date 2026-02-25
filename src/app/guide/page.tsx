@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { PageShell } from "@/components/layout/PageShell";
+import { routes } from "@/lib/routes";
 
 export const metadata = {
   title: "Game Guide",
@@ -232,7 +233,7 @@ export default function GuidePage() {
             buildups.
           </p>
           <Link
-            href="/guide/infusions"
+            href={routes.infusions()}
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-accent/10 border border-brand-accent/20 text-brand-accent font-semibold rounded hover:bg-brand-accent/20 transition-colors"
           >
             Explore Infusions &rarr;

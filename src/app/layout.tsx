@@ -118,6 +118,7 @@ export default async function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen pt-12 md:pt-16`}
+        suppressHydrationWarning
       >
         <a
           href="#main-content"

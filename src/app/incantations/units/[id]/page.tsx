@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 // 3. The UI Component
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
+import { DictionaryProvider } from "@/components/providers/DictionaryProvider";
+import { buildDynamicDictionary } from "@/lib/link-dictionary";
 import { routes } from "@/lib/routes";
-import { getUnitById, getUnits } from "@/services/api/api";
+import { fetchGameData, getUnitById, getUnits } from "@/services/api/api";
 import {
   fetchEntityTimeline,
   mapStatChangesToChangelog,
@@ -55,8 +57,8 @@ export default async function UnitPage({ params }: UnitPageProps) {
     notFound();
   }
 
-  // Fetch related entities
-  const allUnits = await getUnits();
+  const data = await fetchGameData();
+  const allUnits = data.units || [];
 
   // Synthesize UI Patch History directly from inline stat_changes
   const entityChangelog = unit.stat_changes
@@ -65,8 +67,20 @@ export default async function UnitPage({ params }: UnitPageProps) {
   const entityTimeline = await fetchEntityTimeline(id);
 
   const relatedEntities = allUnits.filter(
-    (u: Unit) => u.entity_id !== id && u.magic_school === unit.magic_school
+    (u: Unit) =>
+      u.entity_id !== unit.entity_id &&
+      (u.magic_school === unit.magic_school ||
+        u.movement_type === unit.movement_type ||
+        u.category === unit.category)
   );
+
+  const allEntities = [
+    ...allUnits,
+    ...(data.spells || []),
+    ...(data.spellcasters || []),
+    ...(data.titans || []),
+  ];
+  const dictionary = buildDynamicDictionary(allEntities);
 
   // Schema for Unit (Product/Character)
   const jsonLdData = {
@@ -103,7 +117,7 @@ export default async function UnitPage({ params }: UnitPageProps) {
   };
 
   return (
-    <>
+    <DictionaryProvider dictionary={dictionary}>
       <JsonLd
         data={jsonLdData as Record<string, unknown>}
         id={`json-ld-unit-${unit.entity_id}`}
@@ -120,8 +134,8 @@ export default async function UnitPage({ params }: UnitPageProps) {
           { label: unit.name },
         ]}
         relatedEntities={relatedEntities}
-        relatedTitle={`More ${unit.magic_school} Units`}
+        relatedTitle="Related Units"
       />
-    </>
+    </DictionaryProvider>
   );
 }
