@@ -3,10 +3,12 @@ import { NextRequest } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 
-import { fetchGameData } from "@/services/api/api";
+import { ensureDataLoaded } from "@/services/api/api";
+import { registry } from "@/services/api/registry";
 import { anonymizeIp } from "@/services/infrastructure/anonymize-ip";
 import { ratelimit } from "@/services/infrastructure/ratelimit";
 import { monitoring } from "@/services/monitoring";
+import { AllDataResponse } from "@/types/api";
 
 import { renderDeckImage } from "./render-deck";
 import { renderEntityImage } from "./render-entity";
@@ -48,8 +50,22 @@ export async function GET(request: NextRequest) {
     );
     const fontData = await fs.readFile(fontPath);
 
-    // Fetch Game Data
-    const data = await fetchGameData();
+    // Use registry instead of re-fetching all 7 chunks every request
+    await ensureDataLoaded();
+    const data: AllDataResponse = {
+      units: registry.getAllUnits(),
+      spells: registry.getAllSpells(),
+      titans: registry.getAllTitans(),
+      spellcasters: registry.getAllSpellcasters(),
+      consumables: registry.getAllConsumables(),
+      upgrades: registry.getAllUpgrades(),
+      infusions: registry.getAllInfusions(),
+      build_info: {
+        version: "registry",
+        generated_at: new Date().toISOString(),
+      },
+      _source: "Registry (OG Route)",
+    };
 
     // --- TEAM MODE ---
     if (teamHash) {

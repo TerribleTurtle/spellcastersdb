@@ -7,11 +7,12 @@ import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { DictionaryProvider } from "@/components/providers/DictionaryProvider";
 import { buildDynamicDictionary } from "@/lib/link-dictionary";
 import { routes } from "@/lib/routes";
-import { fetchGameData, getUnitById, getUnits } from "@/services/api/api";
+import { ensureDataLoaded, getUnitById, getUnits } from "@/services/api/api";
 import {
   fetchEntityTimeline,
   mapStatChangesToChangelog,
 } from "@/services/api/patch-history";
+import { registry } from "@/services/api/registry";
 import { Unit } from "@/types/api";
 
 interface UnitPageProps {
@@ -64,8 +65,8 @@ export default async function UnitPage({ params }: UnitPageProps) {
     notFound();
   }
 
-  const data = await fetchGameData();
-  const allUnits = data.units || [];
+  await ensureDataLoaded();
+  const allUnits = registry.getAllUnits();
 
   // Synthesize UI Patch History directly from inline stat_changes
   const entityChangelog = unit.stat_changes
@@ -83,9 +84,9 @@ export default async function UnitPage({ params }: UnitPageProps) {
 
   const allEntities = [
     ...allUnits,
-    ...(data.spells || []),
-    ...(data.spellcasters || []),
-    ...(data.titans || []),
+    ...registry.getAllSpells(),
+    ...registry.getAllSpellcasters(),
+    ...registry.getAllTitans(),
   ];
   const dictionary = buildDynamicDictionary(allEntities);
 

@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 
+import { getCachedAsset } from "@/services/api/asset-cache";
 import {
   getCardAltText,
   getCardImageUrl,
@@ -85,39 +86,21 @@ export async function renderDeckImage(
       );
   });
 
-  try {
-    await Promise.all(
-      Array.from(uniqueUrls).map(async (url) => {
-        try {
-          const controller = new AbortController();
-          const id = setTimeout(() => controller.abort(), 4000); // 4s timeout per image
-
-          const res = await fetch(url, { signal: controller.signal });
-          clearTimeout(id);
-
-          if (res.ok) {
-            const arrayBuffer = await res.arrayBuffer();
-            const base64 = Buffer.from(arrayBuffer).toString("base64");
-            const mime = url.endsWith(".webp") ? "image/webp" : "image/png";
-            urlToDataUri.set(url, `data:${mime};base64,${base64}`);
-          } else {
-            monitoring.captureMessage(
-              "OG image fetch returned non-OK",
-              "warning",
-              { url, status: res.status }
-            );
-          }
-        } catch (err) {
-          monitoring.captureMessage("OG image fetch error", "warning", {
-            url,
-            error: err,
-          });
+  await Promise.all(
+    Array.from(uniqueUrls).map(async (url) => {
+      try {
+        const dataUri = await getCachedAsset(url);
+        if (dataUri) {
+          urlToDataUri.set(url, dataUri);
         }
-      })
-    );
-  } catch (e) {
-    monitoring.captureException(e, { operation: "ogImagePreFetch" });
-  }
+      } catch (e) {
+        monitoring.captureMessage("Deck image fetch failed", "warning", {
+          url,
+          error: e,
+        });
+      }
+    })
+  );
 
   const getImageSrc = (entity: UnifiedEntity) => {
     const url = resolveUrl(

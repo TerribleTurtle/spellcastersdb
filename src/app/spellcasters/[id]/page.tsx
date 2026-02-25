@@ -9,7 +9,7 @@ import { DictionaryProvider } from "@/components/providers/DictionaryProvider";
 import { buildDynamicDictionary } from "@/lib/link-dictionary";
 import { routes } from "@/lib/routes";
 import {
-  fetchGameData,
+  ensureDataLoaded,
   getSpellcasterById,
   getSpellcasters,
 } from "@/services/api/api";
@@ -17,6 +17,7 @@ import {
   fetchEntityTimeline,
   mapStatChangesToChangelog,
 } from "@/services/api/patch-history";
+import { registry } from "@/services/api/registry";
 import { Spellcaster } from "@/types/api";
 
 interface SpellcasterPageProps {
@@ -81,8 +82,8 @@ export default async function SpellcasterPage({
     notFound();
   }
 
-  const data = await fetchGameData();
-  const allSpellcasters = data.spellcasters || [];
+  await ensureDataLoaded();
+  const allSpellcasters = registry.getAllSpellcasters();
 
   // Synthesize UI Patch History directly from inline stat_changes
   const entityChangelog = spellcaster.stat_changes
@@ -96,10 +97,10 @@ export default async function SpellcasterPage({
   );
 
   const allEntities = [
-    ...(data.units || []),
-    ...(data.spells || []),
+    ...registry.getAllUnits(),
+    ...registry.getAllSpells(),
     ...allSpellcasters,
-    ...(data.titans || []),
+    ...registry.getAllTitans(),
   ];
   const dictionary = buildDynamicDictionary(allEntities);
 

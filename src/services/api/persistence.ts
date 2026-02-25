@@ -48,7 +48,21 @@ export interface StoredDeck {
 
 // --- Functions ---
 
-// Helper: Convert Deck to Stored Format
+/**
+ * Converts a hydrated Deck into a lightweight storage format containing only IDs.
+ *
+ * This is used by `zustand/persist` to serialize decks into `localStorage`
+ * without storing full entity objects (which would be stale after data refreshes).
+ *
+ * @param deck - The hydrated deck with full entity references.
+ * @returns A `StoredDeck` containing only `spellcasterId` and `slotIds`.
+ *
+ * @example
+ * ```ts
+ * const stored = serializeDeck(currentDeck);
+ * // stored = { id: "abc", name: "Fire", spellcasterId: "nadia", slotIds: ["fire_imp_1", ...] }
+ * ```
+ */
 export function serializeDeck(deck: Deck): StoredDeck {
   return {
     id: deck.id,
@@ -64,7 +78,23 @@ export function serializeDeck(deck: Deck): StoredDeck {
   };
 }
 
-// Helper: Reconstruct Deck from Stored Format
+/**
+ * Rehydrates a `StoredDeck` (IDs only) back into a full `Deck` with entity references.
+ *
+ * Builds O(1) lookup maps from the provided entity arrays, then resolves each ID.
+ * Self-heals missing `id` fields by generating a new UUID.
+ *
+ * @param stored - The lightweight stored deck from `localStorage`.
+ * @param units - All available units, spells, and titans to resolve slot IDs against.
+ * @param spellcasters - All available spellcasters to resolve the spellcaster ID.
+ * @returns A fully hydrated `Deck` with resolved entity references.
+ *
+ * @example
+ * ```ts
+ * const deck = reconstructDeck(storedDeck, allUnits, allSpellcasters);
+ * console.log(deck.spellcaster?.name); // "Nadia"
+ * ```
+ */
 export function reconstructDeck(
   stored: StoredDeck,
   units: (Unit | Spell | Titan)[],
@@ -105,7 +135,23 @@ export function reconstructDeck(
   };
 }
 
-// Helper: Efficient Equality Check (avoids JSON.stringify)
+/**
+ * Performs a fast structural equality check between two decks.
+ *
+ * Compares `id`, `name`, `spellcaster_id`, and all 5 slot `entity_id` values.
+ * Avoids expensive `JSON.stringify` and is safe for use in React selectors.
+ *
+ * @param deckA - First deck to compare.
+ * @param deckB - Second deck to compare.
+ * @returns `true` if both decks have identical IDs and entity references.
+ *
+ * @example
+ * ```ts
+ * if (!areDecksEqual(currentDeck, savedDeck)) {
+ *   showUnsavedChangesModal();
+ * }
+ * ```
+ */
 export function areDecksEqual(deckA: Deck, deckB: Deck): boolean {
   if (deckA === deckB) return true;
 

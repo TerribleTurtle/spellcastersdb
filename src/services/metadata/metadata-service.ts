@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import { fetchGameData } from "@/services/api/api";
+import { getSpellcasterById } from "@/services/api/api";
 import { monitoring } from "@/services/monitoring";
 import { decodeDeck, decodeTeam } from "@/services/utils/encoding";
 
@@ -76,10 +76,7 @@ async function generateSingleDeckMetadata(deckHash: string): Promise<Metadata> {
   // Always try to get spellcaster name for better metadata
   if (decoded?.spellcasterId) {
     try {
-      const data = await fetchGameData();
-      const spellcaster = data.spellcasters.find(
-        (h) => h.spellcaster_id === decoded.spellcasterId
-      );
+      const spellcaster = await getSpellcasterById(decoded.spellcasterId);
       if (spellcaster) {
         spellcasterName = spellcaster.name;
         if (!deckName) {

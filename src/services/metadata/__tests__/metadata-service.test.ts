@@ -2,16 +2,16 @@ import { Metadata } from "next";
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { fetchGameData } from "@/services/api/api";
+import { getSpellcasterById } from "@/services/api/api";
 import { monitoring } from "@/services/monitoring";
 import { decodeDeck, decodeTeam } from "@/services/utils/encoding";
-import { AllDataResponse, Spellcaster } from "@/types/api";
+import { Spellcaster } from "@/types/api";
 
 import { generateDeckMetadata } from "../metadata-service";
 
 // --- Mocks ---
 vi.mock("@/services/api/api", () => ({
-  fetchGameData: vi.fn(),
+  getSpellcasterById: vi.fn(),
 }));
 
 vi.mock("@/services/monitoring", () => ({
@@ -100,24 +100,17 @@ describe("generateDeckMetadata", () => {
         slotIds: [],
       });
 
-      vi.mocked(fetchGameData).mockResolvedValue({
-        spellcasters: [
-          {
-            spellcaster_id: "sc1",
-            name: "Pyromancer",
-          } as unknown as Spellcaster,
-        ],
-        units: [],
-        spells: [],
-        titans: [],
-      } as unknown as AllDataResponse);
+      vi.mocked(getSpellcasterById).mockResolvedValue({
+        spellcaster_id: "sc1",
+        name: "Pyromancer",
+      } as unknown as Spellcaster);
 
       const params = Promise.resolve({ d: "hash_no_name" });
       const result = await generateDeckMetadata(params);
 
       expect(result.title).toBe("Pyromancer Deck - SpellcastersDB");
       expect(result.description).toContain("Check out this Pyromancer build");
-      expect(fetchGameData).toHaveBeenCalled();
+      expect(getSpellcasterById).toHaveBeenCalledWith("sc1");
     });
 
     it("generates fallback Custom Deck title when api fails", async () => {
@@ -128,7 +121,7 @@ describe("generateDeckMetadata", () => {
       });
 
       const testError = new Error("API Error");
-      vi.mocked(fetchGameData).mockRejectedValue(testError);
+      vi.mocked(getSpellcasterById).mockRejectedValue(testError);
 
       const params = Promise.resolve({ d: "hash_error" });
       const result = await generateDeckMetadata(params);

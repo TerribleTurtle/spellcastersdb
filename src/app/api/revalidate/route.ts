@@ -5,6 +5,23 @@ import { timingSafeEqual } from "crypto";
 
 import { monitoring } from "@/services/monitoring";
 
+/**
+ * Handles on-demand cache revalidation for game data and sitemaps.
+ *
+ * **Authentication:** Requires a valid secret via `Authorization: Bearer <REVALIDATION_SECRET>`
+ * header. Falls back to `?secret=<REVALIDATION_SECRET>` query param for backward compatibility.
+ * Uses `timingSafeEqual` to prevent timing attacks.
+ *
+ * @param request - The incoming Next.js request object.
+ * @returns `{ revalidated: true, now: number, message: string }` on success (200).
+ * @returns `{ message: "Invalid token" }` on auth failure (401).
+ * @returns `{ message: "Error revalidating", error: "Internal Server Error" }` on failure (500).
+ *
+ * @example
+ * ```bash
+ * curl -H "Authorization: Bearer MY_SECRET" https://spellcastersdb.com/api/revalidate
+ * ```
+ */
 export async function GET(request: NextRequest) {
   // Securely get secret from Authorization header
   const authHeader = request.headers.get("authorization");

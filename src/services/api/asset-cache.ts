@@ -3,6 +3,10 @@ import { monitoring } from "@/services/monitoring";
 /**
  * In-memory cache for asset Data URIs to prevent repeated fetching/buffering.
  * Keys are URLs, Values are Data URIs (base64).
+ *
+ * **Note:** This is an invocation-level cache. On Vercel serverless, it resets
+ * on every cold start. It excels at deduplicating concurrent requests within
+ * a single invocation but does NOT persist across function instances.
  */
 export const assetCache = new Map<string, string>();
 
