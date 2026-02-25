@@ -155,8 +155,7 @@ export function DeckSlot({
       ref={setNodeRef}
       data-testid={`deck-slot-${slot.index}`}
       className={cn(
-        "relative group aspect-3/4 rounded-lg border-2 transition-[border-color,background-color,box-shadow,transform,opacity] flex flex-col items-center justify-center w-full z-50",
-        "md:w-full md:max-w-[140px]",
+        "relative group aspect-3/4 w-full rounded-lg border-2 transition-[border-color,background-color,box-shadow,transform,opacity] flex flex-col items-center justify-center overflow-visible",
         // Valid drop target
         isValidTarget &&
           !isOver &&
@@ -224,7 +223,7 @@ export function DeckSlot({
               <div className="w-6 h-6 rounded-full border-2 border-current border-dashed opacity-50" />
             )}
           </div>
-          <span className="text-[9px] md:text-xs font-bold uppercase tracking-wide md:tracking-widest">
+          <span className="text-[10px] sm:text-xs px-0.5 text-center block font-bold uppercase tracking-tight">
             {isTitanSlot ? "Titan" : `Incant. ${slot.index + 1}`}
           </span>
         </div>
@@ -245,7 +244,11 @@ export function DeckSlot({
               alt={getCardAltText(slot.unit)}
               fill
               sizes={`(max-width: ${BREAKPOINTS.md}px) 100vw, 33vw`}
-              className="object-cover object-top"
+              className={cn(
+                "object-cover object-top",
+                slot.unit.category === ENTITY_CATEGORY.Spell &&
+                  "scale-125 md:scale-[1.35] origin-center"
+              )}
             />
             {/* Rank/Titan Badge */}
             {(slot.unit.rank ||

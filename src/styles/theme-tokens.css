@@ -107,6 +107,9 @@
   --color-action-danger: var(--sp-action-danger);
   --color-action-danger-hover: var(--sp-action-danger-hover);
 
+  /* Third Party Brands */
+  --color-discord: var(--sp-discord);
+
   /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);

@@ -122,8 +122,7 @@ export function SpellcasterSlot({
       ref={setNodeRef}
       data-testid="spellcaster-slot"
       className={cn(
-        "relative group aspect-3/4 rounded-lg border-2 transition-all flex flex-col items-center justify-center shadow-lg w-full",
-        "md:w-full md:max-w-[160px]",
+        "relative group aspect-3/4 w-full rounded-lg border-2 transition-[border-color,background-color,box-shadow,transform,opacity] flex flex-col items-center justify-center overflow-visible",
         // Valid drop target
         isValidTarget &&
           !isOver &&
@@ -175,8 +174,8 @@ export function SpellcasterSlot({
           <div className="mb-2 flex justify-center">
             <Sparkles size={28} />
           </div>
-          <span className="text-[9px] md:text-[9px] lg:text-xs font-bold uppercase tracking-tighter md:tracking-tight lg:tracking-wider">
-            Spellcaster
+          <span className="text-[10px] sm:text-xs px-0.5 text-center block font-bold uppercase tracking-tight">
+            {isReadOnly ? "No Leader" : "Spellcaster"}
           </span>
         </div>
       )}
@@ -226,8 +225,8 @@ export function SpellcasterSlot({
             </div>
           </div>
           {/* Name Banner */}
-          <div className="min-h-[28px] bg-brand-primary/20 backdrop-blur-sm border-t border-brand-primary/30 flex items-center justify-center px-1 py-0.5 z-10 shrink-0">
-            <span className="text-[11px] font-bold text-text-primary text-center leading-tight line-clamp-2 wrap-break-word w-full shadow-black drop-shadow-md">
+          <div className="min-h-[24px] bg-surface-main/95 border-t border-border-default flex items-center justify-center px-1 py-0.5 z-10 shrink-0">
+            <span className="text-[10px] font-bold text-text-secondary text-center leading-tight line-clamp-2 wrap-break-word w-full">
               {spellcaster.name}
             </span>
           </div>

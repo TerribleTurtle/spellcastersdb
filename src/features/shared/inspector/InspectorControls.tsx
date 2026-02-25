@@ -113,7 +113,7 @@ export function InspectorControls({ item, onClose }: InspectorControlsProps) {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 gap-2">
             {DECK_SLOTS.map((idx) => {
               const status = getStatus(idx);
               const isOccupiedBySelf = status === "ALREADY_IN";

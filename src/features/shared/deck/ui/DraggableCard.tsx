@@ -162,15 +162,15 @@ export const DraggableCard = React.memo(function DraggableCard({
 
         {/* Rank Badge - Overlaid on Image */}
         {(rank || isTitan) && (
-          <div className="absolute bottom-9 lg:bottom-12 left-1 z-20">
+          <div className="absolute top-1 right-1 z-20">
             <RankBadge
               rank={isTitan ? "V" : rank!}
               isTitan={isTitan}
               mode="icon"
               className={
                 isTitan
-                  ? "scale-100 lg:scale-125 origin-bottom-left"
-                  : "scale-100 lg:scale-125 origin-bottom-left"
+                  ? "scale-90 lg:scale-110 origin-top-right"
+                  : "scale-90 lg:scale-110 origin-top-right"
               }
             />
           </div>
@@ -181,7 +181,7 @@ export const DraggableCard = React.memo(function DraggableCard({
             <TooltipTrigger asChild>
               <div
                 className={cn(
-                  "absolute bottom-9 lg:bottom-12 left-1 flex items-center justify-center w-6 h-6 rounded-full border-2 shadow-sm transition-colors cursor-help z-20 pointer-events-auto scale-100 lg:scale-125 origin-bottom-left",
+                  "absolute bottom-[clamp(30px,2.5vw,44px)] left-1 flex items-center justify-center w-6 h-6 rounded-full border-2 shadow-sm transition-colors cursor-help z-20 pointer-events-auto scale-100 lg:scale-125 origin-bottom-left",
                   // Apply colors from config manually or use inline styles if needed, but here we can map
                   // Apply colors from config manually or use inline styles if needed, but here we can map
                   spellcasterClass && CLASS_STYLES[spellcasterClass]
@@ -219,7 +219,7 @@ export const DraggableCard = React.memo(function DraggableCard({
 
         {/* Deck Usage Badges (Team Mode) */}
         {otherDeckIndices && otherDeckIndices.length > 0 && (
-          <div className="absolute bottom-9 lg:bottom-11 right-1 flex flex-col items-end gap-1 pointer-events-none z-20 scale-75 origin-bottom-right md:scale-100">
+          <div className="absolute bottom-[clamp(30px,2.5vw,44px)] right-1 flex flex-col items-end gap-1 pointer-events-none z-20 scale-75 origin-bottom-right md:scale-100">
             {otherDeckIndices.map((deckIndex) => {
               // Safe lookup for theme, fallback to default if index out of bounds (shouldn't happen in normal team flow)
               const theme = DECK_THEMES[deckIndex as DeckThemeIndex];
@@ -242,9 +242,9 @@ export const DraggableCard = React.memo(function DraggableCard({
       </div>
 
       {/* Name Banner / Quick Add Button - Integrated */}
-      <div className="absolute bottom-0 inset-x-0 min-h-[32px] lg:min-h-[40px] bg-surface-overlay-heavy border-t border-border-default flex items-center justify-center px-1 py-1 z-10 transition-colors pointer-events-none">
-        <div className="w-full flex justify-center px-1">
-          <span className="text-[10px] lg:text-xs 2xl:text-sm font-bold text-text-secondary text-center leading-tight line-clamp-2 uppercase tracking-tight wrap-break-word">
+      <div className="absolute bottom-0 inset-x-0 min-h-[clamp(30px,2.5vw,44px)] bg-surface-overlay-heavy border-t border-border-default flex items-center justify-center px-1 py-1 z-10 transition-colors pointer-events-none">
+        <div className="w-full flex justify-center px-0.5">
+          <span className="text-[clamp(10px,0.75vw,14px)] font-bold text-text-secondary text-center leading-tight line-clamp-2 uppercase tracking-tight wrap-break-word">
             {item.name}
           </span>
         </div>
