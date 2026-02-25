@@ -58,6 +58,24 @@ describe("generateDeckMetadata", () => {
     );
   });
 
+  it("prioritizes 'd' (deck) parameter over 'team' parameter when both are present", async () => {
+    vi.mocked(decodeDeck).mockReturnValue({
+      name: "Deck Wins",
+      spellcasterId: "sc1",
+      slotIds: [],
+    });
+
+    const params = Promise.resolve({
+      d: "valid_deck_hash",
+      team: "valid_team_hash",
+    });
+    const result = await generateDeckMetadata(params);
+
+    expect(result.title).toBe("Deck Wins - SpellcastersDB");
+    expect(decodeDeck).toHaveBeenCalledWith("valid_deck_hash");
+    expect(decodeTeam).not.toHaveBeenCalled();
+  });
+
   describe("Single Deck Metadata", () => {
     it("generates metadata for a named deck", async () => {
       vi.mocked(decodeDeck).mockReturnValue({
@@ -134,6 +152,35 @@ describe("generateDeckMetadata", () => {
 
       expect(result.title).toBe("Custom Deck - SpellcastersDB");
     });
+
+    it("generates correct OG image URL and Twitter card type for decks", async () => {
+      vi.mocked(decodeDeck).mockReturnValue({
+        name: "OG Deck",
+        spellcasterId: "sc1",
+        slotIds: [],
+      });
+
+      const rawHash = "test_raw_hash_123";
+      const params = Promise.resolve({ d: rawHash });
+      const result = await generateDeckMetadata(params);
+
+      // 1. OG Image URL format
+      expect(result.openGraph?.images).toEqual([`/api/og?d=${rawHash}`]);
+      expect(result.twitter?.images).toEqual([`/api/og?d=${rawHash}`]);
+
+      // 2. Twitter card is always summary_large_image
+      expect((result.twitter as any)?.card).toBe("summary_large_image");
+    });
+
+    it("falls back to Custom Deck if decodeDeck returns null (corrupted hash)", async () => {
+      vi.mocked(decodeDeck).mockReturnValue(null);
+
+      const params = Promise.resolve({ d: "corrupted_hash" });
+      const result = await generateDeckMetadata(params);
+
+      expect(result.title).toBe("Custom Deck - SpellcastersDB");
+      expect(result.openGraph?.images).toEqual([`/api/og?d=corrupted_hash`]);
+    });
   });
 
   describe("Team Metadata", () => {
@@ -160,6 +207,24 @@ describe("generateDeckMetadata", () => {
       const result = await generateDeckMetadata(params);
 
       expect(result.title).toBe("Team Trinity - SpellcastersDB");
+    });
+
+    it("generates correct OG image URL and Twitter card type for teams", async () => {
+      vi.mocked(decodeTeam).mockReturnValue({
+        name: "OG Team",
+        decks: [],
+      });
+
+      const rawHash = "v2~team_hash_123";
+      const params = Promise.resolve({ team: rawHash });
+      const result = await generateDeckMetadata(params);
+
+      // OG Image URL format for teams
+      expect(result.openGraph?.images).toEqual([`/api/og?team=${rawHash}`]);
+      expect(result.twitter?.images).toEqual([`/api/og?team=${rawHash}`]);
+
+      // Twitter card is always summary_large_image
+      expect((result.twitter as any)?.card).toBe("summary_large_image");
     });
   });
 });

@@ -38,6 +38,13 @@ export async function generateMetadata({
     openGraph: {
       title: titan.name,
       description: titan.description,
+      images: [{ url: `/api/og?id=${id}`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: titan.name,
+      description: titan.description,
+      images: [`/api/og?id=${id}`],
     },
   };
 }

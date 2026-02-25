@@ -9,6 +9,19 @@ import { getSpellcasters } from "@/services/api/api";
 export const metadata = {
   title: "Spellcasters",
   description: "Browse all accessible spellcasters in Spellcasters Chronicles.",
+  openGraph: {
+    title: "Spellcasters",
+    description:
+      "Browse all accessible spellcasters in Spellcasters Chronicles.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Spellcasters",
+    description:
+      "Browse all accessible spellcasters in Spellcasters Chronicles.",
+    images: ["/og-default.png"],
+  },
 };
 
 export default async function SpellcastersIndexPage() {

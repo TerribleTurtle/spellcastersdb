@@ -24,6 +24,17 @@ export async function generateMetadata({ params }: SchoolPageProps) {
   return {
     title: `${decodedSchool} School Units & Spells | SpellcastersDB`,
     description: `Complete list of ${decodedSchool} units, spells, and titans.`,
+    openGraph: {
+      title: `${decodedSchool} School Units & Spells | SpellcastersDB`,
+      description: `Complete list of ${decodedSchool} units, spells, and titans.`,
+      images: ["/og-default.png"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${decodedSchool} School Units & Spells | SpellcastersDB`,
+      description: `Complete list of ${decodedSchool} units, spells, and titans.`,
+      images: ["/og-default.png"],
+    },
   };
 }
 

@@ -32,6 +32,12 @@ const eslintConfig = defineConfig([
       "react/forbid-dom-props": ["warn", { "forbid": ["style"] }],
       "react/forbid-component-props": ["warn", { "forbid": ["style"] }]
     }
+  },
+  {
+    files: ["**/*.test.ts", "**/*.test.tsx"],
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off"
+    }
   }
 ]);
 

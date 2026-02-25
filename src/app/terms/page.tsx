@@ -6,6 +6,19 @@ export const metadata = {
   title: "Terms of Service",
   description:
     "Terms of Service for SpellcastersDB. An unofficial, fan-made community database.",
+  openGraph: {
+    title: "Terms of Service",
+    description:
+      "Terms of Service for SpellcastersDB. An unofficial, fan-made community database.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Terms of Service",
+    description:
+      "Terms of Service for SpellcastersDB. An unofficial, fan-made community database.",
+    images: ["/og-default.png"],
+  },
 };
 
 export default function TermsPage() {

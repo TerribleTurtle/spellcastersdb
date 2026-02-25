@@ -5,6 +5,19 @@ export const metadata = {
   title: "Privacy Policy",
   description:
     "Privacy Policy for SpellcastersDB. We prioritize your privacy with minimal data collection and no tracking cookies.",
+  openGraph: {
+    title: "Privacy Policy",
+    description:
+      "Privacy Policy for SpellcastersDB. We prioritize your privacy with minimal data collection and no tracking cookies.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Privacy Policy",
+    description:
+      "Privacy Policy for SpellcastersDB. We prioritize your privacy with minimal data collection and no tracking cookies.",
+    images: ["/og-default.png"],
+  },
 };
 
 export default function PrivacyPage() {

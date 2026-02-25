@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { DataFetchError, fetchJson } from "@/services/api/api-client";
+import { monitoring } from "@/services/monitoring";
 import { createShortLink } from "@/services/sharing/create-short-link";
 import { encodeDeck, encodeTeam } from "@/services/utils/encoding";
 import { Deck } from "@/types/deck";
@@ -179,6 +180,66 @@ describe("createShortLink", () => {
       expect(encodeTeam).toHaveBeenCalledWith(mockDecks, "Untitled Team");
     });
 
+    it("replaces the deck at activeSlot when provided", async () => {
+      vi.mocked(fetchJson).mockResolvedValueOnce({ id: "slot123" });
+
+      const newDeck = { id: "new-deck", name: "Replacement" } as Deck;
+      await createShortLink({
+        teamDecks: mockDecks,
+        isTeamMode: true,
+        deck: newDeck,
+        activeSlot: 1, // Replace the middle deck
+      });
+
+      // It should create a new array with the new deck at index 1
+      const expectedDecks = [mockDecks[0], newDeck, mockDecks[2]];
+      expect(encodeTeam).toHaveBeenCalledWith(expectedDecks, "Untitled Team");
+    });
+
+    it("ignores activeSlot if it is out of bounds (too high)", async () => {
+      vi.mocked(fetchJson).mockResolvedValueOnce({ id: "slot456" });
+
+      const newDeck = { id: "new-deck", name: "Replacement" } as Deck;
+      await createShortLink({
+        teamDecks: mockDecks,
+        isTeamMode: true,
+        deck: newDeck,
+        activeSlot: 5, // Out of bounds
+      });
+
+      // It should fall back to the original decks without modification
+      expect(encodeTeam).toHaveBeenCalledWith(mockDecks, "Untitled Team");
+    });
+
+    it("ignores activeSlot if it is negative", async () => {
+      vi.mocked(fetchJson).mockResolvedValueOnce({ id: "slot789" });
+
+      const newDeck = { id: "new-deck", name: "Replacement" } as Deck;
+      await createShortLink({
+        teamDecks: mockDecks,
+        isTeamMode: true,
+        deck: newDeck,
+        activeSlot: -1, // Negative index
+      });
+
+      expect(encodeTeam).toHaveBeenCalledWith(mockDecks, "Untitled Team");
+    });
+
+    it("rejects non-integer floats to prevent array corruption", async () => {
+      vi.mocked(fetchJson).mockResolvedValueOnce({ id: "slot-float" });
+
+      const newDeck = { id: "new-deck", name: "Replacement" } as Deck;
+      await createShortLink({
+        teamDecks: mockDecks,
+        isTeamMode: true,
+        deck: newDeck,
+        activeSlot: 1.5, // Float index should be rejected by Number.isInteger
+      });
+
+      // It should fall back to the original decks without modification
+      expect(encodeTeam).toHaveBeenCalledWith(mockDecks, "Untitled Team");
+    });
+
     it("falls back to long URL on API failure", async () => {
       vi.mocked(fetchJson).mockRejectedValueOnce(new Error("Network Error"));
 
@@ -195,11 +256,25 @@ describe("createShortLink", () => {
     });
   });
 
-  // ─── Edge Cases ───────────────────────────────────────────────────
-
   describe("Edge Cases", () => {
     it("returns current URL when no deck or team inputs provided", async () => {
       const result = await createShortLink({});
+
+      expect(result).toEqual({
+        url: `${MOCK_ORIGIN}/deck-builder`,
+        isShortLink: false,
+        rateLimited: false,
+      });
+    });
+
+    it("returns current URL and warns when isTeamMode is true but teamDecks is undefined", async () => {
+      const result = await createShortLink({ isTeamMode: true });
+
+      // The catch-all `else` block should fire instead of crashing
+      expect(monitoring.captureMessage).toHaveBeenCalledWith(
+        "createShortLink: Invalid options provided, returning current URL",
+        "warning"
+      );
 
       expect(result).toEqual({
         url: `${MOCK_ORIGIN}/deck-builder`,

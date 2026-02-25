@@ -30,6 +30,15 @@ describe("deck-utils", () => {
       deck.slots[0] = { ...deck.slots[0], unit: { entity_id: "u1" } as Unit };
       expect(isDeckEmpty(deck)).toBe(false);
     });
+
+    it("should return false if only titan is present in slot 4 (no units 0-3)", () => {
+      const deck = cloneDeck(INITIAL_DECK);
+      deck.slots[4].unit = {
+        entity_id: "t1",
+        category: "Titan",
+      } as unknown as Unit;
+      expect(isDeckEmpty(deck)).toBe(false);
+    });
   });
 
   describe("cloneSlots", () => {
@@ -93,6 +102,19 @@ describe("deck-utils", () => {
 
       const unit = { rank: "I" } as Unit;
       expect(findAutoFillSlot(deck, unit)).toBe(1); // Should find next empty
+    });
+
+    it("should return -1 when all unit slots (0-3) are full but titan slot (4) is open, for a non-Titan item", () => {
+      const deck = cloneDeck(INITIAL_DECK);
+      for (let i = 0; i < 4; i++) {
+        deck.slots[i].unit = { entity_id: `u${i}` } as Unit;
+      }
+      // Slot 4 (Titan) is still empty
+      const nonTitanUnit = {
+        category: "Creature",
+        rank: "I",
+      } as unknown as Unit;
+      expect(findAutoFillSlot(deck, nonTitanUnit)).toBe(-1);
     });
 
     it("should return -1 if all slots are full", () => {

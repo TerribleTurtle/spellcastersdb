@@ -8,14 +8,17 @@ const TEAM_DELIMITER = "~"; // Tilde for separating decks in a team
 
 const MAX_NAME_LENGTH = 50;
 
+/** Removes HTML tags to prevent XSS injection in metadata */
+const sanitizeHtml = (str: string) => str.replace(/<[^>]*>?/gm, "");
+
 export function encodeDeck(deck: Deck): string {
   const ids = [
     deck.spellcaster?.spellcaster_id || "",
-    deck.slots[0]?.unit?.entity_id || "",
-    deck.slots[1]?.unit?.entity_id || "",
-    deck.slots[2]?.unit?.entity_id || "",
-    deck.slots[3]?.unit?.entity_id || "",
-    deck.slots[4]?.unit?.entity_id || "",
+    deck.slots?.[0]?.unit?.entity_id || "",
+    deck.slots?.[1]?.unit?.entity_id || "",
+    deck.slots?.[2]?.unit?.entity_id || "",
+    deck.slots?.[3]?.unit?.entity_id || "",
+    deck.slots?.[4]?.unit?.entity_id || "",
     (deck.name || "")
       .replace(new RegExp(DELIMITER, "g"), "")
       .replace(new RegExp(TEAM_DELIMITER, "g"), "")
@@ -38,15 +41,21 @@ export function decodeDeck(hash: string): DecodedDeckData | null {
     if (!packed) return null;
 
     const parts = packed.split(DELIMITER);
-    // Support simple format (6 parts) or named format (7 parts)
-    if (parts.length < 6) {
+    // Support simple format (6 parts) or named format (7 parts).
+    // Reject excessive parts to prevent hidden garbage injection (Risk #3).
+    if (parts.length < 6 || parts.length > 7) {
       return null;
     }
+
+    const rawName = parts[6]
+      ? parts[6].substring(0, MAX_NAME_LENGTH)
+      : undefined;
+    const sanitizedName = rawName ? sanitizeHtml(rawName) : undefined;
 
     return {
       spellcasterId: parts[0] || null,
       slotIds: parts.slice(1, 6).map((id) => id || null),
-      name: parts[6] || undefined,
+      name: sanitizedName,
     };
   } catch (e) {
     monitoring.captureException(e, {
@@ -75,7 +84,9 @@ export function encodeTeam(
 
   // Combined array: [name, ...deck1, ...deck2, ...deck3]
   const combined = [
-    name.replace(new RegExp(DELIMITER, "g"), ""),
+    name
+      .replace(new RegExp(DELIMITER, "g"), "")
+      .replace(new RegExp(TEAM_DELIMITER, "g"), ""),
     ...deck1Ids,
     ...deck2Ids,
     ...deck3Ids,
@@ -92,11 +103,11 @@ function getDeckIds(deck: Deck | null | undefined): string[] {
   if (!deck) return ["", "", "", "", "", "", ""];
   return [
     deck.spellcaster?.spellcaster_id || "",
-    deck.slots[0]?.unit?.entity_id || "",
-    deck.slots[1]?.unit?.entity_id || "",
-    deck.slots[2]?.unit?.entity_id || "",
-    deck.slots[3]?.unit?.entity_id || "",
-    deck.slots[4]?.unit?.entity_id || "",
+    deck.slots?.[0]?.unit?.entity_id || "",
+    deck.slots?.[1]?.unit?.entity_id || "",
+    deck.slots?.[2]?.unit?.entity_id || "",
+    deck.slots?.[3]?.unit?.entity_id || "",
+    deck.slots?.[4]?.unit?.entity_id || "",
     // Include deck name for compatibility with decodeTeam (7 items expected)
     (deck.name || "")
       .replace(new RegExp(DELIMITER, "g"), "")
@@ -132,7 +143,10 @@ export function decodeTeam(hash: string): {
       const parts = packed.split(DELIMITER);
       // Structure: Name (1) + Deck1 (7) + Deck2 (7) + Deck3 (7) = 22 parts
 
-      const teamName = parts[0] || "";
+      const rawTeamName = parts[0]
+        ? parts[0].substring(0, MAX_NAME_LENGTH)
+        : "";
+      const teamName = rawTeamName ? sanitizeHtml(rawTeamName) : "";
       const deckParts = parts.slice(1);
 
       const results: (DecodedDeckData | null)[] = [];
@@ -147,7 +161,9 @@ export function decodeTeam(hash: string): {
         results.push({
           spellcasterId: slice[0] || null,
           slotIds: slice.slice(1, 6).map((id) => id || null),
-          name: slice[6] || undefined,
+          name: slice[6]
+            ? sanitizeHtml(slice[6].substring(0, MAX_NAME_LENGTH))
+            : undefined,
         });
       }
 
@@ -163,7 +179,8 @@ export function decodeTeam(hash: string): {
 
   // Legacy V1 (Tilde separated individual deck hashes)
   try {
-    const parts = cleanHash.split(TEAM_DELIMITER);
+    // Limit to 3 parts before executing computationally expensive decodeDeck
+    const parts = cleanHash.split(TEAM_DELIMITER).slice(0, 3);
     const results = parts.map(decodeDeck);
 
     while (results.length < 3) results.push(null);

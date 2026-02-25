@@ -33,6 +33,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${infusion.name} - SC Guide`,
     description: infusion.allied_effect.description,
+    openGraph: {
+      title: `${infusion.name} - SC Guide`,
+      description: infusion.allied_effect.description,
+      images: [{ url: `/og-default.png`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${infusion.name} - SC Guide`,
+      description: infusion.allied_effect.description,
+      images: [`/og-default.png`],
+    },
   };
 }
 

@@ -1,3 +1,4 @@
+import LZString from "lz-string";
 import { describe, expect, it } from "vitest";
 
 import { Spellcaster, Unit } from "@/types/api";
@@ -96,6 +97,89 @@ describe("Deck Encoding", () => {
       name: "Incomplete",
     });
   });
+
+  it("should not crash if deck.slots is undefined", () => {
+    // Simulate a corrupted deck from local storage
+    const corruptedDeck = {
+      id: "d3",
+      name: "Corrupt",
+      spellcaster: { spellcaster_id: "sc1" },
+      slots: undefined as any,
+    } as Deck;
+
+    const encoded = encodeDeck(corruptedDeck);
+    const decoded = decodeDeck(encoded);
+
+    expect(decoded).toEqual({
+      spellcasterId: "sc1",
+      slotIds: [null, null, null, null, null],
+      name: "Corrupt",
+    });
+  });
+
+  it("should enforce a maximum name length on decode (DoS mitigation)", () => {
+    // Generate a payload with a massive name to simulate a zip bomb
+    const original = mockDeck("d4", "A".repeat(100_000), "sc1", []);
+
+    const encoded = encodeDeck(original);
+    // Directly mutate the uncompressed payload to bypass the encode truncated check
+    // Wait, let's just create an encoded string manually
+    const DELIMITER = "\x1F";
+    const maliciousPayload = `sc1${DELIMITER}${DELIMITER}${DELIMITER}${DELIMITER}${DELIMITER}${DELIMITER}${"A".repeat(100_000)}`;
+
+    const maliciousEncoded =
+      LZString.compressToEncodedURIComponent(maliciousPayload);
+
+    const decoded = decodeDeck(maliciousEncoded);
+
+    // Name should be truncated to 50 characters, preventing DoS
+    expect(decoded?.name?.length).toBeLessThanOrEqual(50);
+    expect(decoded?.name).toBe("A".repeat(50));
+  });
+
+  it("should strip delimiter characters from the deck name", () => {
+    const original = mockDeck("d5", "Name\x1FWith~Delimiters", "sc1", []);
+    const encoded = encodeDeck(original);
+    const decoded = decodeDeck(encoded);
+
+    expect(decoded?.name).toBe("NameWithDelimiters");
+  });
+
+  it("should sanitize HTML/XSS payloads from deck names", () => {
+    const original = mockDeck(
+      "xss-deck",
+      "<script>alert(1)</script>BadName",
+      "sc1",
+      []
+    );
+    const encoded = encodeDeck(original);
+    const decoded = decodeDeck(encoded);
+
+    // Tags should be completely stripped
+    expect(decoded?.name).toBe("alert(1)BadName");
+  });
+
+  it("should truncate deck names that are exactly 50 or more characters", () => {
+    const exactly50 = mockDeck("d6", "A".repeat(50), "sc1", []);
+    const over50 = mockDeck("d7", "B".repeat(60), "sc1", []);
+
+    expect(decodeDeck(encodeDeck(exactly50))?.name).toBe("A".repeat(50));
+    expect(decodeDeck(encodeDeck(over50))?.name).toBe("B".repeat(50));
+  });
+
+  it("should return null when decoding empty or garbage input", () => {
+    expect(decodeDeck("")).toBeNull();
+    expect(decodeDeck("garbage!@#$")).toBeNull();
+  });
+
+  it("should return null if the decompressed payload has fewer than 6 parts", () => {
+    const DELIMITER = "\x1F";
+    // Construct a payload with 5 parts instead of 6 or 7
+    const truncatedPayload = `sc1${DELIMITER}u1${DELIMITER}u2${DELIMITER}u3${DELIMITER}u4`;
+    const encoded = LZString.compressToEncodedURIComponent(truncatedPayload);
+
+    expect(decodeDeck(encoded)).toBeNull();
+  });
 });
 
 describe("Team Encoding", () => {
@@ -139,5 +223,110 @@ describe("Team Encoding", () => {
     expect(decoded.decks[0]?.name).toBe("Legacy1");
     expect(decoded.decks[1]?.spellcasterId).toBe("sc2");
     expect(decoded.decks[2]?.slotIds[0]).toBe("u3");
+  });
+
+  it("should not crash if team decks have undefined slots", () => {
+    const corruptDeck1 = {
+      spellcaster: { spellcaster_id: "sc1" },
+      slots: undefined as any,
+      name: "D1",
+    } as Deck;
+    const corruptDeck2 = {
+      spellcaster: { spellcaster_id: "sc2" },
+      slots: undefined as any,
+      name: "D2",
+    } as Deck;
+    const corruptDeck3 = {
+      spellcaster: { spellcaster_id: "sc3" },
+      slots: undefined as any,
+      name: "D3",
+    } as Deck;
+
+    const encoded = encodeTeam(
+      [corruptDeck1, corruptDeck2, corruptDeck3],
+      "Corrupt Team"
+    );
+    const decoded = decodeTeam(encoded);
+
+    expect(decoded.name).toBe("Corrupt Team");
+    expect(decoded.decks[0]?.slotIds).toEqual([null, null, null, null, null]);
+  });
+
+  it("should enforce a maximum name length on decodeTeam (DoS mitigation)", () => {
+    const DELIMITER = "\x1F";
+    const maliciousName = "T".repeat(100_000);
+    const maliciousDeckName = "D".repeat(100_000);
+
+    // Construct fake flattened payload
+    // format: name ~ [deck1 7 items] ~ [deck2 7 items] ~ [deck3 7 items]
+    const emptyDeckParts = ["sc", "", "", "", "", "", maliciousDeckName].join(
+      DELIMITER
+    );
+    const payload = [
+      maliciousName,
+      emptyDeckParts,
+      emptyDeckParts,
+      emptyDeckParts,
+    ].join(DELIMITER);
+
+    const maliciousEncoded =
+      "v2~" + LZString.compressToEncodedURIComponent(payload);
+
+    const decoded = decodeTeam(maliciousEncoded);
+
+    expect(decoded.name.length).toBeLessThanOrEqual(50);
+    expect(decoded.name).toBe("T".repeat(50));
+
+    expect(decoded.decks[0]?.name?.length).toBeLessThanOrEqual(50);
+    expect(decoded.decks[0]?.name).toBe("D".repeat(50));
+  });
+
+  it("should handle empty or missing team hashes gracefully", () => {
+    const defaultStructure = { name: "", decks: [null, null, null] };
+    expect(decodeTeam("")).toEqual(defaultStructure);
+    // @ts-expect-error Testing invalid input gracefully handled
+    expect(decodeTeam(null)).toEqual(defaultStructure);
+  });
+
+  it("should strip team delimiter (tilde) characters from the team name during encode", () => {
+    const d1 = mockDeck("d1", "D1", "sc1", []);
+    const encoded = encodeTeam([d1, d1, d1], "Team~Name~Here");
+    const decoded = decodeTeam(encoded);
+
+    expect(decoded.name).not.toContain("~");
+    expect(decoded.name).toBe("TeamNameHere");
+  });
+
+  it("should enforce a strict limit of 3 decks on V1 legacy decode to prevent DoS", () => {
+    // A malicious V1 payload could contain thousands of tildes
+    const maliciousPayload = "~".repeat(1000);
+    const decoded = decodeTeam(maliciousPayload);
+
+    // Should not crash and should cap the decks array at exactly 3 items
+    expect(decoded.decks).toHaveLength(3);
+  });
+
+  it("should handle corrupted V2 payloads gracefully", () => {
+    const defaultStructure = { name: "", decks: [null, null, null] };
+    expect(decodeTeam("v2~garbageDataThatCannotBeDecompressed")).toEqual(
+      defaultStructure
+    );
+  });
+
+  it("should clean up URL space characters replacing pluses in V2 hashes", () => {
+    // Some older Next.js or email clients replace '+' with ' ' in URLs.
+    const validTeam = encodeTeam(
+      [
+        mockDeck("d1", "D1", "sc1", []),
+        mockDeck("d2", "D2", "sc2", []),
+        mockDeck("d3", "D3", "sc3", []),
+      ],
+      "TeamSpace"
+    );
+    const corruptedSpaceHash = validTeam.replace(/\+/g, " ");
+
+    const decoded = decodeTeam(corruptedSpaceHash);
+    expect(decoded.name).toBe("TeamSpace");
+    expect(decoded.decks[0]?.name).toBe("D1");
   });
 });

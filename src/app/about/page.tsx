@@ -15,6 +15,19 @@ export const metadata = {
     "Database",
     "Open Source",
   ],
+  openGraph: {
+    title: "About",
+    description:
+      "Learn about SpellcastersDB, a community-driven database and deck builder for Spellcasters Chronicles. Built by fans, for fans.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "About",
+    description:
+      "Learn about SpellcastersDB, a community-driven database and deck builder for Spellcasters Chronicles. Built by fans, for fans.",
+    images: ["/og-default.png"],
+  },
 };
 
 export default function AboutPage() {

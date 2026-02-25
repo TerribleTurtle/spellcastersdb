@@ -50,6 +50,15 @@ export async function generateMetadata({
     openGraph: {
       title: `${spellcaster.name} Builds, Decks & Stats`,
       description: description,
+      images: [
+        { url: `/api/og?spellcasterId=${id}`, width: 1200, height: 630 },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${spellcaster.name} Builds, Decks & Stats`,
+      description: description,
+      images: [`/api/og?spellcasterId=${id}`],
     },
     keywords: [
       spellcaster.name,

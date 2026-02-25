@@ -47,11 +47,11 @@ export async function createShortLink({
     // Splice in the active deck changes if any
     if (
       deck &&
-      typeof activeSlot === "number" &&
-      activeSlot >= 0 &&
-      activeSlot < 3
+      Number.isInteger(activeSlot) &&
+      activeSlot! >= 0 &&
+      activeSlot! < 3
     ) {
-      currentTeamDecks[activeSlot] = deck;
+      currentTeamDecks[activeSlot!] = deck;
     }
 
     hash = encodeTeam(currentTeamDecks, teamName || "Untitled Team");

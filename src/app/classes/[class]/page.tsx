@@ -23,6 +23,17 @@ export async function generateMetadata({ params }: ClassPageProps) {
   return {
     title: `All ${decodedClass} Units List & Stats | SpellcastersDB`,
     description: `Complete list of ${decodedClass} spellcasters in Spellcasters Chronicles. Compare stats, abilities, and playstyles.`,
+    openGraph: {
+      title: `All ${decodedClass} Units List & Stats | SpellcastersDB`,
+      description: `Complete list of ${decodedClass} spellcasters in Spellcasters Chronicles. Compare stats, abilities, and playstyles.`,
+      images: ["/og-default.png"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `All ${decodedClass} Units List & Stats | SpellcastersDB`,
+      description: `Complete list of ${decodedClass} spellcasters in Spellcasters Chronicles. Compare stats, abilities, and playstyles.`,
+      images: ["/og-default.png"],
+    },
   };
 }
 

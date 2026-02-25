@@ -107,8 +107,16 @@ async function fetchWithFallback(
  *
  * ```
  */
+let inflightFetch: Promise<AllDataResponse> | null = null;
+
 export async function fetchGameData(): Promise<AllDataResponse> {
-  return fetchWithFallback((source) => source.fetch());
+  if (inflightFetch) return inflightFetch;
+
+  inflightFetch = fetchWithFallback((source) => source.fetch()).finally(() => {
+    inflightFetch = null;
+  });
+
+  return inflightFetch;
 }
 
 /**
@@ -124,8 +132,18 @@ export async function fetchGameData(): Promise<AllDataResponse> {
  * // data.consumables and data.upgrades are empty
  * ```
  */
+let inflightCriticalFetch: Promise<AllDataResponse> | null = null;
+
 export async function fetchCriticalGameData(): Promise<AllDataResponse> {
-  return fetchWithFallback((source) => source.fetchCritical());
+  if (inflightCriticalFetch) return inflightCriticalFetch;
+
+  inflightCriticalFetch = fetchWithFallback((source) =>
+    source.fetchCritical()
+  ).finally(() => {
+    inflightCriticalFetch = null;
+  });
+
+  return inflightCriticalFetch;
 }
 
 /**

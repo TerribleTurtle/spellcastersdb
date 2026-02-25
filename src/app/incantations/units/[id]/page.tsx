@@ -45,6 +45,13 @@ export async function generateMetadata({
     openGraph: {
       title: unit.name,
       description: unit.description,
+      images: [{ url: `/api/og?unitId=${id}`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: unit.name,
+      description: unit.description,
+      images: [`/api/og?unitId=${id}`],
     },
   };
 }

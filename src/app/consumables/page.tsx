@@ -7,6 +7,17 @@ import { getConsumables } from "@/services/api/api";
 export const metadata = {
   title: "Consumables",
   description: "Potions, scrolls, and artifacts.",
+  openGraph: {
+    title: "Consumables",
+    description: "Potions, scrolls, and artifacts.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Consumables",
+    description: "Potions, scrolls, and artifacts.",
+    images: ["/og-default.png"],
+  },
 };
 
 export default async function ConsumablesIndexPage() {

@@ -22,12 +22,14 @@ export const metadata = {
     description:
       "Search the complete card database including creatures, spells, and titans. Research units for your next deck, build, or loadout.",
     type: "website",
+    images: ["/og-default.png"],
   },
   twitter: {
     card: "summary_large_image",
     title: "Card Database & Builds | Spellcasters Chronicles",
     description:
       "Search the complete card database for your next deck, build, or loadout.",
+    images: ["/og-default.png"],
   },
 };
 

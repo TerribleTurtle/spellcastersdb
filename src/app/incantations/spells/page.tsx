@@ -6,6 +6,19 @@ export const metadata = {
   title: "Spells Archive | SpellcastersDB",
   description:
     "Comprehensive database of all Spells in Spellcasters Chronicles.",
+  openGraph: {
+    title: "Spells Archive | SpellcastersDB",
+    description:
+      "Comprehensive database of all Spells in Spellcasters Chronicles.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Spells Archive | SpellcastersDB",
+    description:
+      "Comprehensive database of all Spells in Spellcasters Chronicles.",
+    images: ["/og-default.png"],
+  },
 };
 
 export default async function SpellsIndexPage() {

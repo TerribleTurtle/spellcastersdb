@@ -10,6 +10,19 @@ export const metadata = {
   description:
     "Frequently asked questions about SpellcastersDB, the community database for Spellcasters Chronicles. Learn how to use the site and contribute.",
   keywords: ["Spellcasters Chronicles", "FAQ", "Questions", "Help", "Guide"],
+  openGraph: {
+    title: "FAQ",
+    description:
+      "Frequently asked questions about SpellcastersDB, the community database for Spellcasters Chronicles. Learn how to use the site and contribute.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FAQ",
+    description:
+      "Frequently asked questions about SpellcastersDB, the community database for Spellcasters Chronicles. Learn how to use the site and contribute.",
+    images: ["/og-default.png"],
+  },
 };
 
 interface FAQItem {
