@@ -33,7 +33,7 @@ export function DeckBuilderShell({
         data-testid="deck-builder-shell"
         className={cn(
           "h-full flex flex-col relative bg-surface-main overflow-hidden",
-          "xl:grid xl:grid-cols-[1fr_640px] xl:grid-rows-[auto_1fr]",
+          "xl:grid xl:grid-cols-[1fr_minmax(480px,35%)] xl:grid-rows-[auto_1fr]",
           className
         )}
       >

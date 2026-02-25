@@ -22,7 +22,7 @@ export const UnitGridRow = React.memo(function UnitGridRow({
 }: UnitGridRowProps) {
   return (
     <div
-      className="px-2 lg:px-4 py-1 grid gap-2 max-w-[1920px] mx-auto"
+      className="px-2 lg:px-4 py-1 grid gap-2"
       style={{
         gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
       }}

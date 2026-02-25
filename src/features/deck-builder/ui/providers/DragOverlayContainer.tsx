@@ -7,6 +7,7 @@ import { useShallow } from "zustand/react/shallow";
 import { GameImage } from "@/components/ui/GameImage";
 import { RankBadge } from "@/components/ui/rank-badge";
 import { centerUnderCursor } from "@/features/deck-builder/dnd/modifiers";
+import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
 import { useDeckStore } from "@/store/index";
@@ -26,14 +27,18 @@ export function DragOverlayContainer() {
       dropAnimation={null}
       modifiers={[centerUnderCursor]}
     >
-      <div className="w-[110px] aspect-3/4 rounded-lg border-2 border-brand-secondary/50 bg-surface-raised flex flex-col overflow-hidden shadow-2xl relative cursor-grabbing pointer-events-none">
+      <div className="w-[110px] aspect-3/4 rounded-lg border-2 border-brand-secondary/50 bg-surface-main flex flex-col overflow-hidden shadow-2xl relative cursor-grabbing pointer-events-none">
         {/* Image Area */}
-        <div className="relative flex-1 overflow-hidden">
+        <div className="relative flex-1 bg-surface-main overflow-hidden">
           <GameImage
             src={getCardImageUrl(activeDragItem)}
             alt={activeDragItem.name || "Card Image"}
             fill
-            className="object-cover object-top opacity-90"
+            className={cn(
+              "object-cover object-top",
+              activeDragItem.category === ENTITY_CATEGORY.Spell &&
+                "scale-[1.35] origin-center"
+            )}
           />
           {/* Rank Badge for Units/Titans */}
           {activeDragItem.category !== ENTITY_CATEGORY.Spellcaster && (

@@ -14,7 +14,7 @@
 
 - **The Archive**: A searchable, filterable database of all Units, Spells, Titans, and Spellcasters.
 - **Smart Interlinking**: Dynamic, context-aware glossary that automatically hyperlinks game terminology (units, spells, mechanics, schools) within all entity descriptions.
-- **The Forge**: A logic-validating deck builder with modals for saving/editing, short link sharing (via Upstash Redis), and toast notifications.
+- **The Forge**: A logic-validating deck builder with a fluid, dynamically scaling CSS Grid layout supporting ultrawide monitors (1440p+), modals for saving/editing, short link sharing (via Upstash Redis), and toast notifications.
 - **Infusions Database**: A dedicated hub detailing elemental effects, cumulative build-up mechanics, and scalable damage tiers cross-referenced globally across all game entities.
 - **The Trinity (Team Builder)**: Build and manage teams of 3 decks with shared card pool validation and short link sharing.
 - **Patch History**: Real-time balance updates with visual badges (Buff/Nerf/Rework) and detailed before/after stat comparisons for every entity.

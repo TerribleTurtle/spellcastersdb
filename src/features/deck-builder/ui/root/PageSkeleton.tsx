@@ -5,7 +5,7 @@ import { BrowserSkeleton } from "@/features/deck-builder/browser/BrowserSkeleton
 
 export function PageSkeleton() {
   return (
-    <div className="flex flex-col h-full w-full bg-surface-main overflow-hidden xl:grid xl:grid-cols-[1fr_640px] xl:grid-rows-[auto_1fr]">
+    <div className="flex flex-col h-full w-full bg-surface-main overflow-hidden xl:grid xl:grid-cols-[1fr_minmax(480px,35%)] xl:grid-rows-[auto_1fr]">
       {/* === DESKTOP HEADER (xl:flex) === */}
       <div className="hidden xl:flex h-14 border-b border-border-default shrink-0 bg-surface-main xl:col-span-2 items-center px-4 justify-between gap-4">
         {/* Deck Name Input Skeleton */}

@@ -3,6 +3,7 @@
 import { GameImage } from "@/components/ui/GameImage";
 import { cn } from "@/lib/utils";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import { ENTITY_CATEGORY } from "@/services/config/constants";
 import { UnifiedEntity } from "@/types/api";
 import { Deck } from "@/types/deck";
 
@@ -47,7 +48,7 @@ export function DeckOverview({
       />
 
       {/* Units Container - Grid on Mobile, Row on Desktop */}
-      <div className="grid grid-cols-2 gap-2 md:flex md:gap-4">
+      <div className="flex gap-2 md:gap-4">
         {/* Units 0-3 */}
         {deck.slots.slice(0, 4).map((s) => (
           <VisualSlot
@@ -169,7 +170,11 @@ function VisualSlot({
           src={getCardImageUrl(item)}
           alt={item.name}
           fill
-          className="object-cover object-top"
+          className={cn(
+            "object-cover object-top",
+            item.category === ENTITY_CATEGORY.Spell &&
+              "scale-[1.35] origin-center"
+          )}
         />
 
         {/* Badges */}

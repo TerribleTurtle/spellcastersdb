@@ -33,7 +33,7 @@ export function PageShell({
     <div
       data-testid="page-shell"
       className={cn(
-        "py-8 md:py-12 px-4 md:px-8 mx-auto w-full",
+        "py-6 md:py-8 px-4 md:px-8 mx-auto w-full",
         maxWidthClass,
         className
       )}
@@ -50,12 +50,12 @@ export function PageShell({
           />
         </div>
       )}
-      <div className="mb-8 md:mb-12 text-center md:text-left">
-        <h1 className="text-4xl md:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-brand-primary to-brand-secondary mb-3 md:mb-4">
+      <div className="mb-5 md:mb-8 text-center md:text-left">
+        <h1 className="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-linear-to-r from-brand-primary to-brand-secondary mb-3 md:mb-4">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-lg text-muted-foreground max-w-2xl">{subtitle}</p>
+          <p className="text-lg text-text-muted max-w-2xl">{subtitle}</p>
         )}
       </div>
       {children}

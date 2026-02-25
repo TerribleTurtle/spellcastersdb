@@ -59,9 +59,9 @@ export function ActiveDeckTray({
       id={idSuffix ? `active-deck-${idSuffix}` : undefined}
       className="h-auto min-h-[100px] xl:min-h-0 bg-transparent border-t border-brand-primary/20 flex flex-col pb-0 xl:pb-0 xl:justify-center relative"
     >
-      <div className="grow flex items-center justify-between gap-0.5 px-2 py-1 xl:grid xl:grid-cols-6 xl:gap-2 xl:pl-4 xl:pr-4 xl:py-3 xl:items-center xl:content-center xl:grow-0">
-        {/* Spellcaster Area - Fixed Width on Desktop */}
-        <div className="relative flex items-center flex-1 min-w-[76px] max-w-[17%] xl:max-w-none xl:w-full justify-center">
+      <div className="grid grid-cols-6 gap-1 sm:gap-2 xl:gap-3 px-2 py-2 sm:px-3 sm:py-3 xl:px-6 xl:py-4 max-w-[700px] mx-auto w-full">
+        {/* Spellcaster Area */}
+        <div className="col-span-1">
           <SpellcasterSlot
             spellcaster={spellcaster}
             onSelect={(item, pos) => onSelect?.(item, pos)}
@@ -71,15 +71,12 @@ export function ActiveDeckTray({
           />
         </div>
 
-        {/* Separator */}
-        <div className="w-px h-24 bg-surface-hover mx-2 self-center hidden" />
-
-        {/* Unit Slots 1-4 - Equal Distribution */}
+        {/* Unit Slots 1-4 */}
         {slots.slice(0, 4).map((slot) => (
           <div
             key={slot.index}
             className={cn(
-              "flex-1 min-w-0 flex justify-center xl:col-span-1 xl:w-full transition-all duration-300",
+              "col-span-1 transition-all duration-300",
               isSwapMode && "scale-105 z-10"
             )}
           >
@@ -103,11 +100,8 @@ export function ActiveDeckTray({
           </div>
         ))}
 
-        {/* Separator */}
-        <div className="w-px h-24 bg-surface-hover mx-2 self-center hidden" />
-
-        {/* Titan Area - Fixed Width on Desktop */}
-        <div className="relative flex items-center flex-1 min-w-0 max-w-[17%] xl:max-w-none xl:w-full justify-center">
+        {/* Titan Area */}
+        <div className="col-span-1">
           <Slot
             slot={slots[4]}
             allSlots={slots}

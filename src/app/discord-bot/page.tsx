@@ -84,7 +84,7 @@ export default function DiscordBotPage() {
                   <span className="font-bold text-text-primary">
                     SpellcastersBot
                   </span>
-                  <span className="px-1.5 py-0.5 rounded text-[10px] bg-[#5865F2] text-text-primary font-medium">
+                  <span className="px-1.5 py-0.5 rounded text-[10px] bg-discord text-text-primary font-medium">
                     BOT
                   </span>
                 </div>
