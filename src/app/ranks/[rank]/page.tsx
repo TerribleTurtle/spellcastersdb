@@ -20,6 +20,17 @@ export async function generateMetadata({ params }: RankPageProps) {
   return {
     title: `Rank ${rank} Units List | SpellcastersDB`,
     description: `Complete list of Rank ${rank} units and spells.`,
+    openGraph: {
+      title: `Rank ${rank} Units List | SpellcastersDB`,
+      description: `Complete list of Rank ${rank} units and spells.`,
+      images: ["/og-default.png"],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Rank ${rank} Units List | SpellcastersDB`,
+      description: `Complete list of Rank ${rank} units and spells.`,
+      images: ["/og-default.png"],
+    },
   };
 }
 

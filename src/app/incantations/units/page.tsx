@@ -5,6 +5,17 @@ import { getUnits } from "@/services/api/api";
 export const metadata = {
   title: "The Archive | SpellcastersDB",
   description: "Comprehensive database of Units, Spells, and Buildings.",
+  openGraph: {
+    title: "The Archive | SpellcastersDB",
+    description: "Comprehensive database of Units, Spells, and Buildings.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Archive | SpellcastersDB",
+    description: "Comprehensive database of Units, Spells, and Buildings.",
+    images: ["/og-default.png"],
+  },
 };
 
 export default async function UnitsIndexPage() {

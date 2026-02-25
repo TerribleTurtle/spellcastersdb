@@ -16,6 +16,19 @@ export const metadata = {
     "Game Mechanics",
     "Deck Building",
   ],
+  openGraph: {
+    title: "Game Guide",
+    description:
+      "Learn the basics of Spellcasters Chronicles. Understand unit types, deck building, spellcaster system, and game mechanics.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Game Guide",
+    description:
+      "Learn the basics of Spellcasters Chronicles. Understand unit types, deck building, spellcaster system, and game mechanics.",
+    images: ["/og-default.png"],
+  },
 };
 
 export default function GuidePage() {

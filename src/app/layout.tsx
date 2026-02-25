@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-default.svg",
+        url: "/og-default.png",
         width: 1200,
         height: 630,
         alt: "SpellcastersDB - Community Hub",
@@ -88,6 +88,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "SpellcastersDB",
     description: "A community database for Spellcasters Chronicles.",
+    images: ["/og-default.png"],
     creator: "@TerribleTurtle",
   },
   robots: {

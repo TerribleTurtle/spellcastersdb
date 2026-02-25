@@ -89,6 +89,25 @@ describe("useTeamImport", () => {
       // Should use existing ID
       expect(baseProps.saveTeam).toHaveBeenCalledWith("existing-id", "Alpha");
     });
+
+    it("should generate new ID if existing team has falsy ID", () => {
+      const existingTeams: Team[] = [
+        {
+          id: "", // Falsy ID should trigger uuid fallback
+          name: "Gamma",
+          decks: [] as unknown as Team["decks"],
+        },
+      ];
+      const { result } = renderHook(() =>
+        useTeamImport({ ...baseProps, savedTeams: existingTeams })
+      );
+
+      act(() => {
+        result.current.performSave("Gamma");
+      });
+
+      expect(baseProps.saveTeam).toHaveBeenCalledWith("mocked-uuid", "Gamma");
+    });
   });
 
   describe("performSave (Viewing Import Mode)", () => {

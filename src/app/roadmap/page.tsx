@@ -9,6 +9,19 @@ export const metadata: Metadata = {
   title: "Roadmap",
   description:
     "View the development roadmap for SpellcastersDB. Vote on features and track bugs.",
+  openGraph: {
+    title: "Roadmap",
+    description:
+      "View the development roadmap for SpellcastersDB. Vote on features and track bugs.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Roadmap",
+    description:
+      "View the development roadmap for SpellcastersDB. Vote on features and track bugs.",
+    images: ["/og-default.png"],
+  },
 };
 
 // Revalidate every minute (60 seconds)

@@ -8,6 +8,19 @@ export const metadata = {
   title: "Discord Bot - SpellcastersDB",
   description:
     "Add the SpellcastersDB bot to your server. Search cards, build decks, and access game data directly quickly.",
+  openGraph: {
+    title: "Discord Bot - SpellcastersDB",
+    description:
+      "Add the SpellcastersDB bot to your server. Search cards, build decks, and access game data directly quickly.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Discord Bot - SpellcastersDB",
+    description:
+      "Add the SpellcastersDB bot to your server. Search cards, build decks, and access game data directly quickly.",
+    images: ["/og-default.png"],
+  },
 };
 
 export default function DiscordBotPage() {

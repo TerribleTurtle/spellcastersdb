@@ -26,6 +26,19 @@ export const metadata: Metadata = {
   title: "SpellcastersDB - The Community Hub",
   description:
     "A community database and deck builder for Spellcasters Chronicles.",
+  openGraph: {
+    title: "SpellcastersDB - The Community Hub",
+    description:
+      "A community database and deck builder for Spellcasters Chronicles.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SpellcastersDB - The Community Hub",
+    description:
+      "A community database and deck builder for Spellcasters Chronicles.",
+    images: ["/og-default.png"],
+  },
 };
 
 // Revalidate every hour

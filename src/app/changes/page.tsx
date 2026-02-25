@@ -7,6 +7,19 @@ export const metadata = {
   title: "Change Log",
   description:
     "Detailed history of balance changes, bug fixes, and content updates for Spellcasters Chronicles.",
+  openGraph: {
+    title: "Change Log",
+    description:
+      "Detailed history of balance changes, bug fixes, and content updates for Spellcasters Chronicles.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Change Log",
+    description:
+      "Detailed history of balance changes, bug fixes, and content updates for Spellcasters Chronicles.",
+    images: ["/og-default.png"],
+  },
 };
 
 export default async function ChangesPage() {

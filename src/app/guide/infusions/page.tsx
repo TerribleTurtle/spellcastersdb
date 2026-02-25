@@ -11,6 +11,19 @@ export const metadata = {
   title: "Infusions Database - SC Guide",
   description:
     "Explore all elemental infusions in Spellcasters Chronicles, including Fire, Lightning, Poison, and Ice effects.",
+  openGraph: {
+    title: "Infusions Database - SC Guide",
+    description:
+      "Explore all elemental infusions in Spellcasters Chronicles, including Fire, Lightning, Poison, and Ice effects.",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Infusions Database - SC Guide",
+    description:
+      "Explore all elemental infusions in Spellcasters Chronicles, including Fire, Lightning, Poison, and Ice effects.",
+    images: ["/og-default.png"],
+  },
 };
 
 const INFUSION_ICONS: Record<string, React.ElementType> = {

@@ -171,36 +171,58 @@ describe("createTeamSlice", () => {
       quickAddToTeam(1, MockUnit);
 
       const state = useDeckStore.getState();
-      // Should update teamDecks[1] AND currentDeck
       expect(state.teamDecks[1].slots[0].unit).toEqual(MockUnit);
+      // Ensures currentDeck is synchronized
       expect(state.currentDeck.slots[0].unit).toEqual(MockUnit);
     });
 
-    it("should work even if slot is not active (just updates teamDecks)", () => {
-      const { quickAddToTeam } = useDeckStore.getState();
-      // activeSlot is null
+    it("should return an error string if the deck is full", () => {
+      const { setActiveSlot, quickAddToTeam, setTeamSlot } =
+        useDeckStore.getState();
+      setActiveSlot(0);
 
-      quickAddToTeam(2, MockUnit);
+      // Fill all 4 slots
+      for (let i = 0; i < 4; i++) {
+        setTeamSlot(0, i as any, { ...MockUnit, entity_id: `u-${i}` });
+      }
 
-      const state = useDeckStore.getState();
-      expect(state.teamDecks[2].slots[0].unit).toEqual(MockUnit);
-      // currentDeck should be untouched (it was initial deck)
-      expect(state.currentDeck.slots[0].unit).toBeNull();
+      // Try adding a 5th unit
+      const error = quickAddToTeam(0, { ...MockUnit, entity_id: "u-5" });
+      expect(error).toBe("Deck Full!");
     });
   });
 
   describe("moveCardBetweenDecks", () => {
-    it("should move card from Deck 0 to Deck 1", () => {
+    it("should move a unit from one deck to another deck in the team", () => {
       const { setTeamSlot, moveCardBetweenDecks } = useDeckStore.getState();
-
-      // Setup: Deck 0 Slot 0 has unit
       setTeamSlot(0, 0, MockUnit);
 
-      moveCardBetweenDecks(0, 0, 1, 0);
+      // Map: deck 0, slot 0 -> deck 1, slot 0
+      const error = moveCardBetweenDecks(0, 0, 1, 0);
 
+      expect(error).toBeNull();
       const state = useDeckStore.getState();
       expect(state.teamDecks[0].slots[0].unit).toBeNull(); // Source cleared
       expect(state.teamDecks[1].slots[0].unit).toEqual(MockUnit); // Target populated
+    });
+
+    it("should return an error when trying to move a Titan into a Unit slot", () => {
+      const { setTeamSlot, moveCardBetweenDecks } = useDeckStore.getState();
+      const MockTitan = {
+        ...MockUnit,
+        category: "Titan",
+        entity_id: "t-1",
+      } as unknown as Unit;
+      setTeamSlot(0, 4, MockTitan);
+
+      // Move from deck 0, slot 4 (Titan slot) to deck 1, slot 0 (Unit slot)
+      const error = moveCardBetweenDecks(0, 4, 1, 0);
+
+      expect(error).toContain("Titans cannot go in this slot");
+      const state = useDeckStore.getState();
+      // Unchanged
+      expect(state.teamDecks[0].slots[4].unit).toEqual(MockTitan);
+      expect(state.teamDecks[1].slots[0].unit).toBeNull();
     });
   });
 
@@ -250,6 +272,37 @@ describe("createTeamSlice", () => {
       const state = useDeckStore.getState();
       expect(state.teamDecks[0].id).toBe("a");
       expect(state.teamDecks[1].id).toBe("b");
+      expect(state.teamDecks[2].id).toBe("c");
+    });
+
+    it("should inject up to 3 decks, but not pad if given fewer", () => {
+      const { loadTeamFromData } = useDeckStore.getState();
+      const d = [{ ...INITIAL_DECK }]; // Only 1 deck
+      const newIds = ["new-uuid-1", "new-uuid-2", "new-uuid-3"];
+
+      loadTeamFromData(d, newIds);
+
+      const state = useDeckStore.getState();
+      // The implementation slices up to 3, but does NOT pad with empty decks.
+      expect(state.teamDecks).toHaveLength(1);
+      expect(state.teamDecks[0].id).toBe("new-uuid-1");
+      expect(state.activeTeamId).toBeNull(); // Cleared because it's a new unsaved team
+    });
+
+    it("should inject exactly 3 decks even if provided array is longer", () => {
+      const { loadTeamFromData } = useDeckStore.getState();
+      const d = [
+        { ...INITIAL_DECK },
+        { ...INITIAL_DECK },
+        { ...INITIAL_DECK },
+        { ...INITIAL_DECK },
+      ]; // 4 decks
+      const newIds = ["new-uuid-1", "new-uuid-2", "new-uuid-3"];
+
+      loadTeamFromData(d, newIds);
+
+      const state = useDeckStore.getState();
+      expect(state.teamDecks).toHaveLength(3);
     });
   });
 
@@ -264,6 +317,29 @@ describe("createTeamSlice", () => {
       // importDeckToLibrary generates a new UUID internally, so we check by name and length
       expect(state.savedDecks.length).toBe(1);
       expect(state.savedDecks[0].name).toBe("Source (From Team)");
+    });
+
+    it("should import the targeted team deck into the saved library", () => {
+      const { setTeamSlot, exportTeamSlotToSolo } = useDeckStore.getState();
+
+      // Setup a deck
+      setTeamSlot(1, 0, MockUnit);
+      const stateBefore = useDeckStore.getState();
+      const sourceDeck = stateBefore.teamDecks[1];
+      sourceDeck.name = "Source (From Team)";
+
+      // Act: we want to export slot 1
+      exportTeamSlotToSolo(1, sourceDeck, "new-export-uuid");
+
+      const state = useDeckStore.getState();
+      // importDeckToLibrary generates a new UUID internally.
+      // Since `checkDeckNameAvailable` logic in persistence slice uses unique name generator,
+      // it might append something if it conflicts, but here we just check it was added
+      expect(state.savedDecks.length).toBe(1);
+      expect(state.savedDecks[0].name?.includes("Source (From Team)")).toBe(
+        true
+      );
+      expect(state.savedDecks[0].slots[0].unit).toEqual(MockUnit);
     });
   });
 
@@ -329,6 +405,28 @@ describe("createTeamSlice", () => {
 
       removeTeamSpellcaster(1);
       expect(useDeckStore.getState().teamDecks[1].spellcaster).toBeNull();
+    });
+
+    it("should swap spellcasters if moving to a deck that already has one", () => {
+      const { setTeamSpellcaster, moveSpellcasterBetweenDecks } =
+        useDeckStore.getState();
+
+      const SpellcasterA = MockSpellcaster;
+      const SpellcasterB = {
+        ...MockSpellcaster,
+        entity_id: "sc-2",
+        name: "Other SC",
+      };
+
+      setTeamSpellcaster(0, SpellcasterA);
+      setTeamSpellcaster(1, SpellcasterB);
+
+      moveSpellcasterBetweenDecks(0, 1);
+
+      const state = useDeckStore.getState();
+      // Implementation ACTUALLY swaps them
+      expect(state.teamDecks[0].spellcaster).toEqual(SpellcasterB);
+      expect(state.teamDecks[1].spellcaster).toEqual(SpellcasterA);
     });
   });
 });

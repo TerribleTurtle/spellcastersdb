@@ -70,6 +70,26 @@ describe("createPersistenceSlice", () => {
     });
   });
 
+  describe("saveAsCopy", () => {
+    it("should save current deck as a new copy with a unique name", () => {
+      const { saveDeck, saveAsCopy, setDeckName } = useDeckStore.getState();
+      setDeckName("Base Deck");
+      saveDeck();
+      const originalId = useDeckStore.getState().currentDeck.id!;
+
+      saveAsCopy("Base Deck");
+
+      const state = useDeckStore.getState();
+      expect(state.savedDecks).toHaveLength(2);
+
+      const newDeck = state.savedDecks.find((d) => d.id !== originalId);
+      expect(newDeck).toBeDefined();
+      // Should append (Copy) or similar number based on getUniqueName
+      expect(newDeck?.name).not.toBe("Base Deck");
+      expect(state.currentDeck.id).toBe(newDeck?.id);
+    });
+  });
+
   describe("duplicateDeck", () => {
     it("should duplicate a saved deck", () => {
       const { saveDeck, duplicateDeck, setDeckName } = useDeckStore.getState();
@@ -90,6 +110,49 @@ describe("createPersistenceSlice", () => {
     });
   });
 
+  describe("renameSavedDeck", () => {
+    it("should update a deck's name without enforcing uniqueness", () => {
+      const { saveDeck, setDeckName, renameSavedDeck } =
+        useDeckStore.getState();
+      setDeckName("Old Name");
+      saveDeck();
+      const id = useDeckStore.getState().currentDeck.id!;
+
+      renameSavedDeck(id, "New Name");
+
+      const state = useDeckStore.getState();
+      expect(state.savedDecks[0].name).toBe("New Name");
+    });
+  });
+
+  describe("deleteDecks", () => {
+    it("should batch delete decks and reset currentDeck if included", () => {
+      const { saveDeck, setDeckName, deleteDecks } = useDeckStore.getState();
+
+      setDeckName("D1");
+      saveDeck();
+      const id1 = useDeckStore.getState().currentDeck.id!;
+
+      // Save second as a new deck
+      useDeckStore.setState({
+        currentDeck: { ...cloneDeck(INITIAL_DECK), id: undefined, name: "D2" },
+      });
+      saveDeck();
+      const id2 = useDeckStore.getState().currentDeck.id!;
+
+      expect(useDeckStore.getState().savedDecks).toHaveLength(2);
+
+      // Delete id2 (which happens to be currentDeck right now)
+      deleteDecks([id2]);
+
+      const state = useDeckStore.getState();
+      expect(state.savedDecks).toHaveLength(1);
+      expect(state.savedDecks[0].id).toBe(id1);
+      // currentDeck was deleted, should be reset
+      expect(state.currentDeck.id).toBeUndefined();
+    });
+  });
+
   describe("importDecks", () => {
     it("should import decks with new IDs", () => {
       const { importDecks } = useDeckStore.getState();
@@ -105,6 +168,30 @@ describe("createPersistenceSlice", () => {
       expect(state.savedDecks[0].id).not.toBe("old1"); // UUID regenerated
       expect(state.savedDecks[1].id).not.toBe("old2");
       expect(state.savedDecks[0].name).toBe("Import 1");
+    });
+  });
+
+  describe("importTeams", () => {
+    it("should import teams with new IDs", () => {
+      const { importTeams } = useDeckStore.getState();
+      const toImport: any[] = [{ name: "Team 1", decks: [], id: "old-t1" }];
+
+      importTeams(toImport);
+
+      const state = useDeckStore.getState();
+      expect(state.savedTeams).toHaveLength(1);
+      expect(state.savedTeams[0].id).toBeDefined();
+      expect(state.savedTeams[0].id).not.toBe("old-t1");
+      expect(state.savedTeams[0].name).toBe("Team 1");
+    });
+  });
+
+  describe("clearSavedDecks", () => {
+    it("should wipe savedDecks array", () => {
+      const { setSavedDecks, clearSavedDecks } = useDeckStore.getState();
+      setSavedDecks([cloneDeck(INITIAL_DECK)]);
+      clearSavedDecks();
+      expect(useDeckStore.getState().savedDecks).toHaveLength(0);
     });
   });
 
@@ -136,6 +223,61 @@ describe("createPersistenceSlice", () => {
 
       // Check deep data capability
       expect(state.teamDecks[0].slots[0].unit).toEqual(MockUnit);
+    });
+  });
+
+  describe("upsertSavedTeam", () => {
+    it("should insert a team if not present, and update if present", () => {
+      const { upsertSavedTeam } = useDeckStore.getState();
+      const team = { id: "t-1", name: "Alpha", decks: [] };
+
+      upsertSavedTeam(team as any);
+      expect(useDeckStore.getState().savedTeams).toHaveLength(1);
+
+      upsertSavedTeam({ ...team, name: "Beta" } as any);
+      expect(useDeckStore.getState().savedTeams).toHaveLength(1);
+      expect(useDeckStore.getState().savedTeams[0].name).toBe("Beta");
+    });
+  });
+
+  describe("Team Deletion Actions", () => {
+    it("should delete Team and trigger cascade if active", () => {
+      const { upsertSavedTeam, deleteTeam } = useDeckStore.getState();
+      upsertSavedTeam({ id: "t-1", name: "Alpha", decks: [] } as any);
+
+      // Make active
+      useDeckStore.setState({ activeTeamId: "t-1" });
+
+      deleteTeam("t-1");
+
+      const state = useDeckStore.getState();
+      expect(state.savedTeams).toHaveLength(0);
+      // Cascaded
+      expect(state.activeTeamId).toBeNull();
+    });
+
+    it("should batch deleteTeams and cascade if active included", () => {
+      const { upsertSavedTeam, deleteTeams } = useDeckStore.getState();
+      upsertSavedTeam({ id: "t-1", name: "Alpha", decks: [] } as any);
+      upsertSavedTeam({ id: "t-2", name: "Beta", decks: [] } as any);
+
+      useDeckStore.setState({ activeTeamId: "t-2" });
+
+      deleteTeams(["t-1", "t-2"]);
+
+      const state = useDeckStore.getState();
+      expect(state.savedTeams).toHaveLength(0);
+      // Cascaded
+      expect(state.activeTeamId).toBeNull();
+    });
+  });
+
+  describe("clearSavedTeams", () => {
+    it("should wipe savedTeams array", () => {
+      const { upsertSavedTeam, clearSavedTeams } = useDeckStore.getState();
+      upsertSavedTeam({ id: "t-1", name: "Alpha", decks: [] } as any);
+      clearSavedTeams();
+      expect(useDeckStore.getState().savedTeams).toHaveLength(0);
     });
   });
 

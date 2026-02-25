@@ -1,9 +1,24 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { INITIAL_DECK } from "@/services/api/persistence";
-import { UnifiedEntity } from "@/types/api";
+import { UnifiedEntity, Unit } from "@/types/api";
+import { EntityCategory } from "@/types/enums";
 
 import { useDeckStore } from "../index";
+
+const MockUnit: Unit = {
+  entity_id: "u1",
+  name: "Test Unit",
+  category: EntityCategory.Creature,
+  rank: "I",
+  description: "desc",
+  magic_school: "Wild",
+  tags: [],
+  health: 10,
+  damage: 10,
+  movement_speed: 10,
+  range: 1,
+};
 
 describe("createUISlice", () => {
   beforeEach(() => {
@@ -38,6 +53,19 @@ describe("createUISlice", () => {
         classes: [],
       },
       hasSeenDeckBuilderWelcome: false,
+    });
+  });
+
+  describe("setIsReadOnly", () => {
+    it("should toggle isReadOnly without affecting mode", () => {
+      const store = useDeckStore.getState();
+      expect(store.isReadOnly).toBe(false);
+
+      store.setIsReadOnly(true);
+
+      const state = useDeckStore.getState();
+      expect(state.isReadOnly).toBe(true);
+      expect(state.mode).toBe("SOLO"); // Remains unchanged
     });
   });
 
@@ -110,10 +138,23 @@ describe("createUISlice", () => {
       store.setViewingDeck(mockDeck, "d1");
 
       const state = useDeckStore.getState();
-      expect(state.viewingDeckData).toBe(mockDeck);
+      expect(state.viewingDeckData).toEqual(mockDeck);
       expect(state.viewingDeckId).toBe("d1");
       expect(state.mode).toBe("SOLO");
       expect(state.isReadOnly).toBe(true);
+    });
+
+    it("should clear viewing deck properties on null without reverting mode automatically", () => {
+      const store = useDeckStore.getState();
+      store.setViewingDeck({ ...INITIAL_DECK }, "d1");
+
+      store.setViewingDeck(null, null);
+
+      const state = useDeckStore.getState();
+      expect(state.viewingDeckData).toBeNull();
+      expect(state.viewingDeckId).toBeNull();
+      // mode isn't explicitly reverted to a default, it stays what it was
+      expect(state.mode).toBe("SOLO");
     });
   });
 
@@ -178,6 +219,15 @@ describe("createUISlice", () => {
       expect(state.currentDeck.name).toBe("Current");
       expect(state.pendingImport).toBeNull();
     });
+
+    it("should no-op if pendingImport is null", () => {
+      const store = useDeckStore.getState();
+      store.resolvePendingImport("SAVE_AND_OVERWRITE");
+
+      const state = useDeckStore.getState();
+      // Nothing should have crashed, state is unchanged
+      expect(state.pendingImport).toBeNull();
+    });
   });
 
   describe("Inspector State", () => {
@@ -205,7 +255,43 @@ describe("createUISlice", () => {
     });
   });
 
+  describe("Drag State & Swaps", () => {
+    it("should handle activeDragItem set and clear cycle", () => {
+      const store = useDeckStore.getState();
+      const item = { type: "UNIT", data: MockUnit } as any;
+
+      store.setActiveDragItem(item);
+      expect(useDeckStore.getState().activeDragItem).toEqual(item);
+
+      store.setActiveDragItem(null);
+      expect(useDeckStore.getState().activeDragItem).toBeNull();
+    });
+
+    it("should handle pendingSwapCard set and clear cycle", () => {
+      const store = useDeckStore.getState();
+
+      store.setPendingSwapCard(MockUnit);
+      expect(useDeckStore.getState().pendingSwapCard).toEqual(MockUnit);
+
+      store.setPendingSwapCard(null);
+      expect(useDeckStore.getState().pendingSwapCard).toBeNull();
+    });
+  });
+
   describe("Browser Filters", () => {
+    it("should toggle browser filters: add then remove cycle", () => {
+      const store = useDeckStore.getState();
+
+      // Add
+      store.toggleBrowserFilter("schools", "Wild");
+      expect(useDeckStore.getState().browserFilters.schools).toContain("Wild");
+
+      // Remove
+      useDeckStore.getState().toggleBrowserFilter("schools", "Wild");
+      expect(useDeckStore.getState().browserFilters.schools).not.toContain(
+        "Wild"
+      );
+    });
     it("should toggle browser filters", () => {
       const store = useDeckStore.getState();
 
@@ -261,6 +347,16 @@ describe("createUISlice", () => {
       const state = useDeckStore.getState();
       expect(state.commandCenterOpen).toBe(false);
       expect(state.isImporting).toBe(false);
+    });
+  });
+
+  describe("Welcome Modal", () => {
+    it("should persist having seen the welcome modal", () => {
+      const store = useDeckStore.getState();
+      expect(store.hasSeenDeckBuilderWelcome).toBe(false);
+
+      store.setHasSeenDeckBuilderWelcome(true);
+      expect(useDeckStore.getState().hasSeenDeckBuilderWelcome).toBe(true);
     });
   });
 });
