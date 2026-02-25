@@ -1,4 +1,3 @@
- 
 /**
  * Phase 3 — Validation & Stats: Structural Chaos
  *

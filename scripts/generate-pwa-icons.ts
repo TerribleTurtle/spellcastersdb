@@ -22,6 +22,12 @@ async function generateIcons() {
     .png()
     .toFile(join(ICONS_DIR, "icon-192.png"));
 
+  console.log("Generating 180x180 Apple Touch Icon...");
+  await sharp(SOURCE_SVG)
+    .resize(180, 180)
+    .png()
+    .toFile(join(ICONS_DIR, "apple-touch-icon.png"));
+
   console.log("Generating 512x512 icon...");
   await sharp(SOURCE_SVG)
     .resize(512, 512)
