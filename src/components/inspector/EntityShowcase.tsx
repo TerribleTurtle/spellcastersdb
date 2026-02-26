@@ -8,6 +8,7 @@ import { TextWithLinks } from "@/components/common/TextWithLinks";
 import { EntityMechanics } from "@/components/entity-card/EntityMechanics";
 import { EntityStats } from "@/components/entity-card/EntityStats";
 import { SpellcasterAbilities } from "@/components/entity-card/SpellcasterAbilities";
+import { WeakPointList } from "@/components/entity-card/mechanics/WeakPointList";
 import { EntityDisplayItem } from "@/components/entity-card/types";
 import { Breadcrumbs } from "@/components/inspector/Breadcrumbs";
 import { PatchHistorySection } from "@/components/inspector/PatchHistorySection";
@@ -272,6 +273,23 @@ export function EntityShowcase({
               <EntityMechanics item={item} variant="detailed" />
             </section>
           )}
+
+          {/* Weak Points Section (Titans) */}
+          {"weak_points" in item &&
+            (item as Titan).weak_points &&
+            ((item as Titan).weak_points?.length ?? 0) > 0 && (
+              <section className="bg-surface-card border border-border-default rounded-xl p-4 sm:p-5 animate-in fade-in duration-500 delay-150">
+                <h3 className="text-xs font-bold text-text-dimmed uppercase tracking-widest mb-3">
+                  Weak Points
+                </h3>
+                <div className="space-y-2">
+                  <WeakPointList
+                    weakPoints={(item as Titan).weak_points}
+                    showDescriptions
+                  />
+                </div>
+              </section>
+            )}
 
           {/* Abilities Section (Spellcasters) */}
           {isSpellcaster && (
