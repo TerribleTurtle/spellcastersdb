@@ -88,6 +88,7 @@ describe("Asset Cache (Server Implementation)", () => {
   it("should deduplicate concurrent requests", async () => {
     // Mock fetch to simulate latency so both calls hit the dedup logic
     (global.fetch as Mock).mockImplementation(async () => {
+      // DELIBERATE TIMEOUT: Simulating network latency to ensure both concurrent requests hit the in-flight dedup logic
       await new Promise((resolve) => setTimeout(resolve, 10));
       return {
         ok: true,

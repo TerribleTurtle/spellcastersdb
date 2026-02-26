@@ -171,6 +171,7 @@ describe("🔥 api.ts — Adversarial Evil Tests", () => {
         async () => {
           fetchCount++;
           // simulate network latency
+          // DELIBERATE TIMEOUT: Simulating real network latency to test race-condition stability
           await new Promise((r) => setTimeout(r, 10));
           return POPULATED_DATA;
         }
@@ -553,6 +554,7 @@ describe("🔥 api.ts — Adversarial Evil Tests", () => {
       vi.stubEnv("NODE_ENV", "production");
       vi.spyOn(RemoteDataSource.prototype, "fetch").mockImplementation(
         async () => {
+          // DELIBERATE TIMEOUT: Simulating real network latency for concurrent operation tests
           await new Promise((r) => setTimeout(r, 5));
           return POPULATED_DATA;
         }

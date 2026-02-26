@@ -18,6 +18,9 @@ export function useDeckPersistence({
   onClear,
   onImportSolo,
 }: UseDeckPersistenceProps) {
+  const builderState = useDeckBuilder() as ReturnType<typeof useDeckBuilder> & {
+    teamHasChanges?: boolean;
+  };
   const {
     // Solo State & Actions
     currentDeck: deck,
@@ -35,10 +38,13 @@ export function useDeckPersistence({
 
     // UI Slice
     mode,
-  } = useDeckBuilder();
+  } = builderState;
+
+  // Note: teamHasChanges is currently a placeholder in the real app, but
+  // we access it here so it can be overridden in tests.
+  const teamHasChanges = builderState.teamHasChanges ?? true;
 
   const isTeamMode = mode === "TEAM";
-  const teamHasChanges = true; // Placeholder as per original
 
   // --- Local State ---
   const [savedListTab, setSavedListTab] = useState<SavedListTab>("TEAMS");

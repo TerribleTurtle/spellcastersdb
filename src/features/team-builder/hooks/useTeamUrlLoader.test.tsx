@@ -143,12 +143,10 @@ describe("useTeamUrlLoader", () => {
 
       renderHook(() => useTeamUrlLoader(baseProps));
 
-      // Flush microtask queue to resolve the dynamic import promise
-      await act(async () => {
-        await new Promise((r) => setTimeout(r, 50));
+      // Wait for the dynamic import and effect to resolve
+      await waitFor(() => {
+        expect(mockDecodeTeam).toHaveBeenCalledWith("valid-hash");
       });
-
-      expect(mockDecodeTeam).toHaveBeenCalledWith("valid-hash");
       expect(mockReconstructTeam).toHaveBeenCalled();
     });
   });
@@ -252,9 +250,9 @@ describe("useTeamUrlLoader", () => {
       rerender();
 
       // Should NOT call decodeTeam again — the ref prevents it
-      // Give it a tick to ensure the effect ran
+      // Yield to the microtask queue to ensure the effect has had a chance to run
       await act(async () => {
-        await new Promise((r) => setTimeout(r, 10));
+        await Promise.resolve();
       });
 
       expect(mockDecodeTeam).not.toHaveBeenCalled();

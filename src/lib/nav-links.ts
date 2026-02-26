@@ -48,6 +48,15 @@ export const isActivePath = (
   path: string,
   pathname: string | null
 ): boolean => {
-  if (!pathname) return false;
-  return pathname === path || (path !== "/" && pathname.startsWith(path));
+  if (!pathname || !path) return false;
+  if (pathname === path) return true;
+  if (path === "/") return false;
+  // Ensure the match is at a path boundary (e.g. /deck-builder/ or /deck-builder?)
+  // and not a prefix collision (e.g. /deck-builder-pro)
+  return (
+    pathname.startsWith(path) &&
+    (pathname[path.length] === "/" ||
+      pathname[path.length] === "?" ||
+      pathname[path.length] === "#")
+  );
 };

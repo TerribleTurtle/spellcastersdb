@@ -162,14 +162,7 @@ describe("SpellcasterSlot Performance", () => {
     expect(gameImageRenderSpy).toHaveBeenCalledTimes(1);
 
     // Re-render with a new inline function
-    rerender(
-      <SpellcasterSlot
-        {...initialProps}
-        onSelect={() => {
-          console.log("new func");
-        }}
-      />
-    );
+    rerender(<SpellcasterSlot {...initialProps} onSelect={() => {}} />);
 
     // If it's memoized correctly, GameImage won't render again
     expect(gameImageRenderSpy).toHaveBeenCalledTimes(1);

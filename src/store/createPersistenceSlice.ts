@@ -24,7 +24,7 @@ export const createPersistenceSlice: StateCreator<
       let finalName = nameInput?.trim();
       if (!finalName) {
         finalName =
-          state.currentDeck.name ||
+          state.currentDeck.name?.trim() ||
           (state.currentDeck.spellcaster?.name
             ? `${state.currentDeck.spellcaster.name} Deck`
             : "Untitled Deck");

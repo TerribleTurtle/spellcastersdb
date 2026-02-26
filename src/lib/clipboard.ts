@@ -31,8 +31,8 @@ export async function copyToClipboard(text: string): Promise<boolean> {
   }
 
   // 2. Fallback: execCommand('copy') via textarea
+  const textArea = document.createElement("textarea");
   try {
-    const textArea = document.createElement("textarea");
     textArea.value = text;
 
     // Ensure it's not visible but part of DOM
@@ -44,12 +44,14 @@ export async function copyToClipboard(text: string): Promise<boolean> {
     textArea.focus();
     textArea.select();
 
-    const successful = document.execCommand("copy");
-    document.body.removeChild(textArea);
-
-    return successful;
+    return document.execCommand("copy");
   } catch (err) {
     monitoring.captureException(err, { operation: "clipboardFallback" });
     return false;
+  } finally {
+    // Always clean up the textarea, even if execCommand throws
+    if (textArea.parentNode) {
+      textArea.parentNode.removeChild(textArea);
+    }
   }
 }
