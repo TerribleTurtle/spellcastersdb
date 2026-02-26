@@ -1,7 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useRef } from "react";
 
 import { useDraggable } from "@dnd-kit/core";
-import { HelpCircle, Plus, Shield, Swords, Wand2 } from "lucide-react";
+import {
+  Check,
+  HelpCircle,
+  Plus,
+  Shield,
+  Sparkles,
+  Swords,
+  Wand2,
+  X,
+} from "lucide-react";
 
 import { RankBadge } from "@/components/ui/rank-badge";
 import {
@@ -15,9 +24,14 @@ import {
   getCardAltText,
   getCardImageUrl,
 } from "@/services/assets/asset-helpers";
+import {
+  SHOW_VERSION_BADGES_DEV,
+  isNewEntity,
+  isUpdatedToEA,
+} from "@/services/config/entity-version-utils";
 import { CLASS_STYLES } from "@/services/config/rank-class-styles";
 import { DECK_THEMES, DeckThemeIndex } from "@/services/config/theme-constants";
-import { Spellcaster, Unit } from "@/types/api";
+import { Spellcaster, StatChangeEntry, Unit } from "@/types/api";
 import { BrowserItem } from "@/types/browser";
 import { DragData } from "@/types/dnd";
 
@@ -44,6 +58,14 @@ export const DraggableCard = React.memo(function DraggableCard({
   const rank = !isSpellcaster && "rank" in item ? (item as Unit).rank : null;
   const isTitan = !isSpellcaster && item.category === "Titan";
   const spellcasterClass = isSpellcaster ? (item as Spellcaster).class : null;
+
+  // Version badge state
+  const statChanges =
+    "stat_changes" in item
+      ? (item as { stat_changes?: StatChangeEntry[] }).stat_changes
+      : undefined;
+  const isNew = isNewEntity(id);
+  const isVerified = isUpdatedToEA(id, statChanges);
 
   const draggableData = useMemo<DragData>(
     () => ({
@@ -189,9 +211,8 @@ export const DraggableCard = React.memo(function DraggableCard({
             <TooltipTrigger asChild>
               <div
                 className={cn(
-                  "absolute bottom-[clamp(30px,2.5vw,44px)] left-1 flex items-center justify-center w-6 h-6 rounded-full border-2 shadow-sm transition-colors cursor-help z-20 pointer-events-auto scale-100 lg:scale-125 origin-bottom-left",
-                  // Apply colors from config manually or use inline styles if needed, but here we can map
-                  // Apply colors from config manually or use inline styles if needed, but here we can map
+                  "absolute top-1 right-1 flex items-center justify-center w-6 h-6 rounded-full border-2 shadow-sm transition-colors cursor-help z-20 pointer-events-auto scale-100 lg:scale-125 origin-top-right",
+                  // Apply colors from config
                   spellcasterClass && CLASS_STYLES[spellcasterClass]
                     ? cn(
                         CLASS_STYLES[spellcasterClass].bg,
@@ -224,6 +245,63 @@ export const DraggableCard = React.memo(function DraggableCard({
               <p>{spellcasterClass}</p>
             </TooltipContent>
           </Tooltip>
+        )}
+
+        {/* Version Badges — Bottom Left */}
+        {SHOW_VERSION_BADGES_DEV && (
+          <div className="absolute bottom-[clamp(30px,2.5vw,44px)] left-1 flex flex-col items-start gap-0.5 z-20 pointer-events-auto scale-90 lg:scale-100 origin-bottom-left">
+            {/* NEW Badge */}
+            {isNew && (
+              <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-linear-to-r from-fuchsia-600/95 to-violet-600/95 border border-fuchsia-400/50 shadow-[0_0_12px_rgba(217,70,239,0.4)] backdrop-blur-sm">
+                <Sparkles className="w-[clamp(10px,0.7vw,14px)] h-[clamp(10px,0.7vw,14px)] text-fuchsia-100" />
+                <span className="text-[clamp(8px,0.6vw,11px)] font-black uppercase tracking-widest text-white leading-none">
+                  New
+                </span>
+              </div>
+            )}
+
+            {/* EA Verification Badge */}
+            {!isNew && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div
+                    className={cn(
+                      "flex items-center justify-center w-[clamp(16px,1.2vw,22px)] h-[clamp(16px,1.2vw,22px)] rounded-full border shadow-sm backdrop-blur-sm cursor-help",
+                      isVerified
+                        ? "bg-status-success/20 border-status-success/50 text-status-success"
+                        : "bg-status-danger/20 border-status-danger/50 text-status-danger"
+                    )}
+                    role="presentation"
+                    onClick={(e) => e.stopPropagation()}
+                    onPointerDown={(e) => e.stopPropagation()}
+                  >
+                    {isVerified ? (
+                      <Check
+                        className="w-[clamp(10px,0.8vw,14px)] h-[clamp(10px,0.8vw,14px)]"
+                        strokeWidth={3}
+                      />
+                    ) : (
+                      <X
+                        className="w-[clamp(10px,0.8vw,14px)] h-[clamp(10px,0.8vw,14px)]"
+                        strokeWidth={3}
+                      />
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="bottom"
+                  className={cn(
+                    "z-50 font-bold uppercase tracking-wider text-xs border",
+                    isVerified
+                      ? "bg-surface-overlay-heavy border-status-success/30 text-status-success"
+                      : "bg-surface-overlay-heavy border-status-danger/30 text-status-danger"
+                  )}
+                >
+                  <p>{isVerified ? "Updated to EA" : "Not updated to EA"}</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </div>
         )}
 
         {/* Deck Usage Badges (Team Mode) */}

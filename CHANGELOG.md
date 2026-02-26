@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.31] - 2026-02-26
+
+### Added
+- **EA Version Badges**: Cards now display contextual badges indicating data freshness:
+  - **NEW** badge (fuchsia/violet gradient) on 7 newly-added EA entities (Rhino Rider, Rocket Soldier Factory, Siren, Holy Arrow, Ice Ray, Metamorphosis, Poison Breath).
+  - **EA Verified ✓ / Pre-EA ✗** badge on all other entities, based on whether their `stat_changes` meet the `VERIFIED_SINCE_VERSION` threshold.
+  - Badges appear on cards in the Deck Builder browser, the Inspector panel, and individual entity detail pages (`/spellcasters/[id]`, `/incantations/units/[id]`, etc.).
+- **`entity-version-utils.ts`**: New centralized config file with `SHOW_VERSION_BADGES_DEV`, `VERIFIED_SINCE_VERSION`, and `NEW_ENTITY_IDS` for easy maintenance.
+
+### Changed
+- **Spellcaster Class Icon**: Moved from bottom-left to top-right on `DraggableCard` to match rank badge placement.
+
 ## [1.0.30] - 2026-02-26
 
 ### Added
