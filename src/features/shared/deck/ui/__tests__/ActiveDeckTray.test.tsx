@@ -28,11 +28,13 @@ vi.mock("@dnd-kit/core", () => ({
   }),
 }));
 
-const mockEmptySlots = Array(5).fill({
-  index: 0,
-  unit: null,
-  allowedTypes: [],
-});
+const mockEmptySlots = Array(5)
+  .fill(null)
+  .map((_, i) => ({
+    index: i,
+    unit: null,
+    allowedTypes: [],
+  }));
 
 describe("ActiveDeckTray Performance", () => {
   it("memoizes rendering and does not re-render on referentially new but identical arrays/functions", () => {

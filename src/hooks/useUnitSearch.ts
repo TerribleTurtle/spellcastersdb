@@ -2,6 +2,7 @@ import { useMemo } from "react";
 
 import Fuse from "fuse.js";
 
+import type { SortField, SortOrder } from "@/components/database/FilterSidebar";
 import { useDebounce } from "@/hooks/useDebounce";
 import {
   CATEGORY_PRIORITY,
@@ -20,7 +21,9 @@ interface FilterState {
 export function useUnitSearch(
   units: UnifiedEntity[],
   searchQuery: string,
-  filters: FilterState
+  filters: FilterState,
+  sortBy?: SortField,
+  sortOrder?: SortOrder
 ) {
   // 1. Fuse Instance
   const fuse = useMemo(() => {
@@ -81,11 +84,47 @@ export function useUnitSearch(
       return true;
     });
 
-    // Step C: Sort (Only if filters are active and no search query)
-    // User Request: "ranks should be sorted Creatures > spells > buidings"
-    // "Magic Schools should be Creature > Spells > buildings"
-    // Condition: Only apply when School or Rank filters are active to preserve "All" view.
-    if (
+    // Step C: User-driven sort (takes priority when sortBy is set)
+    if (sortBy) {
+      const dir = sortOrder === "desc" ? -1 : 1;
+      result.sort((a, b) => {
+        const attrA = getSearchableAttributes(a);
+        const attrB = getSearchableAttributes(b);
+
+        let cmp = 0;
+        switch (sortBy) {
+          case "name":
+            cmp = (a.name || "").localeCompare(b.name || "");
+            break;
+          case "cost":
+            cmp =
+              ((a as { population?: number }).population ?? 0) -
+              ((b as { population?: number }).population ?? 0);
+            break;
+          case "damage":
+            cmp =
+              ((a as { damage?: number }).damage ?? 0) -
+              ((b as { damage?: number }).damage ?? 0);
+            break;
+          case "health":
+            cmp =
+              ((a as { health?: number }).health ?? 0) -
+              ((b as { health?: number }).health ?? 0);
+            break;
+          case "rank": {
+            const rankA = RANK_PRIORITY[attrA.rank] || 99;
+            const rankB = RANK_PRIORITY[attrB.rank] || 99;
+            cmp = rankA - rankB;
+            break;
+          }
+        }
+
+        // Tie-break alphabetically
+        if (cmp === 0) cmp = (a.name || "").localeCompare(b.name || "");
+        return cmp * dir;
+      });
+    } else if (
+      // Step C (fallback): Priority sort when filters are active and no search
       debouncedQuery.trim().length === 0 &&
       (filters.schools.length > 0 || filters.ranks.length > 0)
     ) {
@@ -93,24 +132,20 @@ export function useUnitSearch(
         const attrA = getSearchableAttributes(a);
         const attrB = getSearchableAttributes(b);
 
-        // 1. Primary Sort: Category (Creature > Spell > Building)
         const catA = CATEGORY_PRIORITY[attrA.category] || 99;
         const catB = CATEGORY_PRIORITY[attrB.category] || 99;
         if (catA !== catB) return catA - catB;
 
-        // 2. Secondary Sort: Rank (I > II > III > IV)
-        // Note: For School view, this sorts by Rank within Category
         const rankA = RANK_PRIORITY[attrA.rank] || 99;
         const rankB = RANK_PRIORITY[attrB.rank] || 99;
         if (rankA !== rankB) return rankA - rankB;
 
-        // 3. Tertiary Sort: Alphabetical
         return (a.name || "").localeCompare(b.name || "");
       });
     }
 
     return result;
-  }, [units, debouncedQuery, filters, fuse]);
+  }, [units, debouncedQuery, filters, fuse, sortBy, sortOrder]);
 
   return filteredUnits;
 }

@@ -3,6 +3,7 @@ import "@testing-library/react";
 import { vi } from "vitest";
 
 // Extends Vitest expectations
+process.env.IP_HASH_SALT = "test-salt";
 
 // Polyfill window.matchMedia
 if (typeof window !== "undefined") {

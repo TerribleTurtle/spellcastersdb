@@ -359,4 +359,57 @@ describe("createUISlice", () => {
       expect(useDeckStore.getState().hasSeenDeckBuilderWelcome).toBe(true);
     });
   });
+
+  describe("Remaining Setters", () => {
+    it("should setIsImporting", () => {
+      const store = useDeckStore.getState();
+      expect(store.isImporting).toBe(false);
+
+      store.setIsImporting(true);
+      expect(useDeckStore.getState().isImporting).toBe(true);
+    });
+
+    it("should setHoveredItem and setIsInspectorHovered", () => {
+      const store = useDeckStore.getState();
+      const mockItem = { entity_id: "h1" } as unknown as UnifiedEntity;
+
+      expect(store.hoveredItem).toBeNull();
+      expect(store.isInspectorHovered).toBe(false);
+
+      store.setHoveredItem(mockItem);
+      store.setIsInspectorHovered(true);
+
+      expect(useDeckStore.getState().hoveredItem).toEqual(mockItem);
+      expect(useDeckStore.getState().isInspectorHovered).toBe(true);
+    });
+
+    it("should setBrowserFilters explicitly", () => {
+      const store = useDeckStore.getState();
+      const newFilters = {
+        schools: ["Life"],
+        ranks: ["II"],
+        categories: ["Spell"],
+        classes: ["Mage"],
+      };
+
+      store.setBrowserFilters(newFilters);
+      expect(useDeckStore.getState().browserFilters).toEqual(newFilters);
+    });
+
+    it("should setViewSummary", () => {
+      const store = useDeckStore.getState();
+      expect(store.viewSummary).toBe(false);
+
+      store.setViewSummary(true);
+      expect(useDeckStore.getState().viewSummary).toBe(true);
+    });
+
+    it("should setPendingSwapCard", () => {
+      const store = useDeckStore.getState();
+      const mockItem = { entity_id: "u2" } as unknown as UnifiedEntity;
+
+      store.setPendingSwapCard(mockItem);
+      expect(useDeckStore.getState().pendingSwapCard).toEqual(mockItem);
+    });
+  });
 });

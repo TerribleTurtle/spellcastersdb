@@ -87,12 +87,12 @@ export const TeamFactory = {
   ): { teamDecks: Team["decks"]; teamName: string } {
     const processedDecks = decks.slice(0, TEAM_LIMIT).map((deck, i) => ({
       ...cloneDeck(deck),
-      id: newIds[i],
+      id: newIds[i] || uuidv4(), // Fallback if lengths mismatch
     })) as Team["decks"];
 
     return {
       teamDecks: processedDecks,
-      teamName: `${baseName} (Copy)`,
+      teamName: `${baseName || "Untitled Team"} (Copy)`,
     };
   },
 };

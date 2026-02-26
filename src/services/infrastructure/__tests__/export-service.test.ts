@@ -52,11 +52,11 @@ describe("export-service", () => {
   describe("downloadTeamJson", () => {
     const mockDecks: Team["decks"] = [INITIAL_DECK, INITIAL_DECK, INITIAL_DECK];
 
-    it("should sanitize the filename to lowercase with hyphens instead of spaces", () => {
+    it("should sanitize the filename to lowercase with hyphens instead of spaces and special chars", () => {
       downloadTeamJson(mockDecks, "My Awesome Team!");
 
-      // The sanitization is .toLowerCase().replace(/\s+/g, "-")
-      expect(dummyAnchor.download).toBe("my-awesome-team!.json");
+      // The sanitization is a strict regex followed by lowercase and spacing replacements
+      expect(dummyAnchor.download).toBe("my-awesome-team.json");
     });
 
     it("should handle empty filenames by defaulting to 'untitled-team.json'", () => {

@@ -7,15 +7,20 @@ import crypto from "crypto";
  * ever storing or transmitting the actual IP address (PII under GDPR).
  *
  * @param ip - The raw IP address to anonymize.
- * @param salt - A secret salt (defaults to REVALIDATION_SECRET env var).
+ * @param salt - A secret salt (defaults to IP_HASH_SALT env var).
  * @returns A 64-character hex string that cannot be reversed to the original IP.
  */
-export function anonymizeIp(
-  ip: string,
-  salt: string = process.env.REVALIDATION_SECRET || "default-salt"
-): string {
+export function anonymizeIp(ip: string, salt?: string): string {
+  const actualSalt = salt || process.env.IP_HASH_SALT;
+
+  if (!actualSalt) {
+    throw new Error(
+      "IP_HASH_SALT environment variable is required for anonymizeIp. DO NOT fallback to a default salt."
+    );
+  }
+
   return crypto
     .createHash("sha256")
-    .update(ip + salt)
+    .update(ip + actualSalt)
     .digest("hex");
 }

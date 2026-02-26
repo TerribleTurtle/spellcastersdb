@@ -22,3 +22,6 @@
 
 /* 6. Fun themes — Arcane, Inferno, Frost, Retro, Rainbow */
 @import "./themes.css";
+
+/* 7. Print overrides — hide chrome, simplify layout for paper */
+@import "./print.css";
