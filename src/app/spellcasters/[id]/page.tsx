@@ -108,8 +108,8 @@ export default async function SpellcasterPage({
     "@type": "Person",
     name: spellcaster.name,
     description: spellcaster.abilities.primary.description,
-    url: `https://spellcastersdb.com${routes.spellcaster(spellcaster.spellcaster_id!)}`,
-    image: `https://spellcastersdb.com/api/og?spellcasterId=${spellcaster.spellcaster_id}`,
+    url: `https://www.spellcastersdb.com${routes.spellcaster(spellcaster.spellcaster_id!)}`,
+    image: `https://www.spellcastersdb.com/api/og?spellcasterId=${spellcaster.spellcaster_id}`,
   };
 
   const breadcrumbs = [

@@ -59,7 +59,7 @@ export default async function ConsumablePage({ params }: ConsumablePageProps) {
     name: item.name,
     description: item.description,
     category: "Consumable",
-    image: `https://spellcastersdb.com/api/og/consumable?id=${item.entity_id}`,
+    image: `https://www.spellcastersdb.com/api/og/consumable?id=${item.entity_id}`,
     additionalProperty: [
       item.effect_type
         ? {
@@ -90,13 +90,13 @@ export default async function ConsumablePage({ params }: ConsumablePageProps) {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://spellcastersdb.com",
+          item: "https://www.spellcastersdb.com",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "Consumables",
-          item: "https://spellcastersdb.com/consumables",
+          item: "https://www.spellcastersdb.com/consumables",
         },
         {
           "@type": "ListItem",

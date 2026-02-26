@@ -71,7 +71,7 @@ export default async function TitanPage({ params }: TitanPageProps) {
 
   const jsonLdData = {
     "@context": "https://schema.org",
-    thumbnailUrl: `https://spellcastersdb.com/api/og/titan?id=${titan.entity_id}`,
+    thumbnailUrl: `https://www.spellcastersdb.com/api/og/titan?id=${titan.entity_id}`,
     mainEntity: {
       "@type": "Thing",
       name: titan.name,
@@ -85,13 +85,13 @@ export default async function TitanPage({ params }: TitanPageProps) {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://spellcastersdb.com",
+          item: "https://www.spellcastersdb.com",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "Titans",
-          item: "https://spellcastersdb.com/titans",
+          item: "https://www.spellcastersdb.com/titans",
         },
         {
           "@type": "ListItem",

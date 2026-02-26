@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: "/",
       disallow: ["/private/", "/admin/", "/design-system/"],
     },
-    sitemap: "https://spellcastersdb.com/sitemap.xml",
+    sitemap: "https://www.spellcastersdb.com/sitemap.xml",
   };
 }

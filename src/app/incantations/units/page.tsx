@@ -29,7 +29,7 @@ export default async function UnitsIndexPage() {
     hasPart: units.map((u) => ({
       "@type": "Thing", // Or GameCharacter/VisualArtwork depending on what fits best. Units are diverse.
       name: u.name,
-      url: `https://spellcastersdb.com/incantations/units/${u.entity_id}`,
+      url: `https://www.spellcastersdb.com/incantations/units/${u.entity_id}`,
     })),
   };
 

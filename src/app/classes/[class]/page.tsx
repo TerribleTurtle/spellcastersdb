@@ -63,7 +63,7 @@ export default async function ClassPage({ params }: ClassPageProps) {
       itemListElement: classEntities.map((entity, index) => ({
         "@type": "ListItem",
         position: index + 1,
-        url: `https://spellcastersdb.com/spellcasters/${(entity as Spellcaster).spellcaster_id}`,
+        url: `https://www.spellcastersdb.com/spellcasters/${(entity as Spellcaster).spellcaster_id}`,
         name: entity.name,
       })),
     },

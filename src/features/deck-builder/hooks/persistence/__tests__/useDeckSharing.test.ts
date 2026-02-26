@@ -55,7 +55,7 @@ describe("useDeckSharing", () => {
     });
 
     (createShortLink as ReturnType<typeof vi.fn>).mockResolvedValue({
-      url: "https://spellcastersdb.com/s/abc",
+      url: "https://www.spellcastersdb.com/s/abc",
       isShortLink: true,
       rateLimited: false,
     });
@@ -89,7 +89,7 @@ describe("useDeckSharing", () => {
       activeSlot: undefined,
     });
     expect(copyToClipboard).toHaveBeenCalledWith(
-      "https://spellcastersdb.com/s/abc"
+      "https://www.spellcastersdb.com/s/abc"
     );
     expect(mockTrigger).toHaveBeenCalled();
   });
@@ -118,7 +118,7 @@ describe("useDeckSharing", () => {
     // Resolve the promise
     await act(async () => {
       resolveShortLink({
-        url: "https://spellcastersdb.com/s/abc",
+        url: "https://www.spellcastersdb.com/s/abc",
         isShortLink: true,
         rateLimited: false,
       });

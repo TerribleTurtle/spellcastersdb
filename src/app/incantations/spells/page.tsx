@@ -33,7 +33,7 @@ export default async function SpellsIndexPage() {
     hasPart: spells.map((s) => ({
       "@type": "Thing",
       name: s.name,
-      url: `https://spellcastersdb.com/incantations/spells/${s.entity_id}`,
+      url: `https://www.spellcastersdb.com/incantations/spells/${s.entity_id}`,
     })),
   };
 

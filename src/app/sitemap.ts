@@ -6,7 +6,7 @@ import { registry } from "@/services/api/registry";
 export const revalidate = 3600; // Revalidate sitemap every hour
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://spellcastersdb.com";
+  const baseUrl = "https://www.spellcastersdb.com";
 
   // 1. Fetch all dynamic data + build info
   const data = await fetchGameData();

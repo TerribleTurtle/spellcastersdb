@@ -46,7 +46,7 @@ describe("useDeckSharing — Adversarial", () => {
     });
 
     (createShortLink as ReturnType<typeof vi.fn>).mockResolvedValue({
-      url: "https://spellcastersdb.com/s/abc",
+      url: "https://www.spellcastersdb.com/s/abc",
       isShortLink: true,
       rateLimited: false,
     });
@@ -129,7 +129,7 @@ describe("useDeckSharing — Adversarial", () => {
           setTimeout(
             () =>
               resolve({
-                url: `https://spellcastersdb.com/s/${callCount}`,
+                url: `https://www.spellcastersdb.com/s/${callCount}`,
                 isShortLink: true,
                 rateLimited: false,
               }),

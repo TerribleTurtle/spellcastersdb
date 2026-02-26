@@ -11,7 +11,7 @@ describe("useFeedback — Adversarial", () => {
     vi.stubGlobal("open", mockWindowOpen);
     // Set a known location for predictable assertions
     Object.defineProperty(window, "location", {
-      value: { href: "https://spellcastersdb.com/deck-builder" },
+      value: { href: "https://www.spellcastersdb.com/deck-builder" },
       writable: true,
       configurable: true,
     });
@@ -97,7 +97,7 @@ describe("useFeedback — Adversarial", () => {
   it("should handle extremely long URLs in fallback", () => {
     const longPath = "a".repeat(5000);
     Object.defineProperty(window, "location", {
-      value: { href: `https://spellcastersdb.com/${longPath}` },
+      value: { href: `https://www.spellcastersdb.com/${longPath}` },
       writable: true,
       configurable: true,
     });
@@ -125,7 +125,7 @@ describe("useFeedback — Adversarial", () => {
 
     const options = mockOpenPopup.mock.calls[0][1] as Record<string, any>;
     expect(options.hiddenFields.deck_url).toBe(
-      "https://spellcastersdb.com/deck-builder"
+      "https://www.spellcastersdb.com/deck-builder"
     );
   });
 });

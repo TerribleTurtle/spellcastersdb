@@ -91,7 +91,7 @@ export default async function SpellPage({ params }: SpellPageProps) {
     genre: "Strategic Card Game",
     isFamilyFriendly: true,
     keywords: spell.tags.join(", "),
-    thumbnailUrl: `https://spellcastersdb.com/api/og/spell?id=${spell.entity_id}`,
+    thumbnailUrl: `https://www.spellcastersdb.com/api/og/spell?id=${spell.entity_id}`,
     mainEntity: {
       "@type": "Thing",
       name: spell.name,
@@ -105,13 +105,13 @@ export default async function SpellPage({ params }: SpellPageProps) {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://spellcastersdb.com",
+          item: "https://www.spellcastersdb.com",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "Spells",
-          item: "https://spellcastersdb.com/incantations/spells",
+          item: "https://www.spellcastersdb.com/incantations/spells",
         },
         {
           "@type": "ListItem",

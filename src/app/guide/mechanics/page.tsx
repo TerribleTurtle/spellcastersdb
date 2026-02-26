@@ -32,7 +32,7 @@ export default async function MechanicsPage() {
       name: "SpellcastersDB",
       logo: {
         "@type": "ImageObject",
-        url: "https://spellcastersdb.com/favicon.svg",
+        url: "https://www.spellcastersdb.com/favicon.svg",
       },
     },
   };
