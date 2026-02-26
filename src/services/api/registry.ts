@@ -81,7 +81,7 @@ export class EntityRegistry {
 
     // Upgrades are keyed by archetype (not entity_id) — V2 rework
     data.upgrades.forEach((u) => {
-      this.upgrades.set(u.archetype, u);
+      this.upgrades.set(u.class, u);
     });
 
     if (data.infusions) {

@@ -419,15 +419,21 @@ const PopulationScalingSchema = z.object({
   population_cap: z.number(),
 });
 
-export const UpgradeSchema = z.object({
-  archetype: z.string(), // Accepts any archetype the API sends (was strict enum)
-  level_cap: z.number().optional().default(0),
-  population_scaling: z.array(PopulationScalingSchema).optional().default([]),
-  incantation_upgrades: z
-    .array(IncantationUpgradeSchema)
-    .optional()
-    .default([]),
-});
+export const UpgradeSchema = z
+  .object({
+    class: z.string().optional(), // Accepts any archetype/class the API sends
+    archetype: z.string().optional(), // Legacy fallback for cached data
+    level_cap: z.number().optional().default(0),
+    population_scaling: z.array(PopulationScalingSchema).optional().default([]),
+    incantation_upgrades: z
+      .array(IncantationUpgradeSchema)
+      .optional()
+      .default([]),
+  })
+  .transform((data) => ({
+    ...data,
+    class: data.class || data.archetype || "Unknown",
+  }));
 
 // DamageTier Schema (used by Infusions)
 const DamageTierSchema = z.object({

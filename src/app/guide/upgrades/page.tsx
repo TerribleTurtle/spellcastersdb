@@ -53,7 +53,7 @@ const DEFAULT_STYLE = {
 };
 
 function ArchetypeSection({ upgrade }: { upgrade: Upgrade }) {
-  const style = ARCHETYPE_STYLES[upgrade.archetype] || DEFAULT_STYLE;
+  const style = ARCHETYPE_STYLES[upgrade.class] || DEFAULT_STYLE;
 
   return (
     <section
@@ -68,7 +68,7 @@ function ArchetypeSection({ upgrade }: { upgrade: Upgrade }) {
         </div>
         <div>
           <h2 className={`text-2xl font-bold ${style.text}`}>
-            {upgrade.archetype}
+            {upgrade.class}
           </h2>
         </div>
       </div>
@@ -215,7 +215,7 @@ export default async function UpgradesPage() {
 
         {upgrades.length > 0 ? (
           upgrades.map((upgrade) => (
-            <ArchetypeSection key={upgrade.archetype} upgrade={upgrade} />
+            <ArchetypeSection key={upgrade.class} upgrade={upgrade} />
           ))
         ) : (
           <div className="bg-surface-card border border-border-default rounded-xl p-8 text-center">
