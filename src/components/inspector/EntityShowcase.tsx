@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Check, Sparkles, X as XIcon } from "lucide-react";
 
 import { TextWithLinks } from "@/components/common/TextWithLinks";
 import { EntityMechanics } from "@/components/entity-card/EntityMechanics";
@@ -21,7 +21,12 @@ import {
   getCardAltText,
   getCardImageUrl,
 } from "@/services/assets/asset-helpers";
-import { Spell, Spellcaster, Titan, Unit } from "@/types/api";
+import {
+  SHOW_VERSION_BADGES_DEV,
+  isNewEntity,
+  isUpdatedToEA,
+} from "@/services/config/entity-version-utils";
+import { Spell, Spellcaster, StatChangeEntry, Titan, Unit } from "@/types/api";
 import type { UnifiedEntity } from "@/types/api";
 import type { PatchEntry, TimelineEntry } from "@/types/patch-history";
 
@@ -55,6 +60,16 @@ export function EntityShowcase({
   relatedEntities = [],
   relatedTitle,
 }: EntityShowcaseProps) {
+  const showVersionBadges = SHOW_VERSION_BADGES_DEV;
+
+  const id = item.entity_id;
+  const statChanges =
+    "stat_changes" in item
+      ? (item as { stat_changes?: StatChangeEntry[] }).stat_changes
+      : undefined;
+  const isNew = isNewEntity(id);
+  const isVerified = isUpdatedToEA(id, statChanges);
+
   // Type Guards
   const isSpellcaster = "spellcaster_id" in item;
   const isUnit = !isSpellcaster;
@@ -156,7 +171,40 @@ export function EntityShowcase({
               {/* Gradient */}
               <div className="absolute inset-0 bg-linear-to-t from-surface-card via-transparent to-transparent z-20 pointer-events-none" />
 
-              {/* Badges overlaid on image */}
+              {/* Version Badges overlaid on top-left of image */}
+              {showVersionBadges && (
+                <div className="absolute top-3 left-3 flex flex-col items-start gap-1.5 z-30">
+                  {isNew && (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-linear-to-r from-fuchsia-600/95 to-violet-600/95 border border-fuchsia-400/50 shadow-[0_4px_20px_rgba(217,70,239,0.5)] backdrop-blur-md">
+                      <Sparkles className="w-4 h-4 text-fuchsia-100" />
+                      <span className="text-[12px] font-black uppercase tracking-widest text-white leading-none mt-0.5">
+                        New
+                      </span>
+                    </div>
+                  )}
+                  {!isNew && (
+                    <div
+                      className={`flex items-center gap-1.5 px-2 py-1 rounded border shadow-lg backdrop-blur-md cursor-help ${
+                        isVerified
+                          ? "bg-status-success/20 border-status-success/50 text-status-success hover:bg-status-success/30"
+                          : "bg-status-danger/20 border-status-danger/50 text-status-danger hover:bg-status-danger/30"
+                      }`}
+                      title={isVerified ? "Updated to EA" : "Not updated to EA"}
+                    >
+                      {isVerified ? (
+                        <Check className="w-3.5 h-3.5" strokeWidth={3} />
+                      ) : (
+                        <XIcon className="w-3.5 h-3.5" strokeWidth={3} />
+                      )}
+                      <span className="text-[11px] font-extrabold uppercase tracking-wider leading-none mt-0.5">
+                        {isVerified ? "EA Verified" : "Pre-EA"}
+                      </span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Badges overlaid on bottom of image */}
               <div className="absolute bottom-3 left-3 right-3 flex justify-between items-end z-30">
                 <div className="flex flex-col gap-1.5 items-start">
                   {rank &&
