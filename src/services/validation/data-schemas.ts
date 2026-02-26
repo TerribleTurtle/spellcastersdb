@@ -383,44 +383,37 @@ export const ConsumableSchema = z.object({
     .optional()
     .default(EntityCategory.Consumable),
   rarity: z.string().optional(),
+  // Cast Stone fields (V2 extension)
+  effect_type: z.string().optional(),
+  grants_incantation: z.string().optional(),
+  drop_time_seconds: z.array(z.number()).optional(),
 });
 
-export const UpgradeSchema = z
-  .object({
-    ...CommonSchemaParts,
-    entity_id: z.string().optional(),
-    upgrade_id: z.string().optional(),
-    name: z.string(),
-    description: z.string(),
-    image_required: z.boolean().optional(),
-    prerequisite_level: z.number().optional(),
-    cost: z.number().optional(),
-    tags: z.array(z.string()).optional().default([]), // Allow missing tags or default empty
-    target_tags: z.array(z.string()).optional(), // V2 Placeholder often has target_tags
-    category: z.literal(EntityCategory.Upgrade).default(EntityCategory.Upgrade),
-    effect: z.record(z.string(), z.any()).optional(),
-  })
-  .transform((data) => {
-    // Map upgrade_id to entity_id
-    if (!data.entity_id && data.upgrade_id) {
-      data.entity_id = data.upgrade_id;
-    }
-    return data as {
-      entity_id: string; // Ensure entity_id is present after transform
-      name: string;
-      description: string;
-      image_required?: boolean;
-      prerequisite_level?: number;
-      cost?: number;
-      tags: string[];
-      category: EntityCategory.Upgrade;
-      [key: string]: unknown;
-    };
-  })
-  .refine((data) => !!data.entity_id, {
-    message: "entity_id or upgrade_id is required",
-  });
+// Archetype-Based Upgrades (V2 Rework)
+const UpgradeChoiceSchema = z.object({
+  name: z.string(),
+  description: z.string().optional().default(""),
+  effect: z.record(z.string(), z.number()),
+});
 
+const IncantationUpgradeSchema = z.object({
+  incantation_id: z.string(),
+  upgrades: z.array(UpgradeChoiceSchema),
+});
+
+const PopulationScalingSchema = z.object({
+  level: z.number(),
+  population_cap: z.number(),
+});
+
+export const UpgradeSchema = z.object({
+  archetype: z.enum(["Conqueror", "Duelist", "Enchanter", "Unknown"]),
+  level_cap: z.number(),
+  population_scaling: z.array(PopulationScalingSchema),
+  incantation_upgrades: z.array(IncantationUpgradeSchema),
+});
+
+// DamageTier Schema (used by Infusions)
 const DamageTierSchema = z.object({
   tier: z.enum(["I", "II", "III"]),
   value: z.number(),
@@ -453,6 +446,69 @@ export const InfusionSchema = z.object({
   enemy_effect: InfusionEnemyEffectSchema,
 });
 
+// Game Systems Schema (V2 — New Standalone Endpoint)
+const CaptureXPSchema = z.object({
+  first: z.number(),
+  recapture: z.number(),
+  passive_per_sec: z.number(),
+  spellcaster_on_point: z.number(),
+});
+
+const SummoningXPSchema = z.object({
+  spellcaster_death: z.number(),
+  rank_I: z.number(),
+  rank_II: z.number(),
+  rank_III: z.number(),
+  rank_IV: z.number(),
+});
+
+const ScalingXPSchema = z.object({
+  building_spawn_multiplier: z.number(),
+  level_thresholds: z.array(z.number()),
+});
+
+export const MatchXPSchema = z
+  .object({
+    capture: CaptureXPSchema.optional(),
+    kills: SummoningXPSchema.optional(),
+    scaling: ScalingXPSchema.optional(),
+  })
+  .transform((data) => ({
+    capture: data.capture,
+    summoning: data.kills,
+    scaling: data.scaling,
+  }));
+
+const ProgressionConfigSchema = z.object({
+  starting_knowledge: z.object({
+    default: z.number(),
+    beta: z.number(),
+  }),
+  earn_rates: z.object({
+    first_daily_match: z.number(),
+    win: z.number(),
+    loss: z.number(),
+  }),
+});
+
+const RankedTierSchema = z.object({
+  name: z.string(),
+  rp_threshold_min: z.number(),
+  rp_loss_per_loss: z.number(),
+});
+
+const RankedConfigSchema = z.object({
+  tiers_per_rank: z.number(),
+  rp_gain_per_win: z.number(),
+  ranks: z.array(RankedTierSchema),
+});
+
+export const GameSystemsSchema = z.object({
+  progression: ProgressionConfigSchema,
+  ranked: RankedConfigSchema,
+  match_xp: MatchXPSchema,
+});
+
 export const AllDataSchema = z.object({
   build_info: z.object({
     version: z.string(),
@@ -463,6 +519,7 @@ export const AllDataSchema = z.object({
   spells: z.array(SpellSchema),
   titans: z.array(TitanSchema),
   consumables: z.array(ConsumableSchema),
-  upgrades: z.array(UpgradeSchema),
+  upgrades: z.array(UpgradeSchema).optional().default([]),
   infusions: z.array(InfusionSchema).optional().default([]),
+  game_systems: GameSystemsSchema.optional(),
 });

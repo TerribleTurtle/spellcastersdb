@@ -88,6 +88,7 @@ export async function fetchChunkedData(): Promise<AllDataResponse> {
     consumables,
     upgrades,
     infusions,
+    game_systems,
   ] = await Promise.all([
     fetchChunk<RawUnit[]>("units.json"),
     fetchChunk<unknown[]>("spells.json"),
@@ -120,6 +121,13 @@ export async function fetchChunkedData(): Promise<AllDataResponse> {
       });
       return [];
     }),
+    fetchChunk<unknown>("game_systems.json").catch((err) => {
+      monitoring.captureException(err, {
+        message: "Failed to fetch game_systems, defaulting to undefined",
+        context: "api-client.ts:fetchEntities:game_systems",
+      });
+      return undefined;
+    }),
   ]);
 
   const rawData: RawData = {
@@ -134,6 +142,7 @@ export async function fetchChunkedData(): Promise<AllDataResponse> {
     consumables,
     upgrades,
     infusions,
+    game_systems,
   };
 
   const data = mapRawDataToAllData(rawData);

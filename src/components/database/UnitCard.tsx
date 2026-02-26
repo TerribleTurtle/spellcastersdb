@@ -55,19 +55,6 @@ function getEntityMeta(entity: UnifiedEntity) {
     };
   }
 
-  // Upgrade
-  if (
-    entity.category === "Upgrade" ||
-    (!("magic_school" in entity) && "cost" in entity)
-  ) {
-    return {
-      href: routes.upgrade(entity.entity_id),
-      category: "Upgrade",
-      rank: "UPGRADE",
-      school: "Technology",
-    };
-  }
-
   // Unit or Spell
   return {
     href: routes.unit(entity.entity_id),

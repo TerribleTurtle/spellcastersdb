@@ -1,347 +1,184 @@
 import Link from "next/link";
 
-import { GuideToc, MobileGuideToc } from "@/components/guide/GuideToc";
+import {
+  BookOpen,
+  Crown,
+  Flame,
+  Shield,
+  Sparkles,
+  Swords,
+  TrendingUp,
+} from "lucide-react";
+
 import { PageShell } from "@/components/layout/PageShell";
 import { routes } from "@/lib/routes";
 
 export const metadata = {
-  title: "Game Guide",
+  title: "Game Guide — SpellcastersDB",
   description:
-    "Learn the basics of Spellcasters Chronicles. Understand unit types, deck building, spellcaster system, and game mechanics.",
+    "Your comprehensive guide to Spellcasters Chronicles. Learn game mechanics, progression, ranked play, class upgrades, and more.",
   keywords: [
     "Spellcasters Chronicles",
     "Guide",
     "How to Play",
-    "Tutorial",
     "Game Mechanics",
-    "Deck Building",
+    "Ranked Mode",
+    "Upgrades",
   ],
   openGraph: {
-    title: "Game Guide",
+    title: "Game Guide — SpellcastersDB",
     description:
-      "Learn the basics of Spellcasters Chronicles. Understand unit types, deck building, spellcaster system, and game mechanics.",
+      "Your comprehensive guide to Spellcasters Chronicles. Learn game mechanics, progression, ranked play, class upgrades, and more.",
     images: ["/og-default.png"],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "Game Guide",
+    card: "summary_large_image" as const,
+    title: "Game Guide — SpellcastersDB",
     description:
-      "Learn the basics of Spellcasters Chronicles. Understand unit types, deck building, spellcaster system, and game mechanics.",
+      "Your comprehensive guide to Spellcasters Chronicles. Learn game mechanics, progression, ranked play, class upgrades, and more.",
     images: ["/og-default.png"],
   },
 };
 
+interface GuideCard {
+  title: string;
+  description: string;
+  href: string;
+  icon: React.ReactNode;
+  gradient: string;
+  badge?: string;
+}
+
+const GUIDE_CARDS: GuideCard[] = [
+  {
+    title: "Basics & Deck Building",
+    description:
+      "Card types, ranks, spellcasters, and how to build a winning deck from scratch.",
+    href: routes.guideBasics(),
+    icon: <BookOpen size={28} />,
+    gradient: "from-blue-500/20 to-cyan-500/20",
+  },
+  {
+    title: "Mechanics & Progression",
+    description:
+      "XP system, knowledge currency, and how leveling works in-match.",
+    href: routes.guideMechanics(),
+    icon: <Flame size={28} />,
+    gradient: "from-orange-500/20 to-amber-500/20",
+    badge: "NEW",
+  },
+  {
+    title: "Ranked Mode",
+    description:
+      "Climb the competitive ladder from Novice to Grand Master. RP gains, tier breakdowns, and RP mechanics.",
+    href: routes.guideRanked(),
+    icon: <Crown size={28} />,
+    gradient: "from-yellow-500/20 to-amber-500/20",
+    badge: "NEW",
+  },
+  {
+    title: "Class Upgrades",
+    description:
+      "Discover how each class levels up. Population scaling and level-up choices.",
+    href: routes.guideUpgrades(),
+    icon: <TrendingUp size={28} />,
+    gradient: "from-purple-500/20 to-fuchsia-500/20",
+    badge: "NEW",
+  },
+  {
+    title: "Infusions Database",
+    description:
+      "Elemental enhancements that add damage-over-time, crowd control, and status effects to your arsenal.",
+    href: routes.infusions(),
+    icon: <Sparkles size={28} />,
+    gradient: "from-emerald-500/20 to-teal-500/20",
+  },
+];
+
 export default function GuidePage() {
   return (
     <PageShell
-      title="Spellcasters Chronicles Guide"
+      title="Game Guide"
+      subtitle="A reference for game systems and mechanics."
       maxWidth="6xl"
       breadcrumbs={[{ label: "Guide", href: "/guide" }]}
     >
-      <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
-        {/* Main Content Area */}
-        <div className="flex-1 space-y-5 md:space-y-6 min-w-0 w-full max-w-4xl mx-auto lg:mx-0">
-          <MobileGuideToc />
-
-          {/* Game Overview */}
-          <section
-            id="overview"
-            className="bg-surface-card border border-border-default rounded-lg p-5 md:p-6 scroll-mt-24"
-          >
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
-              What is Spellcasters Chronicles?
-            </h2>
-            <p className="text-text-secondary leading-relaxed">
-              Spellcasters Chronicles is a strategic card-based game where
-              players build decks and battle using units, spells, and
-              spellcasters. Each match requires careful planning, resource
-              management, and tactical decision-making to outmaneuver your
-              opponent.
-            </p>
-          </section>
-
-          {/* Card Types */}
-          <section
-            id="card-types"
-            className="bg-surface-card border border-border-default rounded-lg p-5 md:p-6 scroll-mt-24"
-          >
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
-              Card Types
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              Your deck consists of various cards, mainly categorized as
-              Incantations (Creatures, Spells, Buildings) and Titans.
-            </p>
-            <div className="space-y-4">
-              <div className="bg-surface-dim border border-border-default rounded-lg p-3 md:p-4">
-                <h3 className="text-lg font-semibold text-brand-primary mb-2">
-                  Creatures
-                </h3>
-                <p className="text-text-secondary text-sm">
-                  Combat units that attack and defend. Creatures have health,
-                  attack power, and various abilities. They are the backbone of
-                  most strategies.
-                </p>
-              </div>
-              <div className="bg-surface-dim border border-border-default rounded-lg p-3 md:p-4">
-                <h3 className="text-lg font-semibold text-brand-primary mb-2">
-                  Spells
-                </h3>
-                <p className="text-text-secondary text-sm">
-                  Instant or ongoing effects that can turn the tide of battle.
-                  Spells provide utility, damage, healing, or buffs to support
-                  your strategy.
-                </p>
-              </div>
-              <div className="bg-surface-dim border border-border-default rounded-lg p-3 md:p-4">
-                <h3 className="text-lg font-semibold text-brand-primary mb-2">
-                  Buildings
-                </h3>
-                <p className="text-text-secondary text-sm">
-                  Structures that provide passive benefits or generate resources
-                  over time. Buildings are key to long-term strategies and board
-                  control.
-                </p>
-              </div>
-              <div className="bg-surface-dim border border-border-default rounded-lg p-3 md:p-4">
-                <h3 className="text-lg font-semibold text-brand-primary mb-2">
-                  Titans
-                </h3>
-                <p className="text-text-secondary text-sm">
-                  The ultimate invocation. Titans are powerful, game-changing
-                  units with high stats and unique abilities.
-                </p>
-              </div>
+      {/* Hero banner */}
+      <div className="relative overflow-hidden rounded-xl bg-linear-to-br from-brand-primary/10 via-brand-secondary/5 to-transparent border border-brand-primary/20 p-6 md:p-10 mb-8 md:mb-12">
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="flex items-center gap-1.5">
+              <Swords size={20} className="text-brand-primary" />
+              <Shield size={20} className="text-brand-secondary" />
             </div>
-          </section>
-
-          {/* Ranks */}
-          <section
-            id="ranks"
-            className="bg-surface-card border border-border-default rounded-lg p-5 md:p-6 scroll-mt-24"
-          >
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
-              Ranks
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              Incantations are categorized into four ranks, representing their
-              power level and charge time:
-            </p>
-            <ul className="space-y-2 text-text-secondary">
-              <li className="flex items-start gap-2">
-                <span className="text-brand-primary font-bold">Rank I:</span>
-                <span>
-                  Basic incantations with lower stats but faster charge times.
-                  Great for early game pressure.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-brand-primary font-bold">Rank II:</span>
-                <span>
-                  Intermediate incantations with balanced stats and moderate
-                  charge times.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-brand-primary font-bold">Rank III:</span>
-                <span>
-                  Advanced incantations with strong abilities and longer charge
-                  times.
-                </span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-brand-primary font-bold">Rank IV:</span>
-                <span>
-                  Elite incantations with powerful effects but significant time
-                  investment.
-                </span>
-              </li>
-            </ul>
-          </section>
-
-          {/* Spellcaster System */}
-          <section
-            id="spellcasters"
-            className="bg-surface-card border border-border-default rounded-lg p-5 md:p-6 scroll-mt-24"
-          >
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
-              Spellcasters
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              Every deck is led by a Spellcaster, which defines your playstyle
-              and provides unique abilities. Spellcasters have:
-            </p>
-            <ul className="list-disc list-inside text-text-secondary space-y-2">
-              <li>
-                <strong>Faction Affinity:</strong> Spellcasters belong to
-                specific factions and may synergize with certain incantations
-              </li>
-              <li>
-                <strong>Special Abilities:</strong> Unique powers that can be
-                activated during battle
-              </li>
-            </ul>
-          </section>
-
-          {/* Resources */}
-          <section
-            id="charges-cooldowns"
-            className="bg-surface-card border border-border-default rounded-lg p-5 md:p-6 scroll-mt-24"
-          >
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
-              Charges & Cooldowns
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              Timing your incantations is important:
-            </p>
-            <div className="space-y-3">
-              <div>
-                <h3 className="font-semibold text-brand-primary mb-1">
-                  Charges
-                </h3>
-                <p className="text-text-secondary text-sm">
-                  Incantations have initial charges and charge times. Higher
-                  rank incantations have fewer initial charges and longer
-                  recharge periods.
-                </p>
-              </div>
-              <div>
-                <h3 className="font-semibold text-brand-primary mb-1">
-                  Cooldowns
-                </h3>
-                <p className="text-text-secondary text-sm">
-                  Some abilities and effects have cooldowns that limit how often
-                  they can be used.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* Deck Building */}
-          <section
-            id="deck-building"
-            className="bg-surface-card border border-border-default rounded-lg p-5 md:p-6 scroll-mt-24"
-          >
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
-              Deck Building Basics
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              Building a strong deck requires understanding the game&apos;s
-              rules and synergies. Every deck is composed of exactly 6 cards:
-            </p>
-
-            <div className="space-y-4 mb-6">
-              <div className="bg-surface-dim border border-border-default rounded-lg p-3 md:p-4">
-                <h3 className="text-lg font-semibold text-brand-primary mb-2 flex items-center gap-2">
-                  <span className="bg-brand-primary text-text-primary px-2 py-0.5 rounded text-sm font-bold shadow-xs">
-                    1
-                  </span>
-                  Spellcaster
-                </h3>
-                <ul className="list-disc list-inside text-text-secondary text-sm space-y-1">
-                  <li>
-                    The leader of your deck, representing who you play in-game.
-                  </li>
-                  <li>
-                    Build synergies between your Spellcaster and your
-                    incantations.
-                  </li>
-                </ul>
-              </div>
-
-              <div className="bg-surface-dim border border-border-default rounded-lg p-3 md:p-4">
-                <h3 className="text-lg font-semibold text-brand-primary mb-2 flex items-center gap-2">
-                  <span className="bg-brand-primary text-text-primary px-2 py-0.5 rounded text-sm font-bold shadow-xs">
-                    4
-                  </span>
-                  Incantations
-                </h3>
-                <ul className="list-disc list-inside text-text-secondary text-sm space-y-1">
-                  <li>
-                    <strong className="text-brand-accent">Required:</strong> At
-                    least one <strong>Rank I or II Creature</strong> (your deck
-                    cannot be only Spells and Buildings).
-                  </li>
-                  <li>
-                    Consider balancing ranks for early, mid, and late game
-                    presence.
-                  </li>
-                  <li>Include a mix of offensive and defensive options.</li>
-                </ul>
-              </div>
-
-              <div className="bg-surface-dim border border-border-default rounded-lg p-3 md:p-4">
-                <h3 className="text-lg font-semibold text-brand-primary mb-2 flex items-center gap-2">
-                  <span className="bg-brand-primary text-text-primary px-2 py-0.5 rounded text-sm font-bold shadow-xs">
-                    1
-                  </span>
-                  Titan
-                </h3>
-                <ul className="list-disc list-inside text-text-secondary text-sm space-y-1">
-                  <li>
-                    A powerful late-game threat that takes significant time to
-                    charge.
-                  </li>
-                  <li>
-                    Choose a Titan that complements your strategy, but remember
-                    that a single Titan alone won&apos;t guarantee victory.
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <p className="text-text-muted text-sm mt-4">
-              <strong>Tip:</strong> Use our{" "}
-              <Link
-                href="/deck-builder"
-                className="text-brand-primary hover:text-brand-accent underline"
-              >
-                Deck Builder
-              </Link>{" "}
-              to create and validate decks according to the official rules.
-            </p>
-          </section>
-
-          {/* Infusions */}
-          <section
-            id="infusions"
-            className="bg-brand-accent/5 border border-brand-accent/30 rounded-lg p-5 md:p-6 scroll-mt-24"
-          >
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent flex items-center gap-2">
-              Infusions Database
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              Infusions are elemental enhancements applied to units and spells
-              that deal damage over time, crowd control, and apply status
-              buildups.
-            </p>
-            <Link
-              href={routes.infusions()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-accent/10 border border-brand-accent/20 text-brand-accent font-semibold rounded hover:bg-brand-accent/20 transition-colors"
-            >
-              Explore Infusions &rarr;
-            </Link>
-          </section>
-
-          {/* Ready to Build */}
-          <section className="bg-surface-card border border-brand-primary/30 rounded-lg p-5 md:p-6">
-            <h2 className="text-2xl font-semibold mb-4 text-brand-accent">
-              Ready to Build?
-            </h2>
-            <p className="text-text-secondary leading-relaxed mb-4">
-              Create your ultimate deck strategy with our official Deck Builder.
-            </p>
-            <Link
-              href="/deck-builder"
-              className="inline-block px-6 py-3 bg-linear-to-r from-brand-primary to-brand-secondary text-text-primary font-semibold rounded-lg hover:opacity-90 transition-opacity"
-            >
-              Launch Builder
-            </Link>
-          </section>
+            <span className="text-xs font-semibold tracking-widest uppercase text-text-muted">
+              Spellcasters Chronicles
+            </span>
+          </div>
+          <p className="text-text-secondary text-base md:text-lg max-w-2xl leading-relaxed">
+            Whether you&apos;re a new player learning the ropes or a veteran
+            optimizing your builds, this guide hub has everything you need.
+            Explore game mechanics, master ranked play, and discover powerful
+            class upgrades.
+          </p>
         </div>
+        {/* Decorative background glow */}
+        <div className="absolute -top-20 -right-20 w-64 h-64 bg-brand-primary/5 rounded-full blur-3xl" />
+        <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-brand-secondary/5 rounded-full blur-3xl" />
+      </div>
 
-        {/* Desktop TOC Sidebar */}
-        <GuideToc />
+      {/* Card grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+        {GUIDE_CARDS.map((card) => (
+          <Link
+            key={card.href}
+            href={card.href}
+            className="group relative flex flex-col bg-surface-card border border-border-default rounded-xl p-5 md:p-6 transition-all duration-300 hover:border-brand-primary/40 hover:shadow-lg hover:shadow-brand-primary/5 hover:-translate-y-0.5"
+          >
+            {/* Badge */}
+            {card.badge && (
+              <span className="absolute top-3 right-3 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded-full bg-linear-to-r from-fuchsia-500 to-violet-500 text-white shadow-sm">
+                {card.badge}
+              </span>
+            )}
+
+            {/* Icon */}
+            <div
+              className={`w-12 h-12 rounded-lg bg-linear-to-br ${card.gradient} flex items-center justify-center mb-4 text-brand-primary group-hover:scale-110 transition-transform duration-300`}
+            >
+              {card.icon}
+            </div>
+
+            {/* Content */}
+            <h2 className="text-lg font-semibold text-text-primary mb-2 group-hover:text-brand-primary transition-colors">
+              {card.title}
+            </h2>
+            <p className="text-sm text-text-muted leading-relaxed flex-1">
+              {card.description}
+            </p>
+
+            {/* Arrow indicator */}
+            <div className="mt-4 flex items-center gap-1 text-xs font-medium text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              Explore
+              <span className="group-hover:translate-x-1 transition-transform duration-300">
+                →
+              </span>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Quick CTA */}
+      <div className="mt-10 md:mt-14 text-center">
+        <p className="text-text-muted text-sm mb-4">
+          Ready to put your knowledge to the test?
+        </p>
+        <Link
+          href="/deck-builder"
+          className="inline-block px-8 py-3 bg-linear-to-r from-brand-primary to-brand-secondary text-text-primary font-semibold rounded-lg hover:opacity-90 transition-opacity shadow-md shadow-brand-primary/20"
+        >
+          Launch Deck Builder
+        </Link>
       </div>
     </PageShell>
   );

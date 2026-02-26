@@ -40,8 +40,6 @@ export function useDeckBuilder() {
   const quickAdd = (item: UnifiedEntity) => {
     if (item.category === EntityCategory.Consumable)
       return "Consumables cannot be added to decks.";
-    if (item.category === EntityCategory.Upgrade)
-      return "Upgrades cannot be added to decks.";
 
     // Check Mode from Store (not from `ui` obj which is partial)
     const isTeamMode = useDeckStore.getState().mode === "TEAM";

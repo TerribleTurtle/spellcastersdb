@@ -209,43 +209,43 @@ describe("data-schemas.ts — adversarial", () => {
     });
   });
 
-  // ─── UpgradeSchema Refinement Bypass ─────────────────────────────
-  describe("UpgradeSchema refinement attacks", () => {
-    it("should fail if neither entity_id nor upgrade_id is provided", () => {
+  // ─── UpgradeSchema Archetype Validation ───────────────────────────
+  describe("UpgradeSchema archetype validation", () => {
+    it("should fail if archetype is not a known value", () => {
       const r = UpgradeSchema.safeParse({
-        name: "Orphan Upgrade",
-        description: "no IDs",
-        category: "Upgrade",
-        tags: [],
+        archetype: "InvalidClass",
+        level_cap: 25,
+        population_scaling: [],
+        incantation_upgrades: [],
       });
       expect(r.success).toBe(false);
     });
 
-    it("should derive entity_id from upgrade_id if entity_id is missing", () => {
+    it("should fail if population_scaling entries are missing level", () => {
       const r = UpgradeSchema.safeParse({
-        upgrade_id: "upg_123",
-        name: "Derived",
-        description: "desc",
-        category: "Upgrade",
-        tags: [],
+        archetype: "Conqueror",
+        level_cap: 25,
+        population_scaling: [{ population_cap: 10 }],
+        incantation_upgrades: [],
+      });
+      expect(r.success).toBe(false);
+    });
+
+    it("should accept a valid archetype upgrade with all fields", () => {
+      const r = UpgradeSchema.safeParse({
+        archetype: "Enchanter",
+        level_cap: 25,
+        population_scaling: [{ level: 5, population_cap: 10 }],
+        incantation_upgrades: [
+          {
+            incantation_id: "spell_1",
+            upgrades: [
+              { name: "Boost", description: "desc", effect: { damage: 5 } },
+            ],
+          },
+        ],
       });
       expect(r.success).toBe(true);
-      if (r.success) {
-        expect(r.data.entity_id).toBe("upg_123");
-      }
-    });
-
-    it("should handle both entity_id and upgrade_id being empty strings", () => {
-      const r = UpgradeSchema.safeParse({
-        entity_id: "",
-        upgrade_id: "",
-        name: "Empty IDs",
-        description: "desc",
-        category: "Upgrade",
-        tags: [],
-      });
-      // Empty strings are falsy, so the refine should catch this
-      expect(r.success).toBe(false);
     });
   });
 

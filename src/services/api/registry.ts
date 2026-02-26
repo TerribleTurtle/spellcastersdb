@@ -1,6 +1,7 @@
 import {
   AllDataResponse,
   Consumable,
+  GameSystems,
   Infusion,
   Spell,
   Spellcaster,
@@ -21,9 +22,10 @@ export class EntityRegistry {
   private titans = new Map<string, Titan>();
   private spellcasters = new Map<string, Spellcaster>();
   private consumables = new Map<string, Consumable>();
-  private upgrades = new Map<string, Upgrade>();
+  private upgrades = new Map<string, Upgrade>(); // Keyed by archetype
   private infusions = new Map<string, Infusion>();
   private unified = new Map<string, UnifiedEntity>();
+  private gameSystems: GameSystems | null = null;
 
   private initialized = false;
 
@@ -77,15 +79,20 @@ export class EntityRegistry {
       this.unified.set(c.entity_id, c);
     });
 
+    // Upgrades are keyed by archetype (not entity_id) — V2 rework
     data.upgrades.forEach((u) => {
-      this.upgrades.set(u.entity_id, u);
-      this.unified.set(u.entity_id, u);
+      this.upgrades.set(u.archetype, u);
     });
 
     if (data.infusions) {
       data.infusions.forEach((inf) => {
         this.infusions.set(inf.id, inf);
       });
+    }
+
+    // Game Systems (singleton, not per-entity)
+    if (data.game_systems) {
+      this.gameSystems = data.game_systems;
     }
 
     this.initialized = true;
@@ -264,6 +271,18 @@ export class EntityRegistry {
     return Array.from(this.infusions.values());
   }
 
+  /**
+   * Returns the Game Systems config, or null if not loaded.
+   * @example
+   * ```ts
+   * const systems = registry.getGameSystems();
+   * if (systems) console.log(systems.progression);
+   * ```
+   */
+  public getGameSystems(): GameSystems | null {
+    return this.gameSystems;
+  }
+
   /** Alias for `clear()`. Resets the registry to an empty, uninitialized state. */
   public reset() {
     this.clear();
@@ -279,6 +298,7 @@ export class EntityRegistry {
     this.upgrades.clear();
     this.infusions.clear();
     this.unified.clear();
+    this.gameSystems = null;
     this.initialized = false;
   }
 }

@@ -64,16 +64,6 @@ export function getSearchableAttributes(
       tags: entity.tags || [],
     };
   }
-  // Upgrade
-  if (entity.category === "Upgrade") {
-    return {
-      category: "Upgrade",
-      school: "Technology",
-      rank: "UPGRADE",
-      class: "Upgrade",
-      tags: entity.tags || [],
-    };
-  }
 
   // Unit or Spell (Incantation)
   // Both have magic_school.

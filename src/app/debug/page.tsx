@@ -250,7 +250,6 @@ export default async function DebugPage() {
             titans={data.titans}
             spellcasters={data.spellcasters}
             consumables={data.consumables}
-            upgrades={data.upgrades}
           />
         </div>
 

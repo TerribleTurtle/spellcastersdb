@@ -24,6 +24,7 @@ export interface RawData {
   spellcasters?: unknown[];
   units?: RawUnit[];
   infusions?: unknown[];
+  game_systems?: unknown;
   [key: string]: unknown;
 }
 

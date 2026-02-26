@@ -171,29 +171,36 @@ describe("Schema Migration v1.2", () => {
       }
     });
 
-    it("should map upgrade_id to entity_id if missing", () => {
+    it("should parse a valid archetype-based upgrade", () => {
       const upgrade = {
-        upgrade_id: "upg_1",
-        name: "Test Upgrade",
-        description: "Test",
+        archetype: "Duelist",
+        level_cap: 25,
+        population_scaling: [{ level: 5, population_cap: 10 }],
+        incantation_upgrades: [
+          {
+            incantation_id: "spell_1",
+            upgrades: [
+              { name: "Boost", description: "desc", effect: { damage: 5 } },
+            ],
+          },
+        ],
       };
 
       const result = UpgradeSchema.safeParse(upgrade);
       expect(result.success).toBe(true);
       if (result.success) {
-        // Branch hit: data.entity_id = data.upgrade_id
-        expect(result.data.entity_id).toBe("upg_1");
+        expect(result.data.archetype).toBe("Duelist");
       }
     });
 
-    it("should fail validation if an upgrade has neither entity_id nor upgrade_id", () => {
+    it("should fail validation if upgrade is missing archetype", () => {
       const invalidUpgrade = {
-        name: "Test Upgrade",
-        description: "Test",
+        level_cap: 25,
+        population_scaling: [],
+        incantation_upgrades: [],
       };
 
       const result = UpgradeSchema.safeParse(invalidUpgrade);
-      // Branch hit: .refine() fails
       expect(result.success).toBe(false);
     });
   });

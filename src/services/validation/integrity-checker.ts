@@ -34,10 +34,7 @@ export function validateIntegrity(data: AllDataResponse): IntegrityIssue[] {
     data.spellcasters.map((s) => s.entity_id),
     "spellcasters"
   );
-  checkDuplicates(
-    data.upgrades.map((u) => u.entity_id || ""),
-    "upgrades"
-  ); // Handle optional? Schema says entity_id is required after transform.
+  // Note: Upgrades are now archetype-based (not per-entity), skip duplicate check.
 
   // 2. Validate Spawners (Unit -> Unit)
   // Both Units and Spells can have spawners.

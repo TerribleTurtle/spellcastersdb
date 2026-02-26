@@ -62,7 +62,7 @@ export const createSoloSlice: StateCreator<
     }),
 
   quickAdd: (item) => {
-    if (item.category === "Consumable" || item.category === "Upgrade") {
+    if (item.category === "Consumable") {
       return "Cannot add this item to deck.";
     }
 
