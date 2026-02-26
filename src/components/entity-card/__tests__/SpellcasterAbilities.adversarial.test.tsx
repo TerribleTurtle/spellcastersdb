@@ -97,7 +97,6 @@ describe("SpellcasterAbilities (Adversarial image_urls)", () => {
     const evil = {
       ...baseSpellcaster,
       abilities: {
-        // @ts-expect-error forcing malformed data
         passive: null,
         primary: null,
         defense: undefined,

@@ -27,6 +27,18 @@ interface GitHubIssue {
 }
 
 export const roadmapService = {
+  /**
+   * Fetches open GitHub issues for the roadmap page.
+   *
+   * When `GITHUB_TOKEN` is set, requests are authenticated to avoid the
+   * GitHub API's anonymous rate limit (60 req/hr → 5,000 req/hr).
+   * On any failure (rate limit, network error), returns bundled fallback
+   * data so the roadmap page always renders.
+   *
+   * @returns `{ issues: RoadmapIssue[], isLive: boolean }`
+   *   - `issues` — Array of open issues (PRs filtered out).
+   *   - `isLive` — `true` if data is fresh from GitHub, `false` if fallback.
+   */
   async getIssues(): Promise<{ issues: RoadmapIssue[]; isLive: boolean }> {
     try {
       const headers: HeadersInit = {

@@ -231,7 +231,7 @@ describe("getAbilityImageUrl", () => {
     const hero = {
       image_urls: {
         card: "/assets/heroes/fire_elementalist.webp",
-      },
+      } as any,
     };
     const url = getAbilityImageUrl(hero, "attack");
     expect(url).toBeNull();

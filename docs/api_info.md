@@ -64,3 +64,31 @@ The raw API data sometimes has schema inconsistencies that are handled by valida
   - `Upgrade`: The API uses `upgrade_id` in some places. The schema normalizes this to `entity_id`.
 - **Validation**:
   - Zod transforms are used to ensure that the internal application logic always receives a consistent `entity_id` field, regardless of the raw JSON format.
+
+## Internal API Routes
+
+### `GET /api/revalidate`
+
+Purges the ISR cache for the `game-data` tag, forcing the next request to fetch fresh data.
+
+**Authentication:** `Authorization: Bearer <REVALIDATION_SECRET>`
+
+```bash
+# Production
+curl -X GET "https://www.spellcastersdb.com/api/revalidate" \
+  -H "Authorization: Bearer $REVALIDATION_SECRET"
+
+# Local dev
+curl -X GET "http://localhost:3000/api/revalidate" \
+  -H "Authorization: Bearer $REVALIDATION_SECRET"
+```
+
+> **Note:** The CI workflow (`revalidate.yml`) calls this endpoint daily via `workflow_dispatch`.
+
+### `GET /api/local-assets/[...path]`
+
+Development-only proxy that serves card images from a local folder. Disabled in production unless `NEXT_PUBLIC_USE_LOCAL_ASSETS=true`.
+
+- Reads from the path specified by `LOCAL_ASSETS_PATH` env var.
+- Responds with the correct `Content-Type` based on file extension.
+- Returns `404` for missing files and `403` in production when local assets are disabled.

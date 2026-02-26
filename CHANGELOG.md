@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.28] - 2026-02-26
+
+### Added
+- **Assets**: Integrated API `image_urls` for Heroes & extensive test suite additions.
+- **Titans**: Display titan weak points.
+
+### Changed
+- **Schema**: Removed `strict()` from Zod schemas for better API resilience.
+- **Dependencies**: Resolved high/critical security vulnerabilities.
+
+### Fixed
+- **Testing**: Resolved TypeScript errors in test mocks, added tests, and optimized API usage.
+- **Images/Encoding**: Hardened OG images, encoding utils, and synced docs.
+- **CI**: Busted Next.js cache to clear stale API fetch data.
+- **Repo**: Deduplicated `.gitignore` and untracked scratch files.
+- **Deploy**: Resolved type checking and formatting issues blocking deployment.
+
 ## [1.0.27] - 2026-02-24
 
 ### Fixed

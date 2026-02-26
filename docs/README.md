@@ -11,15 +11,11 @@ Quick reference for all docs in this directory.
 | [PRIVACY_AUDIT_REPORT.md](PRIVACY_AUDIT_REPORT.md)                                             | GDPR/CCPA privacy audit findings and remediation status           |
 | [STATE_MANAGEMENT.md](STATE_MANAGEMENT.md)                                                     | Zustand store architecture, slices, and persistence strategy      |
 | [SpellcastersDB Site Design Document.md](SpellcastersDB%20Site%20Design%20Document.md)         | High-level site architecture                                      |
-| [Spellcasters_UI_Design_Spec.md](Spellcasters_UI_Design_Spec.md)                               | UI/UX design spec (historical V1)                                 |
 | [SpellcastersDB SEO & Keyword Strategy.md](SpellcastersDB%20SEO%20%26%20Keyword%20Strategy.md) | Keyword research and SEO strategy                                 |
 
 ### Root-Level Docs
 
-| Document                                    | Description                              |
-| :------------------------------------------ | :--------------------------------------- |
-| [CHANGELOG.md](../CHANGELOG.md)             | Release history and version notes        |
-| [CONTRIBUTING.md](../CONTRIBUTING.md)       | Setup instructions and development guide |
-| [TODO.md](../TODO.md)                       | Future backlog and tech debt items       |
-| [ARCHIVE.md](../ARCHIVE.md)                 | Completed tasks from Phases 0–10         |
-| [tech-debt-notes.md](../tech-debt-notes.md) | Technical debt catalog                   |
+| Document                              | Description                              |
+| :------------------------------------ | :--------------------------------------- |
+| [CHANGELOG.md](../CHANGELOG.md)       | Release history and version notes        |
+| [CONTRIBUTING.md](../CONTRIBUTING.md) | Setup instructions and development guide |
