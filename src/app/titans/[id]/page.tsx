@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { getEntityById, getTitans } from "@/services/api/api";
@@ -77,10 +78,38 @@ export default async function TitanPage({ params }: TitanPageProps) {
       description: titan.description,
       category: "Titan",
     },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://spellcastersdb.com",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Titans",
+          item: "https://spellcastersdb.com/titans",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: titan.name,
+        },
+      ],
+    },
   };
 
   return (
     <>
+      <BreadcrumbsLd
+        items={[
+          { name: "Titans", url: "/titans" },
+          { name: titan.name, url: `/titans/${titan.entity_id}` },
+        ]}
+      />
       <JsonLd
         data={jsonLdData as Record<string, unknown>}
         id={`json-ld-titan-${titan.entity_id}`}

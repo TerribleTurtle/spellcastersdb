@@ -1,5 +1,6 @@
 import { Flame, Sparkles, Target, Zap } from "lucide-react";
 
+import { JsonLd } from "@/components/common/JsonLd";
 import { PageShell } from "@/components/layout/PageShell";
 import { getGameSystems } from "@/services/api/api";
 
@@ -20,6 +21,22 @@ export const metadata = {
 export default async function MechanicsPage() {
   const systems = await getGameSystems();
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: metadata.title,
+    description: metadata.description,
+    author: { "@type": "Organization", name: "SpellcastersDB" },
+    publisher: {
+      "@type": "Organization",
+      name: "SpellcastersDB",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://spellcastersdb.com/favicon.svg",
+      },
+    },
+  };
+
   return (
     <PageShell
       title="Mechanics & Progression"
@@ -30,6 +47,7 @@ export default async function MechanicsPage() {
         { label: "Mechanics", href: "/guide/mechanics" },
       ]}
     >
+      <JsonLd data={jsonLdData} id="json-ld-article" />
       <div className="space-y-8 max-w-4xl mx-auto">
         {/* ── Knowledge Currency ──────────────────────── */}
         {systems?.progression && (

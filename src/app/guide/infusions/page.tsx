@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Flame, Info, Skull, Snowflake, Zap } from "lucide-react";
 
+import { JsonLd } from "@/components/common/JsonLd";
 import { PageShell } from "@/components/layout/PageShell";
 import { routes } from "@/lib/routes";
 import { ensureDataLoaded } from "@/services/api/api";
@@ -45,6 +46,22 @@ export default async function InfusionsIndexPage() {
   await ensureDataLoaded();
   const infusions = registry.getAllInfusions();
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: metadata.title,
+    description: metadata.description,
+    author: { "@type": "Organization", name: "SpellcastersDB" },
+    publisher: {
+      "@type": "Organization",
+      name: "SpellcastersDB",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://spellcastersdb.com/favicon.svg",
+      },
+    },
+  };
+
   return (
     <PageShell
       title="Infusions Database"
@@ -54,6 +71,7 @@ export default async function InfusionsIndexPage() {
         { label: "Infusions", href: routes.infusions() },
       ]}
     >
+      <JsonLd data={jsonLdData} id="json-ld-article" />
       <div className="space-y-8">
         <section className="bg-surface-card border border-border-default rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-4 text-brand-accent">

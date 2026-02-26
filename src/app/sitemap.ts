@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 
 import { fetchGameData } from "@/services/api/api";
+import { registry } from "@/services/api/registry";
 
 export const revalidate = 3600; // Revalidate sitemap every hour
 
@@ -65,6 +66,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     },
     {
+      url: `${baseUrl}/titans`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    },
+    {
       url: `${baseUrl}/incantations/spells`,
       lastModified: new Date(),
       changeFrequency: "weekly",
@@ -105,6 +112,42 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.3,
+    },
+    {
+      url: `${baseUrl}/guide/basics`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/guide/mechanics`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/guide/upgrades`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/guide/ranked`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/guide/infusions`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/spellcasters`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.8,
     },
   ];
 
@@ -200,6 +243,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // Map Infusions
+  const infusions = registry.getAllInfusions();
+  const infusionRoutes: MetadataRoute.Sitemap = infusions.map((i) => ({
+    url: `${baseUrl}/guide/infusions/${i.id}`,
+    lastModified,
+    changeFrequency: "weekly",
+    priority: 0.6,
+  }));
+
   return [
     ...staticRoutes,
     ...typeCategoryRoutes,
@@ -211,5 +263,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...classRoutes,
     ...schoolRoutes,
     ...rankRoutes,
+    ...infusionRoutes,
   ];
 }

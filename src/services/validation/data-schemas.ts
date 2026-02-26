@@ -198,10 +198,23 @@ export const MechanicsSchema = z.object({
 });
 
 // V1.2 Common fields
+const StatChangeSchema = z.object({
+  field: z.string(),
+  old: z.unknown(),
+  new: z.unknown(),
+});
+
+const StatChangeEntrySchema = z.object({
+  version: z.string(),
+  date: z.string(),
+  changes: z.array(StatChangeSchema),
+});
+
 const CommonSchemaParts = {
   $schema: z.string().optional(),
   last_modified: z.string().optional(),
   changelog: z.any().optional(),
+  stat_changes: z.array(StatChangeEntrySchema).optional(),
 };
 
 export const UnitSchema = z.object({

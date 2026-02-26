@@ -1,5 +1,6 @@
 import { Layers, TrendingUp, Users } from "lucide-react";
 
+import { JsonLd } from "@/components/common/JsonLd";
 import { PageShell } from "@/components/layout/PageShell";
 import { getUpgrades } from "@/services/api/api";
 import type { Upgrade } from "@/types/api";
@@ -163,6 +164,22 @@ function ArchetypeSection({ upgrade }: { upgrade: Upgrade }) {
 export default async function UpgradesPage() {
   const upgrades = await getUpgrades();
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: metadata.title,
+    description: metadata.description,
+    author: { "@type": "Organization", name: "SpellcastersDB" },
+    publisher: {
+      "@type": "Organization",
+      name: "SpellcastersDB",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://spellcastersdb.com/favicon.svg",
+      },
+    },
+  };
+
   return (
     <PageShell
       title="Class Upgrades"
@@ -173,6 +190,7 @@ export default async function UpgradesPage() {
         { label: "Upgrades", href: "/guide/upgrades" },
       ]}
     >
+      <JsonLd data={jsonLdData} id="json-ld-article" />
       <div className="space-y-8 max-w-4xl mx-auto">
         {/* Intro */}
         <div className="bg-surface-card border border-border-default rounded-xl p-5 md:p-6">

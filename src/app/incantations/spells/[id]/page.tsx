@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
 import { JsonLd } from "@/components/common/JsonLd";
 import { EntityShowcase } from "@/components/inspector/EntityShowcase";
 import { DictionaryProvider } from "@/components/providers/DictionaryProvider";
@@ -97,10 +98,38 @@ export default async function SpellPage({ params }: SpellPageProps) {
       description: spell.description,
       category: "Spell",
     },
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://spellcastersdb.com",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Spells",
+          item: "https://spellcastersdb.com/incantations/spells",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: spell.name,
+        },
+      ],
+    },
   };
 
   return (
     <DictionaryProvider dictionary={dictionary}>
+      <BreadcrumbsLd
+        items={[
+          { name: "Spells", url: "/incantations/spells" },
+          { name: spell.name, url: `/incantations/spells/${spell.entity_id}` },
+        ]}
+      />
       <JsonLd
         data={jsonLdData as Record<string, unknown>}
         id={`json-ld-spell-${spell.entity_id}`}

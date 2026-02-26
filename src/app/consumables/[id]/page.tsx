@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { BreadcrumbsLd } from "@/components/common/BreadcrumbsLd";
 import { JsonLd } from "@/components/common/JsonLd";
 import { getConsumables } from "@/services/api/api";
 
@@ -82,10 +83,38 @@ export default async function ConsumablePage({ params }: ConsumablePageProps) {
           }
         : null,
     ].filter(Boolean),
+    breadcrumb: {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Home",
+          item: "https://spellcastersdb.com",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Consumables",
+          item: "https://spellcastersdb.com/consumables",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: item.name,
+        },
+      ],
+    },
   };
 
   return (
     <>
+      <BreadcrumbsLd
+        items={[
+          { name: "Consumables", url: "/consumables" },
+          { name: item.name, url: `/consumables/${item.entity_id}` },
+        ]}
+      />
       <JsonLd
         data={jsonLdData as Record<string, unknown>}
         id={`json-ld-consumable-${item.entity_id}`}
