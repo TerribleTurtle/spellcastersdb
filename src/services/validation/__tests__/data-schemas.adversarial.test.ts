@@ -172,6 +172,41 @@ describe("data-schemas.ts — adversarial", () => {
       // Zod allows Infinity for z.number() by default — just verify no crash
       expect(typeof r.success).toBe("boolean");
     });
+
+    it("UnitSchema should reject knowledge_cost as NaN or Infinity", () => {
+      const validUnit = {
+        entity_id: "u_cost",
+        name: "Cost",
+        category: "Creature",
+        health: 100,
+        magic_school: "Wild",
+        tags: [],
+        description: "test",
+      };
+
+      expect(
+        UnitSchema.safeParse({ ...validUnit, knowledge_cost: NaN }).success
+      ).toBe(false);
+      expect(
+        UnitSchema.safeParse({ ...validUnit, knowledge_cost: Infinity }).success
+      ).toBe(false);
+    });
+
+    it("UnitSchema should reject knowledge_cost as a string", () => {
+      const validUnit = {
+        entity_id: "u_cost",
+        name: "Cost",
+        category: "Creature",
+        health: 100,
+        magic_school: "Wild",
+        tags: [],
+        description: "test",
+      };
+
+      expect(
+        UnitSchema.safeParse({ ...validUnit, knowledge_cost: "500" }).success
+      ).toBe(false);
+    });
   });
 
   // ─── UpgradeSchema Refinement Bypass ─────────────────────────────

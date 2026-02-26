@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.30] - 2026-02-26
+
+### Added
+- **Knowledge Purchasing System (v0.0.3 API)**: Consumer-side support for the new `knowledge_cost` field on all incantations (Units & Spells).
+  - Zod schema validation (`z.number().int().min(0).optional()`) in `IncantationBase`.
+  - TypeScript type (`knowledge_cost?: number`) in the `Incantation` interface.
+  - Unit and adversarial tests for valid, invalid, and edge-case `knowledge_cost` values.
+- **Knowledge Cost UI**: Displays the `knowledge.webp` icon alongside `knowledge_cost` in Entity Cards, Inspector stat grids, and Detail Page Quick Facts pills (hidden when cost is 0 or absent).
+- **`KnowledgeIcon` component** (`src/components/ui/icons/KnowledgeIcon.tsx`): Reusable icon wrapper for the Knowledge currency asset.
+
 ## [1.0.29] - 2026-02-26
 
 ### Added

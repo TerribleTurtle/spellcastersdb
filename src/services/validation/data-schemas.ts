@@ -26,6 +26,7 @@ export const IncantationBase = {
 
   // Flattened Card Config
   rank: z.enum(["I", "II", "III", "IV", "V"]).optional(), // Optional for non-units if shared? Actually Units need it.
+  knowledge_cost: z.number().int().min(0).optional(),
 };
 
 // Condition Schema - Hardened for V2 API Drift

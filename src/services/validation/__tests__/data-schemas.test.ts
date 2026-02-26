@@ -39,6 +39,37 @@ describe("data-schemas.ts", () => {
       const invalid = { ...validUnitBase, category: EntityCategory.Spell };
       expect(() => UnitSchema.parse(invalid)).toThrowError();
     });
+    it("should accept a knowledge_cost of 0 or > 0", () => {
+      const freeUnit = {
+        ...validUnitBase,
+        category: EntityCategory.Creature,
+        knowledge_cost: 0,
+      };
+      expect(UnitSchema.parse(freeUnit)).toBeDefined();
+
+      const paidUnit = {
+        ...validUnitBase,
+        category: EntityCategory.Creature,
+        knowledge_cost: 500,
+      };
+      expect(UnitSchema.parse(paidUnit)).toBeDefined();
+    });
+
+    it("should reject invalid knowledge_cost values", () => {
+      const negativeCost = {
+        ...validUnitBase,
+        category: EntityCategory.Creature,
+        knowledge_cost: -1,
+      };
+      expect(() => UnitSchema.parse(negativeCost)).toThrowError();
+
+      const floatCost = {
+        ...validUnitBase,
+        category: EntityCategory.Creature,
+        knowledge_cost: 1.5,
+      };
+      expect(() => UnitSchema.parse(floatCost)).toThrowError();
+    });
   });
 
   describe("SpellSchema", () => {
@@ -58,6 +89,11 @@ describe("data-schemas.ts", () => {
     it("should reject missing category", () => {
       const { category, ...rest } = validSpell;
       expect(() => SpellSchema.parse(rest)).toThrowError();
+    });
+
+    it("should accept knowledge_cost on spells", () => {
+      const spellWithCost = { ...validSpell, knowledge_cost: 200 };
+      expect(SpellSchema.parse(spellWithCost)).toBeDefined();
     });
   });
 
