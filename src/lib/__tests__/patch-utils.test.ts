@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 
-
 import { PATCH_CATEGORY_LABELS } from "../patch-utils";
 
 describe("patch-utils.ts", () => {
