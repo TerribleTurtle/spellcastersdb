@@ -36,7 +36,7 @@ export default async function SpellcastersIndexPage() {
     hasPart: spellcasters.map((s) => ({
       "@type": "GameCharacter",
       name: s.name,
-      url: `https://spellcastersdb.com${routes.spellcaster(s.spellcaster_id!)}`,
+      url: `https://www.spellcastersdb.com${routes.spellcaster(s.spellcaster_id!)}`,
     })),
   };
 

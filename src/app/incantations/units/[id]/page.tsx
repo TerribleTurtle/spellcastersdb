@@ -93,7 +93,7 @@ export default async function UnitPage({ params }: UnitPageProps) {
   // Schema for Unit (Product/Character)
   const jsonLdData = {
     "@context": "https://schema.org",
-    thumbnailUrl: `https://spellcastersdb.com/api/og?unitId=${unit.entity_id}`,
+    thumbnailUrl: `https://www.spellcastersdb.com/api/og?unitId=${unit.entity_id}`,
     mainEntity: {
       "@type": "GameCharacter",
       name: unit.name,
@@ -107,13 +107,13 @@ export default async function UnitPage({ params }: UnitPageProps) {
           "@type": "ListItem",
           position: 1,
           name: "Home",
-          item: "https://spellcastersdb.com",
+          item: "https://www.spellcastersdb.com",
         },
         {
           "@type": "ListItem",
           position: 2,
           name: "Units",
-          item: "https://spellcastersdb.com/incantations/units",
+          item: "https://www.spellcastersdb.com/incantations/units",
         },
         {
           "@type": "ListItem",

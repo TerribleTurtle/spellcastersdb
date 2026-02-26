@@ -26,7 +26,7 @@ export function BreadcrumbsLd({ items, id }: BreadcrumbsLdProps) {
       name: item.name,
       item: item.url.startsWith("http")
         ? item.url
-        : `https://spellcastersdb.com${item.url}`,
+        : `https://www.spellcastersdb.com${item.url}`,
     })),
   };
 

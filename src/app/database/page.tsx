@@ -43,15 +43,15 @@ export default async function DatabasePage() {
     description:
       "Search the complete card database including creatures, spells, and titans.",
     hasPart: units.map((u) => {
-      let url = `https://spellcastersdb.com/database`; // Default
+      let url = `https://www.spellcastersdb.com/database`; // Default
       if (u.category === "Spellcaster")
-        url = `https://spellcastersdb.com/spellcasters/${u.spellcaster_id}`;
+        url = `https://www.spellcastersdb.com/spellcasters/${u.spellcaster_id}`;
       else if (u.category === "Titan")
-        url = `https://spellcastersdb.com/titans/${u.entity_id}`;
+        url = `https://www.spellcastersdb.com/titans/${u.entity_id}`;
       else if (u.category === "Spell")
-        url = `https://spellcastersdb.com/incantations/spells/${u.entity_id}`;
+        url = `https://www.spellcastersdb.com/incantations/spells/${u.entity_id}`;
       else if (u.category === "Creature" || u.category === "Building")
-        url = `https://spellcastersdb.com/incantations/units/${u.entity_id}`;
+        url = `https://www.spellcastersdb.com/incantations/units/${u.entity_id}`;
 
       return {
         "@type": "Thing",

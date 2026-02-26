@@ -68,11 +68,11 @@ export default async function SchoolPage({ params }: SchoolPageProps) {
         const safeEntity = entity as Unit | Spell | Titan;
         const id = safeEntity.entity_id;
 
-        let url = `https://spellcastersdb.com/incantations/units/${id}`;
+        let url = `https://www.spellcastersdb.com/incantations/units/${id}`;
         if (entity.category === "Spell") {
-          url = `https://spellcastersdb.com/incantations/spells/${id}`;
+          url = `https://www.spellcastersdb.com/incantations/spells/${id}`;
         } else if (entity.category === "Titan") {
-          url = `https://spellcastersdb.com/titans/${id}`;
+          url = `https://www.spellcastersdb.com/titans/${id}`;
         }
 
         return {

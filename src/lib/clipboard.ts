@@ -11,7 +11,7 @@ import { monitoring } from "@/services/monitoring";
  *
  * @example
  * ```ts
- * const ok = await copyToClipboard("https://spellcastersdb.com/d/abc123");
+ * const ok = await copyToClipboard("https://www.spellcastersdb.com/d/abc123");
  * if (ok) showToast("Link copied!");
  * ```
  */

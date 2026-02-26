@@ -19,7 +19,7 @@ import { monitoring } from "@/services/monitoring";
  *
  * @example
  * ```bash
- * curl -H "Authorization: Bearer MY_SECRET" https://spellcastersdb.com/api/revalidate
+ * curl -H "Authorization: Bearer MY_SECRET" https://www.spellcastersdb.com/api/revalidate
  * ```
  */
 export async function GET(request: NextRequest) {

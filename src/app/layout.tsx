@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   },
   authors: [{ name: "TerribleTurtle" }],
   creator: "TerribleTurtle",
-  metadataBase: new URL("https://spellcastersdb.com"),
+  metadataBase: new URL("https://www.spellcastersdb.com"),
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
@@ -79,7 +79,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "SpellcastersDB",
     description: "A community database for Spellcasters Chronicles.",
-    url: "https://spellcastersdb.com",
+    url: "https://www.spellcastersdb.com",
     siteName: "SpellcastersDB",
     locale: "en_US",
     type: "website",
@@ -153,11 +153,11 @@ export default async function RootLayout({
                   "@context": "https://schema.org",
                   "@type": "WebSite",
                   name: "SpellcastersDB",
-                  url: "https://spellcastersdb.com",
+                  url: "https://www.spellcastersdb.com",
                   potentialAction: {
                     "@type": "SearchAction",
                     target:
-                      "https://spellcastersdb.com/database?q={search_term_string}",
+                      "https://www.spellcastersdb.com/database?q={search_term_string}",
                     "query-input": "required name=search_term_string",
                   },
                 } as Record<string, unknown>
