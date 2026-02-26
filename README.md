@@ -101,13 +101,12 @@ For detailed setup instructions, including **Local API Development**, please see
 | `npm run test:e2e`        | Runs the E2E test suite (Playwright)                     |
 | `npm run test:e2e:ui`     | Opens the Playwright UI for interactive debugging        |
 | `npm run lighthouse`      | Runs Lighthouse CI checks                                |
-| `npm run analyze`         | Generates a webpack bundle size analysis via cross-env   |
+| `npm run analyze`         | Builds with `@next/bundle-analyzer` enabled to inspect bundle sizes |
 | `npm run dead-code`       | Scans for unused code and files via knip                 |
 | `npm run audit`           | Scans for CVEs, respecting the `.nsprc` whitelist        |
 
 ## Documentation
 
-- [**Active State**](active_state.md): The current development focus and daily progress log.
 - [**API Info**](docs/api_info.md): Specification for the JSON data consumed by this app.
 - [**Brand Guidelines**](docs/BRAND_GUIDELINES.md): Colors, fonts, and styling rules.
 - [**Changelog**](CHANGELOG.md): Release history and version notes.

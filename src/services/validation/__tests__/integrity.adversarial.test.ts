@@ -27,7 +27,7 @@ describe("integrity-checker.ts — adversarial", () => {
     const units = Array.from({ length: 1000 }, () => ({
       entity_id: "same_id",
       name: "Clone",
-      category: "Creature" as const,
+      category: "Creature",
       health: 1,
       movement_speed: 1,
       magic_school: "Wild",
@@ -35,7 +35,7 @@ describe("integrity-checker.ts — adversarial", () => {
       description: "",
       range: 1,
       damage: 1,
-    }));
+    })) as any;
 
     const issues = validateIntegrity({ ...BASE_DATA, units });
     // Should detect 999 duplicates
@@ -49,7 +49,7 @@ describe("integrity-checker.ts — adversarial", () => {
       {
         entity_id: "🔥fire_unit",
         name: "Fire Unit",
-        category: "Creature" as const,
+        category: "Creature",
         health: 100,
         movement_speed: 5,
         magic_school: "Elemental",
@@ -61,7 +61,7 @@ describe("integrity-checker.ts — adversarial", () => {
           spawner: [{ unit_id: "🔥fire_unit" }], // self-spawn — valid
         },
       },
-    ];
+    ] as any;
 
     const issues = validateIntegrity({ ...BASE_DATA, units });
     expect(issues).toHaveLength(0);
@@ -72,7 +72,7 @@ describe("integrity-checker.ts — adversarial", () => {
       {
         entity_id: "🔥fire_unit",
         name: "Fire Unit",
-        category: "Creature" as const,
+        category: "Creature",
         health: 100,
         movement_speed: 5,
         magic_school: "Elemental",
@@ -84,7 +84,7 @@ describe("integrity-checker.ts — adversarial", () => {
           spawner: [{ unit_id: "❄️ice_unit" }], // doesn't exist
         },
       },
-    ];
+    ] as any;
 
     const issues = validateIntegrity({ ...BASE_DATA, units });
     expect(issues).toHaveLength(1);
@@ -97,7 +97,7 @@ describe("integrity-checker.ts — adversarial", () => {
       {
         entity_id: "no_mech",
         name: "Plain",
-        category: "Creature" as const,
+        category: "Creature",
         health: 1,
         movement_speed: 1,
         magic_school: "Wild",
@@ -107,7 +107,7 @@ describe("integrity-checker.ts — adversarial", () => {
         damage: 1,
         mechanics: undefined,
       },
-    ];
+    ] as any;
     const issues = validateIntegrity({ ...BASE_DATA, units });
     expect(issues).toHaveLength(0);
   });
@@ -117,7 +117,7 @@ describe("integrity-checker.ts — adversarial", () => {
       {
         entity_id: "empty_mech",
         name: "Empty",
-        category: "Creature" as const,
+        category: "Creature",
         health: 1,
         movement_speed: 1,
         magic_school: "Wild",
@@ -127,7 +127,7 @@ describe("integrity-checker.ts — adversarial", () => {
         damage: 1,
         mechanics: {},
       },
-    ];
+    ] as any;
     const issues = validateIntegrity({ ...BASE_DATA, units });
     expect(issues).toHaveLength(0);
   });
@@ -137,7 +137,7 @@ describe("integrity-checker.ts — adversarial", () => {
       {
         entity_id: "empty_spawner",
         name: "Empty Spawner",
-        category: "Creature" as const,
+        category: "Creature",
         health: 1,
         movement_speed: 1,
         magic_school: "Wild",
@@ -147,7 +147,7 @@ describe("integrity-checker.ts — adversarial", () => {
         damage: 1,
         mechanics: { spawner: [] },
       },
-    ];
+    ] as any;
     const issues = validateIntegrity({ ...BASE_DATA, units });
     expect(issues).toHaveLength(0);
   });
@@ -158,7 +158,7 @@ describe("integrity-checker.ts — adversarial", () => {
       {
         entity_id: "valid_unit",
         name: "Valid",
-        category: "Creature" as const,
+        category: "Creature",
         health: 1,
         movement_speed: 1,
         magic_school: "Wild",
@@ -167,12 +167,12 @@ describe("integrity-checker.ts — adversarial", () => {
         range: 1,
         damage: 1,
       },
-    ];
+    ] as any;
     const spells = [
       {
         entity_id: "spell_with_spawner",
         name: "Summon",
-        category: "Spell" as const,
+        category: "Spell",
         magic_school: "Wild",
         tags: [],
         description: "",
@@ -183,7 +183,7 @@ describe("integrity-checker.ts — adversarial", () => {
           ],
         },
       },
-    ];
+    ] as any;
 
     const issues = validateIntegrity({ ...BASE_DATA, units, spells });
     expect(issues).toHaveLength(1);

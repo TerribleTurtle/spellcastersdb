@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { createNewDeck } from "@/services/api/deck-factory";
 import { DeckRules } from "@/services/rules/deck-rules";
 import { DeckFactory } from "@/tests/factories/deck-factory";
+import { Deck } from "@/types/deck";
 
 import { TeamMovement } from "../TeamMovement";
 
@@ -18,14 +19,22 @@ describe("TeamMovement.ts — adversarial", () => {
 
     for (const idx of NASTY_INDICES) {
       it(`should fail gracefully with sourceDeckIndex=${idx}`, () => {
-        const decks = [createNewDeck("D1")];
+        const decks = [
+          createNewDeck("D1"),
+          createNewDeck("D2"),
+          createNewDeck("D3"),
+        ] as [Deck, Deck, Deck];
         const result = TeamMovement.moveCardBetweenDecks(decks, idx, 0, 0, 0);
         // Should either succeed (same-slot no-op) or fail with error
         expect(typeof result.success).toBe("boolean");
       });
 
       it(`should fail gracefully with sourceSlotIndex=${idx}`, () => {
-        const decks = [createNewDeck("D1")];
+        const decks = [
+          createNewDeck("D1"),
+          createNewDeck("D2"),
+          createNewDeck("D3"),
+        ] as [Deck, Deck, Deck];
         const result = TeamMovement.moveCardBetweenDecks(decks, 0, idx, 0, 0);
         expect(typeof result.success).toBe("boolean");
       });
@@ -48,7 +57,11 @@ describe("TeamMovement.ts — adversarial", () => {
   // ─── Same Index Moves ────────────────────────────────────────────
   describe("self-referential moves", () => {
     it("moving card to the same slot in the same deck should be a no-op", () => {
-      const decks = [createNewDeck("D1")];
+      const decks = [
+        createNewDeck("D1"),
+        createNewDeck("D2"),
+        createNewDeck("D3"),
+      ] as [Deck, Deck, Deck];
       const unit = DeckFactory.createUnit({ entity_id: "self_move" });
       decks[0] = DeckRules.setSlot(decks[0], 0, unit).data!;
 
@@ -59,7 +72,11 @@ describe("TeamMovement.ts — adversarial", () => {
 
     it("moving spellcaster to the same deck index should succeed as self-swap", () => {
       const caster = DeckFactory.createSpellcaster({ name: "Self" });
-      const decks = [createNewDeck("D1", caster)];
+      const decks = [
+        createNewDeck("D1", caster),
+        createNewDeck("D2", undefined),
+        createNewDeck("D3", undefined),
+      ] as [Deck, Deck, Deck];
 
       // sourceDeckIndex === targetDeckIndex
       const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 0, 0);
@@ -71,7 +88,11 @@ describe("TeamMovement.ts — adversarial", () => {
   // ─── Cross-Deck Move with Empty Slots ────────────────────────────
   describe("cross-deck with all-empty source", () => {
     it("should fail when trying to move empty slot to another deck", () => {
-      const decks = [createNewDeck("D1"), createNewDeck("D2")];
+      const decks = [
+        createNewDeck("D1"),
+        createNewDeck("D2"),
+        createNewDeck("D3"),
+      ] as [Deck, Deck, Deck];
       const result = TeamMovement.moveCardBetweenDecks(decks, 0, 0, 1, 0);
       expect(result.success).toBe(false);
     });
@@ -80,20 +101,32 @@ describe("TeamMovement.ts — adversarial", () => {
   // ─── moveSpellcasterBetweenDecks: Double Empty ───────────────────
   describe("moveSpellcasterBetweenDecks — double empty", () => {
     it("should fail when both decks have no spellcaster", () => {
-      const decks = [createNewDeck("D1"), createNewDeck("D2")];
+      const decks = [
+        createNewDeck("D1", undefined),
+        createNewDeck("D2", undefined),
+        createNewDeck("D3", undefined),
+      ] as [Deck, Deck, Deck];
       const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 0, 1);
       expect(result.success).toBe(false);
     });
 
     it("should fail when source deck doesn't exist", () => {
-      const decks = [createNewDeck("D1")];
+      const decks = [
+        createNewDeck("D1"),
+        createNewDeck("D2"),
+        createNewDeck("D3"),
+      ] as [Deck, Deck, Deck];
       const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 5, 0);
       expect(result.success).toBe(false);
     });
 
     it("should fail when target deck doesn't exist", () => {
       const caster = DeckFactory.createSpellcaster();
-      const decks = [createNewDeck("D1", caster)];
+      const decks = [
+        createNewDeck("D1", caster),
+        createNewDeck("D2", undefined),
+        createNewDeck("D3", undefined),
+      ] as [Deck, Deck, Deck];
       const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 0, 5);
       expect(result.success).toBe(false);
     });
@@ -102,7 +135,11 @@ describe("TeamMovement.ts — adversarial", () => {
   // ─── Immutability ────────────────────────────────────────────────
   describe("immutability guarantees", () => {
     it("moveCardBetweenDecks should not mutate the original decks array", () => {
-      const decks = [createNewDeck("D1"), createNewDeck("D2")];
+      const decks = [
+        createNewDeck("D1"),
+        createNewDeck("D2"),
+        createNewDeck("D3"),
+      ] as [Deck, Deck, Deck];
       const unit = DeckFactory.createUnit({ entity_id: "imm_cross" });
       decks[0] = DeckRules.setSlot(decks[0], 0, unit).data!;
 

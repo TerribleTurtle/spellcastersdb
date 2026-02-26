@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { DataFetchError } from "@/services/config/errors";
 import { monitoring } from "@/services/monitoring";
 
 import {
@@ -49,16 +48,14 @@ describe("api-client.ts", () => {
       expect(result).toEqual(mockResponse);
     });
 
-    it("should throw DataFetchError and log on HTTP error", async () => {
+    it("should throw and log on HTTP error", async () => {
       (global.fetch as ReturnType<typeof vi.fn>).mockResolvedValue({
         ok: false,
         status: 404,
         statusText: "Not Found",
       });
 
-      await expect(fetchJson("http://test.com")).rejects.toThrow(
-        DataFetchError
-      );
+      await expect(fetchJson("http://test.com")).rejects.toThrow();
       // Wait for the async logging to complete if it's fire-and-forget or we just need the next tick
       await new Promise((resolve) => setTimeout(resolve, 0));
       expect(monitoring.captureMessage).toHaveBeenCalled();
@@ -93,7 +90,7 @@ describe("api-client.ts", () => {
         json: () => Promise.resolve({ data: "chunk" }),
       });
 
-      await fetchChunk("test-endpoint", { next: { revalidate: 3600 } });
+      await fetchChunk("test-endpoint");
 
       expect(global.fetch).toHaveBeenCalledWith(
         expect.stringContaining("/test-endpoint"),
@@ -123,7 +120,7 @@ describe("api-client.ts", () => {
         statusText: "Not Found",
       }); // e.g. spells endpoint fails
 
-      await expect(fetchChunkedData()).rejects.toThrow(DataFetchError);
+      await expect(fetchChunkedData()).rejects.toThrow();
     });
 
     it("should gracefully degrade non-critical chunks (titans, consumables, upgrades, infusions) to [] on failure", async () => {

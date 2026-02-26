@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { create } from "zustand";
 
 import { INITIAL_DECK } from "@/services/api/persistence";
+import { DeckBuilderState } from "@/store/types";
 import { DeckFactory } from "@/tests/factories/deck-factory";
-import { DeckBuilderState } from "@/types/store";
 
 import { createSoloSlice } from "../createSoloSlice";
 

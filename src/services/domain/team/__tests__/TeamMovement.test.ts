@@ -3,20 +3,29 @@ import { describe, expect, it } from "vitest";
 import { createNewDeck } from "@/services/api/deck-factory";
 import { DeckRules } from "@/services/rules/deck-rules";
 import { DeckFactory } from "@/tests/factories/deck-factory";
+import { Deck } from "@/types/deck";
 
 import { TeamMovement } from "../TeamMovement";
 
 describe("TeamMovement.ts", () => {
   describe("moveCardBetweenDecks", () => {
     it("should return early logic for same slot intra-deck move", () => {
-      const decks = [createNewDeck("D1")];
+      const decks = [
+        createNewDeck("D1"),
+        createNewDeck("D2"),
+        createNewDeck("D3"),
+      ] as [Deck, Deck, Deck];
       const result = TeamMovement.moveCardBetweenDecks(decks, 0, 0, 0, 0);
       expect(result.data).toEqual(decks);
       expect(result.success).toBe(true);
     });
 
     it("should swap two occupied slots in the same deck", () => {
-      const decks = [createNewDeck("D1")];
+      const decks = [
+        createNewDeck("D1"),
+        createNewDeck("D2"),
+        createNewDeck("D3"),
+      ] as [Deck, Deck, Deck];
       const unit1 = DeckFactory.createUnit({ name: "U1", entity_id: "u1" });
       const unit2 = DeckFactory.createUnit({ name: "U2", entity_id: "u2" });
 
@@ -31,7 +40,11 @@ describe("TeamMovement.ts", () => {
     });
 
     it("should move to an empty slot across different decks", () => {
-      const decks = [createNewDeck("D1"), createNewDeck("D2")];
+      const decks = [
+        createNewDeck("D1"),
+        createNewDeck("D2"),
+        createNewDeck("D3"),
+      ] as [Deck, Deck, Deck];
       const unit = DeckFactory.createUnit({ name: "U1" });
 
       // Setup: U1 in deck 0, slot 0. Deck 1, slot 1 is empty.
@@ -44,14 +57,22 @@ describe("TeamMovement.ts", () => {
     });
 
     it("should return false if source slot is empty", () => {
-      const decks = [createNewDeck("D1"), createNewDeck("D2")];
+      const decks = [
+        createNewDeck("D1"),
+        createNewDeck("D2"),
+        createNewDeck("D3"),
+      ] as [Deck, Deck, Deck];
       const result = TeamMovement.moveCardBetweenDecks(decks, 0, 0, 1, 0);
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
     });
 
     it("should return false for invalid deck indices", () => {
-      const decks = [createNewDeck("D1")];
+      const decks = [
+        createNewDeck("D1"),
+        createNewDeck("D2"),
+        createNewDeck("D3"),
+      ] as [Deck, Deck, Deck];
       const result = TeamMovement.moveCardBetweenDecks(decks, 9, 0, 0, 0);
       expect(result.success).toBe(false);
     });
@@ -60,7 +81,11 @@ describe("TeamMovement.ts", () => {
   describe("moveSpellcasterBetweenDecks", () => {
     it("should move a spellcaster from one deck to an empty spellcaster slot in another", () => {
       const caster1 = DeckFactory.createSpellcaster({ name: "SC1" });
-      const decks = [createNewDeck("D1", caster1), createNewDeck("D2", null)];
+      const decks = [
+        createNewDeck("D1", caster1),
+        createNewDeck("D2", undefined),
+        createNewDeck("D3", undefined),
+      ] as [Deck, Deck, Deck];
 
       const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 0, 1);
 
@@ -75,7 +100,8 @@ describe("TeamMovement.ts", () => {
       const decks = [
         createNewDeck("D1", caster1),
         createNewDeck("D2", caster2),
-      ];
+        createNewDeck("D3", undefined),
+      ] as [Deck, Deck, Deck];
 
       const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 0, 1);
 
@@ -85,7 +111,11 @@ describe("TeamMovement.ts", () => {
     });
 
     it("should return false if source deck has no spellcaster", () => {
-      const decks = [createNewDeck("D1", null), createNewDeck("D2", null)];
+      const decks = [
+        createNewDeck("D1", undefined),
+        createNewDeck("D2", undefined),
+        createNewDeck("D3", undefined),
+      ] as [Deck, Deck, Deck];
 
       const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 0, 1);
       expect(result.success).toBe(false);
@@ -93,7 +123,11 @@ describe("TeamMovement.ts", () => {
     });
 
     it("should return false for invalid deck indices", () => {
-      const decks = [createNewDeck("D1")];
+      const decks = [
+        createNewDeck("D1"),
+        createNewDeck("D2"),
+        createNewDeck("D3"),
+      ] as [Deck, Deck, Deck];
       const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 0, 5);
       expect(result.success).toBe(false);
     });

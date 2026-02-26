@@ -34,7 +34,7 @@ Review the settings in `.env.local`.
 | `NEXT_PUBLIC_API_URL`                | Base URL for game data                      | `https://terribleturtle.github.io/spellcasters-community-api/api/v2` |
 | `NEXT_PUBLIC_USE_LOCAL_ASSETS`       | Toggle to use local images                  | `false`                                                              |
 | `NEXT_PUBLIC_PREFERRED_ASSET_FORMAT` | Asset format (webp/png)                     | `webp`                                                               |
-| `LOCAL_DATA_PATH`                    | Absolute path to local data JSON            | `C:\Projects\spellcasters-community-api\api\v2\all_data.json`        |
+| `LOCAL_DATA_PATH`                    | Absolute path to local data JSON            | `~/projects/spellcasters-community-api/api/v2/all_data.json`         |
 | `LOCAL_API_PATH`                     | _Legacy Fallback for LOCAL_DATA_PATH_       | _(Optional)_                                                         |
 | `GITHUB_TOKEN`                       | Increases GitHub API rate limits            | _(Optional)_                                                         |
 | `REVALIDATION_SECRET`                | Secures `/api/revalidate` endpoint          | _(Required in production)_                                           |
@@ -43,7 +43,9 @@ Review the settings in `.env.local`.
 | `UPSTASH_REDIS_REST_TOKEN`           | Redis token for rate limiting & short links | _(Optional)_                                                         |
 | `SENTRY_AUTH_TOKEN`                  | Sentry source map upload token              | _(Optional)_                                                         |
 | `NEXT_PUBLIC_SENTRY_DSN`             | Sentry DSN for error tracking               | _(Optional)_                                                         |
+| `APP_URL`                            | Production URL for links & CI callbacks     | `http://localhost:3000`                                              |
 | `PORT`                               | Dev server port for local proxy             | `3000`                                                               |
+| `ANALYZE`                            | Enable `@next/bundle-analyzer` during build | _(Set via `npm run analyze`)_                                        |
 
 **Note on Local API Development:**
 If you are working on the Data Layer, you can point the app to a local version of the [Spellcasters Community API](https://github.com/TerribleTurtle/spellcasters-community-api).
@@ -73,7 +75,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 - **Testing**:
   - Run `npm run test` to execute Vitest unit tests.
   - Run `npm run test:coverage` to see a coverage report.
-  - Run `npm run preflight` to run type-check + lint + tests in one go.
+  - Run `npm run preflight` to run type-check, format check, lint, tests, and dependency validation in one go.
   - Run `npm run lighthouse` to verify accessibility, SEO, best practices, and PWA criteria. Performance limits are enforced as warnings due to local dev server latency.
 - **Security & Code Health**:
   - Run `npm run audit` to check for dependency vulnerabilities. Known, upstream-blocked dev-dependency CVEs are whitelisted in `.nsprc`.

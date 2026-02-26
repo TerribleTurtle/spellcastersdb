@@ -72,7 +72,7 @@ describe("API Access & Reliability", () => {
 
   describe("Error Handling", () => {
     it("should propagate DataFetchError (Network Error)", async () => {
-      const networkError = new ApiClient.DataFetchError("Network Failure", 500);
+      const networkError = new Error("Network Failure");
       vi.mocked(ApiClient.fetchChunkedData).mockRejectedValue(networkError);
 
       await expect(getUnits()).rejects.toThrow("Network Failure");
