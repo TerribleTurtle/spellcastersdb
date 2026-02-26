@@ -1,0 +1,106 @@
+/* ═══════════════════════════════════════════════════════
+   ANNOUNCEMENT BANNER — Animations & Gradients Only
+   Layout is handled by Tailwind utilities in the component.
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Variant Gradients ───────────────────────────────── */
+.announcement-banner--launch {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--sp-brand-primary) 25%, var(--sp-surface-deck)), color-mix(in srgb, var(--sp-brand-secondary) 15%, var(--sp-surface-deck)), var(--sp-surface-deck)) !important;
+}
+
+.announcement-banner--info {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--sp-status-info) 20%, var(--sp-surface-deck)), var(--sp-surface-deck)) !important;
+}
+
+.announcement-banner--warning {
+    background: linear-gradient(135deg, color-mix(in srgb, var(--sp-status-warning) 20%, var(--sp-surface-deck)), var(--sp-surface-deck)) !important;
+}
+
+/* ── Slide-in ────────────────────────────────────────── */
+.announcement-banner {
+    animation: banner-slide-in 0.4s ease-out;
+}
+
+@keyframes banner-slide-in {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* ── Shimmer Overlay ─────────────────────────────────── */
+.announcement-banner__shimmer {
+    background: linear-gradient(110deg,
+            transparent 25%,
+            rgba(255, 255, 255, 0.06) 45%,
+            rgba(255, 255, 255, 0.10) 50%,
+            rgba(255, 255, 255, 0.06) 55%,
+            transparent 75%);
+    background-size: 250% 100%;
+    animation: banner-shimmer 4s ease-in-out infinite;
+}
+
+@keyframes banner-shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* ── Badge ───────────────────────────────────────────── */
+.announcement-banner__badge {
+    background: linear-gradient(135deg, #c084fc, #db2777);
+    box-shadow: 0 0 12px rgba(192, 132, 252, 0.4);
+    animation: badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes badge-pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 12px rgba(192, 132, 252, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(192, 132, 252, 0.7);
+    }
+}
+
+.announcement-banner__badge-icon {
+    animation: badge-icon-spin 3s linear infinite;
+}
+
+@keyframes badge-icon-spin {
+
+    0%,
+    100% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: rotate(15deg) scale(1.15);
+    }
+
+    75% {
+        transform: rotate(-10deg) scale(0.95);
+    }
+}
+
+/* ── Reduced Motion ──────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+
+    .announcement-banner,
+    .announcement-banner__shimmer,
+    .announcement-banner__badge,
+    .announcement-banner__badge-icon {
+        animation: none !important;
+    }
+}

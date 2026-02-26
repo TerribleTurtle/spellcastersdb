@@ -17,6 +17,9 @@
 @import "./components.css";
 @import "./shadcn.css";
 
+/* 4b. Component-level stylesheets */
+@import "./announcement-banner.css";
+
 /* 5. Base — Body, scrollbar, animations, utilities, a11y */
 @import "./base.css";
 

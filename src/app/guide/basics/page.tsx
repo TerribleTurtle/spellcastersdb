@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { JsonLd } from "@/components/common/JsonLd";
 import { GuideToc, MobileGuideToc } from "@/components/guide/GuideToc";
 import { PageShell } from "@/components/layout/PageShell";
 import { routes } from "@/lib/routes";
@@ -19,6 +20,22 @@ export const metadata = {
 };
 
 export default function BasicsPage() {
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: metadata.title,
+    description: metadata.description,
+    author: { "@type": "Organization", name: "SpellcastersDB" },
+    publisher: {
+      "@type": "Organization",
+      name: "SpellcastersDB",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://spellcastersdb.com/favicon.svg",
+      },
+    },
+  };
+
   return (
     <PageShell
       title="Basics & Deck Building"
@@ -29,6 +46,7 @@ export default function BasicsPage() {
         { label: "Basics", href: "/guide/basics" },
       ]}
     >
+      <JsonLd data={jsonLdData} id="json-ld-article" />
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
         <div className="flex-1 space-y-5 md:space-y-6 min-w-0 w-full max-w-4xl mx-auto lg:mx-0">
           <MobileGuideToc />

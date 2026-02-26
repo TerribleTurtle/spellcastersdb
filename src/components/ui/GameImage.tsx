@@ -71,6 +71,13 @@ export function GameImage({
   // Bypass Vercel's optimizer to avoid intermittent 400 errors.
   const isRemote = typeof imgSrc === "string" && imgSrc.startsWith("http");
 
+  // Dev warning for missing alt text
+  if (process.env.NODE_ENV === "development" && !alt) {
+    console.warn(
+      `[GameImage] Missing alt text for image: ${src}. This negatively impacts SEO and accessibility.`
+    );
+  }
+
   return (
     <Image
       key={String(src)}

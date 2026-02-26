@@ -1,5 +1,6 @@
 import { Crown, Shield, Trophy } from "lucide-react";
 
+import { JsonLd } from "@/components/common/JsonLd";
 import { PageShell } from "@/components/layout/PageShell";
 import { getGameSystems } from "@/services/api/api";
 
@@ -76,6 +77,22 @@ const DEFAULT_TIER = {
 export default async function RankedPage() {
   const systems = await getGameSystems();
 
+  const jsonLdData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: metadata.title,
+    description: metadata.description,
+    author: { "@type": "Organization", name: "SpellcastersDB" },
+    publisher: {
+      "@type": "Organization",
+      name: "SpellcastersDB",
+      logo: {
+        "@type": "ImageObject",
+        url: "https://spellcastersdb.com/favicon.svg",
+      },
+    },
+  };
+
   return (
     <PageShell
       title="Ranked Mode"
@@ -86,6 +103,7 @@ export default async function RankedPage() {
         { label: "Ranked", href: "/guide/ranked" },
       ]}
     >
+      <JsonLd data={jsonLdData} id="json-ld-article" />
       <div className="space-y-8 max-w-4xl mx-auto">
         {systems?.ranked ? (
           <>
