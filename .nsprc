@@ -1,37 +1,12 @@
 {
-  "1109537": {
+  "1113545": {
     "active": true,
-    "notes": "tmp <= 0.2.3 symlink write. Blocked by @lhci/cli (devDep). No upstream fix available.",
+    "notes": "minimatch ReDoS via matchOne() combinatorial backtracking. Blocked by shadcn -> ts-morph -> @ts-morph/common (devDep CLI).",
     "expiry": "2027-01-01"
   },
-  "1113428": {
+  "1113553": {
     "active": true,
-    "notes": "ajv < 6.14.0 ReDoS with $data option. Transitive devDep, not in production bundle.",
-    "expiry": "2027-01-01"
-  },
-  "1113459": {
-    "active": true,
-    "notes": "minimatch < 3.1.3 ReDoS. Blocked by eslint, eslint-plugin-react, eslint-plugin-jsx-a11y, eslint-plugin-import (devDeps).",
-    "expiry": "2027-01-01"
-  },
-  "1113465": {
-    "active": true,
-    "notes": "minimatch >= 9.0.0 < 9.0.6 ReDoS. Blocked by @sentry/nextjs, @serwist/next, @trivago/prettier-plugin-sort-imports (devDeps).",
-    "expiry": "2027-01-01"
-  },
-  "1113479": {
-    "active": true,
-    "notes": "hono 4.12.0-4.12.1 IP spoofing. Blocked by shadcn -> @modelcontextprotocol/sdk (devDep CLI).",
-    "expiry": "2027-01-01"
-  },
-  "1113515": {
-    "active": true,
-    "notes": "rollup 4.0.0-4.58.0 path traversal. Blocked by @sentry/nextjs and vite (build tools).",
-    "expiry": "2027-01-01"
-  },
-  "1113518": {
-    "active": true,
-    "notes": "basic-ftp < 5.2.0 path traversal. Blocked by @lhci/cli -> proxy-agent (devDep).",
+    "notes": "minimatch ReDoS via nested *() extglobs. Blocked by shadcn -> ts-morph -> @ts-morph/common (devDep CLI).",
     "expiry": "2027-01-01"
   }
 }
