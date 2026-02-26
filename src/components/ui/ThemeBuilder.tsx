@@ -152,9 +152,10 @@ export function ThemeBuilder() {
 
         <div className="space-y-2">
           {themes.map((t) => (
-            <div
+            <button
+              type="button"
               key={t.id}
-              className={`p-3 rounded border cursor-pointer flex items-center justify-between group ${theme === t.id ? "border-brand-primary bg-brand-primary/10" : "border-border-default hover:border-brand-primary/50"}`}
+              className={`w-full text-left p-3 rounded border cursor-pointer flex items-center justify-between group ${theme === t.id ? "border-brand-primary bg-brand-primary/10" : "border-border-default hover:border-brand-primary/50"}`}
               onClick={() => {
                 setTheme(t.id);
                 setEditingTheme(t);
@@ -170,7 +171,7 @@ export function ThemeBuilder() {
               {theme === t.id && (
                 <Check size={14} className="text-brand-primary" />
               )}
-            </div>
+            </button>
           ))}
           {themes.length === 0 && (
             <p className="text-xs text-text-muted">No custom themes yet.</p>

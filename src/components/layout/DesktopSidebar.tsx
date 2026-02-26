@@ -110,7 +110,10 @@ export function DesktopSidebar() {
         {/* Primary Navigation */}
         <div className="flex flex-col gap-1 w-full">
           {isSidebarOpen && (
-            <h3 className="text-xs font-bold text-text-dimmed uppercase tracking-wider px-3 mb-2 flex justify-between items-center">
+            <div
+              className="text-xs font-bold text-text-dimmed uppercase tracking-wider px-3 mb-2 flex justify-between items-center"
+              role="presentation"
+            >
               Menu
               <Button
                 variant="ghost"
@@ -123,7 +126,7 @@ export function DesktopSidebar() {
               >
                 <ChevronLeft size={14} />
               </Button>
-            </h3>
+            </div>
           )}
 
           {PRIMARY_NAV.map((item) => {
@@ -164,9 +167,12 @@ export function DesktopSidebar() {
         {/* Secondary Navigation */}
         <div className="flex flex-col gap-1 w-full">
           {isSidebarOpen && (
-            <h3 className="text-xs font-bold text-text-dimmed uppercase tracking-wider px-3 mb-2">
+            <div
+              className="text-xs font-bold text-text-dimmed uppercase tracking-wider px-3 mb-2"
+              role="presentation"
+            >
               Resources
-            </h3>
+            </div>
           )}
           {SECONDARY_NAV.map((item) => {
             const Icon = item.icon;

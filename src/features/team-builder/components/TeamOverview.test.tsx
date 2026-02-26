@@ -2,8 +2,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { useDeckStore } from "@/store/index";
-
 import { TeamOverview } from "./TeamOverview";
 
 // Mock TeamDeckRow to avoid complex component rendering

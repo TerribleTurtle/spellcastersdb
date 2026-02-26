@@ -10,6 +10,7 @@ import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
 import Footer from "@/components/layout/Footer";
 import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
 import Navbar from "@/components/layout/Navbar";
+import { AxeDevTools } from "@/components/providers/AxeDevTools";
 import { ThemeColorMeta } from "@/components/providers/ThemeColorMeta";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/Toaster";
@@ -166,6 +167,7 @@ export default async function RootLayout({
             <SpeedInsights />
             <Toaster />
             <ThemeColorMeta />
+            <AxeDevTools />
           </TooltipProvider>
         </ThemeProvider>
       </body>

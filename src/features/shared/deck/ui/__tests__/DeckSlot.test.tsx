@@ -20,9 +20,16 @@ vi.mock("next/image", () => ({
   },
 }));
 
+const { rankBadgeRenderSpy } = vi.hoisted(() => ({
+  rankBadgeRenderSpy: vi.fn(),
+}));
+
 // Mock Rank Badge and SVG icons
-vi.mock("@/components/ui/RankBadge", () => ({
-  RankBadge: () => <div data-testid="rank-badge" />,
+vi.mock("@/components/ui/rank-badge", () => ({
+  RankBadge: () => {
+    rankBadgeRenderSpy();
+    return <div data-testid="rank-badge" />;
+  },
 }));
 vi.mock("lucide-react", () => ({
   X: () => <div data-testid="x-icon" />,
@@ -183,5 +190,44 @@ describe("DeckSlot UI Layout", () => {
     expect(removeBtn.className).toContain("absolute");
     expect(removeBtn.className).toContain("-top-1.5");
     expect(removeBtn.className).toContain("-right-1.5");
+  });
+});
+
+describe("DeckSlot Performance", () => {
+  it("memoizes rendering and does not re-render when allSlots array reference changes but content is the same", () => {
+    rankBadgeRenderSpy.mockClear();
+
+    const initialProps = {
+      slot: mockFilledSlot as unknown as DeckSlotType,
+      allSlots: [mockFilledSlot] as unknown as [
+        DeckSlotType,
+        DeckSlotType,
+        DeckSlotType,
+        DeckSlotType,
+        DeckSlotType,
+      ],
+      idSuffix: "perf",
+      deckId: "perf-deck",
+      onSelect: () => {},
+    };
+
+    const { rerender } = render(<DeckSlot {...initialProps} />);
+
+    // RankBadge rendered once
+    expect(rankBadgeRenderSpy).toHaveBeenCalledTimes(1);
+
+    // Re-render with a NEW array reference, but SAME slot object reference
+    const newAllSlots = [...initialProps.allSlots] as unknown as [
+      DeckSlotType,
+      DeckSlotType,
+      DeckSlotType,
+      DeckSlotType,
+      DeckSlotType,
+    ];
+
+    rerender(<DeckSlot {...initialProps} allSlots={newAllSlots} />);
+
+    // If it's memoized correctly with a custom compare, RankBadge won't render again
+    expect(rankBadgeRenderSpy).toHaveBeenCalledTimes(1);
   });
 });

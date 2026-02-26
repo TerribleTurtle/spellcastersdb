@@ -48,11 +48,13 @@ export function CommandCenterModal() {
   const modalRef = useFocusTrap(commandCenterOpen, closeCommandCenter);
 
   return createPortal(
+    /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
     <div
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-overlay-heavy backdrop-blur-sm animate-in fade-in duration-200 overflow-hidden"
       style={{ zIndex: 200 }}
       onClick={closeCommandCenter}
     >
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
       <div
         ref={modalRef}
         className="w-full max-w-5xl h-[90vh] bg-surface-main border border-border-default rounded-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200 flex flex-col"

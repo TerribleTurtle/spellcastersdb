@@ -77,6 +77,7 @@ vi.mock("../UnitGroupHeader", () => ({
     count: number;
     onToggle: () => void;
   }) => (
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div data-testid="group-header" onClick={onToggle}>
       {title} ({count})
     </div>

@@ -15,12 +15,14 @@ export function DamageModifierList({
   modifiers,
   isCompact,
 }: DamageModifierListProps) {
-  if (!modifiers || modifiers.length === 0) return null;
+  // Filter out 1.0x modifiers (0% change) — they are meaningless to display
+  const visible = modifiers?.filter((m) => Math.abs(m.multiplier - 1) >= 0.001);
+  if (!visible || visible.length === 0) return null;
 
   // Strict Array Support
   return (
     <>
-      {modifiers.map((mod, i) => {
+      {visible.map((mod, i) => {
         const isBonus = mod.multiplier >= 1;
         return (
           <div

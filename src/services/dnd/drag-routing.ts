@@ -28,6 +28,12 @@ export type DragAction =
     }
   | { type: "REMOVE_SPELLCASTER"; deckId?: string };
 
+// Internal safe type checker for raw DnD payload indices.
+// Rejects NaN, Infinity, Floats, negative values, and undefined.
+const isSafeIndex = (index: unknown): index is number => {
+  return typeof index === "number" && Number.isInteger(index) && index >= 0;
+};
+
 // Helper to check compatibility
 const isCompatible = (
   item: Unit | Spell | Titan,
@@ -70,7 +76,7 @@ export const DragRoutingService = {
     if (!over || !dropData) {
       if (
         dragData.type === "DECK_SLOT" &&
-        dragData.sourceSlotIndex !== undefined
+        isSafeIndex(dragData.sourceSlotIndex)
       ) {
         // Drag-to-Remove
         return {
@@ -87,7 +93,7 @@ export const DragRoutingService = {
 
     // 2. Browser -> Slot
     if (dragData.type === "BROWSER_CARD" && dropData.type === "DECK_SLOT") {
-      if (dropData.slotIndex === undefined) return { type: "NO_OP" };
+      if (!isSafeIndex(dropData.slotIndex)) return { type: "NO_OP" };
 
       // Type Guard
       const item = dragData.item as Unit | Spell | Titan;
@@ -122,8 +128,8 @@ export const DragRoutingService = {
     // 4. Slot -> Slot (Move/Swap)
     if (dragData.type === "DECK_SLOT" && dropData.type === "DECK_SLOT") {
       if (
-        dragData.sourceSlotIndex === undefined ||
-        dropData.slotIndex === undefined
+        !isSafeIndex(dragData.sourceSlotIndex) ||
+        !isSafeIndex(dropData.slotIndex)
       )
         return { type: "NO_OP" };
 
@@ -145,7 +151,7 @@ export const DragRoutingService = {
 
     // 5. Slot -> Header (Move to another deck, auto-slot)
     if (dragData.type === "DECK_SLOT" && dropData.type === "DECK_HEADER") {
-      if (dragData.sourceSlotIndex === undefined) return { type: "NO_OP" };
+      if (!isSafeIndex(dragData.sourceSlotIndex)) return { type: "NO_OP" };
 
       // Moving from a slot to a whole deck -> Find first empty slot in target
       return {

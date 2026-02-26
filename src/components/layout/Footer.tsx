@@ -52,7 +52,7 @@ export default function Footer() {
                 data-testid="footer-link-discord"
                 className="text-sm text-text-muted hover:text-brand-accent transition-colors"
               >
-                Game Dev Discord
+                Official Game Discord
               </a>
               <a
                 href="https://github.com/TerribleTurtle/spellcasters-community-api"

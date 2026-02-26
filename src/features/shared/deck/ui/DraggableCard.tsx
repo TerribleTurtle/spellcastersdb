@@ -153,6 +153,14 @@ export const DraggableCard = React.memo(function DraggableCard({
           onTouchStart={(e) => e.stopPropagation()}
           role="button"
           aria-label="Quick Add"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              e.stopPropagation();
+              onQuickAdd(item);
+            }
+          }}
         >
           <Plus
             className="w-4 h-4 lg:w-4 lg:h-4 2xl:w-5 2xl:h-5"
@@ -191,6 +199,7 @@ export const DraggableCard = React.memo(function DraggableCard({
                       )
                     : "bg-surface-main border-slate-400"
                 )}
+                role="presentation"
                 onClick={(e) => e.stopPropagation()}
                 onPointerDown={(e) => e.stopPropagation()}
               >

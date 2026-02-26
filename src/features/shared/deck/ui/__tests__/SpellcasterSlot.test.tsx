@@ -12,7 +12,18 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
 };
 
-// Mock Next Image
+const { gameImageRenderSpy } = vi.hoisted(() => ({
+  gameImageRenderSpy: vi.fn(),
+}));
+
+// Mock Next Image / GameImage
+vi.mock("@/components/ui/GameImage", () => ({
+  GameImage: () => {
+    gameImageRenderSpy();
+    return <div data-testid="game-image" />;
+  },
+}));
+
 vi.mock("next/image", () => ({
   default: (props: Record<string, unknown>) => {
     // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
@@ -134,5 +145,33 @@ describe("SpellcasterSlot UI Layout", () => {
     expect(removeBtn.className).toContain("absolute");
     expect(removeBtn.className).toContain("-top-1.5");
     expect(removeBtn.className).toContain("-right-1.5");
+  });
+});
+
+describe("SpellcasterSlot Performance", () => {
+  it("memoizes rendering and does not re-render when inline functions change", () => {
+    gameImageRenderSpy.mockClear();
+
+    const initialProps = {
+      spellcaster: mockFilledSpellcaster as unknown as Spellcaster,
+      deckId: "perf-deck",
+      onSelect: () => {}, // Initial inline arrow function
+    };
+
+    const { rerender } = render(<SpellcasterSlot {...initialProps} />);
+    expect(gameImageRenderSpy).toHaveBeenCalledTimes(1);
+
+    // Re-render with a new inline function
+    rerender(
+      <SpellcasterSlot
+        {...initialProps}
+        onSelect={() => {
+          console.log("new func");
+        }}
+      />
+    );
+
+    // If it's memoized correctly, GameImage won't render again
+    expect(gameImageRenderSpy).toHaveBeenCalledTimes(1);
   });
 });

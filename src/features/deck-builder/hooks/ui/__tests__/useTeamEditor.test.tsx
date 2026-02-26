@@ -21,7 +21,6 @@ const createMockSlots = () =>
       index: i,
       unit: null,
       allowedTypes: [SlotType.Unit],
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     })) as any;
 
 vi.mock("@/features/team-builder/hooks/useTeamBuilder", () => ({

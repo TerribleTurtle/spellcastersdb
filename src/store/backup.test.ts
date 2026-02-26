@@ -103,7 +103,7 @@ describe("Mass Delete & Backup", () => {
         version: 1,
         decks: "not-an-array",
       };
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       expect(BackupService.validateBackup(invalidData as any)).toBe(false);
     });
   });

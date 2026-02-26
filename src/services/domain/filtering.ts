@@ -16,25 +16,41 @@ export const matchesSearch = (
   category: string
 ): boolean => {
   if (!query) return true;
-  const lowQuery = query.toLowerCase();
+  const lowQuery = String(query).toLowerCase();
 
-  if (item.name.toLowerCase().includes(lowQuery)) return true;
+  // Name match
+  if (item?.name && String(item.name).toLowerCase().includes(lowQuery))
+    return true;
+
+  // Description match
   if (
     "description" in item &&
-    item.description.toLowerCase().includes(lowQuery)
+    item.description &&
+    String(item.description).toLowerCase().includes(lowQuery)
   )
     return true;
-  if (
-    "tags" in item &&
-    item.tags.some((tag) => tag.toLowerCase().includes(lowQuery))
-  )
-    return true;
+
+  // Tags match
+  if ("tags" in item && Array.isArray(item.tags)) {
+    if (
+      item.tags.some(
+        (tag) => tag && String(tag).toLowerCase().includes(lowQuery)
+      )
+    )
+      return true;
+  }
+
+  // Magic School match
   if (
     "magic_school" in item &&
-    item.magic_school.toLowerCase().includes(lowQuery)
+    item.magic_school &&
+    String(item.magic_school).toLowerCase().includes(lowQuery)
   )
     return true;
-  if (category.toLowerCase().includes(lowQuery)) return true;
+
+  // Category match
+  if (category && String(category).toLowerCase().includes(lowQuery))
+    return true;
 
   return false;
 };
@@ -85,44 +101,48 @@ const calculateScore = (
   query: string,
   category: string
 ): number => {
-  if (!query) return 0;
-  const lowQuery = query.toLowerCase();
-  const lowName = item.name.toLowerCase();
+  if (!query || !item) return 0;
+  const lowQuery = String(query).toLowerCase();
+  const lowName = item.name ? String(item.name).toLowerCase() : "";
   let score = 0;
 
-  if (lowName === lowQuery) {
-    score += 1000; // Exact match - Highest Priority
-  } else if (lowName.startsWith(lowQuery)) {
-    score += 500; // Prefix match - High Priority
-  } else if (lowName.includes(lowQuery)) {
-    score += 100; // Partial name match
+  if (lowName) {
+    if (lowName === lowQuery) {
+      score += 1000; // Exact match - Highest Priority
+    } else if (lowName.startsWith(lowQuery)) {
+      score += 500; // Prefix match - High Priority
+    } else if (lowName.includes(lowQuery)) {
+      score += 100; // Partial name match
+    }
   }
 
-  if (
-    "tags" in item &&
-    item.tags &&
-    item.tags.some((tag) => tag.toLowerCase().includes(lowQuery))
-  ) {
-    score += 50;
+  if ("tags" in item && Array.isArray(item.tags)) {
+    if (
+      item.tags.some(
+        (tag) => tag && String(tag).toLowerCase().includes(lowQuery)
+      )
+    ) {
+      score += 50;
+    }
   }
 
   if (
     "magic_school" in item &&
     item.magic_school &&
-    item.magic_school.toLowerCase().includes(lowQuery)
+    String(item.magic_school).toLowerCase().includes(lowQuery)
   ) {
     score += 40;
   }
 
   // Category match shouldn't outweigh name match usually, but good to have
-  if (category && category.toLowerCase().includes(lowQuery)) {
+  if (category && String(category).toLowerCase().includes(lowQuery)) {
     score += 30;
   }
 
   if (
     "description" in item &&
     item.description &&
-    item.description.toLowerCase().includes(lowQuery)
+    String(item.description).toLowerCase().includes(lowQuery)
   ) {
     score += 10;
   }

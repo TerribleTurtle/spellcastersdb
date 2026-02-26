@@ -16,9 +16,10 @@ export const UnitGroupHeader = React.memo(function UnitGroupHeader({
   onToggle,
 }: UnitGroupHeaderProps) {
   return (
-    <div
+    <button
+      type="button"
       onClick={onToggle}
-      className="px-4 h-8 bg-surface-main/95 backdrop-blur-sm sticky top-0 z-10 cursor-pointer group select-none flex items-center"
+      className="w-full px-4 h-8 bg-surface-main/95 backdrop-blur-sm sticky top-0 z-10 cursor-pointer group select-none flex items-center text-left"
     >
       <h2 className="text-purple-400 font-bold text-xs uppercase tracking-widest flex items-center justify-between max-w-site-shell mx-auto w-full">
         <span>
@@ -29,6 +30,6 @@ export const UnitGroupHeader = React.memo(function UnitGroupHeader({
           {isCollapsed ? <ChevronRight size={16} /> : <ChevronDown size={16} />}
         </span>
       </h2>
-    </div>
+    </button>
   );
 });

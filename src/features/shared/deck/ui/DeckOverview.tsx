@@ -165,6 +165,15 @@ function VisualSlot({
             onInspect(item, { x: rect.right + 10, y: rect.top });
           }
         }}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if ((e.key === "Enter" || e.key === " ") && onInspect && item) {
+            e.preventDefault();
+            const rect = e.currentTarget.getBoundingClientRect();
+            onInspect(item, { x: rect.right + 10, y: rect.top });
+          }
+        }}
       >
         <GameImage
           src={getCardImageUrl(item)}

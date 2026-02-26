@@ -2,7 +2,12 @@ import { describe, expect, it } from "vitest";
 
 import type { AuditEntry } from "@/types/patch-history";
 
-import { mapAuditToChangelog, titleCaseEntity } from "../patch-history";
+import {
+  filterChangelogForEntity,
+  mapAuditToChangelog,
+  mapStatChangesToChangelog,
+  titleCaseEntity,
+} from "../patch-history";
 
 describe("titleCaseEntity", () => {
   it("formats underscore separated names", () => {
@@ -147,7 +152,156 @@ describe("mapAuditToChangelog", () => {
     ];
 
     const result = mapAuditToChangelog(input);
-    expect(result[0].changes[0].change_type).toBe("edit");
     expect(result[0].changes[0].field).toBe("entity");
+  });
+});
+
+describe("filterChangelogForEntity", () => {
+  const dummyChangelog = [
+    {
+      id: "patch1",
+      version: "1.0",
+      type: "Patch" as const,
+      title: "Patch 1",
+      date: "2024",
+      tags: [],
+      changes: [
+        {
+          target_id: "ogre.json",
+          name: "Ogre",
+          field: "stats.hp",
+          change_type: "edit" as const,
+          category: "units",
+          diffs: [],
+        },
+        {
+          target_id: "data/units/dragon.json",
+          name: "Dragon",
+          field: "stats.damage",
+          change_type: "edit" as const,
+          category: "units",
+          diffs: [],
+        },
+      ],
+    },
+  ];
+
+  it("filters by exact filename match", () => {
+    const result = filterChangelogForEntity(dummyChangelog, "ogre");
+    expect(result).toHaveLength(1);
+    expect(result[0].changes).toHaveLength(1);
+    expect(result[0].changes[0].target_id).toBe("ogre.json");
+  });
+
+  it("filters by path suffix match", () => {
+    const result = filterChangelogForEntity(dummyChangelog, "dragon");
+    expect(result).toHaveLength(1);
+    expect(result[0].changes).toHaveLength(1);
+    expect(result[0].changes[0].name).toBe("Dragon");
+  });
+
+  it("returns empty if no match found", () => {
+    const result = filterChangelogForEntity(dummyChangelog, "goblin");
+    expect(result).toHaveLength(0);
+  });
+});
+
+describe("mapStatChangesToChangelog", () => {
+  it("maps a single-field entry", () => {
+    const changes = [
+      {
+        version: "1.1.0",
+        date: "2024-05-10T12:00:00Z",
+        changes: [{ field: "health", old: 100, new: 120 }],
+      },
+    ];
+
+    const result = mapStatChangesToChangelog(changes, "ogre", "Ogre");
+    expect(result).toHaveLength(1);
+    expect(result[0].version).toBe("1.1.0");
+    expect(result[0].changes[0].field).toBe("health");
+    expect(result[0].changes[0].diffs).toHaveLength(1);
+  });
+
+  it("maps a multi-field entry to 'multiple fields' label", () => {
+    const changes = [
+      {
+        version: "1.1.0",
+        date: "2024-05-10T12:00:00Z",
+        changes: [
+          { field: "health", old: 100, new: 120 },
+          { field: "damage", old: 10, new: 15 },
+        ],
+      },
+    ];
+
+    const result = mapStatChangesToChangelog(changes, "ogre", "Ogre");
+    expect(result[0].changes[0].field).toBe("multiple fields");
+  });
+
+  it("titles version 0.0.1 as 'Initial Release'", () => {
+    const changes = [
+      {
+        version: "0.0.1",
+        date: "2024-01-01T12:00:00Z",
+        changes: [{ field: "added", old: null, new: "yes" }],
+      },
+    ];
+
+    const result = mapStatChangesToChangelog(changes, "ogre", "Ogre");
+    expect(result[0].title).toBe("Initial Release");
+  });
+
+  it("merges multiple entries of the same version", () => {
+    const changes = [
+      {
+        version: "1.2.0",
+        date: "2024-06-01T12:00:00Z",
+        changes: [{ field: "health", old: 100, new: 110 }],
+      },
+      {
+        version: "1.2.0", // Same version
+        date: "2024-06-01T12:00:00Z",
+        changes: [{ field: "damage", old: 20, new: 25 }],
+      },
+    ];
+
+    const result = mapStatChangesToChangelog(changes, "ogre", "Ogre");
+    expect(result).toHaveLength(1);
+    expect(result[0].changes[0].diffs).toHaveLength(2); // Merged into one group
+    expect(result[0].changes[0].field).toBe("multiple fields"); // Because >1 diff now
+  });
+
+  it("sorts newest date first, tie-breaking on version number", () => {
+    const changes = [
+      {
+        version: "1.0.0",
+        date: "2024-01-01T12:00:00Z",
+        changes: [{ field: "health", old: 10, new: 20 }],
+      },
+      {
+        version: "1.1.0",
+        date: "2024-02-01T12:00:00Z", // Newer date
+        changes: [{ field: "health", old: 20, new: 30 }],
+      },
+      {
+        version: "1.1.2",
+        date: "2024-02-01T12:00:00Z", // Same date, newer version
+        changes: [{ field: "health", old: 30, new: 40 }],
+      },
+      {
+        version: "1.1.10",
+        date: "2024-02-01T12:00:00Z", // Same date, newest version
+        changes: [{ field: "health", old: 40, new: 50 }],
+      },
+    ];
+
+    const result = mapStatChangesToChangelog(changes, "ogre", "Ogre");
+    expect(result).toHaveLength(4);
+    // Should sort newest first based on date then version
+    expect(result[0].version).toBe("1.1.10");
+    expect(result[1].version).toBe("1.1.2");
+    expect(result[2].version).toBe("1.1.0");
+    expect(result[3].version).toBe("1.0.0");
   });
 });

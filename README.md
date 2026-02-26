@@ -102,6 +102,8 @@ For detailed setup instructions, including **Local API Development**, please see
 | `npm run test:e2e:ui`     | Opens the Playwright UI for interactive debugging        |
 | `npm run lighthouse`      | Runs Lighthouse CI checks                                |
 | `npm run analyze`         | Generates a webpack bundle size analysis via cross-env   |
+| `npm run dead-code`       | Scans for unused code and files via knip                 |
+| `npm run audit`           | Scans for CVEs, respecting the `.nsprc` whitelist        |
 
 ## Documentation
 

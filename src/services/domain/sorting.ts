@@ -120,18 +120,23 @@ export function groupItems(
 // --- Helpers ---
 
 export function compareByName(a: BrowserItem, b: BrowserItem) {
-  return a.name.localeCompare(b.name);
+  const nameA = String(a?.name || "");
+  const nameB = String(b?.name || "");
+  return nameA.localeCompare(nameB);
 }
 
 export function compareByRank(a: BrowserItem, b: BrowserItem) {
-  const rA = "rank" in a ? (a as Unit).rank || "I" : "I";
-  const rB = "rank" in b ? (b as Unit).rank || "I" : "I";
+  // Use safe optional chaining and string coercion
+  const rA = "rank" in a ? String((a as Unit)?.rank || "I") : "I";
+  const rB = "rank" in b ? String((b as Unit)?.rank || "I") : "I";
   return rA.localeCompare(rB);
 }
 
 export function compareByCategoryPriority(a: BrowserItem, b: BrowserItem) {
-  const catA = "category" in a ? a.category : "Spellcaster";
-  const catB = "category" in b ? b.category : "Spellcaster";
+  const catA =
+    "category" in a && a.category ? String(a.category) : "Spellcaster";
+  const catB =
+    "category" in b && b.category ? String(b.category) : "Spellcaster";
 
   const pA = CATEGORY_PRIORITY[catA] || 99;
   const pB = CATEGORY_PRIORITY[catB] || 99;

@@ -48,9 +48,9 @@ export default function DiscordBotPage() {
             <div className="h-10 w-10 rounded-lg bg-brand-primary/20 flex items-center justify-center text-brand-primary mb-4">
               <Search size={20} />
             </div>
-            <h3 className="text-xl font-bold text-text-primary mb-2">
+            <h2 className="text-xl font-bold text-text-primary mb-2">
               Instant Card Search
-            </h3>
+            </h2>
             <p className="text-text-muted">
               Search for any unit, spell, or item directly in Discord. Get
               detailed stats, abilities, and images instantly.
@@ -61,9 +61,9 @@ export default function DiscordBotPage() {
             <div className="h-10 w-10 rounded-lg bg-brand-secondary/20 flex items-center justify-center text-brand-secondary mb-4">
               <LinkIcon size={20} />
             </div>
-            <h3 className="text-xl font-bold text-text-primary mb-2">
+            <h2 className="text-xl font-bold text-text-primary mb-2">
               Deck Link Previews
-            </h3>
+            </h2>
             <p className="text-text-muted">
               Share deck links and get beautiful, automatic previews with the
               spellcaster, mana curve, and key units.
@@ -74,9 +74,9 @@ export default function DiscordBotPage() {
             <div className="h-10 w-10 rounded-lg bg-purple-500/20 flex items-center justify-center text-purple-400 mb-4">
               <Zap size={20} />
             </div>
-            <h3 className="text-xl font-bold text-text-primary mb-2">
+            <h2 className="text-xl font-bold text-text-primary mb-2">
               Meta Updates
-            </h3>
+            </h2>
             <p className="text-text-muted">
               Subscribe to patch notes. Get notified when new balance changes
               drop.
@@ -105,7 +105,7 @@ export default function DiscordBotPage() {
               </div>
             </div>
 
-            <div className="ml-14 bg-[#2f3136] rounded-l-md border-l-4 border-brand-primary p-4 max-w-sm">
+            <div className="ml-14 bg-surface-dim rounded-l-md border-l-4 border-brand-primary p-4 max-w-sm">
               <div className="font-bold text-brand-primary mb-1">Fire Imp</div>
               <p className="text-sm text-text-secondary mb-3">
                 Unit • Rank I • Inferno

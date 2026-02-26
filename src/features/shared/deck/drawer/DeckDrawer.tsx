@@ -199,6 +199,7 @@ export const DeckDrawer = memo(function DeckDrawer({
   );
 
   return (
+    /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
     <div
       className={containerClasses}
       onClick={handleActivate}
@@ -234,6 +235,7 @@ export const DeckDrawer = memo(function DeckDrawer({
       )}
 
       {/* Handle / Header */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         ref={setNodeRef} // Make header droppable
         data-testid="deck-drawer-header"
@@ -274,7 +276,8 @@ export const DeckDrawer = memo(function DeckDrawer({
             <TooltipProvider delayDuration={0}>
               <Tooltip open={isTooltipOpen} onOpenChange={setIsTooltipOpen}>
                 <TooltipTrigger asChild>
-                  <div
+                  <button
+                    type="button"
                     className={cn(
                       "flex items-center justify-center shrink-0 transition-all rounded-full p-0.5",
                       validation.isValid
@@ -296,7 +299,7 @@ export const DeckDrawer = memo(function DeckDrawer({
                     ) : (
                       <AlertCircle size={16} />
                     )}
-                  </div>
+                  </button>
                 </TooltipTrigger>
                 <TooltipContent
                   side="top"
@@ -375,6 +378,7 @@ export const DeckDrawer = memo(function DeckDrawer({
 
         {/* Right: Validation Status OR Action Toolbar */}
         {/* On Desktop: Always show actions. On Mobile: Depends on Expanded. */}
+        {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
         <div
           className={cn("hidden xl:flex", "items-center gap-2")}
           onClick={(e) => e.stopPropagation()}

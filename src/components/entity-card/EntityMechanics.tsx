@@ -40,12 +40,22 @@ export function EntityMechanics({
 
   if (!mechanics) return null;
 
+  // Pre-filter damage reductions to exclude 1.0x (0% resistance)
+  const visibleDamageReductions = mechanics.damage_reduction?.filter(
+    (m) => Math.abs(m.multiplier - 1) >= 0.001
+  );
+
+  // Pre-filter damage modifiers to exclude 1.0x (0% change)
+  const hasVisibleDamageModifiers = mechanics.damage_modifiers?.some(
+    (m) => Math.abs(m.multiplier - 1) >= 0.001
+  );
+
   const hasMechanics =
     mechanics.pierce ||
     mechanics.stealth ||
     mechanics.cleave ||
-    (mechanics.damage_modifiers && mechanics.damage_modifiers.length > 0) ||
-    (mechanics.damage_reduction?.length ?? 0) > 0 ||
+    hasVisibleDamageModifiers ||
+    (visibleDamageReductions?.length ?? 0) > 0 ||
     (mechanics.aura?.length ?? 0) > 0 ||
     (mechanics.spawner?.length ?? 0) > 0 ||
     (mechanics.features?.length ?? 0) > 0 ||
@@ -199,7 +209,7 @@ export function EntityMechanics({
         isCompact={isCompact}
       />
 
-      {mechanics.damage_reduction?.map((mod, i) => (
+      {visibleDamageReductions?.map((mod, i) => (
         <div
           key={`res-${i}`}
           className={cn(

@@ -151,13 +151,11 @@ describe("calculateDeckStats", () => {
   });
 
   it("should return safe defaults for null/undefined deck", () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const nullStats = calculateDeckStats(null as any);
     expect(nullStats.unitCount).toBe(0);
     expect(nullStats.titanCount).toBe(0);
     expect(nullStats.hasSpellcaster).toBe(false);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const undefinedStats = calculateDeckStats(undefined as any);
     expect(undefinedStats.unitCount).toBe(0);
   });

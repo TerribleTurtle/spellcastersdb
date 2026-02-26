@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { SpellSchema, UnitSchema } from "./data-schemas";
+import {
+  ConsumableSchema,
+  SpellSchema,
+  SpellcasterSchema,
+  UnitSchema,
+  UpgradeSchema,
+} from "./data-schemas";
 
 describe("Schema Migration v1.2", () => {
   it("should validate a valid V1.2 Unit", () => {
@@ -126,5 +132,69 @@ describe("Schema Migration v1.2", () => {
     const result = UnitSchema.safeParse(complexUnit);
     if (!result.success) console.error(result.error);
     expect(result.success).toBe(true);
+  });
+
+  describe("Branch Coverages for Other Entities", () => {
+    it("should map entity_id to spellcaster_id if missing", () => {
+      const validSpellcaster = {
+        entity_id: "sc_1",
+        name: "Test Spellcaster",
+        class: "Enchanter",
+        health: 1000,
+        abilities: {
+          passive: [{ name: "Passive", description: "D" }],
+          primary: { name: "Primary", description: "D" },
+          defense: { name: "Defense", description: "D" },
+          ultimate: { name: "Ultimate", description: "D" },
+        },
+      };
+
+      const result = SpellcasterSchema.safeParse(validSpellcaster);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        // Branch hit: data.spellcaster_id = data.entity_id
+        expect(result.data.spellcaster_id).toBe("sc_1");
+      }
+    });
+
+    it("should transform a nullish consumable description to an empty string", () => {
+      const consumable = {
+        entity_id: "potion_1",
+        name: "Health Potion",
+        // description missing/nullish triggers `val || ""`
+      };
+
+      const result = ConsumableSchema.safeParse(consumable);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.description).toBe("");
+      }
+    });
+
+    it("should map upgrade_id to entity_id if missing", () => {
+      const upgrade = {
+        upgrade_id: "upg_1",
+        name: "Test Upgrade",
+        description: "Test",
+      };
+
+      const result = UpgradeSchema.safeParse(upgrade);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        // Branch hit: data.entity_id = data.upgrade_id
+        expect(result.data.entity_id).toBe("upg_1");
+      }
+    });
+
+    it("should fail validation if an upgrade has neither entity_id nor upgrade_id", () => {
+      const invalidUpgrade = {
+        name: "Test Upgrade",
+        description: "Test",
+      };
+
+      const result = UpgradeSchema.safeParse(invalidUpgrade);
+      // Branch hit: .refine() fails
+      expect(result.success).toBe(false);
+    });
   });
 });

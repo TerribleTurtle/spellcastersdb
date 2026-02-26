@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useCallback } from "react";
 import { Virtuoso } from "react-virtuoso";
 
 import {
@@ -86,25 +86,75 @@ export function SoloForgeList({
   // Direct store access for UI control
   const closeCommandCenter = useDeckStore((s) => s.closeCommandCenter);
 
-  const handleLoadOrImport = (deck: Deck) => {
-    if (isTeamMode) {
-      if (activeSlot === null || activeSlot < 0) {
-        showToast("Please select a team slot first.");
-        return;
-      }
+  const handleLoadOrImport = useCallback(
+    (deck: Deck) => {
+      if (isTeamMode) {
+        if (activeSlot === null || activeSlot < 0) {
+          showToast("Please select a team slot first.");
+          return;
+        }
 
-      // Generate a new ID when importing to avoid collisions with the original solo deck.
-      importSoloDeckToTeam(activeSlot, deck, uuidv4());
-      showToast(`Imported ${deck.name} to active slot.`);
-      closeCommandCenter();
-    } else {
-      // Load Logic
-      if (deck.id) {
-        loadDeck(deck.id);
+        // Generate a new ID when importing to avoid collisions with the original solo deck.
+        importSoloDeckToTeam(activeSlot, deck, uuidv4());
+        showToast(`Imported ${deck.name} to active slot.`);
         closeCommandCenter();
+      } else {
+        // Load Logic
+        if (deck.id) {
+          loadDeck(deck.id);
+          closeCommandCenter();
+        }
       }
-    }
-  };
+    },
+    [
+      isTeamMode,
+      activeSlot,
+      showToast,
+      importSoloDeckToTeam,
+      closeCommandCenter,
+      loadDeck,
+    ]
+  );
+
+  const renderDeckRow = useCallback(
+    (_: number, d: Deck) => (
+      <div className="pb-1 pr-1">
+        <DeckRow
+          key={d.id}
+          deck={d}
+          isActive={activeDeckId === d.id}
+          isTeamMode={isTeamMode}
+          onLoad={() => handleLoadOrImport(d)}
+          onPutAway={
+            !isTeamMode
+              ? () => {
+                  clearDeck();
+                }
+              : undefined
+          }
+          onDelete={() => deleteDeck(d.id!)}
+          onDuplicate={() => duplicateDeck(d.id!)}
+          onRename={(newName) => renameSavedDeck(d.id!, newName)}
+          // Selection Props
+          selectionMode={selectionMode}
+          isSelected={selectedIds?.has(d.id!)}
+          onToggleSelect={() => onToggleSelect?.(d.id!)}
+        />
+      </div>
+    ),
+    [
+      activeDeckId,
+      isTeamMode,
+      selectionMode,
+      selectedIds,
+      clearDeck,
+      deleteDeck,
+      duplicateDeck,
+      renameSavedDeck,
+      onToggleSelect,
+      handleLoadOrImport,
+    ]
+  );
 
   return (
     <div className="flex-1 h-full px-3 py-2">
@@ -138,32 +188,7 @@ export function SoloForgeList({
               style={{ height: "100%" }}
               data={savedDecksList}
               computeItemKey={(_, item) => item.id!}
-              itemContent={(_, d) => (
-                <div className="pb-1 pr-1">
-                  <DeckRow
-                    // Key is handled by Virtuoso via computeItemKey, but passing explicit key is safe/good practice
-                    key={d.id}
-                    deck={d}
-                    isActive={activeDeckId === d.id}
-                    isTeamMode={isTeamMode}
-                    onLoad={() => handleLoadOrImport(d)}
-                    onPutAway={
-                      !isTeamMode
-                        ? () => {
-                            clearDeck();
-                          }
-                        : undefined
-                    }
-                    onDelete={() => deleteDeck(d.id!)}
-                    onDuplicate={() => duplicateDeck(d.id!)}
-                    onRename={(newName) => renameSavedDeck(d.id!, newName)}
-                    // Selection Props
-                    selectionMode={selectionMode}
-                    isSelected={selectedIds?.has(d.id!)}
-                    onToggleSelect={() => onToggleSelect?.(d.id!)}
-                  />
-                </div>
-              )}
+              itemContent={renderDeckRow}
             />
           </SortableContext>
         )}

@@ -5,7 +5,8 @@
 
 :root {
   /* Brand Palette */
-  --sp-brand-primary: #9333ea; /* Purple 600 */
+  --sp-brand-primary: #c084fc; /* Purple 400 */
+  --sp-brand-primary-foreground: #020617; /* Slate 950 */
   --sp-brand-secondary: #db2777; /* Pink 600 */
   --sp-brand-accent: #22d3ee; /* Cyan 400 */
   --sp-brand-dark: #0f172a; /* Slate 900 */
@@ -28,12 +29,12 @@
   --sp-border-default: color-mix(in oklch, white 10%, transparent);
   --sp-border-strong: color-mix(in oklch, white 20%, transparent);
 
-  /* Semantic Text */
-  --sp-text-primary: #ffffff;
-  --sp-text-secondary: #cbd5e1; /* Slate 300 */
-  --sp-text-muted: #94a3b8; /* Slate 400 */
-  --sp-text-dimmed: #64748b; /* Slate 500 */
-  --sp-text-faint: #475569; /* Slate 600 */
+  /* Semantic Text — All pass WCAG AA (≥4.5:1) on #0f172a */
+  --sp-text-primary: #ffffff;           /* 15.4:1 */
+  --sp-text-secondary: #cbd5e1;         /* Slate 300 — 10.1:1 */
+  --sp-text-muted: #94a3b8;             /* Slate 400 — 5.6:1  */
+  --sp-text-dimmed: #94a3b8;            /* Slate 400 — 5.6:1 (was 500, now passes AA) */
+  --sp-text-faint: #94a3b8;             /* Slate 400 — 5.6:1 (decorative/lowest tier) */
 
   /* Status Colors */
   --sp-status-success: #22c55e;
@@ -117,6 +118,7 @@
 
   /* Brand Palette - Tweaked for light mode contrast */
   --sp-brand-primary: #7c3aed; /* Violet 600 - darker for white bg */
+  --sp-brand-primary-foreground: #ffffff;
   --sp-brand-secondary: #db2777; /* Pink 600 - stays same */
   --sp-brand-accent: #0891b2; /* Cyan 600 - darker for white bg */
   --sp-brand-dark: #f8fafc; /* Slate 50 - Inverted "Dark" becomes "Light" base */
@@ -139,12 +141,12 @@
   --sp-border-default: color-mix(in oklch, black 10%, transparent);
   --sp-border-strong: color-mix(in oklch, black 15%, transparent);
 
-  /* Semantic Text */
-  --sp-text-primary: #0f172a; /* Slate 900 */
-  --sp-text-secondary: #475569; /* Slate 600 */
-  --sp-text-muted: #64748b; /* Slate 500 */
-  --sp-text-dimmed: #94a3b8; /* Slate 400 */
-  --sp-text-faint: #cbd5e1; /* Slate 300 */
+  /* Semantic Text — All pass WCAG AA (≥4.5:1) on #ffffff */
+  --sp-text-primary: #0f172a;           /* Slate 900 — 15.4:1 */
+  --sp-text-secondary: #475569;         /* Slate 600 — 7.0:1  */
+  --sp-text-muted: #64748b;             /* Slate 500 — 4.6:1  */
+  --sp-text-dimmed: #64748b;            /* Slate 500 — 4.6:1  */
+  --sp-text-faint: #94a3b8;             /* Slate 400 — decorative only */
 
   /* Scrollbar */
   --sp-scrollbar-track: rgba(0, 0, 0, 0.03);

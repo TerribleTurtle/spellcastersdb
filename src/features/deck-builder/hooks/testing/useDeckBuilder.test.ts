@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { act } from "react";
 
 import { renderHook } from "@testing-library/react";
@@ -47,7 +46,7 @@ describe("useDeckBuilder", () => {
   const mockUnit: Unit = {
     entity_id: "u1",
     name: "Goblin",
-    category: EntityCategory.Creature,
+    category: EntityCategory.Creature as any,
     rank: "I",
     health: 10,
     tags: [],
@@ -161,7 +160,7 @@ describe("useDeckBuilder", () => {
       const { result } = renderHook(() => useDeckBuilder());
       const titan: Unit = {
         ...mockUnit,
-        category: EntityCategory.Titan,
+        category: EntityCategory.Titan as any,
         entity_id: "t1",
       } as unknown as Unit;
 
@@ -190,7 +189,7 @@ describe("useDeckBuilder", () => {
       const { result } = renderHook(() => useDeckBuilder());
       const titan: Unit = {
         ...mockUnit,
-        category: EntityCategory.Titan,
+        category: EntityCategory.Titan as any,
         entity_id: "t1",
       } as unknown as Unit;
 
@@ -254,6 +253,97 @@ describe("useDeckBuilder", () => {
       expect(teamDecks[0].name).toBe("Imported Deck");
       expect(teamDecks[0].spellcaster?.entity_id).toBe("sc1");
       expect(teamDecks[0].slots[0].unit?.entity_id).toBe("u1");
+    });
+  });
+
+  describe("quickAdd Logic Branches", () => {
+    it("should reject Consumables", () => {
+      const { result } = renderHook(() => useDeckBuilder());
+      const consumable = {
+        ...mockUnit,
+        category: EntityCategory.Consumable as any,
+      } as unknown as Unit;
+
+      let quickResult;
+      act(() => {
+        quickResult = result.current.quickAdd(consumable);
+      });
+
+      expect(quickResult).toBe("Consumables cannot be added to decks.");
+    });
+
+    it("should reject Upgrades", () => {
+      const { result } = renderHook(() => useDeckBuilder());
+      const upgrade = {
+        ...mockUnit,
+        category: EntityCategory.Upgrade as any,
+      } as unknown as Unit;
+
+      let quickResult;
+      act(() => {
+        quickResult = result.current.quickAdd(upgrade);
+      });
+
+      expect(quickResult).toBe("Upgrades cannot be added to decks.");
+    });
+
+    it("should add to team slot if in TEAM mode and activeSlot is valid", () => {
+      const { result } = renderHook(() => useDeckBuilder());
+
+      act(() => {
+        useDeckStore.setState({
+          mode: "TEAM",
+          activeSlot: 0,
+          teamDecks: [
+            { id: "t1", name: "D1", slots: [] as any, spellcaster: null },
+            { id: "t2", name: "D2", slots: [] as any, spellcaster: null },
+            { id: "t3", name: "D3", slots: [] as any, spellcaster: null },
+          ],
+        });
+      });
+
+      // Quick add the mocked spellcaster to slot 0 (which maps to deck 0)
+      let quickResult;
+      act(() => {
+        quickResult = result.current.quickAdd(mockSpellcaster);
+      });
+
+      // quickAddToTeam returns a string on error or void on success
+      expect(useDeckStore.getState().teamDecks[0].spellcaster).toEqual(
+        mockSpellcaster
+      );
+      expect(typeof quickResult).not.toBe("string"); // Meaning success
+    });
+
+    it("should reject add in TEAM mode if activeSlot is invalid", () => {
+      const { result } = renderHook(() => useDeckBuilder());
+
+      act(() => {
+        useDeckStore.setState({ mode: "TEAM", activeSlot: undefined });
+      });
+
+      let quickResult;
+      act(() => {
+        quickResult = result.current.quickAdd(mockUnit);
+      });
+
+      expect(quickResult).toBe("Select a deck slot first!");
+    });
+
+    it("should route to solo.quickAdd if mode is SOLO", () => {
+      const { result } = renderHook(() => useDeckBuilder());
+
+      // SOLO mode requires a spellcaster and properly typed slots to add a unit
+      act(() => {
+        useDeckStore.setState({ mode: "SOLO" });
+        result.current.setSpellcaster(mockSpellcaster);
+      });
+
+      act(() => {
+        result.current.quickAdd(mockUnit); // Should go to first empty unit slot
+      });
+
+      expect(result.current.currentDeck.slots[0].unit).toEqual(mockUnit);
     });
   });
 });
