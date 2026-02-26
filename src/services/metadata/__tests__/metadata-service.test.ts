@@ -153,13 +153,17 @@ describe("generateDeckMetadata", () => {
         slotIds: [],
       });
 
-      const rawHash = "test_raw_hash_123";
+      const rawHash = "test+raw+hash+123";
       const params = Promise.resolve({ d: rawHash });
       const result = await generateDeckMetadata(params);
 
       // 1. OG Image URL format
-      expect(result.openGraph?.images).toEqual([`/api/og?d=${rawHash}`]);
-      expect(result.twitter?.images).toEqual([`/api/og?d=${rawHash}`]);
+      expect(result.openGraph?.images).toEqual([
+        `/api/og?d=${encodeURIComponent(rawHash)}`,
+      ]);
+      expect(result.twitter?.images).toEqual([
+        `/api/og?d=${encodeURIComponent(rawHash)}`,
+      ]);
 
       // 2. Twitter card is always summary_large_image
       expect((result.twitter as any)?.card).toBe("summary_large_image");
@@ -168,11 +172,11 @@ describe("generateDeckMetadata", () => {
     it("falls back to Custom Deck if decodeDeck returns null (corrupted hash)", async () => {
       vi.mocked(decodeDeck).mockReturnValue(null);
 
-      const params = Promise.resolve({ d: "corrupted_hash" });
+      const params = Promise.resolve({ d: "corrupted+hash" });
       const result = await generateDeckMetadata(params);
 
       expect(result.title).toBe("Custom Deck - SpellcastersDB");
-      expect(result.openGraph?.images).toEqual([`/api/og?d=corrupted_hash`]);
+      expect(result.openGraph?.images).toEqual([`/api/og?d=corrupted%2Bhash`]);
     });
   });
 
@@ -208,13 +212,17 @@ describe("generateDeckMetadata", () => {
         decks: [],
       });
 
-      const rawHash = "v2~team_hash_123";
+      const rawHash = "v2~team+hash+123";
       const params = Promise.resolve({ team: rawHash });
       const result = await generateDeckMetadata(params);
 
       // OG Image URL format for teams
-      expect(result.openGraph?.images).toEqual([`/api/og?team=${rawHash}`]);
-      expect(result.twitter?.images).toEqual([`/api/og?team=${rawHash}`]);
+      expect(result.openGraph?.images).toEqual([
+        `/api/og?team=${encodeURIComponent(rawHash)}`,
+      ]);
+      expect(result.twitter?.images).toEqual([
+        `/api/og?team=${encodeURIComponent(rawHash)}`,
+      ]);
 
       // Twitter card is always summary_large_image
       expect((result.twitter as any)?.card).toBe("summary_large_image");

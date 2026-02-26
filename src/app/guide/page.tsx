@@ -56,7 +56,7 @@ const GUIDE_CARDS: GuideCard[] = [
       "Card types, ranks, spellcasters, and how to build a winning deck from scratch.",
     href: routes.guideBasics(),
     icon: <BookOpen size={28} />,
-    gradient: "from-blue-500/20 to-cyan-500/20",
+    gradient: "from-status-info/20 to-brand-accent/20",
   },
   {
     title: "Mechanics & Progression",
@@ -64,7 +64,7 @@ const GUIDE_CARDS: GuideCard[] = [
       "XP system, knowledge currency, and how leveling works in-match.",
     href: routes.guideMechanics(),
     icon: <Flame size={28} />,
-    gradient: "from-orange-500/20 to-amber-500/20",
+    gradient: "from-status-warning/20 to-status-warning-text/20",
     badge: "NEW",
   },
   {
@@ -73,7 +73,7 @@ const GUIDE_CARDS: GuideCard[] = [
       "Climb the competitive ladder from Novice to Grand Master. RP gains, tier breakdowns, and RP mechanics.",
     href: routes.guideRanked(),
     icon: <Crown size={28} />,
-    gradient: "from-yellow-500/20 to-amber-500/20",
+    gradient: "from-status-warning-text/20 to-status-warning/20",
     badge: "NEW",
   },
   {
@@ -82,7 +82,7 @@ const GUIDE_CARDS: GuideCard[] = [
       "Discover how each class levels up. Population scaling and level-up choices.",
     href: routes.guideUpgrades(),
     icon: <TrendingUp size={28} />,
-    gradient: "from-purple-500/20 to-fuchsia-500/20",
+    gradient: "from-brand-primary/20 to-brand-secondary/20",
     badge: "NEW",
   },
   {
@@ -91,7 +91,7 @@ const GUIDE_CARDS: GuideCard[] = [
       "Elemental enhancements that add damage-over-time, crowd control, and status effects to your arsenal.",
     href: routes.infusions(),
     icon: <Sparkles size={28} />,
-    gradient: "from-emerald-500/20 to-teal-500/20",
+    gradient: "from-status-success/20 to-brand-accent/20",
   },
 ];
 

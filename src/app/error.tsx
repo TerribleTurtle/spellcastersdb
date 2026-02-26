@@ -42,7 +42,7 @@ export default function Error({
             // Attempt to recover by trying to re-render the segment
             () => reset()
           }
-          className="flex items-center gap-2 rounded-lg bg-surface-hover px-6 py-3 font-semibold text-text-primary transition-colors hover:bg-surface-hover"
+          className="flex items-center gap-2 rounded-lg bg-surface-hover px-6 py-3 font-semibold text-text-primary transition-colors hover:bg-surface-raised"
         >
           <RefreshCcw size={18} />
           Try again

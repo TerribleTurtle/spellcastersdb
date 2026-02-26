@@ -12,7 +12,7 @@ export function InspectorEmptyState() {
             src="/logo.svg"
             alt="SpellcastersDB Logo"
             fill
-            className="object-contain drop-shadow-[0_0_15px_rgba(168,85,247,0.5)]"
+            className="object-contain drop-shadow-[0_0_15px_var(--sp-brand-primary)]"
             priority
           />
         </div>

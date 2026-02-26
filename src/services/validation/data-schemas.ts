@@ -420,10 +420,13 @@ const PopulationScalingSchema = z.object({
 });
 
 export const UpgradeSchema = z.object({
-  archetype: z.enum(["Conqueror", "Duelist", "Enchanter", "Unknown"]),
-  level_cap: z.number(),
-  population_scaling: z.array(PopulationScalingSchema),
-  incantation_upgrades: z.array(IncantationUpgradeSchema),
+  archetype: z.string(), // Accepts any archetype the API sends (was strict enum)
+  level_cap: z.number().optional().default(0),
+  population_scaling: z.array(PopulationScalingSchema).optional().default([]),
+  incantation_upgrades: z
+    .array(IncantationUpgradeSchema)
+    .optional()
+    .default([]),
 });
 
 // DamageTier Schema (used by Infusions)
