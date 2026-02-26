@@ -7,11 +7,22 @@ export function getCardImageUrl(
     entity_id?: string;
     consumable_id?: string;
     category?: string;
+    image_urls?: { card?: string };
   },
   options?: { forceRemote?: boolean; forceFormat?: "png" | "webp" }
 ): string {
   const apiUrl = CONFIG.API.BASE_URL;
-  const assetBase = apiUrl.replace(/\/api\/v2$/, "/assets");
+  const hostRoot = apiUrl.replace(/\/api\/v2$/, "");
+  const assetBase = `${hostRoot}/assets`;
+
+  // Check for local asset override first
+  // If forceRemote is true, SKIP this block
+  const useLocal = !options?.forceRemote && CONFIG.FEATURES.USE_LOCAL_ASSETS;
+
+  // Prefer API-injected card URL for remote requests
+  if (entity.image_urls?.card && !useLocal) {
+    return `${hostRoot}${entity.image_urls.card}`;
+  }
 
   const folder = getAssetFolder(entity);
 
@@ -25,16 +36,13 @@ export function getCardImageUrl(
 
   // Safety: Prevent undefined in URL
   if (!id) {
-    // Moved from console.warn to just returning placeholder to reduce noise
     return `${assetBase}/placeholder_card.png`;
   }
 
   const preferredFormat =
     options?.forceFormat || CONFIG.FEATURES.PREFERRED_ASSET_FORMAT;
 
-  // Check for local asset override
-  // If forceRemote is true, SKIP this block
-  if (!options?.forceRemote && CONFIG.FEATURES.USE_LOCAL_ASSETS) {
+  if (useLocal) {
     return `/api/local-assets/${folder}/${id}.${preferredFormat}`;
   }
 
@@ -80,4 +88,25 @@ export function getCardAltText(entity: {
 
   // Fallback
   return name;
+}
+
+export type AbilityImageType = "attack" | "defense" | "passive" | "ultimate";
+
+export function getAbilityImageUrl(
+  entity: {
+    image_urls?: {
+      attack?: string;
+      defense?: string;
+      passive?: string;
+      ultimate?: string;
+    };
+  },
+  abilityType: AbilityImageType
+): string | null {
+  const path = entity.image_urls?.[abilityType];
+  if (!path) return null;
+
+  const apiUrl = CONFIG.API.BASE_URL;
+  const hostRoot = apiUrl.replace(/\/api\/v2$/, "");
+  return `${hostRoot}${path}`;
 }

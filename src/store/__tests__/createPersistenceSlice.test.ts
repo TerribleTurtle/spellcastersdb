@@ -93,6 +93,15 @@ describe("createPersistenceSlice", () => {
       const state = useDeckStore.getState();
       expect(state.savedDecks[0].name).toBe("Gandalf Deck");
     });
+
+    it("should prioritize nameInput over currentDeck.name", () => {
+      const { saveDeck, setDeckName } = useDeckStore.getState();
+      setDeckName("Ignored Name");
+      saveDeck("Custom Override");
+      expect(useDeckStore.getState().savedDecks[0].name).toBe(
+        "Custom Override"
+      );
+    });
   });
 
   describe("saveAsCopy", () => {
@@ -112,6 +121,24 @@ describe("createPersistenceSlice", () => {
       // Should append (Copy) or similar number based on getUniqueName
       expect(newDeck?.name).not.toBe("Base Deck");
       expect(state.currentDeck.id).toBe(newDeck?.id);
+    });
+
+    it("should fallback to 'Untitled Deck' base if name is empty", () => {
+      const { saveAsCopy, setDeckName } = useDeckStore.getState();
+      setDeckName("");
+      saveAsCopy("");
+      expect(useDeckStore.getState().savedDecks[0].name).toContain(
+        "Untitled Deck"
+      );
+    });
+
+    it("should handle existing decks without names when generating unique name", () => {
+      const { saveAsCopy } = useDeckStore.getState();
+      useDeckStore.setState({
+        savedDecks: [{ ...cloneDeck(INITIAL_DECK), id: "d1" } as any],
+      });
+      saveAsCopy("Copy Me");
+      expect(useDeckStore.getState().savedDecks[1].name).toBe("Copy Me");
     });
   });
 
@@ -139,6 +166,17 @@ describe("createPersistenceSlice", () => {
       duplicateDeck("bogus-id");
       expect(useDeckStore.getState().savedDecks).toHaveLength(0); // Nothing changed
     });
+
+    it("should duplicate a saved deck without a name using 'Untitled'", () => {
+      const { duplicateDeck } = useDeckStore.getState();
+      useDeckStore.setState({
+        savedDecks: [{ ...cloneDeck(INITIAL_DECK), id: "d1", name: "" }],
+      });
+      duplicateDeck("d1");
+      const state = useDeckStore.getState();
+      expect(state.savedDecks).toHaveLength(2);
+      expect(state.savedDecks[1].name).toContain("Untitled");
+    });
   });
 
   describe("renameSavedDeck", () => {
@@ -153,6 +191,14 @@ describe("createPersistenceSlice", () => {
 
       const state = useDeckStore.getState();
       expect(state.savedDecks[0].name).toBe("New Name");
+    });
+
+    it("should ignore decks with non-matching IDs", () => {
+      useDeckStore.setState({
+        savedDecks: [{ ...cloneDeck(INITIAL_DECK), id: "d1", name: "Old" }],
+      });
+      useDeckStore.getState().renameSavedDeck("d2", "New");
+      expect(useDeckStore.getState().savedDecks[0].name).toBe("Old");
     });
   });
 
@@ -205,6 +251,40 @@ describe("createPersistenceSlice", () => {
       expect(state.savedDecks).toHaveLength(1);
       expect(state.currentDeck.id).toBe(currentId); // Unchanged
     });
+
+    it("should delete gracefully even if id doesn't match currentDeck for deleteDeck", () => {
+      const { deleteDeck } = useDeckStore.getState();
+      useDeckStore.setState({
+        savedDecks: [
+          { ...cloneDeck(INITIAL_DECK), id: "other", name: "Other" },
+        ],
+        currentDeck: {
+          ...cloneDeck(INITIAL_DECK),
+          id: "current",
+          name: "Current",
+        },
+      });
+      deleteDeck("other");
+      expect(useDeckStore.getState().savedDecks).toHaveLength(0);
+      expect(useDeckStore.getState().currentDeck.id).toBe("current");
+    });
+
+    it("should delete currentDeck and reset it", () => {
+      const { deleteDeck } = useDeckStore.getState();
+      useDeckStore.setState({
+        savedDecks: [
+          { ...cloneDeck(INITIAL_DECK), id: "current", name: "Current" },
+        ],
+        currentDeck: {
+          ...cloneDeck(INITIAL_DECK),
+          id: "current",
+          name: "Current",
+        },
+      });
+      deleteDeck("current");
+      expect(useDeckStore.getState().savedDecks).toHaveLength(0);
+      expect(useDeckStore.getState().currentDeck.id).toBeUndefined();
+    });
   });
 
   describe("importDecks", () => {
@@ -223,6 +303,12 @@ describe("createPersistenceSlice", () => {
       expect(state.savedDecks[1].id).not.toBe("old2");
       expect(state.savedDecks[0].name).toBe("Import 1");
     });
+
+    it("should fallback to 'Imported Deck' if name is missing", () => {
+      const { importDecks } = useDeckStore.getState();
+      importDecks([{ ...cloneDeck(INITIAL_DECK), id: "old", name: "" }]);
+      expect(useDeckStore.getState().savedDecks[0].name).toBe("Imported Deck");
+    });
   });
 
   describe("importTeams", () => {
@@ -238,6 +324,12 @@ describe("createPersistenceSlice", () => {
       expect(state.savedTeams[0].id).not.toBe("old-t1");
       expect(state.savedTeams[0].name).toBe("Team 1");
     });
+
+    it("should fallback to 'Imported Team' if name is missing", () => {
+      const { importTeams } = useDeckStore.getState();
+      importTeams([{ decks: [], id: "old", name: "" } as any]);
+      expect(useDeckStore.getState().savedTeams[0].name).toBe("Imported Team");
+    });
   });
 
   describe("clearSavedDecks", () => {
@@ -246,6 +338,42 @@ describe("createPersistenceSlice", () => {
       setSavedDecks([cloneDeck(INITIAL_DECK)]);
       clearSavedDecks();
       expect(useDeckStore.getState().savedDecks).toHaveLength(0);
+    });
+  });
+
+  describe("importDeckToLibrary", () => {
+    it("should import deck with missing name as 'Imported Deck'", () => {
+      useDeckStore
+        .getState()
+        .importDeckToLibrary({ ...cloneDeck(INITIAL_DECK), name: "" });
+      expect(useDeckStore.getState().savedDecks[0].name).toBe("Imported Deck");
+    });
+  });
+
+  describe("checkDeckNameAvailable", () => {
+    it("should return false if name exists", () => {
+      useDeckStore.setState({
+        savedDecks: [{ ...cloneDeck(INITIAL_DECK), id: "d1", name: "Taken" }],
+      });
+      expect(useDeckStore.getState().checkDeckNameAvailable("Taken")).toBe(
+        false
+      );
+    });
+    it("should return true if name exists but ID is excluded", () => {
+      useDeckStore.setState({
+        savedDecks: [{ ...cloneDeck(INITIAL_DECK), id: "d1", name: "Taken" }],
+      });
+      expect(
+        useDeckStore.getState().checkDeckNameAvailable("Taken", "d1")
+      ).toBe(true);
+    });
+    it("should return true for empty saved deck names", () => {
+      useDeckStore.setState({
+        savedDecks: [{ ...cloneDeck(INITIAL_DECK), id: "d1", name: "" }],
+      });
+      expect(useDeckStore.getState().checkDeckNameAvailable("Valid")).toBe(
+        true
+      );
     });
   });
 
@@ -277,6 +405,26 @@ describe("createPersistenceSlice", () => {
 
       // Check deep data capability
       expect(state.teamDecks[0].slots[0].unit).toEqual(MockUnit);
+    });
+
+    it("should fallback to 'Untitled Team' if base names are empty", () => {
+      useDeckStore.setState({ teamName: "" });
+      useDeckStore.getState().saveTeamAsCopy("");
+      expect(useDeckStore.getState().savedTeams[0].name).toContain(
+        "Untitled Team"
+      );
+    });
+
+    it("should prefer nameInput over state.teamName", () => {
+      useDeckStore.setState({ teamName: "Old" });
+      useDeckStore.getState().saveTeamAsCopy("New Copy");
+      expect(useDeckStore.getState().savedTeams[0].name).toBe("New Copy");
+    });
+
+    it("should handle existing teams without names when generating unique names", () => {
+      useDeckStore.setState({ savedTeams: [{ id: "t1", decks: [] } as any] });
+      useDeckStore.getState().saveTeamAsCopy("New Copy");
+      expect(useDeckStore.getState().savedTeams[1].name).toBe("New Copy");
     });
   });
 
@@ -345,6 +493,32 @@ describe("createPersistenceSlice", () => {
       duplicateTeam("bogus-id", "Bogus Team");
       expect(useDeckStore.getState().savedTeams).toHaveLength(0); // Nothing changed
     });
+
+    it("should fallback to empty string for team existing names when generating unique name", () => {
+      useDeckStore.setState({
+        savedTeams: [{ id: "t1", name: "", decks: [] } as any],
+      });
+      useDeckStore.getState().duplicateTeam("t1", "t2");
+      expect(useDeckStore.getState().savedTeams).toHaveLength(2);
+    });
+  });
+
+  describe("renameSavedTeam", () => {
+    it("should ignore teams with non-matching IDs", () => {
+      useDeckStore.setState({
+        savedTeams: [{ id: "t1", name: "Old", decks: [] } as any],
+      });
+      useDeckStore.getState().renameSavedTeam("t2", "New");
+      expect(useDeckStore.getState().savedTeams[0].name).toBe("Old");
+    });
+
+    it("should update a team's name upon match", () => {
+      useDeckStore.setState({
+        savedTeams: [{ id: "t1", name: "Old", decks: [] } as any],
+      });
+      useDeckStore.getState().renameSavedTeam("t1", "New");
+      expect(useDeckStore.getState().savedTeams[0].name).toBe("New");
+    });
   });
 
   describe("clearSavedTeams", () => {
@@ -379,6 +553,60 @@ describe("createPersistenceSlice", () => {
       loadDeck("bogus-id");
 
       expect(useDeckStore.getState().currentDeck.name).toBe("Current Name");
+    });
+    describe("Adversarial & Edge Cases", () => {
+      it("saveDeck: should handle names with only whitespace and fallback to spellcaster", () => {
+        const { saveDeck, setDeckName } = useDeckStore.getState();
+        setDeckName("   ");
+        useDeckStore.setState({
+          currentDeck: {
+            ...useDeckStore.getState().currentDeck,
+            spellcaster: { name: "Whitespace Hero" } as any,
+          },
+        });
+        saveDeck();
+
+        const state = useDeckStore.getState();
+        expect(state.savedDecks[0].name).toBe("Whitespace Hero Deck");
+      });
+
+      it("deleteDecks: should safely handle empty array", () => {
+        const stateBefore = useDeckStore.getState();
+        useDeckStore.getState().deleteDecks([]);
+        expect(useDeckStore.getState()).toEqual(stateBefore);
+      });
+
+      it("checkDeckNameAvailable: string padding matches stripped strings (case-insensitive)", () => {
+        useDeckStore.setState({
+          savedDecks: [{ ...cloneDeck(INITIAL_DECK), id: "d1", name: "TaKen" }],
+        });
+        // "  taken  " -> trim() -> "taken" -> lower() -> matches "taken"
+        expect(
+          useDeckStore.getState().checkDeckNameAvailable("  taken  ")
+        ).toBe(false);
+      });
+
+      it("importDecks: empty array does nothing", () => {
+        const { importDecks } = useDeckStore.getState();
+        importDecks([]);
+        expect(useDeckStore.getState().savedDecks).toHaveLength(0);
+      });
+
+      it("saveAsCopy: generates correctly incremented (Copy N) strings for identically named base decks", () => {
+        useDeckStore.setState({
+          savedDecks: [
+            { ...cloneDeck(INITIAL_DECK), id: "d1", name: "Base" },
+            { ...cloneDeck(INITIAL_DECK), id: "d2", name: "Base (Copy)" },
+          ],
+          currentDeck: { ...cloneDeck(INITIAL_DECK), id: "d1", name: "Base" },
+        });
+
+        const { saveAsCopy } = useDeckStore.getState();
+        saveAsCopy(); // Should generate "Base (Copy 2)"
+
+        const names = useDeckStore.getState().savedDecks.map((d) => d.name);
+        expect(names).toContain("Base (Copy 2)");
+      });
     });
   });
 });

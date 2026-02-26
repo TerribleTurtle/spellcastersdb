@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { INITIAL_DECK } from "@/services/api/persistence";
+import { TeamModification } from "@/services/domain/team/TeamModification";
+import { TeamMovement } from "@/services/domain/team/TeamMovement";
 import { cloneDeck } from "@/services/utils/deck-utils";
 import { Spellcaster, Unit } from "@/types/api";
 import { Team } from "@/types/deck";
@@ -427,6 +429,135 @@ describe("createTeamSlice", () => {
       // Implementation ACTUALLY swaps them
       expect(state.teamDecks[0].spellcaster).toEqual(SpellcasterB);
       expect(state.teamDecks[1].spellcaster).toEqual(SpellcasterA);
+    });
+  });
+
+  describe("Error Branches & Edge Cases", () => {
+    it("should handle setActiveSlot out of bounds", () => {
+      useDeckStore.getState().setActiveSlot(99);
+      expect(useDeckStore.getState().activeSlot).toBeNull();
+    });
+
+    it("should handle saveTeam with parameter overrides", () => {
+      useDeckStore.getState().saveTeam("new-id", "Custom Name", 1, {
+        ...cloneDeck(INITIAL_DECK),
+        name: "Override Deck",
+      });
+      const state = useDeckStore.getState();
+      expect(state.savedTeams[0].name).toBe("Custom Name");
+      expect(state.savedTeams[0].decks[1].name).toBe("Override Deck");
+    });
+
+    it("should handle loadTeam with bogus ID", () => {
+      useDeckStore.getState().loadTeam("bogus-id");
+      expect(useDeckStore.getState().teamName).toBe("New Team"); // Unchanged
+    });
+
+    it("should safely handle checkActiveTeamDeletion when active id isn't in array", () => {
+      useDeckStore.setState({ activeTeamId: "active" });
+      useDeckStore.getState().checkActiveTeamDeletion(["other"]);
+      expect(useDeckStore.getState().activeTeamId).toBe("active"); // Unchanged
+    });
+
+    it("should safely handle out of bounds indices returning false success for slot actions", () => {
+      const store = useDeckStore.getState();
+      // Just verifying none of these throw and they fallback to returning {} from modifiers
+      const preState = useDeckStore.getState().teamDecks;
+
+      store.importSoloDeckToTeam(99, INITIAL_DECK, "id");
+      store.setTeamSlot(99, 1, MockUnit);
+      store.clearTeamSlot(99, 1);
+      store.setTeamSpellcaster(99, {} as any);
+      store.removeTeamSpellcaster(99);
+      store.swapTeamSlots(99, 0, 1);
+
+      const resQuickAdd = store.quickAddToTeam(99, MockUnit);
+      expect(typeof resQuickAdd).toBe("string"); // Returns an error string (e.g., Deck not found)
+
+      const resMoveCard = store.moveCardBetweenDecks(99, 0, 0, 1);
+      expect(typeof resMoveCard).toBe("string");
+
+      store.moveSpellcasterBetweenDecks(99, 0);
+
+      expect(useDeckStore.getState().teamDecks).toEqual(preState); // State untouched
+    });
+
+    it("should fallback to 'Untitled Team' if name is empty", () => {
+      useDeckStore.setState({ teamName: "" });
+      useDeckStore.getState().saveTeam("new-id", "");
+      expect(useDeckStore.getState().savedTeams[0].name).toBe("Untitled Team");
+    });
+
+    it("should load team and fallback to null activeTeamId if team id is falsy", () => {
+      useDeckStore.setState({
+        savedTeams: [{ id: "", name: "Alpha", decks: [] } as any],
+      });
+      useDeckStore.getState().loadTeam("");
+      expect(useDeckStore.getState().activeTeamId).toBeNull();
+    });
+
+    it("should safely handle modifiers returning success: false with no truthy error", () => {
+      const originalQuickAdd = TeamModification.quickAdd;
+      TeamModification.quickAdd = () => ({ success: false, error: "" }) as any;
+      const quickAddResult = useDeckStore
+        .getState()
+        .quickAddToTeam(0, MockUnit);
+      TeamModification.quickAdd = originalQuickAdd;
+      expect(quickAddResult).toBeNull();
+
+      const originalMoveCard = TeamMovement.moveCardBetweenDecks;
+      TeamMovement.moveCardBetweenDecks = () =>
+        ({ success: false, error: "" }) as any;
+      const moveResult = useDeckStore
+        .getState()
+        .moveCardBetweenDecks(0, 0, 1, 0);
+      TeamMovement.moveCardBetweenDecks = originalMoveCard;
+      expect(moveResult).toBeNull();
+    });
+    describe("Adversarial & Edge Cases", () => {
+      it("setActiveSlot with negative index returns empty object instead of crashing", () => {
+        useDeckStore.getState().setActiveSlot(-1);
+        const state = useDeckStore.getState();
+        expect(state.activeSlot).toBeNull();
+      });
+
+      it("setActiveTeamId setter accurately updates activeTeamId", () => {
+        useDeckStore.getState().setActiveTeamId("test-id-123");
+        expect(useDeckStore.getState().activeTeamId).toBe("test-id-123");
+      });
+
+      it("saveTeam uses state.activeTeamId over newId if it exists", () => {
+        useDeckStore.setState({ activeTeamId: "existing-uuid" });
+        useDeckStore.getState().saveTeam("different-uuid", "New Team");
+
+        const state = useDeckStore.getState();
+        expect(state.activeTeamId).toBe("existing-uuid");
+        expect(state.savedTeams[0].id).toBe("existing-uuid");
+      });
+
+      it("saveTeam relies on whitespace-only name trimmer to fallback to 'Untitled Team'", () => {
+        useDeckStore.setState({ teamName: "   " });
+        useDeckStore.getState().saveTeam("some-uuid", "   ");
+
+        const state = useDeckStore.getState();
+        expect(state.savedTeams[0].name).toBe("Untitled Team");
+      });
+
+      it("quickAddToTeam explicitly returns null when success is true with no error", () => {
+        const { setActiveSlot, quickAddToTeam } = useDeckStore.getState();
+        setActiveSlot(1);
+        const err = quickAddToTeam(1, MockUnit);
+        expect(err).toBeNull(); // Should explicitly return null, not undefined or string
+      });
+
+      it("moveCardBetweenDecks returns empty error when moving into the same slot gracefully fails", () => {
+        const { setTeamSlot, moveCardBetweenDecks } = useDeckStore.getState();
+        setTeamSlot(0, 0, MockUnit);
+
+        // Moving from deck0 slot0 to deck0 slot0
+        const error = moveCardBetweenDecks(0, 0, 0, 0);
+        expect(error).toBeDefined();
+      });
     });
   });
 });

@@ -325,6 +325,14 @@ export interface SpellcasterAbilities {
   ultimate: Ability;
 }
 
+export interface SpellcasterImageUrls {
+  card?: string;
+  attack?: string;
+  defense?: string;
+  passive?: string;
+  ultimate?: string;
+}
+
 export interface Spellcaster {
   $schema?: string;
   entity_id: string; // V2 uses entity_id
@@ -344,6 +352,9 @@ export interface Spellcaster {
 
   // Kit
   abilities: SpellcasterAbilities;
+
+  // API-injected image URLs (card art + ability images)
+  image_urls?: SpellcasterImageUrls;
 
   stat_changes?: StatChangeEntry[];
 }

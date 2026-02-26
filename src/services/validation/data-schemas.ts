@@ -29,7 +29,7 @@ export const IncantationBase = {
 };
 
 // Condition Schema - Hardened for V2 API Drift
-const ConditionSchema = z.union([
+export const ConditionSchema = z.union([
   z.object({
     field: z.string(),
     operator: z.string(),
@@ -52,7 +52,7 @@ const AuraSchema = z.object({
   effect: z.string().optional(),
 });
 
-const DamageModifierSchema = z.object({
+export const DamageModifierSchema = z.object({
   target_type: z
     .union([
       z.enum([
@@ -317,6 +317,14 @@ export const AbilitySchema = z.object({
   projectiles: z.number().optional(),
 });
 
+const SpellcasterImageUrlsSchema = z.object({
+  card: z.string().optional(),
+  attack: z.string().optional(),
+  defense: z.string().optional(),
+  passive: z.string().optional(),
+  ultimate: z.string().optional(),
+});
+
 export const SpellcasterSchema = z
   .object({
     ...CommonSchemaParts,
@@ -348,6 +356,9 @@ export const SpellcasterSchema = z
       defense: AbilitySchema,
       ultimate: AbilitySchema,
     }),
+
+    // API-injected image URLs
+    image_urls: SpellcasterImageUrlsSchema.optional(),
   })
   // .strict() removed to allow stripping of legacy/unused API fields like movement_speed
   .transform((data) => {
@@ -433,7 +444,7 @@ const InfusionEnemyEffectSchema = z.object({
   damage_tiers: z.array(DamageTierSchema).optional(),
 });
 
-const InfusionSchema = z.object({
+export const InfusionSchema = z.object({
   id: z.string(),
   name: z.string(),
   element: z.enum(["Fire", "Lightning", "Poison", "Ice"]),

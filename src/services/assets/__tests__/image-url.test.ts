@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { getCardImageUrl } from "@/services/assets/asset-helpers";
+import {
+  getAbilityImageUrl,
+  getCardImageUrl,
+} from "@/services/assets/asset-helpers";
 
 // Hoist mock state so it can be accessed inside vi.mock factory
 const mocks = vi.hoisted(() => ({
@@ -25,6 +28,8 @@ vi.mock("@/lib/config", () => ({
     },
   },
 }));
+
+const HOST_ROOT = "https://terribleturtle.github.io/spellcasters-community-api";
 
 describe("getCardImageUrl", () => {
   beforeEach(() => {
@@ -122,5 +127,113 @@ describe("getCardImageUrl", () => {
     // @ts-expect-error - testing invalid entity
     const url = getCardImageUrl(badEntity);
     expect(url).toContain("placeholder_card.png");
+  });
+
+  it("should prefer image_urls.card when present (remote)", () => {
+    const hero = {
+      spellcaster_id: "fire_elementalist",
+      category: "Spellcaster",
+      image_urls: { card: "/assets/heroes/fire_elementalist.webp" },
+    };
+    const url = getCardImageUrl(hero);
+    expect(url).toBe(`${HOST_ROOT}/assets/heroes/fire_elementalist.webp`);
+  });
+
+  it("should ignore image_urls.card when USE_LOCAL_ASSETS is true", () => {
+    mocks.useLocalAssets = true;
+    const hero = {
+      spellcaster_id: "fire_elementalist",
+      category: "Spellcaster",
+      image_urls: { card: "/assets/heroes/fire_elementalist.webp" },
+    };
+    const url = getCardImageUrl(hero);
+    expect(url).toBe("/api/local-assets/heroes/fire_elementalist.png");
+  });
+
+  it("should use image_urls.card with forceRemote even if USE_LOCAL_ASSETS is true", () => {
+    mocks.useLocalAssets = true;
+    const hero = {
+      spellcaster_id: "fire_elementalist",
+      category: "Spellcaster",
+      image_urls: { card: "/assets/heroes/fire_elementalist.webp" },
+    };
+    const url = getCardImageUrl(hero, { forceRemote: true });
+    expect(url).toBe(`${HOST_ROOT}/assets/heroes/fire_elementalist.webp`);
+  });
+
+  it("should fallback to ID-based URL when image_urls has no card", () => {
+    const hero = {
+      spellcaster_id: "fire_elementalist",
+      category: "Spellcaster",
+      image_urls: {},
+    };
+    const url = getCardImageUrl(hero);
+    expect(url).toBe(`${HOST_ROOT}/assets/heroes/fire_elementalist.png`);
+  });
+});
+
+describe("getAbilityImageUrl", () => {
+  it("should resolve attack image URL", () => {
+    const hero = {
+      image_urls: {
+        attack: "/assets/heroes/abilities/fire_elementalist_attack.webp",
+      },
+    };
+    const url = getAbilityImageUrl(hero, "attack");
+    expect(url).toBe(
+      `${HOST_ROOT}/assets/heroes/abilities/fire_elementalist_attack.webp`
+    );
+  });
+
+  it("should resolve defense image URL", () => {
+    const hero = {
+      image_urls: {
+        defense: "/assets/heroes/abilities/fire_elementalist_defense.webp",
+      },
+    };
+    const url = getAbilityImageUrl(hero, "defense");
+    expect(url).toBe(
+      `${HOST_ROOT}/assets/heroes/abilities/fire_elementalist_defense.webp`
+    );
+  });
+
+  it("should resolve passive image URL", () => {
+    const hero = {
+      image_urls: {
+        passive: "/assets/heroes/abilities/fire_elementalist_passive.webp",
+      },
+    };
+    const url = getAbilityImageUrl(hero, "passive");
+    expect(url).toBe(
+      `${HOST_ROOT}/assets/heroes/abilities/fire_elementalist_passive.webp`
+    );
+  });
+
+  it("should resolve ultimate image URL", () => {
+    const hero = {
+      image_urls: {
+        ultimate: "/assets/heroes/abilities/fire_elementalist_ultimate.webp",
+      },
+    };
+    const url = getAbilityImageUrl(hero, "ultimate");
+    expect(url).toBe(
+      `${HOST_ROOT}/assets/heroes/abilities/fire_elementalist_ultimate.webp`
+    );
+  });
+
+  it("should return null when image_urls is undefined", () => {
+    const hero = {};
+    const url = getAbilityImageUrl(hero, "attack");
+    expect(url).toBeNull();
+  });
+
+  it("should return null when the specific ability type is missing", () => {
+    const hero = {
+      image_urls: {
+        card: "/assets/heroes/fire_elementalist.webp",
+      },
+    };
+    const url = getAbilityImageUrl(hero, "attack");
+    expect(url).toBeNull();
   });
 });

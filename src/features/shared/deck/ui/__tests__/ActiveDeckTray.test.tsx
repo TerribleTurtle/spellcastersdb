@@ -54,11 +54,7 @@ describe("ActiveDeckTray Performance", () => {
     // Rerender with structurally identical but referentially different props
     const newSlots = [...mockEmptySlots] as any;
     rerender(
-      <ActiveDeckTray
-        {...initialProps}
-        slots={newSlots}
-        onSelect={() => console.log()}
-      />
+      <ActiveDeckTray {...initialProps} slots={newSlots} onSelect={() => {}} />
     );
 
     // If memoized properly, it shouldn't re-render children
