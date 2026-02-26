@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-dom-props -- Satori requires inline styles; CSS classes are not supported */
 import { ImageResponse } from "next/og";
 
 import { getCachedAsset } from "@/services/api/asset-cache";

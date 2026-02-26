@@ -100,6 +100,22 @@ export interface Stealth {
   break_on_attack: boolean;
 }
 
+export type WeakPointLocation =
+  | "front"
+  | "back"
+  | "side"
+  | "head"
+  | "chest"
+  | "legs"
+  | "wings"
+  | "tail";
+
+export interface WeakPoint {
+  location: WeakPointLocation;
+  multiplier: number;
+  description?: string;
+}
+
 export interface InfusionRef {
   id: string;
 }
@@ -284,6 +300,8 @@ export interface Titan {
   movement_speed: number;
   heal_amount?: number;
   passive_health_regen?: number;
+
+  weak_points?: WeakPoint[];
 
   stat_changes?: StatChangeEntry[];
 }

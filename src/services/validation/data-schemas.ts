@@ -274,6 +274,26 @@ export const TitanSchema = z.object({
   heal_amount: z.number().optional(),
   passive_health_regen: z.number().optional(),
 
+  // V2 Weak Points (positional vulnerabilities)
+  weak_points: z
+    .array(
+      z.object({
+        location: z.enum([
+          "front",
+          "back",
+          "side",
+          "head",
+          "chest",
+          "legs",
+          "wings",
+          "tail",
+        ]),
+        multiplier: z.number().min(1),
+        description: z.string().optional(),
+      })
+    )
+    .optional(),
+
   // V2 Fields detected during hardening
   mechanics: MechanicsSchema.optional(),
   charges: z.number().optional(),
