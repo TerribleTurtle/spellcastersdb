@@ -107,6 +107,9 @@
       "eslint --fix"
     ]
   },
+  "overrides": {
+    "tmp": "^0.2.5"
+  },
   "browserslist": [
     "chrome >= 100",
     "safari >= 15",
