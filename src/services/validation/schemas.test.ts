@@ -173,7 +173,7 @@ describe("Schema Migration v1.2", () => {
 
     it("should parse a valid archetype-based upgrade", () => {
       const upgrade = {
-        archetype: "Duelist",
+        class: "Duelist",
         level_cap: 25,
         population_scaling: [{ level: 5, population_cap: 10 }],
         incantation_upgrades: [
@@ -189,19 +189,22 @@ describe("Schema Migration v1.2", () => {
       const result = UpgradeSchema.safeParse(upgrade);
       expect(result.success).toBe(true);
       if (result.success) {
-        expect(result.data.archetype).toBe("Duelist");
+        expect(result.data.class).toBe("Duelist");
       }
     });
 
-    it("should fail validation if upgrade is missing archetype", () => {
-      const invalidUpgrade = {
+    it("should default class to 'Unknown' if neither class nor archetype is provided", () => {
+      const upgrade = {
         level_cap: 25,
         population_scaling: [],
         incantation_upgrades: [],
       };
 
-      const result = UpgradeSchema.safeParse(invalidUpgrade);
-      expect(result.success).toBe(false);
+      const result = UpgradeSchema.safeParse(upgrade);
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.class).toBe("Unknown");
+      }
     });
   });
 });

@@ -200,13 +200,13 @@ describe("integrity-checker.ts — adversarial", () => {
   it("should not detect duplicates in upgrades (archetype-based, no entity_id)", () => {
     const upgrades = [
       {
-        archetype: "Conqueror",
+        class: "Conqueror",
         level_cap: 25,
         population_scaling: [],
         incantation_upgrades: [],
       },
       {
-        archetype: "Duelist",
+        class: "Duelist",
         level_cap: 25,
         population_scaling: [],
         incantation_upgrades: [],

@@ -160,7 +160,7 @@ describe("data-schemas.ts", () => {
   describe("UpgradeSchema", () => {
     it("should parse a valid archetype-based upgrade", () => {
       const data = {
-        archetype: "Conqueror",
+        class: "Conqueror",
         level_cap: 25,
         population_scaling: [{ level: 5, population_cap: 10 }],
         incantation_upgrades: [
@@ -178,20 +178,23 @@ describe("data-schemas.ts", () => {
       };
 
       const parsed = UpgradeSchema.parse(data);
-      expect(parsed.archetype).toBe("Conqueror");
+      expect(parsed.class).toBe("Conqueror");
     });
 
-    it("should fail if archetype is missing or invalid", () => {
-      const _data = {
+    it("should default class to 'Unknown' when neither class nor archetype is provided", () => {
+      const data = {
         level_cap: 25,
         population_scaling: [],
         incantation_upgrades: [],
       };
+
+      const parsed = UpgradeSchema.parse(data);
+      expect(parsed.class).toBe("Unknown");
     });
 
     it("should allow missing description in upgrades and default to empty string", () => {
       const data = {
-        archetype: "Duelist",
+        class: "Duelist",
         level_cap: 25,
         population_scaling: [],
         incantation_upgrades: [

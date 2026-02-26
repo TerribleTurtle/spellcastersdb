@@ -59,8 +59,12 @@ describe("data-schemas.ts — adversarial", () => {
     it("SpellcasterSchema should reject {}", () => {
       expect(SpellcasterSchema.safeParse({}).success).toBe(false);
     });
-    it("UpgradeSchema should reject {}", () => {
-      expect(UpgradeSchema.safeParse({}).success).toBe(false);
+    it("UpgradeSchema should accept {} and default class to 'Unknown'", () => {
+      const result = UpgradeSchema.safeParse({});
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.class).toBe("Unknown");
+      }
     });
     it("ConsumableSchema should reject {}", () => {
       expect(ConsumableSchema.safeParse({}).success).toBe(false);
@@ -213,7 +217,7 @@ describe("data-schemas.ts — adversarial", () => {
   describe("UpgradeSchema archetype validation", () => {
     it("should accept unknown archetype strings (API drift resilience)", () => {
       const r = UpgradeSchema.safeParse({
-        archetype: "InvalidClass",
+        class: "InvalidClass",
         level_cap: 25,
         population_scaling: [],
         incantation_upgrades: [],
@@ -223,7 +227,7 @@ describe("data-schemas.ts — adversarial", () => {
 
     it("should reject archetype as a number", () => {
       const r = UpgradeSchema.safeParse({
-        archetype: 42,
+        class: 42,
         level_cap: 25,
         population_scaling: [],
         incantation_upgrades: [],
@@ -233,7 +237,7 @@ describe("data-schemas.ts — adversarial", () => {
 
     it("should fail if population_scaling entries are missing level", () => {
       const r = UpgradeSchema.safeParse({
-        archetype: "Conqueror",
+        class: "Conqueror",
         level_cap: 25,
         population_scaling: [{ population_cap: 10 }],
         incantation_upgrades: [],
@@ -243,7 +247,7 @@ describe("data-schemas.ts — adversarial", () => {
 
     it("should accept a valid archetype upgrade with all fields", () => {
       const r = UpgradeSchema.safeParse({
-        archetype: "Enchanter",
+        class: "Enchanter",
         level_cap: 25,
         population_scaling: [{ level: 5, population_cap: 10 }],
         incantation_upgrades: [
