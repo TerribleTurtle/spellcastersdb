@@ -211,9 +211,19 @@ describe("data-schemas.ts — adversarial", () => {
 
   // ─── UpgradeSchema Archetype Validation ───────────────────────────
   describe("UpgradeSchema archetype validation", () => {
-    it("should fail if archetype is not a known value", () => {
+    it("should accept unknown archetype strings (API drift resilience)", () => {
       const r = UpgradeSchema.safeParse({
         archetype: "InvalidClass",
+        level_cap: 25,
+        population_scaling: [],
+        incantation_upgrades: [],
+      });
+      expect(r.success).toBe(true);
+    });
+
+    it("should reject archetype as a number", () => {
+      const r = UpgradeSchema.safeParse({
+        archetype: 42,
         level_cap: 25,
         population_scaling: [],
         incantation_upgrades: [],

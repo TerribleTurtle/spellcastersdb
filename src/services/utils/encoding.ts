@@ -70,7 +70,9 @@ export interface DecodedDeckData {
  */
 export function decodeDeck(hash: string): DecodedDeckData | null {
   try {
-    const packed = LZString.decompressFromEncodedURIComponent(hash);
+    // Clean hash (handle potential space replacements from URL decoding quirks)
+    const cleanHash = hash.replace(/ /g, "+");
+    const packed = LZString.decompressFromEncodedURIComponent(cleanHash);
     if (!packed) return null;
 
     const parts = packed.split(DELIMITER);

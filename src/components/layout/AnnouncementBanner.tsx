@@ -72,7 +72,7 @@ export function AnnouncementBanner({
 
   return (
     <div
-      className={`announcement-banner ${VARIANT_CLASSES[variant] ?? ""} bg-[var(--sp-surface-deck)] fixed z-60 overflow-hidden bottom-0 left-0 right-0 border-t border-white/10 sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 sm:w-max sm:rounded-full sm:border sm:shadow-2xl sm:shadow-brand-primary/20`}
+      className={`announcement-banner ${VARIANT_CLASSES[variant] ?? ""} bg-[var(--sp-surface-deck)] fixed z-60 overflow-hidden bottom-0 left-0 right-0 border-t border-white/10 pb-[env(safe-area-inset-bottom)] sm:pb-0 sm:bottom-6 sm:left-1/2 sm:-translate-x-1/2 sm:w-max sm:rounded-full sm:border sm:shadow-2xl sm:shadow-brand-primary/20`}
       role="banner"
       aria-label={headline}
       data-testid="announcement-banner"
@@ -137,17 +137,16 @@ export function AnnouncementBanner({
             ))}
           </span>
         )}
+        {/* Close button */}
+        <button
+          onClick={handleDismiss}
+          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-10 inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border-none bg-transparent text-white/50 hover:text-white hover:bg-white/15 cursor-pointer transition-colors"
+          aria-label="Dismiss announcement"
+          data-testid="announcement-banner-dismiss"
+        >
+          <X size={20} />
+        </button>
       </div>
-
-      {/* Close button */}
-      <button
-        onClick={handleDismiss}
-        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-10 inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-full border-none bg-transparent text-white/50 hover:text-white hover:bg-white/15 cursor-pointer transition-colors"
-        aria-label="Dismiss announcement"
-        data-testid="announcement-banner-dismiss"
-      >
-        <X size={20} />
-      </button>
     </div>
   );
 }

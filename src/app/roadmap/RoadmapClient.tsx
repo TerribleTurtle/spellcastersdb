@@ -129,7 +129,7 @@ export default function RoadmapClient({
       <div className="mb-8 text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-card border border-border-default backdrop-blur-sm">
           <span
-            className={`w-2 h-2 rounded-full ${isLive ? "bg-status-success shadow-[0_0_8px_theme(--color-status-success)]" : "bg-orange-500 shadow-[0_0_8px_#f97316]"}`}
+            className={`w-2 h-2 rounded-full ${isLive ? "bg-status-success shadow-[0_0_8px_theme(--color-status-success)]" : "bg-status-warning shadow-[0_0_8px_theme(--color-status-warning)]"}`}
           />
           <span className="text-xs font-medium text-text-secondary">
             {isLive ? "Live from GitHub" : "Cached / Offline Mode"}
@@ -161,7 +161,7 @@ export default function RoadmapClient({
           type="feature"
           label="Features"
           icon={Lightbulb}
-          colorClass="text-purple-400"
+          colorClass="text-brand-primary"
           count={counts.feature}
           activeFilter={filter}
           onFilterChange={setFilter}

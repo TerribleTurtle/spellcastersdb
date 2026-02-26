@@ -405,7 +405,7 @@ export interface PopulationScalingEntry {
 }
 
 export interface Upgrade {
-  archetype: SpellcasterClass;
+  archetype: string;
   level_cap: number;
   population_scaling: PopulationScalingEntry[];
   incantation_upgrades: IncantationUpgrade[];

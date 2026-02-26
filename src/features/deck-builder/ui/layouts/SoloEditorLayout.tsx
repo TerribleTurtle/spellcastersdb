@@ -243,7 +243,7 @@ export function SoloEditorLayout({
               variant="ghost"
               size="icon"
               onClick={handleShare}
-              className="text-text-muted hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors h-[34px] w-[34px]"
+              className="text-text-muted hover:text-brand-accent hover:bg-brand-accent/10 rounded transition-colors h-11 w-11"
               title="Share"
             >
               {isSharing ? (

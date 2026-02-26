@@ -102,13 +102,13 @@ async function generateSingleDeckMetadata(deckHash: string): Promise<Metadata> {
       title: `${deckName} - SpellcastersDB`,
       description: description,
       type: "website",
-      images: [`/api/og?d=${deckHash}`],
+      images: [`/api/og?d=${encodeURIComponent(deckHash)}`],
     },
     twitter: {
       card: "summary_large_image",
       title: `${deckName} - SpellcastersDB`,
       description: description,
-      images: [`/api/og?d=${deckHash}`],
+      images: [`/api/og?d=${encodeURIComponent(deckHash)}`],
     },
   };
 }
@@ -130,13 +130,13 @@ async function generateTeamMetadata(teamHash: string): Promise<Metadata> {
       title: `${teamName} - SpellcastersDB`,
       description: description,
       type: "website",
-      images: [`/api/og?team=${teamHash}`],
+      images: [`/api/og?team=${encodeURIComponent(teamHash)}`],
     },
     twitter: {
       card: "summary_large_image",
       title: `${teamName} - SpellcastersDB`,
       description: description,
-      images: [`/api/og?team=${teamHash}`],
+      images: [`/api/og?team=${encodeURIComponent(teamHash)}`],
     },
   };
 }

@@ -180,6 +180,16 @@ describe("Deck Encoding", () => {
 
     expect(decodeDeck(encoded)).toBeNull();
   });
+
+  it("should clean up URL space characters replacing pluses in deck hashes", () => {
+    // Some older Next.js or email clients replace '+' with ' ' in URLs.
+    const validDeck = encodeDeck(mockDeck("d1", "D1", "sc1", []));
+    const corruptedSpaceHash = validDeck.replace(/\+/g, " ");
+
+    const decoded = decodeDeck(corruptedSpaceHash);
+    expect(decoded?.name).toBe("D1");
+    expect(decoded?.spellcasterId).toBe("sc1");
+  });
 });
 
 describe("Team Encoding", () => {

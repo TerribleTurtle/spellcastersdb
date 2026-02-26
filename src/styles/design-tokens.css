@@ -5,18 +5,24 @@
 
 :root {
   /* Brand Palette */
-  --sp-brand-primary: #c084fc; /* Purple 400 */
-  --sp-brand-primary-foreground: #020617; /* Slate 950 */
-  --sp-brand-secondary: #db2777; /* Pink 600 */
-  --sp-brand-accent: #22d3ee; /* Cyan 400 */
-  --sp-brand-dark: #0f172a; /* Slate 900 */
+  --sp-brand-primary: #c084fc;
+  /* Purple 400 */
+  --sp-brand-primary-foreground: #020617;
+  /* Slate 950 */
+  --sp-brand-secondary: #db2777;
+  /* Pink 600 */
+  --sp-brand-accent: #22d3ee;
+  /* Cyan 400 */
+  --sp-brand-dark: #0f172a;
+  /* Slate 900 */
 
   /* Semantic Surfaces */
   --sp-surface-main: #0f172a;
   --sp-surface-card: color-mix(in oklch, white 5%, transparent);
   --sp-surface-hover: color-mix(in oklch, white 10%, transparent);
   --sp-surface-highlight: rgba(168, 85, 247, 0.2);
-  --sp-surface-deck: #020617; /* Slate 950 */
+  --sp-surface-deck: #020617;
+  /* Slate 950 */
   --sp-surface-raised: color-mix(in oklch, white 8%, transparent);
   --sp-surface-dim: color-mix(in oklch, black 20%, transparent);
   --sp-surface-inset: color-mix(in oklch, black 40%, transparent);
@@ -30,11 +36,16 @@
   --sp-border-strong: color-mix(in oklch, white 20%, transparent);
 
   /* Semantic Text — All pass WCAG AA (≥4.5:1) on #0f172a */
-  --sp-text-primary: #ffffff;           /* 15.4:1 */
-  --sp-text-secondary: #cbd5e1;         /* Slate 300 — 10.1:1 */
-  --sp-text-muted: #94a3b8;             /* Slate 400 — 5.6:1  */
-  --sp-text-dimmed: #94a3b8;            /* Slate 400 — 5.6:1 (was 500, now passes AA) */
-  --sp-text-faint: #94a3b8;             /* Slate 400 — 5.6:1 (decorative/lowest tier) */
+  --sp-text-primary: #ffffff;
+  /* 15.4:1 */
+  --sp-text-secondary: #cbd5e1;
+  /* Slate 300 — 10.1:1 */
+  --sp-text-muted: #94a3b8;
+  /* Slate 400 — 5.6:1  */
+  --sp-text-dimmed: #94a3b8;
+  /* Slate 400 — 5.6:1 (was 500, now passes AA) */
+  --sp-text-faint: #94a3b8;
+  /* Slate 400 — 5.6:1 (decorative/lowest tier) */
 
   /* Status Colors */
   --sp-status-success: #22c55e;
@@ -64,17 +75,22 @@
   --sp-rarity-legendary: #facc15;
 
   /* Slot / Drawer Colors */
-  --sp-slot-bg-valid: rgba(251, 191, 36, 0.1); /* amber-400/10 */
-  --sp-slot-border-valid: #fbbf24; /* amber-400 */
+  --sp-slot-bg-valid: rgba(251, 191, 36, 0.1);
+  /* amber-400/10 */
+  --sp-slot-border-valid: #fbbf24;
+  /* amber-400 */
   --sp-slot-glow-valid: 0 0 20px rgba(251, 191, 36, 0.6);
   --sp-slot-bg-invalid: var(--sp-status-danger-muted);
   --sp-slot-border-invalid: var(--sp-status-danger-border);
-  --sp-slot-titan-dot: #f97316; /* orange-500 */
+  --sp-slot-titan-dot: #f97316;
+  /* orange-500 */
   --sp-slot-swap-ring: var(--sp-brand-primary);
 
   /* Actions */
-  --sp-action-danger: #ef4444; /* red-500 */
-  --sp-action-danger-hover: #dc2626; /* red-600 */
+  --sp-action-danger: #ef4444;
+  /* red-500 */
+  --sp-action-danger-hover: #dc2626;
+  /* red-600 */
 
   /* Third Party Brands */
   --sp-discord: #5865f2;
@@ -102,6 +118,8 @@
   --sp-sidebar-ring: oklch(0.556 0 0);
 
   /* Fluid Typography - Scales with viewport */
+  --text-2xs: 0.625rem;
+  /* 10px — compact card labels */
   --text-xs: clamp(0.65rem, 0.6rem + 0.25vw, 0.75rem);
   --text-sm: clamp(0.75rem, 0.7rem + 0.3vw, 0.875rem);
   --text-base: clamp(0.875rem, 0.8rem + 0.4vw, 1rem);
@@ -117,18 +135,23 @@
   color-scheme: light;
 
   /* Brand Palette - Tweaked for light mode contrast */
-  --sp-brand-primary: #7c3aed; /* Violet 600 - darker for white bg */
+  --sp-brand-primary: #7c3aed;
+  /* Violet 600 - darker for white bg */
   --sp-brand-primary-foreground: #ffffff;
-  --sp-brand-secondary: #db2777; /* Pink 600 - stays same */
-  --sp-brand-accent: #0891b2; /* Cyan 600 - darker for white bg */
-  --sp-brand-dark: #f8fafc; /* Slate 50 - Inverted "Dark" becomes "Light" base */
+  --sp-brand-secondary: #db2777;
+  /* Pink 600 - stays same */
+  --sp-brand-accent: #0891b2;
+  /* Cyan 600 - darker for white bg */
+  --sp-brand-dark: #f8fafc;
+  /* Slate 50 - Inverted "Dark" becomes "Light" base */
 
   /* Semantic Surfaces */
   --sp-surface-main: #ffffff;
   --sp-surface-card: color-mix(in oklch, black 3%, transparent);
   --sp-surface-hover: color-mix(in oklch, black 6%, transparent);
   --sp-surface-highlight: rgba(124, 58, 237, 0.1);
-  --sp-surface-deck: #f1f5f9; /* Slate 100 */
+  --sp-surface-deck: #f1f5f9;
+  /* Slate 100 */
   --sp-surface-raised: #ffffff;
   --sp-surface-dim: color-mix(in oklch, black 5%, transparent);
   --sp-surface-inset: color-mix(in oklch, black 5%, transparent);
@@ -142,11 +165,16 @@
   --sp-border-strong: color-mix(in oklch, black 15%, transparent);
 
   /* Semantic Text — All pass WCAG AA (≥4.5:1) on #ffffff */
-  --sp-text-primary: #0f172a;           /* Slate 900 — 15.4:1 */
-  --sp-text-secondary: #475569;         /* Slate 600 — 7.0:1  */
-  --sp-text-muted: #64748b;             /* Slate 500 — 4.6:1  */
-  --sp-text-dimmed: #64748b;            /* Slate 500 — 4.6:1  */
-  --sp-text-faint: #94a3b8;             /* Slate 400 — decorative only */
+  --sp-text-primary: #0f172a;
+  /* Slate 900 — 15.4:1 */
+  --sp-text-secondary: #475569;
+  /* Slate 600 — 7.0:1  */
+  --sp-text-muted: #64748b;
+  /* Slate 500 — 4.6:1  */
+  --sp-text-dimmed: #64748b;
+  /* Slate 500 — 4.6:1  */
+  --sp-text-faint: #94a3b8;
+  /* Slate 400 — decorative only */
 
   /* Scrollbar */
   --sp-scrollbar-track: rgba(0, 0, 0, 0.03);
@@ -171,9 +199,7 @@
   --sp-sidebar-ring: oklch(0.87 0 0);
 
   /* Body Gradient Override */
-  background: radial-gradient(
-    circle at top center,
-    color-mix(in srgb, var(--sp-brand-primary), transparent 95%),
-    var(--sp-surface-main)
-  );
+  background: radial-gradient(circle at top center,
+      color-mix(in srgb, var(--sp-brand-primary), transparent 95%),
+      var(--sp-surface-main));
 }
