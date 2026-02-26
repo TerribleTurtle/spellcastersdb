@@ -1,11 +1,63 @@
 /* ═══════════════════════════════════════════════════════
    Print Stylesheet — @media print overrides
-   Hides interactive chrome, simplifies layout for paper.
+   Forces a universal white-paper, ink-safe layout
+   regardless of the active theme (dark, light, fun themes).
    ═══════════════════════════════════════════════════════ */
 
 @media print {
+
+  /* ── Override design tokens to light/paper values ───── */
+  :root,
+  .dark,
+  .light,
+  [data-theme] {
+    /* Surfaces → white / light greys */
+    --sp-surface-main: #ffffff !important;
+    --sp-surface-card: #f8fafc !important;
+    --sp-surface-hover: #f1f5f9 !important;
+    --sp-surface-highlight: rgba(124, 58, 237, 0.08) !important;
+    --sp-surface-deck: #f1f5f9 !important;
+    --sp-surface-raised: #ffffff !important;
+    --sp-surface-dim: #f1f5f9 !important;
+    --sp-surface-inset: #e2e8f0 !important;
+    --sp-surface-overlay: #ffffff !important;
+    --sp-surface-overlay-heavy: #ffffff !important;
+    --sp-surface-scrim: transparent !important;
+
+    /* Text → dark for paper */
+    --sp-text-primary: #0f172a !important;
+    --sp-text-secondary: #334155 !important;
+    --sp-text-muted: #475569 !important;
+    --sp-text-dimmed: #64748b !important;
+    --sp-text-faint: #94a3b8 !important;
+
+    /* Brand → darker for contrast on white */
+    --sp-brand-primary: #7c3aed !important;
+    --sp-brand-primary-foreground: #ffffff !important;
+    --sp-brand-secondary: #be185d !important;
+    --sp-brand-accent: #0891b2 !important;
+    --sp-brand-dark: #f8fafc !important;
+
+    /* Borders → light grey strokes */
+    --sp-border-subtle: #e2e8f0 !important;
+    --sp-border-default: #cbd5e1 !important;
+    --sp-border-strong: #94a3b8 !important;
+
+    /* Status — darken for paper legibility */
+    --sp-status-success-text: #16a34a !important;
+    --sp-status-danger-text: #dc2626 !important;
+    --sp-status-info-text: #2563eb !important;
+    --sp-status-warning-text: #ca8a04 !important;
+
+    /* Scrollbar — hide in print */
+    --sp-scrollbar-track: transparent !important;
+    --sp-scrollbar-thumb: transparent !important;
+    --sp-scrollbar-thumb-hover: transparent !important;
+  }
+
   /* ── Hide interactive chrome ────────────────────────── */
   nav[data-testid="navbar"],
+  [data-testid="desktop-sidebar"],
   [data-testid="filter-sidebar"],
   [data-testid="filter-mobile-toggle"],
   footer,
@@ -16,51 +68,83 @@
     display: none !important;
   }
 
-  /* ── Reset positioning & backgrounds ────────────────── */
-  body {
-    background: white !important;
-    color: black !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
+  /* Hide sidebar spacer element (same width placeholder) */
+  aside.hidden.md\:flex {
+    display: none !important;
   }
 
-  /* Remove fixed/sticky elements */
+  /* ── Force white background on root elements ────────── */
+  html,
+  body {
+    background: #ffffff !important;
+    color: #0f172a !important;
+  }
+
+  /* ── Remove fixed/sticky elements ──────────────────── */
   .fixed,
   .sticky {
     position: static !important;
   }
 
-  /* Remove backdrop effects */
+  /* Remove backdrop effects (not rendered in print) */
   .backdrop-blur-md,
   .backdrop-blur-xl {
     backdrop-filter: none !important;
   }
 
-  /* ── Simplify grids for paper ───────────────────────── */
+  /* ── Hide TOC sidebar & mobile TOC in print ─────────── */
+  nav[aria-label="Table of Contents"],
+  .lg\:hidden.mb-6 {
+    display: none !important;
+  }
+
+  /* ── Collapse flex layouts to single column ─────────── */
+  .flex.flex-col.lg\:flex-row {
+    display: block !important;
+  }
+
+  /* ── Reset scroll-margin (no fixed header in print) ── */
+  [class*="scroll-mt-"] {
+    scroll-margin-top: 0 !important;
+  }
+
+  /* ── Card grid — let responsive classes handle columns ─ */
   [data-testid="unit-list"] {
-    grid-template-columns: repeat(2, 1fr) !important;
-    gap: 0.5rem !important;
+    gap: 0.35rem !important;
   }
 
   /* Full-width main content when sidebar is hidden */
   [data-testid="unit-archive"] {
     display: block !important;
+    min-height: 0 !important;
+  }
+
+  /* ── Database page layout fixes ─────────────────────── */
+  /* Remove min-height that causes blank space */
+  [class*="min-h-"] {
+    min-height: 0 !important;
+  }
+
+  /* Collapse md:flex-row to single column for print */
+  .flex.flex-col.md\:flex-row {
+    display: block !important;
+  }
+
+  /* Force hidden stats to show in print (they use hidden sm:flex) */
+  .hidden.sm\:flex {
+    display: flex !important;
   }
 
   /* ── Page break control ─────────────────────────────── */
-  [data-testid^="unit-card-"],
-  .bg-surface-card {
+  /* Only avoid breaks inside small cards, NOT whole sections.
+     Sections can be long and break-inside:avoid causes huge
+     blank gaps when a section doesn't fit on the current page. */
+  [data-testid^="unit-card-"] {
     page-break-inside: avoid;
     break-inside: avoid;
   }
 
-  /* Force page breaks between major sections */
-  section {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  /* ── Typography adjustments ─────────────────────────── */
+  /* ── Typography cleanup ─────────────────────────────── */
   * {
     text-shadow: none !important;
     box-shadow: none !important;
@@ -68,12 +152,13 @@
 
   a {
     text-decoration: underline;
+    color: #2563eb !important;
   }
 
   /* Show URL for external links */
   a[href^="http"]:after {
     content: " (" attr(href) ")";
     font-size: 0.75em;
-    color: #666;
+    color: #64748b;
   }
 }
