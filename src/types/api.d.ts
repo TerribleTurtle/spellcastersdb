@@ -232,6 +232,7 @@ export interface Incantation {
   // Config
   rank?: UnitRank;
   mechanics?: UnitMechanics | SpellMechanics;
+  knowledge_cost?: number;
 
   // Patch History
   stat_changes?: StatChangeEntry[];

@@ -14,6 +14,7 @@ import { Breadcrumbs } from "@/components/inspector/Breadcrumbs";
 import { PatchHistorySection } from "@/components/inspector/PatchHistorySection";
 import { RelatedEntities } from "@/components/inspector/RelatedEntities";
 import { GameImage } from "@/components/ui/GameImage";
+import { KnowledgeIcon } from "@/components/ui/icons/KnowledgeIcon";
 import { SmartRankBadge } from "@/components/ui/rank-badge";
 import { routes } from "@/lib/routes";
 import {
@@ -233,6 +234,17 @@ export function EntityShowcase({
                 return cd != null && cd > 0 ? (
                   <span className="bg-surface-card border border-border-default text-text-secondary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
                     CD: {cd}s
+                  </span>
+                ) : null;
+              })()}
+              {(() => {
+                const cost =
+                  "knowledge_cost" in item
+                    ? (item as Unit | Spell).knowledge_cost
+                    : undefined;
+                return cost != null && cost > 0 ? (
+                  <span className="flex items-center gap-1 bg-surface-card border border-border-default text-text-secondary px-3 py-1.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                    <KnowledgeIcon size={12} className="opacity-80" /> {cost}
                   </span>
                 ) : null;
               })()}

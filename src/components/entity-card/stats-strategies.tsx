@@ -2,6 +2,7 @@ import React from "react";
 
 import { Activity, Clock, Heart, Swords, Users, Wind, Zap } from "lucide-react";
 
+import { KnowledgeIcon } from "@/components/ui/icons/KnowledgeIcon";
 import { Spell, Titan } from "@/types/api";
 
 import { EntityDisplayItem } from "./types";
@@ -184,6 +185,19 @@ export const STATS: Record<string, StatDefinition> = {
     condition: (item) =>
       hasProperty(item, "recharge_time") && !!item.recharge_time,
   },
+  knowledge_cost: {
+    id: "knowledge_cost",
+    label: "Knowledge Cost",
+    getValue: (item) =>
+      hasProperty(item, "knowledge_cost")
+        ? (item.knowledge_cost as number)
+        : undefined,
+    icon: KnowledgeIcon,
+    colorClass: "text-amber-400",
+    condition: (item) =>
+      hasProperty(item, "knowledge_cost") &&
+      (item.knowledge_cost as number) > 0,
+  },
   max_targets: {
     id: "max_targets",
     label: "Targets",
@@ -210,6 +224,7 @@ export const STAT_STRATEGIES: Record<EntityCategory, StatDefinition[]> = {
     STATS.movement_speed,
     STATS.movement_type,
     STATS.population,
+    STATS.knowledge_cost,
     // STATS.charges, // HIDDEN_STATS_V2
     STATS.recharge_time,
   ],
@@ -233,6 +248,7 @@ export const STAT_STRATEGIES: Record<EntityCategory, StatDefinition[]> = {
     STATS.charges,
     STATS.recharge_time,
     STATS.max_targets,
+    STATS.knowledge_cost,
   ],
   Spellcaster: [STATS.health, STATS.population],
 };
