@@ -12,12 +12,7 @@
  */
 import type { StatChangeEntry } from "@/types/api";
 
-/**
- * True if we want to show the EA Verification and NEW badges on cards in the UI.
- * This is currently a developer-only setting.
- */
-export const SHOW_VERSION_BADGES_DEV = true;
-
+export const SHOW_VERSION_BADGES_DEV = false;
 // ============================================================================
 // Configuration — Change these when data updates land
 // ============================================================================
