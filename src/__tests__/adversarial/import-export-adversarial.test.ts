@@ -51,11 +51,8 @@ describe("Phase 2 — Import/Export Service Adversarial Tests", () => {
       const xssName = "<script>alert(1)</script> File";
       downloadTeamJson([] as any, xssName);
 
-      // Original regex: .toLowerCase().replace(/\s+/g, "-")
-      // It does NOT strip `<` or `>`
-      expect(dummyAnchor.download).toBe("<script>alert(1)</script>-file.json");
-      // BUG EXPECTED FAIL: While the filename is safe for Blob downloading and the OS replaces invalid chars (like < >) itself,
-      // the DOM element attributes technically accept it.
+      // Stricter sanitization strips out `<` and `>`
+      expect(dummyAnchor.download).toBe("scriptalert1script-file.json");
     });
 
     it("ADV-IE-2: downloadTeamJson with null/undefined teamName", () => {
@@ -94,7 +91,7 @@ describe("Phase 2 — Import/Export Service Adversarial Tests", () => {
 
       expect(result.teamDecks).toHaveLength(2);
       expect(result.teamDecks[0].id).toBe("id-1");
-      expect(result.teamDecks[1].id).toBeUndefined(); // BUG: newIds[i] is undefined!
+      expect(result.teamDecks[1].id).toBeDefined(); // Fallback generates a new uuid
     });
 
     it("ADV-IE-6: prepareImportedTeam with undefined baseName", () => {
@@ -103,7 +100,7 @@ describe("Phase 2 — Import/Export Service Adversarial Tests", () => {
         ["new"],
         undefined as any
       );
-      expect(result.teamName).toBe("undefined (Copy)");
+      expect(result.teamName).toBe("Untitled Team (Copy)");
     });
 
     it("ADV-IE-7: constructTeam with activeSlot out of bounds", () => {

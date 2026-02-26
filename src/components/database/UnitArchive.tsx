@@ -8,6 +8,7 @@ import { useUnitSearch } from "@/hooks/useUnitSearch";
 import { cn } from "@/lib/utils";
 import { UnifiedEntity } from "@/types/api";
 
+import type { SortField, SortOrder } from "./FilterSidebar";
 import { FilterSidebar } from "./FilterSidebar";
 // Assuming we use Unit type
 import { UnitCard } from "./UnitCard";
@@ -34,6 +35,9 @@ interface UnitArchiveProps {
 
 export function UnitArchive(props: UnitArchiveProps) {
   const { initialUnits } = props;
+  // Sort State
+  const [sortBy, setSortBy] = useState<SortField>("name");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("asc");
   // State
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -51,7 +55,13 @@ export function UnitArchive(props: UnitArchiveProps) {
   };
 
   // derived state
-  const filteredUnits = useUnitSearch(initialUnits, searchQuery, activeFilters);
+  const filteredUnits = useUnitSearch(
+    initialUnits,
+    searchQuery,
+    activeFilters,
+    sortBy,
+    sortOrder
+  );
 
   return (
     <div
@@ -65,6 +75,10 @@ export function UnitArchive(props: UnitArchiveProps) {
         activeFilters={activeFilters}
         toggleFilter={toggleFilter}
         clearFilters={clearFilters}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
         className="w-full md:w-64 shrink-0 md:sticky md:top-24 md:z-30"
       />
 

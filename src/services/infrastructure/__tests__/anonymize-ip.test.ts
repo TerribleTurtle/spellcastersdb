@@ -49,20 +49,18 @@ describe("anonymizeIp", () => {
     expect(anonymizeIp(ip, salt)).toBe(expected);
   });
 
-  it("should use REVALIDATION_SECRET env var as default salt", () => {
-    vi.stubEnv("REVALIDATION_SECRET", "env-secret");
+  it("should use IP_HASH_SALT env var as default salt", () => {
+    vi.stubEnv("IP_HASH_SALT", "env-secret");
 
     const withEnv = anonymizeIp("10.0.0.1");
     const withExplicit = anonymizeIp("10.0.0.1", "env-secret");
     expect(withEnv).toBe(withExplicit);
   });
 
-  it("should fall back to 'default-salt' when env var is missing", () => {
-    vi.stubEnv("REVALIDATION_SECRET", "");
+  it("should throw an error when IP_HASH_SALT env var is missing and no salt is provided", () => {
+    vi.stubEnv("IP_HASH_SALT", "");
 
-    const withDefault = anonymizeIp("10.0.0.1");
-    const withExplicit = anonymizeIp("10.0.0.1", "default-salt");
-    expect(withDefault).toBe(withExplicit);
+    expect(() => anonymizeIp("10.0.0.1")).toThrow(/IP_HASH_SALT/);
   });
 
   it("should handle IPv6 addresses", () => {

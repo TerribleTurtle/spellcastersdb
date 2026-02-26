@@ -39,6 +39,7 @@ Review the settings in `.env.local`.
 | `GITHUB_TOKEN`                       | Increases GitHub API rate limits            | _(Optional)_                                                         |
 | `REVALIDATION_SECRET`                | Secures `/api/revalidate` endpoint          | _(Required in production)_                                           |
 | `LOCAL_ASSETS_PATH`                  | Path to local image assets                  | _(Optional)_                                                         |
+| `IP_HASH_SALT`                       | Secret salt for IP anonymization hashing    | _(Required in production)_                                           |
 | `UPSTASH_REDIS_REST_URL`             | Redis URL for rate limiting & short links   | _(Optional)_                                                         |
 | `UPSTASH_REDIS_REST_TOKEN`           | Redis token for rate limiting & short links | _(Optional)_                                                         |
 | `SENTRY_AUTH_TOKEN`                  | Sentry source map upload token              | _(Optional)_                                                         |

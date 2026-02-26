@@ -59,4 +59,53 @@ describe("FilterSidebar", () => {
     fireEvent.click(clearBtn);
     expect(defaultProps.clearFilters).toHaveBeenCalled();
   });
+
+  it("renders sort controls when sort props are provided", () => {
+    const sortProps = {
+      ...defaultProps,
+      sortBy: "name" as const,
+      setSortBy: vi.fn(),
+      sortOrder: "asc" as const,
+      setSortOrder: vi.fn(),
+    };
+    render(<FilterSidebar {...sortProps} />);
+    expect(screen.getByTestId("sort-controls")).toBeTruthy();
+    expect(screen.getByTestId("sort-select")).toBeTruthy();
+    expect(screen.getByTestId("sort-order-toggle")).toBeTruthy();
+  });
+
+  it("does not render sort controls without sort props", () => {
+    render(<FilterSidebar {...defaultProps} />);
+    expect(screen.queryByTestId("sort-controls")).toBeNull();
+  });
+
+  it("calls setSortBy on selection change", () => {
+    const setSortBy = vi.fn();
+    const sortProps = {
+      ...defaultProps,
+      sortBy: "name" as const,
+      setSortBy,
+      sortOrder: "asc" as const,
+      setSortOrder: vi.fn(),
+    };
+    render(<FilterSidebar {...sortProps} />);
+    fireEvent.change(screen.getByTestId("sort-select"), {
+      target: { value: "health" },
+    });
+    expect(setSortBy).toHaveBeenCalledWith("health");
+  });
+
+  it("calls setSortOrder on toggle click", () => {
+    const setSortOrder = vi.fn();
+    const sortProps = {
+      ...defaultProps,
+      sortBy: "name" as const,
+      setSortBy: vi.fn(),
+      sortOrder: "asc" as const,
+      setSortOrder,
+    };
+    render(<FilterSidebar {...sortProps} />);
+    fireEvent.click(screen.getByTestId("sort-order-toggle"));
+    expect(setSortOrder).toHaveBeenCalledWith("desc");
+  });
 });

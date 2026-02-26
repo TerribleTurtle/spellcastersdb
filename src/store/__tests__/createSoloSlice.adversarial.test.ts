@@ -127,12 +127,10 @@ describe("createSoloSlice.ts — adversarial", () => {
       expect(JSON.stringify(useStore.getState().currentDeck)).toBe(snapshot);
     });
 
-    it("clearSlot with index NaN CRASHES (bug: bypasses DeckRules.clearSlot validation)", () => {
+    it("clearSlot with index NaN is ignored safely (fixed bug)", () => {
       useStore.getState().setDeck({ ...INITIAL_DECK });
-      // BUG: createSoloSlice.clearSlot accesses slots[NaN] directly
-      // instead of going through DeckRules.clearSlot which validates indices.
-      // This is a real crash vector if NaN ever reaches this code path.
-      expect(() => useStore.getState().clearSlot(NaN as any)).toThrow();
+      // clearSlot(NaN) is now caught by validation bounds checking
+      expect(() => useStore.getState().clearSlot(NaN as any)).not.toThrow();
     });
 
     it("swapSlots with same indices should be a no-op", () => {

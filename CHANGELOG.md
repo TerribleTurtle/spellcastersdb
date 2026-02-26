@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.29] - 2026-02-26
+
+### Added
+- **Database Sort Controls**: Native sort dropdown (Name, Cost, Attack, Health, Rank) with ascending/descending toggle in the filter sidebar.
+- **Scroll-to-Top FAB**: Global `IntersectionObserver`-based floating action button that appears on all scrollable pages.
+- **Print Stylesheet**: `@media print` rules to hide interactive chrome (navbar, sidebar, filters, FABs), simplify grids, and add page-break controls.
+- **Loading Skeletons**: Added `loading.tsx` for 8 routes missing them (`/deck-builder`, `/design-system`, `/privacy`, `/terms`, `/guide/infusions/[id]`, `/consumables`, `/incantations/spells/[id]`, `/incantations/units/[id]`).
+
+### Fixed
+- **Accessibility**: Resolved Axe DevTools violations on `/database` — fixed heading order (added `sr-only` `<h2>`), missing `<aside>` landmark label, and unlinked sort `<select>` label.
+- **TypeScript**: Fixed implicit `any[]` type error in `useDataHydration.adversarial.test.ts`.
+
 ## [1.0.28] - 2026-02-26
 
 ### Added
@@ -13,7 +25,7 @@ All notable changes to this project will be documented in this file.
 - **Dependencies**: Resolved high/critical security vulnerabilities.
 
 ### Fixed
-- **Testing**: Resolved TypeScript errors in test mocks, added tests, and optimized API usage.
+- **Testing**: Added 38 business logic tests for persistence hooks and expanded the Adversarial Testing Suite to 85 tests to harden data hydration, syncing, and state boundaries. Resolved previous TypeScript errors.
 - **Images/Encoding**: Hardened OG images, encoding utils, and synced docs.
 - **CI**: Busted Next.js cache to clear stale API fetch data.
 - **Repo**: Deduplicated `.gitignore` and untracked scratch files.

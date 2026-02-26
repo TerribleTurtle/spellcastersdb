@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { JsonLd } from "@/components/common/JsonLd";
+import { ScrollToTop } from "@/components/common/ScrollToTop";
 import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
 import Footer from "@/components/layout/Footer";
 import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
@@ -136,6 +137,7 @@ export default async function RootLayout({
         <ThemeProvider>
           <TooltipProvider>
             <Navbar />
+            <ScrollToTop />
 
             <div className="flex max-w-site-shell mx-auto w-full relative">
               <DesktopSidebar />

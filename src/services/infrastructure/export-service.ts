@@ -17,7 +17,14 @@ export function downloadTeamJson(teamDecks: Team["decks"], teamName: string) {
 
   const link = document.createElement("a");
   link.href = url;
-  link.download = `${(teamName || "untitled-team").toLowerCase().replace(/\s+/g, "-")}.json`;
+
+  // Stricter sanitization: remove anything not alphanumeric, space, dash, or underscore
+  const safeName = (teamName || "untitled-team")
+    .replace(/[^a-zA-Z0-9 _-]/g, "")
+    .toLowerCase()
+    .replace(/\s+/g, "-");
+
+  link.download = `${safeName || "untitled-team"}.json`;
   document.body.appendChild(link);
   link.click();
 

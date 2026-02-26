@@ -38,6 +38,15 @@ export const createSoloSlice: StateCreator<
 
   clearSlot: (index) =>
     set((state) => {
+      // Validate index bounds manually as NaN evades typescript checking
+      if (
+        typeof index !== "number" ||
+        isNaN(index) ||
+        index < 0 ||
+        index >= state.currentDeck.slots.length
+      ) {
+        return {};
+      }
       const newDeck = cloneDeck(state.currentDeck);
       newDeck.slots[index].unit = null;
       return { currentDeck: newDeck };

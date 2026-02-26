@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import {
+  ArrowDownAZ,
+  ArrowUpAZ,
+  Search,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
 
 import { FilterSection } from "@/components/ui/FilterSection";
 import { cn } from "@/lib/utils";
@@ -11,6 +17,17 @@ import {
   SCHOOLS,
   SPELLCASTER_CLASSES,
 } from "@/services/config/constants";
+
+export type SortField = "name" | "cost" | "damage" | "health" | "rank";
+export type SortOrder = "asc" | "desc";
+
+const SORT_OPTIONS: { value: SortField; label: string }[] = [
+  { value: "name", label: "Name" },
+  { value: "cost", label: "Cost" },
+  { value: "damage", label: "Attack" },
+  { value: "health", label: "Health" },
+  { value: "rank", label: "Rank" },
+];
 
 interface FilterSidebarProps {
   searchQuery: string;
@@ -27,6 +44,10 @@ interface FilterSidebarProps {
   ) => void;
   clearFilters: () => void;
   className?: string;
+  sortBy?: SortField;
+  setSortBy?: (field: SortField) => void;
+  sortOrder?: SortOrder;
+  setSortOrder?: (order: SortOrder) => void;
 }
 
 // CATEGORIES used locally for filter options (Singular)
@@ -46,6 +67,10 @@ export function FilterSidebar({
   toggleFilter,
   clearFilters,
   className,
+  sortBy,
+  setSortBy,
+  sortOrder,
+  setSortOrder,
 }: FilterSidebarProps) {
   const [isOpen, setIsOpen] = useState(false); // Mobile Drawer State
 
@@ -77,6 +102,7 @@ export function FilterSidebar({
 
       {/* Sidebar Container */}
       <aside
+        aria-label="Filter Options"
         data-testid="filter-sidebar"
         className={cn(
           "bg-surface-main/95 md:bg-transparent backdrop-blur-xl md:backdrop-blur-none fixed inset-0 z-50 p-6 md:p-0 overflow-y-auto transition-transform duration-300 md:relative md:transform-none md:block w-full md:w-64 shrink-0",
@@ -84,12 +110,14 @@ export function FilterSidebar({
           className
         )}
       >
-        <div className="flex justify-between items-center md:hidden mb-6">
-          <h2 className="text-xl font-bold text-text-primary">Filters</h2>
+        <div className="flex justify-between items-center mb-6 md:mb-0">
+          <h2 className="text-xl font-bold text-text-primary md:sr-only">
+            Filters
+          </h2>
           <button
             onClick={() => setIsOpen(false)}
             aria-label="Close filters"
-            className="text-text-muted hover:text-text-primary"
+            className="text-text-muted hover:text-text-primary md:hidden"
           >
             <X size={24} />
           </button>
@@ -125,6 +153,48 @@ export function FilterSidebar({
               </button>
             )}
           </div>
+
+          {/* Sort Controls */}
+          {setSortBy && setSortOrder && (
+            <div className="space-y-2" data-testid="sort-controls">
+              <label
+                htmlFor="sort-select"
+                className="text-xs font-bold text-text-muted uppercase tracking-widest"
+              >
+                Sort By
+              </label>
+              <div className="flex gap-2">
+                <select
+                  id="sort-select"
+                  value={sortBy ?? "name"}
+                  onChange={(e) => setSortBy(e.target.value as SortField)}
+                  data-testid="sort-select"
+                  className="flex-1 bg-surface-card border border-border-default rounded-lg px-3 py-2 text-sm text-text-primary focus:outline-none focus:border-brand-primary/50 transition-colors appearance-none cursor-pointer"
+                >
+                  {SORT_OPTIONS.map((opt) => (
+                    <option key={opt.value} value={opt.value}>
+                      {opt.label}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  onClick={() =>
+                    setSortOrder(sortOrder === "asc" ? "desc" : "asc")
+                  }
+                  data-testid="sort-order-toggle"
+                  title={sortOrder === "asc" ? "Ascending" : "Descending"}
+                  aria-label={`Sort ${sortOrder === "asc" ? "ascending" : "descending"}`}
+                  className="p-2 bg-surface-card border border-border-default rounded-lg text-text-secondary hover:text-text-primary hover:border-brand-primary/50 transition-colors"
+                >
+                  {sortOrder === "asc" ? (
+                    <ArrowDownAZ size={16} />
+                  ) : (
+                    <ArrowUpAZ size={16} />
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Categories */}
           <FilterSection

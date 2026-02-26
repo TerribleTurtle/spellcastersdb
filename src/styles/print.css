@@ -1,0 +1,79 @@
+/* ═══════════════════════════════════════════════════════
+   Print Stylesheet — @media print overrides
+   Hides interactive chrome, simplifies layout for paper.
+   ═══════════════════════════════════════════════════════ */
+
+@media print {
+  /* ── Hide interactive chrome ────────────────────────── */
+  nav[data-testid="navbar"],
+  [data-testid="filter-sidebar"],
+  [data-testid="filter-mobile-toggle"],
+  footer,
+  .scroll-to-top-fab,
+  [data-testid="sort-controls"],
+  [data-testid="view-toggle-grid"],
+  [data-testid="view-toggle-list"] {
+    display: none !important;
+  }
+
+  /* ── Reset positioning & backgrounds ────────────────── */
+  body {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Remove fixed/sticky elements */
+  .fixed,
+  .sticky {
+    position: static !important;
+  }
+
+  /* Remove backdrop effects */
+  .backdrop-blur-md,
+  .backdrop-blur-xl {
+    backdrop-filter: none !important;
+  }
+
+  /* ── Simplify grids for paper ───────────────────────── */
+  [data-testid="unit-list"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+
+  /* Full-width main content when sidebar is hidden */
+  [data-testid="unit-archive"] {
+    display: block !important;
+  }
+
+  /* ── Page break control ─────────────────────────────── */
+  [data-testid^="unit-card-"],
+  .bg-surface-card {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Force page breaks between major sections */
+  section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* ── Typography adjustments ─────────────────────────── */
+  * {
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  /* Show URL for external links */
+  a[href^="http"]:after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    color: #666;
+  }
+}
