@@ -75,6 +75,16 @@ function addUnit(deck: Deck, entity: Unit | Spell): DeckOperationResult<Deck> {
   return { success: false, error: DECK_ERRORS.DECK_FULL, code: "DECK_FULL" };
 }
 
+/**
+ * Safe Index Validation parsing helper.
+ */
+function isValidIndex(index: number): boolean {
+  if (typeof index !== "number" || !Number.isInteger(index)) {
+    return false;
+  }
+  return index >= 0 && index <= TITAN_SLOT_INDEX;
+}
+
 export const DeckRules = {
   /**
    * Assigns a Spellcaster to the deck and updates the deck name if needed.
@@ -121,6 +131,23 @@ export const DeckRules = {
     index: SlotIndex,
     card: Unit | Spell | Titan
   ): DeckOperationResult<Deck> {
+    if (!card) {
+      return {
+        success: false,
+        error: "Card cannot be null",
+        code: "INVALID_CARD",
+      };
+    }
+
+    if (!isValidIndex(index)) {
+      return {
+        success: false,
+        error: DECK_ERRORS.INVALID_SLOT_INDEX,
+        code: "INVALID_INDEX",
+      };
+    }
+
+    const safeIndex = Math.floor(index);
     if (isSpellcaster(card)) {
       return {
         success: false,
@@ -132,23 +159,23 @@ export const DeckRules = {
     const newDeck = cloneDeck(deck);
 
     // Enforce Singleton: If card is already in the deck (within unit slots), swap it with the target slot's content.
-    if (index < MAX_UNIT_SLOTS) {
+    if (safeIndex < MAX_UNIT_SLOTS && card.entity_id) {
       const existingIndex = newDeck.slots.findIndex(
         (s, i) =>
           i < MAX_UNIT_SLOTS &&
-          i !== index &&
+          i !== safeIndex &&
           s.unit?.entity_id === card.entity_id
       );
 
       if (existingIndex !== -1) {
         newDeck.slots[existingIndex] = {
           ...newDeck.slots[existingIndex],
-          unit: newDeck.slots[index].unit,
+          unit: newDeck.slots[safeIndex].unit,
         };
       }
     }
 
-    const slot = newDeck.slots[index];
+    const slot = newDeck.slots[safeIndex];
     const isTitan = card.category === EntityCategory.Titan;
 
     if (slot.allowedTypes.includes(SlotType.Titan) && !isTitan) {
@@ -166,7 +193,7 @@ export const DeckRules = {
       };
     }
 
-    newDeck.slots[index] = { ...slot, unit: card };
+    newDeck.slots[safeIndex] = { ...slot, unit: card };
     return { success: true, data: newDeck };
   },
 
@@ -179,8 +206,13 @@ export const DeckRules = {
    * ```
    */
   clearSlot(deck: Deck, index: SlotIndex): Deck {
+    if (!isValidIndex(index)) {
+      return deck; // Silently ignore invalid clear requests
+    }
+
+    const safeIndex = Math.floor(index);
     const newDeck = cloneDeck(deck);
-    newDeck.slots[index].unit = null;
+    newDeck.slots[safeIndex].unit = null;
     return newDeck;
   },
 
@@ -200,12 +232,7 @@ export const DeckRules = {
     indexB: number
   ): DeckOperationResult<Deck> {
     // Bounds check
-    if (
-      indexA < 0 ||
-      indexA > TITAN_SLOT_INDEX ||
-      indexB < 0 ||
-      indexB > TITAN_SLOT_INDEX
-    ) {
+    if (!isValidIndex(indexA) || !isValidIndex(indexB)) {
       return {
         success: false,
         error: DECK_ERRORS.INVALID_SLOT_INDEX,
@@ -213,9 +240,16 @@ export const DeckRules = {
       };
     }
 
+    const safeA = Math.floor(indexA);
+    const safeB = Math.floor(indexB);
+
+    if (safeA === safeB) {
+      return { success: true, data: deck }; // Safe no-op
+    }
+
     const newDeck = cloneDeck(deck);
-    const slotA = newDeck.slots[indexA];
-    const slotB = newDeck.slots[indexB];
+    const slotA = newDeck.slots[safeA];
+    const slotB = newDeck.slots[safeB];
 
     const unitA = slotA.unit;
     const unitB = slotB.unit;
@@ -243,8 +277,8 @@ export const DeckRules = {
     }
 
     // Perform Swap
-    newDeck.slots[indexA] = { ...slotA, unit: unitB };
-    newDeck.slots[indexB] = { ...slotB, unit: unitA };
+    newDeck.slots[safeA] = { ...slotA, unit: unitB };
+    newDeck.slots[safeB] = { ...slotB, unit: unitA };
 
     return { success: true, data: newDeck };
   },
@@ -264,8 +298,16 @@ export const DeckRules = {
    */
   quickAdd(
     deck: Deck,
-    card: Unit | Spell | Titan | Spellcaster
+    card: Unit | Spell | Titan | Spellcaster | null
   ): DeckOperationResult<Deck> {
+    if (!card) {
+      return {
+        success: false,
+        error: "Card cannot be null",
+        code: "INVALID_CARD",
+      };
+    }
+
     // 1. Spellcaster
     if (isSpellcaster(card)) {
       return {

@@ -1,4 +1,4 @@
-import { Mock, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { monitoring } from "@/services/monitoring";
 import { AllDataResponse } from "@/types/api";

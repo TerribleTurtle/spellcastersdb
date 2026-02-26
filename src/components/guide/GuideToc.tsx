@@ -101,10 +101,13 @@ export function GuideToc() {
       aria-label="Table of Contents"
     >
       <div className="sticky top-24">
-        <h3 className="flex items-center gap-2 font-bold mb-4 text-text-primary px-3 text-sm">
+        <div
+          className="flex items-center gap-2 font-bold mb-4 text-text-primary px-3 text-sm"
+          role="presentation"
+        >
           <List size={16} className="text-brand-primary" />
           On this page
-        </h3>
+        </div>
         <ul className="space-y-0.5 border-l-2 border-border-subtle ml-3">
           {GUIDE_SECTIONS.map(({ id, label }) => {
             const isActive = activeId === id;

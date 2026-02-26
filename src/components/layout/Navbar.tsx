@@ -64,6 +64,7 @@ export default function Navbar() {
     <nav
       className="fixed top-0 left-0 right-0 z-50 border-b border-border-default bg-surface-main/80 backdrop-blur-md"
       data-testid="navbar"
+      aria-label="Main"
     >
       <div className="relative mx-auto max-w-site-shell px-4 sm:px-6 lg:px-8">
         <div className="flex h-12 md:h-16 items-center justify-between">

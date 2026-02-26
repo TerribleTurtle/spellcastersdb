@@ -15,8 +15,8 @@ import { DECK_ERRORS } from "@/services/config/errors";
 import { DeckRules } from "@/services/rules/deck-rules";
 import { cloneDeck } from "@/services/utils/deck-utils";
 import { DeckFactory } from "@/tests/factories/deck-factory";
-import { Deck, DeckSlot } from "@/types/deck";
-import { EntityCategory, SlotType } from "@/types/enums";
+import { Deck } from "@/types/deck";
+import { SlotType } from "@/types/enums";
 
 // --- Helpers ---
 function getEmptyDeck(): Deck {
@@ -44,34 +44,31 @@ function getFullDeck(): Deck {
 // --- Tests ---
 describe("Phase 2 — DeckRules Adversarial Tests", () => {
   describe("setSlot Adversarial", () => {
-    it("ADV-1: OOB negative index — crashes instead of graceful fail (EXPECTED FAIL: Bug #3)", () => {
+    it("ADV-1: OOB negative index — safely returns error instead of crashing", () => {
       const deck = getEmptyDeck();
       const unit = DeckFactory.createUnit();
 
-      // Bug: `newDeck.slots[-1]` is undefined. `slot.allowedTypes` throws TypeError.
-      expect(() => {
-        DeckRules.setSlot(deck, -1, unit);
-      }).toThrowError(TypeError);
+      const result = DeckRules.setSlot(deck, -1, unit);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe(DECK_ERRORS.INVALID_SLOT_INDEX);
     });
 
-    it("ADV-2: OOB positive index — crashes instead of graceful fail (EXPECTED FAIL: Bug #3)", () => {
+    it("ADV-2: OOB positive index — safely returns error instead of crashing", () => {
       const deck = getEmptyDeck();
       const unit = DeckFactory.createUnit();
 
-      // Bug: `newDeck.slots[99]` is undefined.
-      expect(() => {
-        DeckRules.setSlot(deck, 99, unit);
-      }).toThrowError(TypeError);
+      const result = DeckRules.setSlot(deck, 99, unit);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe(DECK_ERRORS.INVALID_SLOT_INDEX);
     });
 
-    it("ADV-3: NaN index — crashes instead of graceful fail", () => {
+    it("ADV-3: NaN index — safely returns error instead of crashing", () => {
       const deck = getEmptyDeck();
       const unit = DeckFactory.createUnit();
 
-      // Bug: `newDeck.slots[NaN]` is undefined.
-      expect(() => {
-        DeckRules.setSlot(deck, NaN as any, unit);
-      }).toThrowError(TypeError);
+      const result = DeckRules.setSlot(deck, NaN as any, unit);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe(DECK_ERRORS.INVALID_SLOT_INDEX);
     });
 
     it("ADV-11: setSlot with Spellcaster entity — returns error", () => {
@@ -142,19 +139,17 @@ describe("Phase 2 — DeckRules Adversarial Tests", () => {
   });
 
   describe("clearSlot Adversarial", () => {
-    it("ADV-4: OOB negative index — crashes (EXPECTED FAIL: Bug #1)", () => {
+    it("ADV-4: OOB negative index — does not crash and safely ignores", () => {
       const deck = getEmptyDeck();
-      // Bug: `newDeck.slots[-1].unit = null`
-      expect(() => {
-        DeckRules.clearSlot(deck, -1);
-      }).toThrowError(TypeError);
+      const result = DeckRules.clearSlot(deck, -1);
+      // Because -1 is invalid, it safely returns the cloned original deck
+      expect(result).toBeDefined();
     });
 
-    it("ADV-5: OOB positive index — crashes (EXPECTED FAIL: Bug #2)", () => {
+    it("ADV-5: OOB positive index — does not crash and safely ignores", () => {
       const deck = getEmptyDeck();
-      expect(() => {
-        DeckRules.clearSlot(deck, 99);
-      }).toThrowError(TypeError);
+      const result = DeckRules.clearSlot(deck, 99);
+      expect(result).toBeDefined();
     });
 
     it("ADV-6: clearSlot on already empty slot behaves idempotently", () => {

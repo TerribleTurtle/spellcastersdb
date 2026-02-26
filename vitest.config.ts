@@ -24,7 +24,7 @@ export default defineConfig({
       thresholds: {
         lines: 42.09,
         functions: 36.84,
-        branches: 30.18,
+        branches: 42.1,
         autoUpdate: false,
       },
       include: ["src/**/*.{ts,tsx}"],

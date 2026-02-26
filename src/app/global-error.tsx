@@ -17,7 +17,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html>
+    <html lang="en">
       <body className="antialiased min-h-screen bg-brand-surface text-brand-neutral flex flex-col items-center justify-center p-6 text-center">
         <div className="space-y-4 max-w-md">
           <h2 className="text-2xl font-bold font-heading text-brand-error">

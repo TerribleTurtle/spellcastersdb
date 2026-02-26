@@ -56,7 +56,7 @@ export function ItemMenu({
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-56 z-[9999] bg-surface-main border border-border-default shadow-xl p-1 text-text-secondary"
+          className="w-56 z-9999 bg-surface-main border border-border-default shadow-xl p-1 text-text-secondary"
         >
           {onDuplicate && (
             <DropdownMenuItem onClick={onDuplicate} className="cursor-pointer">
@@ -130,13 +130,15 @@ function DeleteConfirmationModal({
   onCancel: () => void;
 }) {
   return (
+    /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
     <div
-      className="fixed inset-0 z-[10000] flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-4 animate-in fade-in duration-200"
+      className="fixed inset-0 z-10000 flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-4 animate-in fade-in duration-200"
       onClick={(e) => {
         e.stopPropagation();
         onCancel();
       }}
     >
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         className="bg-surface-card border border-border-default rounded-lg shadow-2xl max-w-sm w-full p-6 space-y-4 animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}

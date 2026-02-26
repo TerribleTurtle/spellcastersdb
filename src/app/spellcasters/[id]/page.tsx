@@ -18,7 +18,6 @@ import {
   mapStatChangesToChangelog,
 } from "@/services/api/patch-history";
 import { registry } from "@/services/api/registry";
-import { Spellcaster } from "@/types/api";
 
 interface SpellcasterPageProps {
   params: Promise<{ id: string }>;

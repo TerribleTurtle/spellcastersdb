@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import { useDndContext, useDraggable, useDroppable } from "@dnd-kit/core";
 import { Shield, X } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
@@ -13,12 +15,18 @@ import { BREAKPOINTS } from "@/services/config/breakpoints";
 import { ENTITY_CATEGORY } from "@/services/config/constants";
 import { useDeckStore } from "@/store/index";
 import { Spell, Titan, UnifiedEntity, Unit } from "@/types/api";
-import { type DeckSlot, SlotType } from "@/types/deck";
+import { type DeckSlot as DeckSlotType, SlotType } from "@/types/deck";
 import { DragData, DraggableEntity, DropData } from "@/types/dnd";
 
-interface DeckSlotProps {
-  slot: DeckSlot;
-  allSlots: [DeckSlot, DeckSlot, DeckSlot, DeckSlot, DeckSlot];
+export interface DeckSlotProps {
+  slot: DeckSlotType;
+  allSlots: [
+    DeckSlotType,
+    DeckSlotType,
+    DeckSlotType,
+    DeckSlotType,
+    DeckSlotType,
+  ];
   onSelect?: (
     item: UnifiedEntity | undefined,
     pos?: { x: number; y: number }
@@ -27,254 +35,271 @@ interface DeckSlotProps {
   idSuffix?: string; // To prevent ID collisions (e.g. mobile vs desktop)
 }
 
-export function DeckSlot({
-  slot,
-  allSlots,
-  onSelect,
-  deckId,
-  idSuffix,
-}: DeckSlotProps) {
-  // ID format: slot-{deckId}-{index} OR slot-{index} (fallback)
-  const baseId = deckId ? `slot-${deckId}-${slot.index}` : `slot-${slot.index}`;
-  const droppableId = idSuffix ? `${baseId}-${idSuffix}` : baseId;
-
-  const baseDragId = deckId
-    ? `slot-drag-${deckId}-${slot.index}`
-    : `slot-drag-${slot.index}`;
-  const draggableId = idSuffix ? `${baseDragId}-${idSuffix}` : baseDragId;
-
-  const { mode, isReadOnly, clearSlot, clearTeamSlot, teamDecks } =
-    useDeckStore(
-      useShallow((state) => ({
-        mode: state.mode,
-        isReadOnly: state.isReadOnly,
-        clearSlot: state.clearSlot,
-        clearTeamSlot: state.clearTeamSlot,
-        teamDecks: state.teamDecks,
-      }))
-    );
-
-  const handleRemove = (e: React.MouseEvent | React.PointerEvent) => {
-    e.stopPropagation();
-    if (isReadOnly) return;
-
-    if (mode === "TEAM" && deckId) {
-      const deckIndex = teamDecks.findIndex((d) => d.id === deckId);
-      if (deckIndex !== -1) {
-        clearTeamSlot(deckIndex, slot.index);
-      }
-    } else {
-      clearSlot(slot.index);
-    }
-  };
-
-  const dropData: DropData = {
-    type: "DECK_SLOT",
-    slotIndex: slot.index,
+export const DeckSlot = memo(
+  function DeckSlotInner({
+    slot,
+    allSlots,
+    onSelect,
     deckId,
-    accepts: slot.allowedTypes,
-  };
+    idSuffix,
+  }: DeckSlotProps) {
+    // ID format: slot-{deckId}-{index} OR slot-{index} (fallback)
+    const baseId = deckId
+      ? `slot-${deckId}-${slot.index}`
+      : `slot-${slot.index}`;
+    const droppableId = idSuffix ? `${baseId}-${idSuffix}` : baseId;
 
-  const { isOver, setNodeRef } = useDroppable({
-    id: droppableId,
-    data: dropData,
-  });
+    const baseDragId = deckId
+      ? `slot-drag-${deckId}-${slot.index}`
+      : `slot-drag-${slot.index}`;
+    const draggableId = idSuffix ? `${baseDragId}-${idSuffix}` : baseDragId;
 
-  const dragData: DragData = {
-    type: "DECK_SLOT",
-    item: slot.unit as DraggableEntity,
-    sourceDeckId: deckId,
-    sourceSlotIndex: slot.index,
-  };
+    const { mode, isReadOnly, clearSlot, clearTeamSlot, teamDecks } =
+      useDeckStore(
+        useShallow((state) => ({
+          mode: state.mode,
+          isReadOnly: state.isReadOnly,
+          clearSlot: state.clearSlot,
+          clearTeamSlot: state.clearTeamSlot,
+          teamDecks: state.teamDecks,
+        }))
+      );
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef: setDragNodeRef,
-    transform,
-    isDragging,
-  } = useDraggable({
-    id: draggableId,
-    data: dragData,
-    disabled: !slot.unit,
-  });
+    const handleRemove = (e: React.MouseEvent | React.PointerEvent) => {
+      e.stopPropagation();
+      if (isReadOnly) return;
 
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-        zIndex: 50,
-        opacity: isDragging ? 0 : 1, // Hide original when dragging (overlay is shown)
-      }
-    : undefined;
-
-  const isTitanSlot = slot.allowedTypes.includes(SlotType.Titan);
-
-  // Determine if this Slot is valid for the current Drag
-  let isValidTarget = false;
-
-  const { active } = useDndContext();
-  const currentDrag = active?.data.current as DragData | undefined;
-
-  if (currentDrag && currentDrag.item) {
-    // Check if it's a Spellcaster (Invalid for Deck Slots)
-    const item = currentDrag.item as UnifiedEntity;
-
-    if (
-      "spellcaster_id" in item ||
-      item.category === ENTITY_CATEGORY.Spellcaster
-    ) {
-      isValidTarget = false;
-    } else {
-      // Unit/Spell/Titan
-      const unitItem = item as Unit | Spell | Titan;
-      const isTitan = unitItem.category === ENTITY_CATEGORY.Titan;
-      const typeMatches = isTitanSlot ? isTitan : !isTitan;
-
-      // Singleton Rule
-      const isInternalMove =
-        currentDrag.type === "DECK_SLOT" && currentDrag.sourceDeckId === deckId;
-
-      // If dragging from browser or another deck, check for duplicates in this deck
-      // Note: If dragging from slot 1 to slot 2 in same deck, we don't count slot 1 as a duplicate source.
-      const isDuplicate =
-        !isInternalMove &&
-        slot.index < 4 &&
-        allSlots.some(
-          (s, i) =>
-            i < 4 &&
-            i !== slot.index &&
-            s.unit?.entity_id === unitItem.entity_id
-        );
-
-      isValidTarget = typeMatches && !isDuplicate;
-    }
-  }
-
-  return (
-    <div
-      ref={setNodeRef}
-      data-testid={`deck-slot-${slot.index}`}
-      className={cn(
-        "relative group aspect-3/4 w-full rounded-lg border-2 transition-[border-color,background-color,box-shadow,transform,opacity] flex flex-col items-center justify-center overflow-visible",
-        // Valid drop target
-        isValidTarget &&
-          !isOver &&
-          "border-slot-border-valid bg-slot-bg-valid shadow-(--sp-slot-glow-valid) animate-pulse",
-        // Active hover
-        isOver &&
-          isValidTarget &&
-          "border-brand-primary bg-brand-primary/10 scale-105",
-        // Invalid Hover
-        isOver &&
-          !isValidTarget &&
-          "border-slot-border-invalid bg-slot-bg-invalid",
-        // Default
-        !isValidTarget &&
-          !isOver &&
-          "border-border-default bg-surface-card md:hover:border-brand-primary/40 md:hover:shadow-lg md:hover:shadow-brand-primary/10",
-        isTitanSlot &&
-          !isValidTarget &&
-          !isOver &&
-          "border-brand-accent/30 bg-brand-accent/5",
-        slot.unit && "border-brand-secondary/50",
-        isDragging && "opacity-50"
-      )}
-      onClick={(e) => {
-        if (!isDragging && onSelect) {
-          e.stopPropagation();
-          onSelect(slot.unit || undefined, { x: e.clientX, y: e.clientY });
+      if (mode === "TEAM" && deckId) {
+        const deckIndex = teamDecks.findIndex((d) => d.id === deckId);
+        if (deckIndex !== -1) {
+          clearTeamSlot(deckIndex, slot.index);
         }
-      }}
-    >
-      {/* Remove Button */}
-      {slot.unit && !isReadOnly && !isDragging && (
-        <button
-          type="button"
-          className="absolute -top-1.5 -right-1.5 z-60 p-1 md:p-1 bg-surface-main hover:bg-status-danger hover:text-white rounded-full text-text-muted transition-colors shadow-md ring-1 ring-border-default/50 hover:ring-status-danger cursor-pointer pointer-events-auto"
-          onPointerDown={handleRemove}
-          onClick={(e) => {
+      } else {
+        clearSlot(slot.index);
+      }
+    };
+
+    const dropData: DropData = {
+      type: "DECK_SLOT",
+      slotIndex: slot.index,
+      deckId,
+      accepts: slot.allowedTypes,
+    };
+
+    const { isOver, setNodeRef } = useDroppable({
+      id: droppableId,
+      data: dropData,
+    });
+
+    const dragData: DragData = {
+      type: "DECK_SLOT",
+      item: slot.unit as DraggableEntity,
+      sourceDeckId: deckId,
+      sourceSlotIndex: slot.index,
+    };
+
+    const {
+      attributes,
+      listeners,
+      setNodeRef: setDragNodeRef,
+      transform,
+      isDragging,
+    } = useDraggable({
+      id: draggableId,
+      data: dragData,
+      disabled: !slot.unit,
+    });
+
+    const style = transform
+      ? {
+          transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+          zIndex: 50,
+          opacity: isDragging ? 0 : 1, // Hide original when dragging (overlay is shown)
+        }
+      : undefined;
+
+    const isTitanSlot = slot.allowedTypes.includes(SlotType.Titan);
+
+    // Determine if this Slot is valid for the current Drag
+    let isValidTarget = false;
+
+    const { active } = useDndContext();
+    const currentDrag = active?.data.current as DragData | undefined;
+
+    if (currentDrag && currentDrag.item) {
+      // Check if it's a Spellcaster (Invalid for Deck Slots)
+      const item = currentDrag.item as UnifiedEntity;
+
+      if (
+        "spellcaster_id" in item ||
+        item.category === ENTITY_CATEGORY.Spellcaster
+      ) {
+        isValidTarget = false;
+      } else {
+        // Unit/Spell/Titan
+        const unitItem = item as Unit | Spell | Titan;
+        const isTitan = unitItem.category === ENTITY_CATEGORY.Titan;
+        const typeMatches = isTitanSlot ? isTitan : !isTitan;
+
+        // Singleton Rule
+        const isInternalMove =
+          currentDrag.type === "DECK_SLOT" &&
+          currentDrag.sourceDeckId === deckId;
+
+        // If dragging from browser or another deck, check for duplicates in this deck
+        // Note: If dragging from slot 1 to slot 2 in same deck, we don't count slot 1 as a duplicate source.
+        const isDuplicate =
+          !isInternalMove &&
+          slot.index < 4 &&
+          allSlots.some(
+            (s, i) =>
+              i < 4 &&
+              i !== slot.index &&
+              s.unit?.entity_id === unitItem.entity_id
+          );
+
+        isValidTarget = typeMatches && !isDuplicate;
+      }
+    }
+
+    return (
+      /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
+      <div
+        ref={setNodeRef}
+        data-testid={`deck-slot-${slot.index}`}
+        className={cn(
+          "relative group aspect-3/4 w-full rounded-lg border-2 transition-[border-color,background-color,box-shadow,transform,opacity] flex flex-col items-center justify-center overflow-visible",
+          // Valid drop target
+          isValidTarget &&
+            !isOver &&
+            "border-slot-border-valid bg-slot-bg-valid shadow-(--sp-slot-glow-valid) animate-pulse",
+          // Active hover
+          isOver &&
+            isValidTarget &&
+            "border-brand-primary bg-brand-primary/10 scale-105",
+          // Invalid Hover
+          isOver &&
+            !isValidTarget &&
+            "border-slot-border-invalid bg-slot-bg-invalid",
+          // Default
+          !isValidTarget &&
+            !isOver &&
+            "border-border-default bg-surface-card md:hover:border-brand-primary/40 md:hover:shadow-lg md:hover:shadow-brand-primary/10",
+          isTitanSlot &&
+            !isValidTarget &&
+            !isOver &&
+            "border-brand-accent/30 bg-brand-accent/5",
+          slot.unit && "border-brand-secondary/50",
+          isDragging && "opacity-50"
+        )}
+        onClick={(e) => {
+          if (!isDragging && onSelect) {
             e.stopPropagation();
-          }}
-          title="Remove from deck"
-          data-testid={`remove-slot-${slot.index}`}
-        >
-          <X size={12} className="w-3 h-3 md:w-3.5 md:h-3.5" />
-        </button>
-      )}
+            onSelect(slot.unit || undefined, { x: e.clientX, y: e.clientY });
+          }
+        }}
+      >
+        {/* Remove Button */}
+        {slot.unit && !isReadOnly && !isDragging && (
+          <button
+            type="button"
+            className="absolute -top-1.5 -right-1.5 z-60 p-1 md:p-1 bg-surface-main hover:bg-status-danger hover:text-white rounded-full text-text-muted transition-colors shadow-md ring-1 ring-border-default/50 hover:ring-status-danger cursor-pointer pointer-events-auto"
+            onPointerDown={handleRemove}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            title="Remove from deck"
+            data-testid={`remove-slot-${slot.index}`}
+          >
+            <X size={12} className="w-3 h-3 md:w-3.5 md:h-3.5" />
+          </button>
+        )}
 
-      {/* Draggable Wrapper */}
-      {slot.unit && (
-        <div
-          ref={setDragNodeRef}
-          {...listeners}
-          {...attributes}
-          style={style}
-          className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing touch-none"
-        ></div>
-      )}
+        {/* Draggable Wrapper */}
+        {slot.unit && (
+          <div
+            ref={setDragNodeRef}
+            {...listeners}
+            {...attributes}
+            style={style}
+            className="absolute inset-0 z-10 cursor-grab active:cursor-grabbing touch-none"
+          ></div>
+        )}
 
-      {/* Label for Empty Slot */}
-      {!slot.unit && (
-        <div className="text-center opacity-70 group-hover:opacity-100 transition-opacity text-text-secondary">
-          <div className="mb-2 flex justify-center">
-            {isTitanSlot ? (
-              <Shield size={24} />
-            ) : (
-              <div className="w-6 h-6 rounded-full border-2 border-current border-dashed opacity-50" />
-            )}
-          </div>
-          <span className="text-[10px] sm:text-xs px-0.5 text-center block font-bold uppercase tracking-tight">
-            {isTitanSlot ? "Titan" : `Incant. ${slot.index + 1}`}
-          </span>
-        </div>
-      )}
-
-      {/* Filled State */}
-      {slot.unit && (
-        <div
-          className={cn(
-            "flex flex-col w-full h-full overflow-hidden rounded text-left pointer-events-none",
-            isDragging && "opacity-0"
-          )}
-        >
-          {/* Image Area */}
-          <div className="relative flex-1 bg-surface-raised overflow-hidden">
-            <GameImage
-              src={getCardImageUrl(slot.unit)}
-              alt={getCardAltText(slot.unit)}
-              fill
-              sizes={`(max-width: ${BREAKPOINTS.md}px) 100vw, 33vw`}
-              className={cn(
-                "object-cover object-top",
-                slot.unit.category === ENTITY_CATEGORY.Spell &&
-                  "scale-125 md:scale-[1.35] origin-center"
+        {/* Label for Empty Slot */}
+        {!slot.unit && (
+          <div className="text-center opacity-70 group-hover:opacity-100 transition-opacity text-text-secondary">
+            <div className="mb-2 flex justify-center">
+              {isTitanSlot ? (
+                <Shield size={24} />
+              ) : (
+                <div className="w-6 h-6 rounded-full border-2 border-current border-dashed opacity-50" />
               )}
-            />
-            {/* Rank/Titan Badge */}
-            {(slot.unit.rank ||
-              slot.unit.category === ENTITY_CATEGORY.Titan) && (
-              <div className="absolute bottom-1 left-1 z-20">
-                <RankBadge
-                  rank={
-                    slot.unit.category === ENTITY_CATEGORY.Titan
-                      ? "V"
-                      : slot.unit.rank!
-                  }
-                  isTitan={slot.unit.category === ENTITY_CATEGORY.Titan}
-                  mode="icon"
-                  className="scale-75 lg:scale-100 origin-bottom-left"
-                />
-              </div>
-            )}
-          </div>
-          {/* Name Banner */}
-          <div className="min-h-[24px] bg-surface-main/95 border-t border-border-default flex items-center justify-center px-1 py-0.5 z-10 shrink-0">
-            <span className="text-[10px] font-bold text-text-secondary text-center leading-tight line-clamp-2 wrap-break-word w-full">
-              {slot.unit.name}
+            </div>
+            <span className="text-[10px] sm:text-xs px-0.5 text-center block font-bold uppercase tracking-tight">
+              {isTitanSlot ? "Titan" : `Incant. ${slot.index + 1}`}
             </span>
           </div>
-        </div>
-      )}
-    </div>
-  );
-}
+        )}
+
+        {/* Filled State */}
+        {slot.unit && (
+          <div
+            className={cn(
+              "flex flex-col w-full h-full overflow-hidden rounded text-left pointer-events-none",
+              isDragging && "opacity-0"
+            )}
+          >
+            {/* Image Area */}
+            <div className="relative flex-1 bg-surface-raised overflow-hidden">
+              <GameImage
+                src={getCardImageUrl(slot.unit)}
+                alt={getCardAltText(slot.unit)}
+                fill
+                sizes={`(max-width: ${BREAKPOINTS.md}px) 100vw, 33vw`}
+                className={cn(
+                  "object-cover object-top",
+                  slot.unit.category === ENTITY_CATEGORY.Spell &&
+                    "scale-125 md:scale-[1.35] origin-center"
+                )}
+              />
+              {/* Rank/Titan Badge */}
+              {(slot.unit.rank ||
+                slot.unit.category === ENTITY_CATEGORY.Titan) && (
+                <div className="absolute bottom-1 left-1 z-20">
+                  <RankBadge
+                    rank={
+                      slot.unit.category === ENTITY_CATEGORY.Titan
+                        ? "V"
+                        : slot.unit.rank!
+                    }
+                    isTitan={slot.unit.category === ENTITY_CATEGORY.Titan}
+                    mode="icon"
+                    className="scale-75 lg:scale-100 origin-bottom-left"
+                  />
+                </div>
+              )}
+            </div>
+            {/* Name Banner */}
+            <div className="min-h-[24px] bg-surface-main/95 border-t border-border-default flex items-center justify-center px-1 py-0.5 z-10 shrink-0">
+              <span className="text-[10px] font-bold text-text-secondary text-center leading-tight line-clamp-2 wrap-break-word w-full">
+                {slot.unit.name}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  },
+  (prevProps, nextProps) => {
+    return (
+      prevProps.deckId === nextProps.deckId &&
+      prevProps.idSuffix === nextProps.idSuffix &&
+      prevProps.slot.index === nextProps.slot.index &&
+      prevProps.slot.unit?.entity_id === nextProps.slot.unit?.entity_id &&
+      prevProps.allSlots.every(
+        (s, i) => s.unit?.entity_id === nextProps.allSlots[i].unit?.entity_id
+      )
+    );
+  }
+);

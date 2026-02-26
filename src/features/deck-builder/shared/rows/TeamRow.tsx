@@ -87,6 +87,7 @@ export function TeamRow({
   };
 
   return (
+    /* eslint-disable-next-line jsx-a11y/no-static-element-interactions */
     <div
       ref={setNodeRef}
       style={style}

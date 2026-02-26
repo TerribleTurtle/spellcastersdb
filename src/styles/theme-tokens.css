@@ -70,7 +70,7 @@
   --color-popover-foreground: var(--sp-text-primary);
 
   --color-primary: var(--sp-brand-primary);
-  --color-primary-foreground: #ffffff;
+  --color-primary-foreground: var(--sp-brand-primary-foreground);
 
   --color-secondary: var(--sp-surface-hover);
   --color-secondary-foreground: var(--sp-text-primary);

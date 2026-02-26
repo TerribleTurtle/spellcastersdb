@@ -7,16 +7,12 @@
 import { describe, expect, it } from "vitest";
 
 import { INITIAL_DECK } from "@/services/api/persistence";
-import {
-  areDecksEqual,
-  reconstructDeck,
-  serializeDeck,
-} from "@/services/api/persistence";
+import { reconstructDeck, serializeDeck } from "@/services/api/persistence";
 import { DeckRules } from "@/services/rules/deck-rules";
 import { cloneDeck, isDeckEmpty } from "@/services/utils/deck-utils";
 import { validateDeck } from "@/services/validation/deck-validation";
 import { DeckFactory } from "@/tests/factories/deck-factory";
-import { Deck, DeckSlot, SlotType } from "@/types/deck";
+import { Deck } from "@/types/deck";
 
 // --- Helpers ---
 

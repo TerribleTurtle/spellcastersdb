@@ -16,7 +16,6 @@ import {
   reconstructDeck,
   serializeDeck,
 } from "@/services/api/persistence";
-import { DeckRules } from "@/services/rules/deck-rules";
 import { cloneDeck } from "@/services/utils/deck-utils";
 import { DeckFactory } from "@/tests/factories/deck-factory";
 import { Deck } from "@/types/deck";

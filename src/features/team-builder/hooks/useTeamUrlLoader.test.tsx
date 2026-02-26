@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { act, renderHook, waitFor } from "@testing-library/react";
-import { Mock, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { useDeckStore } from "@/store/index";
 
@@ -49,7 +49,7 @@ const baseProps = {
 
 describe("useTeamUrlLoader", () => {
   let setViewingTeamSpy: ReturnType<typeof vi.spyOn>;
-  let closeCommandCenterSpy: ReturnType<typeof vi.spyOn>;
+  let _closeCommandCenterSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -64,7 +64,7 @@ describe("useTeamUrlLoader", () => {
 
     const store = useDeckStore.getState();
     setViewingTeamSpy = vi.spyOn(store, "setViewingTeam");
-    closeCommandCenterSpy = vi.spyOn(store, "closeCommandCenter");
+    _closeCommandCenterSpy = vi.spyOn(store, "closeCommandCenter");
   });
 
   describe("Initial State", () => {

@@ -55,7 +55,8 @@ export function MobileDeckDock({
             <TooltipProvider delayDuration={0}>
               <Tooltip open={isTooltipOpen} onOpenChange={setIsTooltipOpen}>
                 <TooltipTrigger asChild>
-                  <div
+                  <button
+                    type="button"
                     className={cn(
                       "flex items-center justify-center shrink-0 transition-all rounded-full p-0.5",
                       validation.isValid
@@ -72,7 +73,7 @@ export function MobileDeckDock({
                     ) : (
                       <AlertCircle size={16} />
                     )}
-                  </div>
+                  </button>
                 </TooltipTrigger>
                 <TooltipContent
                   side="top"

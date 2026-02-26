@@ -227,36 +227,77 @@ export default function GuidePage() {
             </h2>
             <p className="text-text-secondary leading-relaxed mb-4">
               Building a strong deck requires understanding the game&apos;s
-              rules and synergies:
+              rules and synergies. Every deck is composed of exactly 6 cards:
             </p>
-            <ul className="list-disc list-inside text-text-secondary space-y-2">
-              <li>
-                Each deck must have exactly <strong>1 Spellcaster</strong>
-              </li>
-              <li>
-                Decks typically contain <strong>5 Incantations</strong> (exact
-                rules may vary)
-              </li>
-              <li>
-                <strong className="text-brand-accent">Required:</strong> At
-                least one <strong>Rank I or II Creature</strong>
-              </li>
-              <li>Decks must include at least 1 Creature</li>
-              <li>
-                Consider balancing ranks for early, mid, and late game presence
-              </li>
-              <li>Build synergies between your Spellcaster and incantations</li>
-              <li>Include a mix of offensive and defensive options</li>
-              <li>Account for different opponent strategies</li>
-            </ul>
+
+            <div className="space-y-4 mb-6">
+              <div className="bg-surface-dim border border-border-default rounded-lg p-3 md:p-4">
+                <h3 className="text-lg font-semibold text-brand-primary mb-2 flex items-center gap-2">
+                  <span className="bg-brand-primary text-text-primary px-2 py-0.5 rounded text-sm font-bold shadow-xs">
+                    1
+                  </span>
+                  Spellcaster
+                </h3>
+                <ul className="list-disc list-inside text-text-secondary text-sm space-y-1">
+                  <li>
+                    The leader of your deck, representing who you play in-game.
+                  </li>
+                  <li>
+                    Build synergies between your Spellcaster and your
+                    incantations.
+                  </li>
+                </ul>
+              </div>
+
+              <div className="bg-surface-dim border border-border-default rounded-lg p-3 md:p-4">
+                <h3 className="text-lg font-semibold text-brand-primary mb-2 flex items-center gap-2">
+                  <span className="bg-brand-primary text-text-primary px-2 py-0.5 rounded text-sm font-bold shadow-xs">
+                    4
+                  </span>
+                  Incantations
+                </h3>
+                <ul className="list-disc list-inside text-text-secondary text-sm space-y-1">
+                  <li>
+                    <strong className="text-brand-accent">Required:</strong> At
+                    least one <strong>Rank I or II Creature</strong> (your deck
+                    cannot be only Spells and Buildings).
+                  </li>
+                  <li>
+                    Consider balancing ranks for early, mid, and late game
+                    presence.
+                  </li>
+                  <li>Include a mix of offensive and defensive options.</li>
+                </ul>
+              </div>
+
+              <div className="bg-surface-dim border border-border-default rounded-lg p-3 md:p-4">
+                <h3 className="text-lg font-semibold text-brand-primary mb-2 flex items-center gap-2">
+                  <span className="bg-brand-primary text-text-primary px-2 py-0.5 rounded text-sm font-bold shadow-xs">
+                    1
+                  </span>
+                  Titan
+                </h3>
+                <ul className="list-disc list-inside text-text-secondary text-sm space-y-1">
+                  <li>
+                    A powerful late-game threat that takes significant time to
+                    charge.
+                  </li>
+                  <li>
+                    Choose a Titan that complements your strategy, but remember
+                    that a single Titan alone won&apos;t guarantee victory.
+                  </li>
+                </ul>
+              </div>
+            </div>
+
             <p className="text-text-muted text-sm mt-4">
               <strong>Tip:</strong> Use our{" "}
-              <a
+              <Link
                 href="/deck-builder"
                 className="text-brand-primary hover:text-brand-accent underline"
               >
                 Deck Builder
-              </a>{" "}
+              </Link>{" "}
               to create and validate decks according to the official rules.
             </p>
           </section>

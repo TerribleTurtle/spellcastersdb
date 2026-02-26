@@ -29,7 +29,11 @@ export function useDeckSharing({
     setIsLoading(true);
 
     try {
-      const { url, isShortLink, rateLimited } = await createShortLink({
+      const {
+        url,
+        isShortLink: _isShortLink,
+        rateLimited: _rateLimited,
+      } = await createShortLink({
         deck,
         isTeamMode,
         teamDecks,

@@ -16,7 +16,6 @@ import { BackupService } from "@/services/domain/BackupService";
 import { cloneDeck } from "@/services/utils/deck-utils";
 import { createPersistenceSlice } from "@/store/createPersistenceSlice";
 import { DeckBuilderState } from "@/store/types";
-import { DeckFactory } from "@/tests/factories/deck-factory";
 import { Deck } from "@/types/deck";
 
 // --- Mock Store Setup ---
@@ -111,7 +110,7 @@ describe("Phase 5 — Backup & Import Adversarial Tests", () => {
   describe("Zustand Store Import & Duplicate Edge Cases", () => {
     it("ADV-52: importDecks with garbage deck objects — store generates IDs and default names gracefully", () => {
       const store = createTestStore();
-      const garbage = [{}, { name: "Half-valid" }, null] as any[];
+      const _garbage = [{}, { name: "Half-valid" }, null] as any[];
 
       // Bug logic: `importDecks` maps over the array. If an item is `null`, `{ ...null }` merges ok but
       // might be weird. Let's see what happens.

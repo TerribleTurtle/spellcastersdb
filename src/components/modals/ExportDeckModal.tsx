@@ -49,6 +49,7 @@ export function ExportDeckModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-4 animate-in fade-in duration-200">
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
       <div
         ref={modalRef}
         role="dialog"
@@ -78,10 +79,14 @@ export function ExportDeckModal({
         {/* Content */}
         <div className="p-6 space-y-4">
           <div className="space-y-2">
-            <label className="text-xs font-bold text-text-muted uppercase tracking-wider">
+            <label
+              htmlFor="export-deck-name"
+              className="text-xs font-bold text-text-muted uppercase tracking-wider"
+            >
               Solo Deck Name
             </label>
             <input
+              id="export-deck-name"
               type="text"
               value={name}
               onChange={(e) => {
@@ -96,7 +101,6 @@ export function ExportDeckModal({
                   : "border-border-default focus:ring-brand-primary/50 focus:border-brand-primary/50"
               )}
               placeholder="Enter deck name..."
-              autoFocus
             />
             {error && (
               <div className="flex items-center gap-2 text-status-danger-text text-sm mt-2 animate-in slide-in-from-top-1">

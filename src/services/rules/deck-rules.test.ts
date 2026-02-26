@@ -189,5 +189,208 @@ describe("DeckRules", () => {
       expect(result.success).toBe(false);
       expect(result.error).toBeTruthy();
     });
+
+    it("should fail with negative indexA", () => {
+      const result = DeckRules.swapSlots(getInitialDeck(), -1, 0);
+      expect(result.success).toBe(false);
+      expect(result.code).toBe("INVALID_INDEX");
+    });
+
+    it("should fail with indexB greater than TITAN_SLOT_INDEX", () => {
+      const result = DeckRules.swapSlots(getInitialDeck(), 0, 5);
+      expect(result.success).toBe(false);
+      expect(result.code).toBe("INVALID_INDEX");
+    });
+
+    it("should fail with negative indexB", () => {
+      const result = DeckRules.swapSlots(getInitialDeck(), 0, -1);
+      expect(result.success).toBe(false);
+      expect(result.code).toBe("INVALID_INDEX");
+    });
+
+    it("should fail with indexA greater than TITAN_SLOT_INDEX", () => {
+      const result = DeckRules.swapSlots(getInitialDeck(), 5, 0);
+      expect(result.success).toBe(false);
+      expect(result.code).toBe("INVALID_INDEX");
+    });
+
+    it("should swap when one slot is empty", () => {
+      const deck = getInitialDeck();
+      deck.slots[0].unit = MockUnit;
+      // slot 1 is empty
+
+      const result = DeckRules.swapSlots(deck, 0, 1);
+      expect(result.success).toBe(true);
+      expect(result.data?.slots[0].unit).toBeNull();
+      expect(result.data?.slots[1].unit).toEqual(MockUnit);
+    });
+
+    it("should swap when both slots are empty", () => {
+      const result = DeckRules.swapSlots(getInitialDeck(), 0, 1);
+      expect(result.success).toBe(true);
+      expect(result.data?.slots[0].unit).toBeNull();
+      expect(result.data?.slots[1].unit).toBeNull();
+    });
+
+    it("should fail swapping a Unit into a Titan slot (reverse)", () => {
+      const deck = getInitialDeck();
+      deck.slots[0].unit = MockUnit;
+      // slot 4 is the titan slot, empty
+
+      const result = DeckRules.swapSlots(deck, 0, 4);
+      expect(result.success).toBe(false);
+      expect(result.code).toBe("SWAP_INVALID");
+    });
+  });
+
+  // --- New Branch Test Suites ---
+
+  describe("clearSlot", () => {
+    it("should clear a populated slot", () => {
+      const deck = getInitialDeck();
+      deck.slots[0].unit = MockUnit;
+
+      const result = DeckRules.clearSlot(deck, 0);
+      expect(result.slots[0].unit).toBeNull();
+    });
+
+    it("should return a new deck reference (immutability)", () => {
+      const deck = getInitialDeck();
+      deck.slots[0].unit = MockUnit;
+
+      const result = DeckRules.clearSlot(deck, 0);
+      expect(result).not.toBe(deck);
+      // Original deck should be unmodified
+      expect(deck.slots[0].unit).toEqual(MockUnit);
+    });
+
+    it("should be safe to clear an already-empty slot", () => {
+      const deck = getInitialDeck();
+      const result = DeckRules.clearSlot(deck, 0);
+      expect(result.slots[0].unit).toBeNull();
+    });
+
+    it("should clear the titan slot", () => {
+      const deck = getInitialDeck();
+      deck.slots[4].unit = MockTitan;
+
+      const result = DeckRules.clearSlot(deck, 4);
+      expect(result.slots[4].unit).toBeNull();
+    });
+  });
+
+  describe("removeSpellcaster", () => {
+    it("should remove the spellcaster from the deck", () => {
+      const deck = DeckRules.setSpellcaster(getInitialDeck(), MockSpellcaster);
+      expect(deck.spellcaster).toEqual(MockSpellcaster);
+
+      const result = DeckRules.removeSpellcaster(deck);
+      expect(result.spellcaster).toBeNull();
+    });
+
+    it("should return a new deck reference (immutability)", () => {
+      const deck = DeckRules.setSpellcaster(getInitialDeck(), MockSpellcaster);
+      const result = DeckRules.removeSpellcaster(deck);
+      expect(result).not.toBe(deck);
+    });
+
+    it("should be safe to call on a deck with no spellcaster", () => {
+      const deck = getInitialDeck();
+      const result = DeckRules.removeSpellcaster(deck);
+      expect(result.spellcaster).toBeNull();
+    });
+  });
+
+  describe("setSpellcaster — additional branches", () => {
+    it("should auto-rename when name is 'New Deck'", () => {
+      const deck = { ...getInitialDeck(), name: "New Deck" };
+      const result = DeckRules.setSpellcaster(deck, MockSpellcaster);
+      expect(result.name).toBe("Test Spellcaster Deck");
+    });
+
+    it("should return a new deck reference (immutability)", () => {
+      const deck = getInitialDeck();
+      const result = DeckRules.setSpellcaster(deck, MockSpellcaster);
+      expect(result).not.toBe(deck);
+    });
+  });
+
+  describe("setSlot — additional branches", () => {
+    it("should reject a Spellcaster entity placed in a slot", () => {
+      const result = DeckRules.setSlot(
+        getInitialDeck(),
+        0,
+        MockSpellcaster as any
+      );
+      expect(result.success).toBe(false);
+      expect(result.code).toBe("INVALID_TYPE");
+    });
+
+    it("should place a Titan in the Titan slot successfully", () => {
+      const result = DeckRules.setSlot(getInitialDeck(), 4, MockTitan);
+      expect(result.success).toBe(true);
+      expect(result.data?.slots[4].unit).toEqual(MockTitan);
+    });
+
+    it("should swap the old slot content when moving a duplicate unit (singleton enforcement)", () => {
+      const deck = getInitialDeck();
+      const u1 = { ...MockUnit, entity_id: "u-1" };
+      const u2 = { ...MockUnit, entity_id: "u-2" };
+      deck.slots[0].unit = u1;
+      deck.slots[1].unit = u2;
+
+      // Move u1 (currently in slot 0) to slot 1
+      // u2 (currently in slot 1) should move to slot 0
+      const result = DeckRules.setSlot(deck, 1, u1);
+      expect(result.success).toBe(true);
+      expect(result.data?.slots[1].unit?.entity_id).toBe("u-1");
+      expect(result.data?.slots[0].unit?.entity_id).toBe("u-2");
+    });
+
+    it("should not mutate the original deck (immutability)", () => {
+      const deck = getInitialDeck();
+      DeckRules.setSlot(deck, 0, MockUnit);
+      expect(deck.slots[0].unit).toBeNull();
+    });
+  });
+
+  describe("quickAdd — additional branches", () => {
+    it("should route a Spellcaster to setSpellcaster path", () => {
+      const result = DeckRules.quickAdd(getInitialDeck(), MockSpellcaster);
+      expect(result.success).toBe(true);
+      expect(result.data?.spellcaster).toEqual(MockSpellcaster);
+      expect(result.message).toContain("Spellcaster");
+    });
+
+    it("should add a Titan via the addTitan path with success message", () => {
+      const result = DeckRules.quickAdd(getInitialDeck(), MockTitan);
+      expect(result.success).toBe(true);
+      expect(result.message).toContain("Titan Slot");
+    });
+
+    it("should add a unit with success message", () => {
+      const result = DeckRules.quickAdd(getInitialDeck(), MockUnit);
+      expect(result.success).toBe(true);
+      expect(result.message).toContain("Test Unit");
+    });
+
+    it("should fail adding a titan when no titan slot exists", () => {
+      // Create a deck with all Unit slots (no Titan slot)
+      const noTitanDeck: Deck = {
+        spellcaster: null,
+        slots: [
+          { ...EmptySlot, index: 0 },
+          { ...EmptySlot, index: 1 },
+          { ...EmptySlot, index: 2 },
+          { ...EmptySlot, index: 3 },
+          { ...EmptySlot, index: 4 }, // Unit slot instead of Titan
+        ],
+        name: "",
+      };
+
+      const result = DeckRules.quickAdd(noTitanDeck, MockTitan);
+      expect(result.success).toBe(false);
+      expect(result.code).toBe("NO_TITAN_SLOT");
+    });
   });
 });

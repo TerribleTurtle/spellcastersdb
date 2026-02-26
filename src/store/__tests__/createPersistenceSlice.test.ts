@@ -68,6 +68,31 @@ describe("createPersistenceSlice", () => {
       expect(state.savedDecks[0].id).toBe(id);
       expect(state.savedDecks[0].name).toBe("V2");
     });
+
+    it("should fallback to 'Untitled Deck' if no name and no spellcaster", () => {
+      const { saveDeck, setDeckName } = useDeckStore.getState();
+      setDeckName(""); // Empty name
+      saveDeck();
+
+      const state = useDeckStore.getState();
+      expect(state.savedDecks[0].name).toBe("Untitled Deck");
+    });
+
+    it("should fallback to spellcaster name + ' Deck' if no name is provided", () => {
+      const { saveDeck, setDeckName } = useDeckStore.getState();
+      setDeckName("");
+      // Inject spellcaster directly for test coverage purposes
+      useDeckStore.setState({
+        currentDeck: {
+          ...useDeckStore.getState().currentDeck,
+          spellcaster: { name: "Gandalf" } as any,
+        },
+      });
+      saveDeck();
+
+      const state = useDeckStore.getState();
+      expect(state.savedDecks[0].name).toBe("Gandalf Deck");
+    });
   });
 
   describe("saveAsCopy", () => {
@@ -108,6 +133,12 @@ describe("createPersistenceSlice", () => {
       // Should load the copy as current
       expect(state.currentDeck.id).toBe(copy?.id);
     });
+
+    it("should do nothing if target deck ID is not found", () => {
+      const { duplicateDeck } = useDeckStore.getState();
+      duplicateDeck("bogus-id");
+      expect(useDeckStore.getState().savedDecks).toHaveLength(0); // Nothing changed
+    });
   });
 
   describe("renameSavedDeck", () => {
@@ -147,9 +178,32 @@ describe("createPersistenceSlice", () => {
 
       const state = useDeckStore.getState();
       expect(state.savedDecks).toHaveLength(1);
+      expect(state.savedDecks).toHaveLength(1);
       expect(state.savedDecks[0].id).toBe(id1);
       // currentDeck was deleted, should be reset
       expect(state.currentDeck.id).toBeUndefined();
+    });
+
+    it("should not reset currentDeck if it is not in the deleted set", () => {
+      const { saveDeck, setDeckName, deleteDecks } = useDeckStore.getState();
+
+      setDeckName("Current");
+      saveDeck();
+      const currentId = useDeckStore.getState().currentDeck.id!;
+
+      // Manually add another deck to saved list
+      useDeckStore.setState({
+        savedDecks: [
+          ...useDeckStore.getState().savedDecks,
+          { ...cloneDeck(INITIAL_DECK), id: "other-id", name: "Other" },
+        ],
+      });
+
+      deleteDecks(["other-id"]);
+
+      const state = useDeckStore.getState();
+      expect(state.savedDecks).toHaveLength(1);
+      expect(state.currentDeck.id).toBe(currentId); // Unchanged
     });
   });
 
@@ -272,6 +326,27 @@ describe("createPersistenceSlice", () => {
     });
   });
 
+  describe("duplicateTeam", () => {
+    it("should duplicate a saved team", () => {
+      const { upsertSavedTeam, duplicateTeam } = useDeckStore.getState();
+      upsertSavedTeam({ id: "t-1", name: "Alpha", decks: [] } as any);
+
+      duplicateTeam("t-1", "Duplicate Team");
+
+      const state = useDeckStore.getState();
+      expect(state.savedTeams).toHaveLength(2);
+      const copy = state.savedTeams.find((t) => t.id !== "t-1");
+      expect(copy).toBeDefined();
+      expect(copy?.name).toContain("(Copy)");
+    });
+
+    it("should do nothing if target team ID is not found", () => {
+      const { duplicateTeam } = useDeckStore.getState();
+      duplicateTeam("bogus-id", "Bogus Team");
+      expect(useDeckStore.getState().savedTeams).toHaveLength(0); // Nothing changed
+    });
+  });
+
   describe("clearSavedTeams", () => {
     it("should wipe savedTeams array", () => {
       const { upsertSavedTeam, clearSavedTeams } = useDeckStore.getState();
@@ -295,6 +370,15 @@ describe("createPersistenceSlice", () => {
       loadDeck(id);
       expect(useDeckStore.getState().currentDeck.name).toBe("To Load");
       expect(useDeckStore.getState().currentDeck.id).toBe(id);
+    });
+
+    it("should do nothing if target deck ID is not found", () => {
+      const { setDeckName, loadDeck } = useDeckStore.getState();
+      setDeckName("Current Name");
+
+      loadDeck("bogus-id");
+
+      expect(useDeckStore.getState().currentDeck.name).toBe("Current Name");
     });
   });
 });

@@ -67,6 +67,7 @@ export function SaveTeamModal({
 
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay backdrop-blur-sm p-4 animate-in fade-in duration-200">
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
       <div
         ref={modalRef}
         role="dialog"
@@ -97,10 +98,14 @@ export function SaveTeamModal({
         {/* Content */}
         <div className="p-6 space-y-4">
           <div className="space-y-2">
-            <label className="text-xs font-bold text-text-muted uppercase tracking-wider">
+            <label
+              htmlFor="save-team-name"
+              className="text-xs font-bold text-text-muted uppercase tracking-wider"
+            >
               Team Name
             </label>
             <Input
+              id="save-team-name"
               type="text"
               value={name}
               onChange={(e) => {
@@ -119,7 +124,6 @@ export function SaveTeamModal({
                 error && "border-red-500/50 focus-visible:ring-red-500/50"
               )}
               placeholder="Enter team name..."
-              autoFocus
             />
             {error && (
               <div className="flex items-center gap-2 text-status-danger-text text-sm mt-2 animate-in slide-in-from-top-1">

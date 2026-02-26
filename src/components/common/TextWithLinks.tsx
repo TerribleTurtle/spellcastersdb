@@ -54,8 +54,6 @@ export function TextWithLinks({
     const matches: MatchInterval[] = [];
     const matchedKeys = new Set<string>();
 
-    const normalizedText = text.toLowerCase();
-
     // 2. Find first occurrences of keywords
     for (const key of validKeys) {
       if (matches.length >= maxLinks) break;

@@ -121,7 +121,7 @@ describe("Deck Encoding", () => {
     // Generate a payload with a massive name to simulate a zip bomb
     const original = mockDeck("d4", "A".repeat(100_000), "sc1", []);
 
-    const encoded = encodeDeck(original);
+    const _encoded = encodeDeck(original);
     // Directly mutate the uncompressed payload to bypass the encode truncated check
     // Wait, let's just create an encoded string manually
     const DELIMITER = "\x1F";

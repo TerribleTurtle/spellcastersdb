@@ -20,10 +20,12 @@ export function ClearDataConfirmationModal({
   if (!isOpen) return null;
 
   return createPortal(
+    /* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
     <div
       className="fixed inset-0 z-250 flex items-center justify-center p-4 bg-surface-overlay backdrop-blur-sm animate-in fade-in duration-200"
       onClick={onClose}
     >
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
       <div
         ref={modalRef}
         className="w-full max-w-md bg-surface-main border border-status-danger/30 rounded-xl shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"

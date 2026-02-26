@@ -1,9 +1,6 @@
 "use client";
 
-import { Info } from "lucide-react";
-
 import { TextWithLinks } from "@/components/common/TextWithLinks";
-import { Tooltip } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import { Spellcaster } from "@/types/api";
 

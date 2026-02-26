@@ -84,6 +84,7 @@ export function TeamBuilderView({
           }}
           role="presentation"
         >
+          {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
           <div
             className="w-full max-w-6xl h-auto max-h-[90vh] bg-surface-main rounded-xl border border-border-default shadow-2xl overflow-hidden relative flex flex-col shrink-0"
             onClick={(e) => e.stopPropagation()}

@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
 // TODO(2027-Q1): Replace `as any` mock casts with properly typed test factories
 // @vitest-environment jsdom

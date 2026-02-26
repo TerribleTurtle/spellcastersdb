@@ -54,6 +54,7 @@ export function CardInspectorModal() {
       style={{ display: isDesktop ? "none" : undefined }}
     >
       {/* Backdrop - lighter and clickable */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */}
       <div
         className="absolute inset-0 bg-surface-inset backdrop-blur-[1px] md:bg-transparent md:backdrop-blur-none animate-in fade-in duration-(--duration-normal) pointer-events-auto"
         onClick={closeInspector}
@@ -73,6 +74,7 @@ export function CardInspectorModal() {
       />
 
       {/* Side Panel - Slides in from right */}
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions */}
       <div
         ref={containerRef}
         aria-modal="true"

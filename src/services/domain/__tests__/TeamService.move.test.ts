@@ -95,4 +95,86 @@ describe("TeamMovement.moveCardBetweenDecks", () => {
     expect(result.success).toBe(false);
     expect(result.code).toBe("EMPTY_SOURCE");
   });
+
+  describe("moveCardIntraDeck", () => {
+    it("should swap slots within the same deck", () => {
+      const decks = createTeamDecks();
+      decks[0].slots[0].unit = MockUnitA;
+      decks[0].slots[1].unit = MockUnitB;
+
+      const result = TeamMovement.moveCardBetweenDecks(decks, 0, 0, 0, 1);
+
+      expect(result.success).toBe(true);
+      const newDecks = result.data!;
+      expect(newDecks[0].slots[0].unit).toEqual(MockUnitB);
+      expect(newDecks[0].slots[1].unit).toEqual(MockUnitA);
+    });
+
+    it("should fail if deck index is invalid", () => {
+      const decks = createTeamDecks();
+      const result = TeamMovement.moveCardBetweenDecks(decks, 99, 0, 99, 1);
+      expect(result.success).toBe(false);
+      expect(result.code).toBe("INVALID_DECK");
+    });
+  });
+});
+
+describe("TeamMovement.moveSpellcasterBetweenDecks", () => {
+  const createTeamDecks = () =>
+    [
+      cloneDeck(INITIAL_DECK),
+      cloneDeck(INITIAL_DECK),
+      cloneDeck(INITIAL_DECK),
+    ] as [typeof INITIAL_DECK, typeof INITIAL_DECK, typeof INITIAL_DECK];
+
+  const MockSpellcaster = {
+    entity_id: "sc_1",
+    name: "Caster",
+    category: EntityCategory.Spellcaster,
+    health: 100,
+  } as any;
+
+  const MockSpellcaster2 = {
+    entity_id: "sc_2",
+    name: "Other Caster",
+    category: EntityCategory.Spellcaster,
+    health: 120,
+  } as any;
+
+  it("should move a spellcaster to an empty target deck", () => {
+    const decks = createTeamDecks();
+    decks[0].spellcaster = MockSpellcaster;
+
+    const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 0, 1);
+
+    expect(result.success).toBe(true);
+    expect(result.data![1].spellcaster).toEqual(MockSpellcaster);
+    expect(result.data![0].spellcaster).toBeNull();
+  });
+
+  it("should swap spellcasters if target deck is occupied", () => {
+    const decks = createTeamDecks();
+    decks[0].spellcaster = MockSpellcaster;
+    decks[1].spellcaster = MockSpellcaster2;
+
+    const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 0, 1);
+
+    expect(result.success).toBe(true);
+    expect(result.data![1].spellcaster).toEqual(MockSpellcaster);
+    expect(result.data![0].spellcaster).toEqual(MockSpellcaster2);
+  });
+
+  it("should fail if source deck has no spellcaster", () => {
+    const decks = createTeamDecks();
+    const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 0, 1);
+    expect(result.success).toBe(false);
+    expect(result.code).toBe("EMPTY_SOURCE");
+  });
+
+  it("should fail if deck indices are invalid", () => {
+    const decks = createTeamDecks();
+    const result = TeamMovement.moveSpellcasterBetweenDecks(decks, 0, 99);
+    expect(result.success).toBe(false);
+    expect(result.code).toBe("INVALID_DECK");
+  });
 });
