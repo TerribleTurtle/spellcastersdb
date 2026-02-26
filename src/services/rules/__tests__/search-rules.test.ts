@@ -83,21 +83,7 @@ describe("getSearchableAttributes", () => {
     });
   });
 
-  it("should return Upgrade attributes", () => {
-    const entity = makeEntity({
-      category: "Upgrade",
-      tags: ["speed"],
-    });
-    const result = getSearchableAttributes(entity);
-
-    expect(result).toEqual({
-      category: "Upgrade",
-      school: "Technology",
-      rank: "UPGRADE",
-      class: "Upgrade",
-      tags: ["speed"],
-    });
-  });
+  // Note: Upgrades are no longer part of UnifiedEntity, so no Upgrade test needed
 
   it("should return Unit/Spell attributes with rank from entity", () => {
     const entity = makeEntity({

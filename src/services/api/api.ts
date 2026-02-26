@@ -4,6 +4,7 @@ import { monitoring } from "@/services/monitoring";
 import {
   AllDataResponse,
   Consumable,
+  GameSystems,
   Incantation,
   Spell,
   Spellcaster,
@@ -269,6 +270,22 @@ export async function getUpgrades(): Promise<Upgrade[]> {
     () => registry.getAllUpgrades(),
     (data) => data.upgrades
   );
+}
+
+/**
+ * Returns the game systems configuration (progression, ranked, match XP).
+ * Returns null if game_systems data is not available.
+ *
+ * @example
+ * ```ts
+ * const systems = await getGameSystems();
+ * if (systems) console.log(systems.progression.earn_rates);
+ * ```
+ */
+export async function getGameSystems(): Promise<GameSystems | null> {
+  if (registry.isInitialized()) return registry.getGameSystems();
+  const data = await fetchGameData();
+  return data.game_systems ?? null;
 }
 
 /**

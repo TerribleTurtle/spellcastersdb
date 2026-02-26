@@ -57,24 +57,28 @@ describe("Data Integrity Checker", () => {
     );
   });
 
-  it("should detect duplicate upgrade IDs", () => {
+  it("should not check duplicate upgrades (archetype-based, no entity_id)", () => {
     const data = {
       ...mockData,
       upgrades: [
-        { entity_id: "up1" },
-        { entity_id: "up1" },
+        {
+          archetype: "Conqueror",
+          level_cap: 25,
+          population_scaling: [],
+          incantation_upgrades: [],
+        },
+        {
+          archetype: "Duelist",
+          level_cap: 25,
+          population_scaling: [],
+          incantation_upgrades: [],
+        },
       ] as unknown as any[],
     };
 
     const issues = validateIntegrity(data);
-    expect(issues).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          severity: "error",
-          path: "duplicate_check.upgrades",
-        }),
-      ])
-    );
+    // No upgrade-related issues expected since we no longer check upgrade duplicates
+    expect(issues.filter((i) => i.path.includes("upgrades")).length).toBe(0);
   });
 
   it("should detect broken spawner links on units", () => {

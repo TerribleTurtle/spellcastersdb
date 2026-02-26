@@ -272,20 +272,7 @@ describe("useDeckBuilder", () => {
       expect(quickResult).toBe("Consumables cannot be added to decks.");
     });
 
-    it("should reject Upgrades", () => {
-      const { result } = renderHook(() => useDeckBuilder());
-      const upgrade = {
-        ...mockUnit,
-        category: EntityCategory.Upgrade as any,
-      } as unknown as Unit;
-
-      let quickResult;
-      act(() => {
-        quickResult = result.current.quickAdd(upgrade);
-      });
-
-      expect(quickResult).toBe("Upgrades cannot be added to decks.");
-    });
+    // Note: Upgrades are no longer part of UnifiedEntity, so they can't be passed to quickAdd
 
     it("should add to team slot if in TEAM mode and activeSlot is valid", () => {
       const { result } = renderHook(() => useDeckBuilder());

@@ -66,15 +66,7 @@ describe("createSoloSlice.ts — adversarial", () => {
       expect(typeof result).toBe("string"); // Error message
     });
 
-    it("quickAdd should reject 'Upgrade' category", () => {
-      useStore.getState().setDeck({ ...INITIAL_DECK });
-      const fake = {
-        ...DeckFactory.createUnit(),
-        category: "Upgrade",
-      };
-      const result = useStore.getState().quickAdd(fake as any);
-      expect(typeof result).toBe("string"); // Error message
-    });
+    // Note: Upgrades are no longer part of UnifiedEntity, so quickAdd won't receive them
 
     it("quickAdd should reject empty string category", () => {
       useStore.getState().setDeck({ ...INITIAL_DECK });

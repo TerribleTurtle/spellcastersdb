@@ -28,7 +28,6 @@ import {
   Titan,
   UnifiedEntity,
   Unit,
-  Upgrade,
 } from "@/types/api";
 
 interface DebugFeaturesProps {
@@ -37,7 +36,6 @@ interface DebugFeaturesProps {
   titans: Titan[];
   spellcasters: Spellcaster[];
   consumables: Consumable[];
-  upgrades: Upgrade[];
 }
 
 type Tab = "integrity" | "keywords" | "balance" | "search";
@@ -48,7 +46,6 @@ export function DebugFeatures({
   titans,
   spellcasters,
   consumables,
-  upgrades,
 }: DebugFeaturesProps) {
   const [activeTab, setActiveTab] = useState<Tab>("integrity");
 
@@ -60,9 +57,8 @@ export function DebugFeatures({
       ...titans,
       ...spellcasters,
       ...consumables,
-      ...upgrades,
     ] as UnifiedEntity[];
-  }, [units, spells, titans, spellcasters, consumables, upgrades]);
+  }, [units, spells, titans, spellcasters, consumables]);
 
   return (
     <div className="space-y-6">

@@ -303,7 +303,6 @@ export const DeckDrawer = memo(function DeckDrawer({
                 </TooltipTrigger>
                 <TooltipContent
                   side="top"
-                  hideArrow={true}
                   className={cn(
                     "font-medium shadow-md border",
                     validation.isValid

@@ -373,6 +373,10 @@ export interface Consumable {
   effect_value?: number;
   duration?: number;
 
+  // Cast Stone fields (V2 extension)
+  grants_incantation?: string;
+  drop_time_seconds?: number[];
+
   tags: string[];
   category: EntityCategory.Consumable;
   rarity?: string;
@@ -380,21 +384,84 @@ export interface Consumable {
   stat_changes?: StatChangeEntry[];
 }
 
-export interface Upgrade {
-  $schema?: string;
-  entity_id: string;
+// ============================================================================
+// Upgrades (Archetype-Based — V2 Rework)
+// ============================================================================
+
+export interface UpgradeChoice {
   name: string;
   description: string;
-  image_required?: boolean;
+  effect: Record<string, number>;
+}
 
-  // Upgrade-specific
-  prerequisite_level?: number;
-  cost?: number;
+export interface IncantationUpgrade {
+  incantation_id: string;
+  upgrades: UpgradeChoice[];
+}
 
-  tags: string[];
-  category: EntityCategory.Upgrade;
+export interface PopulationScalingEntry {
+  level: number;
+  population_cap: number;
+}
 
-  stat_changes?: StatChangeEntry[];
+export interface Upgrade {
+  archetype: SpellcasterClass;
+  level_cap: number;
+  population_scaling: PopulationScalingEntry[];
+  incantation_upgrades: IncantationUpgrade[];
+}
+
+// ============================================================================
+// Game Systems (V2 — New Standalone Endpoint)
+// ============================================================================
+
+export interface CaptureXP {
+  first: number;
+  recapture: number;
+  passive_per_sec: number;
+  spellcaster_on_point: number;
+}
+
+export interface SummoningXP {
+  spellcaster_death: number;
+  rank_I: number;
+  rank_II: number;
+  rank_III: number;
+  rank_IV: number;
+}
+
+export interface ScalingXP {
+  building_spawn_multiplier: number;
+  level_thresholds: number[];
+}
+
+export interface MatchXP {
+  capture?: CaptureXP;
+  summoning?: SummoningXP;
+  scaling?: ScalingXP;
+}
+
+export interface ProgressionConfig {
+  starting_knowledge: { default: number; beta: number };
+  earn_rates: { first_daily_match: number; win: number; loss: number };
+}
+
+export interface RankedTier {
+  name: string;
+  rp_threshold_min: number;
+  rp_loss_per_loss: number;
+}
+
+export interface RankedConfig {
+  tiers_per_rank: number;
+  rp_gain_per_win: number;
+  ranks: RankedTier[];
+}
+
+export interface GameSystems {
+  progression: ProgressionConfig;
+  ranked: RankedConfig;
+  match_xp: MatchXP;
 }
 
 // ============================================================================
@@ -415,13 +482,8 @@ export interface AllDataResponse {
   consumables: Consumable[];
   upgrades: Upgrade[];
   infusions: Infusion[];
+  game_systems?: GameSystems;
   _source?: string;
 }
 
-export type UnifiedEntity =
-  | Unit
-  | Spell
-  | Titan
-  | Spellcaster
-  | Consumable
-  | Upgrade;
+export type UnifiedEntity = Unit | Spell | Titan | Spellcaster | Consumable;

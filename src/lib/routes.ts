@@ -28,6 +28,10 @@ export const routes = {
 
   // --- Static Pages ---
   guide: (anchor?: string) => `/guide${anchor ? `#${anchor}` : ""}`,
+  guideBasics: () => `/guide/basics`,
+  guideMechanics: () => `/guide/mechanics`,
+  guideRanked: () => `/guide/ranked`,
+  guideUpgrades: () => `/guide/upgrades`,
   infusions: () => `/guide/infusions`,
   infusion: (id: string) => `/guide/infusions/${safeEncode(id)}`,
 

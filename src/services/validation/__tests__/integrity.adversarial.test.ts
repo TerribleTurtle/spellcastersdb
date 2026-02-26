@@ -196,34 +196,24 @@ describe("integrity-checker.ts — adversarial", () => {
     expect(issues).toHaveLength(0);
   });
 
-  // ─── Upgrade with empty string entity_id ─────────────────────────
-  it("should count empty string entity_ids as duplicates", () => {
+  // ─── Upgrade data is now archetype-based ──────────────────────────
+  it("should not detect duplicates in upgrades (archetype-based, no entity_id)", () => {
     const upgrades = [
       {
-        entity_id: "",
-        name: "Upg1",
-        description: "",
-        category: "Upgrade" as const,
-        tags: [],
+        archetype: "Conqueror",
+        level_cap: 25,
+        population_scaling: [],
+        incantation_upgrades: [],
       },
       {
-        entity_id: "",
-        name: "Upg2",
-        description: "",
-        category: "Upgrade" as const,
-        tags: [],
-      },
-      {
-        entity_id: "",
-        name: "Upg3",
-        description: "",
-        category: "Upgrade" as const,
-        tags: [],
+        archetype: "Duelist",
+        level_cap: 25,
+        population_scaling: [],
+        incantation_upgrades: [],
       },
     ];
 
     const issues = validateIntegrity({ ...BASE_DATA, upgrades } as any);
-    // 2 duplicates of ""
-    expect(issues.filter((i) => i.path.includes("upgrades")).length).toBe(2);
+    expect(issues.filter((i) => i.path.includes("upgrades")).length).toBe(0);
   });
 });

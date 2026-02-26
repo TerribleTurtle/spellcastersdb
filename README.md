@@ -13,6 +13,7 @@
 **SpellcastersDB** is a Next.js application designed to serve as a community resource for the game _Spellcasters Chronicles_. It features:
 
 - **The Archive**: A searchable, filterable database of all Units, Spells, Titans, and Spellcasters.
+- **Guide Hub**: A comprehensive, API-driven knowledge base covering game mechanics, ranked tier ladders, class upgrades, and progression systems.
 - **Smart Interlinking**: Dynamic, context-aware glossary that automatically hyperlinks game terminology (units, spells, mechanics, schools) within all entity descriptions.
 - **The Forge**: A logic-validating deck builder with a fluid, dynamically scaling CSS Grid layout supporting ultrawide monitors (1440p+), modals for saving/editing, short link sharing (via Upstash Redis), and toast notifications.
 - **Infusions Database**: A dedicated hub detailing elemental effects, cumulative build-up mechanics, and scalable damage tiers cross-referenced globally across all game entities.
@@ -81,29 +82,29 @@ For detailed setup instructions, including **Local API Development**, please see
 
 ## Available Scripts
 
-| Command                   | Description                                              |
-| :------------------------ | :------------------------------------------------------- |
-| `npm run dev`             | Starts the development server                            |
-| `npm run build`           | Builds the application for production                    |
-| `npm run start`           | Starts the production server                             |
-| `npm run test`            | Runs the test suite (Vitest)                             |
-| `npm run test:coverage`   | Runs tests with coverage report                          |
-| `npm run test:watch`      | Runs tests in watch mode                                 |
-| `npm run lint`            | Runs ESLint                                              |
-| `npm run type-check`      | Runs TypeScript compiler check                           |
-| `npm run check-data`      | Verifies API data fetching logic                         |
-| `npm run preflight`       | Runs Type-Check, Format, Lint, Tests, and Dep Validation |
-| `npm run format:check`    | Checks formatting matches Prettier rules                 |
-| `npm run deps:validate`   | Validates import boundary rules                          |
-| `npm run new:component`   | Scaffolds a new React component                          |
-| `npm run new:route`       | Scaffolds a new App Router page                          |
-| `npm run script:validate` | Validates production data integrity                      |
-| `npm run test:e2e`        | Runs the E2E test suite (Playwright)                     |
-| `npm run test:e2e:ui`     | Opens the Playwright UI for interactive debugging        |
-| `npm run lighthouse`      | Runs Lighthouse CI checks                                |
+| Command                   | Description                                                         |
+| :------------------------ | :------------------------------------------------------------------ |
+| `npm run dev`             | Starts the development server                                       |
+| `npm run build`           | Builds the application for production                               |
+| `npm run start`           | Starts the production server                                        |
+| `npm run test`            | Runs the test suite (Vitest)                                        |
+| `npm run test:coverage`   | Runs tests with coverage report                                     |
+| `npm run test:watch`      | Runs tests in watch mode                                            |
+| `npm run lint`            | Runs ESLint                                                         |
+| `npm run type-check`      | Runs TypeScript compiler check                                      |
+| `npm run check-data`      | Verifies API data fetching logic                                    |
+| `npm run preflight`       | Runs Type-Check, Format, Lint, Tests, and Dep Validation            |
+| `npm run format:check`    | Checks formatting matches Prettier rules                            |
+| `npm run deps:validate`   | Validates import boundary rules                                     |
+| `npm run new:component`   | Scaffolds a new React component                                     |
+| `npm run new:route`       | Scaffolds a new App Router page                                     |
+| `npm run script:validate` | Validates production data integrity                                 |
+| `npm run test:e2e`        | Runs the E2E test suite (Playwright)                                |
+| `npm run test:e2e:ui`     | Opens the Playwright UI for interactive debugging                   |
+| `npm run lighthouse`      | Runs Lighthouse CI checks                                           |
 | `npm run analyze`         | Builds with `@next/bundle-analyzer` enabled to inspect bundle sizes |
-| `npm run dead-code`       | Scans for unused code and files via knip                 |
-| `npm run audit`           | Scans for CVEs, respecting the `.nsprc` whitelist        |
+| `npm run dead-code`       | Scans for unused code and files via knip                            |
+| `npm run audit`           | Scans for CVEs, respecting the `.nsprc` whitelist                   |
 
 ## Documentation
 

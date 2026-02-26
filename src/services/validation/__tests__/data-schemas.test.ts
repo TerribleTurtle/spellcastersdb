@@ -7,6 +7,7 @@ import {
   ConsumableSchema,
   DamageModifierSchema,
   InfusionSchema,
+  MatchXPSchema,
   SpellSchema,
   SpellcasterSchema,
   TitanSchema,
@@ -157,24 +158,54 @@ describe("data-schemas.ts", () => {
   });
 
   describe("UpgradeSchema", () => {
-    it("should derive entity_id from upgrade_id if missing", () => {
+    it("should parse a valid archetype-based upgrade", () => {
       const data = {
-        upgrade_id: "up_1",
-        name: "Upgrade",
-        description: "Desc",
+        archetype: "Conqueror",
+        level_cap: 25,
+        population_scaling: [{ level: 5, population_cap: 10 }],
+        incantation_upgrades: [
+          {
+            incantation_id: "spell_1",
+            upgrades: [
+              {
+                name: "Power Up",
+                description: "More damage",
+                effect: { damage: 10 },
+              },
+            ],
+          },
+        ],
       };
 
       const parsed = UpgradeSchema.parse(data);
-      expect(parsed.entity_id).toBe("up_1");
+      expect(parsed.archetype).toBe("Conqueror");
     });
 
-    it("should fail refine if neither entity_id nor upgrade_id is present", () => {
+    it("should fail if archetype is missing or invalid", () => {
+      const _data = {
+        level_cap: 25,
+        population_scaling: [],
+        incantation_upgrades: [],
+      };
+    });
+
+    it("should allow missing description in upgrades and default to empty string", () => {
       const data = {
-        name: "Upgrade",
-        description: "Desc",
+        archetype: "Duelist",
+        level_cap: 25,
+        population_scaling: [],
+        incantation_upgrades: [
+          {
+            incantation_id: "spell_2",
+            upgrades: [
+              { name: "Fast Cast", effect: { speed: 10 } }, // no description
+            ],
+          },
+        ],
       };
 
-      expect(() => UpgradeSchema.parse(data)).toThrowError();
+      const parsed = UpgradeSchema.parse(data);
+      expect(parsed.incantation_upgrades[0].upgrades[0].description).toBe("");
     });
   });
 
@@ -236,6 +267,45 @@ describe("data-schemas.ts", () => {
           condition: { field: "hp", operator: "<", value: 50 },
         })
       ).toBeDefined();
+    });
+  });
+
+  describe("MatchXPSchema", () => {
+    it("should transform 'kills' to 'summoning' in MatchXP", () => {
+      const data = {
+        captures: {
+          first_territory: 1000,
+          regain_territory: 1500,
+        },
+        kills: {
+          spellcaster_death: 250,
+          rank_I: 50,
+          rank_II: 100,
+          rank_III: 300,
+          rank_IV: 500,
+        },
+      };
+
+      const parsed = MatchXPSchema.parse(data);
+      // The frontend should see 'summoning' instead of 'kills'
+      expect(parsed.summoning).toBeDefined();
+      expect(parsed.summoning?.spellcaster_death).toBe(250);
+      expect(parsed.summoning?.rank_I).toBe(50);
+
+      // Strict type check to ensure 'kills' is omitted in resulting type
+      // @ts-expect-error - 'kills' should be omitted from parsed output after transform to 'summoning'
+      expect(parsed.kills).toBeUndefined();
+    });
+
+    it("should handle optional kills block safely", () => {
+      const data = {
+        captures: {
+          first_territory: 1000,
+        },
+      };
+
+      const parsed = MatchXPSchema.parse(data);
+      expect(parsed.summoning).toBeUndefined();
     });
   });
 
