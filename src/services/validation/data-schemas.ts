@@ -110,97 +110,91 @@ const InfusionRefSchema = z.object({
 // });
 
 // Unit Mechanics (Creature/Building)
-export const UnitMechanicsSchema = z
-  .object({
-    pierce: z.boolean().optional(),
-    stealth: StealthSchema.optional(),
-    cleave: z.boolean().optional(), // V2 Changed to bool
-    aura: z.array(AuraSchema).optional(),
-    damage_modifiers: z.array(DamageModifierSchema).optional(),
-    damage_reduction: z.array(DamageReductionSchema).optional(),
-    spawner: z.array(SpawnerSchema).optional(),
-    features: z.array(FeaturesSchema).optional(),
-    capture_speed_modifier: z.number().optional(),
-    initial_attack: z
-      .object({
-        damage_flat: z.number(),
-        target_types: z.array(
-          z.enum([
-            "Ground",
-            "Hover",
-            "Flying",
-            "Building",
-            "Creature",
-            "Spellcaster",
-            "Unit",
-            "All",
-          ])
-        ),
-        description: z.string(),
+export const UnitMechanicsSchema = z.object({
+  pierce: z.boolean().optional(),
+  stealth: StealthSchema.optional(),
+  cleave: z.boolean().optional(), // V2 Changed to bool
+  aura: z.array(AuraSchema).optional(),
+  damage_modifiers: z.array(DamageModifierSchema).optional(),
+  damage_reduction: z.array(DamageReductionSchema).optional(),
+  spawner: z.array(SpawnerSchema).optional(),
+  features: z.array(FeaturesSchema).optional(),
+  capture_speed_modifier: z.number().optional(),
+  initial_attack: z
+    .object({
+      damage_flat: z.number(),
+      target_types: z.array(
+        z.enum([
+          "Ground",
+          "Hover",
+          "Flying",
+          "Building",
+          "Creature",
+          "Spellcaster",
+          "Unit",
+          "All",
+        ])
+      ),
+      description: z.string(),
+    })
+    .optional(),
+  bonus_damage: z
+    .array(
+      z.object({
+        value: z.number(),
+        unit: z.enum(["flat", "percent_max_hp", "percent_current_hp"]),
+        target_type: z.string().optional(),
+        target_types: z.array(z.string()).optional(),
       })
-      .optional(),
-    bonus_damage: z
-      .array(
-        z.object({
-          value: z.number(),
-          unit: z.enum(["flat", "percent_max_hp", "percent_current_hp"]),
-          target_type: z.string().optional(),
-          target_types: z.array(z.string()).optional(),
-        })
-      )
-      .optional(),
-    infusion: InfusionRefSchema.optional(),
-  })
-  .strict();
+    )
+    .optional(),
+  infusion: InfusionRefSchema.optional(),
+});
 
 // Spell Mechanics
-export const SpellMechanicsSchema = z
-  .object({
-    pierce: z.boolean().optional(),
-    stealth: StealthSchema.optional(),
-    cleave: z.boolean().optional(), // V2 Changed to bool
-    waves: z.number().optional(),
-    interval: z.number().optional(),
-    stagger_modifier: z.boolean().optional(), // V2 Boolean
-    capture_speed_modifier: z.number().optional(),
-    aura: z.array(AuraSchema).optional(),
-    spawner: z.array(SpawnerSchema).optional(),
-    damage_modifiers: z.array(DamageModifierSchema).optional(),
-    damage_reduction: z.array(DamageReductionSchema).optional(),
-    features: z.array(FeaturesSchema).optional(),
-    bonus_damage: z
-      .array(
-        z.object({
-          value: z.number(),
-          unit: z.enum(["flat", "percent_max_hp", "percent_current_hp"]),
-          target_type: z.string().optional(),
-          target_types: z.array(z.string()).optional(),
-        })
-      )
-      .optional(),
-    infusion: InfusionRefSchema.optional(),
-  })
-  .strict();
+export const SpellMechanicsSchema = z.object({
+  pierce: z.boolean().optional(),
+  stealth: StealthSchema.optional(),
+  cleave: z.boolean().optional(), // V2 Changed to bool
+  waves: z.number().optional(),
+  interval: z.number().optional(),
+  stagger_modifier: z.boolean().optional(), // V2 Boolean
+  capture_speed_modifier: z.number().optional(),
+  aura: z.array(AuraSchema).optional(),
+  spawner: z.array(SpawnerSchema).optional(),
+  damage_modifiers: z.array(DamageModifierSchema).optional(),
+  damage_reduction: z.array(DamageReductionSchema).optional(),
+  features: z.array(FeaturesSchema).optional(),
+  bonus_damage: z
+    .array(
+      z.object({
+        value: z.number(),
+        unit: z.enum(["flat", "percent_max_hp", "percent_current_hp"]),
+        target_type: z.string().optional(),
+        target_types: z.array(z.string()).optional(),
+      })
+    )
+    .optional(),
+  infusion: InfusionRefSchema.optional(),
+});
 
 // Legacy/Loose Mechanics for Titans/Abilities (or update to strict later)
 // NOTE: "Legacy" implies this schema is less strict than Unit/Spell schemas to accommodate
 // the wider variety of effects found in Titans and Abilities.
-export const MechanicsSchema = z
-  .object({
-    waves: z.number().optional(),
-    interval: z.number().optional(),
-    pierce: z.boolean().optional(),
-    stealth: StealthSchema.optional(),
-    cleave: z.boolean().optional(), // V2 Changed to bool
-    aura: z.array(AuraSchema).optional(),
-    damage_modifiers: z.array(DamageModifierSchema).optional(),
-    damage_reduction: z.array(DamageReductionSchema).optional(),
-    spawner: z.array(SpawnerSchema).optional(),
-    features: z.array(FeaturesSchema).optional(),
-    auto_capture_altars: z.boolean().optional(),
-    infusion: InfusionRefSchema.optional(),
-  })
-  .strict();
+export const MechanicsSchema = z.object({
+  waves: z.number().optional(),
+  interval: z.number().optional(),
+  pierce: z.boolean().optional(),
+  stealth: StealthSchema.optional(),
+  cleave: z.boolean().optional(), // V2 Changed to bool
+  aura: z.array(AuraSchema).optional(),
+  damage_modifiers: z.array(DamageModifierSchema).optional(),
+  damage_reduction: z.array(DamageReductionSchema).optional(),
+  spawner: z.array(SpawnerSchema).optional(),
+  features: z.array(FeaturesSchema).optional(),
+  auto_capture_altars: z.boolean().optional(),
+  infusion: InfusionRefSchema.optional(),
+});
 
 // V1.2 Common fields
 const CommonSchemaParts = {
@@ -209,90 +203,84 @@ const CommonSchemaParts = {
   changelog: z.any().optional(),
 };
 
-export const UnitSchema = z
-  .object({
-    ...CommonSchemaParts,
-    ...IncantationBase,
-    category: z.enum([EntityCategory.Creature, EntityCategory.Building]), // Strict subset
-    health: z.number(),
-    damage: z.number().optional(),
-    dps: z.number().optional(),
-    attack_interval: z.number().optional(),
-    range: z.number().optional(),
-    movement_speed: z.number().optional(),
-    movement_type: z
-      .enum(["Ground", "Fly", "Flying", "Hover", "Stationary"])
-      .optional(),
-    mechanics: UnitMechanicsSchema.optional(),
-    population: z.number().optional(),
+export const UnitSchema = z.object({
+  ...CommonSchemaParts,
+  ...IncantationBase,
+  category: z.enum([EntityCategory.Creature, EntityCategory.Building]), // Strict subset
+  health: z.number(),
+  damage: z.number().optional(),
+  dps: z.number().optional(),
+  attack_interval: z.number().optional(),
+  range: z.number().optional(),
+  movement_speed: z.number().optional(),
+  movement_type: z
+    .enum(["Ground", "Fly", "Flying", "Hover", "Stationary"])
+    .optional(),
+  mechanics: UnitMechanicsSchema.optional(),
+  population: z.number().optional(),
 
-    // V2 Unit Config
-    charges: z.number().optional(),
-    recharge_time: z.number().optional(),
-    cast_time: z.number().optional(),
-    duration: z.number().optional(),
-    value: z.number().optional(), // Faerie's "value"? Or maybe another unit's.
-  })
-  .strict();
+  // V2 Unit Config
+  charges: z.number().optional(),
+  recharge_time: z.number().optional(),
+  cast_time: z.number().optional(),
+  duration: z.number().optional(),
+  value: z.number().optional(), // Faerie's "value"? Or maybe another unit's.
+});
 
-export const SpellSchema = z
-  .object({
-    ...CommonSchemaParts,
-    ...IncantationBase,
-    category: z.literal(EntityCategory.Spell),
-    damage: z.number().optional(),
-    range: z.number().optional(),
-    cooldown: z.number().optional(),
-    mechanics: SpellMechanicsSchema.optional(),
+export const SpellSchema = z.object({
+  ...CommonSchemaParts,
+  ...IncantationBase,
+  category: z.literal(EntityCategory.Spell),
+  damage: z.number().optional(),
+  range: z.number().optional(),
+  cooldown: z.number().optional(),
+  mechanics: SpellMechanicsSchema.optional(),
 
-    // V2 Spell Config
-    charges: z.number().optional(),
-    recharge_time: z.number().optional(),
-    cast_time: z.number().optional(),
-    value: z.number().optional(),
-    duration: z.number().optional(), // V2
-    heal_amount: z.number().optional(),
-  })
-  .strict();
+  // V2 Spell Config
+  charges: z.number().optional(),
+  recharge_time: z.number().optional(),
+  cast_time: z.number().optional(),
+  value: z.number().optional(),
+  duration: z.number().optional(), // V2
+  heal_amount: z.number().optional(),
+});
 
-export const TitanSchema = z
-  .object({
-    ...CommonSchemaParts,
-    entity_id: z.string(),
-    name: z.string(),
-    category: z.literal(EntityCategory.Titan),
-    magic_school: z.enum([
-      "Elemental",
-      "Wild",
-      "War",
-      "Astral",
-      "Holy",
-      "Technomancy",
-      "Necromancy",
-      "Titan",
-    ]),
-    rank: z.string(), // Usually V
-    description: z.string(),
-    image_required: z.boolean().optional(),
-    tags: z.array(z.string()),
+export const TitanSchema = z.object({
+  ...CommonSchemaParts,
+  entity_id: z.string(),
+  name: z.string(),
+  category: z.literal(EntityCategory.Titan),
+  magic_school: z.enum([
+    "Elemental",
+    "Wild",
+    "War",
+    "Astral",
+    "Holy",
+    "Technomancy",
+    "Necromancy",
+    "Titan",
+  ]),
+  rank: z.string(), // Usually V
+  description: z.string(),
+  image_required: z.boolean().optional(),
+  tags: z.array(z.string()),
 
-    // Titan Stats (Flattened)
-    health: z.number(),
-    damage: z.number(),
-    dps: z.number().optional(),
-    attack_interval: z.number().optional(),
-    movement_speed: z.number(),
-    heal_amount: z.number().optional(),
-    passive_health_regen: z.number().optional(),
+  // Titan Stats (Flattened)
+  health: z.number(),
+  damage: z.number(),
+  dps: z.number().optional(),
+  attack_interval: z.number().optional(),
+  movement_speed: z.number(),
+  heal_amount: z.number().optional(),
+  passive_health_regen: z.number().optional(),
 
-    // V2 Fields detected during hardening
-    mechanics: MechanicsSchema.optional(),
-    charges: z.number().optional(),
-    recharge_time: z.number().optional(),
-    cast_time: z.number().optional(),
-    population: z.number().optional(),
-  })
-  .strict(); // Enforce strict schema to catch API drift
+  // V2 Fields detected during hardening
+  mechanics: MechanicsSchema.optional(),
+  charges: z.number().optional(),
+  recharge_time: z.number().optional(),
+  cast_time: z.number().optional(),
+  population: z.number().optional(),
+});
 
 export const AbilitySchema = z.object({
   name: z.string(),
@@ -380,7 +368,6 @@ export const UpgradeSchema = z
     category: z.literal(EntityCategory.Upgrade).default(EntityCategory.Upgrade),
     effect: z.record(z.string(), z.any()).optional(),
   })
-  .strict() // Enforce strict schema
   .transform((data) => {
     // Map upgrade_id to entity_id
     if (!data.entity_id && data.upgrade_id) {

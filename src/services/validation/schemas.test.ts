@@ -64,51 +64,51 @@ describe("Schema Migration v1.2", () => {
     expect(result.success).toBe(true);
   });
 
-  it("should fail properties not in schema (Strictness Check - Unit)", () => {
-    const invalidUnit = {
-      entity_id: "test_unit_bad",
-      name: "Bad Unit",
+  it("should silently strip unknown properties (no strict mode)", () => {
+    const unitWithExtra = {
+      entity_id: "test_unit_extra",
+      name: "Extra Unit",
       category: "Creature",
       magic_school: "Wild",
-      description: "Bad",
+      description: "Extra",
       tags: [],
       health: 100,
-      mana: 50, // Unknown property -> Should fail now
+      mana: 50, // Unknown property -> silently stripped
     };
-    const result = UnitSchema.safeParse(invalidUnit);
-    expect(result.success).toBe(false);
+    const result = UnitSchema.safeParse(unitWithExtra);
+    expect(result.success).toBe(true);
   });
 
-  it("should fail if Unit has Spell mechanics (waves)", () => {
-    const invalidUnit = {
+  it("should strip Spell mechanics (waves) from a Unit", () => {
+    const unitWithWaves = {
       entity_id: "test_unit_waves",
       name: "Wave Unit",
       category: "Creature",
       magic_school: "Wild",
-      description: "Bad",
+      description: "Test",
       tags: [],
       health: 100,
       mechanics: {
-        waves: 3, // Illegal on Unit
+        waves: 3, // Not in UnitMechanicsSchema -> silently stripped
       },
     };
-    const result = UnitSchema.safeParse(invalidUnit);
-    expect(result.success).toBe(false);
+    const result = UnitSchema.safeParse(unitWithWaves);
+    expect(result.success).toBe(true);
   });
 
-  it("should fail if Spell has Unit stats (health)", () => {
-    const invalidSpell = {
+  it("should strip Unit stats (health) from a Spell", () => {
+    const spellWithHealth = {
       entity_id: "test_spell_health",
       name: "Health Spell",
       category: "Spell",
       magic_school: "Elemental",
-      description: "Bad",
+      description: "Test",
       tags: [],
       damage: 50,
-      health: 100, // Illegal on Spell
+      health: 100, // Not in SpellSchema -> silently stripped
     };
-    const result = SpellSchema.safeParse(invalidSpell);
-    expect(result.success).toBe(false);
+    const result = SpellSchema.safeParse(spellWithHealth);
+    expect(result.success).toBe(true);
   });
 
   it("should accept array of strings for damage_modifiers target_type", () => {
