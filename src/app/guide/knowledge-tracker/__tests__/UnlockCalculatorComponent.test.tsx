@@ -6,7 +6,7 @@ import { GameSystems, UnifiedEntity } from "@/types/api";
 
 import { UnlockCalculator } from "../components/UnlockCalculator";
 
-const mockSystems: GameSystems = {
+const mockSystems = {
   constants: {
     knowledge_per_win: 100,
     knowledge_per_loss: 50,
@@ -23,19 +23,19 @@ const mockSystems: GameSystems = {
       first_win_daily: 200,
     },
   },
-} as GameSystems;
+} as unknown as GameSystems;
 
 const mockEntities: UnifiedEntity[] = [
   {
     entity_id: "e1",
     name: "High Cost Spell",
     knowledge_cost: 500,
-  } as UnifiedEntity,
+  } as unknown as UnifiedEntity,
   {
     entity_id: "e2",
     name: "Zero Cost Starter",
     knowledge_cost: 0,
-  } as UnifiedEntity,
+  } as unknown as UnifiedEntity,
 ];
 
 describe("UnlockCalculator Component Integration", () => {
@@ -44,11 +44,11 @@ describe("UnlockCalculator Component Integration", () => {
     useCalculatorStore.setState({
       selectedIds: [],
       ownedIds: [],
-      isBeta: false,
       hideOwned: false,
-      currentKnowledge: 0,
+      currentKnowledge: 250,
       winRate: 0.5,
-      gamesPerDay: 5,
+      gamesPerDay: 3,
+      matchDuration: 20,
     });
   });
 

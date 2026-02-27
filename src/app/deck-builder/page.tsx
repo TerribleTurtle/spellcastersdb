@@ -6,7 +6,7 @@ import { JsonLd } from "@/components/common/JsonLd";
 import { FeatureErrorBoundary } from "@/components/error/FeatureErrorBoundary";
 import { DeckBuilderContainer } from "@/features/deck-builder/ui/root/DeckBuilderContainer";
 import { PageSkeleton } from "@/features/deck-builder/ui/root/PageSkeleton";
-import { fetchCriticalGameData } from "@/services/api/api";
+import { fetchGameData } from "@/services/api/api";
 import { getCardImageUrl } from "@/services/assets/asset-helpers";
 import { generateDeckMetadata } from "@/services/metadata/metadata-service";
 
@@ -36,9 +36,11 @@ function getPreloadImageUrls(
 }
 
 export default async function DeckBuilderPage() {
-  // We fetch CRITICAL data only to pass to the client for instant search & hydration
-  // Consumables/Upgrades are skipped for initial load
-  const data = await fetchCriticalGameData();
+  // Full data fetch to ensure the singleton registry is populated with ALL entities.
+  // Using fetchCriticalGameData() caused a build-time race condition where the
+  // partial dataset (missing infusions, consumables) would poison the registry
+  // for all subsequent pages rendered during `next build`.
+  const data = await fetchGameData();
 
   // Preload first 6 card images for LCP optimization
   const allItems = [...data.units, ...data.spells, ...data.titans];

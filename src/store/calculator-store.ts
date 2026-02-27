@@ -4,25 +4,26 @@ import { createJSONStorage, persist } from "zustand/middleware";
 interface CalculatorState {
   selectedIds: string[];
   ownedIds: string[];
-  isBeta: boolean;
   hideOwned: boolean;
   currentKnowledge: number;
   winRate: number;
   gamesPerDay: number;
+  matchDuration: number;
 }
 
 interface CalculatorActions {
   toggleEntity: (id: string) => void;
   selectAll: (ids: string[]) => void;
   clearAll: () => void;
-  toggleOwned: (id: string) => void;
+  /** cost: the knowledge_cost of the entity — auto-adjusts the bank */
+  toggleOwned: (id: string, cost?: number) => void;
   clearOwned: () => void;
   initializeDefaults: (defaultIds: string[]) => void;
-  setBeta: (isBeta: boolean) => void;
   setHideOwned: (hideOwned: boolean) => void;
   setCurrentKnowledge: (amount: number) => void;
   setWinRate: (rate: number) => void;
   setGamesPerDay: (games: number) => void;
+  setMatchDuration: (minutes: number) => void;
 }
 
 type CalculatorStore = CalculatorState & CalculatorActions;
@@ -30,11 +31,11 @@ type CalculatorStore = CalculatorState & CalculatorActions;
 const initialState: CalculatorState = {
   selectedIds: [],
   ownedIds: [],
-  isBeta: false,
   hideOwned: false,
   currentKnowledge: 0,
   winRate: 0.5,
-  gamesPerDay: 5,
+  gamesPerDay: 3,
+  matchDuration: 20,
 };
 
 export const useCalculatorStore = create<CalculatorStore>()(
@@ -67,22 +68,27 @@ export const useCalculatorStore = create<CalculatorStore>()(
 
       clearAll: () => set({ selectedIds: [] }),
 
-      toggleOwned: (id: string) =>
+      toggleOwned: (id: string, cost = 0) =>
         set((state) => {
           const ownedSet = new Set(state.ownedIds);
           const selectedSet = new Set(state.selectedIds);
+          let { currentKnowledge } = state;
 
           if (ownedSet.has(id)) {
+            // Un-owning: restore the cost back to the bank
             ownedSet.delete(id);
+            currentKnowledge = currentKnowledge + cost;
           } else {
+            // Owning: deduct cost from bank (floor at 0)
             ownedSet.add(id);
-            // Mutual exclusion: if we marked it owned, it can't be selected
             selectedSet.delete(id);
+            currentKnowledge = Math.max(0, currentKnowledge - cost);
           }
 
           return {
             ownedIds: Array.from(ownedSet),
             selectedIds: Array.from(selectedSet),
+            currentKnowledge,
           };
         }),
 
@@ -113,8 +119,6 @@ export const useCalculatorStore = create<CalculatorStore>()(
           };
         }),
 
-      setBeta: (isBeta: boolean) => set({ isBeta }),
-
       setHideOwned: (hideOwned: boolean) => set({ hideOwned }),
 
       setCurrentKnowledge: (currentKnowledge: number) =>
@@ -123,9 +127,12 @@ export const useCalculatorStore = create<CalculatorStore>()(
       setWinRate: (winRate: number) => set({ winRate }),
 
       setGamesPerDay: (gamesPerDay: number) => set({ gamesPerDay }),
+
+      setMatchDuration: (matchDuration: number) =>
+        set({ matchDuration: Math.max(1, matchDuration) }),
     }),
     {
-      name: "spellcasters_calculator_v2",
+      name: "spellcasters_calculator_v3",
       storage: createJSONStorage(() => localStorage),
     }
   )

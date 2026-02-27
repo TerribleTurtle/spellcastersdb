@@ -32,6 +32,7 @@ export const routes = {
   guideMechanics: () => `/guide/mechanics`,
   guideRanked: () => `/guide/ranked`,
   guideUpgrades: () => `/guide/upgrades`,
+  guideKnowledgeTracker: () => `/guide/knowledge-tracker`,
   infusions: () => `/guide/infusions`,
   infusion: (id: string) => `/guide/infusions/${safeEncode(id)}`,
 

@@ -11,21 +11,21 @@ const mockEntities: UnifiedEntity[] = [
     name: "Alpha",
     category: "Spellcaster",
     knowledge_cost: 100,
-  } as UnifiedEntity,
+  } as unknown as UnifiedEntity,
   {
     entity_id: "u2",
     name: "Beta",
     category: "Creature",
     rank: "I",
     knowledge_cost: 200,
-  } as UnifiedEntity,
+  } as unknown as UnifiedEntity,
   {
     entity_id: "u3",
     name: "Gamma",
     category: "Creature",
     rank: "I",
     knowledge_cost: 0,
-  } as UnifiedEntity, // 0-cost
+  } as unknown as UnifiedEntity, // 0-cost
 ];
 
 describe("EntityPickerGrid", () => {
@@ -73,7 +73,7 @@ describe("EntityPickerGrid", () => {
       name: /Mark Alpha as Owned/i,
     });
     fireEvent.click(ownToggle);
-    expect(defaultProps.onToggleOwned).toHaveBeenCalledWith("u1");
+    expect(defaultProps.onToggleOwned).toHaveBeenCalledWith("u1", 100);
   });
 
   it("displays owned entities visually differently when hideOwned is false", () => {
@@ -168,10 +168,10 @@ describe("EntityPickerGrid", () => {
   it("renders 'Clear Tracked' button in toolbar and calls onClearAll", () => {
     render(<EntityPickerGrid {...defaultProps} />);
 
-    const clearButton = screen.getByRole("button", { name: "Clear Tracked" });
-    expect(clearButton).toBeInTheDocument();
+    const clearBtn = screen.getByRole("button", { name: /Clear/i });
+    expect(clearBtn).toBeInTheDocument();
 
-    fireEvent.click(clearButton);
+    fireEvent.click(clearBtn);
     expect(defaultProps.onClearAll).toHaveBeenCalled();
   });
 });

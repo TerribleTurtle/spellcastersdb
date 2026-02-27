@@ -18,19 +18,19 @@ export function UnlockCalculator({ entities, systems }: UnlockCalculatorProps) {
   const {
     selectedIds,
     ownedIds,
-    isBeta,
     currentKnowledge,
     winRate,
     gamesPerDay,
+    matchDuration,
     hideOwned,
     toggleEntity,
     toggleOwned,
     selectAll,
     clearAll,
-    setBeta,
     setCurrentKnowledge,
     setWinRate,
     setGamesPerDay,
+    setMatchDuration,
     setHideOwned,
     initializeDefaults,
   } = useCalculatorStore();
@@ -73,17 +73,18 @@ export function UnlockCalculator({ entities, systems }: UnlockCalculatorProps) {
   return (
     <div className="space-y-6">
       {/* Top row: Account inputs + Forecast side by side */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <AccountPanel
-          isBeta={isBeta}
-          onBetaChange={setBeta}
           currentKnowledge={currentKnowledge}
           onKnowledgeChange={setCurrentKnowledge}
           winRate={winRate}
           onWinRateChange={setWinRate}
           gamesPerDay={gamesPerDay}
           onGamesPerDayChange={setGamesPerDay}
-          systems={systems}
+          matchDuration={matchDuration}
+          onMatchDurationChange={setMatchDuration}
+          winReward={systems.progression.earn_rates.win}
+          lossReward={systems.progression.earn_rates.loss}
         />
 
         <ForecastPanel
@@ -92,6 +93,7 @@ export function UnlockCalculator({ entities, systems }: UnlockCalculatorProps) {
           selectedCount={selectedIds.length}
           winRate={winRate}
           gamesPerDay={gamesPerDay}
+          matchDuration={matchDuration}
           systems={systems}
         />
       </div>

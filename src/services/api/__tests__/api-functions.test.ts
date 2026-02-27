@@ -109,7 +109,7 @@ describe("api.ts - Initialization & Fallback Mechanisms", () => {
       expect(result).toBe(mockData);
     });
 
-    it("should populate the registry after fetching data", async () => {
+    it("should populate the registry after fetching data if uninitialized", async () => {
       vi.stubEnv("NODE_ENV", "production");
       vi.spyOn(RemoteDataSource.prototype, "fetchCritical").mockResolvedValue(
         mockData
@@ -118,6 +118,28 @@ describe("api.ts - Initialization & Fallback Mechanisms", () => {
       expect(registry.isInitialized()).toBe(false);
       await fetchCriticalGameData();
       expect(registry.isInitialized()).toBe(true);
+    });
+
+    it("should NOT overwrite a fully initialized registry with partial data", async () => {
+      vi.stubEnv("NODE_ENV", "production");
+
+      // Setup a "full" dataset with infusions
+      const fullData = { ...mockData, infusions: [{ id: "i1" }] as any };
+      registry.initialize(fullData);
+      expect(registry.isInitialized()).toBe(true);
+
+      const registryInitSpy = vi.spyOn(registry, "initialize");
+
+      // Critical fetch returns partial data (no infusions)
+      const partialData = { ...mockData, infusions: [] };
+      vi.spyOn(RemoteDataSource.prototype, "fetchCritical").mockResolvedValue(
+        partialData
+      );
+
+      await fetchCriticalGameData();
+
+      // The guard should prevent the partial data from clobbering the full registry
+      expect(registryInitSpy).not.toHaveBeenCalled();
     });
   });
 
