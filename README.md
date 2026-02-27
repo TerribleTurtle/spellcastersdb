@@ -13,6 +13,7 @@
 **SpellcastersDB** is a Next.js application designed to serve as a community resource for the game _Spellcasters Chronicles_. It features:
 
 - **The Archive**: A searchable, filterable database of all Units, Spells, Titans, and Spellcasters.
+- **Knowledge Tracker**: An interactive calculator that connects to the community API to help you plan your unlocks, track owned entities, and forecast your daily progression.
 - **Guide Hub**: A comprehensive, API-driven knowledge base covering game mechanics, ranked tier ladders, class upgrades, and progression systems.
 - **Smart Interlinking**: Dynamic, context-aware glossary that automatically hyperlinks game terminology (units, spells, mechanics, schools) within all entity descriptions.
 - **The Forge**: A logic-validating deck builder with a fluid, dynamically scaling CSS Grid layout supporting ultrawide monitors (1440p+), modals for saving/editing, short link sharing (via Upstash Redis), and toast notifications.
