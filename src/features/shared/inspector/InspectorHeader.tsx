@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Check, Sparkles, X as XIcon } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 
 import { GameImage } from "@/components/ui/GameImage";
 import { Button } from "@/components/ui/button";
@@ -9,19 +9,8 @@ import {
   getCardAltText,
   getCardImageUrl,
 } from "@/services/assets/asset-helpers";
-import {
-  SHOW_VERSION_BADGES_DEV,
-  isNewEntity,
-  isUpdatedToEA,
-} from "@/services/config/entity-version-utils";
-import {
-  Spell,
-  Spellcaster,
-  StatChangeEntry,
-  Titan,
-  UnifiedEntity,
-  Unit,
-} from "@/types/api";
+import { isNewEntity } from "@/services/config/entity-version-utils";
+import { Spell, Spellcaster, Titan, UnifiedEntity, Unit } from "@/types/api";
 
 interface InspectorHeaderProps {
   item: UnifiedEntity;
@@ -59,14 +48,8 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
   const magicSchool = magicSchoolRaw === "Titan" ? null : magicSchoolRaw;
 
   // Version badging
-  const showVersionBadges = SHOW_VERSION_BADGES_DEV;
   const id = item.entity_id;
-  const statChanges =
-    "stat_changes" in item
-      ? (item as { stat_changes?: StatChangeEntry[] }).stat_changes
-      : undefined;
   const isNew = isNewEntity(id);
-  const isVerified = isUpdatedToEA(id, statChanges);
 
   return (
     <div className="w-full h-[140px] relative flex items-center justify-center overflow-hidden shrink-0 bg-surface-main">
@@ -144,37 +127,16 @@ export function InspectorHeader({ item, onBack }: InspectorHeaderProps) {
       </div>
 
       {/* Version Badges - Bottom Left */}
-      {showVersionBadges && (
-        <div className="absolute bottom-2 left-2 flex flex-col items-start gap-1 z-30 pointer-events-auto">
-          {isNew && (
-            <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-linear-to-r from-fuchsia-600/95 to-violet-600/95 border border-fuchsia-400/50 shadow-[0_2px_10px_rgba(217,70,239,0.4)] backdrop-blur-sm">
-              <Sparkles className="w-3.5 h-3.5 text-fuchsia-100" />
-              <span className="text-[10px] font-black uppercase tracking-widest text-white leading-none">
-                New
-              </span>
-            </div>
-          )}
-          {!isNew && (
-            <div
-              className={`flex items-center gap-1 px-1.5 py-0.5 rounded border shadow-sm backdrop-blur-sm ${
-                isVerified
-                  ? "bg-status-success/20 border-status-success/50 text-status-success"
-                  : "bg-status-danger/20 border-status-danger/50 text-status-danger"
-              }`}
-              title={isVerified ? "Updated to EA" : "Not updated to EA"}
-            >
-              {isVerified ? (
-                <Check className="w-3 h-3" strokeWidth={3} />
-              ) : (
-                <XIcon className="w-3 h-3" strokeWidth={3} />
-              )}
-              <span className="text-[10px] font-extrabold uppercase tracking-wider leading-none">
-                {isVerified ? "EA Verified" : "Pre-EA"}
-              </span>
-            </div>
-          )}
-        </div>
-      )}
+      <div className="absolute bottom-2 left-2 flex flex-col items-start gap-1 z-30 pointer-events-auto">
+        {isNew && (
+          <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-linear-to-r from-fuchsia-600/95 to-violet-600/95 border border-fuchsia-400/50 shadow-[0_2px_10px_rgba(217,70,239,0.4)] backdrop-blur-sm">
+            <Sparkles className="w-3.5 h-3.5 text-fuchsia-100" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-white leading-none">
+              New
+            </span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
