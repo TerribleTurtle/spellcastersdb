@@ -15,7 +15,7 @@ export function EALaunchAnnouncement() {
       variant="launch"
       badge="EARLY ACCESS IS LIVE"
       badgeIcon={<Sparkles size={10} />}
-      headline="Spellcasters Chronicles launched today — play FREE!"
+      headline="Spellcasters Chronicles is FREE to play!"
       subtext="Grab it now on Steam and join the community."
       links={[
         {
