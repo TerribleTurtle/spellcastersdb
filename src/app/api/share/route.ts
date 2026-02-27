@@ -52,7 +52,14 @@ export async function POST(request: Request) {
       );
     }
 
-    // 3. Generate Short ID & Save
+    // 3. Check for existing link with this hash+type combo
+    const dedupKey = `share_hash:${type}:${hash}`;
+    const existingId = await redis.get<string>(dedupKey);
+    if (existingId && typeof existingId === "string") {
+      return NextResponse.json({ id: existingId });
+    }
+
+    // 4. Generate Short ID & Save
     const id = crypto.randomUUID().replace(/-/g, "").substring(0, 7);
 
     // Save payload
@@ -62,7 +69,11 @@ export async function POST(request: Request) {
       path: path || "/deck-builder",
     });
 
-    await redis.set(`share:${id}`, payload, { ex: TTL_SECONDS });
+    // Pipeline the sets for atomicity/speed
+    const pipeline = redis.pipeline();
+    pipeline.set(`share:${id}`, payload, { ex: TTL_SECONDS });
+    pipeline.set(dedupKey, id, { ex: TTL_SECONDS });
+    await pipeline.exec();
 
     return NextResponse.json({ id });
   } catch (error) {
