@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import {
   BookOpen,
+  Calculator,
   Crown,
   Flame,
   Shield,
@@ -92,6 +93,15 @@ const GUIDE_CARDS: GuideCard[] = [
     href: routes.infusions(),
     icon: <Sparkles size={28} />,
     gradient: "from-status-success/20 to-brand-accent/20",
+  },
+  {
+    title: "Knowledge Tracker",
+    description:
+      "Track the Knowledge needed to unlock units and spells. Forecast your earnings and plan your next unlocks.",
+    href: routes.guideKnowledgeTracker(),
+    icon: <Calculator size={28} />,
+    gradient: "from-amber-500/20 to-yellow-600/20",
+    badge: "NEW",
   },
 ];
 

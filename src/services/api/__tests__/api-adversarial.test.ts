@@ -521,10 +521,10 @@ describe("🔥 api.ts — Adversarial Evil Tests", () => {
   });
 
   // =========================================================================
-  // 12. DOUBLE FETCH — fetchGameData overwrites registry each time
+  // 12. DOUBLE FETCH — hasFullData guard prevents partial clobbering
   // =========================================================================
   describe("Double Fetch Behavior", () => {
-    it("calling fetchGameData twice should re-initialize registry with fresh data", async () => {
+    it("second fetch with partial/empty data should NOT overwrite a full registry", async () => {
       vi.stubEnv("NODE_ENV", "production");
 
       // First fetch returns populated data
@@ -537,12 +537,35 @@ describe("🔥 api.ts — Adversarial Evil Tests", () => {
       expect(data1.units).toHaveLength(2);
       expect(await getUnits()).toHaveLength(2);
 
-      // Second fetch returns empty — registry should be overwritten
+      // Second fetch returns empty — but the hasFullData guard should
+      // preserve the existing registry since EMPTY_DATA lacks infusions/consumables
       const data2 = await fetchGameData();
-      expect(data2.units).toHaveLength(0);
-      expect(await getUnits()).toEqual([]);
+      expect(data2.units).toHaveLength(0); // raw response is empty
+      expect(await getUnits()).toHaveLength(2); // registry still has prior data
 
       expect(fetchSpy).toHaveBeenCalledTimes(2);
+    });
+
+    it("second fetch with full data DOES overwrite the registry", async () => {
+      vi.stubEnv("NODE_ENV", "production");
+
+      const altData: AllDataResponse = {
+        ...EMPTY_DATA,
+        units: [{ entity_id: "u99", name: "NewUnit" } as any],
+        consumables: [{ entity_id: "c99", name: "NewPotion" } as any],
+      };
+
+      vi.spyOn(RemoteDataSource.prototype, "fetch")
+        .mockResolvedValueOnce(POPULATED_DATA)
+        .mockResolvedValueOnce(altData);
+
+      await fetchGameData();
+      expect(await getUnits()).toHaveLength(2);
+
+      // Second fetch has consumables → hasFullData returns true → overwrites
+      await fetchGameData();
+      expect(await getUnits()).toHaveLength(1);
+      expect(await getUnitById("u99")).toEqual(altData.units[0]);
     });
   });
 

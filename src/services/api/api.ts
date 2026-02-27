@@ -60,7 +60,22 @@ function getDataSource(): GameDataSource {
 }
 
 /**
+ * Checks whether a data payload includes supplementary entities (infusions, consumables).
+ * Used to prevent a partial/critical fetch from overwriting an already-complete registry.
+ */
+function hasFullData(data: AllDataResponse): boolean {
+  return (
+    (data.infusions?.length ?? 0) > 0 || (data.consumables?.length ?? 0) > 0
+  );
+}
+
+/**
  * Generic fetcher with fallback strategy for development.
+ *
+ * SAFETY: If the registry is already initialized with full data (includes
+ * infusions/consumables), a subsequent partial fetch will NOT overwrite it.
+ * This prevents the build-time race condition where `fetchCriticalGameData`
+ * could clobber supplementary data loaded by an earlier `fetchGameData`.
  */
 async function fetchWithFallback(
   fetcher: (source: GameDataSource) => Promise<AllDataResponse>
@@ -68,7 +83,12 @@ async function fetchWithFallback(
   const source = getDataSource();
   try {
     const data = await fetcher(source);
-    registry.initialize(data);
+    // Only (re)initialize the registry if:
+    //  1. It hasn't been initialized yet, OR
+    //  2. The new data is a full dataset (not a partial/critical fetch)
+    if (!registry.isInitialized() || hasFullData(data)) {
+      registry.initialize(data);
+    }
     return data;
   } catch (error) {
     monitoring.captureException(error, {
@@ -88,7 +108,9 @@ async function fetchWithFallback(
       );
       const remote = new RemoteDataSource();
       const data = await fetcher(remote);
-      registry.initialize(data);
+      if (!registry.isInitialized() || hasFullData(data)) {
+        registry.initialize(data);
+      }
       return data;
     }
     throw error;

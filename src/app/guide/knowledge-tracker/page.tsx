@@ -5,19 +5,25 @@ import { getGameSystems, getSpells, getUnits } from "@/services/api/api";
 import { UnlockCalculator } from "./components/UnlockCalculator";
 
 export const metadata = {
-  title: "Unlock Calculator — Guide",
+  title: "Knowledge Tracker — Guide",
   description:
-    "Calculate the games needed to unlock units and spells. Track knowledge earned from matches and daily bonuses.",
+    "Track the Knowledge needed to unlock units and spells. Forecast your earnings and plan your next unlocks.",
   keywords: [
     "Spellcasters Chronicles",
-    "Knowledge Calculator",
+    "Knowledge Tracker",
     "Unlock Tracker",
     "Progression",
   ],
   openGraph: {
-    title: "Unlock Calculator — Guide",
-    description: "Calculate the games needed to unlock units and spells.",
+    title: "Knowledge Tracker — Guide",
+    description: "Track the Knowledge needed to unlock units and spells.",
     type: "website",
+    images: ["/og-default.png"],
+  },
+  twitter: {
+    card: "summary_large_image" as const,
+    title: "Knowledge Tracker — Guide",
+    description: "Track the Knowledge needed to unlock units and spells.",
     images: ["/og-default.png"],
   },
 };
@@ -34,22 +40,32 @@ export default async function CalculatorPage() {
   const jsonLdData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "Knowledge Unlock Calculator",
+    name: "Knowledge Tracker",
     applicationCategory: "GameUtility",
     description: metadata.description,
     operatingSystem: "Any",
+    url: "https://www.spellcastersdb.com/guide/knowledge-tracker",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+    author: {
+      "@type": "Organization",
+      name: "SpellcastersDB",
+    },
   };
 
   return (
     <>
-      <JsonLd data={jsonLdData} id="json-ld-calculator" />
+      <JsonLd data={jsonLdData} id="json-ld-knowledge-tracker" />
       <PageShell
-        title="Unlock Calculator"
-        subtitle="Select incantations, enter your match history, see how many games you need."
+        title="Knowledge Tracker"
+        subtitle="Select units and spells, track your Knowledge bank, and forecast your progress."
         maxWidth="6xl"
         breadcrumbs={[
           { label: "Guide", href: "/guide" },
-          { label: "Calculator", href: "/guide/calculator" },
+          { label: "Knowledge Tracker", href: "/guide/knowledge-tracker" },
         ]}
       >
         {!systems ? (

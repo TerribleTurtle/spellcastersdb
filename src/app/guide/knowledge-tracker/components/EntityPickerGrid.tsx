@@ -13,7 +13,12 @@ import { UnifiedEntity } from "@/types/api";
 
 import { groupCalculatorEntities } from "../utils";
 
-type CategoryFilter = "All" | "Creatures" | "Buildings" | "Spells";
+type CategoryFilter =
+  | "All"
+  | "Spellcasters"
+  | "Creatures"
+  | "Buildings"
+  | "Spells";
 
 interface EntityPickerGridProps {
   entities: UnifiedEntity[];
@@ -23,7 +28,7 @@ interface EntityPickerGridProps {
   onToggleEntity: (id: string) => void;
   onSelectAll: (ids: string[]) => void;
   onClearAll: () => void;
-  onToggleOwned: (id: string) => void;
+  onToggleOwned: (id: string, cost?: number) => void;
   onHideOwnedChange: (checked: boolean) => void;
   totalEarned: number;
 }
@@ -43,26 +48,31 @@ export function EntityPickerGrid({
   const [search, setSearch] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("All");
 
-  const { filteredEntities, groupedEntities } = useMemo(() => {
-    // 1. Text and Tab Filtering
-    const searchFiltered = entities.filter((e) => {
-      if (search && !e.name.toLowerCase().includes(search.toLowerCase()))
-        return false;
+  const { filteredEntities: _filteredEntities, groupedEntities } =
+    useMemo(() => {
+      // 1. Text and Tab Filtering
+      const searchFiltered = entities.filter((e) => {
+        if (search && !e.name.toLowerCase().includes(search.toLowerCase()))
+          return false;
 
-      const cat = e.category || "Spellcaster";
-      if (categoryFilter === "Spellcasters" && cat !== "Spellcaster")
-        return false;
-      if (categoryFilter === "Creatures" && cat !== "Creature") return false;
-      if (categoryFilter === "Buildings" && cat !== "Building") return false;
-      if (categoryFilter === "Spells" && cat !== "Spell") return false;
+        const cat = e.category || "Spellcaster";
+        if (categoryFilter === "Spellcasters" && cat !== "Spellcaster")
+          return false;
+        if (categoryFilter === "Creatures" && cat !== "Creature") return false;
+        if (categoryFilter === "Buildings" && cat !== "Building") return false;
+        if (categoryFilter === "Spells" && cat !== "Spell") return false;
 
-      return true;
-    });
+        return true;
+      });
 
-    // 2. Group and apply hideOwned logic
-    const groups = groupCalculatorEntities(searchFiltered, ownedSet, hideOwned);
-    return { filteredEntities: searchFiltered, groupedEntities: groups };
-  }, [entities, search, categoryFilter, ownedSet, hideOwned]);
+      // 2. Group and apply hideOwned logic
+      const groups = groupCalculatorEntities(
+        searchFiltered,
+        ownedSet,
+        hideOwned
+      );
+      return { filteredEntities: searchFiltered, groupedEntities: groups };
+    }, [entities, search, categoryFilter, ownedSet, hideOwned]);
 
   // We only want to select items that are visible AND currently "unowned"
   const selectableVisibleIds = useMemo(() => {
@@ -84,93 +94,96 @@ export function EntityPickerGrid({
   return (
     <div className="bg-surface-card border border-border-default rounded-lg overflow-hidden">
       {/* Toolbar */}
-      <div className="p-4 border-b border-border-default bg-surface-dim space-y-4">
-        <div className="flex flex-col md:flex-row gap-4 md:items-center justify-between">
-          <div className="flex flex-col sm:flex-row gap-3 sm:items-center flex-1">
-            {/* Search */}
-            <div className="relative flex-1 max-w-sm">
-              <Search
-                size={14}
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-muted"
-                aria-hidden="true"
-              />
-              <input
-                type="text"
-                placeholder="Filter by name..."
-                aria-label="Filter entities by name"
-                className="w-full bg-surface-card border border-border-subtle rounded-md pl-8 pr-3 py-1.5 text-sm focus:border-brand-primary focus:outline-none transition-colors"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-
-            {/* Category Tabs */}
-            <div
-              className="flex bg-surface-card border border-border-subtle rounded-md overflow-hidden text-xs shrink-0"
-              role="tablist"
-              aria-label="Filter by category"
-            >
-              {(["All", "Creatures", "Buildings", "Spells"] as const).map(
-                (cat) => (
-                  <button
-                    key={cat}
-                    role="tab"
-                    aria-selected={categoryFilter === cat}
-                    className={cn(
-                      "px-3 py-1.5 font-medium transition-colors border-r border-border-subtle last:border-r-0",
-                      categoryFilter === cat
-                        ? "bg-brand-primary/10 text-brand-primary"
-                        : "text-text-muted hover:text-text-primary hover:bg-surface-hover"
-                    )}
-                    onClick={() => setCategoryFilter(cat)}
-                  >
-                    {cat === "All" ? "All" : cat}
-                  </button>
-                )
-              )}
-            </div>
+      <div className="p-3 sm:p-4 border-b border-border-default bg-surface-dim space-y-3">
+        {/* Row 1: Search + Hide Owned */}
+        <div className="flex items-center gap-2">
+          {/* Search */}
+          <div className="relative flex-1">
+            <Search
+              size={14}
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 text-text-muted"
+              aria-hidden="true"
+            />
+            <input
+              type="text"
+              placeholder="Filter by name..."
+              aria-label="Filter entities by name"
+              className="w-full bg-surface-card border border-border-subtle rounded-md pl-8 pr-3 py-2 text-sm focus:border-brand-primary focus:outline-none transition-colors"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
 
-          {/* Hide Owned Toggle */}
-          <div className="flex items-center gap-2 shrink-0 bg-surface-card px-3 py-1.5 rounded border border-border-subtle">
+          {/* Hide Owned — always visible as icon+toggle on mobile */}
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Switch
+              id="hide-owned-mobile"
+              checked={hideOwned}
+              onCheckedChange={onHideOwnedChange}
+              aria-label="Hide owned entities"
+            />
             <Label
-              htmlFor="hide-owned"
-              className="text-xs font-semibold cursor-pointer"
+              htmlFor="hide-owned-mobile"
+              className="text-xs text-text-secondary font-medium hidden sm:block cursor-pointer"
             >
               Hide Owned
             </Label>
-            <Switch
-              id="hide-owned"
-              checked={hideOwned}
-              onCheckedChange={onHideOwnedChange}
-            />
           </div>
         </div>
 
-        {/* Bulk Actions */}
-        <div className="flex items-center justify-between text-xs pt-1 border-t border-border-subtle">
-          <span className="text-text-muted">
-            {selectableVisibleIds.length} shown · {selectedCount} selected
-          </span>
-          <div className="flex gap-3">
+        {/* Row 2: Category Tabs (scrollable) + Select All/Clear */}
+        <div className="flex items-center gap-2">
+          {/* Scrollable category tab strip */}
+          <div
+            className="flex bg-surface-card border border-border-subtle rounded-md overflow-x-auto text-xs shrink-0 flex-1 min-w-0 scrollbar-none"
+            role="tablist"
+            aria-label="Filter by category"
+          >
+            {(["All", "Creatures", "Buildings", "Spells"] as const).map(
+              (cat) => (
+                <button
+                  key={cat}
+                  role="tab"
+                  aria-selected={categoryFilter === cat}
+                  className={cn(
+                    "px-3 py-2 font-medium transition-colors border-r border-border-subtle last:border-r-0 whitespace-nowrap",
+                    categoryFilter === cat
+                      ? "bg-brand-primary/10 text-brand-primary"
+                      : "text-text-muted hover:text-text-primary hover:bg-surface-hover"
+                  )}
+                  onClick={() => setCategoryFilter(cat)}
+                >
+                  {cat === "All" ? "All" : cat}
+                </button>
+              )
+            )}
+          </div>
+
+          {/* Select All / Clear — inline at end of row 2 */}
+          <div className="flex gap-2 shrink-0 text-xs">
             <button
-              className="text-brand-primary hover:text-brand-secondary font-semibold transition-colors"
+              className="text-brand-primary hover:text-brand-secondary font-semibold transition-colors whitespace-nowrap"
               onClick={() => onSelectAll(selectableVisibleIds)}
             >
-              Select All Shown
+              All
             </button>
             <button
               className="text-text-muted hover:text-text-primary font-semibold transition-colors"
               onClick={onClearAll}
             >
-              Clear Tracked
+              Clear
             </button>
           </div>
         </div>
+
+        {/* Count row */}
+        <p className="text-[11px] text-text-muted">
+          {selectableVisibleIds.length} shown · {selectedCount} tracked
+        </p>
       </div>
 
       {/* Grid */}
-      <div className="p-4 space-y-6">
+      <div className="p-3 sm:p-4 space-y-5">
         {groupedEntities.length === 0 ? (
           <div className="text-center py-10 text-text-muted text-sm border border-dashed border-border-subtle rounded-lg">
             No entities match your filters.
@@ -281,6 +294,7 @@ export function EntityPickerGrid({
                                   )}
                                 >
                                   {/* Thumbnail */}
+                                  {/* eslint-disable-next-line @next/next/no-img-element -- Thumbnail from dynamic CDN path */}
                                   <img
                                     src={getCardImageUrl(entity)}
                                     alt=""
@@ -315,11 +329,11 @@ export function EntityPickerGrid({
 
                                   {/* Cost */}
                                   {cost > 0 && (
-                                    <span className="flex items-center gap-1 shrink-0 tabular-nums">
+                                    <span className="flex items-center gap-0.5 shrink-0 tabular-nums">
                                       <KnowledgeIcon size={12} />
                                       <span
                                         className={cn(
-                                          "text-xs font-mono font-bold w-7 text-right",
+                                          "text-xs font-mono font-bold",
                                           isOwned
                                             ? "text-text-muted"
                                             : canAfford && !isSelected
@@ -342,7 +356,7 @@ export function EntityPickerGrid({
                                   onClick={(e) => {
                                     e.stopPropagation();
                                     if (cost > 0) {
-                                      onToggleOwned(entity.entity_id);
+                                      onToggleOwned(entity.entity_id, cost);
                                     }
                                   }}
                                   disabled={cost === 0}

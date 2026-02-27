@@ -3,17 +3,17 @@ import { beforeEach, describe, expect, it } from "vitest";
 
 import { useCalculatorStore } from "@/store/calculator-store";
 
-describe("Calculator Zustand Store (v2)", () => {
+describe("Calculator Zustand Store (v3)", () => {
   beforeEach(() => {
     // Reset store to initial state
     useCalculatorStore.setState({
       selectedIds: [],
       ownedIds: [],
-      isBeta: false,
       hideOwned: false,
-      currentKnowledge: 0,
+      currentKnowledge: 250,
       winRate: 0.5,
-      gamesPerDay: 5,
+      gamesPerDay: 3,
+      matchDuration: 20,
     });
   });
 
@@ -21,11 +21,11 @@ describe("Calculator Zustand Store (v2)", () => {
     const state = useCalculatorStore.getState();
     expect(state.selectedIds).toEqual([]);
     expect(state.ownedIds).toEqual([]);
-    expect(state.isBeta).toBe(false);
     expect(state.hideOwned).toBe(false);
-    expect(state.currentKnowledge).toBe(0);
+    expect(state.currentKnowledge).toBe(250);
     expect(state.winRate).toBe(0.5);
-    expect(state.gamesPerDay).toBe(5);
+    expect(state.gamesPerDay).toBe(3);
+    expect(state.matchDuration).toBe(20);
   });
 
   describe("Selection Management", () => {
@@ -156,11 +156,15 @@ describe("Calculator Zustand Store (v2)", () => {
       expect(useCalculatorStore.getState().gamesPerDay).toBe(10);
     });
 
-    it("setBeta updates isBeta", () => {
-      const { setBeta } = useCalculatorStore.getState();
+    it("setMatchDuration updates match duration and clamps to min 1", () => {
+      const { setMatchDuration } = useCalculatorStore.getState();
 
-      act(() => setBeta(true));
-      expect(useCalculatorStore.getState().isBeta).toBe(true);
+      act(() => setMatchDuration(45));
+      expect(useCalculatorStore.getState().matchDuration).toBe(45);
+
+      // Should clamp to 1 minimum
+      act(() => setMatchDuration(0));
+      expect(useCalculatorStore.getState().matchDuration).toBe(1);
     });
   });
 });
