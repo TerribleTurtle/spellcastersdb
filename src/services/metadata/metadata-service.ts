@@ -52,7 +52,7 @@ export async function generateDeckMetadata(
       title: "Deck Builder & Loadout Editor - SpellcastersDB",
       description: "Build and share your Spellcasters Chronicles decks.",
       type: "website",
-      images: ["/og-forge.png"],
+      images: ["/og-default.png"],
     },
     twitter: {
       card: "summary_large_image",

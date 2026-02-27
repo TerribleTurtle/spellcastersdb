@@ -12,11 +12,19 @@ vi.mock("@/services/infrastructure/ratelimit", () => ({
   },
 }));
 
-vi.mock("@/services/infrastructure/redis", () => ({
-  redis: {
-    set: vi.fn(),
-  },
-}));
+vi.mock("@/services/infrastructure/redis", () => {
+  const mockPipeline = {
+    set: vi.fn().mockReturnThis(),
+    exec: vi.fn().mockResolvedValue(["OK", "OK"]),
+  };
+  return {
+    redis: {
+      get: vi.fn(),
+      set: vi.fn(),
+      pipeline: vi.fn(() => mockPipeline),
+    },
+  };
+});
 
 vi.mock("@/services/monitoring", () => ({
   monitoring: {
@@ -50,6 +58,8 @@ describe("POST /api/share", () => {
       reset: Date.now() + 60_000,
       pending: Promise.resolve(),
     });
+    // Default: redis get misses (no cached link)
+    vi.mocked(redis!.get).mockResolvedValue(null);
     // Default: redis set succeeds
     vi.mocked(redis!.set).mockResolvedValue("OK");
   });
@@ -71,7 +81,7 @@ describe("POST /api/share", () => {
     expect(json.id).toHaveLength(7);
   });
 
-  it("stores the payload in Redis with a 30-day TTL", async () => {
+  it("stores the payload and reverse lookup in Redis via pipeline with a 30-day TTL", async () => {
     const req = createRequest({
       hash: "NobwRAenc",
       type: "deck",
@@ -81,11 +91,38 @@ describe("POST /api/share", () => {
     const res = await POST(req);
     const json = await res.json();
 
-    expect(redis!.set).toHaveBeenCalledWith(
+    const pipeline = redis!.pipeline();
+    expect(pipeline.set).toHaveBeenCalledWith(
       `share:${json.id}`,
       expect.stringContaining('"hash":"NobwRAenc"'),
       { ex: 30 * 24 * 60 * 60 }
     );
+    expect(pipeline.set).toHaveBeenCalledWith(
+      `share_hash:deck:NobwRAenc`,
+      json.id,
+      { ex: 30 * 24 * 60 * 60 }
+    );
+    expect(pipeline.exec).toHaveBeenCalled();
+  });
+
+  it("returns an existing ID when the payload hash already exists in Redis", async () => {
+    vi.mocked(redis!.get).mockResolvedValueOnce("existing-id-123");
+
+    const req = createRequest({
+      hash: "NobwRAenc",
+      type: "deck",
+      path: "/deck-builder",
+    });
+
+    const res = await POST(req);
+    const json = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(json.id).toBe("existing-id-123");
+
+    // It should NOT try to create or pipeline anything new
+    expect(redis!.pipeline).not.toHaveBeenCalled();
+    expect(redis!.set).not.toHaveBeenCalled();
   });
 
   it("accepts a valid team request", async () => {
@@ -183,10 +220,11 @@ describe("POST /api/share", () => {
 
   // ─── Error Handling ───────────────────────────────────────────────
 
-  it("returns 500 and captures exception when Redis.set throws", async () => {
-    vi.mocked(redis!.set).mockRejectedValueOnce(
-      new Error("Connection refused")
-    );
+  it("returns 500 and captures exception when Redis pipeline throws", async () => {
+    const mockPipeline = redis!.pipeline();
+    (
+      mockPipeline.exec as unknown as ReturnType<typeof vi.fn>
+    ).mockRejectedValueOnce(new Error("Connection refused (pipeline)"));
 
     const req = createRequest({
       hash: "NobwRAenc",
