@@ -6,6 +6,7 @@ import {
   HelpCircle,
   Home,
   Info,
+  LineChart,
   LucideIcon,
   SwatchBook,
 } from "lucide-react";
@@ -23,6 +24,12 @@ export const PRIMARY_NAV: NavLink[] = [
     name: "Deck Builder",
     href: "/deck-builder",
     icon: SwatchBook,
+    internal: true,
+  },
+  {
+    name: "Tracker",
+    href: "/guide/knowledge-tracker",
+    icon: LineChart,
     internal: true,
   },
   { name: "Database", href: "/database", icon: Database, internal: true },
