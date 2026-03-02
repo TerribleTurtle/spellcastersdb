@@ -11,7 +11,7 @@ vi.mock("../api-client", () => ({
   fetchChunk: vi.fn(),
 }));
 
-const MOCK_RESPONSE = {
+const MOCK_ENTRY = {
   entity_id: "mausoleum",
   name: "Mausoleum",
   description: "Chest spawn locations for the Mausoleum arena.",
@@ -30,12 +30,17 @@ const MOCK_RESPONSE = {
 };
 
 describe("getMapChests", () => {
-  it("fetches map chest data for a valid mapId", async () => {
-    vi.mocked(fetchChunk).mockResolvedValue(MOCK_RESPONSE);
+  it("fetches aggregated map chest data and returns the matching entry", async () => {
+    vi.mocked(fetchChunk).mockResolvedValue([MOCK_ENTRY]);
     const result = await getMapChests("mausoleum");
-    expect(fetchChunk).toHaveBeenCalledWith("map_chests/mausoleum.json");
+    expect(fetchChunk).toHaveBeenCalledWith("map_chests.json");
     expect(result.entity_id).toBe("mausoleum");
     expect(result.chests).toHaveLength(1);
+  });
+
+  it("throws when mapId is not found in the aggregated data", async () => {
+    vi.mocked(fetchChunk).mockResolvedValue([MOCK_ENTRY]);
+    await expect(getMapChests("nonexistent")).rejects.toThrow("Map not found");
   });
 
   it("rejects invalid mapId with path traversal", async () => {
