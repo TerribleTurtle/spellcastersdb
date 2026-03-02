@@ -45,5 +45,6 @@ describe("Guide Hub Page", () => {
     expect(screen.getByText("Basics & Deck Building")).toBeInTheDocument();
     expect(screen.getByText("Mechanics & Progression")).toBeInTheDocument();
     expect(screen.getByText("Ranked Mode")).toBeInTheDocument();
+    expect(screen.getByText("Map Chests")).toBeInTheDocument();
   });
 });

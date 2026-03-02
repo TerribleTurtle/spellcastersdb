@@ -27,6 +27,7 @@ const GUIDE_SECTIONS: TocItem[] = [
   { id: "ranked", label: "Ranked Mode", href: routes.guideRanked() },
   { id: "upgrades", label: "Class Upgrades", href: routes.guideUpgrades() },
   { id: "infusions", label: "Infusions Database", href: routes.infusions() },
+  { id: "map-chests", label: "Map Chests", href: routes.guideMapChests() },
 ];
 
 /**
