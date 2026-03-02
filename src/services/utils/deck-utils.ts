@@ -7,21 +7,31 @@ import { Spell, Spellcaster, Titan, UnifiedEntity, Unit } from "@/types/api";
 import { Deck, DeckSlot } from "@/types/deck";
 
 /**
- * Creates a deep copy of deck slots to ensure immutability.
+ * Creates a shallow copy of each deck slot to ensure immutability.
+ * Each slot object is spread-copied; the `unit` reference inside is NOT deep-cloned.
+ *
+ * @param slots - The array of deck slots to clone.
+ * @returns A new array of shallow-copied `DeckSlot` objects.
  */
 export function cloneSlots(slots: DeckSlot[]): DeckSlot[] {
   return slots.map((s) => ({ ...s }));
 }
 
 /**
- * Creates a deep copy of a Deck.
+ * Creates a deep copy of a Deck using `structuredClone`.
+ *
+ * @param deck - The deck to clone.
+ * @returns A fully independent deep copy of the deck.
  */
 export function cloneDeck(deck: Deck): Deck {
   return structuredClone(deck);
 }
 
 /**
- * Checks if a deck is completely empty (no spellcaster, no units in slots).
+ * Checks if a deck is completely empty (no spellcaster assigned, no units in any slot).
+ *
+ * @param deck - The deck to inspect.
+ * @returns `true` if the deck has no spellcaster and all slots are empty.
  */
 export function isDeckEmpty(deck: Deck): boolean {
   if (deck.spellcaster) return false;
@@ -30,9 +40,15 @@ export function isDeckEmpty(deck: Deck): boolean {
 
 /**
  * Finds the appropriate slot index for auto-filling an item into a deck.
- * - Titans -> Titan Slot (4)
- * - Units/Spells -> First Empty Slot (0-3)
- * @returns Slot index or -1 if no valid slot found.
+ *
+ * Placement rules:
+ * - **Titan** → always slot 4 (`TITAN_SLOT_INDEX`).
+ * - **Spellcaster** → returns `-1` (spellcasters are not placed in slots).
+ * - **Unit / Spell** → first empty slot in indices 0-3.
+ *
+ * @param deck - The deck to search for an open slot.
+ * @param item - The entity to place.
+ * @returns The target slot index (0-4), or `-1` if no valid slot is available.
  */
 export function findAutoFillSlot(
   deck: Deck,

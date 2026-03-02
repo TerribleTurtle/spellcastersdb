@@ -5,6 +5,7 @@ import {
   Calculator,
   Crown,
   Flame,
+  Map,
   Shield,
   Sparkles,
   Swords,
@@ -14,6 +15,10 @@ import {
 import { GuideCard, type GuideCardProps } from "@/components/guide/GuideCard";
 import { PageShell } from "@/components/layout/PageShell";
 import { routes } from "@/lib/routes";
+
+// Revalidate every hour — matches pattern used by other pages (home, roadmap)
+// to ensure Vercel's CDN serves fresh content after deployments.
+export const revalidate = 3600;
 
 export const metadata = {
   title: "Game Guide — SpellcastersDB",
@@ -94,6 +99,15 @@ const GUIDE_CARDS: GuideCardProps[] = [
       "Track the Knowledge needed to unlock units and spells. Forecast your earnings and plan your next unlocks.",
     href: routes.guideKnowledgeTracker(),
     icon: <Calculator size={28} />,
+    gradient: "from-amber-500/20 to-yellow-600/20",
+    badge: "NEW",
+  },
+  {
+    title: "Map Chests",
+    description:
+      "Chest spawn locations, rewards, and rarities for each arena map.",
+    href: routes.guideMapChests(),
+    icon: <Map size={28} />,
     gradient: "from-amber-500/20 to-yellow-600/20",
     badge: "NEW",
   },

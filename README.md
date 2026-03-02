@@ -46,7 +46,7 @@
   - **Comprehensive Testing**: Rigorous unit and integration tests (Vitest) covering core logic, custom hooks, and data validation, enforced by strict coverage threshold lock (`vitest.config.ts`).
     - **Adversarial Testing Suite**: A specialized 85-test characterization suite (`src/__tests__/adversarial` and `__tests__/**/*.adversarial.test.ts`) that aggressively fuzzes inputs, breaks boundaries, and simulates data corruption (e.g., OOB array access, primitive injection, JSON sabotage) to guarantee the resilience of the deck building state machines and backup/import layers.
   - **Revalidation API**: On-demand cache invalidation via `/api/revalidate` (using `Authorization` header) with `revalidateTag` for robust content updates.
-    - **CI/CD**: The "Daily Revalidation" workflow requires `REVALIDATION_SECRET` and optionally `APP_URL` (defaults to `https://www.spellcastersdb.com`) in GitHub Secrets.
+    - **CI/CD**: The "Daily Revalidation" workflow requires `REVALIDATION_SECRET` and optionally `APP_URL` (defaults to `https://www.spellcastersdb.com`) as **GitHub Secrets** (not `.env.local` variables). The app code itself uses `NEXT_PUBLIC_APP_URL` for short-link redirects.
   - **State Persistence**: Optimized `zustand/persist` with `partialize` to serialize only critical user data, excluding transient UI state for consistent high performance.
   - **Asset Caching & CDN Optimization**: Open Graph generation edges and standard images use `Cache-Control` configured for `stale-while-revalidate` alongside `NEXT_PUBLIC_PREFERRED_ASSET_FORMAT` for robust background updating without freezing user interaction.
   - **Bundle Profiling**: Includes `@next/bundle-analyzer` to maintain lightweight chunks. Use `npm run analyze` to inspect footprints.
@@ -115,7 +115,9 @@ For detailed setup instructions, including **Local API Development**, please see
 - [**E2E Conventions**](docs/E2E_CONVENTIONS.md): `data-testid` naming rules and viewport strategy.
 - [**GitHub Token Setup**](docs/GITHUB_TOKEN_SETUP.md): How to configure a GitHub token for roadmap data.
 - [**Privacy Audit**](docs/PRIVACY_AUDIT_REPORT.md): GDPR/CCPA privacy audit findings.
+- [**Security Audit**](docs/SECURITY_AUDIT.md): Security audit findings and remediation status.
 - [**SEO Strategy**](docs/SpellcastersDB%20SEO%20%26%20Keyword%20Strategy.md): Keyword research and SEO strategy.
+- [**Site Design Document**](docs/SpellcastersDB%20Site%20Design%20Document.md): High-level site architecture and design decisions.
 - [**State Management**](docs/STATE_MANAGEMENT.md): Zustand store architecture and persistence strategy.
 - [**Full Index**](docs/README.md): Complete documentation index.
 

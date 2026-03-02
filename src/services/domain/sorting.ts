@@ -19,6 +19,9 @@ type Comparator<T> = (a: T, b: T) => number;
 /**
  * Returns a comparator function based on the selected GroupMode.
  * Used to sort items WITHIN a group.
+ *
+ * @param mode - The active grouping mode ("All", "Rank", or "Magic School").
+ * @returns A comparator that sorts two `BrowserItem`s by mode-specific criteria.
  */
 export function getComparator(mode: GroupMode): Comparator<BrowserItem> {
   return (a, b) => {
@@ -55,6 +58,10 @@ export function getComparator(mode: GroupMode): Comparator<BrowserItem> {
  * 1. Groups always appear in the identical order regardless of search results.
  * 2. Categories like 'Spellcaster' will always appear before 'Unit' when Mode is 'All'.
  * 3. Items within each group are then sorted by the provided `mode` comparator.
+ *
+ * @param items - The pre-filtered list of browser items to group.
+ * @param mode - The active grouping mode determining section titles and sort order.
+ * @returns An ordered array of `GroupedContent` sections, each with a title and sorted items.
  */
 export function groupItems(
   items: BrowserItem[],
@@ -119,12 +126,27 @@ export function groupItems(
 
 // --- Helpers ---
 
+/**
+ * Compares two browser items alphabetically by name using `localeCompare`.
+ *
+ * @param a - First item.
+ * @param b - Second item.
+ * @returns A negative, zero, or positive number for sort ordering.
+ */
 export function compareByName(a: BrowserItem, b: BrowserItem) {
   const nameA = String(a?.name || "");
   const nameB = String(b?.name || "");
   return nameA.localeCompare(nameB);
 }
 
+/**
+ * Compares two browser items by rank (e.g., "I", "II", "III") using `localeCompare`.
+ * Non-ranked items default to `"I"`.
+ *
+ * @param a - First item.
+ * @param b - Second item.
+ * @returns A negative, zero, or positive number for sort ordering.
+ */
 export function compareByRank(a: BrowserItem, b: BrowserItem) {
   // Use safe optional chaining and string coercion
   const rA = "rank" in a ? String((a as Unit)?.rank || "I") : "I";
@@ -132,6 +154,14 @@ export function compareByRank(a: BrowserItem, b: BrowserItem) {
   return rA.localeCompare(rB);
 }
 
+/**
+ * Compares two browser items by their category's display priority.
+ * Uses the `CATEGORY_PRIORITY` map; unknown categories fall back to priority `99`.
+ *
+ * @param a - First item.
+ * @param b - Second item.
+ * @returns A negative, zero, or positive number for sort ordering.
+ */
 export function compareByCategoryPriority(a: BrowserItem, b: BrowserItem) {
   const catA =
     "category" in a && a.category ? String(a.category) : "Spellcaster";
