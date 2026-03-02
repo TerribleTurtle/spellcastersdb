@@ -8,7 +8,7 @@ import { PageShell } from "@/components/layout/PageShell";
 import { routes } from "@/lib/routes";
 import { getMapChests } from "@/services/api/map-chests";
 
-import { KNOWN_MAPS } from "../page";
+import { KNOWN_MAPS } from "../known-maps";
 
 type Props = {
   params: Promise<{ mapId: string }>;

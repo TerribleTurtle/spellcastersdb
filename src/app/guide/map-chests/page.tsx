@@ -6,14 +6,7 @@ import { GuideCard } from "@/components/guide/GuideCard";
 import { PageShell } from "@/components/layout/PageShell";
 import { routes } from "@/lib/routes";
 
-// Define the static list of maps that have chest data
-export const KNOWN_MAPS = [
-  {
-    id: "mausoleum",
-    name: "Mausoleum",
-    description: "Chest spawn locations for the Mausoleum arena.",
-  },
-] as const;
+import { KNOWN_MAPS } from "./known-maps";
 
 export const metadata: Metadata = {
   title: "Map Chests - SC Guide",
