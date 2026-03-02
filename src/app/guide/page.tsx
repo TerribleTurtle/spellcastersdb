@@ -11,6 +11,7 @@ import {
   TrendingUp,
 } from "lucide-react";
 
+import { GuideCard, type GuideCardProps } from "@/components/guide/GuideCard";
 import { PageShell } from "@/components/layout/PageShell";
 import { routes } from "@/lib/routes";
 
@@ -41,16 +42,9 @@ export const metadata = {
   },
 };
 
-interface GuideCard {
-  title: string;
-  description: string;
-  href: string;
-  icon: React.ReactNode;
-  gradient: string;
-  badge?: string;
-}
+// Removed inline interface, using GuideCardProps
 
-const GUIDE_CARDS: GuideCard[] = [
+const GUIDE_CARDS: GuideCardProps[] = [
   {
     title: "Basics & Deck Building",
     description:
@@ -140,41 +134,7 @@ export default function GuidePage() {
       {/* Card grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
         {GUIDE_CARDS.map((card) => (
-          <Link
-            key={card.href}
-            href={card.href}
-            className="group relative flex flex-col bg-surface-card border border-border-default rounded-xl p-5 md:p-6 transition-all duration-300 hover:border-brand-primary/40 hover:shadow-lg hover:shadow-brand-primary/5 hover:-translate-y-0.5"
-          >
-            {/* Badge */}
-            {card.badge && (
-              <span className="absolute top-3 right-3 px-2 py-0.5 text-[10px] font-bold tracking-wider uppercase rounded-full bg-linear-to-r from-fuchsia-500 to-violet-500 text-white shadow-sm">
-                {card.badge}
-              </span>
-            )}
-
-            {/* Icon */}
-            <div
-              className={`w-12 h-12 rounded-lg bg-linear-to-br ${card.gradient} flex items-center justify-center mb-4 text-brand-primary group-hover:scale-110 transition-transform duration-300`}
-            >
-              {card.icon}
-            </div>
-
-            {/* Content */}
-            <h2 className="text-lg font-semibold text-text-primary mb-2 group-hover:text-brand-primary transition-colors">
-              {card.title}
-            </h2>
-            <p className="text-sm text-text-muted leading-relaxed flex-1">
-              {card.description}
-            </p>
-
-            {/* Arrow indicator */}
-            <div className="mt-4 flex items-center gap-1 text-xs font-medium text-brand-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              Explore
-              <span className="group-hover:translate-x-1 transition-transform duration-300">
-                →
-              </span>
-            </div>
-          </Link>
+          <GuideCard key={card.href} {...card} />
         ))}
       </div>
 
