@@ -35,6 +35,9 @@ export const routes = {
   guideKnowledgeTracker: () => `/guide/knowledge-tracker`,
   infusions: () => `/guide/infusions`,
   infusion: (id: string) => `/guide/infusions/${safeEncode(id)}`,
+  guideMapChests: () => `/guide/map-chests`,
+  guideMapChestsDetail: (mapId: string) =>
+    `/guide/map-chests/${safeEncode(mapId)}`,
 
   // --- Dynamic Entity Link Builder ---
   /**
