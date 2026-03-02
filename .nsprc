@@ -1,12 +1,7 @@
 {
-  "1113545": {
+  "1113633": {
     "active": true,
-    "notes": "minimatch ReDoS via matchOne() combinatorial backtracking. Blocked by shadcn -> ts-morph -> @ts-morph/common (devDep CLI).",
-    "expiry": "2027-01-01"
-  },
-  "1113553": {
-    "active": true,
-    "notes": "minimatch ReDoS via nested *() extglobs. Blocked by shadcn -> ts-morph -> @ts-morph/common (devDep CLI).",
+    "notes": "serialize-javascript RCE. Build-only dep via @sentry/webpack-plugin -> webpack -> terser-webpack-plugin. No user input reaches serialize(). Blocked until terser-webpack-plugin supports v7.",
     "expiry": "2027-01-01"
   }
 }
