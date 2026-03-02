@@ -27,6 +27,8 @@ cp .env.local.example .env.local
 
 Review the settings in `.env.local`.
 
+> **Tip:** No database, API keys, or external services are needed for local development. The app fetches data from a public static JSON API out of the box.
+
 ### Environment Variables
 
 | Variable                             | Description                                 | Default / Example                                                    |
@@ -44,7 +46,8 @@ Review the settings in `.env.local`.
 | `UPSTASH_REDIS_REST_TOKEN`           | Redis token for rate limiting & short links | _(Optional)_                                                         |
 | `SENTRY_AUTH_TOKEN`                  | Sentry source map upload token              | _(Optional)_                                                         |
 | `NEXT_PUBLIC_SENTRY_DSN`             | Sentry DSN for error tracking               | _(Optional)_                                                         |
-| `APP_URL`                            | Production URL for links & CI callbacks     | `http://localhost:3000`                                              |
+| `APP_URL`                            | **CI only** — GitHub Secret for revalidation workflow | `https://www.spellcastersdb.com` _(not used by app code)_            |
+| `NEXT_PUBLIC_APP_URL`                | App URL used for short-link redirects       | `http://localhost:3000`                                              |
 | `PORT`                               | Dev server port for local proxy             | `3000`                                                               |
 | `ANALYZE`                            | Enable `@next/bundle-analyzer` during build | _(Set via `npm run analyze`)_                                        |
 

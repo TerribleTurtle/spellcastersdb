@@ -94,3 +94,7 @@ playwright-report/
 # one-off scratch files
 build_api.py
 nul
+
+# direnv
+.envrc
+.direnv/

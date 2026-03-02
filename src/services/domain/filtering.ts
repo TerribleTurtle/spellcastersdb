@@ -3,13 +3,30 @@ import { DEFAULT_CATEGORY, DEFAULT_SCHOOL } from "@/services/config/constants";
 import { isSpellcaster } from "@/services/validation/guards";
 import { BrowserItem } from "@/types/browser";
 
+/**
+ * Represents the set of active hard filters applied to the entity browser.
+ * Each field holds an array of selected values; an empty array means "no filter" for that dimension.
+ */
 export interface FilterState {
+  /** Selected magic schools (e.g., "Fire", "Null"). Only applies to units. */
   schools: string[];
+  /** Selected ranks (e.g., "I", "II", "III"). */
   ranks: string[];
+  /** Selected entity categories (e.g., "Creature", "Building"). */
   categories: string[];
+  /** Selected spellcaster classes. Only applies to spellcasters. */
   classes: string[];
 }
 
+/**
+ * Checks whether an item matches a free-text search query across multiple fields.
+ * Matches against name, description, tags, magic school, and category (substring, case-insensitive).
+ *
+ * @param item - The browser item to test.
+ * @param query - The search string entered by the user. Empty string matches everything.
+ * @param category - The resolved plural category label for the item.
+ * @returns `true` if `query` is empty or matches any searchable field.
+ */
 export const matchesSearch = (
   item: BrowserItem,
   query: string,
@@ -55,6 +72,19 @@ export const matchesSearch = (
   return false;
 };
 
+/**
+ * Applies hard (boolean) filters to an item. Returns `false` immediately
+ * if the item fails any active filter dimension (categories, schools, ranks, classes).
+ *
+ * @param item - The browser item to test.
+ * @param filters - The active `FilterState` containing selected values per dimension.
+ * @param category - The resolved plural category label for the item.
+ * @param school - The item's magic school (or the default school for non-units).
+ * @param rank - The item's rank, or `null` if not applicable.
+ * @param spellcasterClass - The spellcaster's class, or `null` for non-spellcasters.
+ * @param isUnit - Whether the item is a unit entity (affects school filtering).
+ * @returns `true` if the item passes all active filters.
+ */
 export const matchesFilters = (
   item: BrowserItem,
   filters: FilterState,
@@ -150,6 +180,18 @@ const calculateScore = (
   return score;
 };
 
+/**
+ * Filters and ranks a list of browser items through a two-stage pipeline:
+ * 1. **Hard filters** — items failing any active filter dimension are excluded.
+ * 2. **Search scoring** — remaining items are scored by `calculateScore` and sorted descending.
+ *
+ * Items with a score of 0 (no search match) are excluded when a search query is active.
+ *
+ * @param items - The full unfiltered list of browser items.
+ * @param searchQuery - The user's free-text search string. Empty string skips scoring.
+ * @param activeFilters - The currently active `FilterState`.
+ * @returns A filtered and relevance-sorted array of `BrowserItem`s.
+ */
 export function filterBrowserItems(
   items: BrowserItem[],
   searchQuery: string,

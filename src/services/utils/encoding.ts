@@ -44,9 +44,16 @@ export function encodeDeck(deck: Deck): string {
   return LZString.compressToEncodedURIComponent(packed);
 }
 
+/**
+ * The raw data extracted from a decoded deck hash.
+ * Contains entity IDs only — not hydrated entities. Use the Registry to resolve IDs to full objects.
+ */
 export interface DecodedDeckData {
+  /** The spellcaster's ID, or `null` if the deck hash had no spellcaster. */
   spellcasterId: string | null;
+  /** Ordered array of 5 slot entity IDs. `null` entries represent empty slots. */
   slotIds: (string | null)[];
+  /** Optional deck name extracted from the hash (sanitized, max 50 chars). */
   name?: string;
 }
 

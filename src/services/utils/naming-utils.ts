@@ -1,3 +1,15 @@
+/**
+ * Generates a unique name by appending `" (Copy)"` or `" (Copy N)"` suffixes.
+ *
+ * Algorithm:
+ * 1. If `baseName` is not already taken (case-insensitive), return it as-is.
+ * 2. Try `"Name (Copy)"`, then `"Name (Copy 2)"`, ..., up to 100 attempts.
+ * 3. If all 100 are taken, falls back to a timestamp suffix: `"Name (Copy 1709312345678)"`.
+ *
+ * @param baseName - The desired name before deduplication (will be trimmed).
+ * @param existingNames - The list of names already in use.
+ * @returns A name guaranteed to be unique (case-insensitive) within `existingNames`.
+ */
 export function getUniqueName(
   baseName: string,
   existingNames: string[]
