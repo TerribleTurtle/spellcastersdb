@@ -1,7 +1,27 @@
 {
-  "1113633": {
+  "1113686": {
     "active": true,
-    "notes": "serialize-javascript RCE. Build-only dep via @sentry/webpack-plugin -> webpack -> terser-webpack-plugin. No user input reaches serialize(). Blocked until terser-webpack-plugin supports v7.",
+    "notes": "serialize-javascript RCE. Build-only dep via @sentry/nextjs -> @sentry/webpack-plugin -> webpack -> terser-webpack-plugin. No user input reaches serialize(). Blocked until terser-webpack-plugin supports v7.",
+    "expiry": "2027-01-01"
+  },
+  "1113974": {
+    "active": true,
+    "notes": "hono/node-server static path auth bypass. Dev-only dep via shadcn CLI -> @modelcontextprotocol/sdk -> @hono/node-server. Never runs in production. Blocked until shadcn updates its MCP SDK dependency.",
+    "expiry": "2027-01-01"
+  },
+  "1114004": {
+    "active": true,
+    "notes": "Hono cookie attribute injection. Dev-only dep via shadcn CLI -> @modelcontextprotocol/sdk -> hono. Never runs in production. Blocked until shadcn updates its MCP SDK dependency.",
+    "expiry": "2027-01-01"
+  },
+  "1114005": {
+    "active": true,
+    "notes": "Hono SSE control field injection. Dev-only dep via shadcn CLI -> @modelcontextprotocol/sdk -> hono. Never runs in production. Blocked until shadcn updates its MCP SDK dependency.",
+    "expiry": "2027-01-01"
+  },
+  "1114006": {
+    "active": true,
+    "notes": "Hono serveStatic arbitrary file access. Dev-only dep via shadcn CLI -> @modelcontextprotocol/sdk -> hono. Never runs in production. Blocked until shadcn updates its MCP SDK dependency.",
     "expiry": "2027-01-01"
   }
 }
