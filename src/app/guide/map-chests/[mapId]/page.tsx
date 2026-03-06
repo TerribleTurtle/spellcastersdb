@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import { Map } from "lucide-react";
 
 import { MapChestTable } from "@/components/guide/MapChestTable";
+import { MapImage } from "@/components/guide/MapImage";
 import { PageShell } from "@/components/layout/PageShell";
+import { CONFIG } from "@/lib/config";
 import { routes } from "@/lib/routes";
 import { getMapChests } from "@/services/api/map-chests";
 
@@ -83,9 +85,16 @@ export default async function MapChestsDetailPage({ params }: Props) {
           </div>
         </section>
 
+        {mapData.image_urls?.map && (
+          <MapImage
+            src={`${CONFIG.API.BASE_URL.replace(/\/api\/v2$/, "")}${mapData.image_urls.map}`}
+            alt={`${mapData.name} arena map`}
+          />
+        )}
+
         <section className="space-y-4">
           <h2 className="text-2xl font-bold text-brand-primary">
-            Chest Spawns & Rewards
+            Chest Spawns &amp; Rewards
           </h2>
           <p className="text-sm text-text-secondary leading-relaxed max-w-2xl">
             The table below breaks down every potential chest spawn on this map
