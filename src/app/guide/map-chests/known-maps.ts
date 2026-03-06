@@ -7,6 +7,11 @@
  */
 export const KNOWN_MAPS = [
   {
+    id: "nordic_shore",
+    name: "Nordic Shore",
+    description: "Chest spawn locations for the Nordic Shore arena.",
+  },
+  {
     id: "mausoleum",
     name: "Mausoleum",
     description: "Chest spawn locations for the Mausoleum arena.",
