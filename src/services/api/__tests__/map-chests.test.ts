@@ -56,4 +56,18 @@ describe("getMapChests", () => {
   it("rejects mapId with uppercase", async () => {
     await expect(getMapChests("Mausoleum")).rejects.toThrow("Invalid map ID");
   });
+
+  it("preserves image_urls when present in API response", async () => {
+    vi.mocked(fetchChunk).mockResolvedValue([
+      { ...MOCK_ENTRY, image_urls: { map: "/assets/maps/mausoleum.png" } },
+    ]);
+    const result = await getMapChests("mausoleum");
+    expect(result.image_urls?.map).toBe("/assets/maps/mausoleum.png");
+  });
+
+  it("returns undefined image_urls when absent from API response", async () => {
+    vi.mocked(fetchChunk).mockResolvedValue([MOCK_ENTRY]);
+    const result = await getMapChests("mausoleum");
+    expect(result.image_urls).toBeUndefined();
+  });
 });
