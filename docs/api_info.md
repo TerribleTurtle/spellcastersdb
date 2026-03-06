@@ -29,6 +29,13 @@ Images are hosted in the `assets/` directory of the API repository.
 - **Units/Spells/Titans**: `units/[id].png` (Shared folder)
 - **Consumables**: `consumables/[id].png`
 - **Upgrades**: `upgrades/[id].png`
+- **Maps**: `maps/[id].png`
+
+> **Note on `image_urls.map`:** The `MapChestsResponse.image_urls?.map` field contains a **relative path** (e.g. `/assets/maps/mausoleum.png`). Before passing to `next/image`, prepend the host root using the same pattern as `asset-helpers.ts`:
+> ```ts
+> const hostRoot = CONFIG.API.BASE_URL.replace(/\/api\/v2$/, "");
+> const src = `${hostRoot}${mapData.image_urls.map}`;
+> ```
 
 ## Schema Validation
 
