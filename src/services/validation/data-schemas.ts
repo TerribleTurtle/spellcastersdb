@@ -471,23 +471,23 @@ export const InfusionSchema = z.object({
 
 // Game Systems Schema (V2 — New Standalone Endpoint)
 const CaptureXPSchema = z.object({
-  first: z.number(),
+  first_capture: z.number(),
   recapture: z.number(),
   passive_per_sec: z.number(),
   spellcaster_on_point: z.number(),
 });
 
-const SummoningXPSchema = z.object({
+const KillXPSchema = z.object({
   spellcaster_death: z.number(),
-  rank_I: z.number(),
-  rank_II: z.number(),
-  rank_III: z.number(),
-  rank_IV: z.number(),
+  rank_i: z.number(),
+  rank_ii: z.number(),
+  rank_iii: z.number(),
+  rank_iv: z.number(),
 });
 
-const ScalingXPSchema = z.object({
-  building_spawn_multiplier: z.number(),
-  level_thresholds: z.array(z.number()),
+const LevelThresholdSchema = z.object({
+  xp_required: z.number(),
+  level: z.number(),
 });
 
 const SummonXPSchema = z.object({
@@ -497,19 +497,13 @@ const SummonXPSchema = z.object({
   rank_iv: z.number().int().min(0),
 });
 
-export const MatchXPSchema = z
-  .object({
-    capture: CaptureXPSchema.optional(),
-    kills: SummoningXPSchema.optional(),
-    summon_xp: SummonXPSchema.optional(),
-    scaling: ScalingXPSchema.optional(),
-  })
-  .transform((data) => ({
-    capture: data.capture,
-    summoning: data.kills,
-    summon_xp: data.summon_xp,
-    scaling: data.scaling,
-  }));
+export const MatchXPSchema = z.object({
+  capture_xp: CaptureXPSchema.optional(),
+  kill_xp: KillXPSchema.optional(),
+  summon_xp: SummonXPSchema.optional(),
+  building_spawn_multiplier: z.number().optional(),
+  level_thresholds: z.array(LevelThresholdSchema).optional(),
+});
 
 const ProgressionConfigSchema = z.object({
   starting_knowledge: z.object({
