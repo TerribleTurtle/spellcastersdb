@@ -75,6 +75,7 @@ export interface Spawner {
   count: number;
   trigger: "Death" | "Interval" | "Spawn";
   interval?: number;
+  max_active?: number;
 }
 
 export interface Feature {
@@ -438,11 +439,33 @@ export interface ScalingXP {
 export interface MatchXP {
   capture?: CaptureXP;
   summoning?: SummoningXP;
+  summon_xp?: SummonXP;
   scaling?: ScalingXP;
 }
 
+export interface SummonXP {
+  rank_i: number;
+  rank_ii: number;
+  rank_iii: number;
+  rank_iv: number;
+}
+
+export interface Lifestone {
+  heal_per_sec: number;
+  heal_target: string;
+  heal_range: string;
+}
+
+export interface MapObjects {
+  lifestone?: Lifestone;
+}
+
 export interface ProgressionConfig {
-  starting_knowledge: { default: number; beta: number };
+  starting_knowledge: {
+    default: number;
+    beta: number;
+    early_access_compensation: number;
+  };
   earn_rates: { first_daily_match: number; win: number; loss: number };
 }
 
@@ -462,6 +485,7 @@ export interface GameSystems {
   progression: ProgressionConfig;
   ranked: RankedConfig;
   match_xp: MatchXP;
+  map_objects?: MapObjects;
 }
 
 // ============================================================================

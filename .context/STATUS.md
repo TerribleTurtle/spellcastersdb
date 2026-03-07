@@ -8,6 +8,7 @@ _Nothing in progress._
 
 | Feature | Completed | Summary |
 |---|---|---|
+| v0.2.0 Schema Consumer Changes | 2026-03-07 | Added `summon_xp`, `map_objects`, `early_access_compensation`, and `max_active` to Zod schemas, TS types, and Mechanics guide UI |
 | Map Image Support (`image_urls`) | 2026-03-05 | Added `MapImageUrls` type, `MapImage` component, and conditional image display on map chest detail pages for all arena maps |
 | Map Chests Types & API Service | 2026-03 | `MapChestsResponse`, `getMapChests()`, input validation, ISR via `fetchChunk` |
 | Map Chests Index & Detail Pages | 2026-03 | `[mapId]/page.tsx`, static params from `KNOWN_MAPS`, breadcrumb nav |

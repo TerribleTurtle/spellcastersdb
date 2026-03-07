@@ -6,6 +6,7 @@ import {
   AllDataSchema,
   ConsumableSchema,
   DamageModifierSchema,
+  GameSystemsSchema,
   InfusionSchema,
   MatchXPSchema,
   SpellSchema,
@@ -309,6 +310,94 @@ describe("data-schemas.ts", () => {
 
       const parsed = MatchXPSchema.parse(data);
       expect(parsed.summoning).toBeUndefined();
+    });
+
+    it("should pass summon_xp through the transform when present", () => {
+      const data = {
+        kills: {
+          spellcaster_death: 250,
+          rank_I: 50,
+          rank_II: 100,
+          rank_III: 300,
+          rank_IV: 500,
+        },
+        summon_xp: {
+          rank_i: 50,
+          rank_ii: 150,
+          rank_iii: 300,
+          rank_iv: 500,
+        },
+      };
+
+      const parsed = MatchXPSchema.parse(data);
+      expect(parsed.summon_xp).toBeDefined();
+      expect(parsed.summon_xp?.rank_i).toBe(50);
+      expect(parsed.summon_xp?.rank_ii).toBe(150);
+      expect(parsed.summon_xp?.rank_iii).toBe(300);
+      expect(parsed.summon_xp?.rank_iv).toBe(500);
+    });
+
+    it("should leave summon_xp undefined when absent", () => {
+      const data = {
+        kills: {
+          spellcaster_death: 250,
+          rank_I: 50,
+          rank_II: 100,
+          rank_III: 300,
+          rank_IV: 500,
+        },
+      };
+
+      const parsed = MatchXPSchema.parse(data);
+      expect(parsed.summon_xp).toBeUndefined();
+    });
+  });
+
+  describe("GameSystemsSchema", () => {
+    const validBase = {
+      progression: {
+        starting_knowledge: {
+          default: 250,
+          beta: 1000,
+          early_access_compensation: 2000,
+        },
+        earn_rates: { first_daily_match: 200, win: 50, loss: 20 },
+      },
+      ranked: {
+        tiers_per_rank: 3,
+        rp_gain_per_win: 100,
+        ranks: [{ name: "Bronze", rp_threshold_min: 0, rp_loss_per_loss: 50 }],
+      },
+      match_xp: {},
+    };
+
+    it("should parse without map_objects (backward compat)", () => {
+      const parsed = GameSystemsSchema.parse(validBase);
+      expect(parsed.map_objects).toBeUndefined();
+    });
+
+    it("should parse with map_objects.lifestone", () => {
+      const data = {
+        ...validBase,
+        map_objects: {
+          lifestone: {
+            heal_per_sec: 10,
+            heal_target: "Spellcaster",
+            heal_range: "territory",
+          },
+        },
+      };
+
+      const parsed = GameSystemsSchema.parse(data);
+      expect(parsed.map_objects?.lifestone?.heal_per_sec).toBe(10);
+      expect(parsed.map_objects?.lifestone?.heal_target).toBe("Spellcaster");
+    });
+
+    it("should parse early_access_compensation in starting_knowledge", () => {
+      const parsed = GameSystemsSchema.parse(validBase);
+      expect(
+        parsed.progression.starting_knowledge.early_access_compensation
+      ).toBe(2000);
     });
   });
 
