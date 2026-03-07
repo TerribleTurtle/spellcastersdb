@@ -417,30 +417,31 @@ export interface Upgrade {
 // ============================================================================
 
 export interface CaptureXP {
-  first: number;
+  first_capture: number;
   recapture: number;
   passive_per_sec: number;
   spellcaster_on_point: number;
 }
 
-export interface SummoningXP {
+export interface KillXP {
   spellcaster_death: number;
-  rank_I: number;
-  rank_II: number;
-  rank_III: number;
-  rank_IV: number;
+  rank_i: number;
+  rank_ii: number;
+  rank_iii: number;
+  rank_iv: number;
 }
 
-export interface ScalingXP {
-  building_spawn_multiplier: number;
-  level_thresholds: number[];
+export interface LevelThreshold {
+  xp_required: number;
+  level: number;
 }
 
 export interface MatchXP {
-  capture?: CaptureXP;
-  summoning?: SummoningXP;
+  capture_xp?: CaptureXP;
+  kill_xp?: KillXP;
   summon_xp?: SummonXP;
-  scaling?: ScalingXP;
+  building_spawn_multiplier?: number;
+  level_thresholds?: LevelThreshold[];
 }
 
 export interface SummonXP {

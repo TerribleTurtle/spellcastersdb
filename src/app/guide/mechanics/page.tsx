@@ -157,7 +157,7 @@ export default async function MechanicsPage() {
             </p>
 
             {/* Capture XP */}
-            {systems.match_xp.capture && (
+            {systems.match_xp.capture_xp && (
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-text-primary mb-3 flex items-center gap-2">
                   <Target size={18} className="text-emerald-400" />
@@ -181,7 +181,7 @@ export default async function MechanicsPage() {
                           First Capture
                         </td>
                         <td className="py-2.5 px-3 text-right font-semibold text-emerald-400">
-                          {systems.match_xp.capture.first.toLocaleString()}
+                          {systems.match_xp.capture_xp.first_capture.toLocaleString()}
                         </td>
                       </tr>
                       <tr>
@@ -189,7 +189,7 @@ export default async function MechanicsPage() {
                           Recapture
                         </td>
                         <td className="py-2.5 px-3 text-right font-semibold text-emerald-400">
-                          {systems.match_xp.capture.recapture.toLocaleString()}
+                          {systems.match_xp.capture_xp.recapture.toLocaleString()}
                         </td>
                       </tr>
                       <tr>
@@ -197,7 +197,7 @@ export default async function MechanicsPage() {
                           Passive Control (per sec)
                         </td>
                         <td className="py-2.5 px-3 text-right font-semibold text-emerald-400">
-                          {systems.match_xp.capture.passive_per_sec}
+                          {systems.match_xp.capture_xp.passive_per_sec}
                         </td>
                       </tr>
                       <tr>
@@ -206,7 +206,7 @@ export default async function MechanicsPage() {
                         </td>
                         <td className="py-2.5 px-3 text-right font-semibold text-emerald-400">
                           +
-                          {systems.match_xp.capture.spellcaster_on_point.toLocaleString()}
+                          {systems.match_xp.capture_xp.spellcaster_on_point.toLocaleString()}
                         </td>
                       </tr>
                     </tbody>
@@ -215,12 +215,12 @@ export default async function MechanicsPage() {
               </div>
             )}
 
-            {/* Summoning XP */}
-            {systems.match_xp.summoning && (
+            {/* Kill XP */}
+            {systems.match_xp.kill_xp && (
               <div className="mb-6">
                 <h3 className="text-lg font-semibold text-text-primary mb-3 flex items-center gap-2">
                   <Flame size={18} className="text-red-400" />
-                  Summoning XP
+                  Kill XP
                 </h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
@@ -240,15 +240,15 @@ export default async function MechanicsPage() {
                           Spellcasters&apos; Souls
                         </td>
                         <td className="py-2.5 px-3 text-right font-semibold text-red-400">
-                          {systems.match_xp.summoning.spellcaster_death}
+                          {systems.match_xp.kill_xp.spellcaster_death}
                         </td>
                       </tr>
                       {(
                         [
-                          ["Rank I", systems.match_xp.summoning.rank_I],
-                          ["Rank II", systems.match_xp.summoning.rank_II],
-                          ["Rank III", systems.match_xp.summoning.rank_III],
-                          ["Rank IV", systems.match_xp.summoning.rank_IV],
+                          ["Rank I", systems.match_xp.kill_xp.rank_i],
+                          ["Rank II", systems.match_xp.kill_xp.rank_ii],
+                          ["Rank III", systems.match_xp.kill_xp.rank_iii],
+                          ["Rank IV", systems.match_xp.kill_xp.rank_iv],
                         ] as const
                       ).map(([label, xp]) => (
                         <tr key={label}>
@@ -314,7 +314,7 @@ export default async function MechanicsPage() {
             )}
 
             {/* Scaling */}
-            {systems.match_xp.scaling && (
+            {systems.match_xp.building_spawn_multiplier != null && (
               <div>
                 <h3 className="text-lg font-semibold text-text-primary mb-3">
                   XP Scaling
@@ -323,22 +323,27 @@ export default async function MechanicsPage() {
                   <p className="text-sm text-text-secondary mb-3">
                     Building spawns yield reduced XP (
                     <span className="font-semibold text-text-primary">
-                      {systems.match_xp.scaling.building_spawn_multiplier}x
+                      {systems.match_xp.building_spawn_multiplier}x
                     </span>{" "}
-                    multiplier). Higher XP required at key level milestones:
+                    multiplier).
+                    {systems.match_xp.level_thresholds &&
+                      systems.match_xp.level_thresholds.length > 0 &&
+                      " Key level milestones:"}
                   </p>
-                  <div className="flex flex-wrap gap-2">
-                    {systems.match_xp.scaling.level_thresholds.map(
-                      (lvl, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1 bg-surface-card border border-border-default rounded-full text-sm font-semibold text-brand-primary"
-                        >
-                          Lv. {lvl}
-                        </span>
-                      )
-                    )}
-                  </div>
+                  {systems.match_xp.level_thresholds && (
+                    <div className="flex flex-wrap gap-2">
+                      {systems.match_xp.level_thresholds.map(
+                        (threshold, idx) => (
+                          <span
+                            key={idx}
+                            className="px-3 py-1 bg-surface-card border border-border-default rounded-full text-sm font-semibold text-brand-primary"
+                          >
+                            Lv. {threshold.level}
+                          </span>
+                        )
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             )}

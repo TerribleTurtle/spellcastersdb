@@ -275,52 +275,41 @@ describe("data-schemas.ts", () => {
   });
 
   describe("MatchXPSchema", () => {
-    it("should transform 'kills' to 'summoning' in MatchXP", () => {
+    it("should parse capture_xp with first_capture field", () => {
       const data = {
-        captures: {
-          first_territory: 1000,
-          regain_territory: 1500,
-        },
-        kills: {
-          spellcaster_death: 250,
-          rank_I: 50,
-          rank_II: 100,
-          rank_III: 300,
-          rank_IV: 500,
+        capture_xp: {
+          first_capture: 1000,
+          recapture: 1500,
+          passive_per_sec: 1.5,
+          spellcaster_on_point: 750,
         },
       };
 
       const parsed = MatchXPSchema.parse(data);
-      // The frontend should see 'summoning' instead of 'kills'
-      expect(parsed.summoning).toBeDefined();
-      expect(parsed.summoning?.spellcaster_death).toBe(250);
-      expect(parsed.summoning?.rank_I).toBe(50);
-
-      // Strict type check to ensure 'kills' is omitted in resulting type
-      // @ts-expect-error - 'kills' should be omitted from parsed output after transform to 'summoning'
-      expect(parsed.kills).toBeUndefined();
+      expect(parsed.capture_xp).toBeDefined();
+      expect(parsed.capture_xp?.first_capture).toBe(1000);
+      expect(parsed.capture_xp?.spellcaster_on_point).toBe(750);
     });
 
-    it("should handle optional kills block safely", () => {
+    it("should parse kill_xp with rank fields", () => {
       const data = {
-        captures: {
-          first_territory: 1000,
+        kill_xp: {
+          spellcaster_death: 250,
+          rank_i: 50,
+          rank_ii: 100,
+          rank_iii: 300,
+          rank_iv: 500,
         },
       };
 
       const parsed = MatchXPSchema.parse(data);
-      expect(parsed.summoning).toBeUndefined();
+      expect(parsed.kill_xp).toBeDefined();
+      expect(parsed.kill_xp?.spellcaster_death).toBe(250);
+      expect(parsed.kill_xp?.rank_i).toBe(50);
     });
 
-    it("should pass summon_xp through the transform when present", () => {
+    it("should parse summon_xp when present", () => {
       const data = {
-        kills: {
-          spellcaster_death: 250,
-          rank_I: 50,
-          rank_II: 100,
-          rank_III: 300,
-          rank_IV: 500,
-        },
         summon_xp: {
           rank_i: 50,
           rank_ii: 150,
@@ -332,24 +321,47 @@ describe("data-schemas.ts", () => {
       const parsed = MatchXPSchema.parse(data);
       expect(parsed.summon_xp).toBeDefined();
       expect(parsed.summon_xp?.rank_i).toBe(50);
-      expect(parsed.summon_xp?.rank_ii).toBe(150);
-      expect(parsed.summon_xp?.rank_iii).toBe(300);
       expect(parsed.summon_xp?.rank_iv).toBe(500);
     });
 
     it("should leave summon_xp undefined when absent", () => {
       const data = {
-        kills: {
+        kill_xp: {
           spellcaster_death: 250,
-          rank_I: 50,
-          rank_II: 100,
-          rank_III: 300,
-          rank_IV: 500,
+          rank_i: 50,
+          rank_ii: 100,
+          rank_iii: 300,
+          rank_iv: 500,
         },
       };
 
       const parsed = MatchXPSchema.parse(data);
       expect(parsed.summon_xp).toBeUndefined();
+    });
+
+    it("should parse top-level building_spawn_multiplier and level_thresholds", () => {
+      const data = {
+        building_spawn_multiplier: 0.1,
+        level_thresholds: [
+          { xp_required: 0, level: 1 },
+          { xp_required: 20000, level: 25 },
+        ],
+      };
+
+      const parsed = MatchXPSchema.parse(data);
+      expect(parsed.building_spawn_multiplier).toBe(0.1);
+      expect(parsed.level_thresholds).toHaveLength(2);
+      expect(parsed.level_thresholds?.[0].level).toBe(1);
+      expect(parsed.level_thresholds?.[1].xp_required).toBe(20000);
+    });
+
+    it("should handle empty object (all fields optional)", () => {
+      const parsed = MatchXPSchema.parse({});
+      expect(parsed.capture_xp).toBeUndefined();
+      expect(parsed.kill_xp).toBeUndefined();
+      expect(parsed.summon_xp).toBeUndefined();
+      expect(parsed.building_spawn_multiplier).toBeUndefined();
+      expect(parsed.level_thresholds).toBeUndefined();
     });
   });
 
