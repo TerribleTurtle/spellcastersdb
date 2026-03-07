@@ -1,4 +1,4 @@
-import { Flame, Sparkles, Target, Zap } from "lucide-react";
+import { Flame, Heart, Sparkles, Target, Zap } from "lucide-react";
 
 import { JsonLd } from "@/components/common/JsonLd";
 import { PageShell } from "@/components/layout/PageShell";
@@ -66,7 +66,7 @@ export default async function MechanicsPage() {
               reward consistent play.
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
               <div className="bg-surface-dim border border-border-default rounded-lg p-4">
                 <p className="text-xs font-semibold tracking-wider uppercase text-text-muted mb-1">
                   Starting Knowledge
@@ -88,6 +88,19 @@ export default async function MechanicsPage() {
                   </span>
                   <span className="text-sm text-text-muted mb-1">
                     (added to default)
+                  </span>
+                </div>
+              </div>
+              <div className="bg-surface-dim border border-border-default rounded-lg p-4">
+                <p className="text-xs font-semibold tracking-wider uppercase text-text-muted mb-1">
+                  EA Compensation
+                </p>
+                <div className="flex items-end gap-3">
+                  <span className="text-3xl font-bold text-emerald-400">
+                    {systems.progression.starting_knowledge.early_access_compensation.toLocaleString()}
+                  </span>
+                  <span className="text-sm text-text-muted mb-1">
+                    (one-time grant)
                   </span>
                 </div>
               </div>
@@ -253,6 +266,53 @@ export default async function MechanicsPage() {
               </div>
             )}
 
+            {/* Summon XP (Placement Rewards) */}
+            {systems.match_xp.summon_xp && (
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-text-primary mb-3 flex items-center gap-2">
+                  <Sparkles size={18} className="text-violet-400" />
+                  Summon XP (Placement)
+                </h3>
+                <p className="text-sm text-text-muted mb-3">
+                  XP granted when you place a unit on the field, separate from
+                  kill XP.
+                </p>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="border-b border-border-default">
+                        <th className="text-left py-2 px-3 text-text-muted font-medium">
+                          Rank
+                        </th>
+                        <th className="text-right py-2 px-3 text-text-muted font-medium">
+                          XP
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border-subtle">
+                      {(
+                        [
+                          ["Rank I", systems.match_xp.summon_xp.rank_i],
+                          ["Rank II", systems.match_xp.summon_xp.rank_ii],
+                          ["Rank III", systems.match_xp.summon_xp.rank_iii],
+                          ["Rank IV", systems.match_xp.summon_xp.rank_iv],
+                        ] as const
+                      ).map(([label, xp]) => (
+                        <tr key={label}>
+                          <td className="py-2.5 px-3 text-text-secondary">
+                            {label}
+                          </td>
+                          <td className="py-2.5 px-3 text-right font-semibold text-violet-400">
+                            {xp}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
             {/* Scaling */}
             {systems.match_xp.scaling && (
               <div>
@@ -282,6 +342,49 @@ export default async function MechanicsPage() {
                 </div>
               </div>
             )}
+          </section>
+        )}
+
+        {/* ── Map Objects ─────────────────────────────── */}
+        {systems?.map_objects?.lifestone && (
+          <section className="bg-surface-card border border-border-default rounded-xl p-5 md:p-8">
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-lg bg-linear-to-br from-emerald-500/20 to-teal-500/20 flex items-center justify-center">
+                <Heart size={22} className="text-emerald-400" />
+              </div>
+              <h2 className="text-2xl font-bold text-brand-accent">
+                Map Objects
+              </h2>
+            </div>
+            <div className="bg-surface-dim border border-border-default rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-text-primary mb-2">
+                Lifestone
+              </h3>
+              <p className="text-sm text-text-secondary mb-3">
+                Permanent map structures that heal your Spellcaster within their
+                territory.
+              </p>
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-surface-card border border-border-default rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-emerald-400 mb-1">
+                    {systems.map_objects.lifestone.heal_per_sec}
+                  </p>
+                  <p className="text-xs text-text-muted">HP / sec</p>
+                </div>
+                <div className="bg-surface-card border border-border-default rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-emerald-400 mb-1">
+                    {systems.map_objects.lifestone.heal_target}
+                  </p>
+                  <p className="text-xs text-text-muted">Target</p>
+                </div>
+                <div className="bg-surface-card border border-border-default rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-emerald-400 mb-1 capitalize">
+                    {systems.map_objects.lifestone.heal_range}
+                  </p>
+                  <p className="text-xs text-text-muted">Range</p>
+                </div>
+              </div>
+            </div>
           </section>
         )}
 

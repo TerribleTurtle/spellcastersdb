@@ -86,6 +86,7 @@ const SpawnerSchema = z.object({
   count: z.number(),
   trigger: z.enum(["Death", "Interval", "Spawn"]),
   interval: z.number().optional(),
+  max_active: z.number().int().min(0).optional(),
 });
 
 const FeaturesSchema = z.object({
@@ -489,15 +490,24 @@ const ScalingXPSchema = z.object({
   level_thresholds: z.array(z.number()),
 });
 
+const SummonXPSchema = z.object({
+  rank_i: z.number().int().min(0),
+  rank_ii: z.number().int().min(0),
+  rank_iii: z.number().int().min(0),
+  rank_iv: z.number().int().min(0),
+});
+
 export const MatchXPSchema = z
   .object({
     capture: CaptureXPSchema.optional(),
     kills: SummoningXPSchema.optional(),
+    summon_xp: SummonXPSchema.optional(),
     scaling: ScalingXPSchema.optional(),
   })
   .transform((data) => ({
     capture: data.capture,
     summoning: data.kills,
+    summon_xp: data.summon_xp,
     scaling: data.scaling,
   }));
 
@@ -505,6 +515,7 @@ const ProgressionConfigSchema = z.object({
   starting_knowledge: z.object({
     default: z.number(),
     beta: z.number(),
+    early_access_compensation: z.number().int().min(0),
   }),
   earn_rates: z.object({
     first_daily_match: z.number(),
@@ -525,10 +536,21 @@ const RankedConfigSchema = z.object({
   ranks: z.array(RankedTierSchema),
 });
 
+const LifestoneSchema = z.object({
+  heal_per_sec: z.number().min(0),
+  heal_target: z.string(),
+  heal_range: z.string(),
+});
+
+const MapObjectsSchema = z.object({
+  lifestone: LifestoneSchema.optional(),
+});
+
 export const GameSystemsSchema = z.object({
   progression: ProgressionConfigSchema,
   ranked: RankedConfigSchema,
   match_xp: MatchXPSchema,
+  map_objects: MapObjectsSchema.optional(),
 });
 
 export const AllDataSchema = z.object({

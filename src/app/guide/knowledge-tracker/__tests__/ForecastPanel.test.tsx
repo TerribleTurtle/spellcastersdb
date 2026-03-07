@@ -7,7 +7,11 @@ import { ForecastPanel } from "../components/ForecastPanel";
 
 const mockSystems: GameSystems = {
   progression: {
-    starting_knowledge: { default: 250, beta: 1000 },
+    starting_knowledge: {
+      default: 250,
+      beta: 1000,
+      early_access_compensation: 2000,
+    },
     earn_rates: { first_daily_match: 200, win: 50, loss: 25 },
   },
   ranked: { tiers_per_rank: 5, rp_gain_per_win: 10, ranks: [] },
