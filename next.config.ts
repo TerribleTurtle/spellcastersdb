@@ -179,6 +179,7 @@ const withSerwist = withSerwistInit({
   swDest: "public/sw.js",
   additionalPrecacheEntries: [{ url: "/~offline", revision }],
   disable: process.env.NODE_ENV === "development",
+  register: false,
 });
 
 const exportedConfig = withBundleAnalyzer(withSerwist(nextConfig));

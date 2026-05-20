@@ -13,6 +13,7 @@ import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
 import { MaintenanceAnnouncement } from "@/components/layout/MaintenanceAnnouncement";
 import Navbar from "@/components/layout/Navbar";
 import { AxeDevTools } from "@/components/providers/AxeDevTools";
+import { ServiceWorkerRegistry } from "@/components/providers/ServiceWorkerRegistry";
 import { ThemeColorMeta } from "@/components/providers/ThemeColorMeta";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Toaster } from "@/components/ui/Toaster";
@@ -172,6 +173,7 @@ export default async function RootLayout({
             <Toaster />
             <ThemeColorMeta />
             <AxeDevTools />
+            <ServiceWorkerRegistry />
           </TooltipProvider>
         </ThemeProvider>
       </body>
