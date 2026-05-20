@@ -8,9 +8,9 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { JsonLd } from "@/components/common/JsonLd";
 import { ScrollToTop } from "@/components/common/ScrollToTop";
 import { DesktopSidebar } from "@/components/layout/DesktopSidebar";
-import { EALaunchAnnouncement } from "@/components/layout/EALaunchAnnouncement";
 import Footer from "@/components/layout/Footer";
 import { MainLayoutWrapper } from "@/components/layout/MainLayoutWrapper";
+import { MaintenanceAnnouncement } from "@/components/layout/MaintenanceAnnouncement";
 import Navbar from "@/components/layout/Navbar";
 import { AxeDevTools } from "@/components/providers/AxeDevTools";
 import { ThemeColorMeta } from "@/components/providers/ThemeColorMeta";
@@ -137,7 +137,7 @@ export default async function RootLayout({
         </a>
         <ThemeProvider>
           <TooltipProvider>
-            <EALaunchAnnouncement />
+            <MaintenanceAnnouncement />
             <Navbar />
             <ScrollToTop />
 
