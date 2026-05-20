@@ -108,7 +108,8 @@
     ]
   },
   "overrides": {
-    "tmp": "^0.2.5"
+    "tmp": "^0.2.5",
+    "postcss": "^8.5.15"
   },
   "browserslist": [
     "chrome >= 100",
