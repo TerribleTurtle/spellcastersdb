@@ -1,34 +1,36 @@
 "use client";
 
-import { AlertTriangle, Gamepad2, Github } from "lucide-react";
+import { Github, Heart } from "lucide-react";
 
 import { AnnouncementBanner } from "@/components/layout/AnnouncementBanner";
 
 /**
- * Pre-configured Maintenance / End of Life announcement.
- * Drop this into any layout — it handles its own dismissal state.
+ * Pre-configured Maintenance / Sunset announcement.
+ * Handles dynamic server status message based on whether the current date
+ * is before or after the June 19, 2026 shutdown date.
  */
 export function MaintenanceAnnouncement() {
+  const shutdownDate = new Date("2026-06-19T00:00:00Z");
+  const isShutdown = new Date() >= shutdownDate;
+
+  const subtext = isShutdown
+    ? "Game servers went offline on June 19, 2026. While the official game has sunset, our community-built database lives on as an open-source monument to the good times we shared."
+    : "Game servers will go offline on June 19, 2026. While the official game is sunsetting, our community-built database lives on as an open-source monument to the good times we shared.";
+
   return (
     <AnnouncementBanner
-      dismissKey="sc_maintenance_dismissed"
+      dismissKey="sc_sunset_announcement_dismissed"
       variant="warning"
-      badge="MAINTENANCE"
-      badgeIcon={<AlertTriangle size={10} />}
-      headline="This site is no longer under active maintenance."
-      subtext="The original developer is no longer updating data, but the project is open source—feel free to contribute updates!"
+      badge="SUNSET"
+      badgeIcon={<Heart size={10} className="fill-white" />}
+      headline="Spellcasters Chronicles has come to an end."
+      subtext={subtext}
       links={[
         {
           label: "Contribute on GitHub",
           href: "https://github.com/TerribleTurtle/spellcastersdb",
           icon: <Github size={12} />,
           variant: "default",
-        },
-        {
-          label: "Play on Steam",
-          href: "https://store.steampowered.com/app/2458470/Spellcasters_Chronicles/",
-          icon: <Gamepad2 size={12} />,
-          variant: "steam",
         },
       ]}
     />
