@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 import createBundleAnalyzer from "@next/bundle-analyzer";
-import { withSentryConfig } from "@sentry/nextjs";
+// import { withSentryConfig } from "@sentry/nextjs";
 import withSerwistInit from "@serwist/next";
 import { spawnSync } from "node:child_process";
 
@@ -184,6 +184,8 @@ const withSerwist = withSerwistInit({
 
 const exportedConfig = withBundleAnalyzer(withSerwist(nextConfig));
 
+export default exportedConfig;
+/*
 export default withSentryConfig(exportedConfig, {
   // The name of the Sentry project
   project: "spellcastersdb",
@@ -196,3 +198,4 @@ export default withSentryConfig(exportedConfig, {
   // Route Sentry traffic through a Next.js API route to bypass ad-blockers
   tunnelRoute: "/monitoring",
 });
+*/
