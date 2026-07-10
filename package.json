@@ -108,8 +108,10 @@
     ]
   },
   "overrides": {
-    "tmp": "^0.2.5",
-    "postcss": "^8.5.15"
+    "tmp": "^0.2.6",
+    "postcss": "^8.5.15",
+    "esbuild": "^0.28.1",
+    "uuid": "^13.0.0"
   },
   "browserslist": [
     "chrome >= 100",

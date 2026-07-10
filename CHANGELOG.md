@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+### Security
+- Resolved critical and high-severity npm vulnerabilities by forcing secure versions of `esbuild`, `uuid`, `hono`, `vite`, `tmp`, and `vitest`.
+
 ## [1.0.31] - 2026-02-26
 
 ### Added
