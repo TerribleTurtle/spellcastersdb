@@ -11,9 +11,9 @@
 - [x] Run `npm run lighthouse` to confirm there are no regressions in accessibility or performance scores.
 
 ## Phase 3: Active Feature Development (Clean Slate)
-- [ ] **CURRENT:** Security & Dependabot Vulnerability Resolution.
+- [x] **CURRENT:** Security & Dependabot Vulnerability Resolution.
   - Plan document: `docs/plans/2026-10-03-security-patch.md`
-- [ ] Task 1: Direct Production Dependency Updates (`next`, `sharp`).
-- [ ] Task 2: Safe Audit Fix & `.nsprc` Stale Exception Cleanup.
-- [ ] Task 3: Verification & Integration (`npm run preflight`).
-- [ ] Provide End-to-End proof before marking the task complete.
+- [x] Task 1: Direct Production Dependency Updates (`next`, `sharp`).
+- [x] Task 2: Safe Audit Fix & `.nsprc` Stale Exception Cleanup.
+- [x] Task 3: Verification & Integration (`npm run preflight`).
+- [x] Provide End-to-End proof before marking the task complete.
