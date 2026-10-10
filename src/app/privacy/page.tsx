@@ -81,29 +81,6 @@ export default function PrivacyPage() {
             <div className="border-t border-border-subtle pt-6">
               <h3 className="text-lg font-bold text-text-primary mb-2 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-brand-primary"></span>
-                Analytics &amp; Performance
-              </h3>
-              <p className="mb-2">
-                We use <strong>Vercel Analytics</strong> and{" "}
-                <strong>Vercel Speed Insights</strong> to understand website
-                traffic and monitor performance. They collect anonymous data
-                such as:
-              </p>
-              <ul className="list-disc list-inside mt-2 space-y-1 ml-4 text-text-muted">
-                <li>Page views and navigation patterns</li>
-                <li>Core Web Vitals (load times, responsiveness)</li>
-                <li>Device type (Desktop/Mobile)</li>
-                <li>Country of origin</li>
-              </ul>
-              <p className="mt-3 text-sm text-text-dimmed italic">
-                This data is aggregated and does not identify you personally.
-                Both services are privacy-friendly and do not use cookies.
-              </p>
-            </div>
-
-            <div className="border-t border-border-subtle pt-6">
-              <h3 className="text-lg font-bold text-text-primary mb-2 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-brand-primary"></span>
                 Error Monitoring (Sentry)
               </h3>
               <p className="mb-2">
@@ -152,26 +129,6 @@ export default function PrivacyPage() {
                   flushed
                 </li>
               </ul>
-            </div>
-
-            <div className="border-t border-border-subtle pt-6">
-              <h3 className="text-lg font-bold text-text-primary mb-2 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-brand-primary"></span>
-                Feedback (Tally)
-              </h3>
-              <p className="mb-2">
-                We embed a <strong>Tally.so</strong> widget to optionally
-                collect user feedback. Any information you choose to provide in
-                the feedback form is processed and stored by Tally&apos;s
-                servers securely.
-              </p>
-              <p className="mt-3 text-sm text-text-dimmed italic">
-                When you open the feedback form, the current page URL
-                (containing only game state data, such as the cards in your
-                deck) is automatically included as context. This URL does not
-                contain any personal identifiers. No other personal data is
-                sent.
-              </p>
             </div>
           </div>
         </section>

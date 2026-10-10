@@ -3,8 +3,6 @@ import { MetadataRoute } from "next";
 import { fetchGameData } from "@/services/api/api";
 import { registry } from "@/services/api/registry";
 
-export const revalidate = 3600; // Revalidate sitemap every hour
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://www.spellcastersdb.com";
 
@@ -94,12 +92,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "weekly",
       priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/discord-bot`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.4,
     },
     {
       url: `${baseUrl}/privacy`,

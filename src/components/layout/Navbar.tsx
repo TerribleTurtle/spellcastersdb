@@ -5,12 +5,11 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { ExternalLink, Menu, MessageSquare, X } from "lucide-react";
+import { ExternalLink, Menu, X } from "lucide-react";
 
 import { OfflineIndicator } from "@/components/pwa/OfflineIndicator";
 import { ThemePicker } from "@/components/ui/ThemePicker";
 import { Button } from "@/components/ui/button";
-import { useFeedback } from "@/hooks/useFeedback";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import {
   EXTERNAL_LINKS,
@@ -21,7 +20,6 @@ import {
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const feedback = useFeedback();
   const pathname = usePathname();
   const drawerRef = useRef<HTMLDivElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -169,19 +167,6 @@ export default function Navbar() {
                   </a>
                 );
               })}
-
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setIsOpen(false);
-                  feedback.openFeedback();
-                }}
-                data-testid="navbar-drawer-feedback"
-                className="justify-start px-3 py-2 text-base font-medium text-text-secondary hover:bg-surface-card hover:text-brand-accent w-full"
-              >
-                <MessageSquare size={18} className="mr-2" />
-                Feedback
-              </Button>
 
               <div className="px-3 py-2">
                 <ThemePicker

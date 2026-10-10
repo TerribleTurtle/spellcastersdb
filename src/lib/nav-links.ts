@@ -1,6 +1,5 @@
 import {
   BookOpen,
-  Bot,
   Database,
   Github,
   HelpCircle,
@@ -38,7 +37,6 @@ export const PRIMARY_NAV: NavLink[] = [
 export const SECONDARY_NAV: NavLink[] = [
   { name: "Guide", href: "/guide", icon: BookOpen, internal: true },
   { name: "FAQ", href: "/faq", icon: HelpCircle, internal: true },
-  { name: "Bot", href: "/discord-bot", icon: Bot, internal: true },
   { name: "About", href: "/about", icon: Info, internal: true },
 ];
 
