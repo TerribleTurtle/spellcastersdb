@@ -75,7 +75,6 @@ describe("SEO Drift Guards", () => {
         "/spellcasters",
         "/database",
         "/roadmap",
-        "/discord-bot",
         "/privacy",
         "/terms",
       ];

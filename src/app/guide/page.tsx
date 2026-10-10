@@ -16,10 +16,6 @@ import { GuideCard, type GuideCardProps } from "@/components/guide/GuideCard";
 import { PageShell } from "@/components/layout/PageShell";
 import { routes } from "@/lib/routes";
 
-// Revalidate every hour — matches pattern used by other pages (home, roadmap)
-// to ensure Vercel's CDN serves fresh content after deployments.
-export const revalidate = 3600;
-
 export const metadata = {
   title: "Game Guide — SpellcastersDB",
   description:
