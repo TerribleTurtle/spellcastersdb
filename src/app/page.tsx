@@ -41,9 +41,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Revalidate every hour
-export const revalidate = 3600;
-
 export default async function Home() {
   const [units, spells, titans, spellcasters] = await Promise.all([
     getUnits(),

@@ -5,24 +5,16 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import {
-  ChevronLeft,
-  ExternalLink,
-  Github,
-  Menu,
-  MessageSquare,
-} from "lucide-react";
+import { ChevronLeft, ExternalLink, Github, Menu } from "lucide-react";
 
 import { ThemePicker } from "@/components/ui/ThemePicker";
 import { Button } from "@/components/ui/button";
-import { useFeedback } from "@/hooks/useFeedback";
 import { PRIMARY_NAV, SECONDARY_NAV, isActivePath } from "@/lib/nav-links";
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/store/ui-store";
 
 export function DesktopSidebar() {
   const pathname = usePathname();
-  const { openFeedback } = useFeedback();
 
   const { isSidebarOpen, toggleSidebar, setSidebarOpen, hasManuallyToggled } =
     useUIStore();
@@ -208,24 +200,6 @@ export function DesktopSidebar() {
             );
           })}
         </div>
-
-        <Button
-          variant="ghost"
-          onClick={openFeedback}
-          data-testid="sidebar-feedback-btn"
-          className={cn(
-            "flex items-center gap-3 px-3 py-2 h-auto rounded-lg text-sm font-medium text-text-muted hover:bg-surface-card hover:text-text-primary transition-all group w-full justify-start",
-            !isSidebarOpen && "justify-center px-2"
-          )}
-          title={!isSidebarOpen ? "Feedback" : undefined}
-          aria-label="Submit feedback"
-        >
-          <MessageSquare
-            size={18}
-            className="text-text-dimmed group-hover:text-text-primary transition-colors shrink-0"
-          />
-          {isSidebarOpen && "Feedback"}
-        </Button>
 
         {/* Theme Picker */}
         <div

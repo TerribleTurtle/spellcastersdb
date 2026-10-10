@@ -117,7 +117,7 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'none'",
-              `script-src 'self' 'unsafe-inline' ${process.env.NODE_ENV === "development" ? "'unsafe-eval'" : ""} https://va.vercel-scripts.com https://tally.so`,
+              `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' blob: data: https://terribleturtle.github.io https://www.spellcastersdb.com",
               "font-src 'self'",
@@ -125,8 +125,8 @@ const nextConfig: NextConfig = {
               "base-uri 'self'",
               "form-action 'self'",
               "frame-ancestors 'none'",
-              "connect-src 'self' https://terribleturtle.github.io https://vitals.vercel-insights.com https://tally.so https://*.ingest.us.sentry.io",
-              "frame-src 'self' https://tally.so",
+              "connect-src 'self' https://terribleturtle.github.io https://*.ingest.us.sentry.io",
+              "frame-src 'self'",
               "worker-src 'self'",
               "manifest-src 'self'",
               process.env.NODE_ENV === "development"

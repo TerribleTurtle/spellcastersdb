@@ -95,7 +95,7 @@ describe("api-client.ts", () => {
       expect(global.fetch).toHaveBeenCalledWith(
         expect.stringContaining("/test-endpoint"),
         expect.objectContaining({
-          next: { revalidate: 3600, tags: ["game-data", "test-endpoint"] },
+          next: { revalidate: false, tags: ["game-data", "test-endpoint"] },
         })
       );
     });

@@ -1,19 +1,4 @@
 {
-  "1139346": {
-    "active": true,
-    "notes": "extract-zip unvalidated symlink path traversal. Dev-only dep via @lhci/cli -> @puppeteer/browsers -> extract-zip. Lighthouse CI runs only in CI/build.",
-    "expiry": "2027-01-01"
-  },
-  "1153171": {
-    "active": true,
-    "notes": "browserslist unbounded memory growth. Build/dev dep via @serwist/next, @sentry/nextjs, and @vitejs/plugin-react. Unfixable without breaking downgrades.",
-    "expiry": "2027-01-01"
-  },
-  "1153172": {
-    "active": true,
-    "notes": "browserslist uncaught crash via custom stats. Build/dev dep via @serwist/next, @sentry/nextjs, and @vitejs/plugin-react. No untrusted stats file used.",
-    "expiry": "2027-01-01"
-  },
   "1193683": {
     "active": true,
     "notes": "vitest path traversal via @vitest/mocker. Dev-only test runner. Fixing requires major version bump to Vitest 5.",
@@ -22,16 +7,6 @@
   "1193684": {
     "active": true,
     "notes": "@vitest/mocker path traversal. Dev-only test runner. Fixing requires major version bump to Vitest 5.",
-    "expiry": "2027-01-01"
-  },
-  "1193685": {
-    "active": true,
-    "notes": "extract-zip arbitrary file write via symlink. Dev-only dep via @lhci/cli -> @puppeteer/browsers -> extract-zip. Lighthouse CI runs only in CI/build.",
-    "expiry": "2027-01-01"
-  },
-  "1240853": {
-    "active": true,
-    "notes": "basic-ftp ReDoS in Client.list(). Dev-only dep via @lhci/cli -> proxy-agent -> pac-proxy-agent -> get-uri -> basic-ftp. Fixing requires major downgrade of @lhci/cli.",
     "expiry": "2027-01-01"
   },
   "1240992": {

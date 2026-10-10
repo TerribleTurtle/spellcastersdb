@@ -1,9 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Script from "next/script";
-
-import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { JsonLd } from "@/components/common/JsonLd";
 import { ScrollToTop } from "@/components/common/ScrollToTop";
@@ -164,12 +160,6 @@ export default async function RootLayout({
                 } as Record<string, unknown>
               }
             />
-            <Script
-              src="https://tally.so/widgets/embed.js"
-              strategy="lazyOnload"
-            />
-            <Analytics />
-            <SpeedInsights />
             <Toaster />
             <ThemeColorMeta />
             <AxeDevTools />

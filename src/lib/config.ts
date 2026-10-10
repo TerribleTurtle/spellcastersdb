@@ -9,7 +9,7 @@ export const CONFIG = {
     BASE_URL:
       process.env.NEXT_PUBLIC_API_URL ||
       "https://terribleturtle.github.io/spellcasters-community-api/api/v2",
-    REVALIDATE_SECONDS: 3600, // 1 hour (rely on /api/revalidate webhook for instant updates)
+    REVALIDATE_SECONDS: false, // Archive mode: game data is cached until the next deploy (redeploy to refresh)
     TIMEOUT_MS: 10000,
   },
 
