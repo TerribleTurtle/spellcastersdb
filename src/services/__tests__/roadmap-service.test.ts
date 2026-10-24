@@ -75,6 +75,12 @@ describe("roadmapService", () => {
 
       const result = await roadmapService.getIssues();
 
+      expect(mockFetchJson).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          next: { revalidate: false },
+        })
+      );
       expect(result.isLive).toBe(true);
       expect(result.issues).toHaveLength(2);
       expect(result.issues[0].title).toBe("Feature Request");

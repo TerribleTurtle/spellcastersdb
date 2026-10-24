@@ -125,7 +125,7 @@ const nextConfig: NextConfig = {
               "base-uri 'self'",
               "form-action 'self'",
               "frame-ancestors 'none'",
-              "connect-src 'self' https://terribleturtle.github.io https://*.ingest.us.sentry.io",
+              "connect-src 'self' https://terribleturtle.github.io",
               "frame-src 'self'",
               "worker-src 'self'",
               "manifest-src 'self'",

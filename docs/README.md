@@ -4,7 +4,7 @@ Quick reference for all docs in this directory.
 
 | Document                                                                                       | Description                                                       |
 | :--------------------------------------------------------------------------------------------- | :---------------------------------------------------------------- |
-| [api_info.md](api_info.md)                                                                     | API endpoints, entity schemas, ISR revalidation, and known quirks |
+| [api_info.md](api_info.md)                                                                     | API endpoints, entity schemas, caching, revalidation, and known quirks |
 | [BRAND_GUIDELINES.md](BRAND_GUIDELINES.md)                                                     | Colors, typography, tokens, and UI patterns                       |
 | [E2E_CONVENTIONS.md](E2E_CONVENTIONS.md)                                                       | `data-testid` naming rules and viewport strategy                  |
 | [GITHUB_TOKEN_SETUP.md](GITHUB_TOKEN_SETUP.md)                                                 | How to configure a GitHub token for roadmap data                  |

@@ -49,11 +49,11 @@ To test with local API changes:
 2.  The application will automatically detect it in development mode.
 3.  Alternatively, set `LOCAL_DATA_PATH` in `.env.local` to point strictly to your JSON file.
 
-## ISR & Revalidation
+## Caching & Revalidation
 
-This application uses **Incremental Static Regeneration (ISR)** to keep data fresh without rebuilding.
+This application caches static data at build and deploy time.
 
-- **Revalidation Interval**: Defined in `src/lib/config.ts` (default: 60 seconds).
+- **Revalidation Interval**: Configured via `REVALIDATE_SECONDS: false` in `src/lib/config.ts`, caching data at build/deploy time until the next deploy or on-demand `/api/revalidate`.
 - **On-Demand Revalidation**:
   - Endpoint: `/api/revalidate`
   - Method: `GET`
@@ -89,8 +89,6 @@ curl -X GET "https://www.spellcastersdb.com/api/revalidate" \
 curl -X GET "http://localhost:3000/api/revalidate" \
   -H "Authorization: Bearer $REVALIDATION_SECRET"
 ```
-
-> **Note:** The CI workflow (`revalidate.yml`) calls this endpoint daily via `workflow_dispatch`.
 
 ### `GET /api/local-assets/[...path]`
 
