@@ -51,7 +51,7 @@ export const roadmapService = {
 
       const data = await fetchJson<GitHubIssue[]>(GITHUB_API_URL, {
         headers,
-        next: { revalidate: 60 }, // Cache for 60 seconds (ISR)
+        next: { revalidate: false },
       });
 
       // Basic validation/sanitization to ensure it matches our interface

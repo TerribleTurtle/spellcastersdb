@@ -46,7 +46,6 @@ Review the settings in `.env.local`.
 | `UPSTASH_REDIS_REST_TOKEN`           | Redis token for rate limiting & short links | _(Optional)_                                                         |
 | `SENTRY_AUTH_TOKEN`                  | Sentry source map upload token              | _(Optional)_                                                         |
 | `NEXT_PUBLIC_SENTRY_DSN`             | Sentry DSN for error tracking               | _(Optional)_                                                         |
-| `APP_URL`                            | **CI only** — GitHub Secret for revalidation workflow | `https://www.spellcastersdb.com` _(not used by app code)_            |
 | `NEXT_PUBLIC_APP_URL`                | App URL used for short-link redirects       | `http://localhost:3000`                                              |
 | `PORT`                               | Dev server port for local proxy             | `3000`                                                               |
 | `ANALYZE`                            | Enable `@next/bundle-analyzer` during build | _(Set via `npm run analyze`)_                                        |
@@ -80,7 +79,6 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
   - Run `npm run test` to execute Vitest unit tests.
   - Run `npm run test:coverage` to see a coverage report.
   - Run `npm run preflight` to run type-check, format check, lint, tests, and dependency validation in one go.
-  - Run `npm run lighthouse` to verify accessibility, SEO, best practices, and PWA criteria. Performance limits are enforced as warnings due to local dev server latency.
 - **Security & Code Health**:
   - Run `npm run audit` to check for dependency vulnerabilities. Known, upstream-blocked dev-dependency CVEs are whitelisted in `.nsprc`.
   - Run `npm run dead-code` to identify unused exports, files, and dependencies via `knip`.

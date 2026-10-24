@@ -1,17 +1,1 @@
-{
-  "1193683": {
-    "active": true,
-    "notes": "vitest path traversal via @vitest/mocker. Dev-only test runner. Fixing requires major version bump to Vitest 5.",
-    "expiry": "2027-01-01"
-  },
-  "1193684": {
-    "active": true,
-    "notes": "@vitest/mocker path traversal. Dev-only test runner. Fixing requires major version bump to Vitest 5.",
-    "expiry": "2027-01-01"
-  },
-  "1240992": {
-    "active": true,
-    "notes": "braces stack exhaustion denial of service. Dev-only dep via knip and shadcn CLI -> fast-glob -> micromatch -> braces. Never runs in production.",
-    "expiry": "2027-01-01"
-  }
-}
+{}

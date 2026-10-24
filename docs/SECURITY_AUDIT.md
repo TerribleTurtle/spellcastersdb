@@ -1,6 +1,6 @@
 # Security Audit
 
-> Last reviewed: 2026-03-01
+> Last reviewed: 2026-10-24
 
 ## Resolved
 
@@ -11,33 +11,39 @@
 - **Affected package:** `minimatch` 10.0.0–10.2.2 (via `@ts-morph/common`)
 - **Resolution:** Fixed via `npm audit fix` on 2026-03-01.
 
----
-
-## Deferred
-
 ### serialize-javascript — Remote Code Execution (RCE)
 
 - **Severity:** High
 - **Advisory:** [GHSA-5c6j-r48x-rmvq](https://github.com/advisories/GHSA-5c6j-r48x-rmvq)
 - **Affected package:** `serialize-javascript` ≤7.0.2
-- **Dependency chain:** `@sentry/nextjs` → `@sentry/webpack-plugin` → `webpack` → `terser-webpack-plugin` → `serialize-javascript`
+- **Resolution:** Resolved via `@sentry/nextjs` v10 (`^10.75.2`) upgrade on 2026-10-24, updating its transitive Webpack and Terser dependencies.
 
-#### Why we are deferring
+### next@16.4.3 Upgrade
 
-Running `npm audit fix --force` would downgrade `@sentry/nextjs` from v8.x to v7.120.4. This is a **major version downgrade** that would:
+- **Severity:** Maintenance / Security Hardening
+- **Affected package:** `next`
+- **Resolution:** Upgraded to `16.4.3` to apply upstream framework security patches and ensure compatibility with React 19.
 
-1. **Break the existing Sentry integration** — v8 and v7 have incompatible APIs and configuration.
-2. **Require manual code changes** across Sentry config files and any instrumented code.
-3. **Lose v8 features** currently in use by the project.
+### zod@^4.6.6 Upgrade
 
-#### Why the risk is acceptable for now
+- **Severity:** Maintenance / Security Hardening
+- **Affected package:** `zod`
+- **Resolution:** Upgraded to `^4.6.6` for latest schema validation security, bug fixes, and performance improvements.
 
-- The vulnerable package (`serialize-javascript`) is only used at **build time** inside Webpack/Terser, not at runtime in production.
-- It is **not exposed to user input** — an attacker cannot reach this code path through the application.
-- The practical exploitability in this context is **very low**.
+### @sentry/nextjs@^10.75.2 Upgrade
 
-#### Action plan
+- **Severity:** Maintenance / Vulnerability Remediation
+- **Affected package:** `@sentry/nextjs`
+- **Resolution:** Upgraded to `^10.75.2` (v10), eliminating legacy transitive build dependencies and aligning with Next.js 16.
 
-- [ ] Monitor for a patched `@sentry/nextjs` v8.x release that updates its Webpack/Terser dependencies.
-- [ ] Re-run `npm audit` periodically to check if the issue has been resolved upstream.
-- [ ] When a compatible fix is available, apply it and remove this entry.
+### /api/revalidate Empty-Secret Guard
+
+- **Severity:** High / Authentication Bypass Prevention
+- **Affected route:** `/api/revalidate`
+- **Resolution:** Added server-side validation rejecting requests when `REVALIDATION_SECRET` is unset, empty, or whitespace-only, preventing unintended open revalidation endpoints when environment variables are omitted.
+
+---
+
+## Deferred
+
+None. No deferred high or critical severity items remain.

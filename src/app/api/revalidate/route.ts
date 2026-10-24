@@ -29,8 +29,12 @@ export async function GET(request: NextRequest) {
     ? authHeader.substring(7)
     : request.nextUrl.searchParams.get("secret"); // Fallback for backward compatibility during rollout
 
-  const bufferA = Buffer.from(secret || "");
-  const bufferB = Buffer.from(process.env.REVALIDATION_SECRET || "");
+  if (!process.env.REVALIDATION_SECRET || !secret) {
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+  }
+
+  const bufferA = Buffer.from(secret);
+  const bufferB = Buffer.from(process.env.REVALIDATION_SECRET);
 
   if (bufferA.length !== bufferB.length || !timingSafeEqual(bufferA, bufferB)) {
     return NextResponse.json({ message: "Invalid token" }, { status: 401 });

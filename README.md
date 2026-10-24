@@ -46,7 +46,6 @@
   - **Comprehensive Testing**: Rigorous unit and integration tests (Vitest) covering core logic, custom hooks, and data validation, enforced by strict coverage threshold lock (`vitest.config.ts`).
     - **Adversarial Testing Suite**: A specialized 85-test characterization suite (`src/__tests__/adversarial` and `__tests__/**/*.adversarial.test.ts`) that aggressively fuzzes inputs, breaks boundaries, and simulates data corruption (e.g., OOB array access, primitive injection, JSON sabotage) to guarantee the resilience of the deck building state machines and backup/import layers.
   - **Revalidation API**: On-demand cache invalidation via `/api/revalidate` (using `Authorization` header) with `revalidateTag` for robust content updates.
-    - **CI/CD**: The "Daily Revalidation" workflow requires `REVALIDATION_SECRET` and optionally `APP_URL` (defaults to `https://www.spellcastersdb.com`) as **GitHub Secrets** (not `.env.local` variables). The app code itself uses `NEXT_PUBLIC_APP_URL` for short-link redirects.
   - **State Persistence**: Optimized `zustand/persist` with `partialize` to serialize only critical user data, excluding transient UI state for consistent high performance.
   - **Asset Caching & CDN Optimization**: Open Graph generation edges and standard images use `Cache-Control` configured for `stale-while-revalidate` alongside `NEXT_PUBLIC_PREFERRED_ASSET_FORMAT` for robust background updating without freezing user interaction.
   - **Bundle Profiling**: Includes `@next/bundle-analyzer` to maintain lightweight chunks. Use `npm run analyze` to inspect footprints.
@@ -102,7 +101,6 @@ For detailed setup instructions, including **Local API Development**, please see
 | `npm run script:validate` | Validates production data integrity                                 |
 | `npm run test:e2e`        | Runs the E2E test suite (Playwright)                                |
 | `npm run test:e2e:ui`     | Opens the Playwright UI for interactive debugging                   |
-| `npm run lighthouse`      | Runs Lighthouse CI checks                                           |
 | `npm run analyze`         | Builds with `@next/bundle-analyzer` enabled to inspect bundle sizes |
 | `npm run dead-code`       | Scans for unused code and files via knip                            |
 | `npm run audit`           | Scans for CVEs, respecting the `.nsprc` whitelist                   |
